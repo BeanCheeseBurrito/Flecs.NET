@@ -80,19 +80,19 @@
         <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir release/win-x64 -p"/>
         <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir release/win-arm64 -p"/>
 
-        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug/linux-x64"/>
-        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug/linux-arm64"/>
-        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug/osx-x64"/>
-        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug/osx-arm64"/>
-        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug/win-x64"/>
-        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug/win-arm64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug\linux-x64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug\linux-arm64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug\osx-x64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug\osx-arm64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug\win-x64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug\win-arm64"/>
 
-        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release/linux-x64"/>
-        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release/linux-arm64"/>
-        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release/osx-x64"/>
-        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release/osx-arm64"/>
-        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release/win-x64"/>
-        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release/win-arm64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release\linux-x64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release\linux-arm64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release\osx-x64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release\osx-arm64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release\win-x64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release\win-arm64"/>
 
         <Exec Command="$(ZigExePath) cc -g -shared ../../submodules/flecs/flecs.c -o debug/linux-x64/libflecs.so -target x86_64-linux-gnu"/>
         <Exec Command="$(ZigExePath) cc -g -shared ../../submodules/flecs/flecs.c -o debug/linux-arm64/libflecs.so  -target aarch64-linux-gnu"/>
