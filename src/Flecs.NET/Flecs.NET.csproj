@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFrameworks>netstandard2.1;net5.0;net6.0</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RootNamespace>Flecs.NET</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <AnalysisLevel>latest-all</AnalysisLevel>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+        <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+        <NoWarn>$(NoWarn);CA1000;CS9084;CS8500;CA1034;CA1062</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0"/>
+        <ProjectReference Include="..\Flecs.NET.Bindings\Flecs.NET.Bindings.csproj"/>
+    </ItemGroup>
+
+</Project>

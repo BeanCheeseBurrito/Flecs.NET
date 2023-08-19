@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <Import Project="../Flecs.NET.Native/Flecs.NET.Native.targets" />
+
+    <ItemGroup>
+        <ProjectReference Include="../Flecs.NET/Flecs.NET.csproj" />
+    </ItemGroup>
+
+</Project>

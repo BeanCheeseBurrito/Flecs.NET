@@ -1,0 +1,111 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <IncludeContentInPack>true</IncludeContentInPack>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <FlecsNativeIsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</FlecsNativeIsLinux>
+        <FlecsNativeIsOsx Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</FlecsNativeIsOsx>
+        <FlecsNativeIsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</FlecsNativeIsWindows>
+
+        <FlecsNativeProcessorArch>$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)</FlecsNativeProcessorArch>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Vezel.Zig.Toolsets.linux-x64" Version="0.11.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'X64' And '$(FlecsNativeIsLinux)' == 'true">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+
+        <PackageReference Include="Vezel.Zig.Toolsets.osx-x64" Version="0.11.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'X64' And '$(FlecsNativeIsOsx)' == 'true">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+
+        <PackageReference Include="Vezel.Zig.Toolsets.win-x64" Version="0.11.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'X64' And '$(FlecsNativeIsWindows)' == 'true">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+
+        <PackageReference Include="Vezel.Zig.Toolsets.linux-arm64" Version="0.11.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'Arm64' And '$(FlecsNativeIsLinux)' == 'true">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+
+        <PackageReference Include="Vezel.Zig.Toolsets.osx-arm64" Version="0.11.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'Arm64' And '$(FlecsNativeIsOsx)' == 'true">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+
+        <PackageReference Include="Vezel.Zig.Toolsets.win-arm64" Version="0.11.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'Arm64' And '$(FlecsNativeIsWindows)' == 'true">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-arm64/libflecs.so" PackagePath="runtimes/linux-arm64/native/libflecs.so"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-x64/libflecs.dylib" PackagePath="runtimes/osx-x64/native/libflecs.dylib"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-arm64/libflecs.dylib" PackagePath="runtimes/osx-arm64/native/libflecs.dylib"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/libflecs.dll" PackagePath="runtimes/win-x64/native/libflecs.dll"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/libflecs.pdb" PackagePath="runtimes/win-x64/native/libflecs.pdb"/>
+
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/win-arm64/libflecs.dll" PackagePath="runtimes/win-arm64/native/libflecs.dll"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/win-arm64/libflecs.pdb" PackagePath="runtimes/win-arm64/native/libflecs.pdb"/>
+
+        <Content Condition="'$(Configuration)' == 'Release'" Include="release/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so"/>
+        <Content Condition="'$(Configuration)' == 'Release'" Include="release/linux-arm64/libflecs.so" PackagePath="runtimes/linux-arm64/native/libflecs.so"/>
+        <Content Condition="'$(Configuration)' == 'Release'" Include="release/osx-x64/libflecs.dylib" PackagePath="runtimes/osx-x64/native/libflecs.dylib"/>
+        <Content Condition="'$(Configuration)' == 'Release'" Include="release/osx-arm64/libflecs.dylib" PackagePath="runtimes/osx-arm64/native/libflecs.dylib"/>
+        <Content Condition="'$(Configuration)' == 'Release'" Include="release/win-x64/libflecs.dll" PackagePath="runtimes/win-x64/native/libflecs.dll"/>
+        <Content Condition="'$(Configuration)' == 'Release'" Include="release/win-arm64/libflecs.dll" PackagePath="runtimes/win-arm64/native/libflecs.dll"/>
+    </ItemGroup>
+
+    <Target Name="Compile Flecs" AfterTargets="build">
+        <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir debug/linux-x64 -p"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir debug/linux-arm64 -p"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir debug/osx-x64 -p"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir debug/osx-arm64 -p"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir debug/win-x64 -p"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir debug/win-arm64 -p"/>
+
+        <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir release/linux-x64 -p"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir release/linux-arm64 -p"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir release/osx-x64 -p"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir release/osx-arm64 -p"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir release/win-x64 -p"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' != 'true' " Command="mkdir release/win-arm64 -p"/>
+
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug/linux-x64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug/linux-arm64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug/osx-x64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug/osx-arm64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug/win-x64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir debug/win-arm64"/>
+
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release/linux-x64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release/linux-arm64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release/osx-x64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release/osx-arm64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release/win-x64"/>
+        <Exec Condition=" '$(FlecsNativeIsWindows)' == 'true' " Command="mkdir release/win-arm64"/>
+
+        <Exec Command="$(ZigExePath) cc -g -shared ../../submodules/flecs/flecs.c -o debug/linux-x64/libflecs.so -target x86_64-linux-gnu"/>
+        <Exec Command="$(ZigExePath) cc -g -shared ../../submodules/flecs/flecs.c -o debug/linux-arm64/libflecs.so  -target aarch64-linux-gnu"/>
+        <Exec Command="$(ZigExePath) cc -g -shared ../../submodules/flecs/flecs.c -o debug/osx-x64/libflecs.dylib -target x86_64-macos"/>
+        <Exec Command="$(ZigExePath) cc -g -shared ../../submodules/flecs/flecs.c -o debug/osx-arm64/libflecs.dylib -target aarch64-macos"/>
+        <Exec Command="$(ZigExePath) cc -g -shared ../../submodules/flecs/flecs.c -o debug/win-x64/libflecs.dll -target x86_64-windows-gnu -lws2_32"/>
+        <Exec Command="$(ZigExePath) cc -g -shared ../../submodules/flecs/flecs.c -o debug/win-arm64/libflecs.dll -target aarch64-windows-gnu -lws2_32"/>
+
+        <Exec Command="$(ZigExePath) cc -s -shared -O3 -DNDEBUG ../../submodules/flecs/flecs.c -o release/linux-x64/libflecs.so -target x86_64-linux-gnu"/>
+        <Exec Command="$(ZigExePath) cc -s -shared -O3 -DNDEBUG ../../submodules/flecs/flecs.c -o release/linux-arm64/libflecs.so -target aarch64-linux-gnu"/>
+        <Exec Command="$(ZigExePath) cc -s -shared -O3 -DNDEBUG ../../submodules/flecs/flecs.c -o release/osx-x64/libflecs.dylib -target x86_64-macos"/>
+        <Exec Command="$(ZigExePath) cc -s -shared -O3 -DNDEBUG ../../submodules/flecs/flecs.c -o release/osx-arm64/libflecs.dylib -target aarch64-macos"/>
+        <Exec Command="$(ZigExePath) cc -s -shared -O3 -DNDEBUG ../../submodules/flecs/flecs.c -o release/win-x64/libflecs.dll -target x86_64-windows-gnu -lws2_32"/>
+        <Exec Command="$(ZigExePath) cc -s -shared -O3 -DNDEBUG ../../submodules/flecs/flecs.c -o release/win-arm64/libflecs.dll -target aarch64-windows-gnu -lws2_32"/>
+    </Target>
+</Project>

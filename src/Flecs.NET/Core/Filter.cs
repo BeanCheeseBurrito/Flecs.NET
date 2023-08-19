@@ -1,0 +1,50 @@
+using System;
+using System.Runtime.CompilerServices;
+using Flecs.NET.Utilities;
+using static Flecs.NET.Bindings.Native;
+
+namespace Flecs.NET.Core
+{
+    public unsafe struct Filter
+    {
+        public ecs_world_t* World { get; }
+        private ecs_filter_t* FilterPtr => (ecs_filter_t*)Unsafe.AsPointer(ref _filter);
+        private ecs_filter_t _filter;
+
+        public Filter(ecs_world_t* world, FilterBuilder filterBuilder)
+        {
+            Assert.True(world == filterBuilder.World, "Worlds are different");
+
+            _filter = ECS_FILTER_INIT;
+            World = world;
+
+            ecs_filter_desc_t* filterDesc = &filterBuilder.FilterDesc;
+            filterDesc->terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
+            filterDesc->terms_buffer_count = filterBuilder.Terms.Count;
+
+            fixed (ecs_filter_t* filter = &_filter)
+            {
+                filterDesc->storage = filter;
+                if (ecs_filter_init(World, filterDesc) == null)
+                    throw new InvalidOperationException("Failed to init filter");
+            }
+
+            filterBuilder.Dispose();
+        }
+
+        public Filter(ecs_world_t* world, ecs_filter_t* filter)
+        {
+            World = world;
+            fixed (ecs_filter_t* mFilter = &_filter)
+            {
+                ecs_filter_move(mFilter, filter);
+            }
+        }
+
+        public void Iter(Ecs.IterCallback func)
+        {
+            ecs_iter_t iter = ecs_filter_iter(World, FilterPtr);
+            Invoker.Iter(func, ecs_filter_next, &iter);
+        }
+    }
+}

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netcoreapp3.1;net6;net7</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <Import Project="../Flecs.NET.Native/Flecs.NET.Native.targets"/>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Flecs.NET\Flecs.NET.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0"/>
+        <PackageReference Include="xunit" Version="2.4.0"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0"/>
+        <PackageReference Include="coverlet.collector" Version="1.2.0"/>
+    </ItemGroup>
+
+</Project>

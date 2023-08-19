@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET", "src\Flecs.NET\Flecs.NET.csproj", "{FB8ACF0A-03CB-4F94-92DC-84AE58ABE77A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET.Bindgen", "src\Flecs.NET.Bindgen\Flecs.NET.Bindgen.csproj", "{33F92CFA-5C3E-489C-8FA4-4B5E881091FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET.Bindings", "src\Flecs.NET.Bindings\Flecs.NET.Bindings.csproj", "{A69442C0-A005-4270-B6EB-2970BA58B9F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET.Examples", "src\Flecs.NET.Examples\Flecs.NET.Examples.csproj", "{6CA18808-7F69-4F8A-B512-9354C3E56097}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET.Tests", "src\Flecs.NET.Tests\Flecs.NET.Tests.csproj", "{24B5117E-A20C-4F0F-B45A-1C0508AAC52D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET.Native", "src\Flecs.NET.Native\Flecs.NET.Native.csproj", "{C20BC4CB-D946-44C1-A003-3236781F650A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB8ACF0A-03CB-4F94-92DC-84AE58ABE77A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB8ACF0A-03CB-4F94-92DC-84AE58ABE77A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB8ACF0A-03CB-4F94-92DC-84AE58ABE77A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB8ACF0A-03CB-4F94-92DC-84AE58ABE77A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33F92CFA-5C3E-489C-8FA4-4B5E881091FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33F92CFA-5C3E-489C-8FA4-4B5E881091FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33F92CFA-5C3E-489C-8FA4-4B5E881091FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33F92CFA-5C3E-489C-8FA4-4B5E881091FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A69442C0-A005-4270-B6EB-2970BA58B9F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A69442C0-A005-4270-B6EB-2970BA58B9F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A69442C0-A005-4270-B6EB-2970BA58B9F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A69442C0-A005-4270-B6EB-2970BA58B9F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CA18808-7F69-4F8A-B512-9354C3E56097}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CA18808-7F69-4F8A-B512-9354C3E56097}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CA18808-7F69-4F8A-B512-9354C3E56097}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CA18808-7F69-4F8A-B512-9354C3E56097}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24B5117E-A20C-4F0F-B45A-1C0508AAC52D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24B5117E-A20C-4F0F-B45A-1C0508AAC52D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24B5117E-A20C-4F0F-B45A-1C0508AAC52D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24B5117E-A20C-4F0F-B45A-1C0508AAC52D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C20BC4CB-D946-44C1-A003-3236781F650A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C20BC4CB-D946-44C1-A003-3236781F650A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C20BC4CB-D946-44C1-A003-3236781F650A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C20BC4CB-D946-44C1-A003-3236781F650A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

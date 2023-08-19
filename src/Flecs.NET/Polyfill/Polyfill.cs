@@ -1,0 +1,3 @@
+namespace Flecs.NET.Polyfill
+{
+}
