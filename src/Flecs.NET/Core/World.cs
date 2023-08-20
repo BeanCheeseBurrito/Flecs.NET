@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -8,15 +9,39 @@ namespace Flecs.NET.Core
     public unsafe struct World : IDisposable, IEquatable<World>
     {
         public ecs_world_t* Handle { get; private set; }
+        public bool Owned { get; private set; }
 
-        public World(ecs_world_t* handle)
+        public World(ecs_world_t* handle, bool owned = true)
         {
             Handle = handle;
+            Owned = owned;
         }
 
         public static World Create()
         {
             return new World(ecs_init());
+        }
+
+        public static World Create(ecs_world_t* world)
+        {
+            return new World(world, false);
+        }
+
+        public static World Create(string[] args)
+        {
+            NativeString* nativeStrings = Memory.AllocZeroed<NativeString>(args.Length);
+
+            for (int i = 0; i < args.Length; i++)
+                nativeStrings[i] = (NativeString)args[i];
+
+            ecs_world_t* world = ecs_init_w_args(args.Length, (byte**)nativeStrings);
+
+            for (int i = 0; i < args.Length; i++)
+                nativeStrings[i].Dispose();
+
+            Memory.Free(nativeStrings);
+
+            return new World(world);
         }
 
         public void Dispose()
@@ -123,6 +148,11 @@ namespace Flecs.NET.Core
             return new Entity(ecs_set_scope(Handle, scope));
         }
 
+        public AppBuilder App()
+        {
+            return new AppBuilder(Handle);
+        }
+
         public FilterBuilder FilterBuilder()
         {
             return new FilterBuilder(Handle);
@@ -143,14 +173,19 @@ namespace Flecs.NET.Core
             return new RoutineBuilder(Handle);
         }
 
-        public Filter Filter(FilterBuilder filterBuilder)
+        public Filter Filter(string name = "", FilterBuilder filterBuilder = default)
         {
-            return new Filter(Handle, filterBuilder);
+            return new Filter(Handle, name, filterBuilder);
         }
 
-        public Query Query(FilterBuilder filterBuilder = default, QueryBuilder queryBuilder = default)
+        public Rule Rule(string name = "", FilterBuilder filterBuilder = default)
         {
-            return new Query(Handle, filterBuilder, queryBuilder);
+            return new Rule(Handle, name, filterBuilder);
+        }
+
+        public Query Query(string name = "", FilterBuilder filterBuilder = default, QueryBuilder queryBuilder = default)
+        {
+            return new Query(Handle, name, filterBuilder, queryBuilder);
         }
 
         public Observer Observer(string name = "", FilterBuilder filterBuilder = default,
@@ -170,6 +205,11 @@ namespace Flecs.NET.Core
             RoutineBuilder routineBuilder = default, Ecs.IterCallback? callback = null)
         {
             return new Routine(Handle, name, filterBuilder, queryBuilder, routineBuilder, callback);
+        }
+
+        public Routine Routine(ulong entity)
+        {
+            return new Routine(Handle, entity);
         }
 
         public static implicit operator ecs_world_t*(World world)

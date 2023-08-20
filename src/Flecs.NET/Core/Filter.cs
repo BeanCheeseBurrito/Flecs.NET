@@ -5,13 +5,13 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
-    public unsafe struct Filter
+    public unsafe struct Filter : IDisposable
     {
         public ecs_world_t* World { get; }
         private ecs_filter_t* FilterPtr => (ecs_filter_t*)Unsafe.AsPointer(ref _filter);
         private ecs_filter_t _filter;
 
-        public Filter(ecs_world_t* world, FilterBuilder filterBuilder)
+        public Filter(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default)
         {
             Assert.True(world == filterBuilder.World, "Worlds are different");
 
@@ -21,6 +21,18 @@ namespace Flecs.NET.Core
             ecs_filter_desc_t* filterDesc = &filterBuilder.FilterDesc;
             filterDesc->terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
             filterDesc->terms_buffer_count = filterBuilder.Terms.Count;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                using NativeString nativeName = (NativeString)name;
+                using NativeString nativeSep = (NativeString)"::";
+
+                ecs_entity_desc_t entityDesc = default;
+                entityDesc.name = nativeName;
+                entityDesc.sep = nativeSep;
+                entityDesc.root_sep = nativeSep;
+                filterDesc->entity = ecs_entity_init(World, &entityDesc);
+            }
 
             fixed (ecs_filter_t* filter = &_filter)
             {
@@ -36,9 +48,31 @@ namespace Flecs.NET.Core
         {
             World = world;
             fixed (ecs_filter_t* mFilter = &_filter)
-            {
                 ecs_filter_move(mFilter, filter);
+        }
+
+        public void Dispose()
+        {
+            fixed (ecs_filter_t* mFilter = &_filter)
+            {
+                if (mFilter == FilterPtr && FilterPtr != null)
+                    ecs_filter_fini(mFilter);
             }
+        }
+
+        public Entity Entity()
+        {
+            return new Entity(World, ecs_get_entity(FilterPtr));
+        }
+
+        public int FieldCount()
+        {
+            return _filter.field_count;
+        }
+
+        public string Str()
+        {
+            return NativeString.GetStringAndFree(ecs_filter_str(World, FilterPtr));
         }
 
         public void Iter(Ecs.IterCallback func)

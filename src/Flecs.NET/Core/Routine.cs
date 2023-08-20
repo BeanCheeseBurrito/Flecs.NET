@@ -50,5 +50,74 @@ namespace Flecs.NET.Core
 
             filterBuilder.Dispose();
         }
+
+        public Routine(ecs_world_t* world, ulong entity)
+        {
+            World = world;
+            Entity = new Entity(world, entity);
+        }
+
+        public void Destruct()
+        {
+            Entity.Destruct();
+        }
+
+        public void Ctx(void* ctx)
+        {
+            ecs_system_desc_t desc = default;
+            desc.entity = Entity;
+            desc.ctx = ctx;
+            ecs_system_init(World, &desc);
+        }
+
+        public void* Ctx()
+        {
+            return ecs_get_system_ctx(World, Entity);
+        }
+
+        public Query Query()
+        {
+            return new Query(World, ecs_system_get_query(World, Entity));
+        }
+
+        public void Interval(float interval)
+        {
+            ecs_set_interval(World, Entity, interval);
+        }
+
+        public float Interval()
+        {
+            return ecs_get_interval(World, Entity);
+        }
+
+        public void Timeout(float timeout)
+        {
+            ecs_set_timeout(World, Entity, timeout);
+        }
+
+        public float Timeout()
+        {
+            return ecs_get_timeout(World, Entity);
+        }
+
+        public void Rate(int rate)
+        {
+            ecs_set_rate(World, Entity, rate, 0);
+        }
+
+        public void Start()
+        {
+            ecs_start_timer(World, Entity);
+        }
+
+        public void StopTimer()
+        {
+            ecs_stop_timer(World, Entity);
+        }
+
+        public void SetTickSource(ulong entity)
+        {
+            ecs_set_tick_source(World, Entity, entity);
+        }
     }
 }

@@ -1,6 +1,7 @@
+using Flecs.NET.Core;
 using static Flecs.NET.Bindings.Native;
 
-namespace Flecs.NET.Core.Modules
+namespace Flecs.NET.Modules
 {
     public unsafe struct Alerts : IFlecsModule
     {

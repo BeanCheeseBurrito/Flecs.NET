@@ -28,13 +28,11 @@ namespace Flecs.NET.Core
             entityDesc.name = nativeName;
             entityDesc.sep = nativeSep;
 
-            ulong entity = ecs_entity_init(world, &entityDesc);
-
             BindingContext.Callback* bindingContext = Memory.Alloc<BindingContext.Callback>(1);
             *bindingContext = BindingContext.AllocCallback(callback);
 
             ecs_observer_desc_t* observerDesc = &observerBuilder.ObserverDesc;
-            observerDesc->entity = entity;
+            observerDesc->entity = ecs_entity_init(world, &entityDesc);
             observerDesc->filter = filterBuilder.FilterDesc;
             observerDesc->filter.terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
             observerDesc->filter.terms_buffer_count = filterBuilder.Terms.Count;
@@ -51,6 +49,11 @@ namespace Flecs.NET.Core
         {
             World = world;
             Entity = new Entity(world, entity);
+        }
+
+        public void Destruct()
+        {
+            Entity.Destruct();
         }
 
         public readonly void Ctx(void* ctx)

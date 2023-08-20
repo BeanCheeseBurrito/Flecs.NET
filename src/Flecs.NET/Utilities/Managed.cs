@@ -17,6 +17,12 @@ namespace Flecs.NET.Utilities
                 GCHandle.FromIntPtr(handle).Free();
         }
 
+        internal static void FreeGcHandle(GCHandle handle)
+        {
+            if ((IntPtr)handle != IntPtr.Zero)
+                handle.Free();
+        }
+
         internal static void FreeGcHandle(void* data, int index = 0)
         {
             IntPtr handle = ((IntPtr*)data)[index];

@@ -9,7 +9,7 @@ namespace Flecs.NET.Core
     {
         public ecs_world_t* World { get; }
 
-        public ecs_query_desc_t QueryDesc;
+        internal ecs_query_desc_t QueryDesc;
 
         public QueryBuilder(ecs_world_t* world)
         {
