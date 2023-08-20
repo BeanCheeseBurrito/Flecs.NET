@@ -28,17 +28,18 @@ namespace Flecs.NET.Core
             entityDesc.name = nativeName;
             entityDesc.sep = nativeSep;
 
-            BindingContext.Callback* bindingContext = Memory.Alloc<BindingContext.Callback>(1);
-            *bindingContext = BindingContext.AllocCallback(callback);
+            BindingContext.ObserverContext* observerContext = Memory.Alloc<BindingContext.ObserverContext>(1);
+            observerContext[0] = observerBuilder.ObserverContext;
+            BindingContext.SetCallback(ref observerContext->Iter, callback);
 
             ecs_observer_desc_t* observerDesc = &observerBuilder.ObserverDesc;
             observerDesc->entity = ecs_entity_init(world, &entityDesc);
             observerDesc->filter = filterBuilder.FilterDesc;
             observerDesc->filter.terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
             observerDesc->filter.terms_buffer_count = filterBuilder.Terms.Count;
-            observerDesc->binding_ctx = bindingContext;
-            observerDesc->binding_ctx_free = BindingContext.FreeIterPointer;
-            observerDesc->callback = BindingContext.IterPointer;
+            observerDesc->binding_ctx = observerContext;
+            observerDesc->binding_ctx_free = BindingContext.ObserverContextFreePointer;
+            observerDesc->callback = BindingContext.ObserverIterPointer;
 
             Entity = new Entity(world, ecs_observer_init(world, observerDesc));
 

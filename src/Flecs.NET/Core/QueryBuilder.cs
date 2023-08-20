@@ -4,17 +4,19 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
-    // TODO: Allocate GC handles for all these functions ASAP
+    // TODO: Free query context once .binding_context is added
     public unsafe struct QueryBuilder
     {
         public ecs_world_t* World { get; }
 
         internal ecs_query_desc_t QueryDesc;
+        internal BindingContext.QueryContext QueryContext;
 
         public QueryBuilder(ecs_world_t* world)
         {
             World = world;
             QueryDesc = default;
+            QueryContext = default;
         }
 
         public ref QueryBuilder OrderBy<T>(Ecs.OrderByAction compare)
@@ -24,7 +26,8 @@ namespace Flecs.NET.Core
 
         public ref QueryBuilder OrderBy(ulong component, Ecs.OrderByAction compare)
         {
-            QueryDesc.order_by = Marshal.GetFunctionPointerForDelegate(compare);
+            BindingContext.SetCallback(ref QueryContext.OrderByAction, compare);
+            QueryDesc.order_by = QueryContext.OrderByAction.Function;
             QueryDesc.order_by_component = component;
             return ref this;
         }
@@ -36,7 +39,8 @@ namespace Flecs.NET.Core
 
         public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByAction groupByAction)
         {
-            QueryDesc.group_by = Marshal.GetFunctionPointerForDelegate(groupByAction);
+            BindingContext.SetCallback(ref QueryContext.GroupByAction, groupByAction);
+            QueryDesc.group_by = QueryContext.GroupByAction.Function;
             QueryDesc.group_by_id = component;
             return ref this;
         }
@@ -55,8 +59,9 @@ namespace Flecs.NET.Core
 
         public ref QueryBuilder GroupbyCtx(void* ctx, Ecs.ContextFree contextFree)
         {
+            BindingContext.SetCallback(ref QueryContext.ContextFree, contextFree);
+            QueryDesc.group_by_ctx_free = QueryContext.ContextFree.Function;
             QueryDesc.group_by_ctx = ctx;
-            QueryDesc.group_by_ctx_free = Marshal.GetFunctionPointerForDelegate(contextFree);
             return ref this;
         }
 
@@ -67,15 +72,28 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        public ref QueryBuilder OnGroupCreate(Ecs.GroupCreateAction action)
+        public ref QueryBuilder OnGroupCreate(Ecs.GroupCreateAction onGroupCreate)
         {
-            QueryDesc.on_group_create = Marshal.GetFunctionPointerForDelegate(action);
+            BindingContext.SetCallback(ref QueryContext.GroupCreateAction, onGroupCreate);
+            QueryDesc.on_group_create = QueryContext.GroupCreateAction.Function;
             return ref this;
         }
 
-        public ref QueryBuilder OnGroupDelete(Ecs.GroupDeleteAction action)
+        public ref QueryBuilder OnGroupDelete(Ecs.GroupDeleteAction onGroupDelete)
         {
-            QueryDesc.on_group_delete = Marshal.GetFunctionPointerForDelegate(action);
+            BindingContext.SetCallback(ref QueryContext.GroupDeleteAction, onGroupDelete);
+            QueryDesc.on_group_delete = QueryContext.GroupDeleteAction.Function;
+            return ref this;
+        }
+
+        public ref QueryBuilder Observable(Query parent)
+        {
+            return ref Observable(ref parent);
+        }
+
+        public ref QueryBuilder Observable(ref Query parent)
+        {
+            QueryDesc.parent = parent.Handle;
             return ref this;
         }
     }

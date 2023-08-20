@@ -6,12 +6,15 @@ namespace Flecs.NET.Core
     public unsafe struct RoutineBuilder
     {
         public ecs_world_t* World { get; }
+
         internal ecs_system_desc_t RoutineDesc;
+        internal BindingContext.RoutineContext RoutineContext;
 
         public RoutineBuilder(ecs_world_t* world)
         {
             World = world;
             RoutineDesc = default;
+            RoutineContext = default;
         }
 
         public ref RoutineBuilder Kind(ulong phase)
@@ -81,10 +84,10 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        // TODO: Allocate GC handle later
         public ref RoutineBuilder Run(Ecs.IterAction action)
         {
-            RoutineDesc.run = Marshal.GetFunctionPointerForDelegate(action);
+            BindingContext.SetCallback(ref RoutineContext.Run, action);
+            RoutineDesc.run = RoutineContext.Run.Function;
             return ref this;
         }
     }

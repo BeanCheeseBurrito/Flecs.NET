@@ -86,7 +86,7 @@ namespace Flecs.NET.Core
         private static void NormalCtor(void* data, int count, ecs_type_info_t* typeInfo)
         {
             CtorData ctorData = new CtorData(data, typeInfo);
-            BindingContext.TypeHooks* context = (BindingContext.TypeHooks*)typeInfo->hooks.binding_ctx;
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)typeInfo->hooks.binding_ctx;
 
             if (context->Ctor.Function == IntPtr.Zero)
                 return;
@@ -104,7 +104,7 @@ namespace Flecs.NET.Core
         private static void NormalDtor(void* data, int count, ecs_type_info_t* typeInfo)
         {
             DtorData dtorData = new DtorData(data, typeInfo);
-            BindingContext.TypeHooks* context = (BindingContext.TypeHooks*)typeInfo->hooks.binding_ctx;
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)typeInfo->hooks.binding_ctx;
 
             if (context->Dtor.Function == IntPtr.Zero)
                 return;
@@ -122,7 +122,7 @@ namespace Flecs.NET.Core
         private static void NormalMove(void* src, void* dst, int count, ecs_type_info_t* typeInfo)
         {
             MoveData moveData = new MoveData(src, dst, typeInfo);
-            BindingContext.TypeHooks* context = (BindingContext.TypeHooks*)typeInfo->hooks.binding_ctx;
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)typeInfo->hooks.binding_ctx;
 
             if (context->Move.Function == IntPtr.Zero)
                 return;
@@ -141,7 +141,7 @@ namespace Flecs.NET.Core
         private static void NormalCopy(void* src, void* dst, int count, ecs_type_info_t* typeInfo)
         {
             CopyData copyData = new CopyData(src, dst, typeInfo);
-            BindingContext.TypeHooks* context = (BindingContext.TypeHooks*)typeInfo->hooks.binding_ctx;
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)typeInfo->hooks.binding_ctx;
 
             if (context->Copy.Function == IntPtr.Zero)
                 return;

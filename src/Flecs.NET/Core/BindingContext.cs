@@ -10,75 +10,141 @@ namespace Flecs.NET.Core
     public static unsafe class BindingContext
     {
 #if NET5_0_OR_GREATER
-        internal static readonly IntPtr IterPointer; =
+        internal static readonly IntPtr RoutineIterPointer; =
             (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&RoutineIter;
 
-        internal static readonly IntPtr FreeIterPointer =
-            (IntPtr)(delegate* unmanaged<void*, void>)&RoutineFree;
+        internal static readonly IntPtr ObserverIterPointer; =
+            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&ObserverIter;
 
-        internal static readonly IntPtr FreeTypeHooksPointer =
-            (IntPtr)(delegate* unmanaged<void*, void>)&FreeTypeHooks;
+        internal static readonly IntPtr ObserverContextFreePointer =
+            (IntPtr)(delegate* unmanaged<void*, void>)&ObserverContextFree;
+
+        internal static readonly IntPtr RoutineContextFreePointer =
+            (IntPtr)(delegate* unmanaged<void*, void>)&RoutineContextFree;
+
+        internal static readonly IntPtr QueryContextFreePointer =
+            (IntPtr)(delegate* unmanaged<void*, void>)&QueryContextFree;
+
+        internal static readonly IntPtr TypeHooksContextFreePointer =
+            (IntPtr)(delegate* unmanaged<void*, void>)&TypeHooksContextFree;
 #else
-        internal static readonly IntPtr IterPointer;
-        internal static readonly IntPtr FreeIterPointer;
+        internal static readonly IntPtr ObserverIterPointer;
+        internal static readonly IntPtr RoutineIterPointer;
 
-        internal static readonly IntPtr FreeTypeHooksPointer;
+        internal static readonly IntPtr ObserverContextFreePointer;
+        internal static readonly IntPtr RoutineContextFreePointer;
+        internal static readonly IntPtr QueryContextFreePointer;
 
-        private static readonly Ecs.IterAction IterReference = Iter;
-        private static readonly Ecs.ContextFree FreeIterReference = FreeIter;
+        internal static readonly IntPtr TypeHooksContextFreePointer;
 
-        private static readonly Ecs.ContextFree FreeTypeHooksReference = FreeTypeHooks;
+        private static readonly Ecs.IterAction ObserverIterReference = ObserverIter;
+        private static readonly Ecs.IterAction RoutineIterReference = RoutineIter;
+
+        private static readonly Ecs.ContextFree ObserverContextFreeReference = ObserverContextFree;
+        private static readonly Ecs.ContextFree RoutineContextFreeReference = RoutineContextFree;
+        private static readonly Ecs.ContextFree QueryContextFreeReference = QueryContextFree;
+
+        private static readonly Ecs.ContextFree TypeHooksContextFreeReference = TypeHooksContextFree;
 
         [SuppressMessage("Usage", "CA1810")]
         static BindingContext()
         {
-            IterPointer = Marshal.GetFunctionPointerForDelegate(IterReference);
-            FreeIterPointer = Marshal.GetFunctionPointerForDelegate(FreeIterReference);
+            ObserverIterPointer = Marshal.GetFunctionPointerForDelegate(ObserverIterReference);
+            RoutineIterPointer = Marshal.GetFunctionPointerForDelegate(RoutineIterReference);
 
-            FreeTypeHooksPointer = Marshal.GetFunctionPointerForDelegate(FreeTypeHooksReference);
+            ObserverContextFreePointer = Marshal.GetFunctionPointerForDelegate(ObserverContextFreeReference);
+            RoutineContextFreePointer = Marshal.GetFunctionPointerForDelegate(RoutineContextFreeReference);
+            QueryContextFreePointer = Marshal.GetFunctionPointerForDelegate(QueryContextFreeReference);
+
+            TypeHooksContextFreePointer = Marshal.GetFunctionPointerForDelegate(TypeHooksContextFreeReference);
         }
 #endif
 
         [UnmanagedCallersOnly]
-        public static void Iter(ecs_iter_t* iter)
+        public static void ObserverIter(ecs_iter_t* iter)
         {
-            Callback* context = (Callback*)iter->binding_ctx;
+            ObserverContext* context = (ObserverContext*)iter->binding_ctx;
 
 #if NET5_0_OR_GREATER
-            ((delegate* unmanaged<Iter, void>)context->Function)(new Iter(iter));
+            ((delegate* unmanaged<Iter, void>)context->Iter.Function)(new Iter(iter));
 #else
-            Marshal.GetDelegateForFunctionPointer<Ecs.IterCallback>(context->Function)(new Iter(iter));
+            Marshal.GetDelegateForFunctionPointer<Ecs.IterCallback>(context->Iter.Function)(new Iter(iter));
 #endif
         }
 
         [UnmanagedCallersOnly]
-        private static void FreeIter(void* context)
+        public static void RoutineIter(ecs_iter_t* iter)
         {
-            FreeCallback(context);
+            RoutineContext* context = (RoutineContext*)iter->binding_ctx;
+
+#if NET5_0_OR_GREATER
+            ((delegate* unmanaged<Iter, void>)context->Iter.Function)(new Iter(iter));
+#else
+            Marshal.GetDelegateForFunctionPointer<Ecs.IterCallback>(context->Iter.Function)(new Iter(iter));
+#endif
+        }
+
+        [UnmanagedCallersOnly]
+        private static void ObserverContextFree(void* context)
+        {
+            ObserverContext* observerContext = (ObserverContext*)context;
+
+            FreeCallback(ref observerContext->Iter);
+            FreeCallback(ref observerContext->Run);
+
             Memory.Free(context);
         }
 
         [UnmanagedCallersOnly]
-        private static void FreeTypeHooks(void* context)
+        private static void RoutineContextFree(void* context)
         {
-            TypeHooks* typeHooks = (TypeHooks*)context;
-            FreeCallback(&typeHooks->Ctor);
-            FreeCallback(&typeHooks->Dtor);
-            FreeCallback(&typeHooks->Move);
-            FreeCallback(&typeHooks->Copy);
-            FreeCallback(&typeHooks->OnAdd);
-            FreeCallback(&typeHooks->OnSet);
-            FreeCallback(&typeHooks->OnRemove);
-            FreeCallback(&typeHooks->ContextFree);
+            RoutineContext* routineContext = (RoutineContext*)context;
+
+            FreeCallback(ref routineContext->QueryContext.OrderByAction);
+            FreeCallback(ref routineContext->QueryContext.GroupByAction);
+            FreeCallback(ref routineContext->QueryContext.ContextFree);
+            FreeCallback(ref routineContext->QueryContext.GroupCreateAction);
+            FreeCallback(ref routineContext->QueryContext.GroupDeleteAction);
+
+            FreeCallback(ref routineContext->Iter);
+            FreeCallback(ref routineContext->Run);
+
             Memory.Free(context);
         }
 
-        private static void FreeCallback(void* context)
+        [UnmanagedCallersOnly]
+        private static void QueryContextFree(void* context)
         {
-            Callback* callback = (Callback*)context;
+            QueryContext* queryContext = (QueryContext*)context;
 
-            if (callback->GcHandle != IntPtr.Zero)
-                GCHandle.FromIntPtr(callback->GcHandle).Free();
+            FreeCallback(ref queryContext->OrderByAction);
+            FreeCallback(ref queryContext->GroupByAction);
+            FreeCallback(ref queryContext->ContextFree);
+            FreeCallback(ref queryContext->GroupCreateAction);
+            FreeCallback(ref queryContext->GroupDeleteAction);
+
+            Memory.Free(context);
+        }
+
+        [UnmanagedCallersOnly]
+        private static void TypeHooksContextFree(void* context)
+        {
+            TypeHooksContext* typeHooks = (TypeHooksContext*)context;
+            FreeCallback(ref typeHooks->Ctor);
+            FreeCallback(ref typeHooks->Dtor);
+            FreeCallback(ref typeHooks->Move);
+            FreeCallback(ref typeHooks->Copy);
+            FreeCallback(ref typeHooks->OnAdd);
+            FreeCallback(ref typeHooks->OnSet);
+            FreeCallback(ref typeHooks->OnRemove);
+            FreeCallback(ref typeHooks->ContextFree);
+            Memory.Free(context);
+        }
+
+        private static void FreeCallback(ref Callback dest)
+        {
+            Managed.FreeGcHandle(dest.GcHandle);
+            dest = default;
         }
 
         internal static Callback AllocCallback<T>(T? callback) where T : Delegate
@@ -86,6 +152,14 @@ namespace Flecs.NET.Core
             return callback == null
                 ? new Callback(IntPtr.Zero, IntPtr.Zero)
                 : new Callback(Marshal.GetFunctionPointerForDelegate(callback), (IntPtr)GCHandle.Alloc(callback));
+        }
+
+        internal static void SetCallback<T>(ref Callback dest, T? callback) where T : Delegate
+        {
+            if (dest.GcHandle != IntPtr.Zero)
+                FreeCallback(ref dest);
+
+            dest = AllocCallback(callback);
         }
 
         internal struct Callback
@@ -100,7 +174,29 @@ namespace Flecs.NET.Core
             }
         }
 
-        internal struct TypeHooks
+        internal struct ObserverContext
+        {
+            public Callback Iter;
+            public Callback Run;
+        }
+
+        internal struct RoutineContext
+        {
+            public QueryContext QueryContext;
+            public Callback Iter;
+            public Callback Run;
+        }
+
+        internal struct QueryContext
+        {
+            public Callback OrderByAction;
+            public Callback GroupByAction;
+            public Callback ContextFree;
+            public Callback GroupCreateAction;
+            public Callback GroupDeleteAction;
+        }
+
+        internal struct TypeHooksContext
         {
             public Callback Ctor;
             public Callback Dtor;

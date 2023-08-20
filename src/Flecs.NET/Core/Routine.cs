@@ -33,8 +33,10 @@ namespace Flecs.NET.Core
             ecs_add_id(world, entity, Macros.DependsOn(EcsOnUpdate));
             ecs_add_id(world, entity, EcsOnUpdate);
 
-            BindingContext.Callback* bindingContext = Memory.Alloc<BindingContext.Callback>(1);
-            *bindingContext = BindingContext.AllocCallback(callback);
+            BindingContext.RoutineContext* routineContext = Memory.Alloc<BindingContext.RoutineContext>(1);
+            routineContext[0] = routineBuilder.RoutineContext;
+            routineContext->QueryContext = queryBuilder.QueryContext;
+            BindingContext.SetCallback(ref routineContext->Iter, callback);
 
             ecs_system_desc_t* routineDesc = &routineBuilder.RoutineDesc;
             routineDesc->entity = entity;
@@ -42,9 +44,9 @@ namespace Flecs.NET.Core
             routineDesc->query.filter = filterBuilder.FilterDesc;
             routineDesc->query.filter.terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
             routineDesc->query.filter.terms_buffer_count = filterBuilder.Terms.Count;
-            routineDesc->binding_ctx = bindingContext;
-            routineDesc->binding_ctx_free = BindingContext.FreeIterPointer;
-            routineDesc->callback = BindingContext.IterPointer;
+            routineDesc->binding_ctx = routineContext;
+            routineDesc->binding_ctx_free = BindingContext.RoutineContextFreePointer;
+            routineDesc->callback = BindingContext.RoutineIterPointer;
 
             Entity = new Entity(world, ecs_system_init(world, routineDesc));
 

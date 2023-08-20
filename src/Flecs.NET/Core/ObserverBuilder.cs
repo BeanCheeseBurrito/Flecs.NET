@@ -7,7 +7,9 @@ namespace Flecs.NET.Core
     public unsafe struct ObserverBuilder
     {
         public ecs_world_t* World { get; }
+
         internal ecs_observer_desc_t ObserverDesc;
+        internal BindingContext.ObserverContext ObserverContext;
 
         private int _eventCount;
 
@@ -15,6 +17,7 @@ namespace Flecs.NET.Core
         {
             World = world;
             ObserverDesc = default;
+            ObserverContext = default;
             _eventCount = default;
         }
 
@@ -48,10 +51,10 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        // TODO: Allocate GC handle later
         public ref ObserverBuilder Run(Ecs.IterAction action)
         {
-            ObserverDesc.run = Marshal.GetFunctionPointerForDelegate(action);
+            BindingContext.SetCallback(ref ObserverContext.Run, action);
+            ObserverDesc.run = ObserverContext.Run.Function;
             return ref this;
         }
     }

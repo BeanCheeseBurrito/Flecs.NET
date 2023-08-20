@@ -164,7 +164,7 @@ namespace Flecs.NET.Core
             if (Hooks == null)
                 return;
 
-            BindingContext.TypeHooks* bindingContext = Memory.AllocZeroed<BindingContext.TypeHooks>(1);
+            BindingContext.TypeHooksContext* bindingContext = Memory.AllocZeroed<BindingContext.TypeHooksContext>(1);
             bindingContext->OnAdd = BindingContext.AllocCallback(Hooks.OnAdd);
             bindingContext->OnSet = BindingContext.AllocCallback(Hooks.OnSet);
             bindingContext->OnRemove = BindingContext.AllocCallback(Hooks.OnRemove);
@@ -173,7 +173,7 @@ namespace Flecs.NET.Core
             typeHooksDesc.on_set = bindingContext->OnSet.Function;
             typeHooksDesc.on_remove = bindingContext->OnRemove.Function;
             typeHooksDesc.binding_ctx = bindingContext;
-            typeHooksDesc.binding_ctx_free = BindingContext.FreeTypeHooksPointer;
+            typeHooksDesc.binding_ctx_free = BindingContext.TypeHooksContextFreePointer;
 
             if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
             {
