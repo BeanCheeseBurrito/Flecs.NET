@@ -1,3 +1,4 @@
+#nullable enable
 namespace Flecs.NET.Bindings
 {
     public static unsafe partial class Native
@@ -1918,6 +1919,11 @@ namespace Flecs.NET.Bindings
                 public ecs_alert_severity_filter_t Item2;
 
                 public ecs_alert_severity_filter_t Item3;
+
+                public ref ecs_alert_severity_filter_t this[int index] => ref AsSpan()[index];
+
+                [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+                public System.Span<ecs_alert_severity_filter_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 4);
             }
         }
 
@@ -2049,6 +2055,11 @@ namespace Flecs.NET.Bindings
                 public ecs_bitmask_constant_t Item30;
 
                 public ecs_bitmask_constant_t Item31;
+
+                public ref ecs_bitmask_constant_t this[int index] => ref AsSpan()[index];
+
+                [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+                public System.Span<ecs_bitmask_constant_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
             }
         }
 
@@ -2105,78 +2116,11 @@ namespace Flecs.NET.Bindings
 
             public int count;
 
-            public ids_FixedBuffer ids;
+            public fixed ulong ids[32];
 
             public void** data;
 
             public ecs_table_t* table;
-
-            public partial struct ids_FixedBuffer
-            {
-                public ulong Item0;
-
-                public ulong Item1;
-
-                public ulong Item2;
-
-                public ulong Item3;
-
-                public ulong Item4;
-
-                public ulong Item5;
-
-                public ulong Item6;
-
-                public ulong Item7;
-
-                public ulong Item8;
-
-                public ulong Item9;
-
-                public ulong Item10;
-
-                public ulong Item11;
-
-                public ulong Item12;
-
-                public ulong Item13;
-
-                public ulong Item14;
-
-                public ulong Item15;
-
-                public ulong Item16;
-
-                public ulong Item17;
-
-                public ulong Item18;
-
-                public ulong Item19;
-
-                public ulong Item20;
-
-                public ulong Item21;
-
-                public ulong Item22;
-
-                public ulong Item23;
-
-                public ulong Item24;
-
-                public ulong Item25;
-
-                public ulong Item26;
-
-                public ulong Item27;
-
-                public ulong Item28;
-
-                public ulong Item29;
-
-                public ulong Item30;
-
-                public ulong Item31;
-            }
         }
 
         public partial struct ecs_component_desc_t
@@ -2192,130 +2136,7 @@ namespace Flecs.NET.Bindings
         {
             public ecs_gauge_t rate;
 
-            public value_FixedBuffer value;
-
-            public partial struct value_FixedBuffer
-            {
-                public double Item0;
-
-                public double Item1;
-
-                public double Item2;
-
-                public double Item3;
-
-                public double Item4;
-
-                public double Item5;
-
-                public double Item6;
-
-                public double Item7;
-
-                public double Item8;
-
-                public double Item9;
-
-                public double Item10;
-
-                public double Item11;
-
-                public double Item12;
-
-                public double Item13;
-
-                public double Item14;
-
-                public double Item15;
-
-                public double Item16;
-
-                public double Item17;
-
-                public double Item18;
-
-                public double Item19;
-
-                public double Item20;
-
-                public double Item21;
-
-                public double Item22;
-
-                public double Item23;
-
-                public double Item24;
-
-                public double Item25;
-
-                public double Item26;
-
-                public double Item27;
-
-                public double Item28;
-
-                public double Item29;
-
-                public double Item30;
-
-                public double Item31;
-
-                public double Item32;
-
-                public double Item33;
-
-                public double Item34;
-
-                public double Item35;
-
-                public double Item36;
-
-                public double Item37;
-
-                public double Item38;
-
-                public double Item39;
-
-                public double Item40;
-
-                public double Item41;
-
-                public double Item42;
-
-                public double Item43;
-
-                public double Item44;
-
-                public double Item45;
-
-                public double Item46;
-
-                public double Item47;
-
-                public double Item48;
-
-                public double Item49;
-
-                public double Item50;
-
-                public double Item51;
-
-                public double Item52;
-
-                public double Item53;
-
-                public double Item54;
-
-                public double Item55;
-
-                public double Item56;
-
-                public double Item57;
-
-                public double Item58;
-
-                public double Item59;
-            }
+            public fixed double value[60];
         }
 
         public partial struct ecs_data_t
@@ -2338,76 +2159,9 @@ namespace Flecs.NET.Bindings
 
             public byte use_low_id;
 
-            public add_FixedBuffer add;
+            public fixed ulong add[32];
 
             public byte* add_expr;
-
-            public partial struct add_FixedBuffer
-            {
-                public ulong Item0;
-
-                public ulong Item1;
-
-                public ulong Item2;
-
-                public ulong Item3;
-
-                public ulong Item4;
-
-                public ulong Item5;
-
-                public ulong Item6;
-
-                public ulong Item7;
-
-                public ulong Item8;
-
-                public ulong Item9;
-
-                public ulong Item10;
-
-                public ulong Item11;
-
-                public ulong Item12;
-
-                public ulong Item13;
-
-                public ulong Item14;
-
-                public ulong Item15;
-
-                public ulong Item16;
-
-                public ulong Item17;
-
-                public ulong Item18;
-
-                public ulong Item19;
-
-                public ulong Item20;
-
-                public ulong Item21;
-
-                public ulong Item22;
-
-                public ulong Item23;
-
-                public ulong Item24;
-
-                public ulong Item25;
-
-                public ulong Item26;
-
-                public ulong Item27;
-
-                public ulong Item28;
-
-                public ulong Item29;
-
-                public ulong Item30;
-
-                public ulong Item31;
-            }
         }
 
         public partial struct ecs_entity_to_json_desc_t
@@ -2521,6 +2275,11 @@ namespace Flecs.NET.Bindings
                 public ecs_enum_constant_t Item30;
 
                 public ecs_enum_constant_t Item31;
+
+                public ref ecs_enum_constant_t this[int index] => ref AsSpan()[index];
+
+                [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+                public System.Span<ecs_enum_constant_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
             }
         }
 
@@ -2635,6 +2394,11 @@ namespace Flecs.NET.Bindings
                 public ecs_term_t Item14;
 
                 public ecs_term_t Item15;
+
+                public ref ecs_term_t this[int index] => ref AsSpan()[index];
+
+                [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+                public System.Span<ecs_term_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 16);
             }
         }
 
@@ -2682,6 +2446,18 @@ namespace Flecs.NET.Bindings
             public partial struct variable_names_FixedBuffer
             {
                 public byte* Item0;
+
+                public ref byte* this[int index]
+                {
+                    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+                    get
+                    {
+                        if (index >= 16)
+                            throw new System.ArgumentOutOfRangeException($"Index {index} is out of range.");
+                        fixed (byte** pThis = &Item0)
+                            return ref pThis[index];
+                    }
+                }
             }
         }
 
@@ -2705,380 +2481,11 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_gauge_t
         {
-            public avg_FixedBuffer avg;
+            public fixed float avg[60];
 
-            public min_FixedBuffer min;
+            public fixed float min[60];
 
-            public max_FixedBuffer max;
-
-            public partial struct avg_FixedBuffer
-            {
-                public float Item0;
-
-                public float Item1;
-
-                public float Item2;
-
-                public float Item3;
-
-                public float Item4;
-
-                public float Item5;
-
-                public float Item6;
-
-                public float Item7;
-
-                public float Item8;
-
-                public float Item9;
-
-                public float Item10;
-
-                public float Item11;
-
-                public float Item12;
-
-                public float Item13;
-
-                public float Item14;
-
-                public float Item15;
-
-                public float Item16;
-
-                public float Item17;
-
-                public float Item18;
-
-                public float Item19;
-
-                public float Item20;
-
-                public float Item21;
-
-                public float Item22;
-
-                public float Item23;
-
-                public float Item24;
-
-                public float Item25;
-
-                public float Item26;
-
-                public float Item27;
-
-                public float Item28;
-
-                public float Item29;
-
-                public float Item30;
-
-                public float Item31;
-
-                public float Item32;
-
-                public float Item33;
-
-                public float Item34;
-
-                public float Item35;
-
-                public float Item36;
-
-                public float Item37;
-
-                public float Item38;
-
-                public float Item39;
-
-                public float Item40;
-
-                public float Item41;
-
-                public float Item42;
-
-                public float Item43;
-
-                public float Item44;
-
-                public float Item45;
-
-                public float Item46;
-
-                public float Item47;
-
-                public float Item48;
-
-                public float Item49;
-
-                public float Item50;
-
-                public float Item51;
-
-                public float Item52;
-
-                public float Item53;
-
-                public float Item54;
-
-                public float Item55;
-
-                public float Item56;
-
-                public float Item57;
-
-                public float Item58;
-
-                public float Item59;
-            }
-
-            public partial struct min_FixedBuffer
-            {
-                public float Item0;
-
-                public float Item1;
-
-                public float Item2;
-
-                public float Item3;
-
-                public float Item4;
-
-                public float Item5;
-
-                public float Item6;
-
-                public float Item7;
-
-                public float Item8;
-
-                public float Item9;
-
-                public float Item10;
-
-                public float Item11;
-
-                public float Item12;
-
-                public float Item13;
-
-                public float Item14;
-
-                public float Item15;
-
-                public float Item16;
-
-                public float Item17;
-
-                public float Item18;
-
-                public float Item19;
-
-                public float Item20;
-
-                public float Item21;
-
-                public float Item22;
-
-                public float Item23;
-
-                public float Item24;
-
-                public float Item25;
-
-                public float Item26;
-
-                public float Item27;
-
-                public float Item28;
-
-                public float Item29;
-
-                public float Item30;
-
-                public float Item31;
-
-                public float Item32;
-
-                public float Item33;
-
-                public float Item34;
-
-                public float Item35;
-
-                public float Item36;
-
-                public float Item37;
-
-                public float Item38;
-
-                public float Item39;
-
-                public float Item40;
-
-                public float Item41;
-
-                public float Item42;
-
-                public float Item43;
-
-                public float Item44;
-
-                public float Item45;
-
-                public float Item46;
-
-                public float Item47;
-
-                public float Item48;
-
-                public float Item49;
-
-                public float Item50;
-
-                public float Item51;
-
-                public float Item52;
-
-                public float Item53;
-
-                public float Item54;
-
-                public float Item55;
-
-                public float Item56;
-
-                public float Item57;
-
-                public float Item58;
-
-                public float Item59;
-            }
-
-            public partial struct max_FixedBuffer
-            {
-                public float Item0;
-
-                public float Item1;
-
-                public float Item2;
-
-                public float Item3;
-
-                public float Item4;
-
-                public float Item5;
-
-                public float Item6;
-
-                public float Item7;
-
-                public float Item8;
-
-                public float Item9;
-
-                public float Item10;
-
-                public float Item11;
-
-                public float Item12;
-
-                public float Item13;
-
-                public float Item14;
-
-                public float Item15;
-
-                public float Item16;
-
-                public float Item17;
-
-                public float Item18;
-
-                public float Item19;
-
-                public float Item20;
-
-                public float Item21;
-
-                public float Item22;
-
-                public float Item23;
-
-                public float Item24;
-
-                public float Item25;
-
-                public float Item26;
-
-                public float Item27;
-
-                public float Item28;
-
-                public float Item29;
-
-                public float Item30;
-
-                public float Item31;
-
-                public float Item32;
-
-                public float Item33;
-
-                public float Item34;
-
-                public float Item35;
-
-                public float Item36;
-
-                public float Item37;
-
-                public float Item38;
-
-                public float Item39;
-
-                public float Item40;
-
-                public float Item41;
-
-                public float Item42;
-
-                public float Item43;
-
-                public float Item44;
-
-                public float Item45;
-
-                public float Item46;
-
-                public float Item47;
-
-                public float Item48;
-
-                public float Item49;
-
-                public float Item50;
-
-                public float Item51;
-
-                public float Item52;
-
-                public float Item53;
-
-                public float Item54;
-
-                public float Item55;
-
-                public float Item56;
-
-                public float Item57;
-
-                public float Item58;
-
-                public float Item59;
-            }
+            public fixed float max[60];
         }
 
         public partial struct ecs_hashmap_t
@@ -3120,303 +2527,9 @@ namespace Flecs.NET.Bindings
 
             public ecs_http_server_t* server;
 
-            public host_FixedBuffer host;
+            public fixed byte host[128];
 
-            public port_FixedBuffer port;
-
-            public partial struct host_FixedBuffer
-            {
-                public byte Item0;
-
-                public byte Item1;
-
-                public byte Item2;
-
-                public byte Item3;
-
-                public byte Item4;
-
-                public byte Item5;
-
-                public byte Item6;
-
-                public byte Item7;
-
-                public byte Item8;
-
-                public byte Item9;
-
-                public byte Item10;
-
-                public byte Item11;
-
-                public byte Item12;
-
-                public byte Item13;
-
-                public byte Item14;
-
-                public byte Item15;
-
-                public byte Item16;
-
-                public byte Item17;
-
-                public byte Item18;
-
-                public byte Item19;
-
-                public byte Item20;
-
-                public byte Item21;
-
-                public byte Item22;
-
-                public byte Item23;
-
-                public byte Item24;
-
-                public byte Item25;
-
-                public byte Item26;
-
-                public byte Item27;
-
-                public byte Item28;
-
-                public byte Item29;
-
-                public byte Item30;
-
-                public byte Item31;
-
-                public byte Item32;
-
-                public byte Item33;
-
-                public byte Item34;
-
-                public byte Item35;
-
-                public byte Item36;
-
-                public byte Item37;
-
-                public byte Item38;
-
-                public byte Item39;
-
-                public byte Item40;
-
-                public byte Item41;
-
-                public byte Item42;
-
-                public byte Item43;
-
-                public byte Item44;
-
-                public byte Item45;
-
-                public byte Item46;
-
-                public byte Item47;
-
-                public byte Item48;
-
-                public byte Item49;
-
-                public byte Item50;
-
-                public byte Item51;
-
-                public byte Item52;
-
-                public byte Item53;
-
-                public byte Item54;
-
-                public byte Item55;
-
-                public byte Item56;
-
-                public byte Item57;
-
-                public byte Item58;
-
-                public byte Item59;
-
-                public byte Item60;
-
-                public byte Item61;
-
-                public byte Item62;
-
-                public byte Item63;
-
-                public byte Item64;
-
-                public byte Item65;
-
-                public byte Item66;
-
-                public byte Item67;
-
-                public byte Item68;
-
-                public byte Item69;
-
-                public byte Item70;
-
-                public byte Item71;
-
-                public byte Item72;
-
-                public byte Item73;
-
-                public byte Item74;
-
-                public byte Item75;
-
-                public byte Item76;
-
-                public byte Item77;
-
-                public byte Item78;
-
-                public byte Item79;
-
-                public byte Item80;
-
-                public byte Item81;
-
-                public byte Item82;
-
-                public byte Item83;
-
-                public byte Item84;
-
-                public byte Item85;
-
-                public byte Item86;
-
-                public byte Item87;
-
-                public byte Item88;
-
-                public byte Item89;
-
-                public byte Item90;
-
-                public byte Item91;
-
-                public byte Item92;
-
-                public byte Item93;
-
-                public byte Item94;
-
-                public byte Item95;
-
-                public byte Item96;
-
-                public byte Item97;
-
-                public byte Item98;
-
-                public byte Item99;
-
-                public byte Item100;
-
-                public byte Item101;
-
-                public byte Item102;
-
-                public byte Item103;
-
-                public byte Item104;
-
-                public byte Item105;
-
-                public byte Item106;
-
-                public byte Item107;
-
-                public byte Item108;
-
-                public byte Item109;
-
-                public byte Item110;
-
-                public byte Item111;
-
-                public byte Item112;
-
-                public byte Item113;
-
-                public byte Item114;
-
-                public byte Item115;
-
-                public byte Item116;
-
-                public byte Item117;
-
-                public byte Item118;
-
-                public byte Item119;
-
-                public byte Item120;
-
-                public byte Item121;
-
-                public byte Item122;
-
-                public byte Item123;
-
-                public byte Item124;
-
-                public byte Item125;
-
-                public byte Item126;
-
-                public byte Item127;
-            }
-
-            public partial struct port_FixedBuffer
-            {
-                public byte Item0;
-
-                public byte Item1;
-
-                public byte Item2;
-
-                public byte Item3;
-
-                public byte Item4;
-
-                public byte Item5;
-
-                public byte Item6;
-
-                public byte Item7;
-
-                public byte Item8;
-
-                public byte Item9;
-
-                public byte Item10;
-
-                public byte Item11;
-
-                public byte Item12;
-
-                public byte Item13;
-
-                public byte Item14;
-
-                public byte Item15;
-            }
+            public fixed byte port[16];
         }
 
         public partial struct ecs_http_key_value_t
@@ -3524,6 +2637,11 @@ namespace Flecs.NET.Bindings
                 public ecs_http_key_value_t Item30;
 
                 public ecs_http_key_value_t Item31;
+
+                public ref ecs_http_key_value_t this[int index] => ref AsSpan()[index];
+
+                [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+                public System.Span<ecs_http_key_value_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
             }
 
             public partial struct @params_FixedBuffer
@@ -3591,6 +2709,11 @@ namespace Flecs.NET.Bindings
                 public ecs_http_key_value_t Item30;
 
                 public ecs_http_key_value_t Item31;
+
+                public ref ecs_http_key_value_t this[int index] => ref AsSpan()[index];
+
+                [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+                public System.Span<ecs_http_key_value_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
             }
         }
 
@@ -3927,6 +3050,11 @@ namespace Flecs.NET.Bindings
                 public ecs_meta_scope_t Item30;
 
                 public ecs_meta_scope_t Item31;
+
+                public ref ecs_meta_scope_t this[int index] => ref AsSpan()[index];
+
+                [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+                public System.Span<ecs_meta_scope_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
             }
         }
 
@@ -4036,7 +3164,7 @@ namespace Flecs.NET.Bindings
 
             public ecs_filter_desc_t filter;
 
-            public events_FixedBuffer events;
+            public fixed ulong events[8];
 
             public byte yield_existing;
 
@@ -4057,25 +3185,6 @@ namespace Flecs.NET.Bindings
             public int* last_event_id;
 
             public int term_index;
-
-            public partial struct events_FixedBuffer
-            {
-                public ulong Item0;
-
-                public ulong Item1;
-
-                public ulong Item2;
-
-                public ulong Item3;
-
-                public ulong Item4;
-
-                public ulong Item5;
-
-                public ulong Item6;
-
-                public ulong Item7;
-            }
         }
 
         public partial struct ecs_observer_t
@@ -4084,7 +3193,7 @@ namespace Flecs.NET.Bindings
 
             public ecs_filter_t filter;
 
-            public events_FixedBuffer events;
+            public fixed ulong events[8];
 
             public int event_count;
 
@@ -4115,25 +3224,6 @@ namespace Flecs.NET.Bindings
             public byte is_multi;
 
             public System.IntPtr dtor; // delegate* unmanaged<void*, void>
-
-            public partial struct events_FixedBuffer
-            {
-                public ulong Item0;
-
-                public ulong Item1;
-
-                public ulong Item2;
-
-                public ulong Item3;
-
-                public ulong Item4;
-
-                public ulong Item5;
-
-                public ulong Item6;
-
-                public ulong Item7;
-            }
         }
 
         public partial struct ecs_opaque_desc_t
@@ -4416,14 +3506,7 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_rule_op_profile_t
         {
-            public count_FixedBuffer count;
-
-            public partial struct count_FixedBuffer
-            {
-                public int Item0;
-
-                public int Item1;
-            }
+            public fixed int count[2];
         }
 
         public partial struct ecs_rule_t
@@ -4539,1034 +3622,7 @@ namespace Flecs.NET.Bindings
         {
             public ecs_strbuf_element super;
 
-            public buf_FixedBuffer buf;
-
-            public partial struct buf_FixedBuffer
-            {
-                public byte Item0;
-
-                public byte Item1;
-
-                public byte Item2;
-
-                public byte Item3;
-
-                public byte Item4;
-
-                public byte Item5;
-
-                public byte Item6;
-
-                public byte Item7;
-
-                public byte Item8;
-
-                public byte Item9;
-
-                public byte Item10;
-
-                public byte Item11;
-
-                public byte Item12;
-
-                public byte Item13;
-
-                public byte Item14;
-
-                public byte Item15;
-
-                public byte Item16;
-
-                public byte Item17;
-
-                public byte Item18;
-
-                public byte Item19;
-
-                public byte Item20;
-
-                public byte Item21;
-
-                public byte Item22;
-
-                public byte Item23;
-
-                public byte Item24;
-
-                public byte Item25;
-
-                public byte Item26;
-
-                public byte Item27;
-
-                public byte Item28;
-
-                public byte Item29;
-
-                public byte Item30;
-
-                public byte Item31;
-
-                public byte Item32;
-
-                public byte Item33;
-
-                public byte Item34;
-
-                public byte Item35;
-
-                public byte Item36;
-
-                public byte Item37;
-
-                public byte Item38;
-
-                public byte Item39;
-
-                public byte Item40;
-
-                public byte Item41;
-
-                public byte Item42;
-
-                public byte Item43;
-
-                public byte Item44;
-
-                public byte Item45;
-
-                public byte Item46;
-
-                public byte Item47;
-
-                public byte Item48;
-
-                public byte Item49;
-
-                public byte Item50;
-
-                public byte Item51;
-
-                public byte Item52;
-
-                public byte Item53;
-
-                public byte Item54;
-
-                public byte Item55;
-
-                public byte Item56;
-
-                public byte Item57;
-
-                public byte Item58;
-
-                public byte Item59;
-
-                public byte Item60;
-
-                public byte Item61;
-
-                public byte Item62;
-
-                public byte Item63;
-
-                public byte Item64;
-
-                public byte Item65;
-
-                public byte Item66;
-
-                public byte Item67;
-
-                public byte Item68;
-
-                public byte Item69;
-
-                public byte Item70;
-
-                public byte Item71;
-
-                public byte Item72;
-
-                public byte Item73;
-
-                public byte Item74;
-
-                public byte Item75;
-
-                public byte Item76;
-
-                public byte Item77;
-
-                public byte Item78;
-
-                public byte Item79;
-
-                public byte Item80;
-
-                public byte Item81;
-
-                public byte Item82;
-
-                public byte Item83;
-
-                public byte Item84;
-
-                public byte Item85;
-
-                public byte Item86;
-
-                public byte Item87;
-
-                public byte Item88;
-
-                public byte Item89;
-
-                public byte Item90;
-
-                public byte Item91;
-
-                public byte Item92;
-
-                public byte Item93;
-
-                public byte Item94;
-
-                public byte Item95;
-
-                public byte Item96;
-
-                public byte Item97;
-
-                public byte Item98;
-
-                public byte Item99;
-
-                public byte Item100;
-
-                public byte Item101;
-
-                public byte Item102;
-
-                public byte Item103;
-
-                public byte Item104;
-
-                public byte Item105;
-
-                public byte Item106;
-
-                public byte Item107;
-
-                public byte Item108;
-
-                public byte Item109;
-
-                public byte Item110;
-
-                public byte Item111;
-
-                public byte Item112;
-
-                public byte Item113;
-
-                public byte Item114;
-
-                public byte Item115;
-
-                public byte Item116;
-
-                public byte Item117;
-
-                public byte Item118;
-
-                public byte Item119;
-
-                public byte Item120;
-
-                public byte Item121;
-
-                public byte Item122;
-
-                public byte Item123;
-
-                public byte Item124;
-
-                public byte Item125;
-
-                public byte Item126;
-
-                public byte Item127;
-
-                public byte Item128;
-
-                public byte Item129;
-
-                public byte Item130;
-
-                public byte Item131;
-
-                public byte Item132;
-
-                public byte Item133;
-
-                public byte Item134;
-
-                public byte Item135;
-
-                public byte Item136;
-
-                public byte Item137;
-
-                public byte Item138;
-
-                public byte Item139;
-
-                public byte Item140;
-
-                public byte Item141;
-
-                public byte Item142;
-
-                public byte Item143;
-
-                public byte Item144;
-
-                public byte Item145;
-
-                public byte Item146;
-
-                public byte Item147;
-
-                public byte Item148;
-
-                public byte Item149;
-
-                public byte Item150;
-
-                public byte Item151;
-
-                public byte Item152;
-
-                public byte Item153;
-
-                public byte Item154;
-
-                public byte Item155;
-
-                public byte Item156;
-
-                public byte Item157;
-
-                public byte Item158;
-
-                public byte Item159;
-
-                public byte Item160;
-
-                public byte Item161;
-
-                public byte Item162;
-
-                public byte Item163;
-
-                public byte Item164;
-
-                public byte Item165;
-
-                public byte Item166;
-
-                public byte Item167;
-
-                public byte Item168;
-
-                public byte Item169;
-
-                public byte Item170;
-
-                public byte Item171;
-
-                public byte Item172;
-
-                public byte Item173;
-
-                public byte Item174;
-
-                public byte Item175;
-
-                public byte Item176;
-
-                public byte Item177;
-
-                public byte Item178;
-
-                public byte Item179;
-
-                public byte Item180;
-
-                public byte Item181;
-
-                public byte Item182;
-
-                public byte Item183;
-
-                public byte Item184;
-
-                public byte Item185;
-
-                public byte Item186;
-
-                public byte Item187;
-
-                public byte Item188;
-
-                public byte Item189;
-
-                public byte Item190;
-
-                public byte Item191;
-
-                public byte Item192;
-
-                public byte Item193;
-
-                public byte Item194;
-
-                public byte Item195;
-
-                public byte Item196;
-
-                public byte Item197;
-
-                public byte Item198;
-
-                public byte Item199;
-
-                public byte Item200;
-
-                public byte Item201;
-
-                public byte Item202;
-
-                public byte Item203;
-
-                public byte Item204;
-
-                public byte Item205;
-
-                public byte Item206;
-
-                public byte Item207;
-
-                public byte Item208;
-
-                public byte Item209;
-
-                public byte Item210;
-
-                public byte Item211;
-
-                public byte Item212;
-
-                public byte Item213;
-
-                public byte Item214;
-
-                public byte Item215;
-
-                public byte Item216;
-
-                public byte Item217;
-
-                public byte Item218;
-
-                public byte Item219;
-
-                public byte Item220;
-
-                public byte Item221;
-
-                public byte Item222;
-
-                public byte Item223;
-
-                public byte Item224;
-
-                public byte Item225;
-
-                public byte Item226;
-
-                public byte Item227;
-
-                public byte Item228;
-
-                public byte Item229;
-
-                public byte Item230;
-
-                public byte Item231;
-
-                public byte Item232;
-
-                public byte Item233;
-
-                public byte Item234;
-
-                public byte Item235;
-
-                public byte Item236;
-
-                public byte Item237;
-
-                public byte Item238;
-
-                public byte Item239;
-
-                public byte Item240;
-
-                public byte Item241;
-
-                public byte Item242;
-
-                public byte Item243;
-
-                public byte Item244;
-
-                public byte Item245;
-
-                public byte Item246;
-
-                public byte Item247;
-
-                public byte Item248;
-
-                public byte Item249;
-
-                public byte Item250;
-
-                public byte Item251;
-
-                public byte Item252;
-
-                public byte Item253;
-
-                public byte Item254;
-
-                public byte Item255;
-
-                public byte Item256;
-
-                public byte Item257;
-
-                public byte Item258;
-
-                public byte Item259;
-
-                public byte Item260;
-
-                public byte Item261;
-
-                public byte Item262;
-
-                public byte Item263;
-
-                public byte Item264;
-
-                public byte Item265;
-
-                public byte Item266;
-
-                public byte Item267;
-
-                public byte Item268;
-
-                public byte Item269;
-
-                public byte Item270;
-
-                public byte Item271;
-
-                public byte Item272;
-
-                public byte Item273;
-
-                public byte Item274;
-
-                public byte Item275;
-
-                public byte Item276;
-
-                public byte Item277;
-
-                public byte Item278;
-
-                public byte Item279;
-
-                public byte Item280;
-
-                public byte Item281;
-
-                public byte Item282;
-
-                public byte Item283;
-
-                public byte Item284;
-
-                public byte Item285;
-
-                public byte Item286;
-
-                public byte Item287;
-
-                public byte Item288;
-
-                public byte Item289;
-
-                public byte Item290;
-
-                public byte Item291;
-
-                public byte Item292;
-
-                public byte Item293;
-
-                public byte Item294;
-
-                public byte Item295;
-
-                public byte Item296;
-
-                public byte Item297;
-
-                public byte Item298;
-
-                public byte Item299;
-
-                public byte Item300;
-
-                public byte Item301;
-
-                public byte Item302;
-
-                public byte Item303;
-
-                public byte Item304;
-
-                public byte Item305;
-
-                public byte Item306;
-
-                public byte Item307;
-
-                public byte Item308;
-
-                public byte Item309;
-
-                public byte Item310;
-
-                public byte Item311;
-
-                public byte Item312;
-
-                public byte Item313;
-
-                public byte Item314;
-
-                public byte Item315;
-
-                public byte Item316;
-
-                public byte Item317;
-
-                public byte Item318;
-
-                public byte Item319;
-
-                public byte Item320;
-
-                public byte Item321;
-
-                public byte Item322;
-
-                public byte Item323;
-
-                public byte Item324;
-
-                public byte Item325;
-
-                public byte Item326;
-
-                public byte Item327;
-
-                public byte Item328;
-
-                public byte Item329;
-
-                public byte Item330;
-
-                public byte Item331;
-
-                public byte Item332;
-
-                public byte Item333;
-
-                public byte Item334;
-
-                public byte Item335;
-
-                public byte Item336;
-
-                public byte Item337;
-
-                public byte Item338;
-
-                public byte Item339;
-
-                public byte Item340;
-
-                public byte Item341;
-
-                public byte Item342;
-
-                public byte Item343;
-
-                public byte Item344;
-
-                public byte Item345;
-
-                public byte Item346;
-
-                public byte Item347;
-
-                public byte Item348;
-
-                public byte Item349;
-
-                public byte Item350;
-
-                public byte Item351;
-
-                public byte Item352;
-
-                public byte Item353;
-
-                public byte Item354;
-
-                public byte Item355;
-
-                public byte Item356;
-
-                public byte Item357;
-
-                public byte Item358;
-
-                public byte Item359;
-
-                public byte Item360;
-
-                public byte Item361;
-
-                public byte Item362;
-
-                public byte Item363;
-
-                public byte Item364;
-
-                public byte Item365;
-
-                public byte Item366;
-
-                public byte Item367;
-
-                public byte Item368;
-
-                public byte Item369;
-
-                public byte Item370;
-
-                public byte Item371;
-
-                public byte Item372;
-
-                public byte Item373;
-
-                public byte Item374;
-
-                public byte Item375;
-
-                public byte Item376;
-
-                public byte Item377;
-
-                public byte Item378;
-
-                public byte Item379;
-
-                public byte Item380;
-
-                public byte Item381;
-
-                public byte Item382;
-
-                public byte Item383;
-
-                public byte Item384;
-
-                public byte Item385;
-
-                public byte Item386;
-
-                public byte Item387;
-
-                public byte Item388;
-
-                public byte Item389;
-
-                public byte Item390;
-
-                public byte Item391;
-
-                public byte Item392;
-
-                public byte Item393;
-
-                public byte Item394;
-
-                public byte Item395;
-
-                public byte Item396;
-
-                public byte Item397;
-
-                public byte Item398;
-
-                public byte Item399;
-
-                public byte Item400;
-
-                public byte Item401;
-
-                public byte Item402;
-
-                public byte Item403;
-
-                public byte Item404;
-
-                public byte Item405;
-
-                public byte Item406;
-
-                public byte Item407;
-
-                public byte Item408;
-
-                public byte Item409;
-
-                public byte Item410;
-
-                public byte Item411;
-
-                public byte Item412;
-
-                public byte Item413;
-
-                public byte Item414;
-
-                public byte Item415;
-
-                public byte Item416;
-
-                public byte Item417;
-
-                public byte Item418;
-
-                public byte Item419;
-
-                public byte Item420;
-
-                public byte Item421;
-
-                public byte Item422;
-
-                public byte Item423;
-
-                public byte Item424;
-
-                public byte Item425;
-
-                public byte Item426;
-
-                public byte Item427;
-
-                public byte Item428;
-
-                public byte Item429;
-
-                public byte Item430;
-
-                public byte Item431;
-
-                public byte Item432;
-
-                public byte Item433;
-
-                public byte Item434;
-
-                public byte Item435;
-
-                public byte Item436;
-
-                public byte Item437;
-
-                public byte Item438;
-
-                public byte Item439;
-
-                public byte Item440;
-
-                public byte Item441;
-
-                public byte Item442;
-
-                public byte Item443;
-
-                public byte Item444;
-
-                public byte Item445;
-
-                public byte Item446;
-
-                public byte Item447;
-
-                public byte Item448;
-
-                public byte Item449;
-
-                public byte Item450;
-
-                public byte Item451;
-
-                public byte Item452;
-
-                public byte Item453;
-
-                public byte Item454;
-
-                public byte Item455;
-
-                public byte Item456;
-
-                public byte Item457;
-
-                public byte Item458;
-
-                public byte Item459;
-
-                public byte Item460;
-
-                public byte Item461;
-
-                public byte Item462;
-
-                public byte Item463;
-
-                public byte Item464;
-
-                public byte Item465;
-
-                public byte Item466;
-
-                public byte Item467;
-
-                public byte Item468;
-
-                public byte Item469;
-
-                public byte Item470;
-
-                public byte Item471;
-
-                public byte Item472;
-
-                public byte Item473;
-
-                public byte Item474;
-
-                public byte Item475;
-
-                public byte Item476;
-
-                public byte Item477;
-
-                public byte Item478;
-
-                public byte Item479;
-
-                public byte Item480;
-
-                public byte Item481;
-
-                public byte Item482;
-
-                public byte Item483;
-
-                public byte Item484;
-
-                public byte Item485;
-
-                public byte Item486;
-
-                public byte Item487;
-
-                public byte Item488;
-
-                public byte Item489;
-
-                public byte Item490;
-
-                public byte Item491;
-
-                public byte Item492;
-
-                public byte Item493;
-
-                public byte Item494;
-
-                public byte Item495;
-
-                public byte Item496;
-
-                public byte Item497;
-
-                public byte Item498;
-
-                public byte Item499;
-
-                public byte Item500;
-
-                public byte Item501;
-
-                public byte Item502;
-
-                public byte Item503;
-
-                public byte Item504;
-
-                public byte Item505;
-
-                public byte Item506;
-
-                public byte Item507;
-
-                public byte Item508;
-
-                public byte Item509;
-
-                public byte Item510;
-
-                public byte Item511;
-            }
+            public fixed byte buf[512];
         }
 
         public partial struct ecs_strbuf_element_str
@@ -5670,6 +3726,11 @@ namespace Flecs.NET.Bindings
                 public ecs_strbuf_list_elem Item30;
 
                 public ecs_strbuf_list_elem Item31;
+
+                public ref ecs_strbuf_list_elem this[int index] => ref AsSpan()[index];
+
+                [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+                public System.Span<ecs_strbuf_list_elem> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
             }
         }
 
@@ -5744,6 +3805,11 @@ namespace Flecs.NET.Bindings
                 public ecs_member_t Item30;
 
                 public ecs_member_t Item31;
+
+                public ref ecs_member_t this[int index] => ref AsSpan()[index];
+
+                [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+                public System.Span<ecs_member_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
             }
         }
 
@@ -6664,7 +4730,7 @@ namespace Flecs.NET.Bindings
             public ulong hash;
         }
 
-        public enum ecs_http_method_t : uint
+        public enum ecs_http_method_t : int
         {
             EcsHttpGet = 0,
             EcsHttpPost = 1,
@@ -6674,7 +4740,7 @@ namespace Flecs.NET.Bindings
             EcsHttpMethodUnsupported = 5
         }
 
-        public enum ecs_inout_kind_t : uint
+        public enum ecs_inout_kind_t : int
         {
             EcsInOutDefault = 0,
             EcsInOutNone = 1,
@@ -6683,7 +4749,7 @@ namespace Flecs.NET.Bindings
             EcsOut = 4
         }
 
-        public enum ecs_iter_kind_t : uint
+        public enum ecs_iter_kind_t : int
         {
             EcsIterEvalCondition = 0,
             EcsIterEvalTables = 1,
@@ -6691,7 +4757,7 @@ namespace Flecs.NET.Bindings
             EcsIterEvalNone = 3
         }
 
-        public enum ecs_meta_type_op_kind_t : uint
+        public enum ecs_meta_type_op_kind_t : int
         {
             EcsOpArray = 0,
             EcsOpVector = 1,
@@ -6722,7 +4788,7 @@ namespace Flecs.NET.Bindings
             EcsMetaTypeOpKindLast = 25
         }
 
-        public enum ecs_oper_kind_t : uint
+        public enum ecs_oper_kind_t : int
         {
             EcsAnd = 0,
             EcsOr = 1,
@@ -6733,7 +4799,7 @@ namespace Flecs.NET.Bindings
             EcsNotFrom = 6
         }
 
-        public enum ecs_primitive_kind_t : uint
+        public enum ecs_primitive_kind_t : int
         {
             EcsBool = 1,
             EcsChar = 2,
@@ -6755,7 +4821,7 @@ namespace Flecs.NET.Bindings
             EcsPrimitiveKindLast = 17
         }
 
-        public enum ecs_type_kind_t : uint
+        public enum ecs_type_kind_t : int
         {
             EcsPrimitiveType = 0,
             EcsBitmaskType = 1,
@@ -13129,13 +11195,13 @@ namespace Flecs.NET.Bindings
             }
         }
 
-        private partial class BindgenInternal
+        public partial class BindgenInternal
         {
             public const string DllImportPath = "libflecs";
 
             static BindgenInternal()
             {
-                DllFilePaths = new string[]
+                DllFilePaths = new System.Collections.Generic.List<string>
                 {
                     "libflecs",
                     "runtimes/linux-x64/native/libflecs",
@@ -13149,49 +11215,49 @@ namespace Flecs.NET.Bindings
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "SYSLIB1054")]
-        private partial class BindgenInternal
+        public partial class BindgenInternal
         {
-            private static readonly string[] DllFilePaths;
+            public static readonly System.Collections.Generic.List<string> DllFilePaths;
 
-            private static System.IntPtr _libraryHandle = System.IntPtr.Zero;
+            public static System.IntPtr _libraryHandle = System.IntPtr.Zero;
 
-            private static bool IsLinux => System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux);
+            public static bool IsLinux => System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux);
 
-            private static bool IsOsx => System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX);
+            public static bool IsOsx => System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX);
 
-            private static bool IsWindows => System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows);
+            public static bool IsWindows => System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows);
 
             [System.Runtime.InteropServices.DllImport("libc", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "dlopen")]
-            private static extern System.IntPtr LoadLibraryLinux(string? path, int flags);
+            public static extern System.IntPtr LoadLibraryLinux(string? path, int flags);
 
             [System.Runtime.InteropServices.DllImport("libdl", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "dlopen")]
-            private static extern System.IntPtr LoadLibraryOsx(string? path, int flags);
+            public static extern System.IntPtr LoadLibraryOsx(string? path, int flags);
 
             [System.Runtime.InteropServices.DllImport("kernel32", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "LoadLibrary")]
-            private static extern System.IntPtr LoadLibraryWindows(string path);
+            public static extern System.IntPtr LoadLibraryWindows(string path);
 
             [System.Runtime.InteropServices.DllImport("kernel32", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "GetModuleHandle")]
-            private static extern System.IntPtr GetModuleHandle(string? name);
+            public static extern System.IntPtr GetModuleHandle(string? name);
 
             [System.Runtime.InteropServices.DllImport("libc", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "dlsym")]
-            private static extern System.IntPtr GetExportLinux(System.IntPtr handle, string name);
+            public static extern System.IntPtr GetExportLinux(System.IntPtr handle, string name);
 
             [System.Runtime.InteropServices.DllImport("libdl", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "dlsym")]
-            private static extern System.IntPtr GetExportOsx(System.IntPtr handle, string name);
+            public static extern System.IntPtr GetExportOsx(System.IntPtr handle, string name);
 
             [System.Runtime.InteropServices.DllImport("kernel32", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "GetProcAddress")]
-            private static extern System.IntPtr GetExportWindows(System.IntPtr handle, string name);
+            public static extern System.IntPtr GetExportWindows(System.IntPtr handle, string name);
 
             [System.Runtime.InteropServices.DllImport("libc", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "dlerror")]
-            private static extern byte* GetLastErrorLinux();
+            public static extern byte* GetLastErrorLinux();
 
             [System.Runtime.InteropServices.DllImport("libdl", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "dlerror")]
-            private static extern byte* GetLastErrorOsx();
+            public static extern byte* GetLastErrorOsx();
 
             [System.Runtime.InteropServices.DllImport("kernel32", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "GetLastError")]
-            private static extern int GetLastErrorWindows();
+            public static extern int GetLastErrorWindows();
 
-            private static bool TryLoad(string path, out System.IntPtr handle)
+            public static bool TryLoad(string path, out System.IntPtr handle)
             {
 #if NET5_0_OR_GREATER
             return System.Runtime.InteropServices.NativeLibrary.TryLoad(path, out handle);
@@ -13207,7 +11273,7 @@ namespace Flecs.NET.Bindings
 #endif
             }
 
-            private static System.IntPtr GetExport(string symbol)
+            public static System.IntPtr GetExport(string symbol)
             {
 #if NET5_0_OR_GREATER
             return System.Runtime.InteropServices.NativeLibrary.GetExport(_libraryHandle, symbol);
@@ -13252,7 +11318,7 @@ namespace Flecs.NET.Bindings
 #endif
             }
 
-            private static void ResolveLibrary()
+            public static void ResolveLibrary()
             {
                 string fileExtension;
                 if (IsLinux)
@@ -13306,3 +11372,4 @@ namespace Flecs.NET.Bindings
         }
     }
 }
+#nullable disable

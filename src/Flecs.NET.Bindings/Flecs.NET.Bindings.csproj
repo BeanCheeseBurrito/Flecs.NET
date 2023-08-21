@@ -4,6 +4,37 @@
         <TargetFrameworks>netstandard2.1;net5.0;net7.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <IncludeContentInPack>true</IncludeContentInPack>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <Version>3.2.6</Version>
+        <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Bindings.Debug</Title>
+        <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Bindings.Release</Title>
+        <Authors>BeanCheeseBurrito</Authors>
+        <Copyright>BeanCheeseBurrito</Copyright>
+        <Description>Raw C# bindings for flecs</Description>
+        <PackageId>$(Title)</PackageId>
+        <PackageProjectUrl>https://github.com/BeanCheeseBurrito/Flecs.NET</PackageProjectUrl>
+        <PackageIconUrl>https://raw.githubusercontent.com/SanderMertens/flecs/master/docs/img/logo_small.png</PackageIconUrl>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/SanderMertens/flecs</RepositoryUrl>
+        <RepositoryType>Github</RepositoryType>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="icon.png" PackagePath="icon.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    </ItemGroup>
 
 </Project>
