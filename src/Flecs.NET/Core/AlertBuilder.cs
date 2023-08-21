@@ -78,18 +78,11 @@ namespace Flecs.NET.Core
         {
             Assert.True(_severityFilterCount < ECS_ALERT_MAX_SEVERITY_FILTERS, "Maxium number of severity filters reached");
 
+            ref ecs_alert_severity_filter_t filter = ref AlertDesc.severity_filters[_severityFilterCount++];
+            filter.severity = kind;
+            filter.with = with;
 
-            // TODO: Add indexers to fixed-sized buffers in Bindgen.NET
-            fixed (void* severityFilters = &AlertDesc.severity_filters)
-            {
-                ecs_alert_severity_filter_t* filter =
-                    &((ecs_alert_severity_filter_t*)severityFilters)[_severityFilterCount++];
-
-                filter->severity = kind;
-                filter->with = with;
-
-                return ref Var(var);
-            }
+            return ref Var(var);
         }
 
         public ref AlertBuilder SeverityFilter<TSeverity>(ulong with, string var = "")

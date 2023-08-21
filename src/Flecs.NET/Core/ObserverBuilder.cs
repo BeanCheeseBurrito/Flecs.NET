@@ -21,17 +21,13 @@ namespace Flecs.NET.Core
             _eventCount = default;
         }
 
-        // TODO: Add indexers for fixed-sized buffers to Bindgen.NET
         public ref ObserverBuilder Event(ulong @event)
         {
             if (_eventCount >= 8)
                 throw new InvalidOperationException();
 
-            fixed (void* eventsBuffer = &ObserverDesc.events)
-            {
-                ((ulong*)eventsBuffer)[_eventCount++] = @event;
-                return ref this;
-            }
+            ObserverDesc.events[_eventCount++] = @event;
+            return ref this;
         }
 
         public ref ObserverBuilder Event<T>()

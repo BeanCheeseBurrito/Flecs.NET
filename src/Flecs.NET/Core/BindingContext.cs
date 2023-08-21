@@ -10,10 +10,10 @@ namespace Flecs.NET.Core
     public static unsafe class BindingContext
     {
 #if NET5_0_OR_GREATER
-        internal static readonly IntPtr RoutineIterPointer; =
+        internal static readonly IntPtr RoutineIterPointer =
             (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&RoutineIter;
 
-        internal static readonly IntPtr ObserverIterPointer; =
+        internal static readonly IntPtr ObserverIterPointer =
             (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&ObserverIter;
 
         internal static readonly IntPtr ObserverContextFreePointer =
