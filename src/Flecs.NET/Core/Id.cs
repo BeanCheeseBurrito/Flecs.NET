@@ -60,7 +60,7 @@ namespace Flecs.NET.Core
             return (Value & ECS_ID_FLAGS_MASK) == 0;
         }
 
-        public readonly Entity AsEntity()
+        public readonly Entity Entity()
         {
             Assert.True(!IsPair());
             Assert.True(Flags() == 0);

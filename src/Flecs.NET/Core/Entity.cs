@@ -12,6 +12,16 @@ namespace Flecs.NET.Core
         public ecs_world_t* World { get; set; }
         public Id Id { get; set; }
 
+        public static Entity Null()
+        {
+            return default;
+        }
+
+        public static Entity Null(ecs_world_t* world)
+        {
+            return new Entity(world);
+        }
+
         public Entity(ulong id)
         {
             World = null;
@@ -44,6 +54,11 @@ namespace Flecs.NET.Core
             World = world;
         }
 
+        public World CsWorld()
+        {
+            return new World(World, false);
+        }
+
         public bool IsValid()
         {
             return World != null && ecs_is_valid(World, Id) == 1;
@@ -66,10 +81,20 @@ namespace Flecs.NET.Core
 
         public string Path(string sep = "::", string initSep = "::")
         {
+            return PathFrom(0, sep, initSep);
+        }
+
+        public string PathFrom(ulong parent, string sep = "::", string initSep = "::")
+        {
             using NativeString nativeSep = (NativeString)sep;
             using NativeString nativeInitSep = (NativeString)initSep;
-            using NativeString nativePath = (NativeString)ecs_get_path_w_sep(World, 0, Id, nativeSep, nativeInitSep);
-            return (string)nativePath;
+
+            return NativeString.GetStringAndFree(ecs_get_path_w_sep(World, parent, Id, nativeSep, nativeInitSep));
+        }
+
+        public string PathFrom<TParent>(string sep = "::", string initSep = "::")
+        {
+            return PathFrom(Type<TParent>.Id(World), sep, initSep);
         }
 
         public bool Enabled()
@@ -107,6 +132,117 @@ namespace Flecs.NET.Core
             return new Types(World, ecs_get_type(World, Id));
         }
 
+        public Table Table()
+        {
+            return new Table(World, ecs_get_table(World, Id));
+        }
+
+        public void Each(Ecs.EachIdCallback func)
+        {
+            ecs_type_t* type = ecs_get_type(World, Id);
+
+            if (type == null)
+                return;
+
+            ulong* ids = type->array;
+            int count = type->count;
+
+            for (int i = 0; i < count; i++)
+            {
+                ulong id = ids[i];
+                Id entity = new Id(World, id);
+                func(entity);
+
+                if (Macros.PairFirst(id) != EcsUnion)
+                    continue;
+
+                entity = new Id(
+                    World,
+                    Macros.PairSecond(id),
+                    ecs_get_target(World, Id, Macros.PairSecond(id), 0)
+                );
+
+                func(entity);
+            }
+        }
+
+        public void Each(ulong first, ulong second, Ecs.EachIdCallback func)
+        {
+            ecs_world_t* realWorld = ecs_get_world(World);
+            ecs_table_t* table = ecs_get_table(World, Id);
+
+            if (table == null)
+                return;
+
+            ecs_type_t* type = ecs_table_get_type(table);
+
+            if (type == null)
+                return;
+
+            ulong pattern = first;
+
+            if (second != 0)
+                pattern = Macros.Pair(first, second);
+
+            int cur = 0;
+            ulong* ids = type->array;
+
+            while (-1 != (cur = ecs_search_offset(realWorld, table, cur, pattern, null)))
+            {
+                func(new Id(World, ids[cur]));
+                cur++;
+            }
+        }
+
+        public void Each(ulong relation, Ecs.EachEntityCallback func)
+        {
+            Each(relation, EcsWildcard, (Id id) =>
+            {
+                func(id.Second());
+            });
+        }
+
+        public void Each<TFirst>(Ecs.EachEntityCallback func)
+        {
+            Each(Type<TFirst>.Id(World), func);
+        }
+
+        public void Children(ulong relation, Ecs.EachEntityCallback callback)
+        {
+            if (Id == EcsWildcard || Id == EcsAny)
+                return;
+
+            Span<ecs_term_t> terms = stackalloc ecs_term_t[2];
+            ecs_filter_t filter = ECS_FILTER_INIT;
+            filter.terms = (ecs_term_t*)&terms;
+            filter.term_count = 2;
+
+            ecs_filter_desc_t desc = default;
+            desc.terms[0].first.id = relation;
+            desc.terms[0].second.id = Id;
+            desc.terms[0].second.flags = EcsIsEntity;
+            desc.terms[1].id = EcsPrefab;
+            desc.terms[1].oper = EcsOptional;
+            desc.storage = &filter;
+
+            if (ecs_filter_init(World, &desc) == null)
+                return;
+
+            ecs_iter_t it = ecs_filter_iter(World, &filter);
+            Invoker.EachEntity(callback, ecs_filter_next_instanced, &it);
+            ecs_filter_fini(&filter);
+        }
+
+        public void Children<TRel>(Ecs.EachEntityCallback callback)
+        {
+            Children(Type<TRel>.Id(World), callback);
+        }
+
+        public void Children(Ecs.EachEntityCallback callback)
+        {
+            Children(EcsChildOf, callback);
+        }
+
         public readonly void* GetPtr(ulong compId)
         {
             return ecs_get_id(World, Id, compId);
@@ -118,11 +254,69 @@ namespace Flecs.NET.Core
             return ecs_get_id(World, Id, pair);
         }
 
+        public readonly T* GetPtr<T>() where T : unmanaged
+        {
+            ulong componentId = Type<T>.Id(World);
+            Assert.True(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (T*)ecs_get_id(World, Id, componentId);
+        }
+
+        public readonly TEnum* GetEnumPtr<TEnum>() where TEnum : unmanaged, Enum
+        {
+            ulong enumTypeId = Type<TEnum>.Id(World);
+            ulong target = ecs_get_target(World, Id, enumTypeId, 0);
+
+            if (target == 0)
+                return (TEnum*)ecs_get_id(World, Id, enumTypeId);
+
+            void* ptr = ecs_get_id(World, enumTypeId, target);
+            Assert.True(ptr != null, "Missing enum constant value");
+            return (TEnum*)ptr;
+        }
+
+        public readonly TFirst* GetPtr<TFirst>(ulong second) where TFirst : unmanaged
+        {
+            ulong pair = Macros.Pair<TFirst>(second, World);
+            Assert.True(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TFirst*)ecs_get_id(World, Id, pair);
+        }
+
+        public readonly TFirst* GetPtr<TFirst, TSecondEnum>(TSecondEnum secondEnum)
+            where TFirst : unmanaged
+            where TSecondEnum : Enum
+        {
+            ulong enumId = EnumType<TSecondEnum>.Id(secondEnum, World);
+            ulong pair = Macros.Pair<TFirst>(enumId, World);
+            Assert.True(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TFirst*)ecs_get_id(World, Id, pair);
+        }
+
+        public readonly TFirst* GetFirstPtr<TFirst, TSecond>() where TFirst : unmanaged
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            Assert.True(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TFirst*)ecs_get_id(World, Id, pair);
+        }
+
+        public readonly TSecond* GetSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            Assert.True(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TSecond*)ecs_get_id(World, Id, pair);
+        }
+
+        public readonly TSecond* GetSecondPtr<TSecond>(ulong first) where TSecond : unmanaged
+        {
+            ulong pair = Macros.PairSecond<TSecond>(first, World);
+            Assert.True(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TSecond*)ecs_get_id(World, Id, pair);
+        }
+
         public ref readonly T Get<T>()
         {
-            void* component = ecs_get_id(World, Id, Type<T>.Id(World));
+            ulong id = Type<T>.Id(World);
             Assert.True(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return ref Managed.GetTypeRef<T>(component);
+            return ref Managed.GetTypeRef<T>(ecs_get_id(World, Id, id));
         }
 
         public ref readonly TEnum GetEnum<TEnum>() where TEnum : Enum
@@ -309,11 +503,74 @@ namespace Flecs.NET.Core
             return Owns(pair);
         }
 
-        public ref Entity SetName(string name)
+        public Entity Clone(bool cloneValue = true, ulong dstId = 0)
         {
-            using NativeString nativeName = (NativeString)name;
-            ecs_set_name(World, Id, nativeName);
-            return ref this;
+            if (dstId == 0)
+                dstId = ecs_new_id(World);
+
+            Entity dst = new Entity(World, dstId);
+            ecs_clone(World, dstId, Id, Macros.Bool(cloneValue));
+            return dst;
+        }
+
+        public Entity Mut(ref World stage)
+        {
+            Assert.True(!stage.IsReadOnly(), "Cannot use readonly world/stage to create mutable handle");
+            return new Entity(Id).SetStage(stage);
+        }
+
+        public Entity Mut(ref Iter it)
+        {
+            Assert.True(!it.World().IsReadOnly(), "Cannot use iterator created for readonly world/stage to create mutable handle");
+            return new Entity(Id).SetStage(it.World());
+        }
+
+        public Entity Mut(ref Entity entity)
+        {
+            Assert.True(!entity.CsWorld().IsReadOnly(), "Cannot use entity created for readonly world/stage to create mutable handle");
+            return new Entity(Id).SetStage(entity.World);
+        }
+
+        private Entity SetStage(ecs_world_t* stage)
+        {
+            return new Entity(stage, Id);
+        }
+
+        public string ToJson(ecs_entity_to_json_desc_t* desc = null)
+        {
+            return NativeString.GetStringAndFree(ecs_entity_to_json(World, Id, desc));
+        }
+
+        public string DocName()
+        {
+            return NativeString.GetString(ecs_doc_get_name(World, Id));
+        }
+
+        public string DocDetail()
+        {
+            return NativeString.GetString(ecs_doc_get_detail(World, Id));
+        }
+
+        public string DocLink()
+        {
+            return NativeString.GetString(ecs_doc_get_link(World, Id));
+        }
+
+        public string DocColor()
+        {
+            return NativeString.GetString(ecs_doc_get_color(World, Id));
+        }
+
+        public int AlertCount(ulong alert = 0)
+        {
+            return ecs_get_alert_count(World, Id, alert);
+        }
+
+        public TEnum ToConstant<TEnum>() where TEnum : unmanaged, Enum
+        {
+            TEnum* ptr = GetEnumPtr<TEnum>();
+            Assert.True(ptr != null, "Entity is not a constant");
+            return *ptr;
         }
 
         public ref Entity Add(ulong id)
@@ -401,6 +658,52 @@ namespace Flecs.NET.Core
             return ref AddIf(cond, pair);
         }
 
+        public ref Entity IsA(ulong id)
+        {
+            return ref Add(EcsIsA, id);
+        }
+
+        public ref Entity IsA<T>()
+        {
+            return ref Add(EcsIsA, Type<T>.Id(World));
+        }
+
+        public ref Entity ChildOf(ulong second)
+        {
+            return ref Add(EcsChildOf, second);
+        }
+
+        public ref Entity ChildOf<T>()
+        {
+            return ref Add(EcsChildOf, Type<T>.Id(World));
+        }
+
+        public ref Entity DependsOn(ulong second)
+        {
+            return ref Add(EcsDependsOn, second);
+        }
+
+        public ref Entity DependsOn<T>()
+        {
+            return ref Add(EcsDependsOn, Type<T>.Id(World));
+        }
+
+        public ref Entity SlotOf(ulong id)
+        {
+            return ref Add(EcsSlotOf, id);
+        }
+
+        public ref Entity SlotOf<T>()
+        {
+            return ref Add(EcsSlotOf, Type<T>.Id(World));
+        }
+
+        public ref Entity Slot()
+        {
+            Assert.True(ecs_get_target(World, Id, EcsChildOf, 0) != 0, "Add ChildOf pair before using slot()");
+            return ref SlotOf(Target(EcsChildOf));
+        }
+
         public ref Entity Remove(ulong id)
         {
             ecs_remove_id(World, Id, id);
@@ -445,92 +748,6 @@ namespace Flecs.NET.Core
         {
             ulong pair = Macros.PairSecond<TSecond>(first, World);
             return ref Remove(pair);
-        }
-
-        public ref Entity Set<T>(T component)
-        {
-            return ref SetInternal(Type<T>.Id(World), ref component);
-        }
-
-        public ref Entity Set<T>(ref T component)
-        {
-            return ref Set(component);
-        }
-
-        public ref Entity Set<TFirst>(ulong second, TFirst component)
-        {
-            return ref Set(second, ref component);
-        }
-
-        public ref Entity Set<TFirst>(ulong second, ref TFirst component)
-        {
-            ulong pair = Macros.Pair<TFirst>(second, World);
-            return ref SetInternal(pair, ref component);
-        }
-
-        public ref Entity Set<TFirst, TSecondEnum>(TSecondEnum enumMember, ref TFirst component)
-            where TSecondEnum : Enum
-        {
-            ulong enumId = EnumType<TSecondEnum>.Id(enumMember, World);
-            return ref Set(enumId, ref component);
-        }
-
-        public ref Entity Set<TFirst, TSecondEnum>(TSecondEnum enumMember, TFirst component) where TSecondEnum : Enum
-        {
-            return ref Set(enumMember, ref component);
-        }
-
-        public ref Entity SetFirst<TFirst, TSecond>(TFirst component)
-        {
-            return ref SetFirst<TFirst, TSecond>(ref component);
-        }
-
-        public ref Entity SetFirst<TFirst, TSecond>(ref TFirst component)
-        {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return ref SetInternal(pair, ref component);
-        }
-
-        public ref Entity SetSecond<TFirst, TSecond>(TSecond component)
-        {
-            return ref SetSecond<TFirst, TSecond>(ref component);
-        }
-
-        public ref Entity SetSecond<TFirst, TSecond>(ref TSecond component)
-        {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return ref SetInternal(pair, ref component);
-        }
-
-        public ref Entity SetSecond<TSecond>(ulong first, TSecond component)
-        {
-            return ref SetSecond(first, ref component);
-        }
-
-        public ref Entity SetSecond<TSecond>(ulong first, ref TSecond component)
-        {
-            ulong pair = Macros.PairSecond<TSecond>(first, World);
-            return ref SetInternal(pair, ref component);
-        }
-
-        public ref Entity SetPtr(ulong componentId, int size, void* data)
-        {
-            ecs_set_id(World, Id, componentId, (ulong)size, data);
-            return ref this;
-        }
-
-        public ref Entity SetPtr(ulong componentId, ulong size, void* data)
-        {
-            ecs_set_id(World, Id, componentId, size, data);
-            return ref this;
-        }
-
-        public ref Entity SetPtr(ulong componentId, void* data)
-        {
-            EcsComponent* ecsComponent = (EcsComponent*)ecs_get_id(World, componentId, FLECS_IDEcsComponentID_);
-            Assert.True(ecsComponent != null, nameof(ECS_INVALID_PARAMETER));
-            ecs_set_id(World, Id, componentId, (ulong)ecsComponent->size, data);
-            return ref this;
         }
 
         public ref Entity Override(ulong id)
@@ -591,52 +808,6 @@ namespace Flecs.NET.Core
         public ref Entity SetOverrideSecond<TSecond>(ulong first, TSecond component)
         {
             return ref OverrideSecond<TSecond>(first).SetSecond(first, component);
-        }
-
-        public ref Entity IsA(ulong id)
-        {
-            return ref Add(EcsIsA, id);
-        }
-
-        public ref Entity IsA<T>()
-        {
-            return ref Add(EcsIsA, Type<T>.Id(World));
-        }
-
-        public ref Entity ChildOf(ulong second)
-        {
-            return ref Add(EcsChildOf, second);
-        }
-
-        public ref Entity ChildOf<T>()
-        {
-            return ref Add(EcsChildOf, Type<T>.Id(World));
-        }
-
-        public ref Entity DependsOn(ulong second)
-        {
-            return ref Add(EcsDependsOn, second);
-        }
-
-        public ref Entity DependsOn<T>()
-        {
-            return ref Add(EcsDependsOn, Type<T>.Id(World));
-        }
-
-        public ref Entity SlotOf(ulong id)
-        {
-            return ref Add(EcsSlotOf, id);
-        }
-
-        public ref Entity SlotOf<T>()
-        {
-            return ref Add(EcsSlotOf, Type<T>.Id(World));
-        }
-
-        public ref Entity Slot()
-        {
-            Assert.True(ecs_get_target(World, Id, EcsChildOf, 0) != 0, "Add ChildOf pair before using slot()");
-            return ref SlotOf(Target(EcsChildOf));
         }
 
         public ref Entity Enable()
@@ -709,6 +880,113 @@ namespace Flecs.NET.Core
             return ref Disable(pair);
         }
 
+        public ref Entity SetPtr(ulong componentId, int size, void* data)
+        {
+            ecs_set_id(World, Id, componentId, (ulong)size, data);
+            return ref this;
+        }
+
+        public ref Entity SetPtr(ulong componentId, ulong size, void* data)
+        {
+            ecs_set_id(World, Id, componentId, size, data);
+            return ref this;
+        }
+
+        public ref Entity SetPtr(ulong componentId, void* data)
+        {
+            EcsComponent* ecsComponent = (EcsComponent*)ecs_get_id(World, componentId, FLECS_IDEcsComponentID_);
+            Assert.True(ecsComponent != null, nameof(ECS_INVALID_PARAMETER));
+            ecs_set_id(World, Id, componentId, (ulong)ecsComponent->size, data);
+            return ref this;
+        }
+
+        public ref Entity Set<T>(T component)
+        {
+            return ref SetInternal(Type<T>.Id(World), ref component);
+        }
+
+        public ref Entity Set<T>(ref T component)
+        {
+            return ref Set(component);
+        }
+
+        public ref Entity Set<TFirst>(ulong second, TFirst component)
+        {
+            return ref Set(second, ref component);
+        }
+
+        public ref Entity Set<TFirst>(ulong second, ref TFirst component)
+        {
+            ulong pair = Macros.Pair<TFirst>(second, World);
+            return ref SetInternal(pair, ref component);
+        }
+
+        public ref Entity Set<TFirst, TSecondEnum>(TSecondEnum enumMember, ref TFirst component)
+            where TSecondEnum : Enum
+        {
+            ulong enumId = EnumType<TSecondEnum>.Id(enumMember, World);
+            return ref Set(enumId, ref component);
+        }
+
+        public ref Entity Set<TFirst, TSecondEnum>(TSecondEnum enumMember, TFirst component) where TSecondEnum : Enum
+        {
+            return ref Set(enumMember, ref component);
+        }
+
+        public ref Entity SetFirst<TFirst, TSecond>(TFirst component)
+        {
+            return ref SetFirst<TFirst, TSecond>(ref component);
+        }
+
+        public ref Entity SetFirst<TFirst, TSecond>(ref TFirst component)
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            return ref SetInternal(pair, ref component);
+        }
+
+        public ref Entity SetSecond<TFirst, TSecond>(TSecond component)
+        {
+            return ref SetSecond<TFirst, TSecond>(ref component);
+        }
+
+        public ref Entity SetSecond<TFirst, TSecond>(ref TSecond component)
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            return ref SetInternal(pair, ref component);
+        }
+
+        public ref Entity SetSecond<TSecond>(ulong first, TSecond component)
+        {
+            return ref SetSecond(first, ref component);
+        }
+
+        public ref Entity SetSecond<TSecond>(ulong first, ref TSecond component)
+        {
+            ulong pair = Macros.PairSecond<TSecond>(first, World);
+            return ref SetInternal(pair, ref component);
+        }
+
+        public ref Entity With(Action func)
+        {
+            ulong prev = ecs_set_with(World, Id);
+            func();
+            ecs_set_with(World, prev);
+            return ref this;
+        }
+
+        public ref Entity With(ulong first, Action func)
+        {
+            ulong prev = ecs_set_with(World, Macros.Pair(first, Id));
+            func();
+            ecs_set_with(World, prev);
+            return ref this;
+        }
+
+        public ref Entity With<T>(Action func)
+        {
+            return ref With(Type<T>.Id(World), func);
+        }
+
         public ref Entity Scope(Action func)
         {
             ulong prev = ecs_set_scope(World, Id);
@@ -717,11 +995,126 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        public ref Entity With(Action func)
+        public ref Entity SetName(string name)
         {
-            ulong prev = ecs_set_with(World, Id);
-            func();
-            ecs_set_with(World, prev);
+            using NativeString nativeName = (NativeString)name;
+            ecs_set_name(World, Id, nativeName);
+            return ref this;
+        }
+
+        public ref Entity SetAlias(string alias)
+        {
+            using NativeString nativeAlias = (NativeString)alias;
+            ecs_set_alias(World, Id, nativeAlias);
+            return ref this;
+        }
+
+        public ref Entity SetDocName(string name)
+        {
+            using NativeString nativeName = (NativeString)name;
+            ecs_doc_set_name(World, Id, nativeName);
+            return ref this;
+        }
+
+        public ref Entity SetDocBrief(string brief)
+        {
+            using NativeString nativeBrief = (NativeString)brief;
+            ecs_doc_set_brief(World, Id, nativeBrief);
+            return ref this;
+        }
+
+        public ref Entity SetDoDetail(string detail)
+        {
+            using NativeString nativeDetail = (NativeString)detail;
+            ecs_doc_set_detail(World, Id, nativeDetail);
+            return ref this;
+        }
+
+        public ref Entity SetDocLink(string link)
+        {
+            using NativeString nativeLink = (NativeString)link;
+            ecs_doc_set_link(World, Id, nativeLink);
+            return ref this;
+        }
+
+        public ref Entity SetDocColor(string color)
+        {
+            using NativeString nativeColor = (NativeString)color;
+            ecs_doc_set_color(World, Id, nativeColor);
+            return ref this;
+        }
+
+        public ref Entity Unit(
+            string symbol,
+            ulong prefix = 0,
+            ulong @base = 0,
+            ulong over = 0,
+            int factor = 0,
+            int power = 0)
+        {
+            using NativeString nativeSymbol = (NativeString)symbol;
+
+            ecs_unit_desc_t desc = default;
+            desc.symbol = nativeSymbol;
+            desc.entity = Id;
+            desc.@base = @base;
+            desc.over = over;
+            desc.prefix = prefix;
+            desc.translation.factor = factor;
+            desc.translation.power = power;
+            ecs_unit_init(World, &desc);
+
+            return ref this;
+        }
+
+        public ref Entity Unit(
+            ulong prefix = 0,
+            ulong @base = 0,
+            ulong over = 0,
+            int factor = 0,
+            int power = 0)
+        {
+            ecs_unit_desc_t desc = default;
+            desc.entity = Id;
+            desc.@base = @base;
+            desc.over = over;
+            desc.prefix = prefix;
+            desc.translation.factor = factor;
+            desc.translation.power = power;
+            ecs_unit_init(World, &desc);
+
+            return ref this;
+        }
+
+        public ref Entity UnitPrefix(string symbol, int factor = 0, int power = 0)
+        {
+            using NativeString nativeSymbol = (NativeString)symbol;
+
+            ecs_unit_prefix_desc_t desc = default;
+            desc.entity = Id;
+            desc.symbol = nativeSymbol;
+            desc.translation.factor = factor;
+            desc.translation.power = power;
+            ecs_unit_prefix_init(World, &desc);
+
+            return ref this;
+        }
+
+        public ref Entity Quantity(ulong quantity)
+        {
+            ulong pair = Macros.Pair(EcsQuantity, quantity);
+            ecs_add_id(World, Id, pair);
+            return ref this;
+        }
+
+        public ref Entity Quantity<T>()
+        {
+            return ref Quantity(Type<T>.Id(World));
+        }
+
+        public ref Entity Quantity()
+        {
+            ecs_add_id(World, Id, EcsQuantity);
             return ref this;
         }
 
@@ -734,6 +1127,64 @@ namespace Flecs.NET.Core
         {
             ulong pair = Macros.Pair(first, second);
             return ecs_get_mut_id(World, Id, pair);
+        }
+
+        public readonly T* GetMutPtr<T>() where T : unmanaged
+        {
+            ulong componentId = Type<T>.Id(World);
+            Assert.True(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (T*)ecs_get_mut_id(World, Id, componentId);
+        }
+
+        public readonly TEnum* GetMutEnumPtr<TEnum>() where TEnum : unmanaged, Enum
+        {
+            ulong enumTypeId = Type<TEnum>.Id(World);
+            ulong target = ecs_get_target(World, Id, enumTypeId, 0);
+
+            if (target == 0)
+                return (TEnum*)ecs_get_id(World, Id, enumTypeId);
+
+            void* ptr = ecs_get_mut_id(World, enumTypeId, target);
+            Assert.True(ptr != null, "Missing enum constant value");
+            return (TEnum*)ptr;
+        }
+
+        public readonly TFirst* GetMutPtr<TFirst>(ulong second) where TFirst : unmanaged
+        {
+            ulong pair = Macros.Pair<TFirst>(second, World);
+            Assert.True(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TFirst*)ecs_get_mut_id(World, Id, pair);
+        }
+
+        public readonly TFirst* GetMutPtr<TFirst, TSecondEnum>(TSecondEnum secondEnum)
+            where TFirst : unmanaged
+            where TSecondEnum : Enum
+        {
+            ulong enumId = EnumType<TSecondEnum>.Id(secondEnum, World);
+            ulong pair = Macros.Pair<TFirst>(enumId, World);
+            Assert.True(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TFirst*)ecs_get_mut_id(World, Id, pair);
+        }
+
+        public readonly TFirst* GetMutFirstPtr<TFirst, TSecond>() where TFirst : unmanaged
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            Assert.True(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TFirst*)ecs_get_mut_id(World, Id, pair);
+        }
+
+        public readonly TSecond* GetMutSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            Assert.True(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TSecond*)ecs_get_mut_id(World, Id, pair);
+        }
+
+        public readonly TSecond* GetMutSecondPtr<TSecond>(ulong first) where TSecond : unmanaged
+        {
+            ulong pair = Macros.PairSecond<TSecond>(first, World);
+            Assert.True(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TSecond*)ecs_get_mut_id(World, Id, pair);
         }
 
         public ref T GetMut<T>()
@@ -805,6 +1256,62 @@ namespace Flecs.NET.Core
             Modified(pair);
         }
 
+        public Ref<T> GetRef<T>()
+        {
+            Type<T>.Id(World);
+            Assert.True(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return new Ref<T>(World,Id);
+        }
+
+        public Ref<TFirst> GetRef<TFirst>(ulong second)
+        {
+            ulong pair = Macros.Pair<TFirst>(second, World);
+            Assert.True(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return new Ref<TFirst>(World, Id, pair);
+        }
+
+        public Ref<TFirst> GetRefFirst<TFirst, TSecond>()
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            Assert.True(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return new Ref<TFirst>(World, Id, pair);
+        }
+
+        public Ref<TSecond> GetRefSecond<TFirst, TSecond>()
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            Assert.True(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return new Ref<TSecond>(World, Id, pair);
+        }
+
+        public Ref<TSecond> GetRefSecond<TSecond>(ulong first)
+        {
+            ulong pair = Macros.PairSecond<TSecond>(first, World);
+            Assert.True(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return new Ref<TSecond>(World, Id, pair);
+        }
+
+        public void Flatten(ulong relation, ecs_flatten_desc_t* desc = null)
+        {
+            ecs_flatten(World, Macros.Pair(relation, Id), desc);
+        }
+
+        public void Clear()
+        {
+            ecs_clear(World, Id);
+        }
+
+        public void Destruct()
+        {
+            ecs_delete(World, Id);
+        }
+
+        public string FromJson(string json)
+        {
+            using NativeString nativeJson = (NativeString)json;
+            return NativeString.GetString(ecs_entity_from_json(World, Id, nativeJson, null));
+        }
+
         private ref Entity SetInternal<T>(ulong id, ref T component)
         {
             bool isRef = RuntimeHelpers.IsReferenceOrContainsReferences<T>();
@@ -816,16 +1323,6 @@ namespace Flecs.NET.Core
                 ecs_set_id(World, Id, id, (ulong)size, isRef ? Managed.AllocGcHandle(&ptr, ref component) : data);
                 return ref this;
             }
-        }
-
-        public void Clear()
-        {
-            ecs_clear(World, Id);
-        }
-
-        public void Destruct()
-        {
-            ecs_delete(World, Id);
         }
 
         public static implicit operator ulong(Entity entity)
