@@ -9,10 +9,13 @@ namespace Flecs.NET.Core
         public ecs_world_t* World { get; private set; }
         public ecs_query_t* Handle { get; private set; }
 
+        internal BindingContext.QueryContext QueryContext;
+
         public Query(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default,
             QueryBuilder queryBuilder = default)
         {
             World = world;
+            QueryContext = queryBuilder.QueryContext;
 
             ecs_query_desc_t* queryDesc = &queryBuilder.QueryDesc;
             queryDesc->filter = filterBuilder.FilterDesc;
@@ -43,6 +46,7 @@ namespace Flecs.NET.Core
         {
             World = world;
             Handle = query;
+            QueryContext = default;
         }
 
         public void Dispose()
@@ -56,6 +60,7 @@ namespace Flecs.NET.Core
                 return;
 
             ecs_query_fini(Handle);
+            QueryContext.Dispose();
             World = null;
             Handle = null;
         }

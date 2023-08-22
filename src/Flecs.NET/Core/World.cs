@@ -83,6 +83,7 @@ namespace Flecs.NET.Core
                 return;
 
             _ = ecs_fini(Handle);
+            WorldContext.Dispose();
             Handle = null;
         }
 
