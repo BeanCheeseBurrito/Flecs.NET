@@ -9,30 +9,19 @@ namespace Flecs.NET.Core
 
         internal ecs_system_desc_t RoutineDesc;
         internal BindingContext.RoutineContext RoutineContext;
+        internal ulong CurrentPhase;
 
         public RoutineBuilder(ecs_world_t* world)
         {
             World = world;
             RoutineDesc = default;
             RoutineContext = default;
+            CurrentPhase = default;
         }
 
         public ref RoutineBuilder Kind(ulong phase)
         {
-            ulong currentPhase = ecs_get_target(World, RoutineDesc.entity, EcsDependsOn, 0);
-
-            if (currentPhase != 0)
-            {
-                ecs_remove_id(World, RoutineDesc.entity, Macros.DependsOn(currentPhase));
-                ecs_remove_id(World, RoutineDesc.entity, currentPhase);
-            }
-
-            if (phase == 0)
-                return ref this;
-
-            ecs_add_id(World, RoutineDesc.entity, Macros.DependsOn(phase));
-            ecs_add_id(World, RoutineDesc.entity, phase);
-
+            CurrentPhase = phase;
             return ref this;
         }
 

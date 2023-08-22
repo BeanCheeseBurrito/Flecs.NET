@@ -30,8 +30,18 @@ namespace Flecs.NET.Core
             entityDesc.sep = nativeSep;
 
             ulong entity = ecs_entity_init(world, &entityDesc);
-            ecs_add_id(world, entity, Macros.DependsOn(EcsOnUpdate));
-            ecs_add_id(world, entity, EcsOnUpdate);
+            ulong currentPhase = ecs_get_target(World, entity, EcsDependsOn, 0);
+
+            if (currentPhase == 0 && routineBuilder.CurrentPhase != 0)
+            {
+                ecs_add_id(World, entity, Macros.DependsOn(routineBuilder.CurrentPhase));
+                ecs_add_id(World, entity, routineBuilder.CurrentPhase);
+            }
+            else if (currentPhase == 0)
+            {
+                ecs_add_id(world, entity, Macros.DependsOn(EcsOnUpdate));
+                ecs_add_id(world, entity, EcsOnUpdate);
+            }
 
             BindingContext.RoutineContext* routineContext = Memory.Alloc<BindingContext.RoutineContext>(1);
             routineContext[0] = routineBuilder.RoutineContext;
