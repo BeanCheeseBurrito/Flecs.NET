@@ -7,6 +7,7 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    // TODO: Add disposable functions to context structs
     public static unsafe class BindingContext
     {
 #if NET5_0_OR_GREATER
@@ -88,10 +89,7 @@ namespace Flecs.NET.Core
         private static void ObserverContextFree(void* context)
         {
             ObserverContext* observerContext = (ObserverContext*)context;
-
-            FreeCallback(ref observerContext->Iter);
-            FreeCallback(ref observerContext->Run);
-
+            observerContext->Dispose();
             Memory.Free(context);
         }
 
@@ -99,16 +97,7 @@ namespace Flecs.NET.Core
         private static void RoutineContextFree(void* context)
         {
             RoutineContext* routineContext = (RoutineContext*)context;
-
-            FreeCallback(ref routineContext->QueryContext.OrderByAction);
-            FreeCallback(ref routineContext->QueryContext.GroupByAction);
-            FreeCallback(ref routineContext->QueryContext.ContextFree);
-            FreeCallback(ref routineContext->QueryContext.GroupCreateAction);
-            FreeCallback(ref routineContext->QueryContext.GroupDeleteAction);
-
-            FreeCallback(ref routineContext->Iter);
-            FreeCallback(ref routineContext->Run);
-
+            routineContext->Dispose();
             Memory.Free(context);
         }
 
@@ -116,13 +105,7 @@ namespace Flecs.NET.Core
         private static void QueryContextFree(void* context)
         {
             QueryContext* queryContext = (QueryContext*)context;
-
-            FreeCallback(ref queryContext->OrderByAction);
-            FreeCallback(ref queryContext->GroupByAction);
-            FreeCallback(ref queryContext->ContextFree);
-            FreeCallback(ref queryContext->GroupCreateAction);
-            FreeCallback(ref queryContext->GroupDeleteAction);
-
+            queryContext->Dispose();
             Memory.Free(context);
         }
 
@@ -130,14 +113,7 @@ namespace Flecs.NET.Core
         private static void TypeHooksContextFree(void* context)
         {
             TypeHooksContext* typeHooks = (TypeHooksContext*)context;
-            FreeCallback(ref typeHooks->Ctor);
-            FreeCallback(ref typeHooks->Dtor);
-            FreeCallback(ref typeHooks->Move);
-            FreeCallback(ref typeHooks->Copy);
-            FreeCallback(ref typeHooks->OnAdd);
-            FreeCallback(ref typeHooks->OnSet);
-            FreeCallback(ref typeHooks->OnRemove);
-            FreeCallback(ref typeHooks->ContextFree);
+            typeHooks->Dispose();
             Memory.Free(context);
         }
 
@@ -174,29 +150,61 @@ namespace Flecs.NET.Core
             }
         }
 
-        internal struct ObserverContext
+        internal struct WorldContext : IDisposable
+        {
+            public Callback FiniAction;
+
+            public void Dispose()
+            {
+                FreeCallback(ref FiniAction);
+            }
+        }
+
+        internal struct ObserverContext : IDisposable
         {
             public Callback Iter;
             public Callback Run;
+
+            public void Dispose()
+            {
+                FreeCallback(ref Iter);
+                FreeCallback(ref Run);
+            }
         }
 
-        internal struct RoutineContext
+        internal struct RoutineContext : IDisposable
         {
             public QueryContext QueryContext;
             public Callback Iter;
             public Callback Run;
+
+            public void Dispose()
+            {
+                QueryContext.Dispose();
+                FreeCallback(ref Iter);
+                FreeCallback(ref Run);
+            }
         }
 
-        internal struct QueryContext
+        internal struct QueryContext : IDisposable
         {
             public Callback OrderByAction;
             public Callback GroupByAction;
             public Callback ContextFree;
             public Callback GroupCreateAction;
             public Callback GroupDeleteAction;
+
+            public void Dispose()
+            {
+                FreeCallback(ref OrderByAction);
+                FreeCallback(ref GroupByAction);
+                FreeCallback(ref ContextFree);
+                FreeCallback(ref GroupCreateAction);
+                FreeCallback(ref GroupDeleteAction);
+            }
         }
 
-        internal struct TypeHooksContext
+        internal struct TypeHooksContext : IDisposable
         {
             public Callback Ctor;
             public Callback Dtor;
@@ -206,6 +214,18 @@ namespace Flecs.NET.Core
             public Callback OnSet;
             public Callback OnRemove;
             public Callback ContextFree;
+
+            public void Dispose()
+            {
+                FreeCallback(ref Ctor);
+                FreeCallback(ref Dtor);
+                FreeCallback(ref Move);
+                FreeCallback(ref Copy);
+                FreeCallback(ref OnAdd);
+                FreeCallback(ref OnSet);
+                FreeCallback(ref OnRemove);
+                FreeCallback(ref ContextFree);
+            }
         }
     }
 }
