@@ -117,14 +117,14 @@ namespace Flecs.NET.Core
             return Enabled(Type<T>.Id(World));
         }
 
-        public bool Enabled<TFirst>(ulong id)
+        public bool Enabled<TFirst>(ulong second)
         {
-            return Enabled(Macros.Pair(Type<TFirst>.Id(World), id));
+            return Enabled(Macros.Pair<TFirst>(second, World));
         }
 
         public bool Enabled<TFirst, TSecond>()
         {
-            return Enabled(Macros.Pair(Type<TFirst>.Id(World), Type<TSecond>.Id(World)));
+            return Enabled(Macros.Pair<TFirst, TSecond>(World));
         }
 
         public Types Types()
@@ -250,8 +250,7 @@ namespace Flecs.NET.Core
 
         public readonly void* GetPtr(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
-            return ecs_get_id(World, Id, pair);
+            return GetPtr(Macros.Pair(first, second));
         }
 
         public readonly T* GetPtr<T>() where T : unmanaged
@@ -430,8 +429,7 @@ namespace Flecs.NET.Core
 
         public bool Has(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
-            return Has(pair);
+            return Has(Macros.Pair(first, second));
         }
 
         public bool Has<T>()
@@ -453,14 +451,12 @@ namespace Flecs.NET.Core
 
         public bool Has<TFirst>(ulong second)
         {
-            ulong pair = Macros.Pair<TFirst>(second, World);
-            return Has(pair);
+            return Has(Macros.Pair<TFirst>(second, World));
         }
 
         public bool Has<TFirst, TSecond>()
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return Has(pair);
+            return Has(Macros.Pair<TFirst, TSecond>(World));
         }
 
         public bool Hash<TFirst, TSecondEnum>(TSecondEnum enumMember) where TSecondEnum : Enum
@@ -471,8 +467,7 @@ namespace Flecs.NET.Core
 
         public bool HasSecond<TSecond>(ulong first)
         {
-            ulong pair = Macros.PairSecond<TSecond>(first, World);
-            return Has(pair);
+            return Has(Macros.PairSecond<TSecond>(first, World));
         }
 
         public bool Owns(ulong id)
@@ -482,8 +477,7 @@ namespace Flecs.NET.Core
 
         public bool Owns(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
-            return Owns(pair);
+            return Owns(Macros.Pair(first, second));
         }
 
         public bool Owns<T>()
@@ -493,14 +487,12 @@ namespace Flecs.NET.Core
 
         public bool Owns<TFirst>(ulong second)
         {
-            ulong pair = Macros.Pair<TFirst>(second, World);
-            return Owns(pair);
+            return Owns(Macros.Pair<TFirst>(second, World));
         }
 
         public bool Owns<TFirst, TSecond>()
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return Owns(pair);
+            return Owns(Macros.Pair<TFirst, TSecond>(World));
         }
 
         public Entity Clone(bool cloneValue = true, ulong dstId = 0)
@@ -581,8 +573,7 @@ namespace Flecs.NET.Core
 
         public ref Entity Add(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
-            return ref Add(pair);
+            return ref Add(Macros.Pair(first, second));
         }
 
         public ref Entity Add<T>()
@@ -593,8 +584,7 @@ namespace Flecs.NET.Core
 
         public ref Entity Add<TFirst>(ulong second)
         {
-            ulong pair = Macros.Pair<TFirst>(second, World);
-            return ref Add(pair);
+            return ref Add(Macros.Pair<TFirst>(second, World));
         }
 
         public ref Entity Add<TEnum>(TEnum enumMember) where TEnum : Enum
@@ -616,8 +606,7 @@ namespace Flecs.NET.Core
 
         public ref Entity AddSecond<TSecond>(ulong first)
         {
-            ulong pair = Macros.PairSecond<TSecond>(first, World);
-            return ref Add(pair);
+            return ref Add(Macros.PairSecond<TSecond>(first, World));
         }
 
         public ref Entity AddIf(bool cond, ulong id)
@@ -654,8 +643,7 @@ namespace Flecs.NET.Core
 
         public ref Entity AddIf<TFirst, TSecond>(bool cond)
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return ref AddIf(cond, pair);
+            return ref AddIf(cond, Macros.Pair<TFirst, TSecond>(World));
         }
 
         public ref Entity IsA(ulong id)
@@ -712,8 +700,7 @@ namespace Flecs.NET.Core
 
         public ref Entity Remove(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
-            return ref Remove(pair);
+            return ref Remove(Macros.Pair(first, second));
         }
 
         public ref Entity Remove<T>()
@@ -728,14 +715,12 @@ namespace Flecs.NET.Core
 
         public ref Entity Remove<TFirst>(ulong second)
         {
-            ulong pair = Macros.Pair<TFirst>(second, World);
-            return ref Remove(pair);
+            return ref Remove(Macros.Pair<TFirst>(second, World));
         }
 
         public ref Entity Remove<TFirst, TSecond>()
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return ref Remove(pair);
+            return ref Remove(Macros.Pair<TFirst, TSecond>(World));
         }
 
         public ref Entity Remove<TFirst, TSecondEnum>(TSecondEnum enumMember) where TSecondEnum : Enum
@@ -746,8 +731,7 @@ namespace Flecs.NET.Core
 
         public ref Entity RemoveSecond<TSecond>(ulong first)
         {
-            ulong pair = Macros.PairSecond<TSecond>(first, World);
-            return ref Remove(pair);
+            return ref Remove(Macros.PairSecond<TSecond>(first, World));
         }
 
         public ref Entity Override(ulong id)
@@ -758,8 +742,7 @@ namespace Flecs.NET.Core
 
         public ref Entity Override(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
-            return ref Override(pair);
+            return ref Override(Macros.Pair(first, second));
         }
 
         public ref Entity Override<T>()
@@ -769,20 +752,17 @@ namespace Flecs.NET.Core
 
         public ref Entity Override<TFirst>(ulong second)
         {
-            ulong pair = Macros.Pair<TFirst>(second, World);
-            return ref Override(pair);
+            return ref Override(Macros.Pair<TFirst>(second, World));
         }
 
         public ref Entity Override<TFirst, TSecond>()
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return ref Override(pair);
+            return ref Override(Macros.Pair<TFirst, TSecond>(World));
         }
 
         public ref Entity OverrideSecond<TSecond>(ulong first)
         {
-            ulong pair = Macros.PairSecond<TSecond>(first, World);
-            return ref Override(pair);
+            return ref Override(Macros.PairSecond<TSecond>(first, World));
         }
 
         public ref Entity SetOverride<T>(T component)
@@ -824,8 +804,7 @@ namespace Flecs.NET.Core
 
         public ref Entity Enable(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
-            return ref Enable(pair);
+            return ref Enable(Macros.Pair(first, second));
         }
 
         public ref Entity Enable<T>()
@@ -835,14 +814,12 @@ namespace Flecs.NET.Core
 
         public ref Entity Enable<TFirst>(ulong second)
         {
-            ulong pair = Macros.Pair<TFirst>(second, World);
-            return ref Enable(pair);
+            return ref Enable(Macros.Pair<TFirst>(second, World));
         }
 
         public ref Entity Enable<TFirst, TSecond>()
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return ref Enable(pair);
+            return ref Enable(Macros.Pair<TFirst, TSecond>(World));
         }
 
         public ref Entity Disable()
@@ -859,8 +836,7 @@ namespace Flecs.NET.Core
 
         public ref Entity Disable(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
-            return ref Disable(pair);
+            return ref Disable(Macros.Pair(first, second));
         }
 
         public ref Entity Disable<T>()
@@ -870,14 +846,12 @@ namespace Flecs.NET.Core
 
         public ref Entity Disable<TFirst>(ulong second)
         {
-            ulong pair = Macros.Pair<TFirst>(second, World);
-            return ref Disable(pair);
+            return ref Disable(Macros.Pair<TFirst>(second, World));
         }
 
         public ref Entity Disable<TFirst, TSecond>()
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return ref Disable(pair);
+            return ref Disable(Macros.Pair<TFirst, TSecond>(World));
         }
 
         public ref Entity SetPtr(ulong componentId, int size, void* data)
@@ -917,8 +891,7 @@ namespace Flecs.NET.Core
 
         public ref Entity Set<TFirst>(ulong second, ref TFirst component)
         {
-            ulong pair = Macros.Pair<TFirst>(second, World);
-            return ref SetInternal(pair, ref component);
+            return ref SetInternal(Macros.Pair<TFirst>(second, World), ref component);
         }
 
         public ref Entity Set<TFirst, TSecondEnum>(TSecondEnum enumMember, ref TFirst component)
@@ -940,8 +913,7 @@ namespace Flecs.NET.Core
 
         public ref Entity SetFirst<TFirst, TSecond>(ref TFirst component)
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return ref SetInternal(pair, ref component);
+            return ref SetInternal(Macros.Pair<TFirst, TSecond>(World), ref component);
         }
 
         public ref Entity SetSecond<TFirst, TSecond>(TSecond component)
@@ -951,8 +923,7 @@ namespace Flecs.NET.Core
 
         public ref Entity SetSecond<TFirst, TSecond>(ref TSecond component)
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return ref SetInternal(pair, ref component);
+            return ref SetInternal(Macros.Pair<TFirst, TSecond>(World), ref component);
         }
 
         public ref Entity SetSecond<TSecond>(ulong first, TSecond component)
@@ -962,8 +933,7 @@ namespace Flecs.NET.Core
 
         public ref Entity SetSecond<TSecond>(ulong first, ref TSecond component)
         {
-            ulong pair = Macros.PairSecond<TSecond>(first, World);
-            return ref SetInternal(pair, ref component);
+            return ref SetInternal(Macros.PairSecond<TSecond>(first, World), ref component);
         }
 
         public ref Entity With(Action func)
@@ -1102,8 +1072,7 @@ namespace Flecs.NET.Core
 
         public ref Entity Quantity(ulong quantity)
         {
-            ulong pair = Macros.Pair(EcsQuantity, quantity);
-            ecs_add_id(World, Id, pair);
+            ecs_add_id(World, Id, Macros.Pair(EcsQuantity, quantity));
             return ref this;
         }
 
@@ -1125,8 +1094,7 @@ namespace Flecs.NET.Core
 
         public void* GetMutPtr(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
-            return ecs_get_mut_id(World, Id, pair);
+            return GetMutPtr(Macros.Pair(first, second));
         }
 
         public readonly T* GetMutPtr<T>() where T : unmanaged
@@ -1229,8 +1197,7 @@ namespace Flecs.NET.Core
 
         public void Modified(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
-            Modified(pair);
+            Modified(Macros.Pair(first, second));
         }
 
         public void Modified<T>()
@@ -1240,20 +1207,17 @@ namespace Flecs.NET.Core
 
         public void Modified<TFirst>(ulong second)
         {
-            ulong pair = Macros.Pair<TFirst>(second, World);
-            Modified(pair);
+            Modified(Macros.Pair<TFirst>(second, World));
         }
 
         public void Modified<TFirst, TSecond>()
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            Modified(pair);
+            Modified(Macros.Pair<TFirst, TSecond>(World));
         }
 
         public void ModifiedSecond<TSecond>(ulong first)
         {
-            ulong pair = Macros.PairSecond<TSecond>(first, World);
-            Modified(pair);
+            Modified(Macros.PairSecond<TSecond>(first, World));
         }
 
         public Ref<T> GetRef<T>()
