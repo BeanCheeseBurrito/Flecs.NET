@@ -8,7 +8,7 @@ namespace Flecs.NET.Core
     public unsafe struct Filter : IDisposable
     {
         public ecs_world_t* World { get; }
-        private ecs_filter_t* FilterPtr => (ecs_filter_t*)Unsafe.AsPointer(ref _filter);
+        internal ecs_filter_t* FilterPtr => (ecs_filter_t*)Unsafe.AsPointer(ref _filter);
         private ecs_filter_t _filter;
 
         public Filter(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default)

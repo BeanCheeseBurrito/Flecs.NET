@@ -459,7 +459,7 @@ namespace Flecs.NET.Core
             return Has(Macros.Pair<TFirst, TSecond>(World));
         }
 
-        public bool Hash<TFirst, TSecondEnum>(TSecondEnum enumMember) where TSecondEnum : Enum
+        public bool Has<TFirst, TSecondEnum>(TSecondEnum enumMember) where TSecondEnum : Enum
         {
             ulong enumId = EnumType<TSecondEnum>.Id(enumMember, World);
             return Has<TFirst>(enumId);

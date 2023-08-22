@@ -152,11 +152,13 @@ namespace Flecs.NET.Core
 
         internal struct WorldContext : IDisposable
         {
-            public Callback FiniAction;
+            public Callback AtFini;
+            public Callback RunpostFrame;
 
             public void Dispose()
             {
-                FreeCallback(ref FiniAction);
+                FreeCallback(ref AtFini);
+                FreeCallback(ref RunpostFrame);
             }
         }
 

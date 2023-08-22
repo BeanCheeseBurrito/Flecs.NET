@@ -4,7 +4,8 @@ using System;
 
 namespace Flecs.NET.Polyfill
 {
-    public class UnmanagedCallersOnlyAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Method, Inherited = false)]
+    public sealed class UnmanagedCallersOnlyAttribute : Attribute
     {
     }
 }
