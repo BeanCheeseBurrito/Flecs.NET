@@ -22,7 +22,7 @@ namespace Flecs.NET.Core
             }
         }
 
-        public static void Each(Ecs.EachCallback eachCallback, Ecs.IterNext iterNext, ecs_iter_t* iter)
+        public static void EachEntity(Ecs.EachEntityCallback eachCallback, Ecs.IterNext iterNext, ecs_iter_t* iter)
         {
             if (eachCallback == null)
                 throw new ArgumentNullException(nameof(eachCallback));

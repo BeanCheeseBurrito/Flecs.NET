@@ -59,12 +59,6 @@ namespace Flecs.NET.Core
             Handle = null;
         }
 
-        public void Each(Ecs.EachCallback func)
-        {
-            ecs_iter_t iter = ecs_query_iter(World, Handle);
-            Invoker.Each(func, ecs_query_next_instanced, &iter);
-        }
-
         public bool Changed()
         {
             return ecs_query_changed(Handle, null) == 1;

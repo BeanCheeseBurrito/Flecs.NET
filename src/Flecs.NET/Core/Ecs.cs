@@ -5,6 +5,8 @@ namespace Flecs.NET.Core
 {
     public static unsafe class Ecs
     {
+        public delegate void FiniAction(ecs_world_t* world, void* ctx);
+
         public delegate int AppInitAction(ecs_world_t* world);
 
         public delegate void ContextFree(void* ctx);
@@ -23,7 +25,9 @@ namespace Flecs.NET.Core
 
         public delegate byte IterNext(ecs_iter_t* iter);
 
-        public delegate void EachCallback(Entity entity);
+        public delegate void EachEntityCallback(Entity entity);
+
+        public delegate void EachIdCallback(Id id);
 
         public delegate int OrderByAction(ulong e1, void* ptr1, ulong e2, void* ptr2);
     }
