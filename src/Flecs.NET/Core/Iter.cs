@@ -34,7 +34,7 @@ namespace Flecs.NET.Core
 
         public World World()
         {
-            return new World(Handle->world);
+            return new World(Handle->world, false);
         }
 
         public ecs_iter_t* CPtr()
