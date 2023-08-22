@@ -8,10 +8,10 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
-    <Import Project="../Flecs.NET.Native/Flecs.NET.Native.targets" />
+    <Import Project="../Flecs.NET.Native/Flecs.NET.Native.targets"/>
 
     <ItemGroup>
-        <ProjectReference Include="../Flecs.NET/Flecs.NET.csproj" />
+        <ProjectReference Include="../Flecs.NET/Flecs.NET.csproj"/>
     </ItemGroup>
 
 </Project>

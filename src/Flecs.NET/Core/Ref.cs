@@ -27,8 +27,10 @@ namespace Flecs.NET.Core
             if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
                 throw new InvalidOperationException("Can't use GetPtr on managed types");
 
-            fixed (ecs_ref_t* refPtr= &_ref)
+            fixed (ecs_ref_t* refPtr = &_ref)
+            {
                 return (T*)ecs_ref_get_id(World, refPtr, _ref.id);
+            }
         }
 
         public ref T Get()

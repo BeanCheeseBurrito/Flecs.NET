@@ -76,7 +76,8 @@ namespace Flecs.NET.Core
 
         public ref AlertBuilder SeverityFilter(ulong kind, ulong with, string var = "")
         {
-            Assert.True(_severityFilterCount < ECS_ALERT_MAX_SEVERITY_FILTERS, "Maxium number of severity filters reached");
+            Assert.True(_severityFilterCount < ECS_ALERT_MAX_SEVERITY_FILTERS,
+                "Maxium number of severity filters reached");
 
             ref ecs_alert_severity_filter_t filter = ref AlertDesc.severity_filters[_severityFilterCount++];
             filter.severity = kind;
@@ -95,7 +96,8 @@ namespace Flecs.NET.Core
             return ref SeverityFilter(Type<TSeverity>.Id(World), Type<TWith>.Id(World), var);
         }
 
-        public ref AlertBuilder SeverityFilter<TSeverity, TWithEnum>(TWithEnum withEnum, string var = "") where TWithEnum : Enum
+        public ref AlertBuilder SeverityFilter<TSeverity, TWithEnum>(TWithEnum withEnum, string var = "")
+            where TWithEnum : Enum
         {
             return ref SeverityFilter(Type<TSeverity>.Id(World), EnumType<TWithEnum>.Id(withEnum, World), var);
         }
@@ -135,6 +137,5 @@ namespace Flecs.NET.Core
 
             return ref this;
         }
-
     }
 }

@@ -196,10 +196,7 @@ namespace Flecs.NET.Core
 
         public void Each(ulong relation, Ecs.EachEntityCallback func)
         {
-            Each(relation, EcsWildcard, (Id id) =>
-            {
-                func(id.Second());
-            });
+            Each(relation, EcsWildcard, (Id id) => { func(id.Second()); });
         }
 
         public void Each<TFirst>(Ecs.EachEntityCallback func)
@@ -513,13 +510,15 @@ namespace Flecs.NET.Core
 
         public Entity Mut(ref Iter it)
         {
-            Assert.True(!it.World().IsReadOnly(), "Cannot use iterator created for readonly world/stage to create mutable handle");
+            Assert.True(!it.World().IsReadOnly(),
+                "Cannot use iterator created for readonly world/stage to create mutable handle");
             return new Entity(Id).SetStage(it.World());
         }
 
         public Entity Mut(ref Entity entity)
         {
-            Assert.True(!entity.CsWorld().IsReadOnly(), "Cannot use entity created for readonly world/stage to create mutable handle");
+            Assert.True(!entity.CsWorld().IsReadOnly(),
+                "Cannot use entity created for readonly world/stage to create mutable handle");
             return new Entity(Id).SetStage(entity.World);
         }
 
@@ -1224,7 +1223,7 @@ namespace Flecs.NET.Core
         {
             Type<T>.Id(World);
             Assert.True(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return new Ref<T>(World,Id);
+            return new Ref<T>(World, Id);
         }
 
         public Ref<TFirst> GetRef<TFirst>(ulong second)

@@ -1,4 +1,3 @@
-using System;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -9,7 +8,8 @@ namespace Flecs.NET.Core
         public ecs_world_t* World { get; }
         public Entity Entity { get; }
 
-        public Alert(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default, AlertBuilder alertBuilder = default)
+        public Alert(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default,
+            AlertBuilder alertBuilder = default)
         {
             World = world;
 

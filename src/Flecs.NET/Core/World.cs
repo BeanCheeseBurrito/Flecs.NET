@@ -1,7 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.ExceptionServices;
-using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -107,7 +104,7 @@ namespace Flecs.NET.Core
             ecs_quit(Handle);
         }
 
-        public void AtFini(Ecs.FiniAction action, void *ctx)
+        public void AtFini(Ecs.FiniAction action, void* ctx)
         {
             BindingContext.SetCallback(ref WorldContext.AtFini, action);
             ecs_atfini(Handle, WorldContext.AtFini.Function, ctx);

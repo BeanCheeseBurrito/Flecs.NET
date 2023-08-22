@@ -9,7 +9,8 @@ namespace Flecs.NET.Core
         public ecs_world_t* World { get; private set; }
         public ecs_query_t* Handle { get; private set; }
 
-        public Query(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default, QueryBuilder queryBuilder = default)
+        public Query(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default,
+            QueryBuilder queryBuilder = default)
         {
             World = world;
 

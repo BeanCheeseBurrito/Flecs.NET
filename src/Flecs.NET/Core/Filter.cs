@@ -48,7 +48,9 @@ namespace Flecs.NET.Core
         {
             World = world;
             fixed (ecs_filter_t* mFilter = &_filter)
+            {
                 ecs_filter_move(mFilter, filter);
+            }
         }
 
         public void Dispose()

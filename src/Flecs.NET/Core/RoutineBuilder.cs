@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core

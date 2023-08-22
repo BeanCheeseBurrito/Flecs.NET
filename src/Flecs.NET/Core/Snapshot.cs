@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
