@@ -621,6 +621,21 @@ namespace Flecs.NET.Core
             Scope(Type<T>.Id(Handle), func);
         }
 
+        public ScopedWorld Scope(ulong parent)
+        {
+            return new ScopedWorld(Handle, parent);
+        }
+
+        public ScopedWorld Scope<T>()
+        {
+            return Scope(Type<T>.Id(Handle));
+        }
+
+        public ScopedWorld Scope(string name)
+        {
+            return Scope(Entity(name));
+        }
+
         public void DeleteWith(ulong id)
         {
             ecs_delete_with(Handle, id);
@@ -1060,7 +1075,10 @@ namespace Flecs.NET.Core
             return ecs_world_from_json(Handle, nativeJson, desc);
         }
 
-        // TODO: Add metric builder here
+        public MetricBuilder Metric(ulong entity)
+        {
+            return new MetricBuilder(Handle, entity);
+        }
 
         public AppBuilder App()
         {
