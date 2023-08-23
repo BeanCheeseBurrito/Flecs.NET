@@ -7,11 +7,16 @@
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
+    
+    <PropertyGroup>
+        <Example>EXAMPLE</Example>
+        <DefineConstants>$(DefineConstants);$(Example)</DefineConstants>
+    </PropertyGroup>
 
-    <Import Project="../Flecs.NET.Native/Flecs.NET.Native.targets"/>
+    <Import Project="../Flecs.NET.Native/Flecs.NET.Native.targets" />
 
     <ItemGroup>
-        <ProjectReference Include="../Flecs.NET/Flecs.NET.csproj"/>
+        <ProjectReference Include="../Flecs.NET/Flecs.NET.csproj" />
     </ItemGroup>
 
 </Project>
