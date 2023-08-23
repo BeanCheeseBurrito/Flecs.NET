@@ -9,8 +9,10 @@ namespace Flecs.NET.Core
     [SuppressMessage("Usage", "CS9087")]
     public unsafe struct Entity : IEquatable<Entity>
     {
-        public ecs_world_t* World { get; set; }
-        public Id Id { get; set; }
+        private Id _id;
+
+        public ref Id Id => ref _id;
+        public ref ecs_world_t* World => ref _id.World;
 
         public static Entity Null()
         {
@@ -24,20 +26,17 @@ namespace Flecs.NET.Core
 
         public Entity(ulong id)
         {
-            World = null;
-            Id = id;
+            _id = id;
         }
 
         public Entity(ecs_world_t* world)
         {
-            World = world;
-            Id = ecs_new_w_id(world, 0);
+            _id = new Id(world, ecs_new_w_id(world, 0));
         }
 
         public Entity(ecs_world_t* world, ulong id)
         {
-            World = world;
-            Id = id;
+            _id = new Id(world, id);
         }
 
         public Entity(ecs_world_t* world, string name)
@@ -50,8 +49,7 @@ namespace Flecs.NET.Core
             desc.sep = nativeSeparator;
             desc.root_sep = nativeSeparator;
 
-            Id = ecs_entity_init(world, &desc);
-            World = world;
+            _id = new Id(world, ecs_entity_init(world, &desc));
         }
 
         public World CsWorld()

@@ -6,23 +6,44 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// Struct used to register components and component metadata.
+    /// </summary>
+    /// <typeparam name="TComponent"></typeparam>
     public unsafe struct Component<TComponent> : IEquatable<Component<TComponent>>, IEquatable<ulong>
     {
-        public Entity Entity { get; }
-        public ecs_world_t* World { get; }
+        private UntypedComponent _untypedComponent;
 
-        public Id Id => Entity.Id;
+        /// <summary>
+        /// Reference to untyped component.
+        /// </summary>
+        public ref UntypedComponent UntypedComponent => ref _untypedComponent;
 
-        public Component(ecs_world_t* world, ulong id)
-        {
-            Entity = new Entity(world, id);
-            World = world;
-        }
+        /// <summary>
+        /// Reference to world.
+        /// </summary>
+        public ref ecs_world_t* World => ref _untypedComponent.World;
 
+        /// <summary>
+        /// Reference to entity.
+        /// </summary>
+        public ref Entity Entity => ref _untypedComponent.Entity;
+
+        /// <summary>
+        /// Reference to id.
+        /// </summary>
+        public ref Id Id => ref Entity.Id;
+
+        /// <summary>
+        /// Registers a component.
+        /// If the component was already registered, this operation will return a handle to the existing component.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="name"></param>
+        /// <param name="allowTag"></param>
+        /// <param name="id"></param>
         public Component(ecs_world_t* world, string? name = null, bool allowTag = true, ulong id = 0)
         {
-            World = world;
-
             bool implicitName = false;
 
             if (string.IsNullOrEmpty(name))
@@ -99,80 +120,155 @@ namespace Flecs.NET.Core
                     Type<TComponent>.RegisterLifeCycleActions(world);
             }
 
-            Entity = new Entity(world, id);
+            _untypedComponent = new UntypedComponent(world, id);
         }
 
-        public ref Component<TComponent> Member(ulong typeId, string name, int count, int offset = 0)
+        // TODO: Port opaque stuff here later
+
+        /// <summary>
+        /// Add member with unit.
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="unit"></param>
+        /// <param name="name"></param>
+        /// <param name="count"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public ref Component<TComponent> Member(ulong typeId, ulong unit, string name, int count, int offset = 0)
         {
-            using NativeString nativeName = (NativeString)name;
-
-            ecs_entity_desc_t desc = default;
-            desc.name = nativeName;
-            desc.add[0] = Macros.Pair(EcsChildOf, Entity);
-            ulong eid = ecs_entity_init(World, &desc);
-            Assert.True(eid != 0, nameof(ECS_INTERNAL_ERROR));
-
-            Entity e = new Entity(World, eid);
-
-            EcsMember m = default;
-            m.type = typeId;
-            m.count = count;
-            m.offset = offset;
-            e.Set(m);
-
+            UntypedComponent.Member(typeId, unit, name, count, offset);
             return ref this;
         }
 
+        /// <summary>
+        /// Add member.
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="name"></param>
+        /// <param name="count"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public ref Component<TComponent> Member(ulong typeId, string name, int count = 0, int offset = 0)
+        {
+            UntypedComponent.Member(typeId, name, count, offset);
+            return ref this;
+        }
+
+        /// <summary>
+        /// Add member.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="count"></param>
+        /// <param name="offset"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public ref Component<TComponent> Member<T>(string name, int count = 0, int offset = 0)
         {
-            return ref Member(Type<T>.Id(World), name, count, offset);
+            UntypedComponent.Member<T>(name, count, offset);
+            return ref this;
         }
 
+        /// <summary>
+        /// Add member with unit.
+        /// </summary>
+        /// <param name="unit"></param>
+        /// <param name="name"></param>
+        /// <param name="count"></param>
+        /// <param name="offset"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Component<TComponent> Member<T>(ulong unit, string name, int count = 0, int offset = 0)
+        {
+            UntypedComponent.Member<T>(unit, name, count, offset);
+            return ref this;
+        }
+
+        /// <summary>
+        /// Add member with unit.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="count"></param>
+        /// <param name="offset"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TUnit"></typeparam>
+        /// <returns></returns>
+        public ref Component<TComponent> Member<T, TUnit>(string name, int count = 0, int offset = 0)
+        {
+            UntypedComponent.Member<T, TUnit>(name, count, offset);
+            return ref this;
+        }
+
+        /// <summary>
+        /// Add constant.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public ref Component<TComponent> Constant(string name, int value)
+        {
+            UntypedComponent.Constant(name, value);
+            return ref this;
+        }
+
+        /// <summary>
+        /// Add bitmask constant.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public ref Component<TComponent> Bit(string name, uint value)
+        {
+            UntypedComponent.Bit(name, value);
+            return ref this;
+        }
+
+        /// <summary>
+        /// Add member value range.
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public ref Component<TComponent> Range(double min, double max)
         {
-            ecs_member_t* m = ecs_cpp_last_member(World, Entity);
-
-            if (m == null)
-                return ref this;
-
-            World w = new World(World);
-            Entity me = w.Entity(m->member);
-            ref EcsMemberRanges mr = ref me.GetMut<EcsMemberRanges>();
-            mr.value.min = min;
-            mr.value.max = max;
-            me.Modified<EcsMemberRanges>();
+            UntypedComponent.Range(min, max);
             return ref this;
         }
 
+        /// <summary>
+        /// Add member warning range.
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public ref Component<TComponent> WarningRange(double min, double max)
         {
-            ecs_member_t* m = ecs_cpp_last_member(World, Entity);
-
-            if (m == null)
-                return ref this;
-
-            World w = new World(World);
-            Entity me = w.Entity(m->member);
-            ref EcsMemberRanges mr = ref me.GetMut<EcsMemberRanges>();
-            mr.warning.min = min;
-            mr.warning.max = max;
-            me.Modified<EcsMemberRanges>();
+            UntypedComponent.WarningRange(min, max);
             return ref this;
         }
 
+        /// <summary>
+        /// Add member error range.
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public ref Component<TComponent> ErrorRange(double min, double max)
         {
-            ecs_member_t* m = ecs_cpp_last_member(World, Entity);
+            UntypedComponent.ErrorRange(min, max);
+            return ref this;
+        }
 
-            if (m == null)
-                return ref this;
-
-            World w = new World(World);
-            Entity me = w.Entity(m->member);
-            ref EcsMemberRanges mr = ref me.GetMut<EcsMemberRanges>();
-            mr.error.min = min;
-            mr.error.max = max;
-            me.Modified<EcsMemberRanges>();
+        /// <summary>
+        /// Register member as metric.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="brief"></param>
+        /// <param name="name"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Component<TComponent> Metric<T>(ulong parent = 0, string brief = "", string name = "")
+        {
+            UntypedComponent.Metric<T>(parent, brief, name);
             return ref this;
         }
 

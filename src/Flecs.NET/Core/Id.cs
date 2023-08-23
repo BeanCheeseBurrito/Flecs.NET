@@ -6,114 +6,117 @@ namespace Flecs.NET.Core
 {
     public unsafe struct Id : IEquatable<Id>
     {
-        public ecs_world_t* World { get; }
-        public ulong Value { get; }
+        private ecs_world_t* _world;
+        private ulong _value;
+
+        public ref ecs_world_t* World => ref _world;
+        public ref ulong Value => ref _value;
 
         public Id(ulong id)
         {
-            World = null;
-            Value = id;
+            _world = null;
+            _value = id;
         }
 
         public Id(ulong first, ulong second)
         {
-            World = null;
-            Value = Macros.Pair(first, second);
+            _world = null;
+            _value = Macros.Pair(first, second);
         }
 
         public Id(ecs_world_t* world, ulong first, ulong second)
         {
-            World = world;
-            Value = Macros.Pair(first, second);
+            _world = world;
+            _value = Macros.Pair(first, second);
         }
 
         public Id(ecs_world_t* world, ulong id = 0)
         {
-            World = world;
-            Value = id;
+            _world = world;
+            _value = id;
         }
 
         public Id(Id first, Id second)
         {
-            World = first.World;
-            Value = Macros.Pair(first.Value, second.Value);
+            _world = first.World;
+            _value = Macros.Pair(first.Value, second.Value);
         }
 
         public Id(Entity first, Entity second)
         {
-            World = first.World;
-            Value = Macros.Pair(first, second);
+            _world = first.World;
+            _value = Macros.Pair(first, second);
         }
 
-        public readonly bool IsPair()
+        public bool IsPair()
         {
             return (Value & ECS_ID_FLAGS_MASK) == ECS_PAIR;
         }
 
-        public readonly bool IsWildCard()
+        public bool IsWildCard()
         {
             return ecs_id_is_wildcard(Value) == 1;
         }
 
-        public readonly bool IsEntity()
+        public bool IsEntity()
         {
             return (Value & ECS_ID_FLAGS_MASK) == 0;
         }
 
-        public readonly Entity Entity()
+        public Entity Entity()
         {
             Assert.True(!IsPair());
             Assert.True(Flags() == 0);
             return new Entity(World, Value);
         }
 
-        public readonly Entity AddFlags(ulong flags)
+        public Entity AddFlags(ulong flags)
         {
             return new Entity(World, Value | flags);
         }
 
-        public readonly Entity RemoveFlags(ulong flags)
+        public Entity RemoveFlags(ulong flags)
         {
             Assert.True((Value & ECS_ID_FLAGS_MASK) == flags);
             return new Entity(World, Value & ECS_COMPONENT_MASK);
         }
 
-        public readonly Entity RemoveFlags()
+        public Entity RemoveFlags()
         {
             return new Entity(World, Value & ECS_COMPONENT_MASK);
         }
 
-        public readonly Entity RemoveGeneration()
+        public Entity RemoveGeneration()
         {
             return new Entity(World, (uint)Value);
         }
 
-        public readonly Entity TypeId()
+        public Entity TypeId()
         {
             return new Entity(World, ecs_get_typeid(World, Value));
         }
 
-        public readonly bool HasFlags(ulong flags)
+        public bool HasFlags(ulong flags)
         {
             return (Value & flags) == flags;
         }
 
-        public readonly bool HasFlags()
+        public bool HasFlags()
         {
             return (Value & ECS_ID_FLAGS_MASK) != 0;
         }
 
-        public readonly Entity Flags()
+        public Entity Flags()
         {
             return new Entity(World, Value & ECS_ID_FLAGS_MASK);
         }
 
-        public readonly bool HasRelation(ulong first)
+        public bool HasRelation(ulong first)
         {
             return IsPair() && Macros.PairFirst(Value) == first;
         }
 
-        public readonly Entity First()
+        public Entity First()
         {
             Assert.True(IsPair());
             ulong entity = Macros.PairFirst(Value);
@@ -126,17 +129,17 @@ namespace Flecs.NET.Core
             return World == null ? new Entity(entity) : new Entity(World, ecs_get_alive(World, entity));
         }
 
-        public readonly string Str()
+        public string Str()
         {
             return NativeString.GetStringAndFree(ecs_id_str(World, Value));
         }
 
-        public readonly string FlagsStr()
+        public string FlagsStr()
         {
             return NativeString.GetStringAndFree(ecs_id_flag_str(Value & ECS_ID_FLAGS_MASK));
         }
 
-        public readonly World CsWorld()
+        public World CsWorld()
         {
             return new World(World);
         }
@@ -171,17 +174,17 @@ namespace Flecs.NET.Core
             return id.Value;
         }
 
-        public readonly bool Equals(Id other)
+        public bool Equals(Id other)
         {
             return Value == other.Value;
         }
 
-        public readonly override bool Equals(object? obj)
+        public override bool Equals(object? obj)
         {
             return obj is Id id && Equals(id);
         }
 
-        public readonly override int GetHashCode()
+        public override int GetHashCode()
         {
             return Value.GetHashCode();
         }
