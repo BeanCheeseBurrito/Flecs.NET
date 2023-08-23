@@ -6,8 +6,10 @@ namespace Flecs.NET.Core
 {
     public unsafe struct Observer
     {
-        public ecs_world_t* World { get; }
-        public Entity Entity { get; }
+        private Entity _entity;
+
+        public ref Entity Entity => ref _entity;
+        public ref ecs_world_t* World => ref _entity.World;
 
         public Observer(
             ecs_world_t* world,
@@ -18,8 +20,6 @@ namespace Flecs.NET.Core
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback), "Callback is null");
-
-            World = world;
 
             using NativeString nativeName = (NativeString)name;
             using NativeString nativeSep = (NativeString)"::";
@@ -41,15 +41,14 @@ namespace Flecs.NET.Core
             observerDesc->binding_ctx_free = BindingContext.ObserverContextFreePointer;
             observerDesc->callback = BindingContext.ObserverIterPointer;
 
-            Entity = new Entity(world, ecs_observer_init(world, observerDesc));
+            _entity = new Entity(world, ecs_observer_init(world, observerDesc));
 
             filterBuilder.Dispose();
         }
 
         public Observer(ecs_world_t* world, ulong entity)
         {
-            World = world;
-            Entity = new Entity(world, entity);
+            _entity = new Entity(world, entity);
         }
 
         public void Destruct()

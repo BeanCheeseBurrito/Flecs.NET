@@ -23,11 +23,11 @@ namespace Flecs.NET.Core
 
         public delegate void GroupDeleteAction(ecs_world_t* world, ulong groupId, void* groupCtx, void* groupByCtx);
 
-        public delegate void IterAction(ecs_iter_t* iter);
+        public delegate void IterAction(ecs_iter_t* it);
 
-        public delegate void IterCallback(Iter iter);
+        public delegate void IterCallback(Iter it);
 
-        public delegate byte IterNext(ecs_iter_t* iter);
+        public delegate byte IterNext(ecs_iter_t* it);
 
         public delegate int OrderByAction(ulong e1, void* ptr1, ulong e2, void* ptr2);
     }

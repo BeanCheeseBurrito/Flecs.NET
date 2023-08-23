@@ -6,8 +6,10 @@ namespace Flecs.NET.Core
 {
     public unsafe struct Routine
     {
-        public ecs_world_t* World { get; }
-        public Entity Entity { get; }
+        private Entity _entity;
+
+        public ref Entity Entity => ref _entity;
+        public ref ecs_world_t* World => ref _entity.World;
 
         public Routine(
             ecs_world_t* world,
@@ -20,8 +22,6 @@ namespace Flecs.NET.Core
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback), "Callback is null");
 
-            World = world;
-
             using NativeString nativeName = (NativeString)name;
             using NativeString nativeSep = (NativeString)"::";
 
@@ -30,12 +30,12 @@ namespace Flecs.NET.Core
             entityDesc.sep = nativeSep;
 
             ulong entity = ecs_entity_init(world, &entityDesc);
-            ulong currentPhase = ecs_get_target(World, entity, EcsDependsOn, 0);
+            ulong currentPhase = ecs_get_target(world, entity, EcsDependsOn, 0);
 
             if (currentPhase == 0 && routineBuilder.CurrentPhase != 0)
             {
-                ecs_add_id(World, entity, Macros.DependsOn(routineBuilder.CurrentPhase));
-                ecs_add_id(World, entity, routineBuilder.CurrentPhase);
+                ecs_add_id(world, entity, Macros.DependsOn(routineBuilder.CurrentPhase));
+                ecs_add_id(world, entity, routineBuilder.CurrentPhase);
             }
             else if (currentPhase == 0)
             {
@@ -58,15 +58,14 @@ namespace Flecs.NET.Core
             routineDesc->binding_ctx_free = BindingContext.RoutineContextFreePointer;
             routineDesc->callback = BindingContext.RoutineIterPointer;
 
-            Entity = new Entity(world, ecs_system_init(world, routineDesc));
+            _entity = new Entity(world, ecs_system_init(world, routineDesc));
 
             filterBuilder.Dispose();
         }
 
         public Routine(ecs_world_t* world, ulong entity)
         {
-            World = world;
-            Entity = new Entity(world, entity);
+            _entity  = new Entity(world, entity);
         }
 
         public void Destruct()
