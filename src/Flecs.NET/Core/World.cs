@@ -811,6 +811,11 @@ namespace Flecs.NET.Core
             return Id<TFirst, TSecond>();
         }
 
+        public Component<T> Component<T>()
+        {
+            return new Component<T>(Handle);
+        }
+
         public Entity Entity()
         {
             return new Entity(Handle);
@@ -927,9 +932,9 @@ namespace Flecs.NET.Core
             ecs_set_threads(Handle, threads);
         }
 
-        public void GetThreads()
+        public int GetThreads()
         {
-            ecs_get_stage_count(Handle);
+            return ecs_get_stage_count(Handle);
         }
 
         public void SetTaskThreads(int taskThreads)
@@ -947,10 +952,115 @@ namespace Flecs.NET.Core
             return new Snapshot(Handle);
         }
 
-        public Component<T> Component<T>()
+        public int PlecsFromStr(string name, string str)
         {
-            return new Component<T>(Handle);
+            using NativeString nativeName = (NativeString)name;
+            using NativeString nativeStr = (NativeString)str;
+
+            return ecs_plecs_from_str(Handle, nativeName, nativeStr);
         }
+
+        public int PlecsFromFile(string fileName)
+        {
+            using NativeString nativeFileName = (NativeString)fileName;
+            return ecs_plecs_from_file(Handle, nativeFileName);
+        }
+
+        public string ToExpr(ulong id, void* value)
+        {
+            return NativeString.GetStringAndFree(ecs_ptr_to_expr(Handle, id, value));
+        }
+
+        public string ToExpr<T>(T* value) where T : unmanaged
+        {
+            return ToExpr(Type<T>.Id(Handle), value);
+        }
+
+        public Cursor Cursor(ulong id, void* data)
+        {
+            return new Cursor(Handle, id, data);
+        }
+
+        public Cursor Cursor<T>(void* data)
+        {
+            return Cursor(Type<T>.Id(Handle), data);
+        }
+
+        public Entity Primitive(ecs_primitive_kind_t kind)
+        {
+            ecs_primitive_desc_t desc = default;
+            desc.kind = kind;
+
+            ulong id = ecs_primitive_init(Handle, &desc);
+            Assert.True(id != 0, nameof(ECS_INVALID_OPERATION));
+
+            return Entity(id);
+        }
+
+        public Entity Array(ulong elemId, int arrayCount)
+        {
+            ecs_array_desc_t desc = default;
+            desc.type = elemId;
+            desc.count = arrayCount;
+
+            ulong id = ecs_array_init(Handle, &desc);
+            Assert.True(id != 0, nameof(ECS_INVALID_OPERATION));
+
+            return Entity(id);
+        }
+
+        public Entity Array<T>(int arrayCount)
+        {
+            return Array(Type<T>.Id(Handle), arrayCount);
+        }
+
+        public Entity Vector(ulong elemId)
+        {
+            ecs_vector_desc_t desc = default;
+            desc.type = elemId;
+            ulong id = ecs_vector_init(Handle, &desc);
+            Assert.True(id != 0, nameof(ECS_INVALID_OPERATION));
+            return Entity(id);
+        }
+
+        public Entity Vector<T>()
+        {
+            return Vector(Type<T>.Id(Handle));
+        }
+
+        public string ToJson(ulong id, void* value)
+        {
+            return NativeString.GetStringAndFree(ecs_ptr_to_json(Handle, id, value));
+        }
+
+        public string ToJson<T>(T* value) where T : unmanaged
+        {
+            return ToJson(Type<T>.Id(Handle), value);
+        }
+
+        public string ToJson()
+        {
+            return NativeString.GetStringAndFree(ecs_world_to_json(Handle, null));
+        }
+
+        public void* FromJson(ulong id, void* value, string json, ecs_from_json_desc_t* desc = null)
+        {
+            using NativeString nativeJson = (NativeString)json;
+            return ecs_ptr_from_json(Handle, id, value, nativeJson, desc);
+        }
+
+        public void* FromJson<T>(T* value, string json, ecs_from_json_desc_t* desc = null) where T : unmanaged
+        {
+            return FromJson(Type<T>.Id(Handle), value, json, desc);
+        }
+
+        public void* FromJson(string json, ecs_from_json_desc_t *desc = null)
+        {
+            using NativeString nativeJson = (NativeString)json;
+            return ecs_world_from_json(Handle, nativeJson, desc);
+        }
+
+        // TODO: Add metric builder here
 
         public AppBuilder App()
         {
