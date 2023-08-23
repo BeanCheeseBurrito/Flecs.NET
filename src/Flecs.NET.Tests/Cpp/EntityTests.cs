@@ -115,9 +115,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity != 0);
             Assert.True(entity.Has<Position>());
 
-            ref readonly Position p = ref entity.Get<Position>();
-            Assert.Equal(10, p.X);
-            Assert.Equal(20, p.Y);
+            Position* p = entity.GetPtr<Position>();
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
         }
 
         [Fact]
@@ -136,13 +136,13 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Has<Position>());
             Assert.True(entity.Has<Velocity>());
 
-            ref readonly Position p = ref entity.Get<Position>();
-            Assert.Equal(10, p.X);
-            Assert.Equal(20, p.Y);
+            Position* p = entity.GetPtr<Position>();
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
 
-            ref readonly Velocity v = ref entity.Get<Velocity>();
-            Assert.Equal(1, v.X);
-            Assert.Equal(2, v.Y);
+            Velocity* v = entity.GetPtr<Velocity>();
+            Assert.Equal(1, v->X);
+            Assert.Equal(2, v->Y);
         }
 
         [Fact]
@@ -189,9 +189,9 @@ namespace Flecs.NET.Tests.Cpp
             entity.Set(new Position() { X = 10, Y = 20 });
             Assert.True(entity.Has<Position>());
 
-            ref readonly Position p = ref entity.Get<Position>();
-            Assert.Equal(10, p.X);
-            Assert.Equal(20, p.Y);
+            Position* p = entity.GetPtr<Position>();
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
         }
 
         [Fact]
@@ -297,13 +297,13 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Has<Position>());
             Assert.True(entity.Has<Velocity>());
 
-            ref readonly Position p = ref entity.Get<Position>();
-            Assert.Equal(10, p.X);
-            Assert.Equal(20, p.Y);
+            Position* p = entity.GetPtr<Position>();
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
 
-            ref readonly Velocity v = ref entity.Get<Velocity>();
-            Assert.Equal(1, v.X);
-            Assert.Equal(2, v.Y);
+            Velocity* v = entity.GetPtr<Velocity>();
+            Assert.Equal(1, v->X);
+            Assert.Equal(2, v->Y);
         }
 
         [Fact]
@@ -540,9 +540,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Position>());
             Assert.True(e.Has(position));
 
-            ref readonly Position ptr = ref e.Get<Position>();
-            Assert.Equal(10, ptr.X);
-            Assert.Equal(20, ptr.Y);
+            Position* ptr = e.GetPtr<Position>();
+            Assert.Equal(10, ptr->X);
+            Assert.Equal(20, ptr->Y);
         }
 
         [Fact]
@@ -561,9 +561,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Position>());
             Assert.True(e.Has(id));
 
-            ref readonly Position ptr = ref e.Get<Position>();
-            Assert.Equal(10, ptr.X);
-            Assert.Equal(20, ptr.Y);
+            Position* ptr = e.GetPtr<Position>();
+            Assert.Equal(10, ptr->X);
+            Assert.Equal(20, ptr->Y);
         }
 
         [Fact]
@@ -582,9 +582,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Position>());
             Assert.True(e.Has(id));
 
-            ref readonly Position ptr = ref e.Get<Position>();
-            Assert.Equal(10, ptr.X);
-            Assert.Equal(20, ptr.Y);
+            Position* ptr = e.GetPtr<Position>();
+            Assert.Equal(10, ptr->X);
+            Assert.Equal(20, ptr->Y);
         }
 
         [Fact]
@@ -602,9 +602,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Position>());
             Assert.True(e.Has(position));
 
-            ref readonly Position ptr = ref e.Get<Position>();
-            Assert.Equal(10, ptr.X);
-            Assert.Equal(20, ptr.Y);
+            Position* ptr = e.GetPtr<Position>();
+            Assert.Equal(10, ptr->X);
+            Assert.Equal(20, ptr->Y);
         }
 
         [Fact]
@@ -623,9 +623,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Position>());
             Assert.True(e.Has(id));
 
-            ref readonly Position ptr = ref e.Get<Position>();
-            Assert.Equal(10, ptr.X);
-            Assert.Equal(20, ptr.Y);
+            Position* ptr = e.GetPtr<Position>();
+            Assert.Equal(10, ptr->X);
+            Assert.Equal(20, ptr->Y);
         }
 
         [Fact]
@@ -644,9 +644,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Position>());
             Assert.True(e.Has(id));
 
-            ref readonly Position ptr = ref e.Get<Position>();
-            Assert.Equal(10, ptr.X);
-            Assert.Equal(20, ptr.Y);
+            Position* ptr = e.GetPtr<Position>();
+            Assert.Equal(10, ptr->X);
+            Assert.Equal(20, ptr->Y);
         }
 
         [Fact]
@@ -1105,9 +1105,9 @@ namespace Flecs.NET.Tests.Cpp
 
             Component<MyTag> comp = world.Component<MyTag>();
 
-            ref readonly EcsComponent ptr = ref comp.Entity.Get<EcsComponent>();
-            Assert.Equal(0, ptr.size);
-            Assert.Equal(0, ptr.alignment);
+            EcsComponent* ptr = comp.Entity.GetPtr<EcsComponent>();
+            Assert.Equal(0, ptr->size);
+            Assert.Equal(0, ptr->alignment);
         }
 
 
@@ -1367,7 +1367,7 @@ namespace Flecs.NET.Tests.Cpp
         //     Assert.Equal(Pod::copy_invoked, 0);
         //
         //     Assert.True(e.Has<Pod>());
-        //     const Pod *p = e.Get<Pod>();
+        //     const Pod *p = e.GetPtr<Pod>();
         //     Assert.True(p != NULL);
         //     Assert.Equal(p.value, 10);
         // }
@@ -1383,7 +1383,7 @@ namespace Flecs.NET.Tests.Cpp
         //     Assert.Equal(Pod::copy_invoked, 1);
         //
         //     Assert.True(e.Has<Pod>());
-        //     const Pod *p = e.Get<Pod>();
+        //     const Pod *p = e.GetPtr<Pod>();
         //     Assert.True(p != NULL);
         //     Assert.Equal(p.value, 10);
         // }
@@ -1398,9 +1398,9 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(e.Has<Position>());
 
-            ref readonly Position p = ref e.Get<Position>();
-            Assert.Equal(10, p.X);
-            Assert.Equal(20, p.Y);
+            Position* p = e.GetPtr<Position>();
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
         }
 
         [Fact]
@@ -1518,14 +1518,14 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Position>());
             Assert.True(e.Owns<Position>());
 
-            ref readonly Position p = ref e.Get<Position>();
-            Assert.Equal(10, p.X);
-            Assert.Equal(20, p.Y);
+            Position* p = e.GetPtr<Position>();
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
 
-            ref readonly Position pBase = ref @base.Get<Position>();
-            Assert.True(!Macros.AreSameReadOnlyRefs(p, pBase));
-            Assert.Equal(10, pBase.X);
-            Assert.Equal(20, pBase.Y);
+            Position* pBase = @base.GetPtr<Position>();
+            Assert.True(p != pBase);
+            Assert.Equal(10, pBase->X);
+            Assert.Equal(20, pBase->Y);
         }
 
         [Fact]
@@ -1544,14 +1544,14 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Position>());
             Assert.True(e.Owns<Position>());
 
-            ref readonly Position p = ref e.Get<Position>();
-            Assert.Equal(10, p.X);
-            Assert.Equal(20, p.Y);
+            Position* p = e.GetPtr<Position>();
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
 
-            ref readonly Position pBase = ref @base.Get<Position>();
-            Assert.True(!Macros.AreSameReadOnlyRefs(p, pBase));
-            Assert.Equal(10, pBase.X);
-            Assert.Equal(20, pBase.Y);
+            Position* pBase = @base.GetPtr<Position>();
+            Assert.True(p != pBase);
+            Assert.Equal(10, pBase->X);
+            Assert.Equal(20, pBase->Y);
         }
 
         [Fact]
@@ -1568,14 +1568,14 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True((e.Has<Position, Tgt>()));
             Assert.True((e.Owns<Position, Tgt>()));
 
-            ref readonly Position p = ref e.GetFirst<Position, Tgt>();
-            Assert.Equal(10, p.X);
-            Assert.Equal(20, p.Y);
+            Position* p = e.GetFirstPtr<Position, Tgt>();
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
 
-            ref readonly Position pBase = ref @base.GetFirst<Position, Tgt>();
-            Assert.True(!Macros.AreSameReadOnlyRefs(p, pBase));
-            Assert.Equal(10, pBase.X);
-            Assert.Equal(20, pBase.Y);
+            Position* pBase = @base.GetFirstPtr<Position, Tgt>();
+            Assert.True(p != pBase);
+            Assert.Equal(10, pBase->X);
+            Assert.Equal(20, pBase->Y);
         }
 
         [Fact]
@@ -1594,14 +1594,14 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True((e.Has<Position>(tgt)));
             Assert.True((e.Owns<Position>(tgt)));
 
-            ref readonly Position p = ref e.Get<Position>(tgt);
-            Assert.Equal(10, p.X);
-            Assert.Equal(20, p.Y);
+            Position* p = e.GetPtr<Position>(tgt);
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
 
-            ref readonly Position pBase = ref @base.Get<Position>(tgt);
-            Assert.True(!Macros.AreSameReadOnlyRefs(p, pBase));
-            Assert.Equal(10, pBase.X);
-            Assert.Equal(20, pBase.Y);
+            Position* pBase = @base.GetPtr<Position>(tgt);
+            Assert.True(p != pBase);
+            Assert.Equal(10, pBase->X);
+            Assert.Equal(20, pBase->Y);
         }
 
         [Fact]
@@ -1618,14 +1618,14 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True((e.Has<Tgt, Position>()));
             Assert.True((e.Owns<Tgt, Position>()));
 
-            ref readonly Position p = ref e.GetSecond<Tgt, Position>();
-            Assert.Equal(10, p.X);
-            Assert.Equal(20, p.Y);
+            Position* p = e.GetSecondPtr<Tgt, Position>();
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
 
-            ref readonly Position pBase = ref @base.GetSecond<Tgt, Position>();
-            Assert.True(!Macros.AreSameReadOnlyRefs(p, pBase));
-            Assert.Equal(10, pBase.X);
-            Assert.Equal(20, pBase.Y);
+            Position* pBase = @base.GetSecondPtr<Tgt, Position>();
+            Assert.True(p != pBase);
+            Assert.Equal(10, pBase->X);
+            Assert.Equal(20, pBase->Y);
         }
 
         [Fact]
@@ -1733,9 +1733,9 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity()
                 .Set(new Template<int> { X = 10, Y = 20 });
 
-            ref readonly Template<int> ptr = ref e.Get<Template<int>>();
-            Assert.Equal(10, ptr.X);
-            Assert.Equal(20, ptr.Y);
+            Template<int>* ptr = e.GetPtr<Template<int>>();
+            Assert.Equal(10, ptr->X);
+            Assert.Equal(20, ptr->Y);
         }
 
         [Fact]
@@ -2025,8 +2025,8 @@ namespace Flecs.NET.Tests.Cpp
         //         });
         //
         //     Assert.True(A.Get([](const Position& p) {
-        //         Assert.Equal(10, p.X);
-        //         Assert.Equal(20, p.Y);
+        //         Assert.Equal(10, p->X);
+        //         Assert.Equal(20, p->Y);
         //     }));
         //
         //     Assert.True(B.Get([](const Position& p) {
@@ -2075,8 +2075,8 @@ namespace Flecs.NET.Tests.Cpp
         //         .Set<Position>({50, 60});
         //
         //     Assert.True(A.Get([](const Position& p) {
-        //         Assert.Equal(10, p.X);
-        //         Assert.Equal(20, p.Y);
+        //         Assert.Equal(10, p->X);
+        //         Assert.Equal(20, p->Y);
         //     }));
         //
         //     Assert.True(B.Get([](const Position& p) {
@@ -2139,10 +2139,10 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     Assert.True(e.Has<Position>());
         //
-        //     const Position *p = e.Get<Position>();
+        //     const Position *p = e.GetPtr<Position>();
         //     Assert.True(p != NULL);
-        //     Assert.Equal(10, p.X);
-        //     Assert.Equal(20, p.Y);
+        //     Assert.Equal(10, p->X);
+        //     Assert.Equal(20, p->Y);
         // }
         //
         // [Fact]
@@ -2845,8 +2845,8 @@ namespace Flecs.NET.Tests.Cpp
         //     bool invoked = false;
         //     e.mut(stage).Get([&](const Position& p) {
         //         invoked = true;
-        //         Assert.Equal(10, p.X);
-        //         Assert.Equal(20, p.Y);
+        //         Assert.Equal(10, p->X);
+        //         Assert.Equal(20, p->Y);
         //     });
         //     test_bool(invoked, true);
         //
@@ -2941,7 +2941,7 @@ namespace Flecs.NET.Tests.Cpp
         //     Assert.True(dst.Has<Tag>());
         //     Assert.True(dst.Has<PositionInitialized>());
         //
-        //     const PositionInitialized *ptr = dst.Get<PositionInitialized>();
+        //     const PositionInitialized *ptr = dst.GetPtr<PositionInitialized>();
         //     Assert.True(ptr != NULL);
         //     Assert.Equal(ptr->x, -1);
         //     Assert.Equal(ptr->y, -1);
@@ -2958,10 +2958,10 @@ namespace Flecs.NET.Tests.Cpp
         //     Assert.True(dst.Has<Tag>());
         //     Assert.True(dst.Has<PositionInitialized>());
         //
-        //     const PositionInitialized *ptr = dst.Get<PositionInitialized>();
+        //     const PositionInitialized *ptr = dst.GetPtr<PositionInitialized>();
         //     Assert.True(ptr != NULL);
-        //     Assert.Equal(10, ptr.X);
-        //     Assert.Equal(20, ptr.Y);
+        //     Assert.Equal(10, ptr->X);
+        //     Assert.Equal(20, ptr->Y);
         // }
         //
         // [Fact]
@@ -2978,10 +2978,10 @@ namespace Flecs.NET.Tests.Cpp
         //     Assert.True(dst.Has<Tag>());
         //     Assert.True(dst.Has<PositionInitialized>());
         //
-        //     const PositionInitialized *ptr = dst.Get<PositionInitialized>();
+        //     const PositionInitialized *ptr = dst.GetPtr<PositionInitialized>();
         //     Assert.True(ptr != NULL);
-        //     Assert.Equal(10, ptr.X);
-        //     Assert.Equal(20, ptr.Y);
+        //     Assert.Equal(10, ptr->X);
+        //     Assert.Equal(20, ptr->Y);
         // }
         //
         // [Fact]
@@ -3647,10 +3647,10 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     Assert.True(e.Has<Position>());
         //     Assert.True(e.Has<Velocity>());
-        //     Assert.Equal(e.Get<Velocity>()->x, 1);
-        //     Assert.Equal(e.Get<Velocity>()->y, 2);
-        //     Assert.Equal(e.Get<Position>()->x, 10);
-        //     Assert.Equal(e.Get<Position>()->y, 20);
+        //     Assert.Equal(e.GetPtr<Velocity>()->x, 1);
+        //     Assert.Equal(e.GetPtr<Velocity>()->y, 2);
+        //     Assert.Equal(e.GetPtr<Position>()->x, 10);
+        //     Assert.Equal(e.GetPtr<Position>()->y, 20);
         // }
         //
         // [Fact]
