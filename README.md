@@ -23,7 +23,7 @@ git clone --recursive https://github.com/BeanCheeseBurrito/Flecs.NET.git
 cd Flecs.NET
 ```
 ### Generate bindings
-Generate the binding code.
+Generate the binding code. Bindings are generated with [Bindgen.NET](https://github.com/BeanCheeseBurrito/Bindgen.NET).
 ```bash
 dotnet run --project src/Flecs.NET.Bindgen
 ```
