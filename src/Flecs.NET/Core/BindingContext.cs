@@ -62,7 +62,7 @@ namespace Flecs.NET.Core
 #endif
 
         [UnmanagedCallersOnly]
-        public static void ObserverIter(ecs_iter_t* iter)
+        private static void ObserverIter(ecs_iter_t* iter)
         {
             ObserverContext* context = (ObserverContext*)iter->binding_ctx;
 
@@ -74,7 +74,7 @@ namespace Flecs.NET.Core
         }
 
         [UnmanagedCallersOnly]
-        public static void RoutineIter(ecs_iter_t* iter)
+        private static void RoutineIter(ecs_iter_t* iter)
         {
             RoutineContext* context = (RoutineContext*)iter->binding_ctx;
 

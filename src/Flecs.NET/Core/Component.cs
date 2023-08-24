@@ -272,61 +272,126 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
         public static implicit operator ulong(Component<TComponent> component)
         {
             return ToUInt64(component);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
         public static ulong ToUInt64(Component<TComponent> component)
         {
             return component.Entity.Id.Value;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(Component<TComponent> other)
         {
             return Entity.Id.Value == other.Entity.Id.Value;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(ulong other)
         {
             return Entity.Id.Value == other;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object? obj)
         {
             return (obj is Component<TComponent> component && Equals(component)) || obj is ulong id && Equals(id);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool operator ==(Component<TComponent> a, Component<TComponent> b)
         {
             return a.Equals(b);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool operator !=(Component<TComponent> a, Component<TComponent> b)
         {
             return !(a == b);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool operator ==(Component<TComponent> a, ulong b)
         {
             return a.Equals(b);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool operator !=(Component<TComponent> a, ulong b)
         {
             return !(a == b);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool operator ==(ulong a, Component<TComponent> b)
         {
             return b.Equals(a);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool operator !=(ulong a, Component<TComponent> b)
         {
             return !(a == b);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return Entity.Id.Value.GetHashCode();

@@ -11,9 +11,20 @@ namespace Flecs.NET.Core
         private ecs_app_desc_t _desc;
         private GCHandle _initHandle;
 
+        /// <summary>
+        /// Reference to world.
+        /// </summary>
         public ref ecs_world_t* World => ref _world;
+
+        /// <summary>
+        /// Reference to app description.
+        /// </summary>
         public ref ecs_app_desc_t Desc => ref _desc;
 
+        /// <summary>
+        /// Creates an app builder for world.
+        /// </summary>
+        /// <param name="world"></param>
         public AppBuilder(ecs_world_t* world)
         {
             _world = world;

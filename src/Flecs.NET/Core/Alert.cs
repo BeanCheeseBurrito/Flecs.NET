@@ -7,9 +7,23 @@ namespace Flecs.NET.Core
     {
         private Entity _entity;
 
+        /// <summary>
+        /// Reference to entity.
+        /// </summary>
         public ref Entity Entity => ref _entity;
+
+        /// <summary>
+        /// Reference to world.
+        /// </summary>
         public ref ecs_world_t* World => ref _entity.World;
 
+        /// <summary>
+        /// Creates an alert.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="name"></param>
+        /// <param name="filterBuilder"></param>
+        /// <param name="alertBuilder"></param>
         public Alert(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default,
             AlertBuilder alertBuilder = default)
         {

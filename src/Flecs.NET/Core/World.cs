@@ -5,7 +5,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    ///     The world is the container of all ECS data and systems. If the world is deleted, all data in the world will be deleted as well.
+    /// The world is the container of all ECS data and systems. If the world is deleted, all data in the world will be deleted as well.
     /// </summary>
     public unsafe struct World : IDisposable, IEquatable<World>
     {
@@ -15,17 +15,17 @@ namespace Flecs.NET.Core
         internal BindingContext.WorldContext WorldContext;
 
         /// <summary>
-        ///     The handle to the C world.
+        /// The handle to the C world.
         /// </summary>
         public ref ecs_world_t* Handle => ref _handle;
 
         /// <summary>
-        ///     Represents whether or not the world is owned.
+        /// Represents whether or not the world is owned.
         /// </summary>
         public ref bool Owned => ref _owned;
 
         /// <summary>
-        ///     Constructs a world from an <see cref="ecs_world_t"/> pointer.
+        /// Constructs a world from an <see cref="ecs_world_t"/> pointer.
         /// </summary>
         /// <param name="handle">The world handle.</param>
         /// <param name="owned">The owned boolean.</param>
@@ -37,7 +37,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates a flecs world that is owned.
+        /// Creates a flecs world that is owned.
         /// </summary>
         /// <returns></returns>
         public static World Create()
@@ -46,7 +46,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates a flecs world from an <see cref="ecs_world_t"/> pointer that is not owned.
+        /// Creates a flecs world from an <see cref="ecs_world_t"/> pointer that is not owned.
         /// </summary>
         /// <param name="world">A C world.</param>
         /// <returns>A newly created world.</returns>
@@ -56,7 +56,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates world from command line arguments.
+        /// Creates world from command line arguments.
         /// </summary>
         /// <param name="args">Command line arguments.</param>
         /// <returns></returns>
@@ -78,7 +78,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Calls <see cref="ecs_fini"/> and cleans up resources.
+        /// Calls <see cref="ecs_fini"/> and cleans up resources.
         /// </summary>
         public void Dispose()
         {
@@ -91,7 +91,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Deletes and creates a new world.
+        /// Deletes and creates a new world.
         /// </summary>
         public void Reset()
         {
@@ -101,59 +101,99 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Signals that the application should quit. The next call to <see cref="Progress"/> returns false.
+        /// Signals that the application should quit. The next call to <see cref="Progress"/> returns false.
         /// </summary>
-        public readonly void Quit()
+        public void Quit()
         {
             ecs_quit(Handle);
         }
 
+        /// <summary>
+        /// Register action to be executed when world is destroyed.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="ctx"></param>
         public void AtFini(Ecs.FiniAction action, void* ctx)
         {
             BindingContext.SetCallback(ref WorldContext.AtFini, action);
             ecs_atfini(Handle, WorldContext.AtFini.Function, ctx);
         }
 
-        public readonly bool ShouldQuit()
+        /// <summary>
+        /// Test if Quit() has been called.
+        /// </summary>
+        /// <returns></returns>
+        public bool ShouldQuit()
         {
             return ecs_should_quit(Handle) == 1;
         }
 
+        /// <summary>
+        /// Begin frame.
+        /// </summary>
+        /// <param name="deltaTime"></param>
+        /// <returns></returns>
         public float FrameBegin(float deltaTime = 0)
         {
             return ecs_frame_begin(Handle, deltaTime);
         }
 
+        /// <summary>
+        /// End frame.
+        /// </summary>
         public void FrameEnd()
         {
             ecs_frame_end(Handle);
         }
 
+        /// <summary>
+        /// Begin staging.
+        /// </summary>
+        /// <returns></returns>
         public bool ReadonlyBegin()
         {
             return ecs_readonly_begin(Handle) == 1;
         }
 
+        /// <summary>
+        /// End staging.
+        /// </summary>
         public void ReadonlyEnd()
         {
             ecs_readonly_end(Handle);
         }
 
+        /// <summary>
+        /// Defer operations until end end of frame, or until DeferEnd() is called.
+        /// </summary>
+        /// <returns></returns>
         public bool DeferBegin()
         {
             return ecs_defer_begin(Handle) == 1;
         }
 
+        /// <summary>
+        /// End block of operations to defer.
+        /// </summary>
+        /// <returns></returns>
         public bool DeferEnd()
         {
             return ecs_defer_end(Handle) == 1;
         }
 
+        /// <summary>
+        /// Test whether deferring is enabled.
+        /// </summary>
+        /// <returns></returns>
         public bool IsDeferred()
         {
             return ecs_is_deferred(Handle) == 1;
         }
 
+        /// <summary>
+        /// Configure world to have N stages.
+        /// </summary>
+        /// <param name="stages"></param>
         public void SetStageCount(int stages)
         {
             ecs_set_stage_count(Handle, stages);

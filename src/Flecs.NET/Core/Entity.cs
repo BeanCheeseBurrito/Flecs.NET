@@ -6,14 +6,24 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
-    [SuppressMessage("Usage", "CS9087")]
     public unsafe struct Entity : IEquatable<Entity>
     {
         private Id _id;
 
+        /// <summary>
+        /// Reference to id.
+        /// </summary>
         public ref Id Id => ref _id;
+
+        /// <summary>
+        /// Reference to world.
+        /// </summary>
         public ref ecs_world_t* World => ref _id.World;
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
         public static Entity Null()
         {
             return default;
