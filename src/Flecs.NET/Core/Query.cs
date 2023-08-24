@@ -6,19 +6,22 @@ namespace Flecs.NET.Core
 {
     public unsafe struct Query : IDisposable
     {
-        public ecs_world_t* World { get; private set; }
-        public ecs_query_t* Handle { get; private set; }
+        private ecs_world_t* _world;
+        private ecs_query_t* _handle;
 
         internal BindingContext.QueryContext QueryContext;
+
+        public ref ecs_world_t* World => ref _world;
+        public ref ecs_query_t* Handle => ref _handle;
 
         public Query(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default,
             QueryBuilder queryBuilder = default)
         {
-            World = world;
             QueryContext = queryBuilder.QueryContext;
+            _world = world;
 
             ecs_query_desc_t* queryDesc = &queryBuilder.QueryDesc;
-            queryDesc->filter = filterBuilder.FilterDesc;
+            queryDesc->filter = filterBuilder.Desc;
             queryDesc->filter.terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
             queryDesc->filter.terms_buffer_count = filterBuilder.Terms.Count;
 
@@ -31,12 +34,12 @@ namespace Flecs.NET.Core
                 entityDesc.name = nativeName;
                 entityDesc.sep = nativeSep;
                 entityDesc.root_sep = nativeSep;
-                queryDesc->filter.entity = ecs_entity_init(World, &entityDesc);
+                queryDesc->filter.entity = ecs_entity_init(world, &entityDesc);
             }
 
-            Handle = ecs_query_init(world, queryDesc);
+            _handle = ecs_query_init(world, queryDesc);
 
-            if (Handle == null)
+            if (_handle == null)
                 throw new InvalidOperationException("Query failed to init");
 
             filterBuilder.Dispose();
@@ -44,9 +47,9 @@ namespace Flecs.NET.Core
 
         public Query(ecs_world_t* world, ecs_query_t* query = null)
         {
-            World = world;
-            Handle = query;
             QueryContext = default;
+            _world = world;
+            _handle = query;
         }
 
         public void Dispose()

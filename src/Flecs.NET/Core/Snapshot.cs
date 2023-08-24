@@ -5,13 +5,16 @@ namespace Flecs.NET.Core
 {
     public unsafe struct Snapshot : IDisposable
     {
-        public ecs_world_t* World { get; }
-        public ecs_snapshot_t* Handle { get; private set; }
+        private ecs_world_t* _world;
+        private ecs_snapshot_t* _handle;
+
+        public ref ecs_world_t* World => ref _world;
+        public ref ecs_snapshot_t* Handle => ref _handle;
 
         public Snapshot(ecs_world_t* world)
         {
-            World = world;
-            Handle = null;
+            _world = world;
+            _handle = null;
         }
 
         public void Take()

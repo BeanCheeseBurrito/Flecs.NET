@@ -9,17 +9,20 @@ namespace Flecs.NET.Core
     /// </summary>
     public unsafe struct World : IDisposable, IEquatable<World>
     {
+        private ecs_world_t* _handle;
+        private bool _owned;
+
+        internal BindingContext.WorldContext WorldContext;
+
         /// <summary>
         ///     The handle to the C world.
         /// </summary>
-        public ecs_world_t* Handle { get; private set; }
+        public ref ecs_world_t* Handle => ref _handle;
 
         /// <summary>
         ///     Represents whether or not the world is owned.
         /// </summary>
-        public bool Owned { get; private set; }
-
-        internal BindingContext.WorldContext WorldContext;
+        public ref bool Owned => ref _owned;
 
         /// <summary>
         ///     Constructs a world from an <see cref="ecs_world_t"/> pointer.
@@ -28,9 +31,9 @@ namespace Flecs.NET.Core
         /// <param name="owned">The owned boolean.</param>
         public World(ecs_world_t* handle, bool owned = true)
         {
-            Handle = handle;
-            Owned = owned;
             WorldContext = default;
+            _handle = handle;
+            _owned = owned;
         }
 
         /// <summary>

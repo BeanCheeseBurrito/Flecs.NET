@@ -8,6 +8,9 @@ namespace Flecs.NET.Core
         private ecs_world_t* _world;
         private ulong _prevScope;
 
+        public ref ecs_world_t* World => ref _world;
+        public ref ulong PrevScope => ref _prevScope;
+
         public ScopedWorld(ecs_world_t* world, ulong scope)
         {
             _prevScope = ecs_set_scope(world, scope);

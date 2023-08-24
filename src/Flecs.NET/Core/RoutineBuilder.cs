@@ -4,18 +4,21 @@ namespace Flecs.NET.Core
 {
     public unsafe struct RoutineBuilder
     {
-        public ecs_world_t* World { get; }
+        private ecs_world_t* _world;
 
         internal ecs_system_desc_t RoutineDesc;
         internal BindingContext.RoutineContext RoutineContext;
         internal ulong CurrentPhase;
 
+        public ref ecs_world_t* World => ref _world;
+        public ref ecs_system_desc_t Desc => ref RoutineDesc;
+
         public RoutineBuilder(ecs_world_t* world)
         {
-            World = world;
             RoutineDesc = default;
             RoutineContext = default;
             CurrentPhase = default;
+            _world = world;
         }
 
         public ref RoutineBuilder Kind(ulong phase)

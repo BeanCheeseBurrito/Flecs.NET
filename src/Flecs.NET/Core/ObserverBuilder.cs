@@ -5,18 +5,21 @@ namespace Flecs.NET.Core
 {
     public unsafe struct ObserverBuilder
     {
-        public ecs_world_t* World { get; }
+        private ecs_world_t* _world;
 
         internal ecs_observer_desc_t ObserverDesc;
         internal BindingContext.ObserverContext ObserverContext;
+
+        public ref ecs_world_t* World => ref _world;
+        public ref ecs_observer_desc_t Desc => ref ObserverDesc;
 
         private int _eventCount;
 
         public ObserverBuilder(ecs_world_t* world)
         {
-            World = world;
             ObserverDesc = default;
             ObserverContext = default;
+            _world = world;
             _eventCount = default;
         }
 

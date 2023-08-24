@@ -34,7 +34,7 @@ namespace Flecs.NET.Core
 
             ecs_observer_desc_t* observerDesc = &observerBuilder.ObserverDesc;
             observerDesc->entity = ecs_entity_init(world, &entityDesc);
-            observerDesc->filter = filterBuilder.FilterDesc;
+            observerDesc->filter = filterBuilder.Desc;
             observerDesc->filter.terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
             observerDesc->filter.terms_buffer_count = filterBuilder.Terms.Count;
             observerDesc->binding_ctx = observerContext;

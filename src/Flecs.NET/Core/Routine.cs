@@ -51,7 +51,7 @@ namespace Flecs.NET.Core
             ecs_system_desc_t* routineDesc = &routineBuilder.RoutineDesc;
             routineDesc->entity = entity;
             routineDesc->query = queryBuilder.QueryDesc;
-            routineDesc->query.filter = filterBuilder.FilterDesc;
+            routineDesc->query.filter = filterBuilder.Desc;
             routineDesc->query.filter.terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
             routineDesc->query.filter.terms_buffer_count = filterBuilder.Terms.Count;
             routineDesc->binding_ctx = routineContext;

@@ -7,23 +7,24 @@ namespace Flecs.NET.Core
 {
     public unsafe struct AppBuilder : IDisposable
     {
-        public ecs_world_t* World { get; }
-        public ref ecs_app_desc_t AppDesc => ref _appDesc;
-
-        private ecs_app_desc_t _appDesc;
+        private ecs_world_t* _world;
+        private ecs_app_desc_t _desc;
         private GCHandle _initHandle;
+
+        public ref ecs_world_t* World => ref _world;
+        public ref ecs_app_desc_t Desc => ref _desc;
 
         public AppBuilder(ecs_world_t* world)
         {
-            World = world;
-            _appDesc = default;
+            _world = world;
+            _desc = default;
             _initHandle = default;
 
             ecs_world_info_t* stats = ecs_get_world_info(world);
-            AppDesc.target_fps = stats->target_fps;
+            Desc.target_fps = stats->target_fps;
 
-            if (Math.Abs(AppDesc.target_fps - 0) < 0.01)
-                AppDesc.target_fps = 60;
+            if (Math.Abs(Desc.target_fps - 0) < 0.01)
+                Desc.target_fps = 60;
         }
 
         public void Dispose()
@@ -34,38 +35,38 @@ namespace Flecs.NET.Core
 
         public ref AppBuilder TargetFps(float value)
         {
-            AppDesc.target_fps = value;
+            Desc.target_fps = value;
             return ref this;
         }
 
         public ref AppBuilder DeltaTime(float value)
         {
-            AppDesc.delta_time = value;
+            Desc.delta_time = value;
             return ref this;
         }
 
         public ref AppBuilder Threads(int value)
         {
-            AppDesc.threads = value;
+            Desc.threads = value;
             return ref this;
         }
 
         public ref AppBuilder Frames(int value)
         {
-            AppDesc.frames = value;
+            Desc.frames = value;
             return ref this;
         }
 
         public ref AppBuilder EnableRest(ushort port = 0)
         {
-            AppDesc.enable_rest = Macros.True;
-            AppDesc.port = port;
+            Desc.enable_rest = Macros.True;
+            Desc.port = port;
             return ref this;
         }
 
         public ref AppBuilder EnableMonitor(bool value = true)
         {
-            AppDesc.enable_monitor = Macros.Bool(value);
+            Desc.enable_monitor = Macros.Bool(value);
             return ref this;
         }
 
@@ -74,19 +75,19 @@ namespace Flecs.NET.Core
             Managed.FreeGcHandle(_initHandle);
             _initHandle = GCHandle.Alloc(value);
 
-            AppDesc.init = Marshal.GetFunctionPointerForDelegate(value);
+            Desc.init = Marshal.GetFunctionPointerForDelegate(value);
             return ref this;
         }
 
         public ref AppBuilder Ctx(void* value)
         {
-            AppDesc.ctx = value;
+            Desc.ctx = value;
             return ref this;
         }
 
         public int Run()
         {
-            fixed (ecs_app_desc_t* appDesc = &AppDesc)
+            fixed (ecs_app_desc_t* appDesc = &Desc)
             {
                 int result = ecs_app_run(World, appDesc);
 

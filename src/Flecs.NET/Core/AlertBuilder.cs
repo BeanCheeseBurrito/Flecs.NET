@@ -7,65 +7,67 @@ namespace Flecs.NET.Core
 {
     public unsafe struct AlertBuilder : IDisposable
     {
-        public ecs_world_t* World { get; }
+        private ecs_world_t* _world;
+        private UnsafeList<NativeString> _strings;
+        private int _severityFilterCount;
 
         internal ecs_alert_desc_t AlertDesc;
-        internal UnsafeList<NativeString> Strings;
 
-        private int _severityFilterCount;
+        public ref ecs_world_t* World => ref _world;
+        public ref ecs_alert_desc_t Desc => ref AlertDesc;
 
         public AlertBuilder(ecs_world_t* world)
         {
-            World = world;
             AlertDesc = default;
-            Strings = default;
+            _world = world;
+            _strings = default;
             _severityFilterCount = default;
         }
 
         public void Dispose()
         {
-            for (int i = 0; i < Strings.Count; i++)
-                Strings[i].Dispose();
+            for (int i = 0; i < _strings.Count; i++)
+                _strings[i].Dispose();
 
-            Strings.Dispose();
+            _strings.Dispose();
         }
 
         public ref AlertBuilder Message(string message)
         {
             NativeString nativeMessage = (NativeString)message;
-            Strings.Add(nativeMessage);
+            _strings.Add(nativeMessage);
 
-            AlertDesc.message = nativeMessage;
+            Desc.message = nativeMessage;
             return ref this;
         }
 
         public ref AlertBuilder Brief(string brief)
         {
             NativeString nativeBrief = (NativeString)brief;
-            Strings.Add(nativeBrief);
+            _strings.Add(nativeBrief);
 
-            AlertDesc.brief = nativeBrief;
+            Desc.brief = nativeBrief;
             return ref this;
         }
 
         public ref AlertBuilder DocName(string docName)
         {
             NativeString nativeDocName = (NativeString)docName;
-            Strings.Add(nativeDocName);
+            _strings.Add(nativeDocName);
 
-            AlertDesc.doc_name = nativeDocName;
+            Desc.doc_name = nativeDocName;
             return ref this;
         }
 
         public ref AlertBuilder RetainPeriod(float period)
         {
-            AlertDesc.retain_period = period;
+            Desc.retain_period = period;
             return ref this;
         }
 
         public ref AlertBuilder Severity(ulong kind)
         {
-            AlertDesc.severity = kind;
+            Desc.severity = kind;
             return ref this;
         }
 
@@ -79,7 +81,7 @@ namespace Flecs.NET.Core
             Assert.True(_severityFilterCount < ECS_ALERT_MAX_SEVERITY_FILTERS,
                 "Maxium number of severity filters reached");
 
-            ref ecs_alert_severity_filter_t filter = ref AlertDesc.severity_filters[_severityFilterCount++];
+            ref ecs_alert_severity_filter_t filter = ref Desc.severity_filters[_severityFilterCount++];
             filter.severity = kind;
             filter.with = with;
 
@@ -104,13 +106,13 @@ namespace Flecs.NET.Core
 
         public ref AlertBuilder Member(ulong member)
         {
-            AlertDesc.member = member;
+            Desc.member = member;
             return ref this;
         }
 
         public ref AlertBuilder Id(ulong id)
         {
-            AlertDesc.id = id;
+            Desc.id = id;
             return ref this;
         }
 
@@ -133,7 +135,7 @@ namespace Flecs.NET.Core
                 return ref this;
 
             using NativeString nativeVar = (NativeString)var;
-            AlertDesc.var = nativeVar;
+            Desc.var = nativeVar;
 
             return ref this;
         }

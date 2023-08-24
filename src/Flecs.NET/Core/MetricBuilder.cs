@@ -8,18 +8,18 @@ namespace Flecs.NET.Core
     /// </summary>
     public unsafe struct MetricBuilder
     {
+        private ecs_world_t* _world;
+        private ecs_metric_desc_t _desc;
+
         /// <summary>
         /// The world.
         /// </summary>
-        public ecs_world_t* World { get; }
+        public ref ecs_world_t* World => ref _world;
 
         /// <summary>
         /// A reference to the desc struct.
         /// </summary>
         public ref ecs_metric_desc_t Desc => ref _desc;
-
-        private ecs_metric_desc_t _desc;
-        private bool _created;
 
         /// <summary>
         /// Creates a metric builder using the provided entity.
@@ -29,8 +29,7 @@ namespace Flecs.NET.Core
         public MetricBuilder(ecs_world_t* world, ulong entity)
         {
             _desc = default;
-            _created = false;
-            World = world;
+            _world = world;
             Desc.entity = entity;
         }
 

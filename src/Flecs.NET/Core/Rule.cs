@@ -6,12 +6,15 @@ namespace Flecs.NET.Core
 {
     public unsafe struct Rule : IDisposable
     {
-        public ecs_world_t* World { get; private set; }
-        public ecs_rule_t* Handle { get; private set; }
+        private ecs_world_t* _world;
+        private ecs_rule_t* _handle;
+
+        public ref ecs_world_t* World => ref _world;
+        public ref ecs_rule_t* Handle => ref _handle;
 
         public Rule(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default)
         {
-            World = world;
+            _world = world;
 
             ecs_filter_desc_t* filterDesc = &filterBuilder.FilterDesc;
 
@@ -24,10 +27,10 @@ namespace Flecs.NET.Core
                 entityDesc.name = nativeName;
                 entityDesc.sep = nativeSep;
                 entityDesc.root_sep = nativeSep;
-                filterDesc->entity = ecs_entity_init(World, &entityDesc);
+                filterDesc->entity = ecs_entity_init(world, &entityDesc);
             }
 
-            Handle = ecs_rule_init(world, filterDesc);
+            _handle = ecs_rule_init(world, filterDesc);
 
             if (Handle == null)
                 throw new InvalidOperationException("Rule failed to init");

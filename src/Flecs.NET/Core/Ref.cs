@@ -7,12 +7,14 @@ namespace Flecs.NET.Core
 {
     public unsafe struct Ref<T>
     {
-        public ecs_world_t* World { get; }
+        private ecs_world_t* _world;
         private ecs_ref_t _ref;
+
+        public ref ecs_world_t* World => ref _world;
 
         public Ref(ecs_world_t* world, ulong entity, ulong id = 0)
         {
-            World = world == null ? null : ecs_get_world(world);
+            _world = world == null ? null : ecs_get_world(world);
 
             if (id == 0)
                 id = Type<T>.Id(world);

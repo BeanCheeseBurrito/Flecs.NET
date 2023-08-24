@@ -9,7 +9,10 @@ namespace Flecs.NET.Core
 {
     public unsafe struct FilterBuilder : IDisposable
     {
-        public ecs_world_t* World { get; }
+        private ecs_world_t* _world;
+
+        public ref ecs_world_t* World => ref _world;
+        public ref ecs_filter_desc_t Desc => ref FilterDesc;
 
         internal ecs_filter_desc_t FilterDesc;
         internal UnsafeList<ecs_term_t> Terms;
@@ -42,12 +45,12 @@ namespace Flecs.NET.Core
 
         public FilterBuilder(ecs_world_t* world)
         {
-            World = world;
+            FilterDesc = default;
             Terms = default;
             Strings = default;
 
+            _world = world;
             _termIdType = TermIdType.Src;
-            FilterDesc = default;
             _exprCount = default;
             _termIndex = default;
         }
@@ -365,13 +368,13 @@ namespace Flecs.NET.Core
 
         public ref FilterBuilder Instanced()
         {
-            FilterDesc.instanced = Macros.True;
+            Desc.instanced = Macros.True;
             return ref this;
         }
 
         public ref FilterBuilder FilterFlags(uint flags)
         {
-            FilterDesc.flags |= flags;
+            Desc.flags |= flags;
             return ref this;
         }
 
@@ -382,7 +385,7 @@ namespace Flecs.NET.Core
             NativeString nativeExpr = (NativeString)expr;
             Strings.Add(nativeExpr);
 
-            FilterDesc.expr = nativeExpr;
+            Desc.expr = nativeExpr;
             _exprCount++;
 
             return ref this;

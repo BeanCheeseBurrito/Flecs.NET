@@ -7,16 +7,18 @@ namespace Flecs.NET.Core
 {
     public unsafe struct Filter : IDisposable
     {
-        public ecs_world_t* World { get; }
-        internal ecs_filter_t* FilterPtr => (ecs_filter_t*)Unsafe.AsPointer(ref _filter);
+        private ecs_world_t* _world;
         private ecs_filter_t _filter;
+
+        public ref ecs_world_t* World => ref _world;
+        public ecs_filter_t* FilterPtr => (ecs_filter_t*)Unsafe.AsPointer(ref _filter);
 
         public Filter(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default)
         {
             Assert.True(world == filterBuilder.World, "Worlds are different");
 
             _filter = ECS_FILTER_INIT;
-            World = world;
+            _world = world;
 
             ecs_filter_desc_t* filterDesc = &filterBuilder.FilterDesc;
             filterDesc->terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
@@ -31,13 +33,13 @@ namespace Flecs.NET.Core
                 entityDesc.name = nativeName;
                 entityDesc.sep = nativeSep;
                 entityDesc.root_sep = nativeSep;
-                filterDesc->entity = ecs_entity_init(World, &entityDesc);
+                filterDesc->entity = ecs_entity_init(world, &entityDesc);
             }
 
             fixed (ecs_filter_t* filter = &_filter)
             {
                 filterDesc->storage = filter;
-                if (ecs_filter_init(World, filterDesc) == null)
+                if (ecs_filter_init(world, filterDesc) == null)
                     throw new InvalidOperationException("Failed to init filter");
             }
 
@@ -46,7 +48,7 @@ namespace Flecs.NET.Core
 
         public Filter(ecs_world_t* world, ecs_filter_t* filter)
         {
-            World = world;
+            _world = world;
             fixed (ecs_filter_t* mFilter = &_filter)
             {
                 ecs_filter_move(mFilter, filter);

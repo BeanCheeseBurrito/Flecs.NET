@@ -4,26 +4,28 @@ namespace Flecs.NET.Core
 {
     public unsafe struct Timer
     {
-        public Entity Entity { get; }
+        private Entity _entity;
+
+        public ref Entity Entity => ref _entity;
 
         public Timer(ulong id)
         {
-            Entity = new Entity(id);
+            _entity = new Entity(id);
         }
 
         public Timer(ecs_world_t* world)
         {
-            Entity = new Entity(world);
+            _entity = new Entity(world);
         }
 
         public Timer(ecs_world_t* world, ulong id)
         {
-            Entity = new Entity(world, id);
+            _entity = new Entity(world, id);
         }
 
         public Timer(ecs_world_t* world, string name)
         {
-            Entity = new Entity(world, name);
+            _entity = new Entity(world, name);
         }
 
         public ref Timer Interval(float interval)

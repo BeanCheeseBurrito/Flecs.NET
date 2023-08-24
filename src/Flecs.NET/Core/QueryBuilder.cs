@@ -6,16 +6,19 @@ namespace Flecs.NET.Core
     // TODO: Free query context once .binding_context is added
     public unsafe struct QueryBuilder
     {
-        public ecs_world_t* World { get; }
+        private ecs_world_t* _world;
 
         internal ecs_query_desc_t QueryDesc;
         internal BindingContext.QueryContext QueryContext;
 
+        public ref ecs_world_t* World => ref _world;
+        public ref ecs_query_desc_t Desc => ref QueryDesc;
+
         public QueryBuilder(ecs_world_t* world)
         {
-            World = world;
             QueryDesc = default;
             QueryContext = default;
+            _world = world;
         }
 
         public ref QueryBuilder OrderBy<T>(Ecs.OrderByAction compare)
