@@ -3,8 +3,17 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// Static class for importng modules.
+    /// </summary>
     public static unsafe class Module
     {
+        /// <summary>
+        /// Imports a module.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static Entity Import<T>(World world) where T : IFlecsModule, new()
         {
             string symbol = Type<T>.GetSymbolName();
@@ -27,6 +36,13 @@ namespace Flecs.NET.Core
             return new Entity(world, module);
         }
 
+        /// <summary>
+        /// Imports a module.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="symbol"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static ulong DoImport<T>(World world, string symbol) where T : IFlecsModule, new()
         {
             ulong scope = ecs_set_scope(world, 0);

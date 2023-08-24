@@ -6,6 +6,13 @@ namespace Flecs.NET.Core
 {
     public static unsafe class Invoker
     {
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="iterCallback"></param>
+        /// <param name="iterNext"></param>
+        /// <param name="iter"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void Iter(Ecs.IterCallback iterCallback, Ecs.IterNext iterNext, ecs_iter_t* iter)
         {
             if (iterCallback == null)
@@ -22,6 +29,13 @@ namespace Flecs.NET.Core
             }
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="eachCallback"></param>
+        /// <param name="iterNext"></param>
+        /// <param name="iter"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void EachEntity(Ecs.EachEntityCallback eachCallback, Ecs.IterNext iterNext, ecs_iter_t* iter)
         {
             if (eachCallback == null)

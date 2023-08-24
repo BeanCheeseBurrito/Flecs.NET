@@ -38,36 +38,64 @@ namespace Flecs.NET.Core
                 Desc.target_fps = 60;
         }
 
+        /// <summary>
+        /// Cleans up resources.
+        /// </summary>
         public void Dispose()
         {
             Managed.FreeGcHandle(_initHandle);
             _initHandle = default;
         }
 
+        /// <summary>
+        /// Sets the target fps.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public ref AppBuilder TargetFps(float value)
         {
             Desc.target_fps = value;
             return ref this;
         }
 
+        /// <summary>
+        /// Sets the delta time.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public ref AppBuilder DeltaTime(float value)
         {
             Desc.delta_time = value;
             return ref this;
         }
 
+        /// <summary>
+        /// Sets the number of threads to use.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public ref AppBuilder Threads(int value)
         {
             Desc.threads = value;
             return ref this;
         }
 
+        /// <summary>
+        /// Sets the number of frames to run.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public ref AppBuilder Frames(int value)
         {
             Desc.frames = value;
             return ref this;
         }
 
+        /// <summary>
+        /// Enable ecs access over http for the explorer.
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
         public ref AppBuilder EnableRest(ushort port = 0)
         {
             Desc.enable_rest = Macros.True;
@@ -75,12 +103,22 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
+        /// <summary>
+        /// Periodically collect statistics.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public ref AppBuilder EnableMonitor(bool value = true)
         {
             Desc.enable_monitor = Macros.Bool(value);
             return ref this;
         }
 
+        /// <summary>
+        /// Sets a callback to be run before starting the main loop.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public ref AppBuilder Init(Ecs.AppInitAction value)
         {
             Managed.FreeGcHandle(_initHandle);
@@ -90,12 +128,21 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
+        /// <summary>
+        /// Context for storing custom data.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public ref AppBuilder Ctx(void* value)
         {
             Desc.ctx = value;
             return ref this;
         }
 
+        /// <summary>
+        /// Runs the app.
+        /// </summary>
+        /// <returns></returns>
         public int Run()
         {
             fixed (ecs_app_desc_t* appDesc = &Desc)

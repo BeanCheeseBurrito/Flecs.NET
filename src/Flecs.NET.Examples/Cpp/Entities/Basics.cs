@@ -1,4 +1,4 @@
-#if CPP_ENTITIES_BASICS
+#if Cpp_Entities_Basics
 
 using Flecs.NET.Core;
 

@@ -8,8 +8,13 @@ namespace Flecs.NET.Core
 {
     public static unsafe class EnumType<T>
     {
-        public static EnumPair[] Data { get; private set; }
+        private static EnumPair[] _data = Array.Empty<EnumPair>();
 
+        /// <summary>
+        /// Inits entities for an enum type and it's members.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="id"></param>
         public static void Init(ecs_world_t* world, ulong id)
         {
             ecs_cpp_enum_init(world, id);
@@ -19,7 +24,7 @@ namespace Flecs.NET.Core
             if (RuntimeFeature.IsDynamicCodeSupported)
             {
                 Array values = type.GetEnumValues();
-                Data = new EnumPair[values.Length];
+                _data = new EnumPair[values.Length];
 
                 for (int i = 0; i < values.Length; i++)
                 {
@@ -31,7 +36,7 @@ namespace Flecs.NET.Core
                     using NativeString nativeName = (NativeString)member.ToString();
                     ulong enumEntity = ecs_cpp_enum_constant_register(world, id, 0, nativeName, value);
 
-                    Data[i] = new EnumPair(value, enumEntity);
+                    _data[i] = new EnumPair(value, enumEntity);
                 }
             }
             else
@@ -40,15 +45,22 @@ namespace Flecs.NET.Core
             }
         }
 
+        /// <summary>
+        /// Gets an id for an enum member.
+        /// </summary>
+        /// <param name="member"></param>
+        /// <param name="world"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public static ulong Id(T member, ecs_world_t* world)
         {
             Type<T>.Id(world);
 
             int value = Convert.ToInt32(member, CultureInfo.InvariantCulture);
 
-            for (int i = 0; i < Data.Length; i++)
+            for (int i = 0; i < _data.Length; i++)
             {
-                EnumPair enumPair = Data[i];
+                EnumPair enumPair = _data[i];
                 if (enumPair.Value == value)
                     return enumPair.Id;
             }
@@ -56,7 +68,7 @@ namespace Flecs.NET.Core
             throw new InvalidOperationException("Failed to find entity associated with enum member.");
         }
 
-        public struct EnumPair
+        private struct EnumPair
         {
             public int Value { get; }
             public ulong Id { get; }

@@ -7,9 +7,9 @@
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
-    
+
     <PropertyGroup>
-        <Example>EXAMPLE</Example>
+        <Example>Example</Example>
         <DefineConstants>$(DefineConstants);$(Example)</DefineConstants>
     </PropertyGroup>
 

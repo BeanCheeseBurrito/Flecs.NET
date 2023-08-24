@@ -5,14 +5,32 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// A filter allows for uncached, adhoc iteration over ECS data.
+    /// </summary>
     public unsafe struct Filter : IDisposable
     {
         private ecs_world_t* _world;
         private ecs_filter_t _filter;
 
+        /// <summary>
+        /// A reference to the world.
+        /// </summary>
         public ref ecs_world_t* World => ref _world;
+
+        /// <summary>
+        /// A pointer to the filter.
+        /// </summary>
         public ecs_filter_t* FilterPtr => (ecs_filter_t*)Unsafe.AsPointer(ref _filter);
 
+
+        /// <summary>
+        /// Creates a filter.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="name"></param>
+        /// <param name="filterBuilder"></param>
+        /// <exception cref="InvalidOperationException"></exception>
         public Filter(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default)
         {
             Assert.True(world == filterBuilder.World, "Worlds are different");
@@ -46,6 +64,11 @@ namespace Flecs.NET.Core
             filterBuilder.Dispose();
         }
 
+        /// <summary>
+        /// Creates a filter with the specified world and filter pointer.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="filter"></param>
         public Filter(ecs_world_t* world, ecs_filter_t* filter)
         {
             _world = world;
@@ -55,6 +78,9 @@ namespace Flecs.NET.Core
             }
         }
 
+        /// <summary>
+        /// Cleans up resources.
+        /// </summary>
         public void Dispose()
         {
             fixed (ecs_filter_t* mFilter = &_filter)
@@ -64,21 +90,37 @@ namespace Flecs.NET.Core
             }
         }
 
+        /// <summary>
+        /// Returns the entity associated with the filter.
+        /// </summary>
+        /// <returns></returns>
         public Entity Entity()
         {
             return new Entity(World, ecs_get_entity(FilterPtr));
         }
 
+        /// <summary>
+        /// Returns the field count of the filter.
+        /// </summary>
+        /// <returns></returns>
         public int FieldCount()
         {
             return _filter.field_count;
         }
 
+        /// <summary>
+        /// Returns the string representation of the filter query.
+        /// </summary>
+        /// <returns></returns>
         public string Str()
         {
             return NativeString.GetStringAndFree(ecs_filter_str(World, FilterPtr));
         }
 
+        /// <summary>
+        /// Iterates the filter using the provided callback.
+        /// </summary>
+        /// <param name="func"></param>
         public void Iter(Ecs.IterCallback func)
         {
             ecs_iter_t iter = ecs_filter_iter(World, FilterPtr);
