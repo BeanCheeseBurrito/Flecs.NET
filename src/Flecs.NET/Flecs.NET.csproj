@@ -6,6 +6,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RootNamespace>Flecs.NET</RootNamespace>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <IncludeContentInPack>true</IncludeContentInPack>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -16,9 +17,54 @@
         <NoWarn>$(NoWarn);CA1000;CS9087;CS9084;CS8500;CA1034;CA1062</NoWarn>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <Version>3.2.6-build.1</Version>
+        <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Debug</Title>
+        <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Release</Title>
+        <Authors>BeanCheeseBurrito</Authors>
+        <Copyright>BeanCheeseBurrito</Copyright>
+        <Description>High-level C# wrapper for flecs</Description>
+        <PackageId>$(Title)</PackageId>
+        <PackageProjectUrl>https://github.com/BeanCheeseBurrito/Flecs.NET</PackageProjectUrl>
+        <PackageIconUrl>https://raw.githubusercontent.com/SanderMertens/flecs/master/docs/img/logo_small.png</PackageIconUrl>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/BeanCheeseBurrito/Flecs.NET</RepositoryUrl>
+        <RepositoryType>Github</RepositoryType>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    </PropertyGroup>
+
     <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0"/>
         <ProjectReference Include="..\Flecs.NET.Bindings\Flecs.NET.Bindings.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="../../docs/icon.png" PackagePath="icon.png"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="../Flecs.NET.Native/debug/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="../Flecs.NET.Native/debug/linux-arm64/libflecs.so" PackagePath="runtimes/linux-arm64/native/libflecs.so"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="../Flecs.NET.Native/debug/osx-x64/libflecs.dylib" PackagePath="runtimes/osx-x64/native/libflecs.dylib"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="../Flecs.NET.Native/debug/osx-arm64/libflecs.dylib" PackagePath="runtimes/osx-arm64/native/libflecs.dylib"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="../Flecs.NET.Native/debug/win-x64/libflecs.dll" PackagePath="runtimes/win-x64/native/libflecs.dll"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="../Flecs.NET.Native/debug/win-x64/libflecs.pdb" PackagePath="runtimes/win-x64/native/libflecs.pdb"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="../Flecs.NET.Native/debug/win-arm64/libflecs.dll" PackagePath="runtimes/win-arm64/native/libflecs.dll"/>
+        <Content Condition="'$(Configuration)' == 'Debug'" Include="../Flecs.NET.Native/debug/win-arm64/libflecs.pdb" PackagePath="runtimes/win-arm64/native/libflecs.pdb"/>
+
+        <Content Condition="'$(Configuration)' == 'Release'" Include="../Flecs.NET.Native/release/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so"/>
+        <Content Condition="'$(Configuration)' == 'Release'" Include="../Flecs.NET.Native/release/linux-arm64/libflecs.so" PackagePath="runtimes/linux-arm64/native/libflecs.so"/>
+        <Content Condition="'$(Configuration)' == 'Release'" Include="../Flecs.NET.Native/release/osx-x64/libflecs.dylib" PackagePath="runtimes/osx-x64/native/libflecs.dylib"/>
+        <Content Condition="'$(Configuration)' == 'Release'" Include="../Flecs.NET.Native/release/osx-arm64/libflecs.dylib" PackagePath="runtimes/osx-arm64/native/libflecs.dylib"/>
+        <Content Condition="'$(Configuration)' == 'Release'" Include="../Flecs.NET.Native/release/win-x64/libflecs.dll" PackagePath="runtimes/win-x64/native/libflecs.dll"/>
+        <Content Condition="'$(Configuration)' == 'Release'" Include="../Flecs.NET.Native/release/win-arm64/libflecs.dll" PackagePath="runtimes/win-arm64/native/libflecs.dll"/>
     </ItemGroup>
 
 </Project>
