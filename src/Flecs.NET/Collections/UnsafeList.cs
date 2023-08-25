@@ -4,15 +4,41 @@ using Flecs.NET.Utilities;
 
 namespace Flecs.NET.Collections
 {
+    /// <summary>
+    /// Unsafe list.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public unsafe struct UnsafeList<T> : IDisposable
     {
+        /// <summary>
+        /// Data storage for the unsafe list.
+        /// </summary>
         public void* Data { get; private set; }
+
+        /// <summary>
+        /// The capacity of the unsafe list.
+        /// </summary>
         public int Capacity { get; private set; }
+
+        /// <summary>
+        /// The current count of the unsafe list.
+        /// </summary>
         public int Count { get; private set; }
 
+        /// <summary>
+        /// Represents whether or not the unsafe list is null.
+        /// </summary>
         public readonly bool IsNull => Data == null;
+
+        /// <summary>
+        /// Represents whether or not the unsafe list stores a managed type.
+        /// </summary>
         public readonly bool IsManaged => RuntimeHelpers.IsReferenceOrContainsReferences<T>();
 
+        /// <summary>
+        /// Creates an unsafe list with the specified capacity.
+        /// </summary>
+        /// <param name="capacity"></param>
         public UnsafeList(int capacity)
         {
             if (capacity <= 0)
@@ -27,6 +53,11 @@ namespace Flecs.NET.Collections
             Count = 0;
         }
 
+        /// <summary>
+        /// Gets a managed reference to the object at the specified index.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <exception cref="ArgumentException"></exception>
         public readonly ref T this[int index]
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -39,6 +70,10 @@ namespace Flecs.NET.Collections
             }
         }
 
+        /// <summary>
+        /// Adds an item to the unsafe list.
+        /// </summary>
+        /// <param name="item"></param>
         public void Add(T item)
         {
             if (Count == Capacity)
@@ -51,6 +86,9 @@ namespace Flecs.NET.Collections
             Managed.SetTypeRef(Data, item, Count++);
         }
 
+        /// <summary>
+        /// Disposes the unsafe list and frees resources.
+        /// </summary>
         public void Dispose()
         {
             if (Data == null)

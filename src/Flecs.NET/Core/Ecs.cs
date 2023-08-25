@@ -3,6 +3,9 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// A static class for storing ECS related types, delegates, and methods.
+    /// </summary>
     public static unsafe class Ecs
     {
         /// <summary>

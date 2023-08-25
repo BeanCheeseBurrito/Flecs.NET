@@ -7,6 +7,9 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// A wrapper around ecs_filter_desc_t.
+    /// </summary>
     public unsafe struct FilterBuilder : IDisposable
     {
         private ecs_world_t* _world;
@@ -983,6 +986,11 @@ namespace Flecs.NET.Core
             return ref Term(first, second).Write();
         }
 
+        /// <summary>
+        /// Alternative form of Term().Write().
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public ref FilterBuilder Write<T>()
         {
             return ref Term<T>().Write();
@@ -1465,6 +1473,13 @@ namespace Flecs.NET.Core
         private void SetTermId(ulong first, ulong second)
         {
             CurrentTerm = new ecs_term_t() { id = Macros.Pair(first, second) };
+        }
+
+        private enum TermIdType
+        {
+            Src,
+            First,
+            Second
         }
     }
 }

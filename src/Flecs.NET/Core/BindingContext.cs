@@ -7,7 +7,9 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
-    // TODO: Add disposable functions to context structs
+    /// <summary>
+    /// A static class holding methods and types for binding contexts.
+    /// </summary>
     public static unsafe class BindingContext
     {
 #if NET5_0_OR_GREATER

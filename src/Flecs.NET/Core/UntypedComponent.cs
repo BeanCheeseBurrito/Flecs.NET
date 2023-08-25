@@ -3,6 +3,9 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// An untyped component.
+    /// </summary>
     public unsafe struct UntypedComponent
     {
         private Entity _entity;

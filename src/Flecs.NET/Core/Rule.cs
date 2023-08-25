@@ -4,14 +4,31 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// A wrapper for ecs_rule_t.
+    /// </summary>
     public unsafe struct Rule : IDisposable
     {
         private ecs_world_t* _world;
         private ecs_rule_t* _handle;
 
+        /// <summary>
+        /// A reference to the world.
+        /// </summary>
         public ref ecs_world_t* World => ref _world;
+
+        /// <summary>
+        /// A reference to the handle.
+        /// </summary>
         public ref ecs_rule_t* Handle => ref _handle;
 
+        /// <summary>
+        /// Creates a rule for the provided world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="name"></param>
+        /// <param name="filterBuilder"></param>
+        /// <exception cref="InvalidOperationException"></exception>
         public Rule(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default)
         {
             _world = world;
@@ -38,11 +55,17 @@ namespace Flecs.NET.Core
             filterBuilder.Dispose();
         }
 
+        /// <summary>
+        /// Disposes the rule.
+        /// </summary>
         public void Dispose()
         {
             Destruct();
         }
 
+        /// <summary>
+        /// Destructs the rule.
+        /// </summary>
         public void Destruct()
         {
             if (Handle == null)
@@ -53,32 +76,56 @@ namespace Flecs.NET.Core
             Handle = null;
         }
 
+        /// <summary>
+        /// Tests if the rule is not null.
+        /// </summary>
+        /// <returns></returns>
         public bool IsValid()
         {
             return Handle != null;
         }
 
+        /// <summary>
+        /// Returns the entity associated with the rule.
+        /// </summary>
+        /// <returns></returns>
         public Entity Entity()
         {
             return new Entity(World, ecs_get_entity(Handle));
         }
 
+        /// <summary>
+        /// Returns the filter for the rule.
+        /// </summary>
+        /// <returns></returns>
         public Filter Filter()
         {
             return new Filter(World, ecs_rule_get_filter(Handle));
         }
 
+        /// <summary>
+        /// Converts rule to a string expression.
+        /// </summary>
+        /// <returns></returns>
         public string Str()
         {
             ecs_filter_t* filter = ecs_rule_get_filter(Handle);
             return NativeString.GetStringAndFree(ecs_filter_str(World, filter));
         }
 
+        /// <summary>
+        /// Converts rule to a string that can be used to aid in debugging.
+        /// </summary>
+        /// <returns></returns>
         public string RuleStr()
         {
             return NativeString.GetStringAndFree(ecs_rule_str(Handle));
         }
 
+        /// <summary>
+        /// Iterates the rule.
+        /// </summary>
+        /// <param name="func"></param>
         public void Iter(Ecs.IterCallback func)
         {
             ecs_iter_t iter = ecs_rule_iter(World, Handle);

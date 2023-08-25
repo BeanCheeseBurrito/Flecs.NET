@@ -5,6 +5,9 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// A wrapper around ecs_app_desc_t.
+    /// </summary>
     public unsafe struct AppBuilder : IDisposable
     {
         private ecs_world_t* _world;

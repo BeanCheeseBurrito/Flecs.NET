@@ -3,6 +3,9 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// A wrapper for an alert.
+    /// </summary>
     public unsafe struct Alert
     {
         private Entity _entity;

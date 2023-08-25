@@ -1,5 +1,8 @@
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// A static class for holding flecs internals.
+    /// </summary>
     public class FlecsInternal
     {
         /// <summary>

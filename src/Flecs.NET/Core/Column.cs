@@ -6,6 +6,10 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// A wrapper around table columns.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public readonly unsafe struct Column<T> : IEquatable<Column<T>>
     {
         /// <summary>

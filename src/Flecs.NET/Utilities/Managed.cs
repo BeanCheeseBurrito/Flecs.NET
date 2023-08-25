@@ -4,8 +4,16 @@ using System.Runtime.InteropServices;
 
 namespace Flecs.NET.Utilities
 {
+    /// <summary>
+    /// Static class for working with managed memory in flecs.
+    /// </summary>
     public static unsafe class Managed
     {
+        /// <summary>
+        /// Gets the managed size of a type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static int ManagedSize<T>()
         {
             return RuntimeHelpers.IsReferenceOrContainsReferences<T>() ? sizeof(IntPtr) : sizeof(T);

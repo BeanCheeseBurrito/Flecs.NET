@@ -4,7 +4,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Event builder interface.
+    /// Metric builder interface.
     /// </summary>
     public unsafe struct MetricBuilder
     {

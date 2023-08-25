@@ -5,7 +5,7 @@ using Flecs.NET.Core;
 
 namespace Flecs.NET.Utilities
 {
-    public readonly unsafe struct NativeString : IEquatable<NativeString>, IDisposable
+    internal readonly unsafe struct NativeString : IEquatable<NativeString>, IDisposable
     {
         public IntPtr Data { get; }
         public bool IsFlecs { get; }

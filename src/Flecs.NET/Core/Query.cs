@@ -4,6 +4,9 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// A wrapper around ecs_query_t.
+    /// </summary>
     public unsafe struct Query : IDisposable
     {
         private ecs_world_t* _world;
@@ -11,9 +14,24 @@ namespace Flecs.NET.Core
 
         internal BindingContext.QueryContext QueryContext;
 
+        /// <summary>
+        /// A reference to the world.
+        /// </summary>
         public ref ecs_world_t* World => ref _world;
+
+        /// <summary>
+        /// A reference to the handle.
+        /// </summary>
         public ref ecs_query_t* Handle => ref _handle;
 
+        /// <summary>
+        /// Creates a query for the provided world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="name"></param>
+        /// <param name="filterBuilder"></param>
+        /// <param name="queryBuilder"></param>
+        /// <exception cref="InvalidOperationException"></exception>
         public Query(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default,
             QueryBuilder queryBuilder = default)
         {
@@ -45,6 +63,11 @@ namespace Flecs.NET.Core
             filterBuilder.Dispose();
         }
 
+        /// <summary>
+        /// Creates a query from a world and handle.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="query"></param>
         public Query(ecs_world_t* world, ecs_query_t* query = null)
         {
             QueryContext = default;
@@ -52,11 +75,17 @@ namespace Flecs.NET.Core
             _handle = query;
         }
 
+        /// <summary>
+        /// Disposes query.
+        /// </summary>
         public void Dispose()
         {
             Destruct();
         }
 
+        /// <summary>
+        /// Destructs query and cleans up resources.
+        /// </summary>
         public void Destruct()
         {
             if (Handle == null)
@@ -68,49 +97,87 @@ namespace Flecs.NET.Core
             Handle = null;
         }
 
+        /// <summary>
+        /// Returns whether the query data changed since the last iteration.
+        /// </summary>
+        /// <returns></returns>
         public bool Changed()
         {
             return ecs_query_changed(Handle, null) == 1;
         }
 
+        /// <summary>
+        /// Returns whether query is orphaned.
+        /// </summary>
+        /// <returns></returns>
         public bool Orphaned()
         {
             return ecs_query_orphaned(Handle) == 1;
         }
 
+        /// <summary>
+        /// Get info for group.
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
         public ecs_query_group_info_t* GroupInfo(ulong groupId)
         {
             return ecs_query_get_group_info(Handle, groupId);
         }
 
+        /// <summary>
+        /// Get context for group.
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
         public void* GroupCtx(ulong groupId)
         {
             ecs_query_group_info_t* groupInfo = GroupInfo((groupId));
             return groupInfo == null ? null : groupInfo->ctx;
         }
 
+        /// <summary>
+        /// Returns filter for query.
+        /// </summary>
+        /// <returns></returns>
         public Filter Filter()
         {
             return new Filter(World, ecs_query_get_filter(Handle));
         }
 
+        /// <summary>
+        /// Returns the field count of the query.
+        /// </summary>
+        /// <returns></returns>
         public int FieldCount()
         {
             ecs_filter_t* filter = ecs_query_get_filter(Handle);
             return filter->term_count;
         }
 
+        /// <summary>
+        /// Returns the filter string of the query.
+        /// </summary>
+        /// <returns></returns>
         public string Str()
         {
             ecs_filter_t* filter = ecs_query_get_filter(Handle);
             return NativeString.GetStringAndFree(ecs_filter_str(World, filter));
         }
 
+        /// <summary>
+        /// Returns the entity associated with the query.
+        /// </summary>
+        /// <returns></returns>
         public Entity Entity()
         {
             return new Entity(World, ecs_get_entity(Handle));
         }
 
+        /// <summary>
+        /// Iterates the query.
+        /// </summary>
+        /// <param name="iterCallback"></param>
         public void Iter(Ecs.IterCallback iterCallback)
         {
             ecs_iter_t iter = ecs_query_iter(World, Handle);

@@ -9,24 +9,71 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// Static class that registers and stores information about types.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static unsafe class Type<T>
     {
+        /// <summary>
+        /// Registered type hooks.
+        /// </summary>
         public static TypeHooks? Hooks;
+
+        /// <summary>
+        /// The raw id of the type.
+        /// </summary>
         public static ulong RawId { get; private set; }
+
+        /// <summary>
+        /// The size of the type.
+        /// </summary>
         public static int Size { get; private set; }
+
+        /// <summary>
+        /// The alignment of the type.
+        /// </summary>
         public static int Alignment { get; private set; }
+
+        /// <summary>
+        /// The reset count of the type.
+        /// </summary>
         public static int ResetCount { get; private set; }
+
+        /// <summary>
+        /// Whether or not the type is an alias.
+        /// </summary>
         public static bool IsAlias { get; private set; }
+
+        /// <summary>
+        /// Whether or not the type can be registered as a tag.
+        /// </summary>
         public static bool AllowTag { get; private set; } = true;
 
+        /// <summary>
+        /// The type name of the type.
+        /// </summary>
         public static string? TypeName { get; private set; }
+
+        /// <summary>
+        /// The symbol name of the type.
+        /// </summary>
         public static string? SymbolName { get; private set; }
 
+        /// <summary>
+        /// Sets type hooks for the type.
+        /// </summary>
+        /// <param name="typeHooks"></param>
         public static void SetTypeHooks(TypeHooks typeHooks)
         {
             Hooks = typeHooks;
         }
 
+        /// <summary>
+        /// Tests if the type is registered.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <returns></returns>
         public static bool IsRegistered(ecs_world_t* world)
         {
             if (ResetCount != FlecsInternal.ResetCount)
@@ -38,6 +85,11 @@ namespace Flecs.NET.Core
             return world == null || ecs_exists(world, RawId) != 0;
         }
 
+        /// <summary>
+        /// Inits a type.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="allowTag"></param>
         public static void Init(ulong entity, bool allowTag = true)
         {
             if (RawId != 0)
@@ -75,6 +127,16 @@ namespace Flecs.NET.Core
             }
         }
 
+        /// <summary>
+        /// Registers a type and returns it's id.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="name"></param>
+        /// <param name="allowTag"></param>
+        /// <param name="id"></param>
+        /// <param name="isComponent"></param>
+        /// <param name="existing"></param>
+        /// <returns></returns>
         public static ulong IdExplicit(ecs_world_t* world, string? name = null, bool allowTag = true,
             ulong id = default, bool isComponent = true, bool* existing = null)
         {
@@ -113,6 +175,13 @@ namespace Flecs.NET.Core
             return RawId;
         }
 
+        /// <summary>
+        /// Registers a type and returns it's id.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="name"></param>
+        /// <param name="allowTag"></param>
+        /// <returns></returns>
         public static ulong Id(ecs_world_t* world, string? name = null, bool allowTag = true)
         {
             if (IsRegistered(world))
@@ -145,6 +214,10 @@ namespace Flecs.NET.Core
             return RawId;
         }
 
+        /// <summary>
+        /// Registers type hooks.
+        /// </summary>
+        /// <param name="world"></param>
         public static void RegisterLifeCycleActions(ecs_world_t* world)
         {
             ecs_type_hooks_t typeHooksDesc = default;
@@ -193,18 +266,30 @@ namespace Flecs.NET.Core
             ecs_set_hooks_id(world, RawId, &typeHooksDesc);
         }
 
+        /// <summary>
+        /// Gets the size of a type.
+        /// </summary>
+        /// <returns></returns>
         public static int GetSize()
         {
             Assert.True(RawId != 0, nameof(ECS_INTERNAL_ERROR));
             return Size;
         }
 
+        /// <summary>
+        /// Gets the alignment of a type.
+        /// </summary>
+        /// <returns></returns>
         public static int GetAlignment()
         {
             Assert.True(RawId != 0, nameof(ECS_INTERNAL_ERROR));
             return Alignment;
         }
 
+        /// <summary>
+        /// Gets the type name.
+        /// </summary>
+        /// <returns></returns>
         public static string GetTypeName()
         {
             if (TypeName != null)
@@ -214,6 +299,10 @@ namespace Flecs.NET.Core
             return TypeName = symbol.Replace(".", "::", StringComparison.Ordinal);
         }
 
+        /// <summary>
+        /// Gets the symbol name of a type.
+        /// </summary>
+        /// <returns></returns>
         public static string GetSymbolName()
         {
             if (SymbolName != null)
@@ -260,6 +349,9 @@ namespace Flecs.NET.Core
             return SymbolName;
         }
 
+        /// <summary>
+        /// Resets a types information.
+        /// </summary>
         public static void Reset()
         {
             RawId = 0;
@@ -268,6 +360,10 @@ namespace Flecs.NET.Core
             AllowTag = true;
         }
 
+        /// <summary>
+        /// Calculates the alignment of a type.
+        /// </summary>
+        /// <returns></returns>
         public static int AlignOf()
         {
             return sizeof(AlignOfHelper) - sizeof(T);

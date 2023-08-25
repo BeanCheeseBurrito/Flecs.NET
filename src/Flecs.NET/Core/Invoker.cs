@@ -4,6 +4,9 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// A static class for holding callback invokers.
+    /// </summary>
     public static unsafe class Invoker
     {
         /// <summary>

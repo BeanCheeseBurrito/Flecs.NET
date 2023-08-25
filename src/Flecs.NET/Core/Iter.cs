@@ -387,6 +387,10 @@ namespace Flecs.NET.Core
             return new Column<T>(ptr, count, isShared);
         }
 
+        /// <summary>
+        /// Gets an enumerator for iter.
+        /// </summary>
+        /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
@@ -402,25 +406,49 @@ namespace Flecs.NET.Core
         }
     }
 
+    /// <summary>
+    /// Enumerator for iters.
+    /// </summary>
     public struct IterEnumerator : IEnumerator
     {
+        /// <summary>
+        /// Length of the iter.
+        /// </summary>
         public int Length { get; }
+
+        /// <summary>
+        /// Current index of the iter.
+        /// </summary>
         public int Current { get; private set; }
 
+        /// <summary>
+        /// Current index of the iter.
+        /// </summary>
         readonly object IEnumerator.Current => Current;
 
+        /// <summary>
+        /// Create a new iter with the provided length.
+        /// </summary>
+        /// <param name="length"></param>
         public IterEnumerator(int length)
         {
             Length = length;
             Current = -1;
         }
 
+        /// <summary>
+        /// Moves to the next index of the iter.
+        /// </summary>
+        /// <returns></returns>
         public bool MoveNext()
         {
             Current++;
             return Current < Length;
         }
 
+        /// <summary>
+        /// Resets the index of the enumerator.
+        /// </summary>
         public void Reset()
         {
             Current = -1;

@@ -6,6 +6,10 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    /// A static class for registering enum types and it's members.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static unsafe class EnumType<T>
     {
         private static EnumPair[] _data = Array.Empty<EnumPair>();
