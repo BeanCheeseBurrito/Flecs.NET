@@ -173,7 +173,7 @@ namespace Flecs.NET.Tests.Cpp
             int traitValue = 0;
 
             world.Routine(
-                filterBuilder: world.FilterBuilder().Expr("(Pair, *)"),
+                filter: world.FilterBuilder().Expr("(Pair, *)"),
                 callback: it =>
                 {
                     Column<Pair> tr = it.Field<Pair>(1);
@@ -208,7 +208,7 @@ namespace Flecs.NET.Tests.Cpp
             int traitValue = 0;
 
             world.Routine(
-                filterBuilder: world.FilterBuilder().Expr("(Pair, *)"),
+                filter: world.FilterBuilder().Expr("(Pair, *)"),
                 callback: it =>
                 {
                     Column<Pair> tr = it.Field<Pair>(1);

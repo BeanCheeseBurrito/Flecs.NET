@@ -2035,49 +2035,49 @@ namespace Flecs.NET.Core
         /// Create filter.
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="filterBuilder"></param>
+        /// <param name="filter"></param>
         /// <returns></returns>
-        public Filter Filter(string name = "", FilterBuilder filterBuilder = default)
+        public Filter Filter(string name = "", FilterBuilder filter = default)
         {
-            return new Filter(Handle, name, filterBuilder);
+            return new Filter(Handle, name, filter);
         }
 
         /// <summary>
         /// Create rule.
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="filterBuilder"></param>
+        /// <param name="filter"></param>
         /// <returns></returns>
-        public Rule Rule(string name = "", FilterBuilder filterBuilder = default)
+        public Rule Rule(string name = "", FilterBuilder filter = default)
         {
-            return new Rule(Handle, name, filterBuilder);
+            return new Rule(Handle, name, filter);
         }
 
         /// <summary>
         /// Create query.
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="queryBuilder"></param>
+        /// <param name="filter"></param>
+        /// <param name="query"></param>
         /// <returns></returns>
-        public Query Query(string name = "", FilterBuilder filterBuilder = default, QueryBuilder queryBuilder = default)
+        public Query Query(string name = "", FilterBuilder filter = default, QueryBuilder query = default)
         {
-            return new Query(Handle, name, filterBuilder, queryBuilder);
+            return new Query(Handle, name, filter, query);
         }
 
         /// <summary>
         /// Create observer.
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="observerBuilder"></param>
+        /// <param name="filter"></param>
+        /// <param name="observer"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public Observer Observer(string name = "", FilterBuilder filterBuilder = default,
-            ObserverBuilder observerBuilder = default,
+        public Observer Observer(string name = "", FilterBuilder filter = default,
+            ObserverBuilder observer = default,
             Ecs.IterCallback? callback = null)
         {
-            return new Observer(Handle, name, filterBuilder, observerBuilder, callback);
+            return new Observer(Handle, name, filter, observer, callback);
         }
 
         /// <summary>
@@ -2094,16 +2094,16 @@ namespace Flecs.NET.Core
         /// Create routine.
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="queryBuilder"></param>
-        /// <param name="routineBuilder"></param>
+        /// <param name="filter"></param>
+        /// <param name="query"></param>
+        /// <param name="routine"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public Routine Routine(string name = "", FilterBuilder filterBuilder = default,
-            QueryBuilder queryBuilder = default,
-            RoutineBuilder routineBuilder = default, Ecs.IterCallback? callback = null)
+        public Routine Routine(string name = "", FilterBuilder filter = default,
+            QueryBuilder query = default,
+            RoutineBuilder routine = default, Ecs.IterCallback? callback = null)
         {
-            return new Routine(Handle, name, filterBuilder, queryBuilder, routineBuilder, callback);
+            return new Routine(Handle, name, filter, query, routine, callback);
         }
 
         /// <summary>

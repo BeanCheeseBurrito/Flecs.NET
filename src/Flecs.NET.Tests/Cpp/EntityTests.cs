@@ -398,8 +398,8 @@ namespace Flecs.NET.Tests.Cpp
             bool invoked = false;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<Position>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnSet),
+                filter: world.FilterBuilder().Term<Position>(),
+                observer: world.ObserverBuilder().Event(EcsOnSet),
                 callback: it => { invoked = true; }
             );
 
@@ -476,8 +476,8 @@ namespace Flecs.NET.Tests.Cpp
             bool invoked = false;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<Position>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnSet),
+                filter: world.FilterBuilder().Term<Position>(),
+                observer: world.ObserverBuilder().Event(EcsOnSet),
                 callback: it => { invoked = true; }
             );
 
@@ -509,8 +509,8 @@ namespace Flecs.NET.Tests.Cpp
             bool invoked = false;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<Position>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnSet),
+                filter: world.FilterBuilder().Term<Position>(),
+                observer: world.ObserverBuilder().Event(EcsOnSet),
                 callback: it => { invoked = true; }
             );
 

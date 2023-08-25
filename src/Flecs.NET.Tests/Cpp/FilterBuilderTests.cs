@@ -16,7 +16,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Filter filter = world.Filter(
-                filterBuilder: world.FilterBuilder()
+                filter: world.FilterBuilder()
                     .Term<Position>()
                     .Term<Velocity>()
             );
@@ -45,7 +45,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity f = world.Entity().Set(new FilterWrapper
             {
                 Filter = world.Filter(
-                    filterBuilder: world.FilterBuilder().Term<Position>()
+                    filter: world.FilterBuilder().Term<Position>()
                 )
             });
 

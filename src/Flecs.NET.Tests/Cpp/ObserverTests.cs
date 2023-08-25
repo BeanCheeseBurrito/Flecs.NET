@@ -19,8 +19,8 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<Position>().Term<Velocity>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnAdd),
+                filter: world.FilterBuilder().Term<Position>().Term<Velocity>(),
+                observer: world.ObserverBuilder().Event(EcsOnAdd),
                 callback: it => { count += it.Count(); }
             );
 
@@ -42,8 +42,8 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<Position>().Term<Velocity>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnRemove),
+                filter: world.FilterBuilder().Term<Position>().Term<Velocity>(),
+                observer: world.ObserverBuilder().Event(EcsOnRemove),
                 callback: it =>
                 {
                     Column<Position> p = it.Field<Position>(1);
@@ -84,8 +84,8 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<Position>().Term<Velocity>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnSet),
+                filter: world.FilterBuilder().Term<Position>().Term<Velocity>(),
+                observer: world.ObserverBuilder().Event(EcsOnSet),
                 callback: it =>
                 {
                     Column<Position> p = it.Field<Position>(1);
@@ -120,8 +120,8 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<Position>().Term<Velocity>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsUnSet),
+                filter: world.FilterBuilder().Term<Position>().Term<Velocity>(),
+                observer: world.ObserverBuilder().Event(EcsUnSet),
                 callback: it =>
                 {
                     Column<Position> p = it.Field<Position>(1);
@@ -164,7 +164,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity();
 
             world.Observer(
-                filterBuilder: world.FilterBuilder()
+                filter: world.FilterBuilder()
                     .Term<TagA>()
                     .Term<TagB>()
                     .Term<TagC>()
@@ -175,7 +175,7 @@ namespace Flecs.NET.Tests.Cpp
                     .Term<TagH>()
                     .Term<TagI>()
                     .Term<TagJ>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnAdd),
+                observer: world.ObserverBuilder().Event(EcsOnAdd),
                 callback: it =>
                 {
                     Assert.Equal(1, it.Count());
@@ -209,7 +209,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity();
 
             world.Observer(
-                filterBuilder: world.FilterBuilder()
+                filter: world.FilterBuilder()
                     .Term<TagA>()
                     .Term<TagB>()
                     .Term<TagC>()
@@ -230,7 +230,7 @@ namespace Flecs.NET.Tests.Cpp
                     .Term<TagR>()
                     .Term<TagS>()
                     .Term<TagT>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnAdd),
+                observer: world.ObserverBuilder().Event(EcsOnAdd),
                 callback: it =>
                 {
                     Assert.Equal(1, it.Count());
@@ -276,8 +276,8 @@ namespace Flecs.NET.Tests.Cpp
             Entity last = default;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<Position>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnSet),
+                filter: world.FilterBuilder().Term<Position>(),
+                observer: world.ObserverBuilder().Event(EcsOnSet),
                 callback: it =>
                 {
                     Column<Position> p = it.Field<Position>(1);
@@ -365,8 +365,8 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<TagA>(),
-                observerBuilder: world.ObserverBuilder()
+                filter: world.FilterBuilder().Term<TagA>(),
+                observer: world.ObserverBuilder()
                     .Event(EcsOnAdd)
                     .YieldExisting(),
                 callback: it =>
@@ -402,10 +402,10 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder()
+                filter: world.FilterBuilder()
                     .Term<TagA>()
                     .Term<TagB>(),
-                observerBuilder: world.ObserverBuilder()
+                observer: world.ObserverBuilder()
                     .Event(EcsOnAdd)
                     .YieldExisting(),
                 callback: it =>
@@ -438,8 +438,8 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             observer = world.Observer(
-                filterBuilder: world.FilterBuilder().Term<TagA>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnAdd),
+                filter: world.FilterBuilder().Term<TagA>(),
+                observer: world.ObserverBuilder().Event(EcsOnAdd),
                 callback: it => { count += it.Count(); }
             );
 
@@ -456,8 +456,8 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Observer observer = world.Observer(
-                filterBuilder: world.FilterBuilder().Term<TagA>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnAdd),
+                filter: world.FilterBuilder().Term<TagA>(),
+                observer: world.ObserverBuilder().Event(EcsOnAdd),
                 callback: it => { }
             );
 
@@ -475,8 +475,8 @@ namespace Flecs.NET.Tests.Cpp
             int invoked = 0;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<Position>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnAdd),
+                filter: world.FilterBuilder().Term<Position>(),
+                observer: world.ObserverBuilder().Event(EcsOnAdd),
                 callback: it => { invoked += it.Count(); }
             );
 
@@ -494,8 +494,8 @@ namespace Flecs.NET.Tests.Cpp
             int invoked = 0;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<Position>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnRemove),
+                filter: world.FilterBuilder().Term<Position>(),
+                observer: world.ObserverBuilder().Event(EcsOnRemove),
                 callback: it => { invoked += it.Count(); }
             );
 
@@ -517,8 +517,8 @@ namespace Flecs.NET.Tests.Cpp
             int invoked = 0;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<MyTag>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnAdd),
+                filter: world.FilterBuilder().Term<MyTag>(),
+                observer: world.ObserverBuilder().Event(EcsOnAdd),
                 callback: it => { invoked += it.Count(); }
             );
 
@@ -536,8 +536,8 @@ namespace Flecs.NET.Tests.Cpp
             int invoked = 0;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Term<MyTag>(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnAdd),
+                filter: world.FilterBuilder().Term<MyTag>(),
+                observer: world.ObserverBuilder().Event(EcsOnAdd),
                 callback: it => { invoked += it.Count(); }
             );
 
@@ -557,8 +557,8 @@ namespace Flecs.NET.Tests.Cpp
             world.Component<Tag>();
 
             world.Observer(
-                filterBuilder: world.FilterBuilder().Expr("Tag"),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnAdd),
+                filter: world.FilterBuilder().Expr("Tag"),
+                observer: world.ObserverBuilder().Event(EcsOnAdd),
                 callback: it => { invoked += it.Count(); }
             );
 
@@ -582,10 +582,10 @@ namespace Flecs.NET.Tests.Cpp
             int invoked = 0;
 
             world.Observer(
-                filterBuilder: world.FilterBuilder()
+                filter: world.FilterBuilder()
                     .Term(tagA)
                     .Term(tagB).Filter(),
-                observerBuilder: world.ObserverBuilder().Event(EcsOnAdd),
+                observer: world.ObserverBuilder().Event(EcsOnAdd),
                 callback: it => { invoked += it.Count(); }
             );
 
