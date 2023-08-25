@@ -4,22 +4,22 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A table is where entities and components are stored.
+    ///     A table is where entities and components are stored.
     /// </summary>
     public readonly unsafe struct Table
     {
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ecs_world_t* World { get; }
 
         /// <summary>
-        /// A reference to the handle.
+        ///     A reference to the handle.
         /// </summary>
         public ecs_table_t* Handle { get; }
 
         /// <summary>
-        /// Creates a table from the provided world and handle.
+        ///     Creates a table from the provided world and handle.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="table"></param>
@@ -30,7 +30,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Convert table type to string.
+        ///     Convert table type to string.
         /// </summary>
         /// <returns></returns>
         public string Str()
@@ -39,7 +39,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get table type.
+        ///     Get table type.
         /// </summary>
         /// <returns></returns>
         public Types Types()
@@ -48,7 +48,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get table count.
+        ///     Get table count.
         /// </summary>
         /// <returns></returns>
         public int Count()
@@ -57,7 +57,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find type index for (component) id.
+        ///     Find type index for (component) id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -67,7 +67,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find type index for pair.
+        ///     Find type index for pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -79,7 +79,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find type index for type.
+        ///     Find type index for type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -89,7 +89,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find type index for pair.
+        ///     Find type index for pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -100,7 +100,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find type index for pair.
+        ///     Find type index for pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -111,7 +111,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find type index for pair.
+        ///     Find type index for pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -122,7 +122,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find column index for (component) id.
+        ///     Find column index for (component) id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -132,7 +132,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find column index for pair.
+        ///     Find column index for pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -144,7 +144,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find column index for type.
+        ///     Find column index for type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -154,7 +154,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find column index for pair.
+        ///     Find column index for pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -166,7 +166,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find column index for pair.
+        ///     Find column index for pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -178,7 +178,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find column index for pair.
+        ///     Find column index for pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -190,7 +190,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if table has (component) id.
+        ///     Test if table has (component) id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -200,7 +200,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if table has the pair.
+        ///     Test if table has the pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -212,7 +212,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if table has the type.
+        ///     Test if table has the type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -222,7 +222,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if table has the pair.
+        ///     Test if table has the pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -233,7 +233,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if table has the pair.
+        ///     Test if table has the pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -244,7 +244,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if table has the pair.
+        ///     Test if table has the pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -255,7 +255,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get pointer to component array by column index.
+        ///     Get pointer to component array by column index.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -265,7 +265,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get pointer to component array by component.
+        ///     Get pointer to component array by component.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -276,7 +276,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get pointer to component array by component.
+        ///     Get pointer to component array by component.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -288,7 +288,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get managed column to component array by component.
+        ///     Get managed column to component array by component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -299,7 +299,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get managed column to component array by pair.
+        ///     Get managed column to component array by pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -312,7 +312,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get managed column to component array by pair.
+        ///     Get managed column to component array by pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -325,7 +325,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get managed column to component array by pair.
+        ///     Get managed column to component array by pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -338,7 +338,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get column size.
+        ///     Get column size.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -348,7 +348,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get depth for given relationship.
+        ///     Get depth for given relationship.
         /// </summary>
         /// <param name="rel"></param>
         /// <returns></returns>
@@ -358,7 +358,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get depth for given relationship.
+        ///     Get depth for given relationship.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>

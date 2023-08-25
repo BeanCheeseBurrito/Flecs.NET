@@ -5,7 +5,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A wrapper around ecs_type_t.
+    ///     A wrapper around ecs_type_t.
     /// </summary>
     public unsafe struct Types : IEquatable<Types>
     {
@@ -13,17 +13,17 @@ namespace Flecs.NET.Core
         private ecs_type_t* _handle;
 
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// A reference to the handle.
+        ///     A reference to the handle.
         /// </summary>
         public ref ecs_type_t* Handle => ref _handle;
 
         /// <summary>
-        /// Creates a types wrapper around the provided world and handle.
+        ///     Creates a types wrapper around the provided world and handle.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="type"></param>
@@ -34,7 +34,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Convert type to comma-separated string
+        ///     Convert type to comma-separated string
         /// </summary>
         /// <returns></returns>
         public string Str()
@@ -43,7 +43,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Return number of ids in type
+        ///     Return number of ids in type
         /// </summary>
         /// <returns></returns>
         public int Count()
@@ -52,7 +52,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Return pointer to array.
+        ///     Return pointer to array.
         /// </summary>
         /// <returns></returns>
         public ulong* Array()
@@ -61,7 +61,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get id at specified index in type.
+        ///     Get id at specified index in type.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -73,7 +73,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
@@ -83,7 +82,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
@@ -93,7 +91,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -103,7 +100,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -113,7 +109,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -122,7 +117,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -133,7 +127,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>

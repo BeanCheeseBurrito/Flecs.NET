@@ -5,28 +5,28 @@ using Flecs.NET.Utilities;
 namespace Flecs.NET.Collections
 {
     /// <summary>
-    /// Unsafe array.
+    ///     Unsafe array.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public unsafe struct UnsafeArray<T> : IDisposable
     {
         /// <summary>
-        /// Data storage for the array.
+        ///     Data storage for the array.
         /// </summary>
         public void* Data { get; private set; }
 
         /// <summary>
-        /// The length of the array.
+        ///     The length of the array.
         /// </summary>
         public int Length { get; }
 
         /// <summary>
-        /// Represents whether or not the array is null.
+        ///     Represents whether or not the array is null.
         /// </summary>
         public readonly bool IsNull => Data == null;
 
         /// <summary>
-        /// Creates an unsafe array with the provided length.
+        ///     Creates an unsafe array with the provided length.
         /// </summary>
         /// <param name="length"></param>
         /// <param name="isZeroed"></param>
@@ -41,7 +41,7 @@ namespace Flecs.NET.Collections
         }
 
         /// <summary>
-        /// Creates an unsafe array from the provided pointer and length.
+        ///     Creates an unsafe array from the provided pointer and length.
         /// </summary>
         /// <param name="data"></param>
         /// <param name="length"></param>
@@ -52,7 +52,7 @@ namespace Flecs.NET.Collections
         }
 
         /// <summary>
-        /// Grabs a managed reference to an object at the specified index.
+        ///     Grabs a managed reference to an object at the specified index.
         /// </summary>
         /// <param name="index"></param>
         /// <exception cref="ArgumentException"></exception>
@@ -69,7 +69,7 @@ namespace Flecs.NET.Collections
         }
 
         /// <summary>
-        /// Disposes the unsafe array and cleans up resources.
+        ///     Disposes the unsafe array and cleans up resources.
         /// </summary>
         public void Dispose()
         {

@@ -1,39 +1,38 @@
 using System;
 using System.Runtime.CompilerServices;
 using Flecs.NET.Utilities;
-
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A wrapper around table columns.
+    ///     A wrapper around table columns.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public readonly unsafe struct Column<T> : IEquatable<Column<T>>
     {
         /// <summary>
-        /// Pointer to column.
+        ///     Pointer to column.
         /// </summary>
         public void* Data { get; }
 
         /// <summary>
-        /// Length of the column.
+        ///     Length of the column.
         /// </summary>
         public int Length { get; }
 
         /// <summary>
-        /// Specifies if the column is shared.
+        ///     Specifies if the column is shared.
         /// </summary>
         public bool IsShared { get; }
 
         /// <summary>
-        /// Specifies if the column pointer is null.
+        ///     Specifies if the column pointer is null.
         /// </summary>
         public bool IsNull => Data == null;
 
         /// <summary>
-        /// Creates column.
+        ///     Creates column.
         /// </summary>
         /// <param name="data"></param>
         /// <param name="length"></param>
@@ -46,7 +45,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets a managed reference to the component at the specified index.
+        ///     Gets a managed reference to the component at the specified index.
         /// </summary>
         /// <param name="index"></param>
         public ref T this[int index]
@@ -62,7 +61,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -72,7 +70,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -82,7 +79,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -91,7 +87,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -102,7 +97,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>

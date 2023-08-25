@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 namespace Flecs.NET.Utilities
 {
     /// <summary>
-    /// Static class for working with managed memory in flecs.
+    ///     Static class for working with managed memory in flecs.
     /// </summary>
     public static unsafe class Managed
     {
         /// <summary>
-        /// Gets the managed size of a type.
+        ///     Gets the managed size of a type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>

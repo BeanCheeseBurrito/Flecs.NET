@@ -3,19 +3,19 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Timer struct.
+    ///     Timer struct.
     /// </summary>
     public unsafe struct Timer
     {
         private Entity _entity;
 
         /// <summary>
-        /// A reference to the entity.
+        ///     A reference to the entity.
         /// </summary>
         public ref Entity Entity => ref _entity;
 
         /// <summary>
-        /// Creates a timer from the entity id.
+        ///     Creates a timer from the entity id.
         /// </summary>
         /// <param name="id"></param>
         public Timer(ulong id)
@@ -24,7 +24,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a timer for the provided world.
+        ///     Creates a timer for the provided world.
         /// </summary>
         /// <param name="world"></param>
         public Timer(ecs_world_t* world)
@@ -33,7 +33,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a timer from the provided world and id.
+        ///     Creates a timer from the provided world and id.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="id"></param>
@@ -43,7 +43,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a timer from the provided world and entity name.
+        ///     Creates a timer from the provided world and entity name.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
@@ -53,7 +53,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the interval.
+        ///     Sets the interval.
         /// </summary>
         /// <param name="interval"></param>
         /// <returns></returns>
@@ -64,7 +64,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets the interval.
+        ///     Gets the interval.
         /// </summary>
         /// <returns></returns>
         public float Interval()
@@ -73,7 +73,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the timeout.
+        ///     Sets the timeout.
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
@@ -84,7 +84,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets the timeout.
+        ///     Gets the timeout.
         /// </summary>
         /// <returns></returns>
         public float Timeout()
@@ -93,7 +93,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the rate.
+        ///     Sets the rate.
         /// </summary>
         /// <param name="rate"></param>
         /// <param name="tickSource"></param>
@@ -105,7 +105,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Starts the timer.
+        ///     Starts the timer.
         /// </summary>
         public void Start()
         {
@@ -113,7 +113,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Stops the timer.
+        ///     Stops the timer.
         /// </summary>
         public void Stop()
         {

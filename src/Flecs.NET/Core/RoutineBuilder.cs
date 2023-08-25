@@ -3,7 +3,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A wrapper around ecs_system_desc_t.
+    ///     A wrapper around ecs_system_desc_t.
     /// </summary>
     public unsafe struct RoutineBuilder
     {
@@ -14,17 +14,17 @@ namespace Flecs.NET.Core
         internal ulong CurrentPhase;
 
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// A reference to the routine description.
+        ///     A reference to the routine description.
         /// </summary>
         public ref ecs_system_desc_t Desc => ref RoutineDesc;
 
         /// <summary>
-        /// Creates a routine builder for the provided world.
+        ///     Creates a routine builder for the provided world.
         /// </summary>
         /// <param name="world"></param>
         public RoutineBuilder(ecs_world_t* world)
@@ -36,7 +36,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify in which phase the system should run.
+        ///     Specify in which phase the system should run.
         /// </summary>
         /// <param name="phase"></param>
         /// <returns></returns>
@@ -47,7 +47,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify in which phase the system should run.
+        ///     Specify in which phase the system should run.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -57,7 +57,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify whether system can run on multiple threads.
+        ///     Specify whether system can run on multiple threads.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -68,7 +68,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify whether system should be ran in staged context.
+        ///     Specify whether system should be ran in staged context.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -79,7 +79,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set system interval.
+        ///     Set system interval.
         /// </summary>
         /// <param name="interval"></param>
         /// <returns></returns>
@@ -90,7 +90,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set system rate.
+        ///     Set system rate.
         /// </summary>
         /// <param name="tickSource"></param>
         /// <param name="rate"></param>
@@ -103,7 +103,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set system rate.
+        ///     Set system rate.
         /// </summary>
         /// <param name="rate"></param>
         /// <returns></returns>
@@ -114,7 +114,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set tick source.
+        ///     Set tick source.
         /// </summary>
         /// <param name="tickSource"></param>
         /// <returns></returns>
@@ -125,7 +125,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set system context.
+        ///     Set system context.
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
@@ -136,7 +136,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set system run callback.
+        ///     Set system run callback.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>

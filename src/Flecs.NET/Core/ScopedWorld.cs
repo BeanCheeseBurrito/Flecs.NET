@@ -4,7 +4,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Scoped world.
+    ///     Scoped world.
     /// </summary>
     public unsafe struct ScopedWorld : IDisposable
     {
@@ -12,17 +12,17 @@ namespace Flecs.NET.Core
         private ulong _prevScope;
 
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// A reference to the previous scope entity.
+        ///     A reference to the previous scope entity.
         /// </summary>
         public ref ulong PrevScope => ref _prevScope;
 
         /// <summary>
-        /// Creates a scoped world in the scope of an entity.
+        ///     Creates a scoped world in the scope of an entity.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="scope"></param>
@@ -33,7 +33,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Disposes the scoped world.
+        ///     Disposes the scoped world.
         /// </summary>
         public void Dispose()
         {

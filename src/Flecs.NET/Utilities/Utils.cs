@@ -2,14 +2,13 @@ using System.Runtime.CompilerServices;
 
 namespace Flecs.NET.Utilities
 {
-
     /// <summary>
-    /// Static class for simple utility functions.
+    ///     Static class for simple utility functions.
     /// </summary>
     public static unsafe class Utils
     {
         /// <summary>
-        /// Gets the next power of 2 for the provided number.
+        ///     Gets the next power of 2 for the provided number.
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>

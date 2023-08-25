@@ -6,7 +6,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A wrapper around ecs_alert_desc_t.
+    ///     A wrapper around ecs_alert_desc_t.
     /// </summary>
     public unsafe struct AlertBuilder : IDisposable
     {
@@ -17,17 +17,17 @@ namespace Flecs.NET.Core
         internal ecs_alert_desc_t AlertDesc;
 
         /// <summary>
-        /// Reference to world.
+        ///     Reference to world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// Reference to alert description.
+        ///     Reference to alert description.
         /// </summary>
         public ref ecs_alert_desc_t Desc => ref AlertDesc;
 
         /// <summary>
-        /// Creates an alert builder for world.
+        ///     Creates an alert builder for world.
         /// </summary>
         /// <param name="world"></param>
         public AlertBuilder(ecs_world_t* world)
@@ -39,7 +39,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Cleans up the alert builder's resources.
+        ///     Cleans up the alert builder's resources.
         /// </summary>
         public void Dispose()
         {
@@ -50,7 +50,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the message of the alert.
+        ///     Sets the message of the alert.
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
@@ -64,7 +64,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the brief of the alert.
+        ///     Sets the brief of the alert.
         /// </summary>
         /// <param name="brief"></param>
         /// <returns></returns>
@@ -78,7 +78,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the doc name of the alert.
+        ///     Sets the doc name of the alert.
         /// </summary>
         /// <param name="docName"></param>
         /// <returns></returns>
@@ -92,7 +92,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the retain period of the alert
+        ///     Sets the retain period of the alert
         /// </summary>
         /// <param name="period"></param>
         /// <returns></returns>
@@ -103,7 +103,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the severity of the alert.
+        ///     Sets the severity of the alert.
         /// </summary>
         /// <param name="kind"></param>
         /// <returns></returns>
@@ -114,7 +114,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the severity of the alert.
+        ///     Sets the severity of the alert.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -124,7 +124,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Adds a severity filter to the alert.
+        ///     Adds a severity filter to the alert.
         /// </summary>
         /// <param name="kind"></param>
         /// <param name="with"></param>
@@ -143,7 +143,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Adds a severity filter to the alert.
+        ///     Adds a severity filter to the alert.
         /// </summary>
         /// <param name="with"></param>
         /// <param name="var"></param>
@@ -155,7 +155,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Adds a severity filter to the alert.
+        ///     Adds a severity filter to the alert.
         /// </summary>
         /// <param name="var"></param>
         /// <typeparam name="TSeverity"></typeparam>
@@ -167,7 +167,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Adds a severity filter to the alert.
+        ///     Adds a severity filter to the alert.
         /// </summary>
         /// <param name="withEnum"></param>
         /// <param name="var"></param>
@@ -181,7 +181,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set the member to create an alert for out of range values.
+        ///     Set the member to create an alert for out of range values.
         /// </summary>
         /// <param name="member"></param>
         /// <returns></returns>
@@ -192,7 +192,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set member to create an alert for out of range of values.
+        ///     Set member to create an alert for out of range of values.
         /// </summary>
         /// <param name="member"></param>
         /// <param name="var"></param>
@@ -212,8 +212,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set (component) id for member (optional). If Member() is set and id
-        /// is not set, the id will default to the member parent.
+        ///     Set (component) id for member (optional). If Member() is set and id
+        ///     is not set, the id will default to the member parent.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -224,7 +224,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set source variable for member.
+        ///     Set source variable for member.
         /// </summary>
         /// <param name="var"></param>
         /// <returns></returns>

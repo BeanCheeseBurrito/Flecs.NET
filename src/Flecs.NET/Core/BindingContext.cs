@@ -8,7 +8,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A static class holding methods and types for binding contexts.
+    ///     A static class holding methods and types for binding contexts.
     /// </summary>
     public static unsafe class BindingContext
     {

@@ -4,24 +4,24 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A wrapper for an alert.
+    ///     A wrapper for an alert.
     /// </summary>
     public unsafe struct Alert
     {
         private Entity _entity;
 
         /// <summary>
-        /// Reference to entity.
+        ///     Reference to entity.
         /// </summary>
         public ref Entity Entity => ref _entity;
 
         /// <summary>
-        /// Reference to world.
+        ///     Reference to world.
         /// </summary>
         public ref ecs_world_t* World => ref _entity.World;
 
         /// <summary>
-        /// Creates an alert.
+        ///     Creates an alert.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>

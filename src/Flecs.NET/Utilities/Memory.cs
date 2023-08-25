@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 namespace Flecs.NET.Utilities
 {
     /// <summary>
-    /// Static class for allocating and freeing memory.
+    ///     Static class for allocating and freeing memory.
     /// </summary>
     public static unsafe class Memory
     {
         /// <summary>
-        /// Allocates memory for type.
+        ///     Allocates memory for type.
         /// </summary>
         /// <param name="count"></param>
         /// <typeparam name="T"></typeparam>
@@ -22,7 +22,7 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
-        /// Allocates zeroed memory for type.
+        ///     Allocates zeroed memory for type.
         /// </summary>
         /// <param name="count"></param>
         /// <typeparam name="T"></typeparam>
@@ -34,7 +34,7 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
-        /// Reallocate memory for type.
+        ///     Reallocate memory for type.
         /// </summary>
         /// <param name="data"></param>
         /// <param name="count"></param>
@@ -47,7 +47,7 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
-        /// Free memory.
+        ///     Free memory.
         /// </summary>
         /// <param name="data"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -61,7 +61,7 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
-        /// Allocate specified amount of bytes.
+        ///     Allocate specified amount of bytes.
         /// </summary>
         /// <param name="byteCount"></param>
         /// <returns></returns>
@@ -77,7 +77,7 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
-        /// Allocate zeroed specified amount of bytes.
+        ///     Allocate zeroed specified amount of bytes.
         /// </summary>
         /// <param name="byteCount"></param>
         /// <returns></returns>
@@ -94,7 +94,7 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
-        /// Reallocate specified amount of bytes.
+        ///     Reallocate specified amount of bytes.
         /// </summary>
         /// <param name="data"></param>
         /// <param name="byteCount"></param>

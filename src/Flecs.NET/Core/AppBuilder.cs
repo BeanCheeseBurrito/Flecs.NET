@@ -6,7 +6,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A wrapper around ecs_app_desc_t.
+    ///     A wrapper around ecs_app_desc_t.
     /// </summary>
     public unsafe struct AppBuilder : IDisposable
     {
@@ -15,17 +15,17 @@ namespace Flecs.NET.Core
         private GCHandle _initHandle;
 
         /// <summary>
-        /// Reference to world.
+        ///     Reference to world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// Reference to app description.
+        ///     Reference to app description.
         /// </summary>
         public ref ecs_app_desc_t Desc => ref _desc;
 
         /// <summary>
-        /// Creates an app builder for world.
+        ///     Creates an app builder for world.
         /// </summary>
         /// <param name="world"></param>
         public AppBuilder(ecs_world_t* world)
@@ -42,7 +42,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Cleans up resources.
+        ///     Cleans up resources.
         /// </summary>
         public void Dispose()
         {
@@ -51,7 +51,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the target fps.
+        ///     Sets the target fps.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -62,7 +62,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the delta time.
+        ///     Sets the delta time.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -73,7 +73,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the number of threads to use.
+        ///     Sets the number of threads to use.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -84,7 +84,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the number of frames to run.
+        ///     Sets the number of frames to run.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -95,7 +95,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Enable ecs access over http for the explorer.
+        ///     Enable ecs access over http for the explorer.
         /// </summary>
         /// <param name="port"></param>
         /// <returns></returns>
@@ -107,7 +107,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Periodically collect statistics.
+        ///     Periodically collect statistics.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -118,7 +118,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets a callback to be run before starting the main loop.
+        ///     Sets a callback to be run before starting the main loop.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -132,7 +132,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Context for storing custom data.
+        ///     Context for storing custom data.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -143,7 +143,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Runs the app.
+        ///     Runs the app.
         /// </summary>
         /// <returns></returns>
         public int Run()

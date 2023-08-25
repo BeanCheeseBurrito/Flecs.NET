@@ -5,22 +5,22 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Helper macros for working with flecs.
+    ///     Helper macros for working with flecs.
     /// </summary>
     public static unsafe class Macros
     {
         /// <summary>
-        /// False.
+        ///     False.
         /// </summary>
         public const byte False = 0;
 
         /// <summary>
-        /// True.
+        ///     True.
         /// </summary>
         public const byte True = 1;
 
         /// <summary>
-        /// Converts a managed boolean to a byte.
+        ///     Converts a managed boolean to a byte.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -31,7 +31,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Tests if 2 readonly refs point to the same object.
+        ///     Tests if 2 readonly refs point to the same object.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -44,7 +44,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Tests if a readonly ref is null.
+        ///     Tests if a readonly ref is null.
         /// </summary>
         /// <param name="obj"></param>
         /// <typeparam name="T"></typeparam>
@@ -60,7 +60,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets the low 32 bits of an entity.
+        ///     Gets the low 32 bits of an entity.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -71,7 +71,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets the high 32 bits of an entity.
+        ///     Gets the high 32 bits of an entity.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -82,7 +82,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Combines 2 entity ids together.
+        ///     Combines 2 entity ids together.
         /// </summary>
         /// <param name="low"></param>
         /// <param name="hi"></param>
@@ -94,7 +94,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a pair out of 2 entities.
+        ///     Creates a pair out of 2 entities.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -106,7 +106,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a pair out of 2 types.
+        ///     Creates a pair out of 2 types.
         /// </summary>
         /// <param name="world"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -119,7 +119,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a pair out of a type and an entity.
+        ///     Creates a pair out of a type and an entity.
         /// </summary>
         /// <param name="second"></param>
         /// <param name="world"></param>
@@ -132,7 +132,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a pair out of a type and an entity.
+        ///     Creates a pair out of a type and an entity.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="world"></param>
@@ -145,7 +145,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the first part of a pair.
+        ///     Returns the first part of a pair.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -156,7 +156,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the second part of a pair.
+        ///     Returns the second part of a pair.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -167,7 +167,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a dependson relationship with the provided entity.
+        ///     Creates a dependson relationship with the provided entity.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -178,7 +178,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Checks if an entity has a flag.
+        ///     Checks if an entity has a flag.
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="flag"></param>
@@ -190,7 +190,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Locks a table.
+        ///     Locks a table.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="table"></param>
@@ -202,7 +202,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Unlocks a table.
+        ///     Unlocks a table.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="table"></param>

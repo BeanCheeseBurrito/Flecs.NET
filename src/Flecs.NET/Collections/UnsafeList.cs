@@ -5,38 +5,38 @@ using Flecs.NET.Utilities;
 namespace Flecs.NET.Collections
 {
     /// <summary>
-    /// Unsafe list.
+    ///     Unsafe list.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public unsafe struct UnsafeList<T> : IDisposable
     {
         /// <summary>
-        /// Data storage for the unsafe list.
+        ///     Data storage for the unsafe list.
         /// </summary>
         public void* Data { get; private set; }
 
         /// <summary>
-        /// The capacity of the unsafe list.
+        ///     The capacity of the unsafe list.
         /// </summary>
         public int Capacity { get; private set; }
 
         /// <summary>
-        /// The current count of the unsafe list.
+        ///     The current count of the unsafe list.
         /// </summary>
         public int Count { get; private set; }
 
         /// <summary>
-        /// Represents whether or not the unsafe list is null.
+        ///     Represents whether or not the unsafe list is null.
         /// </summary>
         public readonly bool IsNull => Data == null;
 
         /// <summary>
-        /// Represents whether or not the unsafe list stores a managed type.
+        ///     Represents whether or not the unsafe list stores a managed type.
         /// </summary>
         public readonly bool IsManaged => RuntimeHelpers.IsReferenceOrContainsReferences<T>();
 
         /// <summary>
-        /// Creates an unsafe list with the specified capacity.
+        ///     Creates an unsafe list with the specified capacity.
         /// </summary>
         /// <param name="capacity"></param>
         public UnsafeList(int capacity)
@@ -54,7 +54,7 @@ namespace Flecs.NET.Collections
         }
 
         /// <summary>
-        /// Gets a managed reference to the object at the specified index.
+        ///     Gets a managed reference to the object at the specified index.
         /// </summary>
         /// <param name="index"></param>
         /// <exception cref="ArgumentException"></exception>
@@ -71,7 +71,7 @@ namespace Flecs.NET.Collections
         }
 
         /// <summary>
-        /// Adds an item to the unsafe list.
+        ///     Adds an item to the unsafe list.
         /// </summary>
         /// <param name="item"></param>
         public void Add(T item)
@@ -87,7 +87,7 @@ namespace Flecs.NET.Collections
         }
 
         /// <summary>
-        /// Disposes the unsafe list and frees resources.
+        ///     Disposes the unsafe list and frees resources.
         /// </summary>
         public void Dispose()
         {

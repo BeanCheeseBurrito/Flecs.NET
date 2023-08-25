@@ -5,27 +5,25 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Class for iterating over query results.
+    ///     Class for iterating over query results.
     /// </summary>
     public readonly unsafe struct Iter : IEnumerable
     {
         /// <summary>
-        /// Reference to handle.
+        ///     Reference to handle.
         /// </summary>
         public ecs_iter_t* Handle { get; }
 
         /// <summary>
-        ///
         /// </summary>
         public int Begin { get; }
 
         /// <summary>
-        ///
         /// </summary>
         public int End { get; }
 
         /// <summary>
-        /// Creates an iter wrapper using the provided handle.
+        ///     Creates an iter wrapper using the provided handle.
         /// </summary>
         /// <param name="iter"></param>
         public Iter(ecs_iter_t* iter)
@@ -36,7 +34,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns entity id of system.
+        ///     Returns entity id of system.
         /// </summary>
         /// <returns></returns>
         public Entity System()
@@ -45,7 +43,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns entity id of event.
+        ///     Returns entity id of event.
         /// </summary>
         /// <returns></returns>
         public Entity Event()
@@ -54,7 +52,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the entity id of the event id.
+        ///     Returns the entity id of the event id.
         /// </summary>
         /// <returns></returns>
         public Entity EventId()
@@ -63,7 +61,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns staged C# world.
+        ///     Returns staged C# world.
         /// </summary>
         /// <returns></returns>
         public World World()
@@ -72,7 +70,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns count of iter.
+        ///     Returns count of iter.
         /// </summary>
         /// <returns></returns>
         public int Count()
@@ -81,7 +79,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the delta time.
+        ///     Returns the delta time.
         /// </summary>
         /// <returns></returns>
         public float DeltaTime()
@@ -90,7 +88,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the delta system time.
+        ///     Returns the delta system time.
         /// </summary>
         /// <returns></returns>
         public float DeltaSystemTime()
@@ -99,7 +97,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the type of the iterated table.
+        ///     Returns the type of the iterated table.
         /// </summary>
         /// <returns></returns>
         public Types Types()
@@ -108,7 +106,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns table of the iter.
+        ///     Returns table of the iter.
         /// </summary>
         /// <returns></returns>
         public Table Table()
@@ -117,7 +115,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns context pointer.
+        ///     Returns context pointer.
         /// </summary>
         /// <returns></returns>
         public void* CtxPtr()
@@ -126,7 +124,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns context pointer.
+        ///     Returns context pointer.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -136,7 +134,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns context ref.
+        ///     Returns context ref.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -146,7 +144,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns param pointer.
+        ///     Returns param pointer.
         /// </summary>
         /// <returns></returns>
         public void* ParamPtr()
@@ -155,7 +153,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns param pointer.
+        ///     Returns param pointer.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -165,7 +163,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns param ref.
+        ///     Returns param ref.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -175,7 +173,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Obtain mutable handle to entity being iterated over.
+        ///     Obtain mutable handle to entity being iterated over.
         /// </summary>
         /// <param name="row"></param>
         /// <returns></returns>
@@ -186,7 +184,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns whether field is matched on self.
+        ///     Returns whether field is matched on self.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -196,7 +194,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns whether field is set.
+        ///     Returns whether field is set.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -206,7 +204,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns whether field is readonly.
+        ///     Returns whether field is readonly.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -216,7 +214,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Number of fields in iterator.
+        ///     Number of fields in iterator.
         /// </summary>
         /// <returns></returns>
         public int FieldCount()
@@ -225,7 +223,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Size of field data type.
+        ///     Size of field data type.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -235,7 +233,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Obtain field source (0 if This).
+        ///     Obtain field source (0 if This).
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -245,7 +243,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Obtain id matched for field.
+        ///     Obtain id matched for field.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -255,8 +253,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Obtain pair id matched for field.
-        /// This operation will fail if the id is not a pair.
+        ///     Obtain pair id matched for field.
+        ///     This operation will fail if the id is not a pair.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -268,7 +266,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Obtain column index for field.
+        ///     Obtain column index for field.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -278,7 +276,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Convert current iterator result to string.
+        ///     Convert current iterator result to string.
         /// </summary>
         /// <returns></returns>
         public string Str()
@@ -287,7 +285,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get readonly access to field data.
+        ///     Get readonly access to field data.
         /// </summary>
         /// <param name="index"></param>
         /// <typeparam name="T"></typeparam>
@@ -298,7 +296,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get access to entity ids.
+        ///     Get access to entity ids.
         /// </summary>
         /// <returns></returns>
         public Column<ulong> Entities()
@@ -307,7 +305,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Obtain the total number of tables the iterator will iterate over.
+        ///     Obtain the total number of tables the iterator will iterate over.
         /// </summary>
         /// <returns></returns>
         public int TableCount()
@@ -316,8 +314,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Check if the current table has changed since the last iteration.
-        /// Can only be used when iterating queries and/or systems.
+        ///     Check if the current table has changed since the last iteration.
+        ///     Can only be used when iterating queries and/or systems.
         /// </summary>
         /// <returns></returns>
         public bool Changed()
@@ -326,10 +324,10 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Skip current table.
-        /// This indicates to the query that the data in the current table is not
-        /// modified. By default, iterating a table with a query will mark the
-        /// iterated components as dirty if they are annotated with InOut or Out.
+        ///     Skip current table.
+        ///     This indicates to the query that the data in the current table is not
+        ///     modified. By default, iterating a table with a query will mark the
+        ///     iterated components as dirty if they are annotated with InOut or Out.
         /// </summary>
         public void Skip()
         {
@@ -337,7 +335,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Return group id for current table (grouped queries only)
+        ///     Return group id for current table (grouped queries only)
         /// </summary>
         /// <returns></returns>
         public ulong GroupId()
@@ -346,7 +344,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get value of variable by id.
+        ///     Get value of variable by id.
         /// </summary>
         /// <param name="varId"></param>
         /// <returns></returns>
@@ -357,7 +355,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get value of variable by name.
+        ///     Get value of variable by name.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -388,7 +386,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets an enumerator for iter.
+        ///     Gets an enumerator for iter.
         /// </summary>
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
@@ -397,7 +395,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets an enumerator for iter.
+        ///     Gets an enumerator for iter.
         /// </summary>
         /// <returns></returns>
         public IterEnumerator GetEnumerator()
@@ -407,27 +405,27 @@ namespace Flecs.NET.Core
     }
 
     /// <summary>
-    /// Enumerator for iters.
+    ///     Enumerator for iters.
     /// </summary>
     public struct IterEnumerator : IEnumerator
     {
         /// <summary>
-        /// Length of the iter.
+        ///     Length of the iter.
         /// </summary>
         public int Length { get; }
 
         /// <summary>
-        /// Current index of the iter.
+        ///     Current index of the iter.
         /// </summary>
         public int Current { get; private set; }
 
         /// <summary>
-        /// Current index of the iter.
+        ///     Current index of the iter.
         /// </summary>
         readonly object IEnumerator.Current => Current;
 
         /// <summary>
-        /// Create a new iter with the provided length.
+        ///     Create a new iter with the provided length.
         /// </summary>
         /// <param name="length"></param>
         public IterEnumerator(int length)
@@ -437,7 +435,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Moves to the next index of the iter.
+        ///     Moves to the next index of the iter.
         /// </summary>
         /// <returns></returns>
         public bool MoveNext()
@@ -447,7 +445,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Resets the index of the enumerator.
+        ///     Resets the index of the enumerator.
         /// </summary>
         public void Reset()
         {

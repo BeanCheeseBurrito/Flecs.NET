@@ -4,29 +4,29 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// An untyped component.
+    ///     An untyped component.
     /// </summary>
     public unsafe struct UntypedComponent
     {
         private Entity _entity;
 
         /// <summary>
-        /// Reference to id.
+        ///     Reference to id.
         /// </summary>
         public ref Id Id => ref _entity.Id;
 
         /// <summary>
-        /// Reference to entity.
+        ///     Reference to entity.
         /// </summary>
         public ref Entity Entity => ref _entity;
 
         /// <summary>
-        /// Reference to world pointer.
+        ///     Reference to world pointer.
         /// </summary>
         public ref ecs_world_t* World => ref _entity.World;
 
         /// <summary>
-        /// Constructs component from entity id.
+        ///     Constructs component from entity id.
         /// </summary>
         /// <param name="id"></param>
         public UntypedComponent(ulong id)
@@ -35,7 +35,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Constructs component from new id using the provided world.
+        ///     Constructs component from new id using the provided world.
         /// </summary>
         /// <param name="world"></param>
         public UntypedComponent(ecs_world_t* world)
@@ -44,7 +44,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Constructs component with the provided world and entity id.
+        ///     Constructs component with the provided world and entity id.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="id"></param>
@@ -54,7 +54,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Constructs component wit hthe provided world and entity name.
+        ///     Constructs component wit hthe provided world and entity name.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
@@ -64,7 +64,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add member with unit.
+        ///     Add member with unit.
         /// </summary>
         /// <param name="typeId"></param>
         /// <param name="unit"></param>
@@ -95,7 +95,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add member.
+        ///     Add member.
         /// </summary>
         /// <param name="typeId"></param>
         /// <param name="name"></param>
@@ -108,7 +108,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add member.
+        ///     Add member.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="count"></param>
@@ -121,7 +121,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add member with unit.
+        ///     Add member with unit.
         /// </summary>
         /// <param name="unit"></param>
         /// <param name="name"></param>
@@ -135,7 +135,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add member with unit.
+        ///     Add member with unit.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="count"></param>
@@ -149,7 +149,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add constant.
+        ///     Add constant.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -172,7 +172,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add bitmask constant.
+        ///     Add bitmask constant.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -195,7 +195,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add member value range.
+        ///     Add member value range.
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
@@ -217,7 +217,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add member warning range.
+        ///     Add member warning range.
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
@@ -239,7 +239,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add member error range.
+        ///     Add member error range.
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
@@ -261,7 +261,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Register member as metric.
+        ///     Register member as metric.
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="brief"></param>

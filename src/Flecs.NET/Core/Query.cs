@@ -5,7 +5,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A wrapper around ecs_query_t.
+    ///     A wrapper around ecs_query_t.
     /// </summary>
     public unsafe struct Query : IDisposable
     {
@@ -15,17 +15,17 @@ namespace Flecs.NET.Core
         internal BindingContext.QueryContext QueryContext;
 
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// A reference to the handle.
+        ///     A reference to the handle.
         /// </summary>
         public ref ecs_query_t* Handle => ref _handle;
 
         /// <summary>
-        /// Creates a query for the provided world.
+        ///     Creates a query for the provided world.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
@@ -64,7 +64,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a query from a world and handle.
+        ///     Creates a query from a world and handle.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="query"></param>
@@ -76,7 +76,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Disposes query.
+        ///     Disposes query.
         /// </summary>
         public void Dispose()
         {
@@ -84,7 +84,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Destructs query and cleans up resources.
+        ///     Destructs query and cleans up resources.
         /// </summary>
         public void Destruct()
         {
@@ -98,7 +98,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns whether the query data changed since the last iteration.
+        ///     Returns whether the query data changed since the last iteration.
         /// </summary>
         /// <returns></returns>
         public bool Changed()
@@ -107,7 +107,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns whether query is orphaned.
+        ///     Returns whether query is orphaned.
         /// </summary>
         /// <returns></returns>
         public bool Orphaned()
@@ -116,7 +116,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get info for group.
+        ///     Get info for group.
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
@@ -126,7 +126,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get context for group.
+        ///     Get context for group.
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
@@ -137,7 +137,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns filter for query.
+        ///     Returns filter for query.
         /// </summary>
         /// <returns></returns>
         public Filter Filter()
@@ -146,7 +146,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the field count of the query.
+        ///     Returns the field count of the query.
         /// </summary>
         /// <returns></returns>
         public int FieldCount()
@@ -156,7 +156,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the filter string of the query.
+        ///     Returns the filter string of the query.
         /// </summary>
         /// <returns></returns>
         public string Str()
@@ -166,7 +166,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the entity associated with the query.
+        ///     Returns the entity associated with the query.
         /// </summary>
         /// <returns></returns>
         public Entity Entity()
@@ -175,7 +175,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Iterates the query.
+        ///     Iterates the query.
         /// </summary>
         /// <param name="iterCallback"></param>
         public void Iter(Ecs.IterCallback iterCallback)

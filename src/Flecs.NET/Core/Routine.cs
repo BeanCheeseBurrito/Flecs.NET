@@ -5,24 +5,24 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Wrapper around system.
+    ///     Wrapper around system.
     /// </summary>
     public unsafe struct Routine
     {
         private Entity _entity;
 
         /// <summary>
-        /// A reference to the entity.
+        ///     A reference to the entity.
         /// </summary>
         public ref Entity Entity => ref _entity;
 
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _entity.World;
 
         /// <summary>
-        /// Creates a routine for the provided world.
+        ///     Creates a routine for the provided world.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
@@ -84,17 +84,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a routine for the provided world.
+        ///     Creates a routine for the provided world.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="entity"></param>
         public Routine(ecs_world_t* world, ulong entity)
         {
-            _entity  = new Entity(world, entity);
+            _entity = new Entity(world, entity);
         }
 
         /// <summary>
-        /// Destructs the routine.
+        ///     Destructs the routine.
         /// </summary>
         public void Destruct()
         {
@@ -102,7 +102,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the context for the routine.
+        ///     Sets the context for the routine.
         /// </summary>
         /// <param name="ctx"></param>
         public void Ctx(void* ctx)
@@ -114,7 +114,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the context for the routine.
+        ///     Returns the context for the routine.
         /// </summary>
         /// <returns></returns>
         public void* Ctx()
@@ -123,7 +123,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the query for the routine.
+        ///     Returns the query for the routine.
         /// </summary>
         /// <returns></returns>
         public Query Query()
@@ -132,7 +132,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the interval for the routine.
+        ///     Sets the interval for the routine.
         /// </summary>
         /// <param name="interval"></param>
         public void Interval(float interval)
@@ -141,7 +141,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the interval for the routine.
+        ///     Returns the interval for the routine.
         /// </summary>
         /// <returns></returns>
         public float Interval()
@@ -150,7 +150,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the timeout for the routine.
+        ///     Sets the timeout for the routine.
         /// </summary>
         /// <param name="timeout"></param>
         public void Timeout(float timeout)
@@ -159,7 +159,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets the timeout for the routine.
+        ///     Gets the timeout for the routine.
         /// </summary>
         /// <returns></returns>
         public float Timeout()
@@ -168,7 +168,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the rate for the routine.
+        ///     Sets the rate for the routine.
         /// </summary>
         /// <param name="rate"></param>
         public void Rate(int rate)
@@ -177,7 +177,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Starts the timer.
+        ///     Starts the timer.
         /// </summary>
         public void Start()
         {
@@ -185,7 +185,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Stops the timer.
+        ///     Stops the timer.
         /// </summary>
         public void StopTimer()
         {
@@ -193,7 +193,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the external tick source.
+        ///     Sets the external tick source.
         /// </summary>
         /// <param name="entity"></param>
         public void SetTickSource(ulong entity)

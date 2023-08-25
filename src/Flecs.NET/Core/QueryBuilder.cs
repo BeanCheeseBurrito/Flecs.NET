@@ -4,7 +4,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Wrapper around ecs_query_desc_t.
+    ///     Wrapper around ecs_query_desc_t.
     /// </summary>
     public unsafe struct QueryBuilder
     {
@@ -14,17 +14,17 @@ namespace Flecs.NET.Core
         internal BindingContext.QueryContext QueryContext;
 
         /// <summary>
-        /// Reference to the world.
+        ///     Reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// Reference to the query description.
+        ///     Reference to the query description.
         /// </summary>
         public ref ecs_query_desc_t Desc => ref QueryDesc;
 
         /// <summary>
-        /// Creates a query builder for the provided world.
+        ///     Creates a query builder for the provided world.
         /// </summary>
         /// <param name="world"></param>
         public QueryBuilder(ecs_world_t* world)
@@ -35,7 +35,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sort the output of a query.
+        ///     Sort the output of a query.
         /// </summary>
         /// <param name="compare"></param>
         /// <typeparam name="T"></typeparam>
@@ -46,7 +46,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sort the output of a query.
+        ///     Sort the output of a query.
         /// </summary>
         /// <param name="component"></param>
         /// <param name="compare"></param>
@@ -60,7 +60,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Group and sort matched tables.
+        ///     Group and sort matched tables.
         /// </summary>
         /// <param name="groupByAction"></param>
         /// <typeparam name="T"></typeparam>
@@ -71,7 +71,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Group and sort matched tables.
+        ///     Group and sort matched tables.
         /// </summary>
         /// <param name="component"></param>
         /// <param name="groupByAction"></param>
@@ -85,7 +85,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Group and sort matched tables.
+        ///     Group and sort matched tables.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -95,7 +95,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Group and sort matched tables.
+        ///     Group and sort matched tables.
         /// </summary>
         /// <param name="component"></param>
         /// <returns></returns>
@@ -107,7 +107,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify context to be passed to group_by function.
+        ///     Specify context to be passed to group_by function.
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="contextFree"></param>
@@ -121,7 +121,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify context to be passed to group_by function.
+        ///     Specify context to be passed to group_by function.
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
@@ -133,7 +133,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify on_group_create action.
+        ///     Specify on_group_create action.
         /// </summary>
         /// <param name="onGroupCreate"></param>
         /// <returns></returns>
@@ -145,7 +145,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify on_group_delete action.
+        ///     Specify on_group_delete action.
         /// </summary>
         /// <param name="onGroupDelete"></param>
         /// <returns></returns>
@@ -157,7 +157,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify parent query (creates subquery)
+        ///     Specify parent query (creates subquery)
         /// </summary>
         /// <param name="parent"></param>
         /// <returns></returns>
@@ -167,7 +167,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify parent query (creates subquery)
+        ///     Specify parent query (creates subquery)
         /// </summary>
         /// <param name="parent"></param>
         /// <returns></returns>

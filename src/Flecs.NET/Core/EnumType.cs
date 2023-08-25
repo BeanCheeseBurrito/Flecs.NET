@@ -7,7 +7,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A static class for registering enum types and it's members.
+    ///     A static class for registering enum types and it's members.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public static unsafe class EnumType<T>
@@ -15,7 +15,7 @@ namespace Flecs.NET.Core
         private static EnumPair[] _data = Array.Empty<EnumPair>();
 
         /// <summary>
-        /// Inits entities for an enum type and it's members.
+        ///     Inits entities for an enum type and it's members.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="id"></param>
@@ -50,7 +50,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets an id for an enum member.
+        ///     Gets an id for an enum member.
         /// </summary>
         /// <param name="member"></param>
         /// <param name="world"></param>

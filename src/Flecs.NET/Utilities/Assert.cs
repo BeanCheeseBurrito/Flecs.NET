@@ -3,12 +3,12 @@ using System.Diagnostics;
 namespace Flecs.NET.Utilities
 {
     /// <summary>
-    /// Static class for assertions.
+    ///     Static class for assertions.
     /// </summary>
     public static class Assert
     {
         /// <summary>
-        /// Asserts that a condition is true.
+        ///     Asserts that a condition is true.
         /// </summary>
         /// <param name="condition"></param>
         /// <param name="message"></param>
@@ -19,7 +19,7 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
-        /// Asserts that a condition is false.
+        ///     Asserts that a condition is false.
         /// </summary>
         /// <param name="condition"></param>
         /// <param name="message"></param>

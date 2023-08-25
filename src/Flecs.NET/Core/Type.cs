@@ -10,58 +10,58 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Static class that registers and stores information about types.
+    ///     Static class that registers and stores information about types.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public static unsafe class Type<T>
     {
         /// <summary>
-        /// Registered type hooks.
+        ///     Registered type hooks.
         /// </summary>
         public static TypeHooks? Hooks;
 
         /// <summary>
-        /// The raw id of the type.
+        ///     The raw id of the type.
         /// </summary>
         public static ulong RawId { get; private set; }
 
         /// <summary>
-        /// The size of the type.
+        ///     The size of the type.
         /// </summary>
         public static int Size { get; private set; }
 
         /// <summary>
-        /// The alignment of the type.
+        ///     The alignment of the type.
         /// </summary>
         public static int Alignment { get; private set; }
 
         /// <summary>
-        /// The reset count of the type.
+        ///     The reset count of the type.
         /// </summary>
         public static int ResetCount { get; private set; }
 
         /// <summary>
-        /// Whether or not the type is an alias.
+        ///     Whether or not the type is an alias.
         /// </summary>
         public static bool IsAlias { get; private set; }
 
         /// <summary>
-        /// Whether or not the type can be registered as a tag.
+        ///     Whether or not the type can be registered as a tag.
         /// </summary>
         public static bool AllowTag { get; private set; } = true;
 
         /// <summary>
-        /// The type name of the type.
+        ///     The type name of the type.
         /// </summary>
         public static string? TypeName { get; private set; }
 
         /// <summary>
-        /// The symbol name of the type.
+        ///     The symbol name of the type.
         /// </summary>
         public static string? SymbolName { get; private set; }
 
         /// <summary>
-        /// Sets type hooks for the type.
+        ///     Sets type hooks for the type.
         /// </summary>
         /// <param name="typeHooks"></param>
         public static void SetTypeHooks(TypeHooks typeHooks)
@@ -70,7 +70,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Tests if the type is registered.
+        ///     Tests if the type is registered.
         /// </summary>
         /// <param name="world"></param>
         /// <returns></returns>
@@ -86,7 +86,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Inits a type.
+        ///     Inits a type.
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="allowTag"></param>
@@ -128,7 +128,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Registers a type and returns it's id.
+        ///     Registers a type and returns it's id.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
@@ -176,7 +176,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Registers a type and returns it's id.
+        ///     Registers a type and returns it's id.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
@@ -215,7 +215,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Registers type hooks.
+        ///     Registers type hooks.
         /// </summary>
         /// <param name="world"></param>
         public static void RegisterLifeCycleActions(ecs_world_t* world)
@@ -267,7 +267,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets the size of a type.
+        ///     Gets the size of a type.
         /// </summary>
         /// <returns></returns>
         public static int GetSize()
@@ -277,7 +277,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets the alignment of a type.
+        ///     Gets the alignment of a type.
         /// </summary>
         /// <returns></returns>
         public static int GetAlignment()
@@ -287,7 +287,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets the type name.
+        ///     Gets the type name.
         /// </summary>
         /// <returns></returns>
         public static string GetTypeName()
@@ -300,7 +300,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets the symbol name of a type.
+        ///     Gets the symbol name of a type.
         /// </summary>
         /// <returns></returns>
         public static string GetSymbolName()
@@ -350,7 +350,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Resets a types information.
+        ///     Resets a types information.
         /// </summary>
         public static void Reset()
         {
@@ -361,7 +361,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Calculates the alignment of a type.
+        ///     Calculates the alignment of a type.
         /// </summary>
         /// <returns></returns>
         public static int AlignOf()

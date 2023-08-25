@@ -5,7 +5,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Class that wraps around a flecs::id_t.
+    ///     Class that wraps around a flecs::id_t.
     /// </summary>
     public unsafe struct Id : IEquatable<Id>
     {
@@ -13,17 +13,17 @@ namespace Flecs.NET.Core
         private ulong _value;
 
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// A reference to the id value.
+        ///     A reference to the id value.
         /// </summary>
         public ref ulong Value => ref _value;
 
         /// <summary>
-        /// Creates an id with the provided id value.
+        ///     Creates an id with the provided id value.
         /// </summary>
         /// <param name="id"></param>
         public Id(ulong id)
@@ -33,7 +33,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates an id with the provided pair.
+        ///     Creates an id with the provided pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -44,7 +44,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates an id with the provided world and pair.
+        ///     Creates an id with the provided world and pair.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="first"></param>
@@ -56,7 +56,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates an id with the provided world and id value.
+        ///     Creates an id with the provided world and id value.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="id"></param>
@@ -67,7 +67,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates an id with the provided pair.
+        ///     Creates an id with the provided pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -78,7 +78,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates an id with the provided pair.
+        ///     Creates an id with the provided pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -89,7 +89,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if id is pair. (has first, second)
+        ///     Test if id is pair. (has first, second)
         /// </summary>
         /// <returns></returns>
         public bool IsPair()
@@ -98,7 +98,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if id is a wildcard.
+        ///     Test if id is a wildcard.
         /// </summary>
         /// <returns></returns>
         public bool IsWildCard()
@@ -107,7 +107,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if id is an entity.
+        ///     Test if id is an entity.
         /// </summary>
         /// <returns></returns>
         public bool IsEntity()
@@ -116,7 +116,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Return id as entity. (only allowed when id is valid entity)
+        ///     Return id as entity. (only allowed when id is valid entity)
         /// </summary>
         /// <returns></returns>
         public Entity Entity()
@@ -127,7 +127,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Return id with role added
+        ///     Return id with role added
         /// </summary>
         /// <param name="flags"></param>
         /// <returns></returns>
@@ -137,7 +137,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Return id with role removed.
+        ///     Return id with role removed.
         /// </summary>
         /// <param name="flags"></param>
         /// <returns></returns>
@@ -148,7 +148,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Return id without role.
+        ///     Return id without role.
         /// </summary>
         /// <returns></returns>
         public Entity RemoveFlags()
@@ -157,7 +157,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Return id without generation.
+        ///     Return id without generation.
         /// </summary>
         /// <returns></returns>
         public Entity RemoveGeneration()
@@ -166,7 +166,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Return component type of id.
+        ///     Return component type of id.
         /// </summary>
         /// <returns></returns>
         public Entity TypeId()
@@ -175,7 +175,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if id has specified flags.
+        ///     Test if id has specified flags.
         /// </summary>
         /// <param name="flags"></param>
         /// <returns></returns>
@@ -185,7 +185,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if id has flags.
+        ///     Test if id has flags.
         /// </summary>
         /// <returns></returns>
         public bool HasFlags()
@@ -194,7 +194,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Return id flags set on id.
+        ///     Return id flags set on id.
         /// </summary>
         /// <returns></returns>
         public Entity Flags()
@@ -203,7 +203,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if id has specified first.
+        ///     Test if id has specified first.
         /// </summary>
         /// <param name="first"></param>
         /// <returns></returns>
@@ -213,10 +213,10 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get first element from a pair.
-        /// If the id is not a pair, this operation will fail. When the id has a
-        /// world, the operation will ensure that the returned id has the correct
-        /// generation count.
+        ///     Get first element from a pair.
+        ///     If the id is not a pair, this operation will fail. When the id has a
+        ///     world, the operation will ensure that the returned id has the correct
+        ///     generation count.
         /// </summary>
         /// <returns></returns>
         public Entity First()
@@ -227,10 +227,10 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get second element from a pair.
-        /// If the id is not a pair, this operation will fail. When the id has a
-        /// world, the operation will ensure that the returned id has the correct
-        /// generation count.
+        ///     Get second element from a pair.
+        ///     If the id is not a pair, this operation will fail. When the id has a
+        ///     world, the operation will ensure that the returned id has the correct
+        ///     generation count.
         /// </summary>
         /// <returns></returns>
         public Entity Second()
@@ -240,7 +240,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Convert id to string.
+        ///     Convert id to string.
         /// </summary>
         /// <returns></returns>
         public string Str()
@@ -249,7 +249,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Convert role of id to string.
+        ///     Convert role of id to string.
         /// </summary>
         /// <returns></returns>
         public string FlagsStr()
@@ -258,7 +258,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the C# world.
+        ///     Returns the C# world.
         /// </summary>
         /// <returns></returns>
         public World CsWorld()
@@ -267,7 +267,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -277,7 +276,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -287,7 +285,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -298,7 +295,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -309,7 +305,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -319,7 +314,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -329,7 +323,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -339,7 +332,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -349,7 +341,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns a hash code.
+        ///     Returns a hash code.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()

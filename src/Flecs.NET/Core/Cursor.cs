@@ -11,7 +11,6 @@ namespace Flecs.NET.Core
         private ecs_meta_cursor_t _cursor;
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="world"></param>
         /// <param name="typeId"></param>
@@ -22,7 +21,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Push value scope.
+        ///     Push value scope.
         /// </summary>
         /// <returns></returns>
         public int Push()
@@ -34,7 +33,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Pop value Scope.
+        ///     Pop value Scope.
         /// </summary>
         /// <returns></returns>
         public int Pop()
@@ -46,7 +45,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Move to the next member/element.
+        ///     Move to the next member/element.
         /// </summary>
         /// <returns></returns>
         public int Next()
@@ -58,7 +57,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Move to member by name.
+        ///     Move to member by name.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -72,7 +71,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Move to element by index.
+        ///     Move to element by index.
         /// </summary>
         /// <param name="elem"></param>
         /// <returns></returns>
@@ -85,7 +84,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if current scope is a collection type.
+        ///     Test if current scope is a collection type.
         /// </summary>
         /// <returns></returns>
         public bool IsCollection()
@@ -97,7 +96,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get member name.
+        ///     Get member name.
         /// </summary>
         /// <returns></returns>
         public string GetMember()
@@ -109,7 +108,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get type of value.
+        ///     Get type of value.
         /// </summary>
         /// <returns></returns>
         public Entity GetType()
@@ -121,7 +120,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get unit of value.
+        ///     Get unit of value.
         /// </summary>
         /// <returns></returns>
         public Entity GetUnit()
@@ -133,7 +132,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get untyped pointer to value.
+        ///     Get untyped pointer to value.
         /// </summary>
         /// <returns></returns>
         public void* GetPtr()
@@ -145,7 +144,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set boolean value.
+        ///     Set boolean value.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -158,7 +157,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set char value.
+        ///     Set char value.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -171,7 +170,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set signed int value
+        ///     Set signed int value
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -184,7 +183,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set unsigned int value.
+        ///     Set unsigned int value.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -197,7 +196,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set float value.
+        ///     Set float value.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -210,7 +209,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set string value.
+        ///     Set string value.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -224,7 +223,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set string literal value.
+        ///     Set string literal value.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -238,7 +237,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set entity value.
+        ///     Set entity value.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -251,7 +250,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set null value.
+        ///     Set null value.
         /// </summary>
         /// <returns></returns>
         public int SetNull()
@@ -263,7 +262,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get boolean value.
+        ///     Get boolean value.
         /// </summary>
         /// <returns></returns>
         public bool GetBool()
@@ -275,7 +274,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get char value.
+        ///     Get char value.
         /// </summary>
         /// <returns></returns>
         public char GetChar()
@@ -287,7 +286,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get signed int value.
+        ///     Get signed int value.
         /// </summary>
         /// <returns></returns>
         public long GetInt()
@@ -299,7 +298,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get unsigned int value.
+        ///     Get unsigned int value.
         /// </summary>
         /// <returns></returns>
         public ulong GetUInt()
@@ -311,7 +310,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get float value.
+        ///     Get float value.
         /// </summary>
         public double GetFloat()
         {
@@ -322,7 +321,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get string value.
+        ///     Get string value.
         /// </summary>
         /// <returns></returns>
         public string GetString()
@@ -334,7 +333,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get entity value.
+        ///     Get entity value.
         /// </summary>
         /// <returns></returns>
         public Entity GetEntity()

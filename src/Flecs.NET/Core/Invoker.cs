@@ -5,12 +5,11 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A static class for holding callback invokers.
+    ///     A static class for holding callback invokers.
     /// </summary>
     public static unsafe class Invoker
     {
         /// <summary>
-        ///
         /// </summary>
         /// <param name="iterCallback"></param>
         /// <param name="iterNext"></param>
@@ -33,7 +32,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="eachCallback"></param>
         /// <param name="iterNext"></param>

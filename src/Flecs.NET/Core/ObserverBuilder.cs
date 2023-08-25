@@ -4,7 +4,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A wrapper around ecs_observer_desc_t.
+    ///     A wrapper around ecs_observer_desc_t.
     /// </summary>
     public unsafe struct ObserverBuilder
     {
@@ -15,17 +15,17 @@ namespace Flecs.NET.Core
         internal BindingContext.ObserverContext ObserverContext;
 
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// A reference to the observer description.
+        ///     A reference to the observer description.
         /// </summary>
         public ref ecs_observer_desc_t Desc => ref ObserverDesc;
 
         /// <summary>
-        /// Creates an observer builder for the provided world.
+        ///     Creates an observer builder for the provided world.
         /// </summary>
         /// <param name="world"></param>
         public ObserverBuilder(ecs_world_t* world)
@@ -37,7 +37,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify the event(s) for when the observer should run.
+        ///     Specify the event(s) for when the observer should run.
         /// </summary>
         /// <param name="event"></param>
         /// <returns></returns>
@@ -52,7 +52,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify the event(s) for when the observer should run.
+        ///     Specify the event(s) for when the observer should run.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -62,7 +62,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Invoke observer for anything that matches its filter on creation.
+        ///     Invoke observer for anything that matches its filter on creation.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -73,7 +73,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set observer context.
+        ///     Set observer context.
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
@@ -84,7 +84,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set observer run callback.
+        ///     Set observer run callback.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>

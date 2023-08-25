@@ -6,7 +6,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A filter allows for uncached, adhoc iteration over ECS data.
+    ///     A filter allows for uncached, adhoc iteration over ECS data.
     /// </summary>
     public unsafe struct Filter : IDisposable
     {
@@ -14,18 +14,18 @@ namespace Flecs.NET.Core
         private ecs_filter_t _filter;
 
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// A pointer to the filter.
+        ///     A pointer to the filter.
         /// </summary>
         public ecs_filter_t* FilterPtr => (ecs_filter_t*)Unsafe.AsPointer(ref _filter);
 
 
         /// <summary>
-        /// Creates a filter.
+        ///     Creates a filter.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
@@ -65,7 +65,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a filter with the specified world and filter pointer.
+        ///     Creates a filter with the specified world and filter pointer.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="filter"></param>
@@ -79,7 +79,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Cleans up resources.
+        ///     Cleans up resources.
         /// </summary>
         public void Dispose()
         {
@@ -91,7 +91,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the entity associated with the filter.
+        ///     Returns the entity associated with the filter.
         /// </summary>
         /// <returns></returns>
         public Entity Entity()
@@ -100,7 +100,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the field count of the filter.
+        ///     Returns the field count of the filter.
         /// </summary>
         /// <returns></returns>
         public int FieldCount()
@@ -109,7 +109,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the string representation of the filter query.
+        ///     Returns the string representation of the filter query.
         /// </summary>
         /// <returns></returns>
         public string Str()
@@ -118,7 +118,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Iterates the filter using the provided callback.
+        ///     Iterates the filter using the provided callback.
         /// </summary>
         /// <param name="func"></param>
         public void Iter(Ecs.IterCallback func)

@@ -4,40 +4,40 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Modules
 {
     /// <summary>
-    /// Alerts module
+    ///     Alerts module
     /// </summary>
     public unsafe struct Alerts : IFlecsModule
     {
         /// <summary>
-        /// Alert
+        ///     Alert
         /// </summary>
         public struct Alert
         {
         }
 
         /// <summary>
-        /// Info
+        ///     Info
         /// </summary>
         public struct Info
         {
         }
 
         /// <summary>
-        /// Warning
+        ///     Warning
         /// </summary>
         public struct Warning
         {
         }
 
         /// <summary>
-        /// Error
+        ///     Error
         /// </summary>
         public struct Err
         {
         }
 
         /// <summary>
-        /// Inits the alerts module.
+        ///     Inits the alerts module.
         /// </summary>
         /// <param name="world"></param>
         public readonly void InitModule(ref World world)

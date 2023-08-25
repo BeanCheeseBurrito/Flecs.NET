@@ -6,7 +6,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Reference to a component from a specific entity.
+    ///     Reference to a component from a specific entity.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public unsafe struct Ref<T>
@@ -15,12 +15,12 @@ namespace Flecs.NET.Core
         private ecs_ref_t _ref;
 
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// Creates a ref.
+        ///     Creates a ref.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="entity"></param>
@@ -38,7 +38,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets a pointer to the ref component.
+        ///     Gets a pointer to the ref component.
         /// </summary>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
@@ -54,7 +54,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets a reference to the ref component.
+        ///     Gets a reference to the ref component.
         /// </summary>
         /// <returns></returns>
         public ref T Get()
@@ -67,7 +67,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the entity associated with the ref.
+        ///     Returns the entity associated with the ref.
         /// </summary>
         /// <returns></returns>
         public Entity Entity()

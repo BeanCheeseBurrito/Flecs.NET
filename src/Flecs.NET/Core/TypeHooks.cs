@@ -8,52 +8,52 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Class containing type hooks delegates and context.
+    ///     Class containing type hooks delegates and context.
     /// </summary>
     public unsafe partial class TypeHooks
     {
         /// <summary>
-        /// Ctor delegate.
+        ///     Ctor delegate.
         /// </summary>
         public ManagedCtor? Ctor { get; set; }
 
         /// <summary>
-        /// Dtor delegate.
+        ///     Dtor delegate.
         /// </summary>
         public ManagedDtor? Dtor { get; set; }
 
         /// <summary>
-        /// Move delegate.
+        ///     Move delegate.
         /// </summary>
         public ManagedMove? Move { get; set; }
 
         /// <summary>
-        /// Copy delegate.
+        ///     Copy delegate.
         /// </summary>
         public ManagedCopy? Copy { get; set; }
 
         /// <summary>
-        /// On add delegate.
+        ///     On add delegate.
         /// </summary>
         public Ecs.IterAction? OnAdd { get; set; }
 
         /// <summary>
-        /// On set delegate.
+        ///     On set delegate.
         /// </summary>
         public Ecs.IterAction? OnSet { get; set; }
 
         /// <summary>
-        /// On remove delegate.
+        ///     On remove delegate.
         /// </summary>
         public Ecs.IterAction? OnRemove { get; set; }
 
         /// <summary>
-        /// Context free delegate.
+        ///     Context free delegate.
         /// </summary>
         public Ecs.ContextFree? ContextFree { get; set; }
 
         /// <summary>
-        /// Context pointer.
+        ///     Context pointer.
         /// </summary>
         public void* Context { get; set; }
     }
@@ -248,43 +248,43 @@ namespace Flecs.NET.Core
         private delegate void UnmanagedCopy(void* dst, void* src, int count, ecs_type_info_t* typeInfo);
 
         /// <summary>
-        /// Ctor hook.
+        ///     Ctor hook.
         /// </summary>
         public delegate void ManagedCtor(ref CtorData ctorData);
 
         /// <summary>
-        /// Dtor hook.
+        ///     Dtor hook.
         /// </summary>
         public delegate void ManagedDtor(ref DtorData dtorData);
 
         /// <summary>
-        /// Move hook.
+        ///     Move hook.
         /// </summary>
         public delegate void ManagedMove(ref MoveData ctorData);
 
         /// <summary>
-        /// Copy hook.
+        ///     Copy hook.
         /// </summary>
         public delegate void ManagedCopy(ref CopyData copyData);
     }
 
     /// <summary>
-    /// Ctor hook data.
+    ///     Ctor hook data.
     /// </summary>
     public unsafe struct CtorData
     {
         /// <summary>
-        /// Pointer to data.
+        ///     Pointer to data.
         /// </summary>
         public void* Data { get; internal set; }
 
         /// <summary>
-        /// Type info.
+        ///     Type info.
         /// </summary>
         public TypeInfo TypeInfo { get; }
 
         /// <summary>
-        /// Creates ctor data from the provided data and type info.
+        ///     Creates ctor data from the provided data and type info.
         /// </summary>
         /// <param name="data"></param>
         /// <param name="typeInfo"></param>
@@ -295,7 +295,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets a managed reference to the data.
+        ///     Gets a managed reference to the data.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -306,22 +306,22 @@ namespace Flecs.NET.Core
     }
 
     /// <summary>
-    /// Dtor hook data.
+    ///     Dtor hook data.
     /// </summary>
     public unsafe struct DtorData
     {
         /// <summary>
-        /// Pointer to data.
+        ///     Pointer to data.
         /// </summary>
         public void* Data { get; internal set; }
 
         /// <summary>
-        /// Type info.
+        ///     Type info.
         /// </summary>
         public TypeInfo TypeInfo { get; }
 
         /// <summary>
-        /// Creates dtor data from the provided data and type info.
+        ///     Creates dtor data from the provided data and type info.
         /// </summary>
         /// <param name="data"></param>
         /// <param name="typeInfo"></param>
@@ -332,7 +332,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets a managed reference to the data.
+        ///     Gets a managed reference to the data.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -343,27 +343,27 @@ namespace Flecs.NET.Core
     }
 
     /// <summary>
-    /// Move hook data.
+    ///     Move hook data.
     /// </summary>
     public unsafe struct MoveData
     {
         /// <summary>
-        /// Pointer to source.
+        ///     Pointer to source.
         /// </summary>
         public void* SrcData { get; internal set; }
 
         /// <summary>
-        /// Pointer to destiniation.
+        ///     Pointer to destiniation.
         /// </summary>
         public void* DstData { get; internal set; }
 
         /// <summary>
-        /// Type info.
+        ///     Type info.
         /// </summary>
         public TypeInfo TypeInfo { get; }
 
         /// <summary>
-        /// Creates move data from the provided source, destination, and type info.
+        ///     Creates move data from the provided source, destination, and type info.
         /// </summary>
         /// <param name="src"></param>
         /// <param name="dst"></param>
@@ -376,7 +376,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets a managed reference to source.
+        ///     Gets a managed reference to source.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -386,7 +386,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets a managed reference to destination.
+        ///     Gets a managed reference to destination.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -397,27 +397,27 @@ namespace Flecs.NET.Core
     }
 
     /// <summary>
-    /// Copy hook data.
+    ///     Copy hook data.
     /// </summary>
     public unsafe struct CopyData
     {
         /// <summary>
-        /// Pointer to source.
+        ///     Pointer to source.
         /// </summary>
         public void* SrcData { get; internal set; }
 
         /// <summary>
-        /// Pointer to destination.
+        ///     Pointer to destination.
         /// </summary>
         public void* DstData { get; internal set; }
 
         /// <summary>
-        /// Type info.
+        ///     Type info.
         /// </summary>
         public TypeInfo TypeInfo { get; }
 
         /// <summary>
-        /// Creates copy data from the provided source, destination, and type info.
+        ///     Creates copy data from the provided source, destination, and type info.
         /// </summary>
         /// <param name="src"></param>
         /// <param name="dst"></param>
@@ -430,7 +430,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets a managed reference to the source.
+        ///     Gets a managed reference to the source.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -440,7 +440,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets a managed reference to the destination.
+        ///     Gets a managed reference to the destination.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>

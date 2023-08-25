@@ -8,7 +8,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A wrapper around ecs_filter_desc_t.
+    ///     A wrapper around ecs_filter_desc_t.
     /// </summary>
     public unsafe struct FilterBuilder : IDisposable
     {
@@ -17,6 +17,7 @@ namespace Flecs.NET.Core
         private int _termIndex;
         private int _exprCount;
         private readonly ref ecs_term_t CurrentTerm => ref Terms[_termIndex - 1];
+
         private readonly ref ecs_term_id_t CurrentTermId
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -41,17 +42,17 @@ namespace Flecs.NET.Core
         internal UnsafeList<NativeString> Strings;
 
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// A reference to the filter description.
+        ///     A reference to the filter description.
         /// </summary>
         public ref ecs_filter_desc_t Desc => ref FilterDesc;
 
         /// <summary>
-        /// Creates a filter builder for the provided world.
+        ///     Creates a filter builder for the provided world.
         /// </summary>
         /// <param name="world"></param>
         public FilterBuilder(ecs_world_t* world)
@@ -67,7 +68,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Cleans up resources.
+        ///     Cleans up resources.
         /// </summary>
         public void Dispose()
         {
@@ -91,7 +92,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// The self flags indicates the term identifier itself is used.
+        ///     The self flags indicates the term identifier itself is used.
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Self()
@@ -102,9 +103,9 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// The up flag indicates that the term identifier may be substituted by
-        /// traversing a relationship upwards. For example: substitute the identifier
-        /// with its parent by traversing the ChildOf relationship.
+        ///     The up flag indicates that the term identifier may be substituted by
+        ///     traversing a relationship upwards. For example: substitute the identifier
+        ///     with its parent by traversing the ChildOf relationship.
         /// </summary>
         /// <param name="traverse"></param>
         /// <returns></returns>
@@ -120,9 +121,9 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// The up flag indicates that the term identifier may be substituted by
-        /// traversing a relationship upwards. For example: substitute the identifier
-        /// with its parent by traversing the ChildOf relationship.
+        ///     The up flag indicates that the term identifier may be substituted by
+        ///     traversing a relationship upwards. For example: substitute the identifier
+        ///     with its parent by traversing the ChildOf relationship.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -132,8 +133,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// The cascade flag is like up, but returns results in breadth-first order.
-        /// Only supported for Query.
+        ///     The cascade flag is like up, but returns results in breadth-first order.
+        ///     Only supported for Query.
         /// </summary>
         /// <param name="traverse"></param>
         /// <returns></returns>
@@ -149,8 +150,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// The cascade flag is like up, but returns results in breadth-first order.
-        /// Only supported for Query.
+        ///     The cascade flag is like up, but returns results in breadth-first order.
+        ///     Only supported for Query.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -160,7 +161,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// The parent flag is short for Up(EcsChildOf).
+        ///     The parent flag is short for Up(EcsChildOf).
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Parent()
@@ -171,7 +172,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify relationship to traverse, and flags to indicate direction.
+        ///     Specify relationship to traverse, and flags to indicate direction.
         /// </summary>
         /// <param name="traverse"></param>
         /// <param name="flags"></param>
@@ -185,7 +186,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify value of identifier by id.
+        ///     Specify value of identifier by id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -197,10 +198,10 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify value of identifier by id. Almost the same as id(entity), but this
-        /// operation explicitly sets the EcsIsEntity flag. This forces the id to
-        /// be interpreted as entity, whereas not setting the flag would implicitly
-        /// convert ids for builtin variables such as EcsThis to a variable.
+        ///     Specify value of identifier by id. Almost the same as id(entity), but this
+        ///     operation explicitly sets the EcsIsEntity flag. This forces the id to
+        ///     be interpreted as entity, whereas not setting the flag would implicitly
+        ///     convert ids for builtin variables such as EcsThis to a variable.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -213,7 +214,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify value of identifier by name.
+        ///     Specify value of identifier by name.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -231,7 +232,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Specify identifier is a variable (resolved at query evaluation time).
+        ///     Specify identifier is a variable (resolved at query evaluation time).
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -248,7 +249,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Override term id flags.
+        ///     Override term id flags.
         /// </summary>
         /// <param name="flags"></param>
         /// <returns></returns>
@@ -260,7 +261,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Call prior to setting values for src identifier.
+        ///     Call prior to setting values for src identifier.
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Src()
@@ -271,9 +272,9 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Call prior to setting values for first identifier. This is either the
-        /// component identifier, or first element of a pair (in case second is
-        /// populated as well).
+        ///     Call prior to setting values for first identifier. This is either the
+        ///     component identifier, or first element of a pair (in case second is
+        ///     populated as well).
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder First()
@@ -284,8 +285,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Call prior to setting values for second identifier. This is the second
-        /// element of a pair. Requires that First() is populated as well.
+        ///     Call prior to setting values for second identifier. This is the second
+        ///     element of a pair. Requires that First() is populated as well.
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Second()
@@ -296,7 +297,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Select src identifier, initialize it with entity id.
+        ///     Select src identifier, initialize it with entity id.
         /// </summary>
         /// <param name="srcId"></param>
         /// <returns></returns>
@@ -306,7 +307,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Select src identifier, initialize it with id associated with type.
+        ///     Select src identifier, initialize it with id associated with type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -316,8 +317,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Select src identifier, initialize it with name. If name starts with a $
-        /// the name is interpreted as a variable.
+        ///     Select src identifier, initialize it with name. If name starts with a $
+        ///     the name is interpreted as a variable.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -328,7 +329,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Select first identifier, initialize it with entity id.
+        ///     Select first identifier, initialize it with entity id.
         /// </summary>
         /// <param name="firstId"></param>
         /// <returns></returns>
@@ -338,7 +339,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Select first identifier, initialize it with id associated with type.
+        ///     Select first identifier, initialize it with id associated with type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -348,8 +349,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Select first identifier, initialize it with name. If name starts with a $
-        /// the name is interpreted as a variable.
+        ///     Select first identifier, initialize it with name. If name starts with a $
+        ///     the name is interpreted as a variable.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -360,7 +361,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Select second identifier, initialize it with entity id.
+        ///     Select second identifier, initialize it with entity id.
         /// </summary>
         /// <param name="secondId"></param>
         /// <returns></returns>
@@ -370,7 +371,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Select second identifier, initialize it with id associated with type.
+        ///     Select second identifier, initialize it with id associated with type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -380,8 +381,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Select second identifier, initialize it with name. If name starts with a $
-        /// the name is interpreted as a variable.
+        ///     Select second identifier, initialize it with name. If name starts with a $
+        ///     the name is interpreted as a variable.
         /// </summary>
         /// <param name="secondName"></param>
         /// <returns></returns>
@@ -392,7 +393,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set role of term.
+        ///     Set role of term.
         /// </summary>
         /// <param name="role"></param>
         /// <returns></returns>
@@ -404,7 +405,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set read/write access of term.
+        ///     Set read/write access of term.
         /// </summary>
         /// <param name="inOut"></param>
         /// <returns></returns>
@@ -416,13 +417,12 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set read/write access for stage. Use this when a system reads or writes
-        /// components other than the ones provided by the query. This information
-        /// can be used by schedulers to insert sync/merge points between systems
-        /// where deferred operations are flushed.
-        ///
-        /// Setting this is optional. If not set, the value of the accessed component
-        /// may be out of sync for at most one frame.
+        ///     Set read/write access for stage. Use this when a system reads or writes
+        ///     components other than the ones provided by the query. This information
+        ///     can be used by schedulers to insert sync/merge points between systems
+        ///     where deferred operations are flushed.
+        ///     Setting this is optional. If not set, the value of the accessed component
+        ///     may be out of sync for at most one frame.
         /// </summary>
         /// <param name="inOut"></param>
         /// <returns></returns>
@@ -437,8 +437,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for InOutStage(EcsOut).
-        /// Use when system uses add, remove or set.
+        ///     Short for InOutStage(EcsOut).
+        ///     Use when system uses add, remove or set.
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Write()
@@ -447,8 +447,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for InOutStage(EcsIn).
-        /// Use when system uses get.
+        ///     Short for InOutStage(EcsIn).
+        ///     Use when system uses get.
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Read()
@@ -457,8 +457,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for InOutStage(EcsInOut).
-        /// Use when system uses get_mut.
+        ///     Short for InOutStage(EcsInOut).
+        ///     Use when system uses get_mut.
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder ReadWrite()
@@ -467,7 +467,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for InOut(EcsIn)
+        ///     Short for InOut(EcsIn)
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder In()
@@ -476,7 +476,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for InOut(EcsOut)
+        ///     Short for InOut(EcsOut)
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Out()
@@ -485,7 +485,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for InOut(EcsInOut)
+        ///     Short for InOut(EcsInOut)
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder InOut()
@@ -494,7 +494,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for InOut(EcsInOutNone)
+        ///     Short for InOut(EcsInOutNone)
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder InOutNone()
@@ -503,7 +503,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set operator of term.
+        ///     Set operator of term.
         /// </summary>
         /// <param name="oper"></param>
         /// <returns></returns>
@@ -515,7 +515,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for Oper(EcsAnd).
+        ///     Short for Oper(EcsAnd).
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder And()
@@ -524,7 +524,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for Oper(EcsOr).
+        ///     Short for Oper(EcsOr).
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Or()
@@ -533,7 +533,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for Oper(EcsNot).
+        ///     Short for Oper(EcsNot).
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Not()
@@ -542,7 +542,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for Oper(EcsOptional).
+        ///     Short for Oper(EcsOptional).
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Optional()
@@ -552,7 +552,7 @@ namespace Flecs.NET.Core
 
 
         /// <summary>
-        /// Short for Oper(EcsAndFrom).
+        ///     Short for Oper(EcsAndFrom).
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder AndFrom()
@@ -561,7 +561,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for Oper(EcsOFrom).
+        ///     Short for Oper(EcsOFrom).
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder OrFrom()
@@ -570,7 +570,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Short for Oper(EcsNotFrom).
+        ///     Short for Oper(EcsNotFrom).
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder NotFrom()
@@ -579,7 +579,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Match singleton.
+        ///     Match singleton.
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Singleton()
@@ -596,7 +596,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Filter terms are not triggered on by observers.
+        ///     Filter terms are not triggered on by observers.
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Filter()
@@ -606,11 +606,11 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// When true, terms returned by an iterator may either contain 1 or N
-        /// elements, where terms with N elements are owned, and terms with 1 element
-        /// are shared, for example from a parent or base entity. When false, the
-        /// iterator will at most return 1 element when the result contains both
-        /// owned and shared terms.
+        ///     When true, terms returned by an iterator may either contain 1 or N
+        ///     elements, where terms with N elements are owned, and terms with 1 element
+        ///     are shared, for example from a parent or base entity. When false, the
+        ///     iterator will at most return 1 element when the result contains both
+        ///     owned and shared terms.
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder Instanced()
@@ -620,7 +620,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set flags for advanced usage
+        ///     Set flags for advanced usage
         /// </summary>
         /// <param name="flags"></param>
         /// <returns></returns>
@@ -631,7 +631,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Filter expression. Should not be set at the same time as terms array.
+        ///     Filter expression. Should not be set at the same time as terms array.
         /// </summary>
         /// <param name="expr"></param>
         /// <returns></returns>
@@ -649,7 +649,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().
+        ///     Alternative form of Term().
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -659,7 +659,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().
+        ///     Alternative form of Term().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -670,7 +670,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().
+        ///     Alternative form of Term().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -681,7 +681,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().
+        ///     Alternative form of Term().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -692,7 +692,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().
+        ///     Alternative form of Term().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -703,7 +703,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().
+        ///     Alternative form of Term().
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -713,7 +713,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().
+        ///     Alternative form of Term().
         /// </summary>
         /// <param name="enumMember"></param>
         /// <typeparam name="TEnum"></typeparam>
@@ -724,7 +724,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().
+        ///     Alternative form of Term().
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -735,7 +735,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().
+        ///     Alternative form of Term().
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -746,7 +746,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().
+        ///     Alternative form of Term().
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -757,7 +757,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().
+        ///     Alternative form of Term().
         /// </summary>
         /// <param name="secondEnum"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -769,7 +769,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of TermSecond().
+        ///     Alternative form of TermSecond().
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -780,7 +780,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of TermSecond().
+        ///     Alternative form of TermSecond().
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -791,7 +791,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Not().
+        ///     Alternative form of Term().Not().
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -801,7 +801,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Not().
+        ///     Alternative form of Term().Not().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -812,7 +812,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Not().
+        ///     Alternative form of Term().Not().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -823,7 +823,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Not().
+        ///     Alternative form of Term().Not().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -834,7 +834,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Not().
+        ///     Alternative form of Term().Not().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -845,7 +845,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Not().
+        ///     Alternative form of Term().Not().
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -855,7 +855,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Not().
+        ///     Alternative form of Term().Not().
         /// </summary>
         /// <param name="enumMember"></param>
         /// <typeparam name="TEnum"></typeparam>
@@ -866,7 +866,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Not().
+        ///     Alternative form of Term().Not().
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -877,7 +877,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Not().
+        ///     Alternative form of Term().Not().
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -888,7 +888,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Not().
+        ///     Alternative form of Term().Not().
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -899,7 +899,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Not().
+        ///     Alternative form of Term().Not().
         /// </summary>
         /// <param name="secondEnum"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -911,7 +911,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of TermSecond().Not().
+        ///     Alternative form of TermSecond().Not().
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -922,7 +922,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of TermSecond().Not().
+        ///     Alternative form of TermSecond().Not().
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -933,7 +933,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Write().
+        ///     Alternative form of Term().Write().
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -943,7 +943,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Write().
+        ///     Alternative form of Term().Write().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -954,7 +954,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Write().
+        ///     Alternative form of Term().Write().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -965,7 +965,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Write().
+        ///     Alternative form of Term().Write().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -976,7 +976,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Write().
+        ///     Alternative form of Term().Write().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -987,7 +987,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Write().
+        ///     Alternative form of Term().Write().
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -997,7 +997,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Write().
+        ///     Alternative form of Term().Write().
         /// </summary>
         /// <param name="enumMember"></param>
         /// <typeparam name="TEnum"></typeparam>
@@ -1008,7 +1008,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Write().
+        ///     Alternative form of Term().Write().
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1019,7 +1019,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Write().
+        ///     Alternative form of Term().Write().
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1030,7 +1030,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Write().
+        ///     Alternative form of Term().Write().
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -1041,7 +1041,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Write().
+        ///     Alternative form of Term().Write().
         /// </summary>
         /// <param name="secondEnum"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1053,7 +1053,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of TermSecond().Write().
+        ///     Alternative form of TermSecond().Write().
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -1064,7 +1064,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of TermSecond().Write().
+        ///     Alternative form of TermSecond().Write().
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -1075,7 +1075,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Read().
+        ///     Alternative form of Term().Read().
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -1085,7 +1085,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Read().
+        ///     Alternative form of Term().Read().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1096,7 +1096,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Read().
+        ///     Alternative form of Term().Read().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1107,7 +1107,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Read().
+        ///     Alternative form of Term().Read().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1118,7 +1118,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Read().
+        ///     Alternative form of Term().Read().
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1129,7 +1129,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Read().
+        ///     Alternative form of Term().Read().
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -1139,7 +1139,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Read().
+        ///     Alternative form of Term().Read().
         /// </summary>
         /// <param name="enumMember"></param>
         /// <typeparam name="TEnum"></typeparam>
@@ -1150,7 +1150,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Read().
+        ///     Alternative form of Term().Read().
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1161,7 +1161,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Read().
+        ///     Alternative form of Term().Read().
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1172,7 +1172,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Read().
+        ///     Alternative form of Term().Read().
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -1183,7 +1183,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of Term().Read().
+        ///     Alternative form of Term().Read().
         /// </summary>
         /// <param name="secondEnum"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1195,7 +1195,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of TermSecond().Read().
+        ///     Alternative form of TermSecond().Read().
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -1206,7 +1206,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of TermSecond().Read().
+        ///     Alternative form of TermSecond().Read().
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -1217,7 +1217,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of With(EcsScopeOpen).Entity(0)
+        ///     Alternative form of With(EcsScopeOpen).Entity(0)
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder ScopeOpen()
@@ -1226,7 +1226,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form of With(EcsScopeClose).Entity(0)
+        ///     Alternative form of With(EcsScopeClose).Entity(0)
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder ScopeClose()
@@ -1235,7 +1235,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term.
+        ///     Increments to the next term.
         /// </summary>
         /// <returns></returns>
         public ref FilterBuilder IncrementTerm()
@@ -1248,7 +1248,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the current term to the one at the provided index.
+        ///     Sets the current term to the one at the provided index.
         /// </summary>
         /// <param name="termIndex"></param>
         /// <returns></returns>
@@ -1268,7 +1268,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Alternative form for TermAt().
+        ///     Alternative form for TermAt().
         /// </summary>
         /// <param name="termIndex"></param>
         /// <returns></returns>
@@ -1278,7 +1278,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided id.
+        ///     Increments to the next term with the provided id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -1290,7 +1290,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided name.
+        ///     Increments to the next term with the provided name.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -1303,7 +1303,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided pair.
+        ///     Increments to the next term with the provided pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1316,7 +1316,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided pair.
+        ///     Increments to the next term with the provided pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1330,7 +1330,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided pair.
+        ///     Increments to the next term with the provided pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1345,7 +1345,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided pair.
+        ///     Increments to the next term with the provided pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1360,7 +1360,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided type.
+        ///     Increments to the next term with the provided type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -1373,7 +1373,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided enum.
+        ///     Increments to the next term with the provided enum.
         /// </summary>
         /// <param name="enumMember"></param>
         /// <typeparam name="TEnum"></typeparam>
@@ -1386,7 +1386,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided pair.
+        ///     Increments to the next term with the provided pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1397,7 +1397,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided pair.
+        ///     Increments to the next term with the provided pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1408,7 +1408,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided pair.
+        ///     Increments to the next term with the provided pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -1419,7 +1419,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided pair.
+        ///     Increments to the next term with the provided pair.
         /// </summary>
         /// <param name="secondEnum"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1432,7 +1432,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided pair.
+        ///     Increments to the next term with the provided pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -1444,7 +1444,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Increments to the next term with the provided pair.
+        ///     Increments to the next term with the provided pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>

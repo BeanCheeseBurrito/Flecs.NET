@@ -5,24 +5,24 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A wrapper around observer..
+    ///     A wrapper around observer..
     /// </summary>
     public unsafe struct Observer
     {
         private Entity _entity;
 
         /// <summary>
-        /// A reference to the entity.
+        ///     A reference to the entity.
         /// </summary>
         public ref Entity Entity => ref _entity;
 
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _entity.World;
 
         /// <summary>
-        /// Creates an observer for the provided world.
+        ///     Creates an observer for the provided world.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
@@ -66,7 +66,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets an observer from the provided world an entity.
+        ///     Gets an observer from the provided world an entity.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="entity"></param>
@@ -76,7 +76,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Destructs the observer.
+        ///     Destructs the observer.
         /// </summary>
         public void Destruct()
         {
@@ -84,7 +84,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Sets the observer context.
+        ///     Sets the observer context.
         /// </summary>
         /// <param name="ctx"></param>
         public void Ctx(void* ctx)
@@ -96,7 +96,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets the observer context.
+        ///     Gets the observer context.
         /// </summary>
         /// <returns></returns>
         public void* Ctx()
@@ -105,7 +105,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets the observer context.
+        ///     Gets the observer context.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -115,7 +115,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the filter for the observer.
+        ///     Returns the filter for the observer.
         /// </summary>
         /// <returns></returns>
         public Filter Filter()
@@ -126,7 +126,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="observer"></param>
         /// <returns></returns>

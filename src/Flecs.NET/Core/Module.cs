@@ -4,12 +4,12 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Static class for importng modules.
+    ///     Static class for importng modules.
     /// </summary>
     public static unsafe class Module
     {
         /// <summary>
-        /// Imports a module.
+        ///     Imports a module.
         /// </summary>
         /// <param name="world"></param>
         /// <typeparam name="T"></typeparam>
@@ -37,7 +37,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Imports a module.
+        ///     Imports a module.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="symbol"></param>

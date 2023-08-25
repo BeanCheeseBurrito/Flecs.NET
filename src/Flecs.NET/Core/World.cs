@@ -5,7 +5,8 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// The world is the container of all ECS data and systems. If the world is deleted, all data in the world will be deleted as well.
+    ///     The world is the container of all ECS data and systems. If the world is deleted, all data in the world will be
+    ///     deleted as well.
     /// </summary>
     public unsafe struct World : IDisposable, IEquatable<World>
     {
@@ -15,17 +16,17 @@ namespace Flecs.NET.Core
         internal BindingContext.WorldContext WorldContext;
 
         /// <summary>
-        /// The handle to the C world.
+        ///     The handle to the C world.
         /// </summary>
         public ref ecs_world_t* Handle => ref _handle;
 
         /// <summary>
-        /// Represents whether or not the world is owned.
+        ///     Represents whether or not the world is owned.
         /// </summary>
         public ref bool Owned => ref _owned;
 
         /// <summary>
-        /// Constructs a world from an <see cref="ecs_world_t"/> pointer.
+        ///     Constructs a world from an <see cref="ecs_world_t" /> pointer.
         /// </summary>
         /// <param name="handle">The world handle.</param>
         /// <param name="owned">The owned boolean.</param>
@@ -37,7 +38,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a flecs world that is owned.
+        ///     Creates a flecs world that is owned.
         /// </summary>
         /// <returns></returns>
         public static World Create()
@@ -46,7 +47,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates a flecs world from an <see cref="ecs_world_t"/> pointer that is not owned.
+        ///     Creates a flecs world from an <see cref="ecs_world_t" /> pointer that is not owned.
         /// </summary>
         /// <param name="world">A C world.</param>
         /// <returns>A newly created world.</returns>
@@ -56,7 +57,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Creates world from command line arguments.
+        ///     Creates world from command line arguments.
         /// </summary>
         /// <param name="args">Command line arguments.</param>
         /// <returns></returns>
@@ -78,7 +79,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Calls <see cref="ecs_fini"/> and cleans up resources.
+        ///     Calls <see cref="ecs_fini" /> and cleans up resources.
         /// </summary>
         public void Dispose()
         {
@@ -91,7 +92,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Deletes and creates a new world.
+        ///     Deletes and creates a new world.
         /// </summary>
         public void Reset()
         {
@@ -101,7 +102,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Signals that the application should quit. The next call to <see cref="Progress"/> returns false.
+        ///     Signals that the application should quit. The next call to <see cref="Progress" /> returns false.
         /// </summary>
         public void Quit()
         {
@@ -109,7 +110,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Register action to be executed when world is destroyed.
+        ///     Register action to be executed when world is destroyed.
         /// </summary>
         /// <param name="action"></param>
         /// <param name="ctx"></param>
@@ -120,7 +121,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if Quit() has been called.
+        ///     Test if Quit() has been called.
         /// </summary>
         /// <returns></returns>
         public bool ShouldQuit()
@@ -129,7 +130,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Begin frame.
+        ///     Begin frame.
         /// </summary>
         /// <param name="deltaTime"></param>
         /// <returns></returns>
@@ -139,7 +140,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// End frame.
+        ///     End frame.
         /// </summary>
         public void FrameEnd()
         {
@@ -147,7 +148,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Begin staging.
+        ///     Begin staging.
         /// </summary>
         /// <returns></returns>
         public bool ReadonlyBegin()
@@ -156,7 +157,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// End staging.
+        ///     End staging.
         /// </summary>
         public void ReadonlyEnd()
         {
@@ -164,7 +165,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Defer operations until end end of frame, or until DeferEnd() is called.
+        ///     Defer operations until end end of frame, or until DeferEnd() is called.
         /// </summary>
         /// <returns></returns>
         public bool DeferBegin()
@@ -173,7 +174,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// End block of operations to defer.
+        ///     End block of operations to defer.
         /// </summary>
         /// <returns></returns>
         public bool DeferEnd()
@@ -182,7 +183,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test whether deferring is enabled.
+        ///     Test whether deferring is enabled.
         /// </summary>
         /// <returns></returns>
         public bool IsDeferred()
@@ -191,7 +192,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Configure world to have N stages.
+        ///     Configure world to have N stages.
         /// </summary>
         /// <param name="stages"></param>
         public void SetStageCount(int stages)
@@ -200,7 +201,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get number of configured stages.
+        ///     Get number of configured stages.
         /// </summary>
         /// <returns></returns>
         public int GetStageCount()
@@ -209,7 +210,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get current stage id.
+        ///     Get current stage id.
         /// </summary>
         /// <returns></returns>
         public int GetStageId()
@@ -218,7 +219,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if is a stage.
+        ///     Test if is a stage.
         /// </summary>
         /// <returns></returns>
         public bool IsStage()
@@ -232,7 +233,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Enable/disable auto merging for world or stage.
+        ///     Enable/disable auto merging for world or stage.
         /// </summary>
         /// <param name="autoMerge"></param>
         public void SetAutoMerge(bool autoMerge)
@@ -241,7 +242,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Merge world or stage.
+        ///     Merge world or stage.
         /// </summary>
         public void Merge()
         {
@@ -249,7 +250,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get stage-specific world pointer.
+        ///     Get stage-specific world pointer.
         /// </summary>
         /// <param name="stageId"></param>
         /// <returns></returns>
@@ -259,7 +260,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create asynchronous stage.
+        ///     Create asynchronous stage.
         /// </summary>
         /// <returns></returns>
         public World AsyncStage()
@@ -268,7 +269,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get actual world.
+        ///     Get actual world.
         /// </summary>
         /// <returns></returns>
         public World GetWorld()
@@ -277,7 +278,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test whether the current world object is readonly.
+        ///     Test whether the current world object is readonly.
         /// </summary>
         /// <returns></returns>
         public bool IsReadOnly()
@@ -286,7 +287,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set world context.
+        ///     Set world context.
         /// </summary>
         /// <param name="ctx"></param>
         public void SetContext(void* ctx)
@@ -295,7 +296,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get world context.
+        ///     Get world context.
         /// </summary>
         /// <returns></returns>
         public void* GetContext()
@@ -304,7 +305,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Preallocate memory for number of entities.
+        ///     Preallocate memory for number of entities.
         /// </summary>
         /// <param name="entityCount"></param>
         public void Dim(int entityCount)
@@ -313,7 +314,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set entity range.
+        ///     Set entity range.
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
@@ -323,7 +324,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Enforce that operations cannot modify entities outside of range.
+        ///     Enforce that operations cannot modify entities outside of range.
         /// </summary>
         /// <param name="enabled"></param>
         public void EnableRangeCheck(bool enabled)
@@ -332,7 +333,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set current scope.
+        ///     Set current scope.
         /// </summary>
         /// <param name="scope"></param>
         /// <returns></returns>
@@ -342,7 +343,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get current scope.
+        ///     Get current scope.
         /// </summary>
         /// <returns></returns>
         public Entity GetScope()
@@ -351,7 +352,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set search path.
+        ///     Set search path.
         /// </summary>
         /// <param name="searchPath"></param>
         /// <returns></returns>
@@ -361,7 +362,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Lookup entity by name.
+        ///     Lookup entity by name.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -374,7 +375,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set singleton component.
+        ///     Set singleton component.
         /// </summary>
         /// <param name="component"></param>
         /// <typeparam name="T"></typeparam>
@@ -386,7 +387,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set singleton pair.
+        ///     Set singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <param name="component"></param>
@@ -399,7 +400,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set singleton pair.
+        ///     Set singleton pair.
         /// </summary>
         /// <param name="component"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -412,7 +413,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set singleton pair.
+        ///     Set singleton pair.
         /// </summary>
         /// <param name="component"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -425,7 +426,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set singleton component.
+        ///     Set singleton component.
         /// </summary>
         /// <param name="component"></param>
         /// <typeparam name="T"></typeparam>
@@ -436,7 +437,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set singleton pair.
+        ///     Set singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <param name="component"></param>
@@ -448,7 +449,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set singleton pair.
+        ///     Set singleton pair.
         /// </summary>
         /// <param name="component"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -460,7 +461,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set singleton pair.
+        ///     Set singleton pair.
         /// </summary>
         /// <param name="component"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -472,7 +473,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get mut pointer to singleton component.
+        ///     Get mut pointer to singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -482,7 +483,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get mut pointer to singleton pair.
+        ///     Get mut pointer to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -493,7 +494,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get mut pointer to singleton pair.
+        ///     Get mut pointer to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -504,7 +505,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get mut pointer to singleton pair.
+        ///     Get mut pointer to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -515,7 +516,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get managed mut reference to singleton component.
+        ///     Get managed mut reference to singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -525,7 +526,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get managed mut reference to singleton pair.
+        ///     Get managed mut reference to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -536,7 +537,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get managed mut reference to singleton pair.
+        ///     Get managed mut reference to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -547,7 +548,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get managed mut reference to singleton pair.
+        ///     Get managed mut reference to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -558,7 +559,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Mark singleton component as modified.
+        ///     Mark singleton component as modified.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public void Modified<T>()
@@ -567,7 +568,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Mark singleton pair as modified.
+        ///     Mark singleton pair as modified.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -577,7 +578,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Mark singleton pair as modified.
+        ///     Mark singleton pair as modified.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -587,7 +588,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets ref to singleton component.
+        ///     Gets ref to singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -597,7 +598,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets ref to singleton pair.
+        ///     Gets ref to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -608,7 +609,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets ref to singleton pair.
+        ///     Gets ref to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -619,7 +620,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets ref to singleton pair.
+        ///     Gets ref to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -630,7 +631,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets pointer to singleton component.
+        ///     Gets pointer to singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -640,7 +641,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets pointer to singleton pair.
+        ///     Gets pointer to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -651,7 +652,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets pointer to singleton pair.
+        ///     Gets pointer to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -663,7 +664,7 @@ namespace Flecs.NET.Core
 
 
         /// <summary>
-        /// Gets pointer to singleton pair.
+        ///     Gets pointer to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -674,7 +675,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets managed reference to singleton component.
+        ///     Gets managed reference to singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -684,7 +685,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets managed reference to singleton pair.
+        ///     Gets managed reference to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -695,7 +696,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets managed reference to singleton pair.
+        ///     Gets managed reference to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -706,7 +707,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Gets managed reference to singleton pair.
+        ///     Gets managed reference to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -717,7 +718,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if world has pair.
+        ///     Test if world has pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -728,7 +729,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if world has singleton component.
+        ///     Test if world has singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -738,7 +739,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if world has singleton pair.
+        ///     Test if world has singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -749,7 +750,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Test if world has singleton pair.
+        ///     Test if world has singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -760,7 +761,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add singleton pair.
+        ///     Add singleton pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -770,7 +771,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add singleton component.
+        ///     Add singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public void Add<T>()
@@ -779,7 +780,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add singleton pair.
+        ///     Add singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -789,7 +790,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Add singleton pair.
+        ///     Add singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -799,7 +800,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Remove singleton pair.
+        ///     Remove singleton pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -809,7 +810,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Remove singleton component.
+        ///     Remove singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public void Remove<T>()
@@ -818,7 +819,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Remove singleton pair.
+        ///     Remove singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -828,7 +829,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Remove singleton pair.
+        ///     Remove singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -838,7 +839,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Iterate entities in root of world
+        ///     Iterate entities in root of world
         /// </summary>
         /// <param name="func"></param>
         public void Children(Ecs.EachEntityCallback func)
@@ -847,7 +848,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get singleton entity for type.
+        ///     Get singleton entity for type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -857,7 +858,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get target for a given pair from a singleton entity.
+        ///     Get target for a given pair from a singleton entity.
         /// </summary>
         /// <param name="index"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -868,7 +869,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get target for a given pair from a singleton entity.
+        ///     Get target for a given pair from a singleton entity.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="index"></param>
@@ -880,7 +881,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get target for a given pair from a singleton entity.
+        ///     Get target for a given pair from a singleton entity.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="index"></param>
@@ -891,7 +892,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create alias for component.
+        ///     Create alias for component.
         /// </summary>
         /// <param name="alias"></param>
         /// <typeparam name="T"></typeparam>
@@ -910,7 +911,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create alias for component.
+        ///     Create alias for component.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="alias"></param>
@@ -930,7 +931,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create alias for component.
+        ///     Create alias for component.
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="alias"></param>
@@ -945,7 +946,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Count entities matching a component.
+        ///     Count entities matching a component.
         /// </summary>
         /// <param name="componentId"></param>
         /// <returns></returns>
@@ -955,7 +956,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Count entities matching a pair.
+        ///     Count entities matching a pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -966,7 +967,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Count entities matching a component.
+        ///     Count entities matching a component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -976,7 +977,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Count entities matching a pair.
+        ///     Count entities matching a pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -987,7 +988,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Count entities matching a pair.
+        ///     Count entities matching a pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -998,7 +999,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// All entities created in function are created with id.
+        ///     All entities created in function are created with id.
         /// </summary>
         /// <param name="withId">Id to be added to the created entities.</param>
         /// <param name="func"></param>
@@ -1010,7 +1011,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// All entities created in function are created with pair.
+        ///     All entities created in function are created with pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1021,7 +1022,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// All entities created in function are created with type.
+        ///     All entities created in function are created with type.
         /// </summary>
         /// <param name="func"></param>
         /// <typeparam name="T"></typeparam>
@@ -1031,7 +1032,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// All entities created in function are created with enum.
+        ///     All entities created in function are created with enum.
         /// </summary>
         /// <param name="enum"></param>
         /// <param name="func"></param>
@@ -1043,7 +1044,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// All entities created in function are created with pair.
+        ///     All entities created in function are created with pair.
         /// </summary>
         /// <param name="second"></param>
         /// <param name="func"></param>
@@ -1054,7 +1055,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// All entities created in function are created with pair.
+        ///     All entities created in function are created with pair.
         /// </summary>
         /// <param name="secondEnum"></param>
         /// <param name="func"></param>
@@ -1067,7 +1068,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// All entities created in function are created with pair.
+        ///     All entities created in function are created with pair.
         /// </summary>
         /// <param name="func"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1078,7 +1079,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// All entities created in function are created with pair.
+        ///     All entities created in function are created with pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="func"></param>
@@ -1089,8 +1090,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// All entities created in function are created in scope. All operations
-        /// called in function (such as lookup) are relative to scope.
+        ///     All entities created in function are created in scope. All operations
+        ///     called in function (such as lookup) are relative to scope.
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="func"></param>
@@ -1102,7 +1103,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Same as scope(parent, func), but with T as parent.
+        ///     Same as scope(parent, func), but with T as parent.
         /// </summary>
         /// <param name="func"></param>
         /// <typeparam name="T"></typeparam>
@@ -1112,7 +1113,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Use provided scope for operations ran on returned world.
+        ///     Use provided scope for operations ran on returned world.
         /// </summary>
         /// <param name="parent"></param>
         /// <returns></returns>
@@ -1122,7 +1123,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Use provided scope for operations ran on returned world.
+        ///     Use provided scope for operations ran on returned world.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -1132,7 +1133,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Use provided scope for operations ran on returned world.
+        ///     Use provided scope for operations ran on returned world.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -1142,7 +1143,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Delete all entities with specified id.
+        ///     Delete all entities with specified id.
         /// </summary>
         /// <param name="id"></param>
         public void DeleteWith(ulong id)
@@ -1151,7 +1152,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Delete all entities with specified pair.
+        ///     Delete all entities with specified pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1161,7 +1162,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Delete all entities with specified component.
+        ///     Delete all entities with specified component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public void DeleteWith<T>()
@@ -1170,7 +1171,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Delete all entities with specified enum.
+        ///     Delete all entities with specified enum.
         /// </summary>
         /// <param name="enum"></param>
         /// <typeparam name="TEnum"></typeparam>
@@ -1181,7 +1182,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Delete all entities with specified pair.
+        ///     Delete all entities with specified pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1191,7 +1192,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Delete all entities with specified pair.
+        ///     Delete all entities with specified pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -1201,7 +1202,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Delete all entities with specified pair.
+        ///     Delete all entities with specified pair.
         /// </summary>
         /// <param name="secondEnum"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1213,7 +1214,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Delete all entities with specified pair.
+        ///     Delete all entities with specified pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -1223,7 +1224,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Remove all instances of specified id.
+        ///     Remove all instances of specified id.
         /// </summary>
         /// <param name="id"></param>
         public void RemoveAll(ulong id)
@@ -1232,7 +1233,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Remove all instances of specified pair.
+        ///     Remove all instances of specified pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1242,7 +1243,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Remove all instances of specified component.
+        ///     Remove all instances of specified component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public void RemoveAll<T>()
@@ -1251,7 +1252,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Remove all instances of specified enum.
+        ///     Remove all instances of specified enum.
         /// </summary>
         /// <param name="enum"></param>
         /// <typeparam name="TEnum"></typeparam>
@@ -1262,7 +1263,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Remove all instances of specified pair.
+        ///     Remove all instances of specified pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1272,7 +1273,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Remove all instances of specified pair.
+        ///     Remove all instances of specified pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -1282,7 +1283,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Remove all instances of specified pair.
+        ///     Remove all instances of specified pair.
         /// </summary>
         /// <param name="secondEnum"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1294,7 +1295,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Remove all instances of specified pair.
+        ///     Remove all instances of specified pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -1304,8 +1305,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Defer all operations called in function. If the world is already in
-        /// deferred mode, do nothing.
+        ///     Defer all operations called in function. If the world is already in
+        ///     deferred mode, do nothing.
         /// </summary>
         /// <param name="func"></param>
         public void Defer(Action func)
@@ -1316,7 +1317,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Suspend deferring operations.
+        ///     Suspend deferring operations.
         /// </summary>
         public void DeferSuspend()
         {
@@ -1324,7 +1325,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Resume deferring operations.
+        ///     Resume deferring operations.
         /// </summary>
         public void DeferResume()
         {
@@ -1332,7 +1333,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Check if entity id exists in the world.
+        ///     Check if entity id exists in the world.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -1342,7 +1343,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Check if entity id exists in the world.
+        ///     Check if entity id exists in the world.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -1352,7 +1353,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Check if entity id is valid.
+        ///     Check if entity id is valid.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -1362,7 +1363,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get alive entity for id.
+        ///     Get alive entity for id.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -1372,7 +1373,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Ensures that entity with provided generation is alive.
+        ///     Ensures that entity with provided generation is alive.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -1383,7 +1384,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Run callback after completing frame.
+        ///     Run callback after completing frame.
         /// </summary>
         /// <param name="action"></param>
         /// <param name="ctx"></param>
@@ -1394,7 +1395,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get the world info.
+        ///     Get the world info.
         /// </summary>
         /// <returns></returns>
         public ecs_world_info_t* GetInfo()
@@ -1403,7 +1404,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get id from id value.
+        ///     Get id from id value.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -1413,7 +1414,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get pair from id values.
+        ///     Get pair from id values.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1424,7 +1425,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get id from a type.
+        ///     Get id from a type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -1434,7 +1435,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get id from an enum.
+        ///     Get id from an enum.
         /// </summary>
         /// <param name="enum"></param>
         /// <typeparam name="TEnum"></typeparam>
@@ -1446,7 +1447,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get pair id.
+        ///     Get pair id.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1457,7 +1458,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get pair id.
+        ///     Get pair id.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -1468,7 +1469,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get pair id.
+        ///     Get pair id.
         /// </summary>
         /// <param name="secondEnum"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1481,7 +1482,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get pair id.
+        ///     Get pair id.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -1492,7 +1493,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get pair id.
+        ///     Get pair id.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -1503,7 +1504,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get pair id.
+        ///     Get pair id.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -1514,7 +1515,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Find or register component.
+        ///     Find or register component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -1524,7 +1525,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create an entity.
+        ///     Create an entity.
         /// </summary>
         /// <returns></returns>
         public Entity Entity()
@@ -1533,7 +1534,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create an entity from id.
+        ///     Create an entity from id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -1543,7 +1544,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create an entity from name.
+        ///     Create an entity from name.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -1553,7 +1554,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create an entity from type.
+        ///     Create an entity from type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -1563,7 +1564,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create an entity that's associated with a type.
+        ///     Create an entity that's associated with a type.
         /// </summary>
         /// <param name="name"></param>
         /// <typeparam name="T"></typeparam>
@@ -1574,7 +1575,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Convert enum constant to entity.
+        ///     Convert enum constant to entity.
         /// </summary>
         /// <param name="enumMember"></param>
         /// <typeparam name="TEnum"></typeparam>
@@ -1585,7 +1586,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create a prefab.
+        ///     Create a prefab.
         /// </summary>
         /// <returns></returns>
         public Entity Prefab()
@@ -1594,7 +1595,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create a prefab that's associated with a type.
+        ///     Create a prefab that's associated with a type.
         /// </summary>
         /// <param name="name"></param>
         /// <typeparam name="T"></typeparam>
@@ -1609,7 +1610,7 @@ namespace Flecs.NET.Core
         // TODO: Add World.Each stuff here later
 
         /// <summary>
-        /// Define a module.
+        ///     Define a module.
         /// </summary>
         /// <param name="name"></param>
         /// <typeparam name="TModule"></typeparam>
@@ -1630,7 +1631,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Import a module.
+        ///     Import a module.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -1642,7 +1643,7 @@ namespace Flecs.NET.Core
         // TODO: Add pipeline_builder
 
         /// <summary>
-        /// Set pipeline.
+        ///     Set pipeline.
         /// </summary>
         /// <param name="pipeline"></param>
         public void SetPipeline(ulong pipeline)
@@ -1651,7 +1652,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set pipeline.
+        ///     Set pipeline.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public void SetPipeline<T>()
@@ -1660,7 +1661,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Get pipeline.
+        ///     Get pipeline.
         /// </summary>
         /// <returns></returns>
         public Entity GetPipeline()
@@ -1669,7 +1670,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Progress world one tick.
+        ///     Progress world one tick.
         /// </summary>
         /// <returns></returns>
         public bool Progress()
@@ -1678,7 +1679,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Run pipeline.
+        ///     Run pipeline.
         /// </summary>
         /// <param name="pipeline"></param>
         /// <param name="deltaTime"></param>
@@ -1688,7 +1689,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Run pipeline.
+        ///     Run pipeline.
         /// </summary>
         /// <param name="deltaTime"></param>
         /// <typeparam name="TPipeline"></typeparam>
@@ -1698,7 +1699,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set timescale.
+        ///     Set timescale.
         /// </summary>
         /// <param name="scale"></param>
         public void SetTimeScale(float scale)
@@ -1707,7 +1708,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set target FPS.
+        ///     Set target FPS.
         /// </summary>
         /// <param name="targetFps"></param>
         public void SetTargetFps(float targetFps)
@@ -1716,7 +1717,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Reset simulation clock.
+        ///     Reset simulation clock.
         /// </summary>
         public void ResetClock()
         {
@@ -1724,7 +1725,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set number of threads.
+        ///     Set number of threads.
         /// </summary>
         /// <param name="threads"></param>
         public void SetThreads(int threads)
@@ -1733,7 +1734,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set number of threads.
+        ///     Set number of threads.
         /// </summary>
         /// <returns></returns>
         public int GetThreads()
@@ -1742,7 +1743,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Set number of task threads.
+        ///     Set number of task threads.
         /// </summary>
         /// <param name="taskThreads"></param>
         public void SetTaskThreads(int taskThreads)
@@ -1751,7 +1752,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns true if task thread use has been requested.
+        ///     Returns true if task thread use has been requested.
         /// </summary>
         /// <returns></returns>
         public bool UsingTaskThreads()
@@ -1760,7 +1761,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create a snapshot.
+        ///     Create a snapshot.
         /// </summary>
         /// <returns></returns>
         public Snapshot Snapshot()
@@ -1769,7 +1770,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Load plecs string.
+        ///     Load plecs string.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="str"></param>
@@ -1783,7 +1784,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Load plecs from file.
+        ///     Load plecs from file.
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
@@ -1794,7 +1795,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Convert value to string.
+        ///     Convert value to string.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="value"></param>
@@ -1805,7 +1806,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Convert value to string
+        ///     Convert value to string
         /// </summary>
         /// <param name="value"></param>
         /// <typeparam name="T"></typeparam>
@@ -1816,7 +1817,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Return meta cursor to value.
+        ///     Return meta cursor to value.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="data"></param>
@@ -1827,7 +1828,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Return meta cursor to value.
+        ///     Return meta cursor to value.
         /// </summary>
         /// <param name="data"></param>
         /// <typeparam name="T"></typeparam>
@@ -1838,7 +1839,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create primitive type.
+        ///     Create primitive type.
         /// </summary>
         /// <param name="kind"></param>
         /// <returns></returns>
@@ -1854,7 +1855,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create array type.
+        ///     Create array type.
         /// </summary>
         /// <param name="elemId"></param>
         /// <param name="arrayCount"></param>
@@ -1872,7 +1873,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create array type.
+        ///     Create array type.
         /// </summary>
         /// <param name="arrayCount"></param>
         /// <typeparam name="T"></typeparam>
@@ -1883,7 +1884,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create vector type.
+        ///     Create vector type.
         /// </summary>
         /// <param name="elemId"></param>
         /// <returns></returns>
@@ -1897,7 +1898,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create vector type.
+        ///     Create vector type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -1907,7 +1908,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Serialize untyped value to JSON.
+        ///     Serialize untyped value to JSON.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="value"></param>
@@ -1918,7 +1919,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Serialize value to JSON.
+        ///     Serialize value to JSON.
         /// </summary>
         /// <param name="value"></param>
         /// <typeparam name="T"></typeparam>
@@ -1929,7 +1930,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Serialize world to JSON.
+        ///     Serialize world to JSON.
         /// </summary>
         /// <returns></returns>
         public string ToJson()
@@ -1938,7 +1939,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Deserialize value from JSON.
+        ///     Deserialize value from JSON.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="value"></param>
@@ -1952,7 +1953,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Deserialize value from JSON.
+        ///     Deserialize value from JSON.
         /// </summary>
         /// <param name="value"></param>
         /// <param name="json"></param>
@@ -1965,19 +1966,19 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Deserialize value from JSON.
+        ///     Deserialize value from JSON.
         /// </summary>
         /// <param name="json"></param>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public void* FromJson(string json, ecs_from_json_desc_t *desc = null)
+        public void* FromJson(string json, ecs_from_json_desc_t* desc = null)
         {
             using NativeString nativeJson = (NativeString)json;
             return ecs_world_from_json(Handle, nativeJson, desc);
         }
 
         /// <summary>
-        /// Create app builder.
+        ///     Create app builder.
         /// </summary>
         /// <returns></returns>
         public AppBuilder App()
@@ -1986,7 +1987,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create metric builder.
+        ///     Create metric builder.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -1996,7 +1997,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create filter builder.
+        ///     Create filter builder.
         /// </summary>
         /// <returns></returns>
         public FilterBuilder FilterBuilder()
@@ -2005,7 +2006,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create query builder.
+        ///     Create query builder.
         /// </summary>
         /// <returns></returns>
         public QueryBuilder QueryBuilder()
@@ -2014,7 +2015,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create observer builder.
+        ///     Create observer builder.
         /// </summary>
         /// <returns></returns>
         public ObserverBuilder ObserverBuilder()
@@ -2023,7 +2024,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create routine builder.
+        ///     Create routine builder.
         /// </summary>
         /// <returns></returns>
         public RoutineBuilder RoutineBuilder()
@@ -2032,7 +2033,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create filter.
+        ///     Create filter.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="filter"></param>
@@ -2043,7 +2044,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create rule.
+        ///     Create rule.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="filter"></param>
@@ -2054,7 +2055,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create query.
+        ///     Create query.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="filter"></param>
@@ -2066,7 +2067,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create observer.
+        ///     Create observer.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="filter"></param>
@@ -2081,7 +2082,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create observer.
+        ///     Create observer.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -2091,7 +2092,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create routine.
+        ///     Create routine.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="filter"></param>
@@ -2107,7 +2108,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Create routine.
+        ///     Create routine.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -2117,7 +2118,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="world"></param>
         /// <returns></returns>
@@ -2127,7 +2127,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <returns></returns>
         public ecs_world_t* To()
@@ -2136,7 +2135,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -2146,7 +2144,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -2156,7 +2153,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -2165,7 +2161,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -2176,7 +2171,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>

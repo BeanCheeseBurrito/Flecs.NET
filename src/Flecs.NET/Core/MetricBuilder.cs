@@ -4,7 +4,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// Metric builder interface.
+    ///     Metric builder interface.
     /// </summary>
     public unsafe struct MetricBuilder
     {
@@ -12,17 +12,17 @@ namespace Flecs.NET.Core
         private ecs_metric_desc_t _desc;
 
         /// <summary>
-        /// The world.
+        ///     The world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// A reference to the desc struct.
+        ///     A reference to the desc struct.
         /// </summary>
         public ref ecs_metric_desc_t Desc => ref _desc;
 
         /// <summary>
-        /// Creates a metric builder using the provided entity.
+        ///     Creates a metric builder using the provided entity.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="entity"></param>
@@ -34,7 +34,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -45,7 +44,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -55,7 +53,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="name"></param>
         /// <typeparam name="T"></typeparam>
@@ -72,7 +69,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -83,7 +79,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -94,7 +89,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -104,7 +98,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -115,7 +108,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -126,7 +118,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -137,7 +128,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -148,7 +138,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="kind"></param>
         /// <returns></returns>
@@ -159,7 +148,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -169,7 +157,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="brief"></param>
         /// <returns></returns>

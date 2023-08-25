@@ -5,7 +5,7 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    /// A wrapper for ecs_rule_t.
+    ///     A wrapper for ecs_rule_t.
     /// </summary>
     public unsafe struct Rule : IDisposable
     {
@@ -13,17 +13,17 @@ namespace Flecs.NET.Core
         private ecs_rule_t* _handle;
 
         /// <summary>
-        /// A reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        /// A reference to the handle.
+        ///     A reference to the handle.
         /// </summary>
         public ref ecs_rule_t* Handle => ref _handle;
 
         /// <summary>
-        /// Creates a rule for the provided world.
+        ///     Creates a rule for the provided world.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
@@ -56,7 +56,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Disposes the rule.
+        ///     Disposes the rule.
         /// </summary>
         public void Dispose()
         {
@@ -64,7 +64,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Destructs the rule.
+        ///     Destructs the rule.
         /// </summary>
         public void Destruct()
         {
@@ -77,7 +77,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Tests if the rule is not null.
+        ///     Tests if the rule is not null.
         /// </summary>
         /// <returns></returns>
         public bool IsValid()
@@ -86,7 +86,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the entity associated with the rule.
+        ///     Returns the entity associated with the rule.
         /// </summary>
         /// <returns></returns>
         public Entity Entity()
@@ -95,7 +95,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Returns the filter for the rule.
+        ///     Returns the filter for the rule.
         /// </summary>
         /// <returns></returns>
         public Filter Filter()
@@ -104,7 +104,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Converts rule to a string expression.
+        ///     Converts rule to a string expression.
         /// </summary>
         /// <returns></returns>
         public string Str()
@@ -114,7 +114,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Converts rule to a string that can be used to aid in debugging.
+        ///     Converts rule to a string that can be used to aid in debugging.
         /// </summary>
         /// <returns></returns>
         public string RuleStr()
@@ -123,7 +123,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        /// Iterates the rule.
+        ///     Iterates the rule.
         /// </summary>
         /// <param name="func"></param>
         public void Iter(Ecs.IterCallback func)
