@@ -7,12 +7,12 @@
 
 </div>
 
-**Flecs.NET** is a high-level wrapper for flecs. Low-level bindings to the C api are included and generated with [Bindgen.NET](https://github.com/BeanCheeseBurrito/Bindgen.NET). Native libraries are cross-compiled with [Vezel-Dev's Zig Toolsets](https://github.com/vezel-dev/zig-toolsets).
+**Flecs.NET** is a high-level wrapper for [flecs](https://github.com/SanderMertens/flecs). Low-level bindings to the C api are included and generated with [Bindgen.NET](https://github.com/BeanCheeseBurrito/Bindgen.NET). Native libraries are cross-compiled with [Vezel-Dev's Zig Toolsets](https://github.com/vezel-dev/zig-toolsets).
 > **Warning**
 > This repo is a work in progress. Bugs are expected and the API is subject to change.
 
 ## Nuget
-You can download the nuget package and use Flecs.NET right away!
+You can download the nuget package and use **Flecs.NET** right away!
 
 **Flecs.NET (Wrapper + bindings + native libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Debug/)**
 ```console
@@ -29,7 +29,7 @@ dotnet add PROJECT package Flecs.NET.Bindings.Release --version *-*
 dotnet add PROJECT package Flecs.NET.Native.Release --version *-*
 ```
 
-Flecs.NET provides both [release](https://www.nuget.org/packages/Flecs.NET.Release) and [debug](https://www.nuget.org/packages/Flecs.NET.Debug) packages for nuget.
+**Flecs.NET** provides both [release](https://www.nuget.org/packages/Flecs.NET.Release) and [debug](https://www.nuget.org/packages/Flecs.NET.Debug) packages for nuget.
 To include both of them in your project based on your build configuration, use the packages references below. The latest stable or prerelease versions will be added to your project.
 ```xml
 <ItemGroup>
