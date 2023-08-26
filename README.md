@@ -21,12 +21,12 @@ You can download the nuget package and use **Flecs.NET** right away!
 dotnet add PROJECT package Flecs.NET.Release --version *-*
 ```
 
-**Flecs.NET.Bindings (Bindings + native libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Bindings.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Bindings.Debug/)**:
+**Flecs.NET.Bindings (Bindings + native libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Bindings.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Bindings.Debug/)**
 ```console
 dotnet add PROJECT package Flecs.NET.Bindings.Release --version *-*
 ```
 
-**Flecs.NET.Native (Native libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Native.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Native.Debug/)**:
+**Flecs.NET.Native (Native libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Native.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Native.Debug/)**
 ```console
 dotnet add PROJECT package Flecs.NET.Native.Release --version *-*
 ```
