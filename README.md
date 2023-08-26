@@ -5,6 +5,8 @@
 
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](https://github.com/SanderMertens/flecs/blob/master/LICENSE)
 
+[Docs](https://beancheeseburrito.github.io/Flecs.NET-Docs/) · [Examples](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET.Examples) · [Discord](https://discord.gg/BEzP5Rgrrp)
+
 </div>
 
 **Flecs.NET** is a high-level wrapper for [flecs](https://github.com/SanderMertens/flecs). Low-level bindings to the C api are included and generated with [Bindgen.NET](https://github.com/BeanCheeseBurrito/Bindgen.NET). Native libraries are cross-compiled with [Vezel-Dev's Zig Toolsets](https://github.com/vezel-dev/zig-toolsets).
@@ -19,12 +21,12 @@ You can download the nuget package and use **Flecs.NET** right away!
 dotnet add PROJECT package Flecs.NET.Release --version *-*
 ```
 
-**Flecs.NET.Bindings (Bindings): [Release](https://www.nuget.org/packages/Flecs.NET.Bindings.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Bindings.Debug/)**:
+**Flecs.NET.Bindings (Bindings + native libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Bindings.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Bindings.Debug/)**:
 ```console
 dotnet add PROJECT package Flecs.NET.Bindings.Release --version *-*
 ```
 
-**Flecs.NET.Native (Native libraries) [Release](https://www.nuget.org/packages/Flecs.NET.Native.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Native.Debug/)**:
+**Flecs.NET.Native (Native libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Native.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Native.Debug/)**:
 ```console
 dotnet add PROJECT package Flecs.NET.Native.Release --version *-*
 ```
