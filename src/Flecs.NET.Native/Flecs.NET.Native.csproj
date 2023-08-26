@@ -64,7 +64,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="../../docs/icon.png" PackagePath="icon.png"/>
+        <Content Include="../../docs/icon.png" PackagePath="icon.png" />
     </ItemGroup>
 
     <ItemGroup>
