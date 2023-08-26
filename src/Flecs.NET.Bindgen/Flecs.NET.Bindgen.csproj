@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Bindgen.NET" Version="0.0.8"/>
+        <PackageReference Include="Bindgen.NET" Version="0.1.0"/>
     </ItemGroup>
 
 </Project>

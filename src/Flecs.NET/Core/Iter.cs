@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
@@ -229,7 +230,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ulong Size(int index)
         {
-            return ecs_field_size(Handle, index);
+            return (ulong)ecs_field_size(Handle, index);
         }
 
         /// <summary>
@@ -381,7 +382,7 @@ namespace Flecs.NET.Core
             bool isShared = ecs_field_is_self(Handle, index) == 0;
             int count = isShared ? 1 : Handle->count;
 
-            void* ptr = ecs_field_w_size(Handle, (ulong)Managed.ManagedSize<T>(), index);
+            void* ptr = ecs_field_w_size(Handle, (IntPtr)Managed.ManagedSize<T>(), index);
             return new Column<T>(ptr, count, isShared);
         }
 

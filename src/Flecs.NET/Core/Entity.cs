@@ -1598,7 +1598,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity SetPtr(ulong componentId, int size, void* data)
         {
-            ecs_set_id(World, Id, componentId, (ulong)size, data);
+            ecs_set_id(World, Id, componentId, (IntPtr)size, data);
             return ref this;
         }
 
@@ -1611,7 +1611,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity SetPtr(ulong componentId, ulong size, void* data)
         {
-            ecs_set_id(World, Id, componentId, size, data);
+            ecs_set_id(World, Id, componentId, (IntPtr)size, data);
             return ref this;
         }
 
@@ -1625,7 +1625,7 @@ namespace Flecs.NET.Core
         {
             EcsComponent* ecsComponent = (EcsComponent*)ecs_get_id(World, componentId, FLECS_IDEcsComponentID_);
             Assert.True(ecsComponent != null, nameof(ECS_INVALID_PARAMETER));
-            ecs_set_id(World, Id, componentId, (ulong)ecsComponent->size, data);
+            ecs_set_id(World, Id, componentId, (IntPtr)ecsComponent->size, data);
             return ref this;
         }
 
@@ -2374,7 +2374,7 @@ namespace Flecs.NET.Core
             fixed (void* data = &component)
             {
                 IntPtr ptr = default;
-                ecs_set_id(World, Id, id, (ulong)size, isRef ? Managed.AllocGcHandle(&ptr, ref component) : data);
+                ecs_set_id(World, Id, id, (IntPtr)size, isRef ? Managed.AllocGcHandle(&ptr, ref component) : data);
                 return ref this;
             }
         }

@@ -165,7 +165,7 @@ namespace Flecs.NET.Core
             RawId = ecs_cpp_component_register_explicit(
                 world, RawId, id,
                 nativeName, nativeTypeName, nativeSymbolName,
-                (ulong)Size, (ulong)Alignment,
+                (IntPtr)Size, (IntPtr)Alignment,
                 Macros.Bool(isComponent), (byte*)existing
             );
 

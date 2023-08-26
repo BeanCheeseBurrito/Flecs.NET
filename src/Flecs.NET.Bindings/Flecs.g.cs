@@ -94,10 +94,10 @@ namespace Flecs.NET.Bindings
         public static extern ulong ecs_cpp_component_register(ecs_world_t* world, ulong id, byte* name, byte* symbol, int size, int alignment, byte implicit_name, byte* existing_out);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern ulong ecs_cpp_component_register_explicit(ecs_world_t* world, ulong s_id, ulong id, byte* name, byte* type_name, byte* symbol, ulong size, ulong alignment, byte is_component, byte* existing_out);
+        public static extern ulong ecs_cpp_component_register_explicit(ecs_world_t* world, ulong s_id, ulong id, byte* name, byte* type_name, byte* symbol, System.IntPtr size, System.IntPtr alignment, byte is_component, byte* existing_out);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void ecs_cpp_component_validate(ecs_world_t* world, ulong id, byte* name, byte* symbol, ulong size, ulong alignment, byte implicit_name);
+        public static extern void ecs_cpp_component_validate(ecs_world_t* world, ulong id, byte* name, byte* symbol, System.IntPtr size, System.IntPtr alignment, byte implicit_name);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_cpp_enum_constant_register(ecs_world_t* world, ulong parent, ulong id, byte* name, int value);
@@ -106,13 +106,13 @@ namespace Flecs.NET.Bindings
         public static extern void ecs_cpp_enum_init(ecs_world_t* world, ulong id);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_cpp_get_constant_name(byte* constant_name, byte* func_name, ulong len, ulong back_len);
+        public static extern byte* ecs_cpp_get_constant_name(byte* constant_name, byte* func_name, System.IntPtr len, System.IntPtr back_len);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_cpp_get_symbol_name(byte* symbol_name, byte* type_name, ulong len);
+        public static extern byte* ecs_cpp_get_symbol_name(byte* symbol_name, byte* type_name, System.IntPtr len);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_cpp_get_type_name(byte* type_name, byte* func_name, ulong len, ulong front_len);
+        public static extern byte* ecs_cpp_get_type_name(byte* type_name, byte* func_name, System.IntPtr len, System.IntPtr front_len);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ecs_member_t* ecs_cpp_last_member(ecs_world_t* world, ulong type);
@@ -247,13 +247,13 @@ namespace Flecs.NET.Bindings
         public static extern byte ecs_field_is_writeonly(ecs_iter_t* it, int index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern ulong ecs_field_size(ecs_iter_t* it, int index);
+        public static extern System.IntPtr ecs_field_size(ecs_iter_t* it, int index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_field_src(ecs_iter_t* it, int index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void* ecs_field_w_size(ecs_iter_t* it, ulong size, int index);
+        public static extern void* ecs_field_w_size(ecs_iter_t* it, System.IntPtr size, int index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ecs_iter_t ecs_filter_chain_iter(ecs_iter_t* it, ecs_filter_t* filter);
@@ -1075,7 +1075,7 @@ namespace Flecs.NET.Bindings
         public static extern ecs_record_t* ecs_record_find(ecs_world_t* world, ulong entity);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void* ecs_record_get_column(ecs_record_t* r, int column, ulong c_size);
+        public static extern void* ecs_record_get_column(ecs_record_t* r, int column, System.IntPtr c_size);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_record_get_entity(ecs_record_t* record);
@@ -1207,7 +1207,7 @@ namespace Flecs.NET.Bindings
         public static extern void ecs_set_hooks_id(ecs_world_t* world, ulong id, ecs_type_hooks_t* hooks);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern ulong ecs_set_id(ecs_world_t* world, ulong entity, ulong id, ulong size, void* ptr);
+        public static extern ulong ecs_set_id(ecs_world_t* world, ulong entity, ulong id, System.IntPtr size, void* ptr);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_set_interval(ecs_world_t* world, ulong tick_source, float interval);
@@ -1441,7 +1441,7 @@ namespace Flecs.NET.Bindings
         public static extern int ecs_table_get_column_index(ecs_world_t* world, ecs_table_t* table, ulong id);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern ulong ecs_table_get_column_size(ecs_table_t* table, int index);
+        public static extern System.IntPtr ecs_table_get_column_size(ecs_table_t* table, int index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_table_get_depth(ecs_world_t* world, ecs_table_t* table, ulong rel);
@@ -4565,13 +4565,13 @@ namespace Flecs.NET.Bindings
 
             public System.IntPtr clear; // delegate* unmanaged<void*, void>
 
-            public System.IntPtr ensure_element; // delegate* unmanaged<void*, ulong, void*>
+            public System.IntPtr ensure_element; // delegate* unmanaged<void*, System.IntPtr, void*>
 
             public System.IntPtr ensure_member; // delegate* unmanaged<void*, byte*, void*>
 
-            public System.IntPtr count; // delegate* unmanaged<void*, ulong>
+            public System.IntPtr count; // delegate* unmanaged<void*, System.IntPtr>
 
-            public System.IntPtr resize; // delegate* unmanaged<void*, ulong, void>
+            public System.IntPtr resize; // delegate* unmanaged<void*, System.IntPtr, void>
         }
 
         public partial struct EcsPipelineStats

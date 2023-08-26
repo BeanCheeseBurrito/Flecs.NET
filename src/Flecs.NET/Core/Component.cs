@@ -61,8 +61,8 @@ namespace Flecs.NET.Core
                 ecs_cpp_component_validate(
                     world, id, nativeName,
                     nativeSymbolName,
-                    (ulong)Type<TComponent>.GetSize(),
-                    (ulong)Type<TComponent>.GetAlignment(),
+                    (IntPtr)Type<TComponent>.GetSize(),
+                    (IntPtr)Type<TComponent>.GetAlignment(),
                     Macros.Bool(implicitName)
                 );
             }

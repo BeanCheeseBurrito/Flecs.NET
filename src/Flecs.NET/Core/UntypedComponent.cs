@@ -1,3 +1,4 @@
+using System;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -167,7 +168,7 @@ namespace Flecs.NET.Core
             ulong id = ecs_entity_init(World, &desc);
             Assert.True(id != 0, nameof(ECS_INTERNAL_ERROR));
 
-            ecs_set_id(World, id, Macros.Pair(EcsConstant, FLECS_IDecs_i32_tID_), sizeof(int), &value);
+            ecs_set_id(World, id, Macros.Pair(EcsConstant, FLECS_IDecs_i32_tID_), (IntPtr)sizeof(int), &value);
             return ref this;
         }
 
@@ -190,7 +191,7 @@ namespace Flecs.NET.Core
             ulong id = ecs_entity_init(World, &desc);
             Assert.True(id != 0, nameof(ECS_INTERNAL_ERROR));
 
-            ecs_set_id(World, id, Macros.Pair(EcsConstant, FLECS_IDecs_u32_tID_), sizeof(uint), &value);
+            ecs_set_id(World, id, Macros.Pair(EcsConstant, FLECS_IDecs_u32_tID_), (IntPtr)sizeof(uint), &value);
             return ref this;
         }
 
