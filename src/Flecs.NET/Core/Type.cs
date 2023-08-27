@@ -111,7 +111,7 @@ namespace Flecs.NET.Core
                     ? attribute.Pack
                     : AlignOf();
 
-            if (!allowTag)
+            if (!allowTag || RuntimeHelpers.IsReferenceOrContainsReferences<T>())
                 return;
 
             if (RuntimeFeature.IsDynamicCodeSupported)
