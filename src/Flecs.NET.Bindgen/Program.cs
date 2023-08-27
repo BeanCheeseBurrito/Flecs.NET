@@ -62,6 +62,8 @@ string GetMacOsHeaders()
 
     string path = process.StandardOutput.ReadToEnd();
 
+    Console.WriteLine(path);
+
     if (!Directory.Exists(path))
         throw new DirectoryNotFoundException("Couldn't find system headers. Install XCode.");
 
