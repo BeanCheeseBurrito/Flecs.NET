@@ -62,7 +62,7 @@ string GetMacOsHeaders()
 
     string path = process.StandardOutput.ReadToEnd();
 
-    if (!Path.Exists(path))
+    if (!Path.Exists("/Applications/Xcode_14.2.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk"))
         throw new DirectoryNotFoundException("Couldn't find system headers. Install XCode.");
 
     return path + "/usr/include";
