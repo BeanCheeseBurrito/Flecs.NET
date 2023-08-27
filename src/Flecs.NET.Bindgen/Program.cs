@@ -61,10 +61,9 @@ string GetMacOsHeaders()
     process.WaitForExit();
 
     string path = process.StandardOutput.ReadToEnd();
+    DirectoryInfo directoryInfo = new(path);
 
-    Console.WriteLine(path);
-
-    if (!Directory.Exists(path))
+    if (!directoryInfo.Exists)
         throw new DirectoryNotFoundException("Couldn't find system headers. Install XCode.");
 
     return path + "/usr/include";
