@@ -107,6 +107,8 @@ dotnet restore
 ```
 ### Generate bindings
 Generate the binding code. Bindings are generated with [Bindgen.NET](https://github.com/BeanCheeseBurrito/Bindgen.NET).
+> **Note**
+> The binding generator needs access to system headers on MacOS. Ensure that XCode is installed.
 ```console
 dotnet run --project src/Flecs.NET.Bindgen
 ```
