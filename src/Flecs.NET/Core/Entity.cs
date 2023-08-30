@@ -375,7 +375,8 @@ namespace Flecs.NET.Core
                 return;
 
             ecs_iter_t it = ecs_filter_iter(World, &filter);
-            Invoker.EachEntity(callback, ecs_filter_next_instanced, &it);
+            while (ecs_filter_next_instanced(&it) == 1)
+                Invoker.EachEntity(&it, callback);
             ecs_filter_fini(&filter);
         }
 

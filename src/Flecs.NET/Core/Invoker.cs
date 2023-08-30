@@ -10,55 +10,102 @@ namespace Flecs.NET.Core
     public static unsafe class Invoker
     {
         /// <summary>
+        ///     Invokes an iter callback using a delegate.
         /// </summary>
-        /// <param name="iterCallback"></param>
-        /// <param name="iterNext"></param>
         /// <param name="iter"></param>
+        /// <param name="callback"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void Iter(Ecs.IterCallback iterCallback, Ecs.IterNext iterNext, ecs_iter_t* iter)
+        public static void Iter(ecs_iter_t* iter, Ecs.IterCallback callback)
         {
-            if (iterCallback == null)
-                throw new ArgumentNullException(nameof(iterCallback));
-
-            if (iterNext == null)
-                throw new ArgumentNullException(nameof(iterNext));
-
-            while (iterNext(iter) == 1)
-            {
-                Macros.TableLock(iter->world, iter->table);
-                iterCallback(new Iter(iter));
-                Macros.TableUnlock(iter->world, iter->table);
-            }
+            Macros.TableLock(iter->world, iter->table);
+            callback(new Iter(iter));
+            Macros.TableUnlock(iter->world, iter->table);
         }
 
         /// <summary>
+        ///     Invokes an each callback using a delegate.
         /// </summary>
-        /// <param name="eachCallback"></param>
-        /// <param name="iterNext"></param>
         /// <param name="iter"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public static void EachEntity(Ecs.EachEntityCallback eachCallback, Ecs.IterNext iterNext, ecs_iter_t* iter)
+        /// <param name="callback"></param>
+        public static void EachEntity(ecs_iter_t* iter, Ecs.EachEntityCallback callback)
         {
-            if (eachCallback == null)
-                throw new ArgumentNullException(nameof(eachCallback));
+            Macros.TableLock(iter->world, iter->table);
 
-            if (iterNext == null)
-                throw new ArgumentNullException(nameof(iterNext));
+            ecs_world_t* world = iter->world;
+            int count = iter->count;
 
-            while (iterNext(iter) == 1)
-            {
-                Macros.TableLock(iter->world, iter->table);
+            Assert.True(count > 0, "No entities returned, use Each() without Entity argument");
 
-                ecs_world_t* world = iter->world;
-                int count = iter->count;
+            for (int i = 0; i < count; i++)
+                callback(new Entity(world, iter->entities[i]));
 
-                Assert.True(count > 0, "No entities returned, use Each() without Entity argument");
-
-                for (int i = 0; i < count; i++)
-                    eachCallback(new Entity(world, iter->entities[i]));
-
-                Macros.TableUnlock(iter->world, iter->table);
-            }
+            Macros.TableUnlock(iter->world, iter->table);
         }
+
+#if NET5_0_OR_GREATER
+        /// <summary>
+        ///     Invokes an iter callback using a managed function pointer.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void Iter(ecs_iter_t* iter, delegate* managed<Iter, void> callback)
+        {
+            Macros.TableLock(iter->world, iter->table);
+            callback(new Iter(iter));
+            Macros.TableUnlock(iter->world, iter->table);
+        }
+
+        /// <summary>
+        ///     Invokes an iter callback using an unmanaged function pointer.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void Iter(ecs_iter_t* iter, delegate* unmanaged<Iter, void> callback)
+        {
+            Macros.TableLock(iter->world, iter->table);
+            callback(new Iter(iter));
+            Macros.TableUnlock(iter->world, iter->table);
+        }
+
+        /// <summary>
+        ///     Invokes an each callback using a managed function pointer.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void EachEntity(ecs_iter_t* iter, delegate* managed<Entity, void> callback)
+        {
+            Macros.TableLock(iter->world, iter->table);
+
+            ecs_world_t* world = iter->world;
+            int count = iter->count;
+
+            Assert.True(count > 0, "No entities returned, use Each() without Entity argument");
+
+            for (int i = 0; i < count; i++)
+                callback(new Entity(world, iter->entities[i]));
+
+            Macros.TableUnlock(iter->world, iter->table);
+        }
+
+        /// <summary>
+        ///     Invokes an each callback using an unmanaged function pointer.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void EachEntity(ecs_iter_t* iter, delegate* unmanaged<Entity, void> callback)
+        {
+            Macros.TableLock(iter->world, iter->table);
+
+            ecs_world_t* world = iter->world;
+            int count = iter->count;
+
+            Assert.True(count > 0, "No entities returned, use Each() without Entity argument");
+
+            for (int i = 0; i < count; i++)
+                callback(new Entity(world, iter->entities[i]));
+
+            Macros.TableUnlock(iter->world, iter->table);
+        }
+#endif
     }
 }

@@ -124,7 +124,19 @@ namespace Flecs.NET.Core
         public void Iter(Ecs.IterCallback func)
         {
             ecs_iter_t iter = ecs_filter_iter(World, FilterPtr);
-            Invoker.Iter(func, ecs_filter_next, &iter);
+            while (ecs_filter_next(&iter) == 1)
+                Invoker.Iter(&iter, func);
+        }
+
+        /// <summary>
+        ///     Iterates the filter using the provided callback.
+        /// </summary>
+        /// <param name="func"></param>
+        public void Each(Ecs.EachEntityCallback func)
+        {
+            ecs_iter_t iter = ecs_filter_iter(World, FilterPtr);
+            while (ecs_filter_next_instanced(&iter) == 1)
+                Invoker.EachEntity(&iter, func);
         }
     }
 }

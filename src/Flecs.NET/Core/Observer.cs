@@ -21,6 +21,33 @@ namespace Flecs.NET.Core
         /// </summary>
         public ref ecs_world_t* World => ref _entity.World;
 
+        private Observer(
+            ecs_world_t* world,
+            ecs_observer_desc_t* observerDesc,
+            string name = "",
+            FilterBuilder filterBuilder = default,
+            ObserverBuilder observerBuilder = default)
+        {
+            using NativeString nativeName = (NativeString)name;
+            using NativeString nativeSep = (NativeString)"::";
+
+            ecs_entity_desc_t entityDesc = default;
+            entityDesc.name = nativeName;
+            entityDesc.sep = nativeSep;
+
+            BindingContext.ObserverContext* observerContext = Memory.Alloc<BindingContext.ObserverContext>(1);
+            observerContext[0] = observerBuilder.ObserverContext;
+
+            observerDesc->entity = ecs_entity_init(world, &entityDesc);
+            observerDesc->filter = filterBuilder.Desc;
+            observerDesc->filter.terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
+            observerDesc->filter.terms_buffer_count = filterBuilder.Terms.Count;
+            observerDesc->binding_ctx_free = BindingContext.ObserverContextFreePointer;
+            observerDesc->binding_ctx = observerContext;
+
+            _entity = default;
+        }
+
         /// <summary>
         ///     Creates an observer for the provided world.
         /// </summary>
@@ -36,32 +63,48 @@ namespace Flecs.NET.Core
             FilterBuilder filterBuilder = default,
             ObserverBuilder observerBuilder = default,
             Ecs.IterCallback? callback = null)
+            : this(world, &observerBuilder.ObserverDesc, name, filterBuilder)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback), "Callback is null");
 
-            using NativeString nativeName = (NativeString)name;
-            using NativeString nativeSep = (NativeString)"::";
-
-            ecs_entity_desc_t entityDesc = default;
-            entityDesc.name = nativeName;
-            entityDesc.sep = nativeSep;
-
-            BindingContext.ObserverContext* observerContext = Memory.Alloc<BindingContext.ObserverContext>(1);
-            observerContext[0] = observerBuilder.ObserverContext;
-            BindingContext.SetCallback(ref observerContext->Iter, callback);
-
             ecs_observer_desc_t* observerDesc = &observerBuilder.ObserverDesc;
-            observerDesc->entity = ecs_entity_init(world, &entityDesc);
-            observerDesc->filter = filterBuilder.Desc;
-            observerDesc->filter.terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
-            observerDesc->filter.terms_buffer_count = filterBuilder.Terms.Count;
-            observerDesc->binding_ctx = observerContext;
-            observerDesc->binding_ctx_free = BindingContext.ObserverContextFreePointer;
             observerDesc->callback = BindingContext.ObserverIterPointer;
 
-            _entity = new Entity(world, ecs_observer_init(world, observerDesc));
+            BindingContext.ObserverContext* context = (BindingContext.ObserverContext*)observerDesc->binding_ctx;
+            BindingContext.SetCallback(ref context->Iterator, callback);
 
+            _entity = new Entity(world, ecs_observer_init(world, observerDesc));
+            filterBuilder.Dispose();
+        }
+
+        /// <summary>
+        ///     Creates an observer for the provided world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="name"></param>
+        /// <param name="filterBuilder"></param>
+        /// <param name="observerBuilder"></param>
+        /// <param name="callback"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Observer(
+            ecs_world_t* world,
+            string name = "",
+            FilterBuilder filterBuilder = default,
+            ObserverBuilder observerBuilder = default,
+            Ecs.EachEntityCallback? callback = null)
+            : this(world, &observerBuilder.ObserverDesc, name, filterBuilder)
+        {
+            if (callback == null)
+                throw new ArgumentNullException(nameof(callback), "Callback is null");
+
+            ecs_observer_desc_t* observerDesc = &observerBuilder.ObserverDesc;
+            observerDesc->callback = BindingContext.ObserverEachEntityPointer;
+
+            BindingContext.ObserverContext* context = (BindingContext.ObserverContext*)observerDesc->binding_ctx;
+            BindingContext.SetCallback(ref context->Iterator, callback);
+
+            _entity = new Entity(world, ecs_observer_init(world, observerDesc));
             filterBuilder.Dispose();
         }
 

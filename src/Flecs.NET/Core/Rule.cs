@@ -123,13 +123,25 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Iterates the rule.
+        ///     Iterates the rule using the provided callback.
         /// </summary>
         /// <param name="func"></param>
         public void Iter(Ecs.IterCallback func)
         {
             ecs_iter_t iter = ecs_rule_iter(World, Handle);
-            Invoker.Iter(func, ecs_rule_next, &iter);
+            while (ecs_rule_next(&iter) == 1)
+                Invoker.Iter(&iter, func);
+        }
+
+        /// <summary>
+        ///     Iterates the rule using the provided callback.
+        /// </summary>
+        /// <param name="func"></param>
+        public void Each(Ecs.EachEntityCallback func)
+        {
+            ecs_iter_t iter = ecs_rule_iter(World, Handle);
+            while (ecs_rule_next_instanced(&iter) == 1)
+                Invoker.EachEntity(&iter, func);
         }
     }
 }
