@@ -39,7 +39,7 @@ using Filter filter = world.Filter(
     filter: world.FilterBuilder().Term<Position>()
 );
 
-filter.Iter(it =>
+filter.Iter((Iter it) =>
 {
     Column<Position> p = it.Field<Position>(1);
     foreach (int i in it)

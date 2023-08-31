@@ -44,10 +44,10 @@ Entity earth = world.Entity("Earth")
     .Add<Planet>()
     .Set(new Position { X = 3, Y = 3 });
 
-Entity moon = world.Entity("Moon")
-    .ChildOf(earth)
-    .Add<Moon>()
-    .Set(new Position { X = 0.1, Y = 0.1 });
+    Entity moon = world.Entity("Moon")
+        .ChildOf(earth)
+        .Add<Moon>()
+        .Set(new Position { X = 0.1, Y = 0.1 });
 
 // Is the Moon a child of Earth?
 Console.WriteLine($"Child of Earth? {moon.Has(EcsChildOf, earth)}\n");

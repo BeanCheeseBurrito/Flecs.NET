@@ -1599,6 +1599,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Create a prefab with the provided name.
+        /// </summary>
+        /// <returns></returns>
+        public Entity Prefab(string name)
+        {
+            return new Entity(Handle, name).Add(EcsPrefab);
+        }
+
+        /// <summary>
         ///     Create a prefab that's associated with a type.
         /// </summary>
         /// <param name="name"></param>
