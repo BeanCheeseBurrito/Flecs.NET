@@ -359,8 +359,9 @@ namespace Flecs.NET.Core
                 return;
 
             Span<ecs_term_t> terms = stackalloc ecs_term_t[2];
+
             ecs_filter_t filter = ECS_FILTER_INIT;
-            filter.terms = (ecs_term_t*)&terms;
+            filter.terms = (ecs_term_t*)Unsafe.AsPointer(ref terms[0]);
             filter.term_count = 2;
 
             ecs_filter_desc_t desc = default;
