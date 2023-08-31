@@ -35,9 +35,16 @@ Console.WriteLine($"[{alice.Types().Str()}]");
 alice.Remove<Walking>();
 
 // Iterate all entities with Position
-// ecs.each([](flecs::entity e, Position& p) {
-//     std::cout << e.name() << ": {" << p.x << ", " << p.y << "}" << "\n";
-// });
+using Filter filter = world.Filter(
+    filter: world.FilterBuilder().Term<Position>()
+);
+
+filter.Iter(it =>
+{
+    Column<Position> p = it.Field<Position>(1);
+    foreach (int i in it)
+        Console.WriteLine($"{it.Entity(i).Name()}: ({p[i].X}, {p[i].Y})");
+});
 
 public struct Position
 {
@@ -48,5 +55,11 @@ public struct Position
 public struct Walking
 {
 }
+
+// Output
+// (10, 20)
+// [Position, Walking, (Identifier,Name)]
+// Alice: (10, 20)
+// Bob: (20, 30)
 
 #endif
