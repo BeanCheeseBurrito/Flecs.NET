@@ -30,20 +30,24 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="handle">The world handle.</param>
         /// <param name="owned">The owned boolean.</param>
-        public World(ecs_world_t* handle, bool owned = true)
+        /// <param name="overrideOsAbort"></param>
+        public World(ecs_world_t* handle, bool owned = true, bool overrideOsAbort = false)
         {
             WorldContext = default;
             _handle = handle;
             _owned = owned;
+
+            if (overrideOsAbort)
+                FlecsInternal.OverrideOsAbort();
         }
 
         /// <summary>
         ///     Creates a flecs world that is owned.
         /// </summary>
         /// <returns></returns>
-        public static World Create()
+        public static World Create(bool overrideOsAbort = true)
         {
-            return new World(ecs_init());
+            return new World(ecs_init(), true, overrideOsAbort);
         }
 
         /// <summary>

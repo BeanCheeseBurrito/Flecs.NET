@@ -15,7 +15,7 @@ namespace Flecs.NET.Utilities
         [Conditional("DEBUG")]
         public static void True(bool condition, string message = "")
         {
-            Debug.Assert(condition, message);
+            Debug.Assert(condition, "[Flecs.NET Assertion]: " + message);
         }
 
         /// <summary>

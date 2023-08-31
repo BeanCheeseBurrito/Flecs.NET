@@ -36,6 +36,9 @@ namespace Flecs.NET.Core
 
         internal static readonly IntPtr TypeHooksContextFreePointer =
             (IntPtr)(delegate* unmanaged<void*, void>)&TypeHooksContextFree;
+
+        internal static readonly IntPtr OsApiAbortPointer =
+            (IntPtr)(delegate* unmanaged<void>)&OsApiAbort;
 #else
         internal static readonly IntPtr ObserverIterPointer;
         internal static readonly IntPtr RoutineIterPointer;
@@ -49,6 +52,8 @@ namespace Flecs.NET.Core
 
         internal static readonly IntPtr TypeHooksContextFreePointer;
 
+        internal static readonly IntPtr OsApiAbortPointer;
+
         private static readonly Ecs.IterAction ObserverIterReference = ObserverIter;
         private static readonly Ecs.IterAction RoutineIterReference = RoutineIter;
 
@@ -60,6 +65,8 @@ namespace Flecs.NET.Core
         private static readonly Ecs.ContextFree QueryContextFreeReference = QueryContextFree;
 
         private static readonly Ecs.ContextFree TypeHooksContextFreeReference = TypeHooksContextFree;
+
+        private static readonly Action OsApiAbortReference = OsApiAbort;
 
         [SuppressMessage("Usage", "CA1810")]
         static BindingContext()
@@ -75,6 +82,8 @@ namespace Flecs.NET.Core
             QueryContextFreePointer = Marshal.GetFunctionPointerForDelegate(QueryContextFreeReference);
 
             TypeHooksContextFreePointer = Marshal.GetFunctionPointerForDelegate(TypeHooksContextFreeReference);
+
+            OsApiAbortPointer = Marshal.GetFunctionPointerForDelegate(OsApiAbortReference);
         }
 #endif
 
@@ -164,6 +173,18 @@ namespace Flecs.NET.Core
             TypeHooksContext* typeHooks = (TypeHooksContext*)context;
             typeHooks->Dispose();
             Memory.Free(context);
+        }
+
+        [UnmanagedCallersOnly]
+        private static void OsApiAbort()
+        {
+            Console.WriteLine(Environment.StackTrace);
+
+#if NET5_0_OR_GREATER
+            ((delegate* unmanaged<void>)FlecsInternal.OsAbortNative)();
+#else
+            Marshal.GetDelegateForFunctionPointer<Action>(FlecsInternal.OsAbortNative)();
+#endif
         }
 
         private static void FreeCallback(ref Callback dest)

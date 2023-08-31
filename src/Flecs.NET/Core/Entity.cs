@@ -2369,6 +2369,8 @@ namespace Flecs.NET.Core
 
         private ref Entity SetInternal<T>(ulong id, ref T component)
         {
+            Assert.True(Type<T>.GetSize() != 0, "Zero-sized types can't be used as components. Use .Add() to add them as tags instead.");
+
             bool isRef = RuntimeHelpers.IsReferenceOrContainsReferences<T>();
             int size = isRef ? sizeof(IntPtr) : sizeof(T);
 
