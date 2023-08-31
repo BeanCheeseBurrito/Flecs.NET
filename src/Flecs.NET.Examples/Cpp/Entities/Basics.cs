@@ -52,14 +52,12 @@ public struct Position
     public double Y { get; set; }
 }
 
-public struct Walking
-{
-}
+public struct Walking { }
 
-// Output
+#endif
+
+// Output:
 // (10, 20)
 // [Position, Walking, (Identifier,Name)]
 // Alice: (10, 20)
 // Bob: (20, 30)
-
-#endif

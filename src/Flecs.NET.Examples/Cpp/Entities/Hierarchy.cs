@@ -16,7 +16,7 @@ void IterateTree(Entity e, Position pParent = default)
     Console.WriteLine($"({pActual.X}, {pActual.Y})\n");
 
     // Iterate children recursively
-    e.Children(child => IterateTree(child, pActual));
+    e.Children((Entity child) => IterateTree(child, pActual));
 }
 
 using World world = World.Create();
@@ -66,3 +66,21 @@ public struct Planet { }
 public struct Moon { }
 
 #endif
+
+// Output:
+// Child of Earth? True
+//
+// ::Sun [Star, Position, (Identifier,Name)]
+// (1, 1)
+//
+// ::Sun::Mercury [Position, Planet, (Identifier,Name), (ChildOf,Sun)]
+// (2, 2)
+//
+// ::Sun::Venus [Position, Planet, (Identifier,Name), (ChildOf,Sun)]
+// (3, 3)
+//
+// ::Sun::Earth [Position, Planet, (Identifier,Name), (ChildOf,Sun)]
+// (4, 4)
+//
+// ::Sun::Earth::Moon [Position, Moon, (Identifier,Name), (ChildOf,Sun.Earth)]
+// (4.1, 4.1)
