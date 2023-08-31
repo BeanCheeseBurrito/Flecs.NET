@@ -21,12 +21,14 @@ void IterateComponents(Entity e) {
 
         if (id.IsPair())
         {
+            // If id is a pair, extract & print both parts of the pair
             Entity rel = id.First();
             Entity tgt = id.Second();
             Console.Write($"rel: {rel.Name()}, tgt: {tgt.Name()}");
         }
         else
         {
+            // Id contains a regular entity. Strip role before printing.
             Entity comp = id.Entity();
             Console.Write($"entity: {comp.Name()}");
         }
@@ -48,6 +50,7 @@ Entity bob = world.Entity()
 Console.WriteLine("Bob's components:");
 IterateComponents(bob);
 
+// We can use the same function to iterate the components of a component
 Console.WriteLine("Position's components:");
 IterateComponents(world.Component<Position>().Entity);
 
