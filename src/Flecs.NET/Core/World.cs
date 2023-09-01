@@ -37,6 +37,8 @@ namespace Flecs.NET.Core
             _handle = handle;
             _owned = owned;
 
+            InitBuiltinComponents();
+
             if (overrideOsAbort)
                 FlecsInternal.OverrideOsAbort();
         }
@@ -1529,6 +1531,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Get component with name.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Component<T> Component<T>(string name)
+        {
+            return new Component<T>(Handle, name);
+        }
+
+        /// <summary>
         ///     Create an entity.
         /// </summary>
         /// <returns></returns>
@@ -2128,6 +2140,14 @@ namespace Flecs.NET.Core
         public Routine Routine(ulong entity)
         {
             return new Routine(Handle, entity);
+        }
+
+        /// <summary>
+        ///     Initializes built-in components.
+        /// </summary>
+        public void InitBuiltinComponents()
+        {
+            Import<Ecs.Meta>();
         }
 
         /// <summary>

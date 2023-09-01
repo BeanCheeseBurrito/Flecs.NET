@@ -350,6 +350,14 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Sets the type's symbol name.
+        /// </summary>
+        public static void SetSymbolName(string symbolName)
+        {
+            SymbolName = symbolName;
+        }
+
+        /// <summary>
         ///     Resets a types information.
         /// </summary>
         public static void Reset()

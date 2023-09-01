@@ -6,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A static class for storing ECS related types, delegates, and methods.
     /// </summary>
-    public static unsafe class Ecs
+    public static unsafe partial class Ecs
     {
         /// <summary>
         ///     App init action.
