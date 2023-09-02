@@ -6251,4949 +6251,829 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDFlecsMonitorID__Ptr;
 
-        public static ref ulong ECS_AND
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ECS_AND_Ptr != null)
-                    return ref *(ulong*)ECS_AND_Ptr;
-                BindgenInternal.LoadDllSymbol("ECS_AND", out ECS_AND_Ptr);
-                return ref *(ulong*)ECS_AND_Ptr;
-            }
-        }
-
-        public static ref long ecs_block_allocator_alloc_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_block_allocator_alloc_count_Ptr != null)
-                    return ref *(long*)ecs_block_allocator_alloc_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_block_allocator_alloc_count", out ecs_block_allocator_alloc_count_Ptr);
-                return ref *(long*)ecs_block_allocator_alloc_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_block_allocator_free_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_block_allocator_free_count_Ptr != null)
-                    return ref *(long*)ecs_block_allocator_free_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_block_allocator_free_count", out ecs_block_allocator_free_count_Ptr);
-                return ref *(long*)ecs_block_allocator_free_count_Ptr;
-            }
-        }
-
-        public static ref ecs_filter_t ECS_FILTER_INIT
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ECS_FILTER_INIT_Ptr != null)
-                    return ref *(ecs_filter_t*)ECS_FILTER_INIT_Ptr;
-                BindgenInternal.LoadDllSymbol("ECS_FILTER_INIT", out ECS_FILTER_INIT_Ptr);
-                return ref *(ecs_filter_t*)ECS_FILTER_INIT_Ptr;
-            }
-        }
-
-        public static ref long ecs_http_busy_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_http_busy_count_Ptr != null)
-                    return ref *(long*)ecs_http_busy_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_http_busy_count", out ecs_http_busy_count_Ptr);
-                return ref *(long*)ecs_http_busy_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_http_request_handled_error_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_http_request_handled_error_count_Ptr != null)
-                    return ref *(long*)ecs_http_request_handled_error_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_http_request_handled_error_count", out ecs_http_request_handled_error_count_Ptr);
-                return ref *(long*)ecs_http_request_handled_error_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_http_request_handled_ok_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_http_request_handled_ok_count_Ptr != null)
-                    return ref *(long*)ecs_http_request_handled_ok_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_http_request_handled_ok_count", out ecs_http_request_handled_ok_count_Ptr);
-                return ref *(long*)ecs_http_request_handled_ok_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_http_request_invalid_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_http_request_invalid_count_Ptr != null)
-                    return ref *(long*)ecs_http_request_invalid_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_http_request_invalid_count", out ecs_http_request_invalid_count_Ptr);
-                return ref *(long*)ecs_http_request_invalid_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_http_request_not_handled_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_http_request_not_handled_count_Ptr != null)
-                    return ref *(long*)ecs_http_request_not_handled_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_http_request_not_handled_count", out ecs_http_request_not_handled_count_Ptr);
-                return ref *(long*)ecs_http_request_not_handled_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_http_request_preflight_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_http_request_preflight_count_Ptr != null)
-                    return ref *(long*)ecs_http_request_preflight_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_http_request_preflight_count", out ecs_http_request_preflight_count_Ptr);
-                return ref *(long*)ecs_http_request_preflight_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_http_request_received_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_http_request_received_count_Ptr != null)
-                    return ref *(long*)ecs_http_request_received_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_http_request_received_count", out ecs_http_request_received_count_Ptr);
-                return ref *(long*)ecs_http_request_received_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_http_send_error_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_http_send_error_count_Ptr != null)
-                    return ref *(long*)ecs_http_send_error_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_http_send_error_count", out ecs_http_send_error_count_Ptr);
-                return ref *(long*)ecs_http_send_error_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_http_send_ok_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_http_send_ok_count_Ptr != null)
-                    return ref *(long*)ecs_http_send_ok_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_http_send_ok_count", out ecs_http_send_ok_count_Ptr);
-                return ref *(long*)ecs_http_send_ok_count_Ptr;
-            }
-        }
-
-        public static ref ecs_os_api_t ecs_os_api
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_os_api_Ptr != null)
-                    return ref *(ecs_os_api_t*)ecs_os_api_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_os_api", out ecs_os_api_Ptr);
-                return ref *(ecs_os_api_t*)ecs_os_api_Ptr;
-            }
-        }
-
-        public static ref long ecs_os_api_calloc_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_os_api_calloc_count_Ptr != null)
-                    return ref *(long*)ecs_os_api_calloc_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_os_api_calloc_count", out ecs_os_api_calloc_count_Ptr);
-                return ref *(long*)ecs_os_api_calloc_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_os_api_free_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_os_api_free_count_Ptr != null)
-                    return ref *(long*)ecs_os_api_free_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_os_api_free_count", out ecs_os_api_free_count_Ptr);
-                return ref *(long*)ecs_os_api_free_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_os_api_malloc_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_os_api_malloc_count_Ptr != null)
-                    return ref *(long*)ecs_os_api_malloc_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_os_api_malloc_count", out ecs_os_api_malloc_count_Ptr);
-                return ref *(long*)ecs_os_api_malloc_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_os_api_realloc_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_os_api_realloc_count_Ptr != null)
-                    return ref *(long*)ecs_os_api_realloc_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_os_api_realloc_count", out ecs_os_api_realloc_count_Ptr);
-                return ref *(long*)ecs_os_api_realloc_count_Ptr;
-            }
-        }
-
-        public static ref ulong ECS_OVERRIDE
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ECS_OVERRIDE_Ptr != null)
-                    return ref *(ulong*)ECS_OVERRIDE_Ptr;
-                BindgenInternal.LoadDllSymbol("ECS_OVERRIDE", out ECS_OVERRIDE_Ptr);
-                return ref *(ulong*)ECS_OVERRIDE_Ptr;
-            }
-        }
-
-        public static ref ulong ECS_PAIR
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ECS_PAIR_Ptr != null)
-                    return ref *(ulong*)ECS_PAIR_Ptr;
-                BindgenInternal.LoadDllSymbol("ECS_PAIR", out ECS_PAIR_Ptr);
-                return ref *(ulong*)ECS_PAIR_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_delete_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_delete_count_Ptr != null)
-                    return ref *(long*)ecs_rest_delete_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_delete_count", out ecs_rest_delete_count_Ptr);
-                return ref *(long*)ecs_rest_delete_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_delete_error_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_delete_error_count_Ptr != null)
-                    return ref *(long*)ecs_rest_delete_error_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_delete_error_count", out ecs_rest_delete_error_count_Ptr);
-                return ref *(long*)ecs_rest_delete_error_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_enable_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_enable_count_Ptr != null)
-                    return ref *(long*)ecs_rest_enable_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_enable_count", out ecs_rest_enable_count_Ptr);
-                return ref *(long*)ecs_rest_enable_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_enable_error_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_enable_error_count_Ptr != null)
-                    return ref *(long*)ecs_rest_enable_error_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_enable_error_count", out ecs_rest_enable_error_count_Ptr);
-                return ref *(long*)ecs_rest_enable_error_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_entity_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_entity_count_Ptr != null)
-                    return ref *(long*)ecs_rest_entity_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_entity_count", out ecs_rest_entity_count_Ptr);
-                return ref *(long*)ecs_rest_entity_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_entity_error_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_entity_error_count_Ptr != null)
-                    return ref *(long*)ecs_rest_entity_error_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_entity_error_count", out ecs_rest_entity_error_count_Ptr);
-                return ref *(long*)ecs_rest_entity_error_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_pipeline_stats_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_pipeline_stats_count_Ptr != null)
-                    return ref *(long*)ecs_rest_pipeline_stats_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_pipeline_stats_count", out ecs_rest_pipeline_stats_count_Ptr);
-                return ref *(long*)ecs_rest_pipeline_stats_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_query_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_query_count_Ptr != null)
-                    return ref *(long*)ecs_rest_query_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_query_count", out ecs_rest_query_count_Ptr);
-                return ref *(long*)ecs_rest_query_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_query_error_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_query_error_count_Ptr != null)
-                    return ref *(long*)ecs_rest_query_error_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_query_error_count", out ecs_rest_query_error_count_Ptr);
-                return ref *(long*)ecs_rest_query_error_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_query_name_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_query_name_count_Ptr != null)
-                    return ref *(long*)ecs_rest_query_name_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_query_name_count", out ecs_rest_query_name_count_Ptr);
-                return ref *(long*)ecs_rest_query_name_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_query_name_error_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_query_name_error_count_Ptr != null)
-                    return ref *(long*)ecs_rest_query_name_error_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_query_name_error_count", out ecs_rest_query_name_error_count_Ptr);
-                return ref *(long*)ecs_rest_query_name_error_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_query_name_from_cache_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_query_name_from_cache_count_Ptr != null)
-                    return ref *(long*)ecs_rest_query_name_from_cache_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_query_name_from_cache_count", out ecs_rest_query_name_from_cache_count_Ptr);
-                return ref *(long*)ecs_rest_query_name_from_cache_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_request_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_request_count_Ptr != null)
-                    return ref *(long*)ecs_rest_request_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_request_count", out ecs_rest_request_count_Ptr);
-                return ref *(long*)ecs_rest_request_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_stats_error_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_stats_error_count_Ptr != null)
-                    return ref *(long*)ecs_rest_stats_error_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_stats_error_count", out ecs_rest_stats_error_count_Ptr);
-                return ref *(long*)ecs_rest_stats_error_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_rest_world_stats_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_rest_world_stats_count_Ptr != null)
-                    return ref *(long*)ecs_rest_world_stats_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_rest_world_stats_count", out ecs_rest_world_stats_count_Ptr);
-                return ref *(long*)ecs_rest_world_stats_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_stack_allocator_alloc_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_stack_allocator_alloc_count_Ptr != null)
-                    return ref *(long*)ecs_stack_allocator_alloc_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_stack_allocator_alloc_count", out ecs_stack_allocator_alloc_count_Ptr);
-                return ref *(long*)ecs_stack_allocator_alloc_count_Ptr;
-            }
-        }
-
-        public static ref long ecs_stack_allocator_free_count
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ecs_stack_allocator_free_count_Ptr != null)
-                    return ref *(long*)ecs_stack_allocator_free_count_Ptr;
-                BindgenInternal.LoadDllSymbol("ecs_stack_allocator_free_count", out ecs_stack_allocator_free_count_Ptr);
-                return ref *(long*)ecs_stack_allocator_free_count_Ptr;
-            }
-        }
-
-        public static ref ulong ECS_TOGGLE
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (ECS_TOGGLE_Ptr != null)
-                    return ref *(ulong*)ECS_TOGGLE_Ptr;
-                BindgenInternal.LoadDllSymbol("ECS_TOGGLE", out ECS_TOGGLE_Ptr);
-                return ref *(ulong*)ECS_TOGGLE_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAcceleration
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAcceleration_Ptr != null)
-                    return ref *(ulong*)EcsAcceleration_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAcceleration", out EcsAcceleration_Ptr);
-                return ref *(ulong*)EcsAcceleration_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAcyclic
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAcyclic_Ptr != null)
-                    return ref *(ulong*)EcsAcyclic_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAcyclic", out EcsAcyclic_Ptr);
-                return ref *(ulong*)EcsAcyclic_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAlertCritical
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAlertCritical_Ptr != null)
-                    return ref *(ulong*)EcsAlertCritical_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAlertCritical", out EcsAlertCritical_Ptr);
-                return ref *(ulong*)EcsAlertCritical_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAlertError
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAlertError_Ptr != null)
-                    return ref *(ulong*)EcsAlertError_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAlertError", out EcsAlertError_Ptr);
-                return ref *(ulong*)EcsAlertError_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAlertInfo
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAlertInfo_Ptr != null)
-                    return ref *(ulong*)EcsAlertInfo_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAlertInfo", out EcsAlertInfo_Ptr);
-                return ref *(ulong*)EcsAlertInfo_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAlertWarning
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAlertWarning_Ptr != null)
-                    return ref *(ulong*)EcsAlertWarning_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAlertWarning", out EcsAlertWarning_Ptr);
-                return ref *(ulong*)EcsAlertWarning_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAlias
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAlias_Ptr != null)
-                    return ref *(ulong*)EcsAlias_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAlias", out EcsAlias_Ptr);
-                return ref *(ulong*)EcsAlias_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAlwaysOverride
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAlwaysOverride_Ptr != null)
-                    return ref *(ulong*)EcsAlwaysOverride_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAlwaysOverride", out EcsAlwaysOverride_Ptr);
-                return ref *(ulong*)EcsAlwaysOverride_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAmount
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAmount_Ptr != null)
-                    return ref *(ulong*)EcsAmount_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAmount", out EcsAmount_Ptr);
-                return ref *(ulong*)EcsAmount_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAmpere
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAmpere_Ptr != null)
-                    return ref *(ulong*)EcsAmpere_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAmpere", out EcsAmpere_Ptr);
-                return ref *(ulong*)EcsAmpere_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAngle
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAngle_Ptr != null)
-                    return ref *(ulong*)EcsAngle_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAngle", out EcsAngle_Ptr);
-                return ref *(ulong*)EcsAngle_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAny
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAny_Ptr != null)
-                    return ref *(ulong*)EcsAny_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAny", out EcsAny_Ptr);
-                return ref *(ulong*)EcsAny_Ptr;
-            }
-        }
-
-        public static ref ulong EcsAtto
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsAtto_Ptr != null)
-                    return ref *(ulong*)EcsAtto_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsAtto", out EcsAtto_Ptr);
-                return ref *(ulong*)EcsAtto_Ptr;
-            }
-        }
-
-        public static ref ulong EcsBar
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsBar_Ptr != null)
-                    return ref *(ulong*)EcsBar_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsBar", out EcsBar_Ptr);
-                return ref *(ulong*)EcsBar_Ptr;
-            }
-        }
-
-        public static ref ulong EcsBel
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsBel_Ptr != null)
-                    return ref *(ulong*)EcsBel_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsBel", out EcsBel_Ptr);
-                return ref *(ulong*)EcsBel_Ptr;
-            }
-        }
-
-        public static ref ulong EcsBits
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsBits_Ptr != null)
-                    return ref *(ulong*)EcsBits_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsBits", out EcsBits_Ptr);
-                return ref *(ulong*)EcsBits_Ptr;
-            }
-        }
-
-        public static ref ulong EcsBitsPerSecond
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsBitsPerSecond_Ptr != null)
-                    return ref *(ulong*)EcsBitsPerSecond_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsBitsPerSecond", out EcsBitsPerSecond_Ptr);
-                return ref *(ulong*)EcsBitsPerSecond_Ptr;
-            }
-        }
-
-        public static ref ulong EcsBytes
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsBytes_Ptr != null)
-                    return ref *(ulong*)EcsBytes_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsBytes", out EcsBytes_Ptr);
-                return ref *(ulong*)EcsBytes_Ptr;
-            }
-        }
-
-        public static ref ulong EcsBytesPerSecond
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsBytesPerSecond_Ptr != null)
-                    return ref *(ulong*)EcsBytesPerSecond_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsBytesPerSecond", out EcsBytesPerSecond_Ptr);
-                return ref *(ulong*)EcsBytesPerSecond_Ptr;
-            }
-        }
-
-        public static ref ulong EcsCandela
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsCandela_Ptr != null)
-                    return ref *(ulong*)EcsCandela_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsCandela", out EcsCandela_Ptr);
-                return ref *(ulong*)EcsCandela_Ptr;
-            }
-        }
-
-        public static ref ulong EcsCelsius
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsCelsius_Ptr != null)
-                    return ref *(ulong*)EcsCelsius_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsCelsius", out EcsCelsius_Ptr);
-                return ref *(ulong*)EcsCelsius_Ptr;
-            }
-        }
-
-        public static ref ulong EcsCenti
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsCenti_Ptr != null)
-                    return ref *(ulong*)EcsCenti_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsCenti", out EcsCenti_Ptr);
-                return ref *(ulong*)EcsCenti_Ptr;
-            }
-        }
-
-        public static ref ulong EcsCentiMeters
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsCentiMeters_Ptr != null)
-                    return ref *(ulong*)EcsCentiMeters_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsCentiMeters", out EcsCentiMeters_Ptr);
-                return ref *(ulong*)EcsCentiMeters_Ptr;
-            }
-        }
-
-        public static ref ulong EcsChildOf
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsChildOf_Ptr != null)
-                    return ref *(ulong*)EcsChildOf_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsChildOf", out EcsChildOf_Ptr);
-                return ref *(ulong*)EcsChildOf_Ptr;
-            }
-        }
-
-        public static ref ulong EcsConstant
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsConstant_Ptr != null)
-                    return ref *(ulong*)EcsConstant_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsConstant", out EcsConstant_Ptr);
-                return ref *(ulong*)EcsConstant_Ptr;
-            }
-        }
-
-        public static ref ulong EcsCounter
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsCounter_Ptr != null)
-                    return ref *(ulong*)EcsCounter_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsCounter", out EcsCounter_Ptr);
-                return ref *(ulong*)EcsCounter_Ptr;
-            }
-        }
-
-        public static ref ulong EcsCounterId
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsCounterId_Ptr != null)
-                    return ref *(ulong*)EcsCounterId_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsCounterId", out EcsCounterId_Ptr);
-                return ref *(ulong*)EcsCounterId_Ptr;
-            }
-        }
-
-        public static ref ulong EcsCounterIncrement
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsCounterIncrement_Ptr != null)
-                    return ref *(ulong*)EcsCounterIncrement_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsCounterIncrement", out EcsCounterIncrement_Ptr);
-                return ref *(ulong*)EcsCounterIncrement_Ptr;
-            }
-        }
-
-        public static ref ulong EcsData
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsData_Ptr != null)
-                    return ref *(ulong*)EcsData_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsData", out EcsData_Ptr);
-                return ref *(ulong*)EcsData_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDataRate
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDataRate_Ptr != null)
-                    return ref *(ulong*)EcsDataRate_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDataRate", out EcsDataRate_Ptr);
-                return ref *(ulong*)EcsDataRate_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDate
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDate_Ptr != null)
-                    return ref *(ulong*)EcsDate_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDate", out EcsDate_Ptr);
-                return ref *(ulong*)EcsDate_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDays
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDays_Ptr != null)
-                    return ref *(ulong*)EcsDays_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDays", out EcsDays_Ptr);
-                return ref *(ulong*)EcsDays_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDeca
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDeca_Ptr != null)
-                    return ref *(ulong*)EcsDeca_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDeca", out EcsDeca_Ptr);
-                return ref *(ulong*)EcsDeca_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDeci
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDeci_Ptr != null)
-                    return ref *(ulong*)EcsDeci_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDeci", out EcsDeci_Ptr);
-                return ref *(ulong*)EcsDeci_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDeciBel
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDeciBel_Ptr != null)
-                    return ref *(ulong*)EcsDeciBel_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDeciBel", out EcsDeciBel_Ptr);
-                return ref *(ulong*)EcsDeciBel_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDefaultChildComponent
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDefaultChildComponent_Ptr != null)
-                    return ref *(ulong*)EcsDefaultChildComponent_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDefaultChildComponent", out EcsDefaultChildComponent_Ptr);
-                return ref *(ulong*)EcsDefaultChildComponent_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDegrees
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDegrees_Ptr != null)
-                    return ref *(ulong*)EcsDegrees_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDegrees", out EcsDegrees_Ptr);
-                return ref *(ulong*)EcsDegrees_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDelete
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDelete_Ptr != null)
-                    return ref *(ulong*)EcsDelete_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDelete", out EcsDelete_Ptr);
-                return ref *(ulong*)EcsDelete_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDependsOn
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDependsOn_Ptr != null)
-                    return ref *(ulong*)EcsDependsOn_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDependsOn", out EcsDependsOn_Ptr);
-                return ref *(ulong*)EcsDependsOn_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDisabled
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDisabled_Ptr != null)
-                    return ref *(ulong*)EcsDisabled_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDisabled", out EcsDisabled_Ptr);
-                return ref *(ulong*)EcsDisabled_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDocBrief
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDocBrief_Ptr != null)
-                    return ref *(ulong*)EcsDocBrief_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDocBrief", out EcsDocBrief_Ptr);
-                return ref *(ulong*)EcsDocBrief_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDocColor
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDocColor_Ptr != null)
-                    return ref *(ulong*)EcsDocColor_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDocColor", out EcsDocColor_Ptr);
-                return ref *(ulong*)EcsDocColor_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDocDetail
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDocDetail_Ptr != null)
-                    return ref *(ulong*)EcsDocDetail_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDocDetail", out EcsDocDetail_Ptr);
-                return ref *(ulong*)EcsDocDetail_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDocLink
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDocLink_Ptr != null)
-                    return ref *(ulong*)EcsDocLink_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDocLink", out EcsDocLink_Ptr);
-                return ref *(ulong*)EcsDocLink_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDontInherit
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDontInherit_Ptr != null)
-                    return ref *(ulong*)EcsDontInherit_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDontInherit", out EcsDontInherit_Ptr);
-                return ref *(ulong*)EcsDontInherit_Ptr;
-            }
-        }
-
-        public static ref ulong EcsDuration
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsDuration_Ptr != null)
-                    return ref *(ulong*)EcsDuration_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsDuration", out EcsDuration_Ptr);
-                return ref *(ulong*)EcsDuration_Ptr;
-            }
-        }
-
-        public static ref ulong EcsElectricCurrent
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsElectricCurrent_Ptr != null)
-                    return ref *(ulong*)EcsElectricCurrent_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsElectricCurrent", out EcsElectricCurrent_Ptr);
-                return ref *(ulong*)EcsElectricCurrent_Ptr;
-            }
-        }
-
-        public static ref ulong EcsEmpty
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsEmpty_Ptr != null)
-                    return ref *(ulong*)EcsEmpty_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsEmpty", out EcsEmpty_Ptr);
-                return ref *(ulong*)EcsEmpty_Ptr;
-            }
-        }
-
-        public static ref ulong EcsExa
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsExa_Ptr != null)
-                    return ref *(ulong*)EcsExa_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsExa", out EcsExa_Ptr);
-                return ref *(ulong*)EcsExa_Ptr;
-            }
-        }
-
-        public static ref ulong EcsExbi
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsExbi_Ptr != null)
-                    return ref *(ulong*)EcsExbi_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsExbi", out EcsExbi_Ptr);
-                return ref *(ulong*)EcsExbi_Ptr;
-            }
-        }
-
-        public static ref ulong EcsExclusive
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsExclusive_Ptr != null)
-                    return ref *(ulong*)EcsExclusive_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsExclusive", out EcsExclusive_Ptr);
-                return ref *(ulong*)EcsExclusive_Ptr;
-            }
-        }
-
-        public static ref ulong EcsFahrenheit
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsFahrenheit_Ptr != null)
-                    return ref *(ulong*)EcsFahrenheit_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsFahrenheit", out EcsFahrenheit_Ptr);
-                return ref *(ulong*)EcsFahrenheit_Ptr;
-            }
-        }
-
-        public static ref ulong EcsFemto
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsFemto_Ptr != null)
-                    return ref *(ulong*)EcsFemto_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsFemto", out EcsFemto_Ptr);
-                return ref *(ulong*)EcsFemto_Ptr;
-            }
-        }
-
-        public static ref ulong EcsFinal
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsFinal_Ptr != null)
-                    return ref *(ulong*)EcsFinal_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsFinal", out EcsFinal_Ptr);
-                return ref *(ulong*)EcsFinal_Ptr;
-            }
-        }
-
-        public static ref ulong EcsFlatten
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsFlatten_Ptr != null)
-                    return ref *(ulong*)EcsFlatten_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsFlatten", out EcsFlatten_Ptr);
-                return ref *(ulong*)EcsFlatten_Ptr;
-            }
-        }
-
-        public static ref ulong EcsFlecs
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsFlecs_Ptr != null)
-                    return ref *(ulong*)EcsFlecs_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsFlecs", out EcsFlecs_Ptr);
-                return ref *(ulong*)EcsFlecs_Ptr;
-            }
-        }
-
-        public static ref ulong EcsFlecsCore
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsFlecsCore_Ptr != null)
-                    return ref *(ulong*)EcsFlecsCore_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsFlecsCore", out EcsFlecsCore_Ptr);
-                return ref *(ulong*)EcsFlecsCore_Ptr;
-            }
-        }
-
-        public static ref ulong EcsForce
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsForce_Ptr != null)
-                    return ref *(ulong*)EcsForce_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsForce", out EcsForce_Ptr);
-                return ref *(ulong*)EcsForce_Ptr;
-            }
-        }
-
-        public static ref ulong EcsFrequency
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsFrequency_Ptr != null)
-                    return ref *(ulong*)EcsFrequency_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsFrequency", out EcsFrequency_Ptr);
-                return ref *(ulong*)EcsFrequency_Ptr;
-            }
-        }
-
-        public static ref ulong EcsGauge
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsGauge_Ptr != null)
-                    return ref *(ulong*)EcsGauge_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsGauge", out EcsGauge_Ptr);
-                return ref *(ulong*)EcsGauge_Ptr;
-            }
-        }
-
-        public static ref ulong EcsGibi
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsGibi_Ptr != null)
-                    return ref *(ulong*)EcsGibi_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsGibi", out EcsGibi_Ptr);
-                return ref *(ulong*)EcsGibi_Ptr;
-            }
-        }
-
-        public static ref ulong EcsGibiBytes
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsGibiBytes_Ptr != null)
-                    return ref *(ulong*)EcsGibiBytes_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsGibiBytes", out EcsGibiBytes_Ptr);
-                return ref *(ulong*)EcsGibiBytes_Ptr;
-            }
-        }
-
-        public static ref ulong EcsGiga
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsGiga_Ptr != null)
-                    return ref *(ulong*)EcsGiga_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsGiga", out EcsGiga_Ptr);
-                return ref *(ulong*)EcsGiga_Ptr;
-            }
-        }
-
-        public static ref ulong EcsGigaBits
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsGigaBits_Ptr != null)
-                    return ref *(ulong*)EcsGigaBits_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsGigaBits", out EcsGigaBits_Ptr);
-                return ref *(ulong*)EcsGigaBits_Ptr;
-            }
-        }
-
-        public static ref ulong EcsGigaBitsPerSecond
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsGigaBitsPerSecond_Ptr != null)
-                    return ref *(ulong*)EcsGigaBitsPerSecond_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsGigaBitsPerSecond", out EcsGigaBitsPerSecond_Ptr);
-                return ref *(ulong*)EcsGigaBitsPerSecond_Ptr;
-            }
-        }
-
-        public static ref ulong EcsGigaBytes
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsGigaBytes_Ptr != null)
-                    return ref *(ulong*)EcsGigaBytes_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsGigaBytes", out EcsGigaBytes_Ptr);
-                return ref *(ulong*)EcsGigaBytes_Ptr;
-            }
-        }
-
-        public static ref ulong EcsGigaBytesPerSecond
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsGigaBytesPerSecond_Ptr != null)
-                    return ref *(ulong*)EcsGigaBytesPerSecond_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsGigaBytesPerSecond", out EcsGigaBytesPerSecond_Ptr);
-                return ref *(ulong*)EcsGigaBytesPerSecond_Ptr;
-            }
-        }
-
-        public static ref ulong EcsGigaHertz
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsGigaHertz_Ptr != null)
-                    return ref *(ulong*)EcsGigaHertz_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsGigaHertz", out EcsGigaHertz_Ptr);
-                return ref *(ulong*)EcsGigaHertz_Ptr;
-            }
-        }
-
-        public static ref ulong EcsGrams
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsGrams_Ptr != null)
-                    return ref *(ulong*)EcsGrams_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsGrams", out EcsGrams_Ptr);
-                return ref *(ulong*)EcsGrams_Ptr;
-            }
-        }
-
-        public static ref ulong EcsHecto
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsHecto_Ptr != null)
-                    return ref *(ulong*)EcsHecto_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsHecto", out EcsHecto_Ptr);
-                return ref *(ulong*)EcsHecto_Ptr;
-            }
-        }
-
-        public static ref ulong EcsHertz
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsHertz_Ptr != null)
-                    return ref *(ulong*)EcsHertz_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsHertz", out EcsHertz_Ptr);
-                return ref *(ulong*)EcsHertz_Ptr;
-            }
-        }
-
-        public static ref ulong EcsHours
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsHours_Ptr != null)
-                    return ref *(ulong*)EcsHours_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsHours", out EcsHours_Ptr);
-                return ref *(ulong*)EcsHours_Ptr;
-            }
-        }
-
-        public static ref ulong EcsIsA
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsIsA_Ptr != null)
-                    return ref *(ulong*)EcsIsA_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsIsA", out EcsIsA_Ptr);
-                return ref *(ulong*)EcsIsA_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKelvin
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKelvin_Ptr != null)
-                    return ref *(ulong*)EcsKelvin_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKelvin", out EcsKelvin_Ptr);
-                return ref *(ulong*)EcsKelvin_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKibi
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKibi_Ptr != null)
-                    return ref *(ulong*)EcsKibi_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKibi", out EcsKibi_Ptr);
-                return ref *(ulong*)EcsKibi_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKibiBytes
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKibiBytes_Ptr != null)
-                    return ref *(ulong*)EcsKibiBytes_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKibiBytes", out EcsKibiBytes_Ptr);
-                return ref *(ulong*)EcsKibiBytes_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKilo
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKilo_Ptr != null)
-                    return ref *(ulong*)EcsKilo_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKilo", out EcsKilo_Ptr);
-                return ref *(ulong*)EcsKilo_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKiloBits
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKiloBits_Ptr != null)
-                    return ref *(ulong*)EcsKiloBits_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKiloBits", out EcsKiloBits_Ptr);
-                return ref *(ulong*)EcsKiloBits_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKiloBitsPerSecond
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKiloBitsPerSecond_Ptr != null)
-                    return ref *(ulong*)EcsKiloBitsPerSecond_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKiloBitsPerSecond", out EcsKiloBitsPerSecond_Ptr);
-                return ref *(ulong*)EcsKiloBitsPerSecond_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKiloBytes
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKiloBytes_Ptr != null)
-                    return ref *(ulong*)EcsKiloBytes_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKiloBytes", out EcsKiloBytes_Ptr);
-                return ref *(ulong*)EcsKiloBytes_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKiloBytesPerSecond
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKiloBytesPerSecond_Ptr != null)
-                    return ref *(ulong*)EcsKiloBytesPerSecond_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKiloBytesPerSecond", out EcsKiloBytesPerSecond_Ptr);
-                return ref *(ulong*)EcsKiloBytesPerSecond_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKiloGrams
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKiloGrams_Ptr != null)
-                    return ref *(ulong*)EcsKiloGrams_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKiloGrams", out EcsKiloGrams_Ptr);
-                return ref *(ulong*)EcsKiloGrams_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKiloHertz
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKiloHertz_Ptr != null)
-                    return ref *(ulong*)EcsKiloHertz_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKiloHertz", out EcsKiloHertz_Ptr);
-                return ref *(ulong*)EcsKiloHertz_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKiloMeters
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKiloMeters_Ptr != null)
-                    return ref *(ulong*)EcsKiloMeters_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKiloMeters", out EcsKiloMeters_Ptr);
-                return ref *(ulong*)EcsKiloMeters_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKiloMetersPerHour
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKiloMetersPerHour_Ptr != null)
-                    return ref *(ulong*)EcsKiloMetersPerHour_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKiloMetersPerHour", out EcsKiloMetersPerHour_Ptr);
-                return ref *(ulong*)EcsKiloMetersPerHour_Ptr;
-            }
-        }
-
-        public static ref ulong EcsKiloMetersPerSecond
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsKiloMetersPerSecond_Ptr != null)
-                    return ref *(ulong*)EcsKiloMetersPerSecond_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsKiloMetersPerSecond", out EcsKiloMetersPerSecond_Ptr);
-                return ref *(ulong*)EcsKiloMetersPerSecond_Ptr;
-            }
-        }
-
-        public static ref ulong EcsLength
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsLength_Ptr != null)
-                    return ref *(ulong*)EcsLength_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsLength", out EcsLength_Ptr);
-                return ref *(ulong*)EcsLength_Ptr;
-            }
-        }
-
-        public static ref ulong EcsLuminousIntensity
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsLuminousIntensity_Ptr != null)
-                    return ref *(ulong*)EcsLuminousIntensity_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsLuminousIntensity", out EcsLuminousIntensity_Ptr);
-                return ref *(ulong*)EcsLuminousIntensity_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMass
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMass_Ptr != null)
-                    return ref *(ulong*)EcsMass_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMass", out EcsMass_Ptr);
-                return ref *(ulong*)EcsMass_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMebi
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMebi_Ptr != null)
-                    return ref *(ulong*)EcsMebi_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMebi", out EcsMebi_Ptr);
-                return ref *(ulong*)EcsMebi_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMebiBytes
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMebiBytes_Ptr != null)
-                    return ref *(ulong*)EcsMebiBytes_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMebiBytes", out EcsMebiBytes_Ptr);
-                return ref *(ulong*)EcsMebiBytes_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMega
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMega_Ptr != null)
-                    return ref *(ulong*)EcsMega_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMega", out EcsMega_Ptr);
-                return ref *(ulong*)EcsMega_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMegaBits
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMegaBits_Ptr != null)
-                    return ref *(ulong*)EcsMegaBits_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMegaBits", out EcsMegaBits_Ptr);
-                return ref *(ulong*)EcsMegaBits_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMegaBitsPerSecond
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMegaBitsPerSecond_Ptr != null)
-                    return ref *(ulong*)EcsMegaBitsPerSecond_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMegaBitsPerSecond", out EcsMegaBitsPerSecond_Ptr);
-                return ref *(ulong*)EcsMegaBitsPerSecond_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMegaBytes
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMegaBytes_Ptr != null)
-                    return ref *(ulong*)EcsMegaBytes_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMegaBytes", out EcsMegaBytes_Ptr);
-                return ref *(ulong*)EcsMegaBytes_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMegaBytesPerSecond
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMegaBytesPerSecond_Ptr != null)
-                    return ref *(ulong*)EcsMegaBytesPerSecond_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMegaBytesPerSecond", out EcsMegaBytesPerSecond_Ptr);
-                return ref *(ulong*)EcsMegaBytesPerSecond_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMegaHertz
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMegaHertz_Ptr != null)
-                    return ref *(ulong*)EcsMegaHertz_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMegaHertz", out EcsMegaHertz_Ptr);
-                return ref *(ulong*)EcsMegaHertz_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMeters
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMeters_Ptr != null)
-                    return ref *(ulong*)EcsMeters_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMeters", out EcsMeters_Ptr);
-                return ref *(ulong*)EcsMeters_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMetersPerSecond
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMetersPerSecond_Ptr != null)
-                    return ref *(ulong*)EcsMetersPerSecond_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMetersPerSecond", out EcsMetersPerSecond_Ptr);
-                return ref *(ulong*)EcsMetersPerSecond_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMetric
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMetric_Ptr != null)
-                    return ref *(ulong*)EcsMetric_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMetric", out EcsMetric_Ptr);
-                return ref *(ulong*)EcsMetric_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMetricInstance
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMetricInstance_Ptr != null)
-                    return ref *(ulong*)EcsMetricInstance_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMetricInstance", out EcsMetricInstance_Ptr);
-                return ref *(ulong*)EcsMetricInstance_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMicro
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMicro_Ptr != null)
-                    return ref *(ulong*)EcsMicro_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMicro", out EcsMicro_Ptr);
-                return ref *(ulong*)EcsMicro_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMicroMeters
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMicroMeters_Ptr != null)
-                    return ref *(ulong*)EcsMicroMeters_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMicroMeters", out EcsMicroMeters_Ptr);
-                return ref *(ulong*)EcsMicroMeters_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMicroSeconds
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMicroSeconds_Ptr != null)
-                    return ref *(ulong*)EcsMicroSeconds_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMicroSeconds", out EcsMicroSeconds_Ptr);
-                return ref *(ulong*)EcsMicroSeconds_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMiles
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMiles_Ptr != null)
-                    return ref *(ulong*)EcsMiles_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMiles", out EcsMiles_Ptr);
-                return ref *(ulong*)EcsMiles_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMilesPerHour
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMilesPerHour_Ptr != null)
-                    return ref *(ulong*)EcsMilesPerHour_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMilesPerHour", out EcsMilesPerHour_Ptr);
-                return ref *(ulong*)EcsMilesPerHour_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMilli
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMilli_Ptr != null)
-                    return ref *(ulong*)EcsMilli_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMilli", out EcsMilli_Ptr);
-                return ref *(ulong*)EcsMilli_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMilliMeters
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMilliMeters_Ptr != null)
-                    return ref *(ulong*)EcsMilliMeters_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMilliMeters", out EcsMilliMeters_Ptr);
-                return ref *(ulong*)EcsMilliMeters_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMilliSeconds
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMilliSeconds_Ptr != null)
-                    return ref *(ulong*)EcsMilliSeconds_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMilliSeconds", out EcsMilliSeconds_Ptr);
-                return ref *(ulong*)EcsMilliSeconds_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMinutes
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMinutes_Ptr != null)
-                    return ref *(ulong*)EcsMinutes_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMinutes", out EcsMinutes_Ptr);
-                return ref *(ulong*)EcsMinutes_Ptr;
-            }
-        }
-
-        public static ref ulong EcsModule
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsModule_Ptr != null)
-                    return ref *(ulong*)EcsModule_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsModule", out EcsModule_Ptr);
-                return ref *(ulong*)EcsModule_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMole
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMole_Ptr != null)
-                    return ref *(ulong*)EcsMole_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMole", out EcsMole_Ptr);
-                return ref *(ulong*)EcsMole_Ptr;
-            }
-        }
-
-        public static ref ulong EcsMonitor
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsMonitor_Ptr != null)
-                    return ref *(ulong*)EcsMonitor_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsMonitor", out EcsMonitor_Ptr);
-                return ref *(ulong*)EcsMonitor_Ptr;
-            }
-        }
-
-        public static ref ulong EcsName
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsName_Ptr != null)
-                    return ref *(ulong*)EcsName_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsName", out EcsName_Ptr);
-                return ref *(ulong*)EcsName_Ptr;
-            }
-        }
-
-        public static ref ulong EcsNano
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsNano_Ptr != null)
-                    return ref *(ulong*)EcsNano_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsNano", out EcsNano_Ptr);
-                return ref *(ulong*)EcsNano_Ptr;
-            }
-        }
-
-        public static ref ulong EcsNanoMeters
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsNanoMeters_Ptr != null)
-                    return ref *(ulong*)EcsNanoMeters_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsNanoMeters", out EcsNanoMeters_Ptr);
-                return ref *(ulong*)EcsNanoMeters_Ptr;
-            }
-        }
-
-        public static ref ulong EcsNanoSeconds
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsNanoSeconds_Ptr != null)
-                    return ref *(ulong*)EcsNanoSeconds_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsNanoSeconds", out EcsNanoSeconds_Ptr);
-                return ref *(ulong*)EcsNanoSeconds_Ptr;
-            }
-        }
-
-        public static ref ulong EcsNewton
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsNewton_Ptr != null)
-                    return ref *(ulong*)EcsNewton_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsNewton", out EcsNewton_Ptr);
-                return ref *(ulong*)EcsNewton_Ptr;
-            }
-        }
-
-        public static ref ulong EcsObserver
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsObserver_Ptr != null)
-                    return ref *(ulong*)EcsObserver_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsObserver", out EcsObserver_Ptr);
-                return ref *(ulong*)EcsObserver_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnAdd
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnAdd_Ptr != null)
-                    return ref *(ulong*)EcsOnAdd_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnAdd", out EcsOnAdd_Ptr);
-                return ref *(ulong*)EcsOnAdd_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnDelete
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnDelete_Ptr != null)
-                    return ref *(ulong*)EcsOnDelete_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnDelete", out EcsOnDelete_Ptr);
-                return ref *(ulong*)EcsOnDelete_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnDeleteTarget
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnDeleteTarget_Ptr != null)
-                    return ref *(ulong*)EcsOnDeleteTarget_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnDeleteTarget", out EcsOnDeleteTarget_Ptr);
-                return ref *(ulong*)EcsOnDeleteTarget_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOneOf
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOneOf_Ptr != null)
-                    return ref *(ulong*)EcsOneOf_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOneOf", out EcsOneOf_Ptr);
-                return ref *(ulong*)EcsOneOf_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnLoad
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnLoad_Ptr != null)
-                    return ref *(ulong*)EcsOnLoad_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnLoad", out EcsOnLoad_Ptr);
-                return ref *(ulong*)EcsOnLoad_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnRemove
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnRemove_Ptr != null)
-                    return ref *(ulong*)EcsOnRemove_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnRemove", out EcsOnRemove_Ptr);
-                return ref *(ulong*)EcsOnRemove_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnSet
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnSet_Ptr != null)
-                    return ref *(ulong*)EcsOnSet_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnSet", out EcsOnSet_Ptr);
-                return ref *(ulong*)EcsOnSet_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnStart
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnStart_Ptr != null)
-                    return ref *(ulong*)EcsOnStart_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnStart", out EcsOnStart_Ptr);
-                return ref *(ulong*)EcsOnStart_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnStore
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnStore_Ptr != null)
-                    return ref *(ulong*)EcsOnStore_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnStore", out EcsOnStore_Ptr);
-                return ref *(ulong*)EcsOnStore_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnTableCreate
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnTableCreate_Ptr != null)
-                    return ref *(ulong*)EcsOnTableCreate_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnTableCreate", out EcsOnTableCreate_Ptr);
-                return ref *(ulong*)EcsOnTableCreate_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnTableDelete
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnTableDelete_Ptr != null)
-                    return ref *(ulong*)EcsOnTableDelete_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnTableDelete", out EcsOnTableDelete_Ptr);
-                return ref *(ulong*)EcsOnTableDelete_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnTableEmpty
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnTableEmpty_Ptr != null)
-                    return ref *(ulong*)EcsOnTableEmpty_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnTableEmpty", out EcsOnTableEmpty_Ptr);
-                return ref *(ulong*)EcsOnTableEmpty_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnTableFill
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnTableFill_Ptr != null)
-                    return ref *(ulong*)EcsOnTableFill_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnTableFill", out EcsOnTableFill_Ptr);
-                return ref *(ulong*)EcsOnTableFill_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnUpdate
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnUpdate_Ptr != null)
-                    return ref *(ulong*)EcsOnUpdate_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnUpdate", out EcsOnUpdate_Ptr);
-                return ref *(ulong*)EcsOnUpdate_Ptr;
-            }
-        }
-
-        public static ref ulong EcsOnValidate
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsOnValidate_Ptr != null)
-                    return ref *(ulong*)EcsOnValidate_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsOnValidate", out EcsOnValidate_Ptr);
-                return ref *(ulong*)EcsOnValidate_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPanic
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPanic_Ptr != null)
-                    return ref *(ulong*)EcsPanic_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPanic", out EcsPanic_Ptr);
-                return ref *(ulong*)EcsPanic_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPascal
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPascal_Ptr != null)
-                    return ref *(ulong*)EcsPascal_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPascal", out EcsPascal_Ptr);
-                return ref *(ulong*)EcsPascal_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPebi
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPebi_Ptr != null)
-                    return ref *(ulong*)EcsPebi_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPebi", out EcsPebi_Ptr);
-                return ref *(ulong*)EcsPebi_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPercentage
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPercentage_Ptr != null)
-                    return ref *(ulong*)EcsPercentage_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPercentage", out EcsPercentage_Ptr);
-                return ref *(ulong*)EcsPercentage_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPeriod1d
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPeriod1d_Ptr != null)
-                    return ref *(ulong*)EcsPeriod1d_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPeriod1d", out EcsPeriod1d_Ptr);
-                return ref *(ulong*)EcsPeriod1d_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPeriod1h
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPeriod1h_Ptr != null)
-                    return ref *(ulong*)EcsPeriod1h_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPeriod1h", out EcsPeriod1h_Ptr);
-                return ref *(ulong*)EcsPeriod1h_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPeriod1m
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPeriod1m_Ptr != null)
-                    return ref *(ulong*)EcsPeriod1m_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPeriod1m", out EcsPeriod1m_Ptr);
-                return ref *(ulong*)EcsPeriod1m_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPeriod1s
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPeriod1s_Ptr != null)
-                    return ref *(ulong*)EcsPeriod1s_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPeriod1s", out EcsPeriod1s_Ptr);
-                return ref *(ulong*)EcsPeriod1s_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPeriod1w
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPeriod1w_Ptr != null)
-                    return ref *(ulong*)EcsPeriod1w_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPeriod1w", out EcsPeriod1w_Ptr);
-                return ref *(ulong*)EcsPeriod1w_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPeta
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPeta_Ptr != null)
-                    return ref *(ulong*)EcsPeta_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPeta", out EcsPeta_Ptr);
-                return ref *(ulong*)EcsPeta_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPhase
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPhase_Ptr != null)
-                    return ref *(ulong*)EcsPhase_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPhase", out EcsPhase_Ptr);
-                return ref *(ulong*)EcsPhase_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPico
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPico_Ptr != null)
-                    return ref *(ulong*)EcsPico_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPico", out EcsPico_Ptr);
-                return ref *(ulong*)EcsPico_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPicoMeters
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPicoMeters_Ptr != null)
-                    return ref *(ulong*)EcsPicoMeters_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPicoMeters", out EcsPicoMeters_Ptr);
-                return ref *(ulong*)EcsPicoMeters_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPicoSeconds
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPicoSeconds_Ptr != null)
-                    return ref *(ulong*)EcsPicoSeconds_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPicoSeconds", out EcsPicoSeconds_Ptr);
-                return ref *(ulong*)EcsPicoSeconds_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPixels
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPixels_Ptr != null)
-                    return ref *(ulong*)EcsPixels_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPixels", out EcsPixels_Ptr);
-                return ref *(ulong*)EcsPixels_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPostFrame
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPostFrame_Ptr != null)
-                    return ref *(ulong*)EcsPostFrame_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPostFrame", out EcsPostFrame_Ptr);
-                return ref *(ulong*)EcsPostFrame_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPostLoad
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPostLoad_Ptr != null)
-                    return ref *(ulong*)EcsPostLoad_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPostLoad", out EcsPostLoad_Ptr);
-                return ref *(ulong*)EcsPostLoad_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPostUpdate
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPostUpdate_Ptr != null)
-                    return ref *(ulong*)EcsPostUpdate_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPostUpdate", out EcsPostUpdate_Ptr);
-                return ref *(ulong*)EcsPostUpdate_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPredEq
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPredEq_Ptr != null)
-                    return ref *(ulong*)EcsPredEq_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPredEq", out EcsPredEq_Ptr);
-                return ref *(ulong*)EcsPredEq_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPredLookup
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPredLookup_Ptr != null)
-                    return ref *(ulong*)EcsPredLookup_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPredLookup", out EcsPredLookup_Ptr);
-                return ref *(ulong*)EcsPredLookup_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPredMatch
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPredMatch_Ptr != null)
-                    return ref *(ulong*)EcsPredMatch_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPredMatch", out EcsPredMatch_Ptr);
-                return ref *(ulong*)EcsPredMatch_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPrefab
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPrefab_Ptr != null)
-                    return ref *(ulong*)EcsPrefab_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPrefab", out EcsPrefab_Ptr);
-                return ref *(ulong*)EcsPrefab_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPreFrame
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPreFrame_Ptr != null)
-                    return ref *(ulong*)EcsPreFrame_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPreFrame", out EcsPreFrame_Ptr);
-                return ref *(ulong*)EcsPreFrame_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPressure
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPressure_Ptr != null)
-                    return ref *(ulong*)EcsPressure_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPressure", out EcsPressure_Ptr);
-                return ref *(ulong*)EcsPressure_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPreStore
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPreStore_Ptr != null)
-                    return ref *(ulong*)EcsPreStore_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPreStore", out EcsPreStore_Ptr);
-                return ref *(ulong*)EcsPreStore_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPreUpdate
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPreUpdate_Ptr != null)
-                    return ref *(ulong*)EcsPreUpdate_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPreUpdate", out EcsPreUpdate_Ptr);
-                return ref *(ulong*)EcsPreUpdate_Ptr;
-            }
-        }
-
-        public static ref ulong EcsPrivate
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsPrivate_Ptr != null)
-                    return ref *(ulong*)EcsPrivate_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsPrivate", out EcsPrivate_Ptr);
-                return ref *(ulong*)EcsPrivate_Ptr;
-            }
-        }
-
-        public static ref ulong EcsQuantity
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsQuantity_Ptr != null)
-                    return ref *(ulong*)EcsQuantity_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsQuantity", out EcsQuantity_Ptr);
-                return ref *(ulong*)EcsQuantity_Ptr;
-            }
-        }
-
-        public static ref ulong EcsQuery
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsQuery_Ptr != null)
-                    return ref *(ulong*)EcsQuery_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsQuery", out EcsQuery_Ptr);
-                return ref *(ulong*)EcsQuery_Ptr;
-            }
-        }
-
-        public static ref ulong EcsRadians
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsRadians_Ptr != null)
-                    return ref *(ulong*)EcsRadians_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsRadians", out EcsRadians_Ptr);
-                return ref *(ulong*)EcsRadians_Ptr;
-            }
-        }
-
-        public static ref ulong EcsReflexive
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsReflexive_Ptr != null)
-                    return ref *(ulong*)EcsReflexive_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsReflexive", out EcsReflexive_Ptr);
-                return ref *(ulong*)EcsReflexive_Ptr;
-            }
-        }
-
-        public static ref ulong EcsRemove
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsRemove_Ptr != null)
-                    return ref *(ulong*)EcsRemove_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsRemove", out EcsRemove_Ptr);
-                return ref *(ulong*)EcsRemove_Ptr;
-            }
-        }
-
-        public static ref ulong EcsScopeClose
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsScopeClose_Ptr != null)
-                    return ref *(ulong*)EcsScopeClose_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsScopeClose", out EcsScopeClose_Ptr);
-                return ref *(ulong*)EcsScopeClose_Ptr;
-            }
-        }
-
-        public static ref ulong EcsScopeOpen
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsScopeOpen_Ptr != null)
-                    return ref *(ulong*)EcsScopeOpen_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsScopeOpen", out EcsScopeOpen_Ptr);
-                return ref *(ulong*)EcsScopeOpen_Ptr;
-            }
-        }
-
-        public static ref ulong EcsSeconds
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsSeconds_Ptr != null)
-                    return ref *(ulong*)EcsSeconds_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsSeconds", out EcsSeconds_Ptr);
-                return ref *(ulong*)EcsSeconds_Ptr;
-            }
-        }
-
-        public static ref ulong EcsSlotOf
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsSlotOf_Ptr != null)
-                    return ref *(ulong*)EcsSlotOf_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsSlotOf", out EcsSlotOf_Ptr);
-                return ref *(ulong*)EcsSlotOf_Ptr;
-            }
-        }
-
-        public static ref ulong EcsSpeed
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsSpeed_Ptr != null)
-                    return ref *(ulong*)EcsSpeed_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsSpeed", out EcsSpeed_Ptr);
-                return ref *(ulong*)EcsSpeed_Ptr;
-            }
-        }
-
-        public static ref ulong EcsSymbol
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsSymbol_Ptr != null)
-                    return ref *(ulong*)EcsSymbol_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsSymbol", out EcsSymbol_Ptr);
-                return ref *(ulong*)EcsSymbol_Ptr;
-            }
-        }
-
-        public static ref ulong EcsSymmetric
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsSymmetric_Ptr != null)
-                    return ref *(ulong*)EcsSymmetric_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsSymmetric", out EcsSymmetric_Ptr);
-                return ref *(ulong*)EcsSymmetric_Ptr;
-            }
-        }
-
-        public static ref ulong EcsSystem
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsSystem_Ptr != null)
-                    return ref *(ulong*)EcsSystem_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsSystem", out EcsSystem_Ptr);
-                return ref *(ulong*)EcsSystem_Ptr;
-            }
-        }
-
-        public static ref ulong EcsTag
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsTag_Ptr != null)
-                    return ref *(ulong*)EcsTag_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsTag", out EcsTag_Ptr);
-                return ref *(ulong*)EcsTag_Ptr;
-            }
-        }
-
-        public static ref ulong EcsTebi
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsTebi_Ptr != null)
-                    return ref *(ulong*)EcsTebi_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsTebi", out EcsTebi_Ptr);
-                return ref *(ulong*)EcsTebi_Ptr;
-            }
-        }
-
-        public static ref ulong EcsTemperature
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsTemperature_Ptr != null)
-                    return ref *(ulong*)EcsTemperature_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsTemperature", out EcsTemperature_Ptr);
-                return ref *(ulong*)EcsTemperature_Ptr;
-            }
-        }
-
-        public static ref ulong EcsTera
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsTera_Ptr != null)
-                    return ref *(ulong*)EcsTera_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsTera", out EcsTera_Ptr);
-                return ref *(ulong*)EcsTera_Ptr;
-            }
-        }
-
-        public static ref ulong EcsThis
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsThis_Ptr != null)
-                    return ref *(ulong*)EcsThis_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsThis", out EcsThis_Ptr);
-                return ref *(ulong*)EcsThis_Ptr;
-            }
-        }
-
-        public static ref ulong EcsTime
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsTime_Ptr != null)
-                    return ref *(ulong*)EcsTime_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsTime", out EcsTime_Ptr);
-                return ref *(ulong*)EcsTime_Ptr;
-            }
-        }
-
-        public static ref ulong EcsTransitive
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsTransitive_Ptr != null)
-                    return ref *(ulong*)EcsTransitive_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsTransitive", out EcsTransitive_Ptr);
-                return ref *(ulong*)EcsTransitive_Ptr;
-            }
-        }
-
-        public static ref ulong EcsTraversable
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsTraversable_Ptr != null)
-                    return ref *(ulong*)EcsTraversable_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsTraversable", out EcsTraversable_Ptr);
-                return ref *(ulong*)EcsTraversable_Ptr;
-            }
-        }
-
-        public static ref ulong EcsUnion
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsUnion_Ptr != null)
-                    return ref *(ulong*)EcsUnion_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsUnion", out EcsUnion_Ptr);
-                return ref *(ulong*)EcsUnion_Ptr;
-            }
-        }
-
-        public static ref ulong EcsUnitPrefixes
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsUnitPrefixes_Ptr != null)
-                    return ref *(ulong*)EcsUnitPrefixes_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsUnitPrefixes", out EcsUnitPrefixes_Ptr);
-                return ref *(ulong*)EcsUnitPrefixes_Ptr;
-            }
-        }
-
-        public static ref ulong EcsUnSet
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsUnSet_Ptr != null)
-                    return ref *(ulong*)EcsUnSet_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsUnSet", out EcsUnSet_Ptr);
-                return ref *(ulong*)EcsUnSet_Ptr;
-            }
-        }
-
-        public static ref ulong EcsUri
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsUri_Ptr != null)
-                    return ref *(ulong*)EcsUri_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsUri", out EcsUri_Ptr);
-                return ref *(ulong*)EcsUri_Ptr;
-            }
-        }
-
-        public static ref ulong EcsUriFile
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsUriFile_Ptr != null)
-                    return ref *(ulong*)EcsUriFile_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsUriFile", out EcsUriFile_Ptr);
-                return ref *(ulong*)EcsUriFile_Ptr;
-            }
-        }
-
-        public static ref ulong EcsUriHyperlink
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsUriHyperlink_Ptr != null)
-                    return ref *(ulong*)EcsUriHyperlink_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsUriHyperlink", out EcsUriHyperlink_Ptr);
-                return ref *(ulong*)EcsUriHyperlink_Ptr;
-            }
-        }
-
-        public static ref ulong EcsUriImage
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsUriImage_Ptr != null)
-                    return ref *(ulong*)EcsUriImage_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsUriImage", out EcsUriImage_Ptr);
-                return ref *(ulong*)EcsUriImage_Ptr;
-            }
-        }
-
-        public static ref ulong EcsVariable
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsVariable_Ptr != null)
-                    return ref *(ulong*)EcsVariable_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsVariable", out EcsVariable_Ptr);
-                return ref *(ulong*)EcsVariable_Ptr;
-            }
-        }
-
-        public static ref ulong EcsWildcard
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsWildcard_Ptr != null)
-                    return ref *(ulong*)EcsWildcard_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsWildcard", out EcsWildcard_Ptr);
-                return ref *(ulong*)EcsWildcard_Ptr;
-            }
-        }
-
-        public static ref ulong EcsWith
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsWith_Ptr != null)
-                    return ref *(ulong*)EcsWith_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsWith", out EcsWith_Ptr);
-                return ref *(ulong*)EcsWith_Ptr;
-            }
-        }
-
-        public static ref ulong EcsWorld
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsWorld_Ptr != null)
-                    return ref *(ulong*)EcsWorld_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsWorld", out EcsWorld_Ptr);
-                return ref *(ulong*)EcsWorld_Ptr;
-            }
-        }
-
-        public static ref ulong EcsYobi
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsYobi_Ptr != null)
-                    return ref *(ulong*)EcsYobi_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsYobi", out EcsYobi_Ptr);
-                return ref *(ulong*)EcsYobi_Ptr;
-            }
-        }
-
-        public static ref ulong EcsYocto
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsYocto_Ptr != null)
-                    return ref *(ulong*)EcsYocto_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsYocto", out EcsYocto_Ptr);
-                return ref *(ulong*)EcsYocto_Ptr;
-            }
-        }
-
-        public static ref ulong EcsYotta
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsYotta_Ptr != null)
-                    return ref *(ulong*)EcsYotta_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsYotta", out EcsYotta_Ptr);
-                return ref *(ulong*)EcsYotta_Ptr;
-            }
-        }
-
-        public static ref ulong EcsZebi
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsZebi_Ptr != null)
-                    return ref *(ulong*)EcsZebi_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsZebi", out EcsZebi_Ptr);
-                return ref *(ulong*)EcsZebi_Ptr;
-            }
-        }
-
-        public static ref ulong EcsZepto
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsZepto_Ptr != null)
-                    return ref *(ulong*)EcsZepto_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsZepto", out EcsZepto_Ptr);
-                return ref *(ulong*)EcsZepto_Ptr;
-            }
-        }
-
-        public static ref ulong EcsZetta
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (EcsZetta_Ptr != null)
-                    return ref *(ulong*)EcsZetta_Ptr;
-                BindgenInternal.LoadDllSymbol("EcsZetta", out EcsZetta_Ptr);
-                return ref *(ulong*)EcsZetta_Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_bool_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_bool_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_bool_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_bool_tID_", out FLECS_IDecs_bool_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_bool_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_byte_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_byte_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_byte_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_byte_tID_", out FLECS_IDecs_byte_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_byte_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_char_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_char_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_char_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_char_tID_", out FLECS_IDecs_char_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_char_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_entity_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_entity_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_entity_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_entity_tID_", out FLECS_IDecs_entity_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_entity_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_f32_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_f32_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_f32_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_f32_tID_", out FLECS_IDecs_f32_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_f32_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_f64_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_f64_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_f64_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_f64_tID_", out FLECS_IDecs_f64_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_f64_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_i16_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_i16_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_i16_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_i16_tID_", out FLECS_IDecs_i16_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_i16_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_i32_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_i32_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_i32_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_i32_tID_", out FLECS_IDecs_i32_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_i32_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_i64_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_i64_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_i64_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_i64_tID_", out FLECS_IDecs_i64_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_i64_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_i8_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_i8_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_i8_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_i8_tID_", out FLECS_IDecs_i8_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_i8_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_iptr_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_iptr_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_iptr_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_iptr_tID_", out FLECS_IDecs_iptr_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_iptr_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_string_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_string_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_string_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_string_tID_", out FLECS_IDecs_string_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_string_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_u16_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_u16_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_u16_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_u16_tID_", out FLECS_IDecs_u16_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_u16_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_u32_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_u32_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_u32_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_u32_tID_", out FLECS_IDecs_u32_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_u32_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_u64_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_u64_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_u64_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_u64_tID_", out FLECS_IDecs_u64_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_u64_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_u8_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_u8_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_u8_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_u8_tID_", out FLECS_IDecs_u8_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_u8_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDecs_uptr_tID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDecs_uptr_tID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDecs_uptr_tID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDecs_uptr_tID_", out FLECS_IDecs_uptr_tID__Ptr);
-                return ref *(ulong*)FLECS_IDecs_uptr_tID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAccelerationID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAccelerationID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAccelerationID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAccelerationID_", out FLECS_IDEcsAccelerationID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAccelerationID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAlertCriticalID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAlertCriticalID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAlertCriticalID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertCriticalID_", out FLECS_IDEcsAlertCriticalID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAlertCriticalID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAlertErrorID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAlertErrorID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAlertErrorID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertErrorID_", out FLECS_IDEcsAlertErrorID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAlertErrorID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAlertID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAlertID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAlertID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertID_", out FLECS_IDEcsAlertID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAlertID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAlertInfoID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAlertInfoID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAlertInfoID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertInfoID_", out FLECS_IDEcsAlertInfoID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAlertInfoID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAlertInstanceID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAlertInstanceID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAlertInstanceID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertInstanceID_", out FLECS_IDEcsAlertInstanceID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAlertInstanceID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAlertsActiveID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAlertsActiveID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAlertsActiveID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertsActiveID_", out FLECS_IDEcsAlertsActiveID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAlertsActiveID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAlertTimeoutID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAlertTimeoutID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAlertTimeoutID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertTimeoutID_", out FLECS_IDEcsAlertTimeoutID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAlertTimeoutID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAlertWarningID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAlertWarningID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAlertWarningID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertWarningID_", out FLECS_IDEcsAlertWarningID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAlertWarningID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAmountID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAmountID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAmountID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAmountID_", out FLECS_IDEcsAmountID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAmountID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAmpereID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAmpereID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAmpereID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAmpereID_", out FLECS_IDEcsAmpereID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAmpereID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAngleID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAngleID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAngleID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAngleID_", out FLECS_IDEcsAngleID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAngleID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsArrayID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsArrayID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsArrayID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsArrayID_", out FLECS_IDEcsArrayID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsArrayID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsAttoID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsAttoID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsAttoID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsAttoID_", out FLECS_IDEcsAttoID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsAttoID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsBarID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsBarID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsBarID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsBarID_", out FLECS_IDEcsBarID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsBarID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsBelID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsBelID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsBelID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsBelID_", out FLECS_IDEcsBelID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsBelID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsBitmaskID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsBitmaskID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsBitmaskID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsBitmaskID_", out FLECS_IDEcsBitmaskID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsBitmaskID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsBitsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsBitsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsBitsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsBitsID_", out FLECS_IDEcsBitsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsBitsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsBitsPerSecondID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsBitsPerSecondID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsBitsPerSecondID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsBitsPerSecondID_", out FLECS_IDEcsBitsPerSecondID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsBitsPerSecondID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsBytesID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsBytesID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsBytesID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsBytesID_", out FLECS_IDEcsBytesID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsBytesID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsBytesPerSecondID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsBytesPerSecondID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsBytesPerSecondID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsBytesPerSecondID_", out FLECS_IDEcsBytesPerSecondID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsBytesPerSecondID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsCandelaID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsCandelaID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsCandelaID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsCandelaID_", out FLECS_IDEcsCandelaID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsCandelaID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsCelsiusID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsCelsiusID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsCelsiusID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsCelsiusID_", out FLECS_IDEcsCelsiusID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsCelsiusID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsCentiID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsCentiID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsCentiID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsCentiID_", out FLECS_IDEcsCentiID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsCentiID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsCentiMetersID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsCentiMetersID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsCentiMetersID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsCentiMetersID_", out FLECS_IDEcsCentiMetersID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsCentiMetersID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsComponentID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsComponentID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsComponentID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsComponentID_", out FLECS_IDEcsComponentID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsComponentID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsCounterID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsCounterID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsCounterID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsCounterID_", out FLECS_IDEcsCounterID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsCounterID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsCounterIdID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsCounterIdID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsCounterIdID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsCounterIdID_", out FLECS_IDEcsCounterIdID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsCounterIdID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsCounterIncrementID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsCounterIncrementID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsCounterIncrementID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsCounterIncrementID_", out FLECS_IDEcsCounterIncrementID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsCounterIncrementID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsDataID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsDataID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsDataID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsDataID_", out FLECS_IDEcsDataID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsDataID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsDataRateID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsDataRateID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsDataRateID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsDataRateID_", out FLECS_IDEcsDataRateID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsDataRateID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsDateID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsDateID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsDateID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsDateID_", out FLECS_IDEcsDateID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsDateID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsDaysID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsDaysID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsDaysID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsDaysID_", out FLECS_IDEcsDaysID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsDaysID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsDecaID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsDecaID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsDecaID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsDecaID_", out FLECS_IDEcsDecaID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsDecaID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsDeciBelID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsDeciBelID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsDeciBelID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsDeciBelID_", out FLECS_IDEcsDeciBelID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsDeciBelID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsDeciID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsDeciID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsDeciID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsDeciID_", out FLECS_IDEcsDeciID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsDeciID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsDegreesID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsDegreesID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsDegreesID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsDegreesID_", out FLECS_IDEcsDegreesID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsDegreesID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsDocDescriptionID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsDocDescriptionID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsDocDescriptionID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsDocDescriptionID_", out FLECS_IDEcsDocDescriptionID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsDocDescriptionID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsDurationID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsDurationID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsDurationID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsDurationID_", out FLECS_IDEcsDurationID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsDurationID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsElectricCurrentID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsElectricCurrentID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsElectricCurrentID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsElectricCurrentID_", out FLECS_IDEcsElectricCurrentID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsElectricCurrentID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsEnumID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsEnumID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsEnumID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsEnumID_", out FLECS_IDEcsEnumID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsEnumID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsExaID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsExaID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsExaID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsExaID_", out FLECS_IDEcsExaID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsExaID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsExbiID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsExbiID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsExbiID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsExbiID_", out FLECS_IDEcsExbiID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsExbiID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsFahrenheitID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsFahrenheitID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsFahrenheitID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsFahrenheitID_", out FLECS_IDEcsFahrenheitID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsFahrenheitID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsFemtoID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsFemtoID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsFemtoID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsFemtoID_", out FLECS_IDEcsFemtoID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsFemtoID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsForceID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsForceID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsForceID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsForceID_", out FLECS_IDEcsForceID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsForceID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsFrequencyID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsFrequencyID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsFrequencyID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsFrequencyID_", out FLECS_IDEcsFrequencyID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsFrequencyID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsGaugeID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsGaugeID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsGaugeID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsGaugeID_", out FLECS_IDEcsGaugeID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsGaugeID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsGibiBytesID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsGibiBytesID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsGibiBytesID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsGibiBytesID_", out FLECS_IDEcsGibiBytesID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsGibiBytesID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsGibiID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsGibiID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsGibiID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsGibiID_", out FLECS_IDEcsGibiID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsGibiID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsGigaBitsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsGigaBitsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsGigaBitsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaBitsID_", out FLECS_IDEcsGigaBitsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsGigaBitsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsGigaBitsPerSecondID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsGigaBitsPerSecondID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsGigaBitsPerSecondID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaBitsPerSecondID_", out FLECS_IDEcsGigaBitsPerSecondID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsGigaBitsPerSecondID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsGigaBytesID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsGigaBytesID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsGigaBytesID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaBytesID_", out FLECS_IDEcsGigaBytesID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsGigaBytesID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsGigaBytesPerSecondID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsGigaBytesPerSecondID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsGigaBytesPerSecondID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaBytesPerSecondID_", out FLECS_IDEcsGigaBytesPerSecondID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsGigaBytesPerSecondID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsGigaHertzID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsGigaHertzID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsGigaHertzID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaHertzID_", out FLECS_IDEcsGigaHertzID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsGigaHertzID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsGigaID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsGigaID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsGigaID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaID_", out FLECS_IDEcsGigaID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsGigaID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsGramsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsGramsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsGramsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsGramsID_", out FLECS_IDEcsGramsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsGramsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsHectoID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsHectoID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsHectoID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsHectoID_", out FLECS_IDEcsHectoID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsHectoID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsHertzID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsHertzID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsHertzID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsHertzID_", out FLECS_IDEcsHertzID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsHertzID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsHoursID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsHoursID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsHoursID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsHoursID_", out FLECS_IDEcsHoursID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsHoursID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsIdentifierID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsIdentifierID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsIdentifierID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsIdentifierID_", out FLECS_IDEcsIdentifierID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsIdentifierID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsIterableID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsIterableID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsIterableID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsIterableID_", out FLECS_IDEcsIterableID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsIterableID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKelvinID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKelvinID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKelvinID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKelvinID_", out FLECS_IDEcsKelvinID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKelvinID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKibiBytesID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKibiBytesID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKibiBytesID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKibiBytesID_", out FLECS_IDEcsKibiBytesID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKibiBytesID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKibiID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKibiID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKibiID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKibiID_", out FLECS_IDEcsKibiID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKibiID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKiloBitsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKiloBitsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKiloBitsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloBitsID_", out FLECS_IDEcsKiloBitsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKiloBitsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKiloBitsPerSecondID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKiloBitsPerSecondID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKiloBitsPerSecondID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloBitsPerSecondID_", out FLECS_IDEcsKiloBitsPerSecondID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKiloBitsPerSecondID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKiloBytesID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKiloBytesID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKiloBytesID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloBytesID_", out FLECS_IDEcsKiloBytesID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKiloBytesID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKiloBytesPerSecondID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKiloBytesPerSecondID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKiloBytesPerSecondID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloBytesPerSecondID_", out FLECS_IDEcsKiloBytesPerSecondID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKiloBytesPerSecondID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKiloGramsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKiloGramsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKiloGramsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloGramsID_", out FLECS_IDEcsKiloGramsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKiloGramsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKiloHertzID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKiloHertzID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKiloHertzID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloHertzID_", out FLECS_IDEcsKiloHertzID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKiloHertzID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKiloID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKiloID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKiloID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloID_", out FLECS_IDEcsKiloID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKiloID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKiloMetersID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKiloMetersID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKiloMetersID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloMetersID_", out FLECS_IDEcsKiloMetersID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKiloMetersID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKiloMetersPerHourID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKiloMetersPerHourID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKiloMetersPerHourID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloMetersPerHourID_", out FLECS_IDEcsKiloMetersPerHourID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKiloMetersPerHourID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsKiloMetersPerSecondID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsKiloMetersPerSecondID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsKiloMetersPerSecondID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloMetersPerSecondID_", out FLECS_IDEcsKiloMetersPerSecondID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsKiloMetersPerSecondID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsLengthID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsLengthID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsLengthID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsLengthID_", out FLECS_IDEcsLengthID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsLengthID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsLuminousIntensityID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsLuminousIntensityID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsLuminousIntensityID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsLuminousIntensityID_", out FLECS_IDEcsLuminousIntensityID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsLuminousIntensityID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMassID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMassID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMassID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMassID_", out FLECS_IDEcsMassID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMassID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMebiBytesID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMebiBytesID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMebiBytesID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMebiBytesID_", out FLECS_IDEcsMebiBytesID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMebiBytesID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMebiID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMebiID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMebiID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMebiID_", out FLECS_IDEcsMebiID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMebiID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMegaBitsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMegaBitsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMegaBitsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaBitsID_", out FLECS_IDEcsMegaBitsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMegaBitsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMegaBitsPerSecondID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMegaBitsPerSecondID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMegaBitsPerSecondID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaBitsPerSecondID_", out FLECS_IDEcsMegaBitsPerSecondID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMegaBitsPerSecondID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMegaBytesID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMegaBytesID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMegaBytesID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaBytesID_", out FLECS_IDEcsMegaBytesID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMegaBytesID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMegaBytesPerSecondID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMegaBytesPerSecondID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMegaBytesPerSecondID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaBytesPerSecondID_", out FLECS_IDEcsMegaBytesPerSecondID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMegaBytesPerSecondID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMegaHertzID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMegaHertzID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMegaHertzID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaHertzID_", out FLECS_IDEcsMegaHertzID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMegaHertzID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMegaID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMegaID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMegaID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaID_", out FLECS_IDEcsMegaID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMegaID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMemberID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMemberID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMemberID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMemberID_", out FLECS_IDEcsMemberID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMemberID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMemberRangesID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMemberRangesID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMemberRangesID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMemberRangesID_", out FLECS_IDEcsMemberRangesID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMemberRangesID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMetaTypeID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMetaTypeID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMetaTypeID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetaTypeID_", out FLECS_IDEcsMetaTypeID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMetaTypeID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMetaTypeSerializedID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMetaTypeSerializedID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMetaTypeSerializedID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetaTypeSerializedID_", out FLECS_IDEcsMetaTypeSerializedID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMetaTypeSerializedID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMetersID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMetersID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMetersID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetersID_", out FLECS_IDEcsMetersID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMetersID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMetersPerSecondID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMetersPerSecondID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMetersPerSecondID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetersPerSecondID_", out FLECS_IDEcsMetersPerSecondID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMetersPerSecondID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMetricID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMetricID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMetricID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricID_", out FLECS_IDEcsMetricID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMetricID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMetricInstanceID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMetricInstanceID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMetricInstanceID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricInstanceID_", out FLECS_IDEcsMetricInstanceID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMetricInstanceID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMetricSourceID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMetricSourceID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMetricSourceID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricSourceID_", out FLECS_IDEcsMetricSourceID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMetricSourceID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMetricValueID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMetricValueID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMetricValueID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricValueID_", out FLECS_IDEcsMetricValueID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMetricValueID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMicroID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMicroID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMicroID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMicroID_", out FLECS_IDEcsMicroID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMicroID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMicroMetersID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMicroMetersID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMicroMetersID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMicroMetersID_", out FLECS_IDEcsMicroMetersID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMicroMetersID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMicroSecondsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMicroSecondsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMicroSecondsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMicroSecondsID_", out FLECS_IDEcsMicroSecondsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMicroSecondsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMilesID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMilesID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMilesID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilesID_", out FLECS_IDEcsMilesID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMilesID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMilesPerHourID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMilesPerHourID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMilesPerHourID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilesPerHourID_", out FLECS_IDEcsMilesPerHourID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMilesPerHourID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMilliID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMilliID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMilliID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilliID_", out FLECS_IDEcsMilliID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMilliID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMilliMetersID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMilliMetersID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMilliMetersID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilliMetersID_", out FLECS_IDEcsMilliMetersID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMilliMetersID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMilliSecondsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMilliSecondsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMilliSecondsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilliSecondsID_", out FLECS_IDEcsMilliSecondsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMilliSecondsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMinutesID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMinutesID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMinutesID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMinutesID_", out FLECS_IDEcsMinutesID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMinutesID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsMoleID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsMoleID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsMoleID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsMoleID_", out FLECS_IDEcsMoleID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsMoleID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsNanoID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsNanoID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsNanoID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsNanoID_", out FLECS_IDEcsNanoID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsNanoID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsNanoMetersID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsNanoMetersID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsNanoMetersID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsNanoMetersID_", out FLECS_IDEcsNanoMetersID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsNanoMetersID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsNanoSecondsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsNanoSecondsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsNanoSecondsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsNanoSecondsID_", out FLECS_IDEcsNanoSecondsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsNanoSecondsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsNewtonID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsNewtonID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsNewtonID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsNewtonID_", out FLECS_IDEcsNewtonID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsNewtonID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsOpaqueID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsOpaqueID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsOpaqueID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsOpaqueID_", out FLECS_IDEcsOpaqueID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsOpaqueID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPascalID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPascalID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPascalID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPascalID_", out FLECS_IDEcsPascalID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPascalID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPebiID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPebiID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPebiID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPebiID_", out FLECS_IDEcsPebiID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPebiID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPercentageID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPercentageID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPercentageID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPercentageID_", out FLECS_IDEcsPercentageID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPercentageID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPetaID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPetaID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPetaID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPetaID_", out FLECS_IDEcsPetaID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPetaID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPicoID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPicoID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPicoID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPicoID_", out FLECS_IDEcsPicoID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPicoID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPicoMetersID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPicoMetersID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPicoMetersID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPicoMetersID_", out FLECS_IDEcsPicoMetersID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPicoMetersID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPicoSecondsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPicoSecondsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPicoSecondsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPicoSecondsID_", out FLECS_IDEcsPicoSecondsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPicoSecondsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPipelineID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPipelineID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPipelineID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPipelineID_", out FLECS_IDEcsPipelineID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPipelineID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPipelineQueryID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPipelineQueryID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPipelineQueryID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPipelineQueryID_", out FLECS_IDEcsPipelineQueryID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPipelineQueryID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPipelineStatsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPipelineStatsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPipelineStatsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPipelineStatsID_", out FLECS_IDEcsPipelineStatsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPipelineStatsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPixelsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPixelsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPixelsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPixelsID_", out FLECS_IDEcsPixelsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPixelsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPolyID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPolyID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPolyID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPolyID_", out FLECS_IDEcsPolyID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPolyID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPressureID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPressureID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPressureID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPressureID_", out FLECS_IDEcsPressureID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPressureID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsPrimitiveID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsPrimitiveID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsPrimitiveID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsPrimitiveID_", out FLECS_IDEcsPrimitiveID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsPrimitiveID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsRadiansID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsRadiansID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsRadiansID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsRadiansID_", out FLECS_IDEcsRadiansID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsRadiansID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsRateFilterID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsRateFilterID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsRateFilterID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsRateFilterID_", out FLECS_IDEcsRateFilterID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsRateFilterID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsRestID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsRestID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsRestID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsRestID_", out FLECS_IDEcsRestID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsRestID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsScriptID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsScriptID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsScriptID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsScriptID_", out FLECS_IDEcsScriptID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsScriptID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsSecondsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsSecondsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsSecondsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsSecondsID_", out FLECS_IDEcsSecondsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsSecondsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsSpeedID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsSpeedID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsSpeedID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsSpeedID_", out FLECS_IDEcsSpeedID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsSpeedID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsStructID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsStructID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsStructID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsStructID_", out FLECS_IDEcsStructID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsStructID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsTargetID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsTargetID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsTargetID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsTargetID_", out FLECS_IDEcsTargetID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsTargetID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsTebiID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsTebiID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsTebiID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsTebiID_", out FLECS_IDEcsTebiID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsTebiID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsTemperatureID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsTemperatureID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsTemperatureID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsTemperatureID_", out FLECS_IDEcsTemperatureID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsTemperatureID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsTeraID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsTeraID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsTeraID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsTeraID_", out FLECS_IDEcsTeraID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsTeraID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsTickSourceID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsTickSourceID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsTickSourceID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsTickSourceID_", out FLECS_IDEcsTickSourceID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsTickSourceID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsTimeID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsTimeID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsTimeID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsTimeID_", out FLECS_IDEcsTimeID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsTimeID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsTimerID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsTimerID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsTimerID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsTimerID_", out FLECS_IDEcsTimerID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsTimerID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsUnitID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsUnitID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsUnitID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsUnitID_", out FLECS_IDEcsUnitID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsUnitID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsUnitPrefixesID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsUnitPrefixesID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsUnitPrefixesID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsUnitPrefixesID_", out FLECS_IDEcsUnitPrefixesID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsUnitPrefixesID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsUnitPrefixID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsUnitPrefixID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsUnitPrefixID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsUnitPrefixID_", out FLECS_IDEcsUnitPrefixID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsUnitPrefixID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsUriFileID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsUriFileID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsUriFileID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsUriFileID_", out FLECS_IDEcsUriFileID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsUriFileID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsUriHyperlinkID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsUriHyperlinkID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsUriHyperlinkID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsUriHyperlinkID_", out FLECS_IDEcsUriHyperlinkID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsUriHyperlinkID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsUriID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsUriID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsUriID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsUriID_", out FLECS_IDEcsUriID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsUriID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsUriImageID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsUriImageID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsUriImageID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsUriImageID_", out FLECS_IDEcsUriImageID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsUriImageID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsVectorID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsVectorID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsVectorID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsVectorID_", out FLECS_IDEcsVectorID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsVectorID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsWorldStatsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsWorldStatsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsWorldStatsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsWorldStatsID_", out FLECS_IDEcsWorldStatsID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsWorldStatsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsWorldSummaryID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsWorldSummaryID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsWorldSummaryID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsWorldSummaryID_", out FLECS_IDEcsWorldSummaryID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsWorldSummaryID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsYobiID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsYobiID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsYobiID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsYobiID_", out FLECS_IDEcsYobiID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsYobiID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsYoctoID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsYoctoID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsYoctoID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsYoctoID_", out FLECS_IDEcsYoctoID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsYoctoID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsYottaID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsYottaID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsYottaID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsYottaID_", out FLECS_IDEcsYottaID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsYottaID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsZebiID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsZebiID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsZebiID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsZebiID_", out FLECS_IDEcsZebiID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsZebiID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsZeptoID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsZeptoID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsZeptoID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsZeptoID_", out FLECS_IDEcsZeptoID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsZeptoID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDEcsZettaID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDEcsZettaID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDEcsZettaID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDEcsZettaID_", out FLECS_IDEcsZettaID__Ptr);
-                return ref *(ulong*)FLECS_IDEcsZettaID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDFlecsAlertsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDFlecsAlertsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDFlecsAlertsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDFlecsAlertsID_", out FLECS_IDFlecsAlertsID__Ptr);
-                return ref *(ulong*)FLECS_IDFlecsAlertsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDFlecsMetricsID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDFlecsMetricsID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDFlecsMetricsID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDFlecsMetricsID_", out FLECS_IDFlecsMetricsID__Ptr);
-                return ref *(ulong*)FLECS_IDFlecsMetricsID__Ptr;
-            }
-        }
-
-        public static ref ulong FLECS_IDFlecsMonitorID_
-        {
-            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                if (FLECS_IDFlecsMonitorID__Ptr != null)
-                    return ref *(ulong*)FLECS_IDFlecsMonitorID__Ptr;
-                BindgenInternal.LoadDllSymbol("FLECS_IDFlecsMonitorID_", out FLECS_IDFlecsMonitorID__Ptr);
-                return ref *(ulong*)FLECS_IDFlecsMonitorID__Ptr;
-            }
-        }
+        public static ref ulong ECS_AND => ref *(ulong*)(ECS_AND_Ptr == null ? BindgenInternal.LoadDllSymbol("ECS_AND", out ECS_AND_Ptr) : ECS_AND_Ptr);
+
+        public static ref long ecs_block_allocator_alloc_count => ref *(long*)(ecs_block_allocator_alloc_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_block_allocator_alloc_count", out ecs_block_allocator_alloc_count_Ptr) : ecs_block_allocator_alloc_count_Ptr);
+
+        public static ref long ecs_block_allocator_free_count => ref *(long*)(ecs_block_allocator_free_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_block_allocator_free_count", out ecs_block_allocator_free_count_Ptr) : ecs_block_allocator_free_count_Ptr);
+
+        public static ref ecs_filter_t ECS_FILTER_INIT => ref *(ecs_filter_t*)(ECS_FILTER_INIT_Ptr == null ? BindgenInternal.LoadDllSymbol("ECS_FILTER_INIT", out ECS_FILTER_INIT_Ptr) : ECS_FILTER_INIT_Ptr);
+
+        public static ref long ecs_http_busy_count => ref *(long*)(ecs_http_busy_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_busy_count", out ecs_http_busy_count_Ptr) : ecs_http_busy_count_Ptr);
+
+        public static ref long ecs_http_request_handled_error_count => ref *(long*)(ecs_http_request_handled_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_request_handled_error_count", out ecs_http_request_handled_error_count_Ptr) : ecs_http_request_handled_error_count_Ptr);
+
+        public static ref long ecs_http_request_handled_ok_count => ref *(long*)(ecs_http_request_handled_ok_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_request_handled_ok_count", out ecs_http_request_handled_ok_count_Ptr) : ecs_http_request_handled_ok_count_Ptr);
+
+        public static ref long ecs_http_request_invalid_count => ref *(long*)(ecs_http_request_invalid_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_request_invalid_count", out ecs_http_request_invalid_count_Ptr) : ecs_http_request_invalid_count_Ptr);
+
+        public static ref long ecs_http_request_not_handled_count => ref *(long*)(ecs_http_request_not_handled_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_request_not_handled_count", out ecs_http_request_not_handled_count_Ptr) : ecs_http_request_not_handled_count_Ptr);
+
+        public static ref long ecs_http_request_preflight_count => ref *(long*)(ecs_http_request_preflight_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_request_preflight_count", out ecs_http_request_preflight_count_Ptr) : ecs_http_request_preflight_count_Ptr);
+
+        public static ref long ecs_http_request_received_count => ref *(long*)(ecs_http_request_received_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_request_received_count", out ecs_http_request_received_count_Ptr) : ecs_http_request_received_count_Ptr);
+
+        public static ref long ecs_http_send_error_count => ref *(long*)(ecs_http_send_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_send_error_count", out ecs_http_send_error_count_Ptr) : ecs_http_send_error_count_Ptr);
+
+        public static ref long ecs_http_send_ok_count => ref *(long*)(ecs_http_send_ok_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_send_ok_count", out ecs_http_send_ok_count_Ptr) : ecs_http_send_ok_count_Ptr);
+
+        public static ref ecs_os_api_t ecs_os_api => ref *(ecs_os_api_t*)(ecs_os_api_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_os_api", out ecs_os_api_Ptr) : ecs_os_api_Ptr);
+
+        public static ref long ecs_os_api_calloc_count => ref *(long*)(ecs_os_api_calloc_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_os_api_calloc_count", out ecs_os_api_calloc_count_Ptr) : ecs_os_api_calloc_count_Ptr);
+
+        public static ref long ecs_os_api_free_count => ref *(long*)(ecs_os_api_free_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_os_api_free_count", out ecs_os_api_free_count_Ptr) : ecs_os_api_free_count_Ptr);
+
+        public static ref long ecs_os_api_malloc_count => ref *(long*)(ecs_os_api_malloc_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_os_api_malloc_count", out ecs_os_api_malloc_count_Ptr) : ecs_os_api_malloc_count_Ptr);
+
+        public static ref long ecs_os_api_realloc_count => ref *(long*)(ecs_os_api_realloc_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_os_api_realloc_count", out ecs_os_api_realloc_count_Ptr) : ecs_os_api_realloc_count_Ptr);
+
+        public static ref ulong ECS_OVERRIDE => ref *(ulong*)(ECS_OVERRIDE_Ptr == null ? BindgenInternal.LoadDllSymbol("ECS_OVERRIDE", out ECS_OVERRIDE_Ptr) : ECS_OVERRIDE_Ptr);
+
+        public static ref ulong ECS_PAIR => ref *(ulong*)(ECS_PAIR_Ptr == null ? BindgenInternal.LoadDllSymbol("ECS_PAIR", out ECS_PAIR_Ptr) : ECS_PAIR_Ptr);
+
+        public static ref long ecs_rest_delete_count => ref *(long*)(ecs_rest_delete_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_delete_count", out ecs_rest_delete_count_Ptr) : ecs_rest_delete_count_Ptr);
+
+        public static ref long ecs_rest_delete_error_count => ref *(long*)(ecs_rest_delete_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_delete_error_count", out ecs_rest_delete_error_count_Ptr) : ecs_rest_delete_error_count_Ptr);
+
+        public static ref long ecs_rest_enable_count => ref *(long*)(ecs_rest_enable_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_enable_count", out ecs_rest_enable_count_Ptr) : ecs_rest_enable_count_Ptr);
+
+        public static ref long ecs_rest_enable_error_count => ref *(long*)(ecs_rest_enable_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_enable_error_count", out ecs_rest_enable_error_count_Ptr) : ecs_rest_enable_error_count_Ptr);
+
+        public static ref long ecs_rest_entity_count => ref *(long*)(ecs_rest_entity_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_entity_count", out ecs_rest_entity_count_Ptr) : ecs_rest_entity_count_Ptr);
+
+        public static ref long ecs_rest_entity_error_count => ref *(long*)(ecs_rest_entity_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_entity_error_count", out ecs_rest_entity_error_count_Ptr) : ecs_rest_entity_error_count_Ptr);
+
+        public static ref long ecs_rest_pipeline_stats_count => ref *(long*)(ecs_rest_pipeline_stats_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_pipeline_stats_count", out ecs_rest_pipeline_stats_count_Ptr) : ecs_rest_pipeline_stats_count_Ptr);
+
+        public static ref long ecs_rest_query_count => ref *(long*)(ecs_rest_query_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_query_count", out ecs_rest_query_count_Ptr) : ecs_rest_query_count_Ptr);
+
+        public static ref long ecs_rest_query_error_count => ref *(long*)(ecs_rest_query_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_query_error_count", out ecs_rest_query_error_count_Ptr) : ecs_rest_query_error_count_Ptr);
+
+        public static ref long ecs_rest_query_name_count => ref *(long*)(ecs_rest_query_name_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_query_name_count", out ecs_rest_query_name_count_Ptr) : ecs_rest_query_name_count_Ptr);
+
+        public static ref long ecs_rest_query_name_error_count => ref *(long*)(ecs_rest_query_name_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_query_name_error_count", out ecs_rest_query_name_error_count_Ptr) : ecs_rest_query_name_error_count_Ptr);
+
+        public static ref long ecs_rest_query_name_from_cache_count => ref *(long*)(ecs_rest_query_name_from_cache_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_query_name_from_cache_count", out ecs_rest_query_name_from_cache_count_Ptr) : ecs_rest_query_name_from_cache_count_Ptr);
+
+        public static ref long ecs_rest_request_count => ref *(long*)(ecs_rest_request_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_request_count", out ecs_rest_request_count_Ptr) : ecs_rest_request_count_Ptr);
+
+        public static ref long ecs_rest_stats_error_count => ref *(long*)(ecs_rest_stats_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_stats_error_count", out ecs_rest_stats_error_count_Ptr) : ecs_rest_stats_error_count_Ptr);
+
+        public static ref long ecs_rest_world_stats_count => ref *(long*)(ecs_rest_world_stats_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_world_stats_count", out ecs_rest_world_stats_count_Ptr) : ecs_rest_world_stats_count_Ptr);
+
+        public static ref long ecs_stack_allocator_alloc_count => ref *(long*)(ecs_stack_allocator_alloc_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_stack_allocator_alloc_count", out ecs_stack_allocator_alloc_count_Ptr) : ecs_stack_allocator_alloc_count_Ptr);
+
+        public static ref long ecs_stack_allocator_free_count => ref *(long*)(ecs_stack_allocator_free_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_stack_allocator_free_count", out ecs_stack_allocator_free_count_Ptr) : ecs_stack_allocator_free_count_Ptr);
+
+        public static ref ulong ECS_TOGGLE => ref *(ulong*)(ECS_TOGGLE_Ptr == null ? BindgenInternal.LoadDllSymbol("ECS_TOGGLE", out ECS_TOGGLE_Ptr) : ECS_TOGGLE_Ptr);
+
+        public static ref ulong EcsAcceleration => ref *(ulong*)(EcsAcceleration_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAcceleration", out EcsAcceleration_Ptr) : EcsAcceleration_Ptr);
+
+        public static ref ulong EcsAcyclic => ref *(ulong*)(EcsAcyclic_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAcyclic", out EcsAcyclic_Ptr) : EcsAcyclic_Ptr);
+
+        public static ref ulong EcsAlertCritical => ref *(ulong*)(EcsAlertCritical_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAlertCritical", out EcsAlertCritical_Ptr) : EcsAlertCritical_Ptr);
+
+        public static ref ulong EcsAlertError => ref *(ulong*)(EcsAlertError_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAlertError", out EcsAlertError_Ptr) : EcsAlertError_Ptr);
+
+        public static ref ulong EcsAlertInfo => ref *(ulong*)(EcsAlertInfo_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAlertInfo", out EcsAlertInfo_Ptr) : EcsAlertInfo_Ptr);
+
+        public static ref ulong EcsAlertWarning => ref *(ulong*)(EcsAlertWarning_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAlertWarning", out EcsAlertWarning_Ptr) : EcsAlertWarning_Ptr);
+
+        public static ref ulong EcsAlias => ref *(ulong*)(EcsAlias_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAlias", out EcsAlias_Ptr) : EcsAlias_Ptr);
+
+        public static ref ulong EcsAlwaysOverride => ref *(ulong*)(EcsAlwaysOverride_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAlwaysOverride", out EcsAlwaysOverride_Ptr) : EcsAlwaysOverride_Ptr);
+
+        public static ref ulong EcsAmount => ref *(ulong*)(EcsAmount_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAmount", out EcsAmount_Ptr) : EcsAmount_Ptr);
+
+        public static ref ulong EcsAmpere => ref *(ulong*)(EcsAmpere_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAmpere", out EcsAmpere_Ptr) : EcsAmpere_Ptr);
+
+        public static ref ulong EcsAngle => ref *(ulong*)(EcsAngle_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAngle", out EcsAngle_Ptr) : EcsAngle_Ptr);
+
+        public static ref ulong EcsAny => ref *(ulong*)(EcsAny_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAny", out EcsAny_Ptr) : EcsAny_Ptr);
+
+        public static ref ulong EcsAtto => ref *(ulong*)(EcsAtto_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAtto", out EcsAtto_Ptr) : EcsAtto_Ptr);
+
+        public static ref ulong EcsBar => ref *(ulong*)(EcsBar_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsBar", out EcsBar_Ptr) : EcsBar_Ptr);
+
+        public static ref ulong EcsBel => ref *(ulong*)(EcsBel_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsBel", out EcsBel_Ptr) : EcsBel_Ptr);
+
+        public static ref ulong EcsBits => ref *(ulong*)(EcsBits_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsBits", out EcsBits_Ptr) : EcsBits_Ptr);
+
+        public static ref ulong EcsBitsPerSecond => ref *(ulong*)(EcsBitsPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsBitsPerSecond", out EcsBitsPerSecond_Ptr) : EcsBitsPerSecond_Ptr);
+
+        public static ref ulong EcsBytes => ref *(ulong*)(EcsBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsBytes", out EcsBytes_Ptr) : EcsBytes_Ptr);
+
+        public static ref ulong EcsBytesPerSecond => ref *(ulong*)(EcsBytesPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsBytesPerSecond", out EcsBytesPerSecond_Ptr) : EcsBytesPerSecond_Ptr);
+
+        public static ref ulong EcsCandela => ref *(ulong*)(EcsCandela_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCandela", out EcsCandela_Ptr) : EcsCandela_Ptr);
+
+        public static ref ulong EcsCelsius => ref *(ulong*)(EcsCelsius_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCelsius", out EcsCelsius_Ptr) : EcsCelsius_Ptr);
+
+        public static ref ulong EcsCenti => ref *(ulong*)(EcsCenti_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCenti", out EcsCenti_Ptr) : EcsCenti_Ptr);
+
+        public static ref ulong EcsCentiMeters => ref *(ulong*)(EcsCentiMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCentiMeters", out EcsCentiMeters_Ptr) : EcsCentiMeters_Ptr);
+
+        public static ref ulong EcsChildOf => ref *(ulong*)(EcsChildOf_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsChildOf", out EcsChildOf_Ptr) : EcsChildOf_Ptr);
+
+        public static ref ulong EcsConstant => ref *(ulong*)(EcsConstant_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsConstant", out EcsConstant_Ptr) : EcsConstant_Ptr);
+
+        public static ref ulong EcsCounter => ref *(ulong*)(EcsCounter_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCounter", out EcsCounter_Ptr) : EcsCounter_Ptr);
+
+        public static ref ulong EcsCounterId => ref *(ulong*)(EcsCounterId_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCounterId", out EcsCounterId_Ptr) : EcsCounterId_Ptr);
+
+        public static ref ulong EcsCounterIncrement => ref *(ulong*)(EcsCounterIncrement_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCounterIncrement", out EcsCounterIncrement_Ptr) : EcsCounterIncrement_Ptr);
+
+        public static ref ulong EcsData => ref *(ulong*)(EcsData_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsData", out EcsData_Ptr) : EcsData_Ptr);
+
+        public static ref ulong EcsDataRate => ref *(ulong*)(EcsDataRate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDataRate", out EcsDataRate_Ptr) : EcsDataRate_Ptr);
+
+        public static ref ulong EcsDate => ref *(ulong*)(EcsDate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDate", out EcsDate_Ptr) : EcsDate_Ptr);
+
+        public static ref ulong EcsDays => ref *(ulong*)(EcsDays_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDays", out EcsDays_Ptr) : EcsDays_Ptr);
+
+        public static ref ulong EcsDeca => ref *(ulong*)(EcsDeca_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDeca", out EcsDeca_Ptr) : EcsDeca_Ptr);
+
+        public static ref ulong EcsDeci => ref *(ulong*)(EcsDeci_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDeci", out EcsDeci_Ptr) : EcsDeci_Ptr);
+
+        public static ref ulong EcsDeciBel => ref *(ulong*)(EcsDeciBel_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDeciBel", out EcsDeciBel_Ptr) : EcsDeciBel_Ptr);
+
+        public static ref ulong EcsDefaultChildComponent => ref *(ulong*)(EcsDefaultChildComponent_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDefaultChildComponent", out EcsDefaultChildComponent_Ptr) : EcsDefaultChildComponent_Ptr);
+
+        public static ref ulong EcsDegrees => ref *(ulong*)(EcsDegrees_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDegrees", out EcsDegrees_Ptr) : EcsDegrees_Ptr);
+
+        public static ref ulong EcsDelete => ref *(ulong*)(EcsDelete_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDelete", out EcsDelete_Ptr) : EcsDelete_Ptr);
+
+        public static ref ulong EcsDependsOn => ref *(ulong*)(EcsDependsOn_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDependsOn", out EcsDependsOn_Ptr) : EcsDependsOn_Ptr);
+
+        public static ref ulong EcsDisabled => ref *(ulong*)(EcsDisabled_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDisabled", out EcsDisabled_Ptr) : EcsDisabled_Ptr);
+
+        public static ref ulong EcsDocBrief => ref *(ulong*)(EcsDocBrief_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDocBrief", out EcsDocBrief_Ptr) : EcsDocBrief_Ptr);
+
+        public static ref ulong EcsDocColor => ref *(ulong*)(EcsDocColor_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDocColor", out EcsDocColor_Ptr) : EcsDocColor_Ptr);
+
+        public static ref ulong EcsDocDetail => ref *(ulong*)(EcsDocDetail_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDocDetail", out EcsDocDetail_Ptr) : EcsDocDetail_Ptr);
+
+        public static ref ulong EcsDocLink => ref *(ulong*)(EcsDocLink_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDocLink", out EcsDocLink_Ptr) : EcsDocLink_Ptr);
+
+        public static ref ulong EcsDontInherit => ref *(ulong*)(EcsDontInherit_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDontInherit", out EcsDontInherit_Ptr) : EcsDontInherit_Ptr);
+
+        public static ref ulong EcsDuration => ref *(ulong*)(EcsDuration_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDuration", out EcsDuration_Ptr) : EcsDuration_Ptr);
+
+        public static ref ulong EcsElectricCurrent => ref *(ulong*)(EcsElectricCurrent_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsElectricCurrent", out EcsElectricCurrent_Ptr) : EcsElectricCurrent_Ptr);
+
+        public static ref ulong EcsEmpty => ref *(ulong*)(EcsEmpty_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsEmpty", out EcsEmpty_Ptr) : EcsEmpty_Ptr);
+
+        public static ref ulong EcsExa => ref *(ulong*)(EcsExa_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsExa", out EcsExa_Ptr) : EcsExa_Ptr);
+
+        public static ref ulong EcsExbi => ref *(ulong*)(EcsExbi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsExbi", out EcsExbi_Ptr) : EcsExbi_Ptr);
+
+        public static ref ulong EcsExclusive => ref *(ulong*)(EcsExclusive_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsExclusive", out EcsExclusive_Ptr) : EcsExclusive_Ptr);
+
+        public static ref ulong EcsFahrenheit => ref *(ulong*)(EcsFahrenheit_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFahrenheit", out EcsFahrenheit_Ptr) : EcsFahrenheit_Ptr);
+
+        public static ref ulong EcsFemto => ref *(ulong*)(EcsFemto_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFemto", out EcsFemto_Ptr) : EcsFemto_Ptr);
+
+        public static ref ulong EcsFinal => ref *(ulong*)(EcsFinal_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFinal", out EcsFinal_Ptr) : EcsFinal_Ptr);
+
+        public static ref ulong EcsFlatten => ref *(ulong*)(EcsFlatten_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFlatten", out EcsFlatten_Ptr) : EcsFlatten_Ptr);
+
+        public static ref ulong EcsFlecs => ref *(ulong*)(EcsFlecs_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFlecs", out EcsFlecs_Ptr) : EcsFlecs_Ptr);
+
+        public static ref ulong EcsFlecsCore => ref *(ulong*)(EcsFlecsCore_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFlecsCore", out EcsFlecsCore_Ptr) : EcsFlecsCore_Ptr);
+
+        public static ref ulong EcsForce => ref *(ulong*)(EcsForce_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsForce", out EcsForce_Ptr) : EcsForce_Ptr);
+
+        public static ref ulong EcsFrequency => ref *(ulong*)(EcsFrequency_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFrequency", out EcsFrequency_Ptr) : EcsFrequency_Ptr);
+
+        public static ref ulong EcsGauge => ref *(ulong*)(EcsGauge_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGauge", out EcsGauge_Ptr) : EcsGauge_Ptr);
+
+        public static ref ulong EcsGibi => ref *(ulong*)(EcsGibi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGibi", out EcsGibi_Ptr) : EcsGibi_Ptr);
+
+        public static ref ulong EcsGibiBytes => ref *(ulong*)(EcsGibiBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGibiBytes", out EcsGibiBytes_Ptr) : EcsGibiBytes_Ptr);
+
+        public static ref ulong EcsGiga => ref *(ulong*)(EcsGiga_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGiga", out EcsGiga_Ptr) : EcsGiga_Ptr);
+
+        public static ref ulong EcsGigaBits => ref *(ulong*)(EcsGigaBits_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGigaBits", out EcsGigaBits_Ptr) : EcsGigaBits_Ptr);
+
+        public static ref ulong EcsGigaBitsPerSecond => ref *(ulong*)(EcsGigaBitsPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGigaBitsPerSecond", out EcsGigaBitsPerSecond_Ptr) : EcsGigaBitsPerSecond_Ptr);
+
+        public static ref ulong EcsGigaBytes => ref *(ulong*)(EcsGigaBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGigaBytes", out EcsGigaBytes_Ptr) : EcsGigaBytes_Ptr);
+
+        public static ref ulong EcsGigaBytesPerSecond => ref *(ulong*)(EcsGigaBytesPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGigaBytesPerSecond", out EcsGigaBytesPerSecond_Ptr) : EcsGigaBytesPerSecond_Ptr);
+
+        public static ref ulong EcsGigaHertz => ref *(ulong*)(EcsGigaHertz_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGigaHertz", out EcsGigaHertz_Ptr) : EcsGigaHertz_Ptr);
+
+        public static ref ulong EcsGrams => ref *(ulong*)(EcsGrams_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGrams", out EcsGrams_Ptr) : EcsGrams_Ptr);
+
+        public static ref ulong EcsHecto => ref *(ulong*)(EcsHecto_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsHecto", out EcsHecto_Ptr) : EcsHecto_Ptr);
+
+        public static ref ulong EcsHertz => ref *(ulong*)(EcsHertz_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsHertz", out EcsHertz_Ptr) : EcsHertz_Ptr);
+
+        public static ref ulong EcsHours => ref *(ulong*)(EcsHours_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsHours", out EcsHours_Ptr) : EcsHours_Ptr);
+
+        public static ref ulong EcsIsA => ref *(ulong*)(EcsIsA_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsIsA", out EcsIsA_Ptr) : EcsIsA_Ptr);
+
+        public static ref ulong EcsKelvin => ref *(ulong*)(EcsKelvin_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKelvin", out EcsKelvin_Ptr) : EcsKelvin_Ptr);
+
+        public static ref ulong EcsKibi => ref *(ulong*)(EcsKibi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKibi", out EcsKibi_Ptr) : EcsKibi_Ptr);
+
+        public static ref ulong EcsKibiBytes => ref *(ulong*)(EcsKibiBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKibiBytes", out EcsKibiBytes_Ptr) : EcsKibiBytes_Ptr);
+
+        public static ref ulong EcsKilo => ref *(ulong*)(EcsKilo_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKilo", out EcsKilo_Ptr) : EcsKilo_Ptr);
+
+        public static ref ulong EcsKiloBits => ref *(ulong*)(EcsKiloBits_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloBits", out EcsKiloBits_Ptr) : EcsKiloBits_Ptr);
+
+        public static ref ulong EcsKiloBitsPerSecond => ref *(ulong*)(EcsKiloBitsPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloBitsPerSecond", out EcsKiloBitsPerSecond_Ptr) : EcsKiloBitsPerSecond_Ptr);
+
+        public static ref ulong EcsKiloBytes => ref *(ulong*)(EcsKiloBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloBytes", out EcsKiloBytes_Ptr) : EcsKiloBytes_Ptr);
+
+        public static ref ulong EcsKiloBytesPerSecond => ref *(ulong*)(EcsKiloBytesPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloBytesPerSecond", out EcsKiloBytesPerSecond_Ptr) : EcsKiloBytesPerSecond_Ptr);
+
+        public static ref ulong EcsKiloGrams => ref *(ulong*)(EcsKiloGrams_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloGrams", out EcsKiloGrams_Ptr) : EcsKiloGrams_Ptr);
+
+        public static ref ulong EcsKiloHertz => ref *(ulong*)(EcsKiloHertz_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloHertz", out EcsKiloHertz_Ptr) : EcsKiloHertz_Ptr);
+
+        public static ref ulong EcsKiloMeters => ref *(ulong*)(EcsKiloMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloMeters", out EcsKiloMeters_Ptr) : EcsKiloMeters_Ptr);
+
+        public static ref ulong EcsKiloMetersPerHour => ref *(ulong*)(EcsKiloMetersPerHour_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloMetersPerHour", out EcsKiloMetersPerHour_Ptr) : EcsKiloMetersPerHour_Ptr);
+
+        public static ref ulong EcsKiloMetersPerSecond => ref *(ulong*)(EcsKiloMetersPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloMetersPerSecond", out EcsKiloMetersPerSecond_Ptr) : EcsKiloMetersPerSecond_Ptr);
+
+        public static ref ulong EcsLength => ref *(ulong*)(EcsLength_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsLength", out EcsLength_Ptr) : EcsLength_Ptr);
+
+        public static ref ulong EcsLuminousIntensity => ref *(ulong*)(EcsLuminousIntensity_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsLuminousIntensity", out EcsLuminousIntensity_Ptr) : EcsLuminousIntensity_Ptr);
+
+        public static ref ulong EcsMass => ref *(ulong*)(EcsMass_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMass", out EcsMass_Ptr) : EcsMass_Ptr);
+
+        public static ref ulong EcsMebi => ref *(ulong*)(EcsMebi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMebi", out EcsMebi_Ptr) : EcsMebi_Ptr);
+
+        public static ref ulong EcsMebiBytes => ref *(ulong*)(EcsMebiBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMebiBytes", out EcsMebiBytes_Ptr) : EcsMebiBytes_Ptr);
+
+        public static ref ulong EcsMega => ref *(ulong*)(EcsMega_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMega", out EcsMega_Ptr) : EcsMega_Ptr);
+
+        public static ref ulong EcsMegaBits => ref *(ulong*)(EcsMegaBits_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMegaBits", out EcsMegaBits_Ptr) : EcsMegaBits_Ptr);
+
+        public static ref ulong EcsMegaBitsPerSecond => ref *(ulong*)(EcsMegaBitsPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMegaBitsPerSecond", out EcsMegaBitsPerSecond_Ptr) : EcsMegaBitsPerSecond_Ptr);
+
+        public static ref ulong EcsMegaBytes => ref *(ulong*)(EcsMegaBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMegaBytes", out EcsMegaBytes_Ptr) : EcsMegaBytes_Ptr);
+
+        public static ref ulong EcsMegaBytesPerSecond => ref *(ulong*)(EcsMegaBytesPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMegaBytesPerSecond", out EcsMegaBytesPerSecond_Ptr) : EcsMegaBytesPerSecond_Ptr);
+
+        public static ref ulong EcsMegaHertz => ref *(ulong*)(EcsMegaHertz_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMegaHertz", out EcsMegaHertz_Ptr) : EcsMegaHertz_Ptr);
+
+        public static ref ulong EcsMeters => ref *(ulong*)(EcsMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMeters", out EcsMeters_Ptr) : EcsMeters_Ptr);
+
+        public static ref ulong EcsMetersPerSecond => ref *(ulong*)(EcsMetersPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMetersPerSecond", out EcsMetersPerSecond_Ptr) : EcsMetersPerSecond_Ptr);
+
+        public static ref ulong EcsMetric => ref *(ulong*)(EcsMetric_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMetric", out EcsMetric_Ptr) : EcsMetric_Ptr);
+
+        public static ref ulong EcsMetricInstance => ref *(ulong*)(EcsMetricInstance_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMetricInstance", out EcsMetricInstance_Ptr) : EcsMetricInstance_Ptr);
+
+        public static ref ulong EcsMicro => ref *(ulong*)(EcsMicro_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMicro", out EcsMicro_Ptr) : EcsMicro_Ptr);
+
+        public static ref ulong EcsMicroMeters => ref *(ulong*)(EcsMicroMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMicroMeters", out EcsMicroMeters_Ptr) : EcsMicroMeters_Ptr);
+
+        public static ref ulong EcsMicroSeconds => ref *(ulong*)(EcsMicroSeconds_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMicroSeconds", out EcsMicroSeconds_Ptr) : EcsMicroSeconds_Ptr);
+
+        public static ref ulong EcsMiles => ref *(ulong*)(EcsMiles_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMiles", out EcsMiles_Ptr) : EcsMiles_Ptr);
+
+        public static ref ulong EcsMilesPerHour => ref *(ulong*)(EcsMilesPerHour_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMilesPerHour", out EcsMilesPerHour_Ptr) : EcsMilesPerHour_Ptr);
+
+        public static ref ulong EcsMilli => ref *(ulong*)(EcsMilli_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMilli", out EcsMilli_Ptr) : EcsMilli_Ptr);
+
+        public static ref ulong EcsMilliMeters => ref *(ulong*)(EcsMilliMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMilliMeters", out EcsMilliMeters_Ptr) : EcsMilliMeters_Ptr);
+
+        public static ref ulong EcsMilliSeconds => ref *(ulong*)(EcsMilliSeconds_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMilliSeconds", out EcsMilliSeconds_Ptr) : EcsMilliSeconds_Ptr);
+
+        public static ref ulong EcsMinutes => ref *(ulong*)(EcsMinutes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMinutes", out EcsMinutes_Ptr) : EcsMinutes_Ptr);
+
+        public static ref ulong EcsModule => ref *(ulong*)(EcsModule_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsModule", out EcsModule_Ptr) : EcsModule_Ptr);
+
+        public static ref ulong EcsMole => ref *(ulong*)(EcsMole_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMole", out EcsMole_Ptr) : EcsMole_Ptr);
+
+        public static ref ulong EcsMonitor => ref *(ulong*)(EcsMonitor_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMonitor", out EcsMonitor_Ptr) : EcsMonitor_Ptr);
+
+        public static ref ulong EcsName => ref *(ulong*)(EcsName_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsName", out EcsName_Ptr) : EcsName_Ptr);
+
+        public static ref ulong EcsNano => ref *(ulong*)(EcsNano_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsNano", out EcsNano_Ptr) : EcsNano_Ptr);
+
+        public static ref ulong EcsNanoMeters => ref *(ulong*)(EcsNanoMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsNanoMeters", out EcsNanoMeters_Ptr) : EcsNanoMeters_Ptr);
+
+        public static ref ulong EcsNanoSeconds => ref *(ulong*)(EcsNanoSeconds_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsNanoSeconds", out EcsNanoSeconds_Ptr) : EcsNanoSeconds_Ptr);
+
+        public static ref ulong EcsNewton => ref *(ulong*)(EcsNewton_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsNewton", out EcsNewton_Ptr) : EcsNewton_Ptr);
+
+        public static ref ulong EcsObserver => ref *(ulong*)(EcsObserver_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsObserver", out EcsObserver_Ptr) : EcsObserver_Ptr);
+
+        public static ref ulong EcsOnAdd => ref *(ulong*)(EcsOnAdd_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnAdd", out EcsOnAdd_Ptr) : EcsOnAdd_Ptr);
+
+        public static ref ulong EcsOnDelete => ref *(ulong*)(EcsOnDelete_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnDelete", out EcsOnDelete_Ptr) : EcsOnDelete_Ptr);
+
+        public static ref ulong EcsOnDeleteTarget => ref *(ulong*)(EcsOnDeleteTarget_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnDeleteTarget", out EcsOnDeleteTarget_Ptr) : EcsOnDeleteTarget_Ptr);
+
+        public static ref ulong EcsOneOf => ref *(ulong*)(EcsOneOf_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOneOf", out EcsOneOf_Ptr) : EcsOneOf_Ptr);
+
+        public static ref ulong EcsOnLoad => ref *(ulong*)(EcsOnLoad_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnLoad", out EcsOnLoad_Ptr) : EcsOnLoad_Ptr);
+
+        public static ref ulong EcsOnRemove => ref *(ulong*)(EcsOnRemove_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnRemove", out EcsOnRemove_Ptr) : EcsOnRemove_Ptr);
+
+        public static ref ulong EcsOnSet => ref *(ulong*)(EcsOnSet_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnSet", out EcsOnSet_Ptr) : EcsOnSet_Ptr);
+
+        public static ref ulong EcsOnStart => ref *(ulong*)(EcsOnStart_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnStart", out EcsOnStart_Ptr) : EcsOnStart_Ptr);
+
+        public static ref ulong EcsOnStore => ref *(ulong*)(EcsOnStore_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnStore", out EcsOnStore_Ptr) : EcsOnStore_Ptr);
+
+        public static ref ulong EcsOnTableCreate => ref *(ulong*)(EcsOnTableCreate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnTableCreate", out EcsOnTableCreate_Ptr) : EcsOnTableCreate_Ptr);
+
+        public static ref ulong EcsOnTableDelete => ref *(ulong*)(EcsOnTableDelete_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnTableDelete", out EcsOnTableDelete_Ptr) : EcsOnTableDelete_Ptr);
+
+        public static ref ulong EcsOnTableEmpty => ref *(ulong*)(EcsOnTableEmpty_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnTableEmpty", out EcsOnTableEmpty_Ptr) : EcsOnTableEmpty_Ptr);
+
+        public static ref ulong EcsOnTableFill => ref *(ulong*)(EcsOnTableFill_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnTableFill", out EcsOnTableFill_Ptr) : EcsOnTableFill_Ptr);
+
+        public static ref ulong EcsOnUpdate => ref *(ulong*)(EcsOnUpdate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnUpdate", out EcsOnUpdate_Ptr) : EcsOnUpdate_Ptr);
+
+        public static ref ulong EcsOnValidate => ref *(ulong*)(EcsOnValidate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnValidate", out EcsOnValidate_Ptr) : EcsOnValidate_Ptr);
+
+        public static ref ulong EcsPanic => ref *(ulong*)(EcsPanic_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPanic", out EcsPanic_Ptr) : EcsPanic_Ptr);
+
+        public static ref ulong EcsPascal => ref *(ulong*)(EcsPascal_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPascal", out EcsPascal_Ptr) : EcsPascal_Ptr);
+
+        public static ref ulong EcsPebi => ref *(ulong*)(EcsPebi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPebi", out EcsPebi_Ptr) : EcsPebi_Ptr);
+
+        public static ref ulong EcsPercentage => ref *(ulong*)(EcsPercentage_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPercentage", out EcsPercentage_Ptr) : EcsPercentage_Ptr);
+
+        public static ref ulong EcsPeriod1d => ref *(ulong*)(EcsPeriod1d_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPeriod1d", out EcsPeriod1d_Ptr) : EcsPeriod1d_Ptr);
+
+        public static ref ulong EcsPeriod1h => ref *(ulong*)(EcsPeriod1h_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPeriod1h", out EcsPeriod1h_Ptr) : EcsPeriod1h_Ptr);
+
+        public static ref ulong EcsPeriod1m => ref *(ulong*)(EcsPeriod1m_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPeriod1m", out EcsPeriod1m_Ptr) : EcsPeriod1m_Ptr);
+
+        public static ref ulong EcsPeriod1s => ref *(ulong*)(EcsPeriod1s_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPeriod1s", out EcsPeriod1s_Ptr) : EcsPeriod1s_Ptr);
+
+        public static ref ulong EcsPeriod1w => ref *(ulong*)(EcsPeriod1w_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPeriod1w", out EcsPeriod1w_Ptr) : EcsPeriod1w_Ptr);
+
+        public static ref ulong EcsPeta => ref *(ulong*)(EcsPeta_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPeta", out EcsPeta_Ptr) : EcsPeta_Ptr);
+
+        public static ref ulong EcsPhase => ref *(ulong*)(EcsPhase_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPhase", out EcsPhase_Ptr) : EcsPhase_Ptr);
+
+        public static ref ulong EcsPico => ref *(ulong*)(EcsPico_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPico", out EcsPico_Ptr) : EcsPico_Ptr);
+
+        public static ref ulong EcsPicoMeters => ref *(ulong*)(EcsPicoMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPicoMeters", out EcsPicoMeters_Ptr) : EcsPicoMeters_Ptr);
+
+        public static ref ulong EcsPicoSeconds => ref *(ulong*)(EcsPicoSeconds_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPicoSeconds", out EcsPicoSeconds_Ptr) : EcsPicoSeconds_Ptr);
+
+        public static ref ulong EcsPixels => ref *(ulong*)(EcsPixels_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPixels", out EcsPixels_Ptr) : EcsPixels_Ptr);
+
+        public static ref ulong EcsPostFrame => ref *(ulong*)(EcsPostFrame_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPostFrame", out EcsPostFrame_Ptr) : EcsPostFrame_Ptr);
+
+        public static ref ulong EcsPostLoad => ref *(ulong*)(EcsPostLoad_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPostLoad", out EcsPostLoad_Ptr) : EcsPostLoad_Ptr);
+
+        public static ref ulong EcsPostUpdate => ref *(ulong*)(EcsPostUpdate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPostUpdate", out EcsPostUpdate_Ptr) : EcsPostUpdate_Ptr);
+
+        public static ref ulong EcsPredEq => ref *(ulong*)(EcsPredEq_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPredEq", out EcsPredEq_Ptr) : EcsPredEq_Ptr);
+
+        public static ref ulong EcsPredLookup => ref *(ulong*)(EcsPredLookup_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPredLookup", out EcsPredLookup_Ptr) : EcsPredLookup_Ptr);
+
+        public static ref ulong EcsPredMatch => ref *(ulong*)(EcsPredMatch_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPredMatch", out EcsPredMatch_Ptr) : EcsPredMatch_Ptr);
+
+        public static ref ulong EcsPrefab => ref *(ulong*)(EcsPrefab_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPrefab", out EcsPrefab_Ptr) : EcsPrefab_Ptr);
+
+        public static ref ulong EcsPreFrame => ref *(ulong*)(EcsPreFrame_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPreFrame", out EcsPreFrame_Ptr) : EcsPreFrame_Ptr);
+
+        public static ref ulong EcsPressure => ref *(ulong*)(EcsPressure_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPressure", out EcsPressure_Ptr) : EcsPressure_Ptr);
+
+        public static ref ulong EcsPreStore => ref *(ulong*)(EcsPreStore_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPreStore", out EcsPreStore_Ptr) : EcsPreStore_Ptr);
+
+        public static ref ulong EcsPreUpdate => ref *(ulong*)(EcsPreUpdate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPreUpdate", out EcsPreUpdate_Ptr) : EcsPreUpdate_Ptr);
+
+        public static ref ulong EcsPrivate => ref *(ulong*)(EcsPrivate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPrivate", out EcsPrivate_Ptr) : EcsPrivate_Ptr);
+
+        public static ref ulong EcsQuantity => ref *(ulong*)(EcsQuantity_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsQuantity", out EcsQuantity_Ptr) : EcsQuantity_Ptr);
+
+        public static ref ulong EcsQuery => ref *(ulong*)(EcsQuery_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsQuery", out EcsQuery_Ptr) : EcsQuery_Ptr);
+
+        public static ref ulong EcsRadians => ref *(ulong*)(EcsRadians_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsRadians", out EcsRadians_Ptr) : EcsRadians_Ptr);
+
+        public static ref ulong EcsReflexive => ref *(ulong*)(EcsReflexive_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsReflexive", out EcsReflexive_Ptr) : EcsReflexive_Ptr);
+
+        public static ref ulong EcsRemove => ref *(ulong*)(EcsRemove_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsRemove", out EcsRemove_Ptr) : EcsRemove_Ptr);
+
+        public static ref ulong EcsScopeClose => ref *(ulong*)(EcsScopeClose_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsScopeClose", out EcsScopeClose_Ptr) : EcsScopeClose_Ptr);
+
+        public static ref ulong EcsScopeOpen => ref *(ulong*)(EcsScopeOpen_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsScopeOpen", out EcsScopeOpen_Ptr) : EcsScopeOpen_Ptr);
+
+        public static ref ulong EcsSeconds => ref *(ulong*)(EcsSeconds_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSeconds", out EcsSeconds_Ptr) : EcsSeconds_Ptr);
+
+        public static ref ulong EcsSlotOf => ref *(ulong*)(EcsSlotOf_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSlotOf", out EcsSlotOf_Ptr) : EcsSlotOf_Ptr);
+
+        public static ref ulong EcsSpeed => ref *(ulong*)(EcsSpeed_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSpeed", out EcsSpeed_Ptr) : EcsSpeed_Ptr);
+
+        public static ref ulong EcsSymbol => ref *(ulong*)(EcsSymbol_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSymbol", out EcsSymbol_Ptr) : EcsSymbol_Ptr);
+
+        public static ref ulong EcsSymmetric => ref *(ulong*)(EcsSymmetric_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSymmetric", out EcsSymmetric_Ptr) : EcsSymmetric_Ptr);
+
+        public static ref ulong EcsSystem => ref *(ulong*)(EcsSystem_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSystem", out EcsSystem_Ptr) : EcsSystem_Ptr);
+
+        public static ref ulong EcsTag => ref *(ulong*)(EcsTag_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTag", out EcsTag_Ptr) : EcsTag_Ptr);
+
+        public static ref ulong EcsTebi => ref *(ulong*)(EcsTebi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTebi", out EcsTebi_Ptr) : EcsTebi_Ptr);
+
+        public static ref ulong EcsTemperature => ref *(ulong*)(EcsTemperature_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTemperature", out EcsTemperature_Ptr) : EcsTemperature_Ptr);
+
+        public static ref ulong EcsTera => ref *(ulong*)(EcsTera_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTera", out EcsTera_Ptr) : EcsTera_Ptr);
+
+        public static ref ulong EcsThis => ref *(ulong*)(EcsThis_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsThis", out EcsThis_Ptr) : EcsThis_Ptr);
+
+        public static ref ulong EcsTime => ref *(ulong*)(EcsTime_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTime", out EcsTime_Ptr) : EcsTime_Ptr);
+
+        public static ref ulong EcsTransitive => ref *(ulong*)(EcsTransitive_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTransitive", out EcsTransitive_Ptr) : EcsTransitive_Ptr);
+
+        public static ref ulong EcsTraversable => ref *(ulong*)(EcsTraversable_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTraversable", out EcsTraversable_Ptr) : EcsTraversable_Ptr);
+
+        public static ref ulong EcsUnion => ref *(ulong*)(EcsUnion_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUnion", out EcsUnion_Ptr) : EcsUnion_Ptr);
+
+        public static ref ulong EcsUnitPrefixes => ref *(ulong*)(EcsUnitPrefixes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUnitPrefixes", out EcsUnitPrefixes_Ptr) : EcsUnitPrefixes_Ptr);
+
+        public static ref ulong EcsUnSet => ref *(ulong*)(EcsUnSet_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUnSet", out EcsUnSet_Ptr) : EcsUnSet_Ptr);
+
+        public static ref ulong EcsUri => ref *(ulong*)(EcsUri_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUri", out EcsUri_Ptr) : EcsUri_Ptr);
+
+        public static ref ulong EcsUriFile => ref *(ulong*)(EcsUriFile_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUriFile", out EcsUriFile_Ptr) : EcsUriFile_Ptr);
+
+        public static ref ulong EcsUriHyperlink => ref *(ulong*)(EcsUriHyperlink_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUriHyperlink", out EcsUriHyperlink_Ptr) : EcsUriHyperlink_Ptr);
+
+        public static ref ulong EcsUriImage => ref *(ulong*)(EcsUriImage_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUriImage", out EcsUriImage_Ptr) : EcsUriImage_Ptr);
+
+        public static ref ulong EcsVariable => ref *(ulong*)(EcsVariable_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsVariable", out EcsVariable_Ptr) : EcsVariable_Ptr);
+
+        public static ref ulong EcsWildcard => ref *(ulong*)(EcsWildcard_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsWildcard", out EcsWildcard_Ptr) : EcsWildcard_Ptr);
+
+        public static ref ulong EcsWith => ref *(ulong*)(EcsWith_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsWith", out EcsWith_Ptr) : EcsWith_Ptr);
+
+        public static ref ulong EcsWorld => ref *(ulong*)(EcsWorld_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsWorld", out EcsWorld_Ptr) : EcsWorld_Ptr);
+
+        public static ref ulong EcsYobi => ref *(ulong*)(EcsYobi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsYobi", out EcsYobi_Ptr) : EcsYobi_Ptr);
+
+        public static ref ulong EcsYocto => ref *(ulong*)(EcsYocto_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsYocto", out EcsYocto_Ptr) : EcsYocto_Ptr);
+
+        public static ref ulong EcsYotta => ref *(ulong*)(EcsYotta_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsYotta", out EcsYotta_Ptr) : EcsYotta_Ptr);
+
+        public static ref ulong EcsZebi => ref *(ulong*)(EcsZebi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsZebi", out EcsZebi_Ptr) : EcsZebi_Ptr);
+
+        public static ref ulong EcsZepto => ref *(ulong*)(EcsZepto_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsZepto", out EcsZepto_Ptr) : EcsZepto_Ptr);
+
+        public static ref ulong EcsZetta => ref *(ulong*)(EcsZetta_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsZetta", out EcsZetta_Ptr) : EcsZetta_Ptr);
+
+        public static ref ulong FLECS_IDecs_bool_tID_ => ref *(ulong*)(FLECS_IDecs_bool_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_bool_tID_", out FLECS_IDecs_bool_tID__Ptr) : FLECS_IDecs_bool_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_byte_tID_ => ref *(ulong*)(FLECS_IDecs_byte_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_byte_tID_", out FLECS_IDecs_byte_tID__Ptr) : FLECS_IDecs_byte_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_char_tID_ => ref *(ulong*)(FLECS_IDecs_char_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_char_tID_", out FLECS_IDecs_char_tID__Ptr) : FLECS_IDecs_char_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_entity_tID_ => ref *(ulong*)(FLECS_IDecs_entity_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_entity_tID_", out FLECS_IDecs_entity_tID__Ptr) : FLECS_IDecs_entity_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_f32_tID_ => ref *(ulong*)(FLECS_IDecs_f32_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_f32_tID_", out FLECS_IDecs_f32_tID__Ptr) : FLECS_IDecs_f32_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_f64_tID_ => ref *(ulong*)(FLECS_IDecs_f64_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_f64_tID_", out FLECS_IDecs_f64_tID__Ptr) : FLECS_IDecs_f64_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_i16_tID_ => ref *(ulong*)(FLECS_IDecs_i16_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_i16_tID_", out FLECS_IDecs_i16_tID__Ptr) : FLECS_IDecs_i16_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_i32_tID_ => ref *(ulong*)(FLECS_IDecs_i32_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_i32_tID_", out FLECS_IDecs_i32_tID__Ptr) : FLECS_IDecs_i32_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_i64_tID_ => ref *(ulong*)(FLECS_IDecs_i64_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_i64_tID_", out FLECS_IDecs_i64_tID__Ptr) : FLECS_IDecs_i64_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_i8_tID_ => ref *(ulong*)(FLECS_IDecs_i8_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_i8_tID_", out FLECS_IDecs_i8_tID__Ptr) : FLECS_IDecs_i8_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_iptr_tID_ => ref *(ulong*)(FLECS_IDecs_iptr_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_iptr_tID_", out FLECS_IDecs_iptr_tID__Ptr) : FLECS_IDecs_iptr_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_string_tID_ => ref *(ulong*)(FLECS_IDecs_string_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_string_tID_", out FLECS_IDecs_string_tID__Ptr) : FLECS_IDecs_string_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_u16_tID_ => ref *(ulong*)(FLECS_IDecs_u16_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_u16_tID_", out FLECS_IDecs_u16_tID__Ptr) : FLECS_IDecs_u16_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_u32_tID_ => ref *(ulong*)(FLECS_IDecs_u32_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_u32_tID_", out FLECS_IDecs_u32_tID__Ptr) : FLECS_IDecs_u32_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_u64_tID_ => ref *(ulong*)(FLECS_IDecs_u64_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_u64_tID_", out FLECS_IDecs_u64_tID__Ptr) : FLECS_IDecs_u64_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_u8_tID_ => ref *(ulong*)(FLECS_IDecs_u8_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_u8_tID_", out FLECS_IDecs_u8_tID__Ptr) : FLECS_IDecs_u8_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_uptr_tID_ => ref *(ulong*)(FLECS_IDecs_uptr_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_uptr_tID_", out FLECS_IDecs_uptr_tID__Ptr) : FLECS_IDecs_uptr_tID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAccelerationID_ => ref *(ulong*)(FLECS_IDEcsAccelerationID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAccelerationID_", out FLECS_IDEcsAccelerationID__Ptr) : FLECS_IDEcsAccelerationID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAlertCriticalID_ => ref *(ulong*)(FLECS_IDEcsAlertCriticalID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertCriticalID_", out FLECS_IDEcsAlertCriticalID__Ptr) : FLECS_IDEcsAlertCriticalID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAlertErrorID_ => ref *(ulong*)(FLECS_IDEcsAlertErrorID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertErrorID_", out FLECS_IDEcsAlertErrorID__Ptr) : FLECS_IDEcsAlertErrorID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAlertID_ => ref *(ulong*)(FLECS_IDEcsAlertID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertID_", out FLECS_IDEcsAlertID__Ptr) : FLECS_IDEcsAlertID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAlertInfoID_ => ref *(ulong*)(FLECS_IDEcsAlertInfoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertInfoID_", out FLECS_IDEcsAlertInfoID__Ptr) : FLECS_IDEcsAlertInfoID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAlertInstanceID_ => ref *(ulong*)(FLECS_IDEcsAlertInstanceID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertInstanceID_", out FLECS_IDEcsAlertInstanceID__Ptr) : FLECS_IDEcsAlertInstanceID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAlertsActiveID_ => ref *(ulong*)(FLECS_IDEcsAlertsActiveID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertsActiveID_", out FLECS_IDEcsAlertsActiveID__Ptr) : FLECS_IDEcsAlertsActiveID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAlertTimeoutID_ => ref *(ulong*)(FLECS_IDEcsAlertTimeoutID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertTimeoutID_", out FLECS_IDEcsAlertTimeoutID__Ptr) : FLECS_IDEcsAlertTimeoutID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAlertWarningID_ => ref *(ulong*)(FLECS_IDEcsAlertWarningID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertWarningID_", out FLECS_IDEcsAlertWarningID__Ptr) : FLECS_IDEcsAlertWarningID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAmountID_ => ref *(ulong*)(FLECS_IDEcsAmountID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAmountID_", out FLECS_IDEcsAmountID__Ptr) : FLECS_IDEcsAmountID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAmpereID_ => ref *(ulong*)(FLECS_IDEcsAmpereID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAmpereID_", out FLECS_IDEcsAmpereID__Ptr) : FLECS_IDEcsAmpereID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAngleID_ => ref *(ulong*)(FLECS_IDEcsAngleID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAngleID_", out FLECS_IDEcsAngleID__Ptr) : FLECS_IDEcsAngleID__Ptr);
+
+        public static ref ulong FLECS_IDEcsArrayID_ => ref *(ulong*)(FLECS_IDEcsArrayID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsArrayID_", out FLECS_IDEcsArrayID__Ptr) : FLECS_IDEcsArrayID__Ptr);
+
+        public static ref ulong FLECS_IDEcsAttoID_ => ref *(ulong*)(FLECS_IDEcsAttoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAttoID_", out FLECS_IDEcsAttoID__Ptr) : FLECS_IDEcsAttoID__Ptr);
+
+        public static ref ulong FLECS_IDEcsBarID_ => ref *(ulong*)(FLECS_IDEcsBarID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBarID_", out FLECS_IDEcsBarID__Ptr) : FLECS_IDEcsBarID__Ptr);
+
+        public static ref ulong FLECS_IDEcsBelID_ => ref *(ulong*)(FLECS_IDEcsBelID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBelID_", out FLECS_IDEcsBelID__Ptr) : FLECS_IDEcsBelID__Ptr);
+
+        public static ref ulong FLECS_IDEcsBitmaskID_ => ref *(ulong*)(FLECS_IDEcsBitmaskID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBitmaskID_", out FLECS_IDEcsBitmaskID__Ptr) : FLECS_IDEcsBitmaskID__Ptr);
+
+        public static ref ulong FLECS_IDEcsBitsID_ => ref *(ulong*)(FLECS_IDEcsBitsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBitsID_", out FLECS_IDEcsBitsID__Ptr) : FLECS_IDEcsBitsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsBitsPerSecondID_ => ref *(ulong*)(FLECS_IDEcsBitsPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBitsPerSecondID_", out FLECS_IDEcsBitsPerSecondID__Ptr) : FLECS_IDEcsBitsPerSecondID__Ptr);
+
+        public static ref ulong FLECS_IDEcsBytesID_ => ref *(ulong*)(FLECS_IDEcsBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBytesID_", out FLECS_IDEcsBytesID__Ptr) : FLECS_IDEcsBytesID__Ptr);
+
+        public static ref ulong FLECS_IDEcsBytesPerSecondID_ => ref *(ulong*)(FLECS_IDEcsBytesPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBytesPerSecondID_", out FLECS_IDEcsBytesPerSecondID__Ptr) : FLECS_IDEcsBytesPerSecondID__Ptr);
+
+        public static ref ulong FLECS_IDEcsCandelaID_ => ref *(ulong*)(FLECS_IDEcsCandelaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCandelaID_", out FLECS_IDEcsCandelaID__Ptr) : FLECS_IDEcsCandelaID__Ptr);
+
+        public static ref ulong FLECS_IDEcsCelsiusID_ => ref *(ulong*)(FLECS_IDEcsCelsiusID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCelsiusID_", out FLECS_IDEcsCelsiusID__Ptr) : FLECS_IDEcsCelsiusID__Ptr);
+
+        public static ref ulong FLECS_IDEcsCentiID_ => ref *(ulong*)(FLECS_IDEcsCentiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCentiID_", out FLECS_IDEcsCentiID__Ptr) : FLECS_IDEcsCentiID__Ptr);
+
+        public static ref ulong FLECS_IDEcsCentiMetersID_ => ref *(ulong*)(FLECS_IDEcsCentiMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCentiMetersID_", out FLECS_IDEcsCentiMetersID__Ptr) : FLECS_IDEcsCentiMetersID__Ptr);
+
+        public static ref ulong FLECS_IDEcsComponentID_ => ref *(ulong*)(FLECS_IDEcsComponentID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsComponentID_", out FLECS_IDEcsComponentID__Ptr) : FLECS_IDEcsComponentID__Ptr);
+
+        public static ref ulong FLECS_IDEcsCounterID_ => ref *(ulong*)(FLECS_IDEcsCounterID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCounterID_", out FLECS_IDEcsCounterID__Ptr) : FLECS_IDEcsCounterID__Ptr);
+
+        public static ref ulong FLECS_IDEcsCounterIdID_ => ref *(ulong*)(FLECS_IDEcsCounterIdID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCounterIdID_", out FLECS_IDEcsCounterIdID__Ptr) : FLECS_IDEcsCounterIdID__Ptr);
+
+        public static ref ulong FLECS_IDEcsCounterIncrementID_ => ref *(ulong*)(FLECS_IDEcsCounterIncrementID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCounterIncrementID_", out FLECS_IDEcsCounterIncrementID__Ptr) : FLECS_IDEcsCounterIncrementID__Ptr);
+
+        public static ref ulong FLECS_IDEcsDataID_ => ref *(ulong*)(FLECS_IDEcsDataID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDataID_", out FLECS_IDEcsDataID__Ptr) : FLECS_IDEcsDataID__Ptr);
+
+        public static ref ulong FLECS_IDEcsDataRateID_ => ref *(ulong*)(FLECS_IDEcsDataRateID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDataRateID_", out FLECS_IDEcsDataRateID__Ptr) : FLECS_IDEcsDataRateID__Ptr);
+
+        public static ref ulong FLECS_IDEcsDateID_ => ref *(ulong*)(FLECS_IDEcsDateID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDateID_", out FLECS_IDEcsDateID__Ptr) : FLECS_IDEcsDateID__Ptr);
+
+        public static ref ulong FLECS_IDEcsDaysID_ => ref *(ulong*)(FLECS_IDEcsDaysID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDaysID_", out FLECS_IDEcsDaysID__Ptr) : FLECS_IDEcsDaysID__Ptr);
+
+        public static ref ulong FLECS_IDEcsDecaID_ => ref *(ulong*)(FLECS_IDEcsDecaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDecaID_", out FLECS_IDEcsDecaID__Ptr) : FLECS_IDEcsDecaID__Ptr);
+
+        public static ref ulong FLECS_IDEcsDeciBelID_ => ref *(ulong*)(FLECS_IDEcsDeciBelID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDeciBelID_", out FLECS_IDEcsDeciBelID__Ptr) : FLECS_IDEcsDeciBelID__Ptr);
+
+        public static ref ulong FLECS_IDEcsDeciID_ => ref *(ulong*)(FLECS_IDEcsDeciID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDeciID_", out FLECS_IDEcsDeciID__Ptr) : FLECS_IDEcsDeciID__Ptr);
+
+        public static ref ulong FLECS_IDEcsDegreesID_ => ref *(ulong*)(FLECS_IDEcsDegreesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDegreesID_", out FLECS_IDEcsDegreesID__Ptr) : FLECS_IDEcsDegreesID__Ptr);
+
+        public static ref ulong FLECS_IDEcsDocDescriptionID_ => ref *(ulong*)(FLECS_IDEcsDocDescriptionID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDocDescriptionID_", out FLECS_IDEcsDocDescriptionID__Ptr) : FLECS_IDEcsDocDescriptionID__Ptr);
+
+        public static ref ulong FLECS_IDEcsDurationID_ => ref *(ulong*)(FLECS_IDEcsDurationID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDurationID_", out FLECS_IDEcsDurationID__Ptr) : FLECS_IDEcsDurationID__Ptr);
+
+        public static ref ulong FLECS_IDEcsElectricCurrentID_ => ref *(ulong*)(FLECS_IDEcsElectricCurrentID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsElectricCurrentID_", out FLECS_IDEcsElectricCurrentID__Ptr) : FLECS_IDEcsElectricCurrentID__Ptr);
+
+        public static ref ulong FLECS_IDEcsEnumID_ => ref *(ulong*)(FLECS_IDEcsEnumID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsEnumID_", out FLECS_IDEcsEnumID__Ptr) : FLECS_IDEcsEnumID__Ptr);
+
+        public static ref ulong FLECS_IDEcsExaID_ => ref *(ulong*)(FLECS_IDEcsExaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsExaID_", out FLECS_IDEcsExaID__Ptr) : FLECS_IDEcsExaID__Ptr);
+
+        public static ref ulong FLECS_IDEcsExbiID_ => ref *(ulong*)(FLECS_IDEcsExbiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsExbiID_", out FLECS_IDEcsExbiID__Ptr) : FLECS_IDEcsExbiID__Ptr);
+
+        public static ref ulong FLECS_IDEcsFahrenheitID_ => ref *(ulong*)(FLECS_IDEcsFahrenheitID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsFahrenheitID_", out FLECS_IDEcsFahrenheitID__Ptr) : FLECS_IDEcsFahrenheitID__Ptr);
+
+        public static ref ulong FLECS_IDEcsFemtoID_ => ref *(ulong*)(FLECS_IDEcsFemtoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsFemtoID_", out FLECS_IDEcsFemtoID__Ptr) : FLECS_IDEcsFemtoID__Ptr);
+
+        public static ref ulong FLECS_IDEcsForceID_ => ref *(ulong*)(FLECS_IDEcsForceID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsForceID_", out FLECS_IDEcsForceID__Ptr) : FLECS_IDEcsForceID__Ptr);
+
+        public static ref ulong FLECS_IDEcsFrequencyID_ => ref *(ulong*)(FLECS_IDEcsFrequencyID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsFrequencyID_", out FLECS_IDEcsFrequencyID__Ptr) : FLECS_IDEcsFrequencyID__Ptr);
+
+        public static ref ulong FLECS_IDEcsGaugeID_ => ref *(ulong*)(FLECS_IDEcsGaugeID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGaugeID_", out FLECS_IDEcsGaugeID__Ptr) : FLECS_IDEcsGaugeID__Ptr);
+
+        public static ref ulong FLECS_IDEcsGibiBytesID_ => ref *(ulong*)(FLECS_IDEcsGibiBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGibiBytesID_", out FLECS_IDEcsGibiBytesID__Ptr) : FLECS_IDEcsGibiBytesID__Ptr);
+
+        public static ref ulong FLECS_IDEcsGibiID_ => ref *(ulong*)(FLECS_IDEcsGibiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGibiID_", out FLECS_IDEcsGibiID__Ptr) : FLECS_IDEcsGibiID__Ptr);
+
+        public static ref ulong FLECS_IDEcsGigaBitsID_ => ref *(ulong*)(FLECS_IDEcsGigaBitsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaBitsID_", out FLECS_IDEcsGigaBitsID__Ptr) : FLECS_IDEcsGigaBitsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsGigaBitsPerSecondID_ => ref *(ulong*)(FLECS_IDEcsGigaBitsPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaBitsPerSecondID_", out FLECS_IDEcsGigaBitsPerSecondID__Ptr) : FLECS_IDEcsGigaBitsPerSecondID__Ptr);
+
+        public static ref ulong FLECS_IDEcsGigaBytesID_ => ref *(ulong*)(FLECS_IDEcsGigaBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaBytesID_", out FLECS_IDEcsGigaBytesID__Ptr) : FLECS_IDEcsGigaBytesID__Ptr);
+
+        public static ref ulong FLECS_IDEcsGigaBytesPerSecondID_ => ref *(ulong*)(FLECS_IDEcsGigaBytesPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaBytesPerSecondID_", out FLECS_IDEcsGigaBytesPerSecondID__Ptr) : FLECS_IDEcsGigaBytesPerSecondID__Ptr);
+
+        public static ref ulong FLECS_IDEcsGigaHertzID_ => ref *(ulong*)(FLECS_IDEcsGigaHertzID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaHertzID_", out FLECS_IDEcsGigaHertzID__Ptr) : FLECS_IDEcsGigaHertzID__Ptr);
+
+        public static ref ulong FLECS_IDEcsGigaID_ => ref *(ulong*)(FLECS_IDEcsGigaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaID_", out FLECS_IDEcsGigaID__Ptr) : FLECS_IDEcsGigaID__Ptr);
+
+        public static ref ulong FLECS_IDEcsGramsID_ => ref *(ulong*)(FLECS_IDEcsGramsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGramsID_", out FLECS_IDEcsGramsID__Ptr) : FLECS_IDEcsGramsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsHectoID_ => ref *(ulong*)(FLECS_IDEcsHectoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsHectoID_", out FLECS_IDEcsHectoID__Ptr) : FLECS_IDEcsHectoID__Ptr);
+
+        public static ref ulong FLECS_IDEcsHertzID_ => ref *(ulong*)(FLECS_IDEcsHertzID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsHertzID_", out FLECS_IDEcsHertzID__Ptr) : FLECS_IDEcsHertzID__Ptr);
+
+        public static ref ulong FLECS_IDEcsHoursID_ => ref *(ulong*)(FLECS_IDEcsHoursID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsHoursID_", out FLECS_IDEcsHoursID__Ptr) : FLECS_IDEcsHoursID__Ptr);
+
+        public static ref ulong FLECS_IDEcsIdentifierID_ => ref *(ulong*)(FLECS_IDEcsIdentifierID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsIdentifierID_", out FLECS_IDEcsIdentifierID__Ptr) : FLECS_IDEcsIdentifierID__Ptr);
+
+        public static ref ulong FLECS_IDEcsIterableID_ => ref *(ulong*)(FLECS_IDEcsIterableID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsIterableID_", out FLECS_IDEcsIterableID__Ptr) : FLECS_IDEcsIterableID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKelvinID_ => ref *(ulong*)(FLECS_IDEcsKelvinID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKelvinID_", out FLECS_IDEcsKelvinID__Ptr) : FLECS_IDEcsKelvinID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKibiBytesID_ => ref *(ulong*)(FLECS_IDEcsKibiBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKibiBytesID_", out FLECS_IDEcsKibiBytesID__Ptr) : FLECS_IDEcsKibiBytesID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKibiID_ => ref *(ulong*)(FLECS_IDEcsKibiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKibiID_", out FLECS_IDEcsKibiID__Ptr) : FLECS_IDEcsKibiID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKiloBitsID_ => ref *(ulong*)(FLECS_IDEcsKiloBitsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloBitsID_", out FLECS_IDEcsKiloBitsID__Ptr) : FLECS_IDEcsKiloBitsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKiloBitsPerSecondID_ => ref *(ulong*)(FLECS_IDEcsKiloBitsPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloBitsPerSecondID_", out FLECS_IDEcsKiloBitsPerSecondID__Ptr) : FLECS_IDEcsKiloBitsPerSecondID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKiloBytesID_ => ref *(ulong*)(FLECS_IDEcsKiloBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloBytesID_", out FLECS_IDEcsKiloBytesID__Ptr) : FLECS_IDEcsKiloBytesID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKiloBytesPerSecondID_ => ref *(ulong*)(FLECS_IDEcsKiloBytesPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloBytesPerSecondID_", out FLECS_IDEcsKiloBytesPerSecondID__Ptr) : FLECS_IDEcsKiloBytesPerSecondID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKiloGramsID_ => ref *(ulong*)(FLECS_IDEcsKiloGramsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloGramsID_", out FLECS_IDEcsKiloGramsID__Ptr) : FLECS_IDEcsKiloGramsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKiloHertzID_ => ref *(ulong*)(FLECS_IDEcsKiloHertzID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloHertzID_", out FLECS_IDEcsKiloHertzID__Ptr) : FLECS_IDEcsKiloHertzID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKiloID_ => ref *(ulong*)(FLECS_IDEcsKiloID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloID_", out FLECS_IDEcsKiloID__Ptr) : FLECS_IDEcsKiloID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKiloMetersID_ => ref *(ulong*)(FLECS_IDEcsKiloMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloMetersID_", out FLECS_IDEcsKiloMetersID__Ptr) : FLECS_IDEcsKiloMetersID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKiloMetersPerHourID_ => ref *(ulong*)(FLECS_IDEcsKiloMetersPerHourID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloMetersPerHourID_", out FLECS_IDEcsKiloMetersPerHourID__Ptr) : FLECS_IDEcsKiloMetersPerHourID__Ptr);
+
+        public static ref ulong FLECS_IDEcsKiloMetersPerSecondID_ => ref *(ulong*)(FLECS_IDEcsKiloMetersPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloMetersPerSecondID_", out FLECS_IDEcsKiloMetersPerSecondID__Ptr) : FLECS_IDEcsKiloMetersPerSecondID__Ptr);
+
+        public static ref ulong FLECS_IDEcsLengthID_ => ref *(ulong*)(FLECS_IDEcsLengthID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsLengthID_", out FLECS_IDEcsLengthID__Ptr) : FLECS_IDEcsLengthID__Ptr);
+
+        public static ref ulong FLECS_IDEcsLuminousIntensityID_ => ref *(ulong*)(FLECS_IDEcsLuminousIntensityID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsLuminousIntensityID_", out FLECS_IDEcsLuminousIntensityID__Ptr) : FLECS_IDEcsLuminousIntensityID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMassID_ => ref *(ulong*)(FLECS_IDEcsMassID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMassID_", out FLECS_IDEcsMassID__Ptr) : FLECS_IDEcsMassID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMebiBytesID_ => ref *(ulong*)(FLECS_IDEcsMebiBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMebiBytesID_", out FLECS_IDEcsMebiBytesID__Ptr) : FLECS_IDEcsMebiBytesID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMebiID_ => ref *(ulong*)(FLECS_IDEcsMebiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMebiID_", out FLECS_IDEcsMebiID__Ptr) : FLECS_IDEcsMebiID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMegaBitsID_ => ref *(ulong*)(FLECS_IDEcsMegaBitsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaBitsID_", out FLECS_IDEcsMegaBitsID__Ptr) : FLECS_IDEcsMegaBitsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMegaBitsPerSecondID_ => ref *(ulong*)(FLECS_IDEcsMegaBitsPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaBitsPerSecondID_", out FLECS_IDEcsMegaBitsPerSecondID__Ptr) : FLECS_IDEcsMegaBitsPerSecondID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMegaBytesID_ => ref *(ulong*)(FLECS_IDEcsMegaBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaBytesID_", out FLECS_IDEcsMegaBytesID__Ptr) : FLECS_IDEcsMegaBytesID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMegaBytesPerSecondID_ => ref *(ulong*)(FLECS_IDEcsMegaBytesPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaBytesPerSecondID_", out FLECS_IDEcsMegaBytesPerSecondID__Ptr) : FLECS_IDEcsMegaBytesPerSecondID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMegaHertzID_ => ref *(ulong*)(FLECS_IDEcsMegaHertzID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaHertzID_", out FLECS_IDEcsMegaHertzID__Ptr) : FLECS_IDEcsMegaHertzID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMegaID_ => ref *(ulong*)(FLECS_IDEcsMegaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaID_", out FLECS_IDEcsMegaID__Ptr) : FLECS_IDEcsMegaID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMemberID_ => ref *(ulong*)(FLECS_IDEcsMemberID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMemberID_", out FLECS_IDEcsMemberID__Ptr) : FLECS_IDEcsMemberID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMemberRangesID_ => ref *(ulong*)(FLECS_IDEcsMemberRangesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMemberRangesID_", out FLECS_IDEcsMemberRangesID__Ptr) : FLECS_IDEcsMemberRangesID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMetaTypeID_ => ref *(ulong*)(FLECS_IDEcsMetaTypeID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetaTypeID_", out FLECS_IDEcsMetaTypeID__Ptr) : FLECS_IDEcsMetaTypeID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMetaTypeSerializedID_ => ref *(ulong*)(FLECS_IDEcsMetaTypeSerializedID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetaTypeSerializedID_", out FLECS_IDEcsMetaTypeSerializedID__Ptr) : FLECS_IDEcsMetaTypeSerializedID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMetersID_ => ref *(ulong*)(FLECS_IDEcsMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetersID_", out FLECS_IDEcsMetersID__Ptr) : FLECS_IDEcsMetersID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMetersPerSecondID_ => ref *(ulong*)(FLECS_IDEcsMetersPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetersPerSecondID_", out FLECS_IDEcsMetersPerSecondID__Ptr) : FLECS_IDEcsMetersPerSecondID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMetricID_ => ref *(ulong*)(FLECS_IDEcsMetricID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricID_", out FLECS_IDEcsMetricID__Ptr) : FLECS_IDEcsMetricID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMetricInstanceID_ => ref *(ulong*)(FLECS_IDEcsMetricInstanceID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricInstanceID_", out FLECS_IDEcsMetricInstanceID__Ptr) : FLECS_IDEcsMetricInstanceID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMetricSourceID_ => ref *(ulong*)(FLECS_IDEcsMetricSourceID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricSourceID_", out FLECS_IDEcsMetricSourceID__Ptr) : FLECS_IDEcsMetricSourceID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMetricValueID_ => ref *(ulong*)(FLECS_IDEcsMetricValueID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricValueID_", out FLECS_IDEcsMetricValueID__Ptr) : FLECS_IDEcsMetricValueID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMicroID_ => ref *(ulong*)(FLECS_IDEcsMicroID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMicroID_", out FLECS_IDEcsMicroID__Ptr) : FLECS_IDEcsMicroID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMicroMetersID_ => ref *(ulong*)(FLECS_IDEcsMicroMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMicroMetersID_", out FLECS_IDEcsMicroMetersID__Ptr) : FLECS_IDEcsMicroMetersID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMicroSecondsID_ => ref *(ulong*)(FLECS_IDEcsMicroSecondsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMicroSecondsID_", out FLECS_IDEcsMicroSecondsID__Ptr) : FLECS_IDEcsMicroSecondsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMilesID_ => ref *(ulong*)(FLECS_IDEcsMilesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilesID_", out FLECS_IDEcsMilesID__Ptr) : FLECS_IDEcsMilesID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMilesPerHourID_ => ref *(ulong*)(FLECS_IDEcsMilesPerHourID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilesPerHourID_", out FLECS_IDEcsMilesPerHourID__Ptr) : FLECS_IDEcsMilesPerHourID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMilliID_ => ref *(ulong*)(FLECS_IDEcsMilliID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilliID_", out FLECS_IDEcsMilliID__Ptr) : FLECS_IDEcsMilliID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMilliMetersID_ => ref *(ulong*)(FLECS_IDEcsMilliMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilliMetersID_", out FLECS_IDEcsMilliMetersID__Ptr) : FLECS_IDEcsMilliMetersID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMilliSecondsID_ => ref *(ulong*)(FLECS_IDEcsMilliSecondsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilliSecondsID_", out FLECS_IDEcsMilliSecondsID__Ptr) : FLECS_IDEcsMilliSecondsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMinutesID_ => ref *(ulong*)(FLECS_IDEcsMinutesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMinutesID_", out FLECS_IDEcsMinutesID__Ptr) : FLECS_IDEcsMinutesID__Ptr);
+
+        public static ref ulong FLECS_IDEcsMoleID_ => ref *(ulong*)(FLECS_IDEcsMoleID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMoleID_", out FLECS_IDEcsMoleID__Ptr) : FLECS_IDEcsMoleID__Ptr);
+
+        public static ref ulong FLECS_IDEcsNanoID_ => ref *(ulong*)(FLECS_IDEcsNanoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsNanoID_", out FLECS_IDEcsNanoID__Ptr) : FLECS_IDEcsNanoID__Ptr);
+
+        public static ref ulong FLECS_IDEcsNanoMetersID_ => ref *(ulong*)(FLECS_IDEcsNanoMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsNanoMetersID_", out FLECS_IDEcsNanoMetersID__Ptr) : FLECS_IDEcsNanoMetersID__Ptr);
+
+        public static ref ulong FLECS_IDEcsNanoSecondsID_ => ref *(ulong*)(FLECS_IDEcsNanoSecondsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsNanoSecondsID_", out FLECS_IDEcsNanoSecondsID__Ptr) : FLECS_IDEcsNanoSecondsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsNewtonID_ => ref *(ulong*)(FLECS_IDEcsNewtonID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsNewtonID_", out FLECS_IDEcsNewtonID__Ptr) : FLECS_IDEcsNewtonID__Ptr);
+
+        public static ref ulong FLECS_IDEcsOpaqueID_ => ref *(ulong*)(FLECS_IDEcsOpaqueID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsOpaqueID_", out FLECS_IDEcsOpaqueID__Ptr) : FLECS_IDEcsOpaqueID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPascalID_ => ref *(ulong*)(FLECS_IDEcsPascalID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPascalID_", out FLECS_IDEcsPascalID__Ptr) : FLECS_IDEcsPascalID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPebiID_ => ref *(ulong*)(FLECS_IDEcsPebiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPebiID_", out FLECS_IDEcsPebiID__Ptr) : FLECS_IDEcsPebiID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPercentageID_ => ref *(ulong*)(FLECS_IDEcsPercentageID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPercentageID_", out FLECS_IDEcsPercentageID__Ptr) : FLECS_IDEcsPercentageID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPetaID_ => ref *(ulong*)(FLECS_IDEcsPetaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPetaID_", out FLECS_IDEcsPetaID__Ptr) : FLECS_IDEcsPetaID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPicoID_ => ref *(ulong*)(FLECS_IDEcsPicoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPicoID_", out FLECS_IDEcsPicoID__Ptr) : FLECS_IDEcsPicoID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPicoMetersID_ => ref *(ulong*)(FLECS_IDEcsPicoMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPicoMetersID_", out FLECS_IDEcsPicoMetersID__Ptr) : FLECS_IDEcsPicoMetersID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPicoSecondsID_ => ref *(ulong*)(FLECS_IDEcsPicoSecondsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPicoSecondsID_", out FLECS_IDEcsPicoSecondsID__Ptr) : FLECS_IDEcsPicoSecondsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPipelineID_ => ref *(ulong*)(FLECS_IDEcsPipelineID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPipelineID_", out FLECS_IDEcsPipelineID__Ptr) : FLECS_IDEcsPipelineID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPipelineQueryID_ => ref *(ulong*)(FLECS_IDEcsPipelineQueryID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPipelineQueryID_", out FLECS_IDEcsPipelineQueryID__Ptr) : FLECS_IDEcsPipelineQueryID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPipelineStatsID_ => ref *(ulong*)(FLECS_IDEcsPipelineStatsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPipelineStatsID_", out FLECS_IDEcsPipelineStatsID__Ptr) : FLECS_IDEcsPipelineStatsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPixelsID_ => ref *(ulong*)(FLECS_IDEcsPixelsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPixelsID_", out FLECS_IDEcsPixelsID__Ptr) : FLECS_IDEcsPixelsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPolyID_ => ref *(ulong*)(FLECS_IDEcsPolyID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPolyID_", out FLECS_IDEcsPolyID__Ptr) : FLECS_IDEcsPolyID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPressureID_ => ref *(ulong*)(FLECS_IDEcsPressureID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPressureID_", out FLECS_IDEcsPressureID__Ptr) : FLECS_IDEcsPressureID__Ptr);
+
+        public static ref ulong FLECS_IDEcsPrimitiveID_ => ref *(ulong*)(FLECS_IDEcsPrimitiveID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPrimitiveID_", out FLECS_IDEcsPrimitiveID__Ptr) : FLECS_IDEcsPrimitiveID__Ptr);
+
+        public static ref ulong FLECS_IDEcsRadiansID_ => ref *(ulong*)(FLECS_IDEcsRadiansID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsRadiansID_", out FLECS_IDEcsRadiansID__Ptr) : FLECS_IDEcsRadiansID__Ptr);
+
+        public static ref ulong FLECS_IDEcsRateFilterID_ => ref *(ulong*)(FLECS_IDEcsRateFilterID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsRateFilterID_", out FLECS_IDEcsRateFilterID__Ptr) : FLECS_IDEcsRateFilterID__Ptr);
+
+        public static ref ulong FLECS_IDEcsRestID_ => ref *(ulong*)(FLECS_IDEcsRestID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsRestID_", out FLECS_IDEcsRestID__Ptr) : FLECS_IDEcsRestID__Ptr);
+
+        public static ref ulong FLECS_IDEcsScriptID_ => ref *(ulong*)(FLECS_IDEcsScriptID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsScriptID_", out FLECS_IDEcsScriptID__Ptr) : FLECS_IDEcsScriptID__Ptr);
+
+        public static ref ulong FLECS_IDEcsSecondsID_ => ref *(ulong*)(FLECS_IDEcsSecondsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsSecondsID_", out FLECS_IDEcsSecondsID__Ptr) : FLECS_IDEcsSecondsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsSpeedID_ => ref *(ulong*)(FLECS_IDEcsSpeedID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsSpeedID_", out FLECS_IDEcsSpeedID__Ptr) : FLECS_IDEcsSpeedID__Ptr);
+
+        public static ref ulong FLECS_IDEcsStructID_ => ref *(ulong*)(FLECS_IDEcsStructID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsStructID_", out FLECS_IDEcsStructID__Ptr) : FLECS_IDEcsStructID__Ptr);
+
+        public static ref ulong FLECS_IDEcsTargetID_ => ref *(ulong*)(FLECS_IDEcsTargetID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTargetID_", out FLECS_IDEcsTargetID__Ptr) : FLECS_IDEcsTargetID__Ptr);
+
+        public static ref ulong FLECS_IDEcsTebiID_ => ref *(ulong*)(FLECS_IDEcsTebiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTebiID_", out FLECS_IDEcsTebiID__Ptr) : FLECS_IDEcsTebiID__Ptr);
+
+        public static ref ulong FLECS_IDEcsTemperatureID_ => ref *(ulong*)(FLECS_IDEcsTemperatureID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTemperatureID_", out FLECS_IDEcsTemperatureID__Ptr) : FLECS_IDEcsTemperatureID__Ptr);
+
+        public static ref ulong FLECS_IDEcsTeraID_ => ref *(ulong*)(FLECS_IDEcsTeraID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTeraID_", out FLECS_IDEcsTeraID__Ptr) : FLECS_IDEcsTeraID__Ptr);
+
+        public static ref ulong FLECS_IDEcsTickSourceID_ => ref *(ulong*)(FLECS_IDEcsTickSourceID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTickSourceID_", out FLECS_IDEcsTickSourceID__Ptr) : FLECS_IDEcsTickSourceID__Ptr);
+
+        public static ref ulong FLECS_IDEcsTimeID_ => ref *(ulong*)(FLECS_IDEcsTimeID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTimeID_", out FLECS_IDEcsTimeID__Ptr) : FLECS_IDEcsTimeID__Ptr);
+
+        public static ref ulong FLECS_IDEcsTimerID_ => ref *(ulong*)(FLECS_IDEcsTimerID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTimerID_", out FLECS_IDEcsTimerID__Ptr) : FLECS_IDEcsTimerID__Ptr);
+
+        public static ref ulong FLECS_IDEcsUnitID_ => ref *(ulong*)(FLECS_IDEcsUnitID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUnitID_", out FLECS_IDEcsUnitID__Ptr) : FLECS_IDEcsUnitID__Ptr);
+
+        public static ref ulong FLECS_IDEcsUnitPrefixesID_ => ref *(ulong*)(FLECS_IDEcsUnitPrefixesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUnitPrefixesID_", out FLECS_IDEcsUnitPrefixesID__Ptr) : FLECS_IDEcsUnitPrefixesID__Ptr);
+
+        public static ref ulong FLECS_IDEcsUnitPrefixID_ => ref *(ulong*)(FLECS_IDEcsUnitPrefixID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUnitPrefixID_", out FLECS_IDEcsUnitPrefixID__Ptr) : FLECS_IDEcsUnitPrefixID__Ptr);
+
+        public static ref ulong FLECS_IDEcsUriFileID_ => ref *(ulong*)(FLECS_IDEcsUriFileID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUriFileID_", out FLECS_IDEcsUriFileID__Ptr) : FLECS_IDEcsUriFileID__Ptr);
+
+        public static ref ulong FLECS_IDEcsUriHyperlinkID_ => ref *(ulong*)(FLECS_IDEcsUriHyperlinkID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUriHyperlinkID_", out FLECS_IDEcsUriHyperlinkID__Ptr) : FLECS_IDEcsUriHyperlinkID__Ptr);
+
+        public static ref ulong FLECS_IDEcsUriID_ => ref *(ulong*)(FLECS_IDEcsUriID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUriID_", out FLECS_IDEcsUriID__Ptr) : FLECS_IDEcsUriID__Ptr);
+
+        public static ref ulong FLECS_IDEcsUriImageID_ => ref *(ulong*)(FLECS_IDEcsUriImageID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUriImageID_", out FLECS_IDEcsUriImageID__Ptr) : FLECS_IDEcsUriImageID__Ptr);
+
+        public static ref ulong FLECS_IDEcsVectorID_ => ref *(ulong*)(FLECS_IDEcsVectorID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsVectorID_", out FLECS_IDEcsVectorID__Ptr) : FLECS_IDEcsVectorID__Ptr);
+
+        public static ref ulong FLECS_IDEcsWorldStatsID_ => ref *(ulong*)(FLECS_IDEcsWorldStatsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsWorldStatsID_", out FLECS_IDEcsWorldStatsID__Ptr) : FLECS_IDEcsWorldStatsID__Ptr);
+
+        public static ref ulong FLECS_IDEcsWorldSummaryID_ => ref *(ulong*)(FLECS_IDEcsWorldSummaryID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsWorldSummaryID_", out FLECS_IDEcsWorldSummaryID__Ptr) : FLECS_IDEcsWorldSummaryID__Ptr);
+
+        public static ref ulong FLECS_IDEcsYobiID_ => ref *(ulong*)(FLECS_IDEcsYobiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsYobiID_", out FLECS_IDEcsYobiID__Ptr) : FLECS_IDEcsYobiID__Ptr);
+
+        public static ref ulong FLECS_IDEcsYoctoID_ => ref *(ulong*)(FLECS_IDEcsYoctoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsYoctoID_", out FLECS_IDEcsYoctoID__Ptr) : FLECS_IDEcsYoctoID__Ptr);
+
+        public static ref ulong FLECS_IDEcsYottaID_ => ref *(ulong*)(FLECS_IDEcsYottaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsYottaID_", out FLECS_IDEcsYottaID__Ptr) : FLECS_IDEcsYottaID__Ptr);
+
+        public static ref ulong FLECS_IDEcsZebiID_ => ref *(ulong*)(FLECS_IDEcsZebiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsZebiID_", out FLECS_IDEcsZebiID__Ptr) : FLECS_IDEcsZebiID__Ptr);
+
+        public static ref ulong FLECS_IDEcsZeptoID_ => ref *(ulong*)(FLECS_IDEcsZeptoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsZeptoID_", out FLECS_IDEcsZeptoID__Ptr) : FLECS_IDEcsZeptoID__Ptr);
+
+        public static ref ulong FLECS_IDEcsZettaID_ => ref *(ulong*)(FLECS_IDEcsZettaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsZettaID_", out FLECS_IDEcsZettaID__Ptr) : FLECS_IDEcsZettaID__Ptr);
+
+        public static ref ulong FLECS_IDFlecsAlertsID_ => ref *(ulong*)(FLECS_IDFlecsAlertsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDFlecsAlertsID_", out FLECS_IDFlecsAlertsID__Ptr) : FLECS_IDFlecsAlertsID__Ptr);
+
+        public static ref ulong FLECS_IDFlecsMetricsID_ => ref *(ulong*)(FLECS_IDFlecsMetricsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDFlecsMetricsID_", out FLECS_IDFlecsMetricsID__Ptr) : FLECS_IDFlecsMetricsID__Ptr);
+
+        public static ref ulong FLECS_IDFlecsMonitorID_ => ref *(ulong*)(FLECS_IDFlecsMonitorID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDFlecsMonitorID_", out FLECS_IDFlecsMonitorID__Ptr) : FLECS_IDFlecsMonitorID__Ptr);
 
         public partial class BindgenInternal
         {
@@ -11363,11 +7243,11 @@ namespace Flecs.NET.Bindings
 #endif
             }
 
-            public static void LoadDllSymbol(string variableSymbol, out void* field)
+            public static void* LoadDllSymbol(string variableSymbol, out void* field)
             {
                 if (_libraryHandle == System.IntPtr.Zero)
                     ResolveLibrary();
-                field = (void*)GetExport(variableSymbol);
+                return field = (void*)GetExport(variableSymbol);
             }
         }
     }
