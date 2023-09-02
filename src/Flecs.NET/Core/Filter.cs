@@ -31,7 +31,7 @@ namespace Flecs.NET.Core
         /// <param name="name"></param>
         /// <param name="filterBuilder"></param>
         /// <exception cref="InvalidOperationException"></exception>
-        public Filter(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default)
+        public Filter(ecs_world_t* world, FilterBuilder filterBuilder = default, string name = "")
         {
             Assert.True(world == filterBuilder.World, "Worlds are different");
 

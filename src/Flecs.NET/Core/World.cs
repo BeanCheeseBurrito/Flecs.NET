@@ -2063,9 +2063,9 @@ namespace Flecs.NET.Core
         /// <param name="name"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public Filter Filter(string name = "", FilterBuilder filter = default)
+        public Filter Filter(FilterBuilder filter = default, string name = "")
         {
-            return new Filter(Handle, name, filter);
+            return new Filter(Handle, filter, name);
         }
 
         /// <summary>
@@ -2074,9 +2074,9 @@ namespace Flecs.NET.Core
         /// <param name="name"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public Rule Rule(string name = "", FilterBuilder filter = default)
+        public Rule Rule(FilterBuilder filter = default, string name = "")
         {
-            return new Rule(Handle, name, filter);
+            return new Rule(Handle, filter, name);
         }
 
         /// <summary>
@@ -2086,9 +2086,9 @@ namespace Flecs.NET.Core
         /// <param name="filter"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        public Query Query(string name = "", FilterBuilder filter = default, QueryBuilder query = default)
+        public Query Query(FilterBuilder filter = default, QueryBuilder query = default, string name = "")
         {
-            return new Query(Handle, name, filter, query);
+            return new Query(Handle, filter, query, name);
         }
 
         /// <summary>
@@ -2099,11 +2099,13 @@ namespace Flecs.NET.Core
         /// <param name="observer"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public Observer Observer(string name = "", FilterBuilder filter = default,
+        public Observer Observer(
+            FilterBuilder filter = default,
             ObserverBuilder observer = default,
-            Ecs.IterCallback? callback = null)
+            Ecs.IterCallback? callback = null,
+            string name = "")
         {
-            return new Observer(Handle, name, filter, observer, callback);
+            return new Observer(Handle, filter, observer, callback, name);
         }
 
         /// <summary>
@@ -2125,11 +2127,14 @@ namespace Flecs.NET.Core
         /// <param name="routine"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public Routine Routine(string name = "", FilterBuilder filter = default,
+        public Routine Routine(
+            FilterBuilder filter = default,
             QueryBuilder query = default,
-            RoutineBuilder routine = default, Ecs.IterCallback? callback = null)
+            RoutineBuilder routine = default,
+            Ecs.IterCallback? callback = null,
+            string name = "")
         {
-            return new Routine(Handle, name, filter, query, routine, callback);
+            return new Routine(Handle, filter, query, routine, callback, name);
         }
 
         /// <summary>

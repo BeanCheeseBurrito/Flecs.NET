@@ -29,7 +29,7 @@ namespace Flecs.NET.Core
         /// <param name="name"></param>
         /// <param name="filterBuilder"></param>
         /// <exception cref="InvalidOperationException"></exception>
-        public Rule(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default)
+        public Rule(ecs_world_t* world, FilterBuilder filterBuilder = default, string name = "")
         {
             _world = world;
 

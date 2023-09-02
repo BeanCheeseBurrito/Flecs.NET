@@ -24,9 +24,9 @@ namespace Flecs.NET.Core
         private Observer(
             ecs_world_t* world,
             ecs_observer_desc_t* observerDesc,
-            string name = "",
-            FilterBuilder filterBuilder = default,
-            ObserverBuilder observerBuilder = default)
+            ref FilterBuilder filterBuilder,
+            ref ObserverBuilder observerBuilder,
+            ref string name)
         {
             using NativeString nativeName = (NativeString)name;
             using NativeString nativeSep = (NativeString)"::";
@@ -59,11 +59,11 @@ namespace Flecs.NET.Core
         /// <exception cref="ArgumentNullException"></exception>
         public Observer(
             ecs_world_t* world,
-            string name = "",
             FilterBuilder filterBuilder = default,
             ObserverBuilder observerBuilder = default,
-            Ecs.IterCallback? callback = null)
-            : this(world, &observerBuilder.ObserverDesc, name, filterBuilder)
+            Ecs.IterCallback? callback = null,
+            string name = "")
+            : this(world, &observerBuilder.ObserverDesc, ref filterBuilder, ref observerBuilder, ref name)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback), "Callback is null");
@@ -93,7 +93,7 @@ namespace Flecs.NET.Core
             FilterBuilder filterBuilder = default,
             ObserverBuilder observerBuilder = default,
             Ecs.EachEntityCallback? callback = null)
-            : this(world, &observerBuilder.ObserverDesc, name, filterBuilder)
+            : this(world, &observerBuilder.ObserverDesc, ref filterBuilder, ref observerBuilder, ref name)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback), "Callback is null");

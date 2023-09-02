@@ -32,8 +32,11 @@ namespace Flecs.NET.Core
         /// <param name="filterBuilder"></param>
         /// <param name="queryBuilder"></param>
         /// <exception cref="InvalidOperationException"></exception>
-        public Query(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default,
-            QueryBuilder queryBuilder = default)
+        public Query(
+            ecs_world_t* world,
+            FilterBuilder filterBuilder = default,
+            QueryBuilder queryBuilder = default,
+            string name = "")
         {
             QueryContext = queryBuilder.QueryContext;
             _world = world;

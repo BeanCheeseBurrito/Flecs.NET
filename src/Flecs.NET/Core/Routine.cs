@@ -24,10 +24,10 @@ namespace Flecs.NET.Core
         private Routine(
             ecs_world_t* world,
             ecs_system_desc_t* routineDesc,
-            string name = "",
-            FilterBuilder filterBuilder = default,
-            QueryBuilder queryBuilder = default,
-            RoutineBuilder routineBuilder = default)
+            ref FilterBuilder filterBuilder,
+            ref QueryBuilder queryBuilder,
+            ref RoutineBuilder routineBuilder,
+            ref string name)
         {
             using NativeString nativeName = (NativeString)name;
             using NativeString nativeSep = (NativeString)"::";
@@ -77,12 +77,12 @@ namespace Flecs.NET.Core
         /// <exception cref="ArgumentNullException"></exception>
         public Routine(
             ecs_world_t* world,
-            string name = "",
             FilterBuilder filterBuilder = default,
             QueryBuilder queryBuilder = default,
             RoutineBuilder routineBuilder = default,
-            Ecs.IterCallback? callback = null)
-            : this(world, &routineBuilder.RoutineDesc, name, filterBuilder, queryBuilder, routineBuilder)
+            Ecs.IterCallback? callback = null,
+            string name = "")
+            : this(world, &routineBuilder.RoutineDesc, ref filterBuilder, ref queryBuilder, ref routineBuilder, ref name)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback), "Callback is null");
@@ -114,7 +114,7 @@ namespace Flecs.NET.Core
             QueryBuilder queryBuilder = default,
             RoutineBuilder routineBuilder = default,
             Ecs.EachEntityCallback? callback = null)
-            : this(world, &routineBuilder.RoutineDesc, name, filterBuilder, queryBuilder, routineBuilder)
+            : this(world, &routineBuilder.RoutineDesc, ref filterBuilder, ref queryBuilder, ref routineBuilder, ref name)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback), "Callback is null");
