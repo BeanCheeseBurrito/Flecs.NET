@@ -1,10 +1,11 @@
+using System.Runtime.InteropServices;
 using Flecs.NET.Core;
 using Xunit;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Tests.Cpp
 {
-    public class ObserverTests
+    public unsafe class ObserverTests
     {
         public ObserverTests()
         {
@@ -313,45 +314,57 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
             Assert.True(last == e2);
         }
-        //
-        // void Observer_2_entities_table_column() {
-        //     using World world = World.Create();
-        //
-        //     Entity e1 = world.Entity();
-        //     Entity e2 = world.Entity();
-        //
-        //     int count = 0;
-        //     Entity last;
-        //
-        //     world.observer<const Position>()
-        //         .Event(flecs::OnSet)
-        //         .iter([&](flecs::iter& it) {
-        //             auto p = it.range().get<Position>();
-        //
-        //             for (auto i : it) {
-        //                 count ++;
-        //                 if (it.entity(i) == e1) {
-        //                     test_int(p[i].x, 10);
-        //                     test_int(p[i].y, 20);
-        //                 } else if (it.entity(i) == e2) {
-        //                     test_int(p[i].x, 30);
-        //                     test_int(p[i].y, 40);
-        //                 } else {
-        //                     Assert.True(false);
-        //                 }
-        //
-        //                 last = it.entity(i);
-        //             }
-        //         });
-        //
-        //     e1.Set(new Position() { X = 10, Y = 20 });
-        //     Assert.Equal(1, count);
-        //     Assert.True(last == e1);
-        //
-        //     e2.Set(new Position() { X = 30, Y = 40 });
-        //     Assert.Equal(2, count);
-        //     Assert.True(last == e2);
-        // }
+
+        [Fact]
+        private void TableColumn2Entities()
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity();
+            Entity e2 = world.Entity();
+
+            int count = 0;
+            Entity last = default;
+
+            world.Observer(
+                filter: world.FilterBuilder().Term<Position>(),
+                observer: world.ObserverBuilder().Event(EcsOnSet),
+                callback: it =>
+                {
+                    Column<Position> p = it.Range().Get<Position>();
+
+                    foreach (int i in it)
+                    {
+                        count++;
+
+                        if (it.Entity(i) == e1)
+                        {
+                            Assert.Equal(10, p[i].X);
+                            Assert.Equal(20, p[i].Y);
+                        }
+                        else if (it.Entity(i) == e2)
+                        {
+                            Assert.Equal(30, p[i].X);
+                            Assert.Equal(40, p[i].Y);
+                        }
+                        else
+                        {
+                            Assert.True(false);
+                        }
+
+                        last = it.Entity(i);
+                    }
+                }
+            );
+
+            e1.Set(new Position() { X = 10, Y = 20 });
+            Assert.Equal(1, count);
+            Assert.True(last == e1);
+
+            e2.Set(new Position() { X = 30, Y = 40 });
+            Assert.Equal(2, count);
+            Assert.True(last == e2);
+        }
 
         [Fact]
         private void YieldExisting()
@@ -458,7 +471,7 @@ namespace Flecs.NET.Tests.Cpp
             Observer observer = world.Observer(
                 filter: world.FilterBuilder().Term<TagA>(),
                 observer: world.ObserverBuilder().Event(EcsOnAdd),
-                callback: it => { }
+                callback: _ => { }
             );
 
             ulong entity = observer;
@@ -610,59 +623,114 @@ namespace Flecs.NET.Tests.Cpp
             e.Add(tagA);
             Assert.Equal(1, invoked);
         }
-        //
-        // void Observer_run_callback() {
-        //     using World world = World.Create();
-        //
-        //     int count = 0;
-        //
-        //     world.observer<Position>()
-        //         .Event(EcsOnAdd)
-        //         .run([](flecs::iter_t *it) {
-        //             while (ecs_iter_next(it)) {
-        //                 it->callback(it);
-        //             }
-        //         })
-        //         .each([&](Position& p) {
-        //             count ++;
-        //         });
-        //
-        //     Entity e = world.Entity();
-        //     Assert.Equal(0, count);
-        //
-        //     e.Set(new Position() { X = 10, Y = 20 });
-        //     Assert.Equal(1, count);
-        // }
-        // TODO: This is crashing when ecs_fini is called on world. Investigate this later.
-        // [Fact]
-        // private void GetFilter() {
-        //     using World world = World.Create();
-        //
-        //     world.Entity().Set(new Position() { X = 0, Y = 0 });
-        //     world.Entity().Set(new Position() { X = 1, Y = 0 });
-        //     world.Entity().Set(new Position() { X = 2, Y = 0 });
-        //
-        //     int count = 0;
-        //
-        //     Observer observer = world.Observer(
-        //         filterBuilder: world.FilterBuilder().Term<Position>(),
-        //         observerBuilder: world.ObserverBuilder().Event(EcsOnSet),
-        //         callback: it => { }
-        //     );
-        //
-        //     Filter filter = observer.Filter();
-        //
-        //     filter.Iter(it =>
-        //     {
-        //         Column<Position> pos = it.Field<Position>(1);
-        //
-        //         foreach (int i in it) {
-        //             Assert.Equal(i, pos[i].X);
-        //             count++;
-        //         }
-        //     });
-        //
-        //     Assert.Equal(3, count);
-        // }
+
+        [Fact]
+        private void RunCallback()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            world.Observer(
+                filter: world.FilterBuilder().Term<Position>(),
+                observer: world.ObserverBuilder()
+                    .Event(EcsOnAdd)
+                    .Run(it =>
+                    {
+                        while (ecs_iter_next(it) == 1)
+                        {
+#if NET5_0_OR_GREATER
+                            ((delegate* unmanaged<ecs_iter_t*, void>)it->callback)(it);
+#else
+                            Marshal.GetDelegateForFunctionPointer<Ecs.IterAction>(it->callback)(it);
+#endif
+                        }
+                    }),
+                callback: it => { count += it.Count(); }
+            );
+
+            Entity e = world.Entity();
+            Assert.Equal(0, count);
+
+            e.Set(new Position() { X = 10, Y = 20 });
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void GetFilter()
+        {
+            using World world = World.Create();
+
+            world.Entity().Set(new Position() { X = 0, Y = 0 });
+            world.Entity().Set(new Position() { X = 1, Y = 0 });
+            world.Entity().Set(new Position() { X = 2, Y = 0 });
+
+            int count = 0;
+
+            Observer observer = world.Observer(
+                filter: world.FilterBuilder().Term<Position>(),
+                observer: world.ObserverBuilder().Event(EcsOnSet),
+                callback: _ => { }
+            );
+
+            using Filter filter = observer.Filter();
+
+            filter.Iter(it =>
+            {
+                Column<Position> pos = it.Field<Position>(1);
+                foreach (int i in it)
+                {
+                    Assert.Equal(i, pos[i].X);
+                    count++;
+                }
+            });
+
+            Assert.Equal(3, count);
+        }
+
+        [Fact]
+        private void OnSetWithSet()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            world.Observer(
+                filter: world.FilterBuilder().Term<Position>(),
+                observer: world.ObserverBuilder().Event(EcsOnSet),
+                callback: it => { count += it.Count(); }
+            );
+
+            Entity e = world.Entity();
+            Assert.Equal(0, count);
+
+            e.Set(new Position { X = 10, Y = 20 });
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void OnSetWithDeferSet()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            world.Observer(
+                filter: world.FilterBuilder().Term<Position>(),
+                observer: world.ObserverBuilder().Event(EcsOnSet),
+                callback: it => { count += it.Count(); }
+            );
+
+            Entity e = world.Entity();
+            Assert.Equal(0, count);
+
+            world.DeferBegin();
+            e.Set(new Position { X = 10, Y = 20 });
+
+            Assert.Equal(0, count);
+            world.DeferEnd();
+
+            Assert.Equal(1, count);
+        }
     }
 }

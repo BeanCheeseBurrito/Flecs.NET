@@ -33,6 +33,11 @@ public struct Template<T>
     public T Y { get; set; }
 }
 
+public struct Self
+{
+    public Entity Value { get; set; }
+}
+
 public struct FilterWrapper
 {
     public Filter Filter { get; set; }
@@ -42,6 +47,13 @@ public struct FilterWrapper
         Filter = filter;
     }
 };
+
+public struct Parent
+{
+    public struct EntityType
+    {
+    }
+}
 
 public struct Pod
 {

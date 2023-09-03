@@ -12,6 +12,8 @@ namespace Flecs.NET.Core
     {
         private ecs_world_t* _world;
         private ecs_filter_t _filter;
+        private ecs_filter_t* _filterPtr;
+        private bool _isOwned;
 
         /// <summary>
         ///     A reference to the world.
@@ -21,8 +23,7 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     A pointer to the filter.
         /// </summary>
-        public ecs_filter_t* FilterPtr => (ecs_filter_t*)Unsafe.AsPointer(ref _filter);
-
+        public ecs_filter_t* FilterPtr => _isOwned ? (ecs_filter_t*)Unsafe.AsPointer(ref _filter) : _filterPtr;
 
         /// <summary>
         ///     Creates a filter.
@@ -36,7 +37,9 @@ namespace Flecs.NET.Core
             Assert.True(world == filterBuilder.World, "Worlds are different");
 
             _filter = ECS_FILTER_INIT;
+            _filterPtr = default;
             _world = world;
+            _isOwned = true;
 
             ecs_filter_desc_t* filterDesc = &filterBuilder.FilterDesc;
             filterDesc->terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
@@ -72,10 +75,9 @@ namespace Flecs.NET.Core
         public Filter(ecs_world_t* world, ecs_filter_t* filter)
         {
             _world = world;
-            fixed (ecs_filter_t* mFilter = &_filter)
-            {
-                ecs_filter_move(mFilter, filter);
-            }
+            _isOwned = false;
+            _filter = default;
+            _filterPtr = filter;
         }
 
         /// <summary>
