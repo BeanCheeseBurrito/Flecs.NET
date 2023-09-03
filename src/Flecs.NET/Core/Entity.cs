@@ -247,7 +247,7 @@ namespace Flecs.NET.Core
         ///     Get the entity's type.
         /// </summary>
         /// <returns></returns>
-        public Types Types()
+        public Types Type()
         {
             return new Types(World, ecs_get_type(World, Id));
         }

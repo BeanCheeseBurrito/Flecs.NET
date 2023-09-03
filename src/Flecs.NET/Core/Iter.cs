@@ -101,7 +101,7 @@ namespace Flecs.NET.Core
         ///     Returns the type of the iterated table.
         /// </summary>
         /// <returns></returns>
-        public Types Types()
+        public Types Type()
         {
             return new Types(Handle->world, ecs_table_get_type(Handle->table));
         }

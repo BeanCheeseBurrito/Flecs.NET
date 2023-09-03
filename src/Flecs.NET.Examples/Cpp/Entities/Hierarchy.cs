@@ -6,7 +6,7 @@ using static Flecs.NET.Bindings.Native;
 void IterateTree(Entity e, Position pParent = default)
 {
     // Print hierarchical name of entity & the entity type
-    Console.WriteLine($"{e.Path()} [{e.Types().Str()}]");
+    Console.WriteLine($"{e.Path()} [{e.Type().Str()}]");
 
     // Get entity position
     ref readonly Position p = ref e.Get<Position>();

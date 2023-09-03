@@ -24,7 +24,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Has<Pair, Position>());
             Assert.True(!entity.Has<Position, Pair>());
 
-            Assert.Equal("(Pair,Position)", entity.Types().Str());
+            Assert.Equal("(Pair,Position)", entity.Type().Str());
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Id != 0);
             Assert.True(entity.HasSecond<Position>(pair));
             Assert.True(!entity.Has<Position>(pair));
-            Assert.Equal("(Pair,Position)", entity.Types().Str());
+            Assert.Equal("(Pair,Position)", entity.Type().Str());
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(entity.Id != 0);
             Assert.True(entity.Has(pair, tag));
-            Assert.Equal("(Pair,Tag)", entity.Types().Str());
+            Assert.Equal("(Pair,Tag)", entity.Type().Str());
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Has<Pair, Position>());
             Assert.True(!entity.Has<Position, Pair>());
 
-            Assert.Equal("(Pair,Position)", entity.Types().Str());
+            Assert.Equal("(Pair,Position)", entity.Type().Str());
 
             entity.Remove<Position, Pair>();
             Assert.True(!entity.Has<Position, Pair>());
@@ -95,7 +95,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Id != 0);
             Assert.True(entity.HasSecond<Position>(pair));
             Assert.True(!entity.Has<Position>(pair));
-            Assert.Equal("(Pair,Position)", entity.Types().Str());
+            Assert.Equal("(Pair,Position)", entity.Type().Str());
 
             entity.Remove<Position>(pair);
             Assert.True(!entity.Has<Position>(pair));
@@ -114,7 +114,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(entity.Id != 0);
             Assert.True(entity.Has(pair, tag));
-            Assert.Equal("(Pair,Tag)", entity.Types().Str());
+            Assert.Equal("(Pair,Tag)", entity.Type().Str());
 
             entity.Remove(tag, pair);
             Assert.True(!entity.Has(tag, pair));
@@ -134,7 +134,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Has<Pair, Position>());
             Assert.True(!entity.Has<Position, Pair>());
 
-            Assert.Equal("(Pair,Position)", entity.Types().Str());
+            Assert.Equal("(Pair,Position)", entity.Type().Str());
 
             Pair* t = entity.GetFirstPtr<Pair, Position>();
             Assert.Equal(10, t->Value);
@@ -152,7 +152,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(entity.Id != 0);
             Assert.True(entity.HasSecond<Position>(pair));
-            Assert.Equal("(Pair,Position)", entity.Types().Str());
+            Assert.Equal("(Pair,Position)", entity.Type().Str());
 
             Position* p = entity.GetSecondPtr<Position>(pair);
             Assert.True(p != null);

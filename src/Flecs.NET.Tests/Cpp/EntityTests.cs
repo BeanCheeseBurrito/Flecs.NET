@@ -1333,10 +1333,10 @@ namespace Flecs.NET.Tests.Cpp
             Entity entity = world.Entity();
             Assert.True(entity != 0);
 
-            Types type1 = entity.Types();
+            Types type1 = entity.Type();
             Assert.Equal(0, type1.Count());
 
-            Types type2 = entity.Types();
+            Types type2 = entity.Type();
             Assert.Equal(0, type2.Count());
         }
 
@@ -1349,11 +1349,11 @@ namespace Flecs.NET.Tests.Cpp
                 .Add<Position>();
             Assert.True(entity != 0);
 
-            Types type1 = entity.Types();
+            Types type1 = entity.Type();
             Assert.Equal(1, type1.Count());
             Assert.Equal(type1.Get(0), world.Id<Position>());
 
-            Types type2 = entity.Types();
+            Types type2 = entity.Type();
             Assert.Equal(1, type2.Count());
             Assert.Equal(type2.Get(0), world.Id<Position>());
         }
@@ -1640,68 +1640,88 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Foo", entity.Name());
         }
 
-        // [Fact]
-        // void path() {
-        //     using World world = World.Create();
-        //
-        //     Entity parent = world.Entity("parent");
-        //     Entity child = world.Scope(parent).Entity("child");
-        //     Assert.Equal(child.Path(), "::parent::child");
-        // }
-        //
-        // [Fact]
-        // void path_from() {
-        //     using World world = World.Create();
-        //
-        //     flecs::entity parent = world.Entity("parent");
-        //     flecs::entity child = world.Scope(parent).Entity("child");
-        //     flecs::entity grandchild = world.Scope(child).Entity("grandchild");
-        //     Assert.Equal(grandchild.Path(), "::parent::child::grandchild");
-        //     Assert.Equal(grandchild.path_from(parent), "child::grandchild");
-        // }
-        //
-        // [Fact]
-        // void path_from_type() {
-        //     using World world = World.Create();
-        //
-        //     flecs::entity parent = world.entity<Parent>();
-        //     flecs::entity child = world.Scope(parent).Entity("child");
-        //     flecs::entity grandchild = world.Scope(child).Entity("grandchild");
-        //     Assert.Equal(grandchild.Path(), "::Parent::child::grandchild");
-        //     Assert.Equal(grandchild.path_from<Parent>(), "child::grandchild");
-        // }
-        //
-        // [Fact]
-        // void path_custom_sep() {
-        //     using World world = World.Create();
-        //
-        //     flecs::entity parent = world.Entity("parent");
-        //     flecs::entity child = world.Scope(parent).Entity("child");
-        //     Assert.Equal(child.path("_", ""), "parent_child");
-        // }
-        //
-        // [Fact]
-        // void path_from_custom_sep() {
-        //     using World world = World.Create();
-        //
-        //     flecs::entity parent = world.Entity("parent");
-        //     flecs::entity child = world.Scope(parent).Entity("child");
-        //     flecs::entity grandchild = world.Scope(child).Entity("grandchild");
-        //     Assert.Equal(grandchild.Path(), "::parent::child::grandchild");
-        //     Assert.Equal(grandchild.path_from(parent, "_"), "child_grandchild");
-        // }
-        //
-        // [Fact]
-        // void path_from_type_custom_sep() {
-        //     using World world = World.Create();
-        //
-        //     flecs::entity parent = world.entity<Parent>();
-        //     flecs::entity child = world.Scope(parent).Entity("child");
-        //     flecs::entity grandchild = world.Scope(child).Entity("grandchild");
-        //     Assert.Equal(grandchild.Path(), "::Parent::child::grandchild");
-        //     Assert.Equal(grandchild.path_from<Parent>("_"), "child_grandchild");
-        // }
-        //
+        [Fact]
+        void Path() {
+            using World world = World.Create();
+            Entity parent = world.Entity("parent");
+
+            using ScopedWorld scope = world.Scope(parent);
+            Entity child = world.Entity("child");
+            Assert.Equal("::parent::child", child.Path());
+        }
+
+        [Fact]
+        void PathFrom() {
+            using World world = World.Create();
+
+            Entity parent = world.Entity("parent");
+
+            using ScopedWorld parentScope = world.Scope(parent);
+            Entity child = world.Entity("child");
+
+            using ScopedWorld childScope = world.Scope(child);
+            Entity grandchild = world.Entity("grandchild");
+
+            Assert.Equal("::parent::child::grandchild", grandchild.Path());
+            Assert.Equal("child::grandchild", grandchild.PathFrom(parent));
+        }
+
+        [Fact]
+        void PathFromType() {
+            using World world = World.Create();
+            Entity parent = world.Entity<Parent>();
+
+            using ScopedWorld parentScope = world.Scope(parent);
+            Entity child = world.Entity("child");
+
+            using ScopedWorld childScope = world.Scope(child);
+            Entity grandchild = world.Entity("grandchild");
+
+            Assert.Equal("::Parent::child::grandchild", grandchild.Path());
+            Assert.Equal("child::grandchild", grandchild.PathFrom<Parent>());
+        }
+
+        [Fact]
+        void PathCustomSep() {
+            using World world = World.Create();
+            Entity parent = world.Entity("parent");
+
+            using ScopedWorld parentScope = world.Scope(parent);
+            Entity child = world.Entity("child");
+
+            Assert.Equal("parent_child", child.Path("_", ""));
+        }
+
+        [Fact]
+        void PathFromCustomSep() {
+            using World world = World.Create();
+            Entity parent = world.Entity("parent");
+
+            using ScopedWorld parentScope = world.Scope(parent);
+            Entity child = world.Entity("child");
+
+            using ScopedWorld childScope = world.Scope(child);
+            Entity grandchild = world.Entity("grandchild");
+
+            Assert.Equal("::parent::child::grandchild", grandchild.Path());
+            Assert.Equal("child_grandchild", grandchild.PathFrom(parent, "_"));
+        }
+
+        [Fact]
+        void PathFromTypeCustomSep() {
+            using World world = World.Create();
+            Entity parent = world.Entity<Parent>();
+
+            using ScopedWorld parentScope = world.Scope(parent);
+            Entity child = world.Entity("child");
+
+            using ScopedWorld childScope = world.Scope(child);
+            Entity grandchild = world.Entity("grandchild");
+
+            Assert.Equal("::Parent::child::grandchild", grandchild.Path());
+            Assert.Equal("child_grandchild", grandchild.PathFrom<Parent>("_"));
+        }
+
         [Fact]
         private void implicit_path_to_char()
         {
@@ -1722,11 +1742,11 @@ namespace Flecs.NET.Tests.Cpp
             Entity entity = new Entity(world, "Foo");
             Assert.True(entity != 0);
 
-            Assert.Equal("(Identifier,Name)", entity.Types().Str());
+            Assert.Equal("(Identifier,Name)", entity.Type().Str());
         }
 
-        [Fact]
-        private void set_template()
+        [Fact] // TODO: Continue porting there
+        private void SetTemplate()
         {
             using World world = World.Create();
 
@@ -1737,6 +1757,51 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(10, ptr->X);
             Assert.Equal(20, ptr->Y);
         }
+
+        // [Fact]
+        // private void WithSelf()
+        // {
+        //     using World world = World.Create();
+        //
+        //     Entity tag = world.Entity().With(() =>
+        //     {
+        //         Entity e1 = world.Entity(); e1.Set(new Self { Value = e1 });
+        //         Entity e2 = world.Entity(); e2.Set(new Self { Value = e2 });
+        //         Entity e3 = world.Entity(); e3.Set(new Self { Value = e3 });
+        //     });
+        //
+        //     Component<Self> self = world.Component<Self>();
+        //     Assert.True(!self.Entity.Has(tag));
+        //
+        //     int count = 0;
+        //     Query query = world.Query(
+        //         filter: world.FilterBuilder().Term(tag)
+        //     );
+        //
+        //     query.Iter(it =>
+        //     {
+        //         foreach (int i in it)
+        //         {
+        //             Entity e = it.Entity(i);
+        //
+        //             Assert.True(e.Has(tag));
+        //         }
+        //     });
+        //
+        //         auto q = world.query_builder<>().term(Tag).build();
+        //
+        //     q.each([&](flecs::entity e) {
+        //         test_assert(e.has(Tag));
+        //
+        //         test_bool(e.get([&](const Self& s){
+        //             test_assert(s.value == e);
+        //         }), true);
+        //
+        //         count ++;
+        //     });
+        //
+        //     test_int(count, 3);
+        // }
 
         [Fact]
         private void NoRecursiveLookup()
@@ -1933,7 +1998,7 @@ namespace Flecs.NET.Tests.Cpp
         // void defer_new_w_nested_name_scope_with() {
         //     using World world = World.Create();
         //
-        //     flecs::entity e, Tag = world.Entity(), parent = world.Entity("Parent");
+        //     Entity e, Tag = world.Entity(), parent = world.Entity("Parent");
         //
         //     world.Defer(() =>
         //  {
@@ -1960,7 +2025,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     struct Tag { };
         //
-        //     flecs::entity e;
+        //     Entity e;
         //
         //     world.Defer(() =>
         //  {
@@ -1981,7 +2046,7 @@ namespace Flecs.NET.Tests.Cpp
         //     struct TagA { };
         //     struct TagB { };
         //
-        //     flecs::entity e = world.Entity();
+        //     Entity e = world.Entity();
         //
         //     world.Defer(() =>
         //  {
@@ -2185,14 +2250,14 @@ namespace Flecs.NET.Tests.Cpp
         // void id_str_from_entity() {
         //     using World world = World.Create();
         //
-        //     flecs::entity id = world.Entity("Foo");
+        //     Entity id = world.Entity("Foo");
         //
         //     Assert.Equal("Foo", id.str());
         // }
         //
         // [Fact]
         // void null_entity() {
-        //     flecs::entity e = flecs::entity::null();
+        //     Entity e = flecs::entity::null();
         //     Assert.True(e.id() == 0);
         // }
         //
@@ -2200,14 +2265,14 @@ namespace Flecs.NET.Tests.Cpp
         // void null_entity_w_world() {
         //     using World world = World.Create();
         //
-        //     flecs::entity e = flecs::entity::null(ecs);
+        //     Entity e = flecs::entity::null(ecs);
         //     Assert.True(e.id() == 0);
         //     Assert.True(e.world().c_ptr() == world.c_ptr());
         // }
         //
         // [Fact]
         // void null_entity_w_0() {
-        //     flecs::entity e = flecs::entity(static_cast<ulong>(0));
+        //     Entity e = flecs::entity(static_cast<ulong>(0));
         //     Assert.True(e.id() == 0);
         //     Assert.True(e.world().c_ptr() == null);
         // }
@@ -2216,7 +2281,7 @@ namespace Flecs.NET.Tests.Cpp
         // void null_entity_w_world_w_0() {
         //     using World world = World.Create();
         //
-        //     flecs::entity e = flecs::entity::null(ecs);
+        //     Entity e = flecs::entity::null(ecs);
         //     Assert.True(e.id() == 0);
         //     Assert.True(e.world().c_ptr() == world.c_ptr());
         // }
@@ -2676,7 +2741,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     struct Prefab { };
         //
-        //     var @base = world.entity<Prefab>();
+        //     var @base = world.Entity<Prefab>();
         //
         //     Entity e = world.Entity().is_a<Prefab>();
         //
@@ -2701,7 +2766,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     struct Parent { };
         //
-        //     var @base = world.entity<Parent>();
+        //     var @base = world.Entity<Parent>();
         //
         //     Entity e = world.Entity().child_of<Parent>();
         //
@@ -2800,7 +2865,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     int count = 0;
         //
-        //     em.each<Rel>([&](flecs::entity obj) {
+        //     em.each<Rel>([&](Entity obj) {
         //         count ++;
         //         Assert.True(obj == world.Id<Obj>());
         //     });
@@ -2824,7 +2889,7 @@ namespace Flecs.NET.Tests.Cpp
         //     var e_child = world.Entity().ChildOf(e2);
         //     int32_t count = 0;
         //
-        //     e2.children([&](flecs::entity child){
+        //     e2.children([&](Entity child){
         //         count ++;
         //         Assert.True(child == e_child);
         //     });
@@ -2857,8 +2922,8 @@ namespace Flecs.NET.Tests.Cpp
         // void default_ctor() {
         //     using World world = World.Create();
         //
-        //     flecs::entity e1;
-        //     flecs::entity e2 = {};
+        //     Entity e1;
+        //     Entity e2 = {};
         //
         //     flecs::entity_view e3;
         //     flecs::entity_view e4 = {};
@@ -2885,9 +2950,9 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     struct Rel {};
         //
-        //     flecs::entity e1 = world.Entity();
-        //     flecs::entity o1 = world.Entity();
-        //     flecs::entity o2 = world.Entity();
+        //     Entity e1 = world.Entity();
+        //     Entity o1 = world.Entity();
+        //     Entity o2 = world.Entity();
         //
         //     e1.Add<Rel>(o1);
         //     e1.Add<Rel>(o2);
@@ -3070,13 +3135,13 @@ namespace Flecs.NET.Tests.Cpp
         // void entity_w_type() {
         //     using World world = World.Create();
         //
-        //     var e = world.entity<EntityType>();
+        //     var e = world.Entity<EntityType>();
         //
         //     Assert.Equal(e.Name(), "EntityType");
         //     Assert.Equal(e.Path(), "::EntityType");
         //     Assert.True(!e.Has<flecs::Component>());
         //
-        //     var e_2 = world.entity<EntityType>();
+        //     var e_2 = world.Entity<EntityType>();
         //     Assert.True(e == e_2);
         // }
         //
@@ -3185,15 +3250,15 @@ namespace Flecs.NET.Tests.Cpp
         // void entity_w_nested_type() {
         //     using World world = World.Create();
         //
-        //     var e = world.entity<Parent::EntityType>();
-        //     var p = world.entity<Parent>();
+        //     var e = world.Entity<Parent::EntityType>();
+        //     var p = world.Entity<Parent>();
         //
         //     Assert.Equal(e.Name(), "EntityType");
         //     Assert.Equal(e.Path(), "::Parent::EntityType");
         //     Assert.True(e.Has(EcsChildOf, p));
         //     Assert.True(!e.Has<flecs::Component>());
         //
-        //     var e_2 = world.entity<Parent::EntityType>();
+        //     var e_2 = world.Entity<Parent::EntityType>();
         //     Assert.True(e == e_2);
         // }
         //
@@ -3208,7 +3273,7 @@ namespace Flecs.NET.Tests.Cpp
         //         world.Entity(),
         //         world.Entity(),
         //         world.Entity()
-        //     }).each([](flecs::entity e) { e.Add<TagA>().Add<TagB>(); });
+        //     }).each([](Entity e) { e.Add<TagA>().Add<TagB>(); });
         //
         //     Assert.Equal( world.count<TagA>(), 3 );
         //     Assert.Equal( world.count<TagB>(), 3 );
@@ -3219,7 +3284,7 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     world.defer_begin();
-        //     var e = world.entity<Tag>();
+        //     var e = world.Entity<Tag>();
         //     world.defer_end();
         //
         //     Assert.Equal(e.Name(), "Tag");
@@ -3455,18 +3520,18 @@ namespace Flecs.NET.Tests.Cpp
         // void children_w_custom_relation() {
         //     using World world = World.Create();
         //
-        //     flecs::entity rel = world.Entity();
+        //     Entity rel = world.Entity();
         //
-        //     flecs::entity parent = world.Entity();
-        //     flecs::entity child_1 = world.Entity().Add(rel, parent);
-        //     flecs::entity child_2 = world.Entity().Add(rel, parent);
+        //     Entity parent = world.Entity();
+        //     Entity child_1 = world.Entity().Add(rel, parent);
+        //     Entity child_2 = world.Entity().Add(rel, parent);
         //     world.Entity().ChildOf(parent);
         //
         //     bool child_1_found = false;
         //     bool child_2_found = false;
         //     int32_t count = 0;
         //
-        //     parent.children(rel, [&](flecs::entity child) {
+        //     parent.children(rel, [&](Entity child) {
         //         if (child == child_1) {
         //             child_1_found = true;
         //         } else if (child == child_2) {
@@ -3486,16 +3551,16 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     struct Rel { };
         //
-        //     flecs::entity parent = world.Entity();
-        //     flecs::entity child_1 = world.Entity().Add<Rel>(parent);
-        //     flecs::entity child_2 = world.Entity().Add<Rel>(parent);
+        //     Entity parent = world.Entity();
+        //     Entity child_1 = world.Entity().Add<Rel>(parent);
+        //     Entity child_2 = world.Entity().Add<Rel>(parent);
         //     world.Entity().ChildOf(parent);
         //
         //     bool child_1_found = false;
         //     bool child_2_found = false;
         //     int32_t count = 0;
         //
-        //     parent.children<Rel>([&](flecs::entity child) {
+        //     parent.children<Rel>([&](Entity child) {
         //         if (child == child_1) {
         //             child_1_found = true;
         //         } else if (child == child_2) {
@@ -3547,7 +3612,7 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     int32_t count = 0;
-        //     world.Entity(0).children([&](flecs::entity e) {
+        //     world.Entity(0).children([&](Entity e) {
         //         Assert.True(e == world.Entity("flecs"));
         //         count ++;
         //     });
@@ -3559,7 +3624,7 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     int32_t count = 0;
-        //     world.children([&](flecs::entity e) {
+        //     world.children([&](Entity e) {
         //         Assert.True(e == world.Entity("flecs"));
         //         count ++;
         //     });
@@ -3570,10 +3635,10 @@ namespace Flecs.NET.Tests.Cpp
         // void get_depth() {
         //     using World world = World.Create();
         //
-        //     flecs::entity e1 = world.Entity();
-        //     flecs::entity e2 = world.Entity().ChildOf(e1);
-        //     flecs::entity e3 = world.Entity().ChildOf(e2);
-        //     flecs::entity e4 = world.Entity().ChildOf(e3);
+        //     Entity e1 = world.Entity();
+        //     Entity e2 = world.Entity().ChildOf(e1);
+        //     Entity e3 = world.Entity().ChildOf(e2);
+        //     Entity e4 = world.Entity().ChildOf(e3);
         //
         //     Assert.Equal(0, e1.depth(EcsChildOf));
         //     Assert.Equal(1, e2.depth(EcsChildOf));
@@ -3588,10 +3653,10 @@ namespace Flecs.NET.Tests.Cpp
         //     struct Rel { };
         //     world.Component<Rel>().Add(flecs::Traversable);
         //
-        //     flecs::entity e1 = world.Entity();
-        //     flecs::entity e2 = world.Entity().Add<Rel>(e1);
-        //     flecs::entity e3 = world.Entity().Add<Rel>(e2);
-        //     flecs::entity e4 = world.Entity().Add<Rel>(e3);
+        //     Entity e1 = world.Entity();
+        //     Entity e2 = world.Entity().Add<Rel>(e1);
+        //     Entity e3 = world.Entity().Add<Rel>(e2);
+        //     Entity e4 = world.Entity().Add<Rel>(e3);
         //
         //     Assert.Equal(0, e1.depth<Rel>());
         //     Assert.Equal(1, e2.depth<Rel>());
@@ -3603,7 +3668,7 @@ namespace Flecs.NET.Tests.Cpp
         // void to_view() {
         //     using World world = World.Create();
         //
-        //     flecs::entity e = world.Entity();
+        //     Entity e = world.Entity();
         //     flecs::entity_view ev = e.view();
         //     Assert.True(e == ev);
         // }
@@ -3614,7 +3679,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     var stage = world.get_stage(0);
         //
-        //     flecs::entity e = stage.Entity();
+        //     Entity e = stage.Entity();
         //     flecs::entity_view ev = e.view();
         //     Assert.True(e == ev);
         //     Assert.True(e.world() == stage);
@@ -3625,7 +3690,7 @@ namespace Flecs.NET.Tests.Cpp
         // void set_alias() {
         //     using World world = World.Create();
         //
-        //     flecs::entity e = world.Entity("parent::child");
+        //     Entity e = world.Entity("parent::child");
         //     e.set_alias("parent_child");
         //
         //     Assert.True(e == world.Lookup("parent::child"));
@@ -3638,7 +3703,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     world.observer<Position>()
         //         .event(flecs::OnAdd)
-        //         .each([](flecs::entity e, Position&) {
+        //         .each([](Entity e, Position&) {
         //             e.emplace<Velocity>(1.0f, 2.0f);
         //         });
         //
@@ -3657,8 +3722,8 @@ namespace Flecs.NET.Tests.Cpp
         // void scoped_world() {
         //     using World world = World.Create();
         //
-        //     flecs::entity parent = world.Entity();
-        //     flecs::entity child = parent.Scope().Entity();
+        //     Entity parent = world.Entity();
+        //     Entity child = parent.Scope().Entity();
         //     Assert.True(child.Parent() == parent);
         // }
     }

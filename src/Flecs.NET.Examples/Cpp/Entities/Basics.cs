@@ -29,7 +29,7 @@ alice.Add<Walking>();
 
 // Print all of the components the entity has. This will output:
 //    Position, Walking, (Identifier,Name)
-Console.WriteLine($"[{alice.Types().Str()}]");
+Console.WriteLine($"[{alice.Type().Str()}]");
 
 // Remove tag
 alice.Remove<Walking>();

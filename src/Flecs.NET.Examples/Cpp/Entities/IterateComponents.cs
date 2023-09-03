@@ -4,7 +4,7 @@ using Flecs.NET.Core;
 
 void IterateComponents(Entity e) {
     // 1. The easiest way to print the components is to use type::str
-    Console.WriteLine(e.Types().Str() + "\n");
+    Console.WriteLine(e.Type().Str() + "\n");
 
     // 2. To get individual component ids, use entity::each
     int i = 0;

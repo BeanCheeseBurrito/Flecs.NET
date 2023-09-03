@@ -47,7 +47,7 @@ Entity inst = world.Entity("MyMammothFreighter")
 
 // Inspect the type of the entity. This outputs:
 //    Position,(Identifier,Name),(IsA,MammothFreighter)
-Console.WriteLine($"Instance type: [{inst.Types().Str()}]");
+Console.WriteLine($"Instance type: [{inst.Type().Str()}]");
 
 // Even though the instance doesn't have a private copy of ImpulseSpeed, we
 // can still get it using the regular API (outputs 50)
