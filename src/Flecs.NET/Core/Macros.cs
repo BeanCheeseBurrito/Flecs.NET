@@ -190,6 +190,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Gets record to row.
+        /// </summary>
+        /// <param name="row"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int RecordToRow(uint row)
+        {
+            return (int)(row & ECS_ROW_MASK);
+        }
+
+        /// <summary>
         ///     Locks a table.
         /// </summary>
         /// <param name="world"></param>

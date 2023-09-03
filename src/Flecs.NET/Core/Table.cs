@@ -19,6 +19,16 @@ namespace Flecs.NET.Core
         public ecs_table_t* Handle { get; }
 
         /// <summary>
+        ///     The offset from the start of the table.
+        /// </summary>
+        public int Offset { get; }
+
+        /// <summary>
+        ///     The number of column indexes in the table range.
+        /// </summary>
+        public int Count { get; }
+
+        /// <summary>
         ///     Creates a table from the provided world and handle.
         /// </summary>
         /// <param name="world"></param>
@@ -27,6 +37,23 @@ namespace Flecs.NET.Core
         {
             World = world;
             Handle = table;
+            Offset = 0;
+            Count = ecs_table_count(table);
+        }
+
+        /// <summary>
+        ///     Creates a table range form the provided world and handle.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="table"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        public Table(ecs_world_t* world, ecs_table_t* table, int offset, int count)
+        {
+            World = world;
+            Handle = table;
+            Offset = offset;
+            Count = count;
         }
 
         /// <summary>
@@ -45,15 +72,6 @@ namespace Flecs.NET.Core
         public Types Types()
         {
             return new Types(World, ecs_table_get_type(Handle));
-        }
-
-        /// <summary>
-        ///     Get table count.
-        /// </summary>
-        /// <returns></returns>
-        public int Count()
-        {
-            return ecs_table_count(Handle);
         }
 
         /// <summary>
@@ -261,7 +279,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public void* GetColumn(int index)
         {
-            return ecs_table_get_column(Handle, index, 0);
+            return ecs_table_get_column(Handle, index, Offset);
         }
 
         /// <summary>

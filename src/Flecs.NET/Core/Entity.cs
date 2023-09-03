@@ -262,6 +262,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Get table range for the entity.
+        /// </summary>
+        /// <returns></returns>
+        public Table Range()
+        {
+            ecs_record_t *r = ecs_record_find(World, Id);
+            return r != null ? new Table(World, r->table, Macros.RecordToRow(r->row), 1) : new Table();
+        }
+
+        /// <summary>
         ///     Iterate (component) ids of an entity.
         /// </summary>
         /// <param name="func"></param>

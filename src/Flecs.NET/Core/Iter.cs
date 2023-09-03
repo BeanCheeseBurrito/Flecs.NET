@@ -116,6 +116,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Returns table range of the iter.
+        /// </summary>
+        /// <returns></returns>
+        public Table Range()
+        {
+            return new Table(Handle->world, Handle->table, Handle->offset, Handle->count);
+        }
+
+        /// <summary>
         ///     Returns context pointer.
         /// </summary>
         /// <returns></returns>
