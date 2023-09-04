@@ -144,7 +144,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public void* Ctx()
         {
-            return ecs_get_observer_ctx(World, Entity);
+            return ecs_observer_get_ctx(World, Entity);
         }
 
         /// <summary>

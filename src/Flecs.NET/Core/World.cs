@@ -13,7 +13,7 @@ namespace Flecs.NET.Core
         private ecs_world_t* _handle;
         private bool _owned;
 
-        internal BindingContext.WorldContext WorldContext;
+        private ref BindingContext.WorldContext WorldContext => ref *EnsureBindingContext();
 
         /// <summary>
         ///     The handle to the C world.
@@ -33,7 +33,6 @@ namespace Flecs.NET.Core
         /// <param name="overrideOsAbort"></param>
         public World(ecs_world_t* handle, bool owned = true, bool overrideOsAbort = false)
         {
-            WorldContext = default;
             _handle = handle;
             _owned = owned;
 
@@ -93,7 +92,6 @@ namespace Flecs.NET.Core
                 return;
 
             _ = ecs_fini(Handle);
-            WorldContext.Dispose();
             Handle = null;
         }
 
@@ -296,18 +294,20 @@ namespace Flecs.NET.Core
         ///     Set world context.
         /// </summary>
         /// <param name="ctx"></param>
-        public void SetContext(void* ctx)
+        /// <param name="ctxFree"></param>
+        public void SetCtx(void* ctx, Ecs.ContextFree? ctxFree = null)
         {
-            ecs_set_context(Handle, ctx);
+            BindingContext.SetCallback(ref WorldContext.ContextFree, ctxFree);
+            ecs_set_ctx(Handle, ctx, WorldContext.ContextFree.Function);
         }
 
         /// <summary>
         ///     Get world context.
         /// </summary>
         /// <returns></returns>
-        public void* GetContext()
+        public void* GetCtx()
         {
-            return ecs_get_context(Handle);
+            return ecs_get_ctx(Handle);
         }
 
         /// <summary>
@@ -1396,8 +1396,8 @@ namespace Flecs.NET.Core
         /// <param name="ctx"></param>
         public void RunPostFrame(Ecs.FiniAction action, void* ctx)
         {
-            BindingContext.SetCallback(ref WorldContext.RunpostFrame, action);
-            ecs_run_post_frame(Handle, WorldContext.RunpostFrame.Function, ctx);
+            BindingContext.SetCallback(ref WorldContext.RunPostFrame, action);
+            ecs_run_post_frame(Handle, WorldContext.RunPostFrame.Function, ctx);
         }
 
         /// <summary>
@@ -1495,6 +1495,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair(ulong first, ulong second)
         {
+            Assert.True(!Macros.IsPair(first) && !Macros.IsPair(second), "Cannot create nested pairs.");
             return Id(first, second);
         }
 
@@ -1506,6 +1507,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair<TFirst>(ulong second)
         {
+            Assert.True(!Macros.IsPair(second), "Cannot create nested pairs.");
             return Id<TFirst>(second);
         }
 
@@ -1792,6 +1794,43 @@ namespace Flecs.NET.Core
         public Snapshot Snapshot()
         {
             return new Snapshot(Handle);
+        }
+
+        /// <summary>
+        ///     Create a timer.
+        /// </summary>
+        /// <returns></returns>
+        public Timer Timer()
+        {
+            return new Timer(Handle);
+        }
+
+        /// <summary>
+        ///     Create a timer.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Timer Timer(ulong id)
+        {
+            return new Timer(Handle, id);
+        }
+
+        /// <summary>
+        ///     Create a timer.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Timer Timer(string name)
+        {
+            return new Timer(Handle, name);
+        }
+
+        /// <summary>
+        ///     Enable randomization of initial time values for timers.
+        /// </summary>
+        public void RandomizeTimers()
+        {
+            ecs_randomize_timers(Handle);
         }
 
         /// <summary>
@@ -2155,6 +2194,18 @@ namespace Flecs.NET.Core
             Import<Ecs.Meta>();
         }
 
+        private BindingContext.WorldContext* EnsureBindingContext()
+        {
+            BindingContext.WorldContext* ptr = (BindingContext.WorldContext*)ecs_get_binding_ctx(Handle);
+
+            if (ptr != null)
+                return ptr;
+
+            ptr = Memory.AllocZeroed<BindingContext.WorldContext>(1);
+            ecs_set_binding_ctx(Handle, ptr, BindingContext.WorldContextFreePointer);
+            return ptr;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="world"></param>
@@ -2185,7 +2236,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is World world && Equals(world);
         }

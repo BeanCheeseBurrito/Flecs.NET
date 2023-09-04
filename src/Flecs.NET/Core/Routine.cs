@@ -50,6 +50,9 @@ namespace Flecs.NET.Core
                 ecs_add_id(world, entity, EcsOnUpdate);
             }
 
+            BindingContext.QueryContext* queryContext = Memory.Alloc<BindingContext.QueryContext>(1);
+            queryContext[0] = queryBuilder.QueryContext;
+
             BindingContext.RoutineContext* routineContext = Memory.Alloc<BindingContext.RoutineContext>(1);
             routineContext[0] = routineBuilder.RoutineContext;
             routineContext->QueryContext = queryBuilder.QueryContext;
@@ -59,6 +62,8 @@ namespace Flecs.NET.Core
             routineDesc->query.filter = filterBuilder.Desc;
             routineDesc->query.filter.terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
             routineDesc->query.filter.terms_buffer_count = filterBuilder.Terms.Count;
+            routineDesc->query.binding_ctx = queryContext;
+            routineDesc->query.binding_ctx_free = BindingContext.QueryContextFreePointer;
             routineDesc->binding_ctx_free = BindingContext.RoutineContextFreePointer;
             routineDesc->binding_ctx = routineContext;
 
@@ -165,7 +170,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public void* Ctx()
         {
-            return ecs_get_system_ctx(World, Entity);
+            return ecs_system_get_ctx(World, Entity);
         }
 
         /// <summary>

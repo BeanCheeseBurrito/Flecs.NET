@@ -167,6 +167,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Tests whether an id is a pair.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPair(ulong id)
+        {
+            return (id & ECS_ID_FLAGS_MASK) == ECS_PAIR;
+        }
+
+        /// <summary>
         ///     Creates a dependson relationship with the provided entity.
         /// </summary>
         /// <param name="entity"></param>

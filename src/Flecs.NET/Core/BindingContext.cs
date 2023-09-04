@@ -25,6 +25,9 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr RoutineEachEntityPointer =
             (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&RoutineIter;
 
+        internal static readonly IntPtr WorldContextFreePointer =
+            (IntPtr)(delegate* unmanaged<void*, void>)&WorldContextFree;
+
         internal static readonly IntPtr ObserverContextFreePointer =
             (IntPtr)(delegate* unmanaged<void*, void>)&ObserverContextFree;
 
@@ -46,6 +49,7 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr ObserverEachEntityPointer;
         internal static readonly IntPtr RoutineEachEntityPointer;
 
+        internal static readonly IntPtr WorldContextFreePointer;
         internal static readonly IntPtr ObserverContextFreePointer;
         internal static readonly IntPtr RoutineContextFreePointer;
         internal static readonly IntPtr QueryContextFreePointer;
@@ -60,6 +64,7 @@ namespace Flecs.NET.Core
         private static readonly Ecs.IterAction ObserverEachEntityReference = ObserverEachEntity;
         private static readonly Ecs.IterAction RoutineEachEntityReference = RoutineEachEntity;
 
+        private static readonly Ecs.ContextFree WorldContextFreeReference = WorldContextFree;
         private static readonly Ecs.ContextFree ObserverContextFreeReference = ObserverContextFree;
         private static readonly Ecs.ContextFree RoutineContextFreeReference = RoutineContextFree;
         private static readonly Ecs.ContextFree QueryContextFreeReference = QueryContextFree;
@@ -77,6 +82,7 @@ namespace Flecs.NET.Core
             ObserverEachEntityPointer = Marshal.GetFunctionPointerForDelegate(ObserverEachEntityReference);
             RoutineEachEntityPointer = Marshal.GetFunctionPointerForDelegate(RoutineEachEntityReference);
 
+            WorldContextFreePointer = Marshal.GetFunctionPointerForDelegate(WorldContextFreeReference);
             ObserverContextFreePointer = Marshal.GetFunctionPointerForDelegate(ObserverContextFreeReference);
             RoutineContextFreePointer = Marshal.GetFunctionPointerForDelegate(RoutineContextFreeReference);
             QueryContextFreePointer = Marshal.GetFunctionPointerForDelegate(QueryContextFreeReference);
@@ -95,7 +101,8 @@ namespace Flecs.NET.Core
 #if NET5_0_OR_GREATER
             delegate* unmanaged<Iter, void> callback = (delegate* unmanaged<Iter, void>)context->Iterator.Function;
 #else
-            Ecs.IterCallback callback = Marshal.GetDelegateForFunctionPointer<Ecs.IterCallback>(context->Iterator.Function);
+            Ecs.IterCallback callback =
+                Marshal.GetDelegateForFunctionPointer<Ecs.IterCallback>(context->Iterator.Function);
 #endif
 
             Invoker.Iter(iter, callback);
@@ -109,7 +116,8 @@ namespace Flecs.NET.Core
 #if NET5_0_OR_GREATER
             delegate* unmanaged<Iter, void> callback = (delegate* unmanaged<Iter, void>)context->Iterator.Function;
 #else
-            Ecs.IterCallback callback = Marshal.GetDelegateForFunctionPointer<Ecs.IterCallback>(context->Iterator.Function);
+            Ecs.IterCallback callback =
+                Marshal.GetDelegateForFunctionPointer<Ecs.IterCallback>(context->Iterator.Function);
 #endif
 
             Invoker.Iter(iter, callback);
@@ -123,7 +131,8 @@ namespace Flecs.NET.Core
 #if NET5_0_OR_GREATER
             delegate* unmanaged<Entity, void> callback = (delegate* unmanaged<Entity, void>)context->Iterator.Function;
 #else
-            Ecs.EachEntityCallback callback = Marshal.GetDelegateForFunctionPointer<Ecs.EachEntityCallback>(context->Iterator.Function);
+            Ecs.EachEntityCallback callback =
+                Marshal.GetDelegateForFunctionPointer<Ecs.EachEntityCallback>(context->Iterator.Function);
 #endif
 
             Invoker.EachEntity(iter, callback);
@@ -137,10 +146,19 @@ namespace Flecs.NET.Core
 #if NET5_0_OR_GREATER
             delegate* unmanaged<Entity, void> callback = (delegate* unmanaged<Entity, void>)context->Iterator.Function;
 #else
-            Ecs.EachEntityCallback callback = Marshal.GetDelegateForFunctionPointer<Ecs.EachEntityCallback>(context->Iterator.Function);
+            Ecs.EachEntityCallback callback =
+                Marshal.GetDelegateForFunctionPointer<Ecs.EachEntityCallback>(context->Iterator.Function);
 #endif
 
             Invoker.EachEntity(iter, callback);
+        }
+
+        [UnmanagedCallersOnly]
+        private static void WorldContextFree(void* context)
+        {
+            WorldContext* worldContext = (WorldContext*)context;
+            worldContext->Dispose();
+            Memory.Free(context);
         }
 
         [UnmanagedCallersOnly]
@@ -223,12 +241,14 @@ namespace Flecs.NET.Core
         internal struct WorldContext : IDisposable
         {
             public Callback AtFini;
-            public Callback RunpostFrame;
+            public Callback RunPostFrame;
+            public Callback ContextFree;
 
             public void Dispose()
             {
                 FreeCallback(ref AtFini);
-                FreeCallback(ref RunpostFrame);
+                FreeCallback(ref RunPostFrame);
+                FreeCallback(ref ContextFree);
             }
         }
 

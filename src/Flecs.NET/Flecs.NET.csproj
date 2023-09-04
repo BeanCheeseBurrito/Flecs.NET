@@ -14,11 +14,11 @@
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
         <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
-        <NoWarn>$(NoWarn);CA1000;CS9087;CS9084;CS8500;CA1034;CA1062</NoWarn>
+        <NoWarn>$(NoWarn);CA1000;CS9087;CS9084;CS8500;CA1034;CA1062;CA1024</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>
-        <Version>3.2.6-build.4</Version>
+        <Version>3.2.6-build.5</Version>
         <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Debug</Title>
         <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Release</Title>
         <Authors>BeanCheeseBurrito</Authors>

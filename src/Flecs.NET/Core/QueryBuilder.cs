@@ -6,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     Wrapper around ecs_query_desc_t.
     /// </summary>
-    public unsafe struct QueryBuilder
+    public unsafe struct QueryBuilder : IDisposable
     {
         private ecs_world_t* _world;
 
@@ -32,6 +32,14 @@ namespace Flecs.NET.Core
             QueryDesc = default;
             QueryContext = default;
             _world = world;
+        }
+
+        /// <summary>
+        ///     Disposes the query builder.
+        /// </summary>
+        public void Dispose()
+        {
+            QueryContext.Dispose();
         }
 
         /// <summary>

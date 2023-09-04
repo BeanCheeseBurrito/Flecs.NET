@@ -1,3 +1,4 @@
+using System;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -5,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_system_desc_t.
     /// </summary>
-    public unsafe struct RoutineBuilder
+    public unsafe struct RoutineBuilder : IDisposable
     {
         private ecs_world_t* _world;
 
@@ -33,6 +34,14 @@ namespace Flecs.NET.Core
             RoutineContext = default;
             CurrentPhase = default;
             _world = world;
+        }
+
+        /// <summary>
+        ///     Disposes the routine builder.
+        /// </summary>
+        public void Dispose()
+        {
+            RoutineContext.Dispose();
         }
 
         /// <summary>

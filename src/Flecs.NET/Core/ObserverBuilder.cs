@@ -6,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_observer_desc_t.
     /// </summary>
-    public unsafe struct ObserverBuilder
+    public unsafe struct ObserverBuilder : IDisposable
     {
         private ecs_world_t* _world;
         private int _eventCount;
@@ -34,6 +34,14 @@ namespace Flecs.NET.Core
             ObserverContext = default;
             _world = world;
             _eventCount = default;
+        }
+
+        /// <summary>
+        ///     Disposes the observer builder.
+        /// </summary>
+        public void Dispose()
+        {
+            ObserverContext.Dispose();
         }
 
         /// <summary>

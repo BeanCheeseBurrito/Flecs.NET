@@ -41,10 +41,15 @@ namespace Flecs.NET.Core
             QueryContext = queryBuilder.QueryContext;
             _world = world;
 
+            BindingContext.QueryContext* queryContext = Memory.Alloc<BindingContext.QueryContext>(1);
+            queryContext[0] = queryBuilder.QueryContext;
+
             ecs_query_desc_t* queryDesc = &queryBuilder.QueryDesc;
             queryDesc->filter = filterBuilder.Desc;
             queryDesc->filter.terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
             queryDesc->filter.terms_buffer_count = filterBuilder.Terms.Count;
+            queryDesc->binding_ctx = queryContext;
+            queryDesc->binding_ctx_free = BindingContext.QueryContextFreePointer;
 
             if (!string.IsNullOrEmpty(name))
             {
