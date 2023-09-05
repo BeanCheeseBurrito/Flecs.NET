@@ -32,7 +32,7 @@ dotnet add PROJECT package Flecs.NET.Native.Release --version *-*
 ```
 
 **Flecs.NET** provides both [release](https://www.nuget.org/packages/Flecs.NET.Release) and [debug](https://www.nuget.org/packages/Flecs.NET.Debug) packages for nuget.
-To include both of them in your project based on your build configuration, use the packages references below. The latest stable or prerelease versions will be added to your project.
+To include both of them in your project based on your build configuration, use the package references below. The latest stable or prerelease versions will be added to your project.
 ```xml
 <ItemGroup>
     <PackageReference Include="Flecs.NET.Debug" Version="*-*" Condition="'$(Configuration)' == 'Debug'" />
@@ -50,7 +50,7 @@ Routine routine = world.Routine(
     filter: world.FilterBuilder().Term<Position>().Term<Velocity>(),
     query: world.QueryBuilder(),
     routine: world.RoutineBuilder(),
-    callback: it =>
+    callback: (Iter it) =>
     {
         Column<Position> p = it.Field<Position>(1);
         Column<Velocity> v = it.Field<Velocity>(2);
