@@ -1667,8 +1667,6 @@ namespace Flecs.NET.Core
             return Core.Module.Import<T>(this);
         }
 
-        // TODO: Add pipeline_builder
-
         /// <summary>
         ///     Set pipeline.
         /// </summary>
@@ -2128,6 +2126,35 @@ namespace Flecs.NET.Core
         public Query Query(FilterBuilder filter = default, QueryBuilder query = default, string name = "")
         {
             return new Query(Handle, filter, query, name);
+        }
+
+        /// <summary>
+        ///     Creates a pipeline.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="query"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public Pipeline Pipeline(
+            FilterBuilder filter = default,
+            QueryBuilder query = default,
+            ulong entity = 0)
+        {
+            return new Pipeline(Handle, filter, query, entity);
+        }
+
+        /// <summary>
+        ///     Creates a pipeline.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="query"></param>
+        /// <typeparam name="TPipeline"></typeparam>
+        /// <returns></returns>
+        public Pipeline Pipeline<TPipeline>(
+            FilterBuilder filter = default,
+            QueryBuilder query = default)
+        {
+            return new Pipeline(Handle, filter, query, Type<TPipeline>.Id(Handle));
         }
 
         /// <summary>
