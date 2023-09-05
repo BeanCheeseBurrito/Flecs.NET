@@ -56,9 +56,9 @@ namespace Flecs.NET.Core
         ///     Returns the entity id of the event id.
         /// </summary>
         /// <returns></returns>
-        public Entity EventId()
+        public Id EventId()
         {
-            return new Entity(Handle->world, Handle->event_id);
+            return new Id(Handle->world, Handle->event_id);
         }
 
         /// <summary>

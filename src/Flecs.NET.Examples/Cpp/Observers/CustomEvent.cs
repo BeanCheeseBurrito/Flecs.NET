@@ -21,7 +21,7 @@ world.Observer(
     callback: (Iter it) =>
     {
         foreach (int i in it)
-            Console.WriteLine($" - {it.Event().Name()}: {it.EventId().Id.Str()}: {it.Entity(i).Name()}");
+            Console.WriteLine($" - {it.Event().Name()}: {it.EventId().Str()}: {it.Entity(i).Name()}");
     }
 );
 
