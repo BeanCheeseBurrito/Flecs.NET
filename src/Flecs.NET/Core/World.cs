@@ -1632,7 +1632,25 @@ namespace Flecs.NET.Core
             return new Component<T>(Handle, name).Entity.Add(EcsPrefab);
         }
 
-        // TODO: Add event_builder stuff here later
+        /// <summary>
+        ///     Create a new event.
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        public EventBuilder Event(ulong eventId)
+        {
+            return new EventBuilder(Handle, eventId);
+        }
+
+        /// <summary>
+        ///     Create a new event.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public EventBuilder Event<T>()
+        {
+            return new EventBuilder(Handle, Type<T>.Id(Handle));
+        }
 
         // TODO: Add World.Each stuff here later
 
