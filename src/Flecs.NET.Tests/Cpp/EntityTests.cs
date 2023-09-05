@@ -400,7 +400,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Observer(
                 filter: world.FilterBuilder().Term<Position>(),
                 observer: world.ObserverBuilder().Event(EcsOnSet),
-                callback: it => { invoked = true; }
+                callback: (Iter _) => { invoked = true; }
             );
 
             void* voidPointer = entity.GetMutPtr(position);
@@ -478,7 +478,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Observer(
                 filter: world.FilterBuilder().Term<Position>(),
                 observer: world.ObserverBuilder().Event(EcsOnSet),
-                callback: it => { invoked = true; }
+                callback: (Iter _) => { invoked = true; }
             );
 
             void* voidPointer = entity.GetPtr(id);
@@ -511,7 +511,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Observer(
                 filter: world.FilterBuilder().Term<Position>(),
                 observer: world.ObserverBuilder().Event(EcsOnSet),
-                callback: it => { invoked = true; }
+                callback: (Iter _) => { invoked = true; }
             );
 
             void* voidPointer = entity.GetMutPtr(id);

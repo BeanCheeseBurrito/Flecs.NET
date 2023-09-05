@@ -1644,7 +1644,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Module<TModule>(string name = "") where TModule : IFlecsModule, new()
         {
-            ulong result = Type<TModule>.Id(Handle);
+            ulong result = Type<TModule>.Id(Handle, null, false);
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -2099,8 +2099,8 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Create filter.
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="filter"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public Filter Filter(FilterBuilder filter = default, string name = "")
         {
@@ -2110,8 +2110,8 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Create rule.
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="filter"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public Rule Rule(FilterBuilder filter = default, string name = "")
         {
@@ -2121,9 +2121,9 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Create query.
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="filter"></param>
         /// <param name="query"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public Query Query(FilterBuilder filter = default, QueryBuilder query = default, string name = "")
         {
@@ -2131,12 +2131,12 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create observer.
+        ///     Create an observer.
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="filter"></param>
         /// <param name="observer"></param>
         /// <param name="callback"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public Observer Observer(
             FilterBuilder filter = default,
@@ -2148,7 +2148,24 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create observer.
+        ///     Create an observer.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="observer"></param>
+        /// <param name="callback"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Observer Observer(
+            FilterBuilder filter = default,
+            ObserverBuilder observer = default,
+            Ecs.EachEntityCallback? callback = null,
+            string name = "")
+        {
+            return new Observer(Handle, filter, observer, callback, name);
+        }
+
+        /// <summary>
+        ///     Create an observer.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -2160,17 +2177,36 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Create routine.
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="filter"></param>
         /// <param name="query"></param>
         /// <param name="routine"></param>
         /// <param name="callback"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public Routine Routine(
             FilterBuilder filter = default,
             QueryBuilder query = default,
             RoutineBuilder routine = default,
             Ecs.IterCallback? callback = null,
+            string name = "")
+        {
+            return new Routine(Handle, filter, query, routine, callback, name);
+        }
+
+        /// <summary>
+        ///     Create routine.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="query"></param>
+        /// <param name="routine"></param>
+        /// <param name="callback"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Routine Routine(
+            FilterBuilder filter = default,
+            QueryBuilder query = default,
+            RoutineBuilder routine = default,
+            Ecs.EachEntityCallback? callback = null,
             string name = "")
         {
             return new Routine(Handle, filter, query, routine, callback, name);

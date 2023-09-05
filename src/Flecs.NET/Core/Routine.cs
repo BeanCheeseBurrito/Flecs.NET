@@ -71,14 +71,14 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates a routine for the provided world.
+        ///      Creates a routine for the provided world.
         /// </summary>
         /// <param name="world"></param>
-        /// <param name="name"></param>
         /// <param name="filterBuilder"></param>
         /// <param name="queryBuilder"></param>
         /// <param name="routineBuilder"></param>
         /// <param name="callback"></param>
+        /// <param name="name"></param>
         /// <exception cref="ArgumentNullException"></exception>
         public Routine(
             ecs_world_t* world,
@@ -106,19 +106,19 @@ namespace Flecs.NET.Core
         ///     Creates a routine for the provided world.
         /// </summary>
         /// <param name="world"></param>
-        /// <param name="name"></param>
         /// <param name="filterBuilder"></param>
         /// <param name="queryBuilder"></param>
         /// <param name="routineBuilder"></param>
         /// <param name="callback"></param>
+        /// <param name="name"></param>
         /// <exception cref="ArgumentNullException"></exception>
         public Routine(
             ecs_world_t* world,
-            string name = "",
             FilterBuilder filterBuilder = default,
             QueryBuilder queryBuilder = default,
             RoutineBuilder routineBuilder = default,
-            Ecs.EachEntityCallback? callback = null)
+            Ecs.EachEntityCallback? callback = null,
+            string name = "")
             : this(world, &routineBuilder.RoutineDesc, ref filterBuilder, ref queryBuilder, ref routineBuilder, ref name)
         {
             if (callback == null)

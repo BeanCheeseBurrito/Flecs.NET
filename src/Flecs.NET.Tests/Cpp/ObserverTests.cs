@@ -1,4 +1,6 @@
+#if !NET5_0_OR_GREATER
 using System.Runtime.InteropServices;
+#endif
 using Flecs.NET.Core;
 using Xunit;
 using static Flecs.NET.Bindings.Native;
@@ -471,7 +473,7 @@ namespace Flecs.NET.Tests.Cpp
             Observer observer = world.Observer(
                 filter: world.FilterBuilder().Term<TagA>(),
                 observer: world.ObserverBuilder().Event(EcsOnAdd),
-                callback: _ => { }
+                callback: (Iter it) => { }
             );
 
             ulong entity = observer;
@@ -670,7 +672,7 @@ namespace Flecs.NET.Tests.Cpp
             Observer observer = world.Observer(
                 filter: world.FilterBuilder().Term<Position>(),
                 observer: world.ObserverBuilder().Event(EcsOnSet),
-                callback: _ => { }
+                callback: (Iter it) => { }
             );
 
             using Filter filter = observer.Filter();
@@ -731,6 +733,184 @@ namespace Flecs.NET.Tests.Cpp
             world.DeferEnd();
 
             Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void OnAddSingleton()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            world.Observer(
+                filter: world.FilterBuilder()
+                    .Term<Position>().Singleton(),
+                observer: world.ObserverBuilder()
+                    .Event(EcsOnSet),
+                callback: it =>
+                {
+                    Column<Position> p = it.Field<Position>(1);
+
+                    foreach (int i in it)
+                    {
+                        Assert.Equal(10, p[i].X);
+                        Assert.Equal(20, p[i].Y);
+                        count++;
+                    }
+                }
+            );
+
+            world.Set(new Position { X = 10, Y = 20 });
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void OnAddPairSingleton()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            Entity tgt = world.Entity();
+
+            world.Observer(
+                filter: world.FilterBuilder()
+                    .Term<Position>(tgt).Singleton(),
+                observer: world.ObserverBuilder()
+                    .Event(EcsOnSet),
+                callback: it =>
+                {
+                    Column<Position> p = it.Field<Position>(1);
+
+                    foreach (int i in it)
+                    {
+                        Assert.Equal(10, p[i].X);
+                        Assert.Equal(20, p[i].Y);
+                        count++;
+                    }
+                }
+            );
+
+            world.Set(tgt, new Position { X = 10, Y = 20 });
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void OnAddPairWildcardSingleton()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            Entity tgt1 = world.Entity();
+            Entity tgt2 = world.Entity();
+
+            world.Observer(
+                filter: world.FilterBuilder()
+                    .Term<Position>(EcsWildcard).Singleton(),
+                observer: world.ObserverBuilder()
+                    .Event(EcsOnSet),
+                callback: it =>
+                {
+                    Column<Position> p = it.Field<Position>(1);
+
+                    foreach (int i in it)
+                    {
+                        Assert.Equal(10, p[i].X);
+                        Assert.Equal(20, p[i].Y);
+                        count++;
+                    }
+                }
+            );
+
+            world.Set(tgt1, new Position { X = 10, Y = 20 });
+            Assert.Equal(1, count);
+
+            world.Set(tgt2, new Position { X = 10, Y = 20 });
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        private void OnAddWithPairSingleton()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            Entity tgt = world.Entity();
+
+            world.Observer(
+                filter: world.FilterBuilder()
+                    .With<Position>(tgt).Singleton(),
+                observer: world.ObserverBuilder()
+                    .Event(EcsOnSet),
+                callback: it => { count += it.Count(); }
+            );
+
+            world.Set(tgt, new Position { X = 10, Y = 20 });
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void AddInYieldExisting()
+        {
+            using World world = World.Create(false);
+
+            Entity e1 = world.Entity().Set<Position>(default);
+            Entity e2 = world.Entity().Set<Position>(default);
+            Entity e3 = world.Entity().Set<Position>(default);
+
+            world.Observer(
+                filter: world.FilterBuilder()
+                    .With<Position>(),
+                observer: world.ObserverBuilder()
+                    .Event(EcsOnAdd)
+                    .YieldExisting(),
+                callback: e => { e.Add<Velocity>(); }
+            );
+
+            Assert.True(e1.Has<Position>());
+            Assert.True(e1.Has<Velocity>());
+
+            Assert.True(e2.Has<Position>());
+            Assert.True(e2.Has<Velocity>());
+
+            Assert.True(e3.Has<Position>());
+            Assert.True(e3.Has<Velocity>());
+        }
+
+        [Fact]
+        private void AddInYieldExistingMulti()
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity().Set<Position>(default).Set<Mass>(default);
+            Entity e2 = world.Entity().Set<Position>(default).Set<Mass>(default);
+            Entity e3 = world.Entity().Set<Position>(default).Set<Mass>(default);
+
+            world.Observer(
+                filter: world.FilterBuilder()
+                    .With<Position>()
+                    .With<Mass>(),
+                observer: world.ObserverBuilder()
+                    .Event(EcsOnAdd)
+                    .YieldExisting(),
+                callback: e => { e.Add<Velocity>(); }
+            );
+
+            Assert.True(e1.Has<Position>());
+            Assert.True(e1.Has<Mass>());
+            Assert.True(e1.Has<Velocity>());
+
+            Assert.True(e2.Has<Position>());
+            Assert.True(e2.Has<Mass>());
+            Assert.True(e2.Has<Velocity>());
+
+            Assert.True(e3.Has<Position>());
+            Assert.True(e3.Has<Mass>());
+            Assert.True(e3.Has<Velocity>());
         }
     }
 }

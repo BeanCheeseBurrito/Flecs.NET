@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Version>3.2.6</Version>
+        <Version>3.2.7</Version>
         <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Native.Debug</Title>
         <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Native.Release</Title>
         <Authors>BeanCheeseBurrito</Authors>

@@ -20,10 +20,10 @@ namespace Flecs.NET.Core
             (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&RoutineIter;
 
         internal static readonly IntPtr ObserverEachEntityPointer =
-            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&ObserverIter;
+            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&ObserverEachEntity;
 
         internal static readonly IntPtr RoutineEachEntityPointer =
-            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&RoutineIter;
+            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&RoutineEachEntity;
 
         internal static readonly IntPtr WorldContextFreePointer =
             (IntPtr)(delegate* unmanaged<void*, void>)&WorldContextFree;

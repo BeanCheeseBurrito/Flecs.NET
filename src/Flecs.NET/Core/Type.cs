@@ -104,14 +104,26 @@ namespace Flecs.NET.Core
             ResetCount = FlecsInternal.ResetCount;
             RawId = entity;
             AllowTag = allowTag;
-            Size = RuntimeHelpers.IsReferenceOrContainsReferences<T>() ? sizeof(IntPtr) : sizeof(T);
-            Alignment = RuntimeHelpers.IsReferenceOrContainsReferences<T>()
-                ? sizeof(IntPtr)
-                : attribute.Value == LayoutKind.Explicit
-                    ? attribute.Pack
-                    : AlignOf();
 
-            if (!allowTag || RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+            if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+            {
+                Size = sizeof(GCHandle);
+                Alignment = Type<GCHandle>.AlignOf();
+                return;
+            }
+
+            if (attribute.Value == LayoutKind.Explicit)
+            {
+                Size = attribute.Size == 0 ? sizeof(T) : attribute.Size;
+                Alignment = attribute.Pack == 0 ? AlignOf() : attribute.Pack;
+            }
+            else
+            {
+                Size = sizeof(T);
+                Alignment = AlignOf();
+            }
+
+            if (!allowTag)
                 return;
 
             if (RuntimeFeature.IsDynamicCodeSupported)

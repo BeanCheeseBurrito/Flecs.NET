@@ -591,7 +591,8 @@ namespace Flecs.NET.Core
             if (singletonId == 0) singletonId = CurrentTerm.first.id;
 
             Assert.True(singletonId != 0, nameof(ECS_INVALID_PARAMETER));
-            CurrentTerm.src.id = singletonId;
+            CurrentTerm.src.id = !Macros.IsPair(singletonId) ? singletonId : Macros.PairFirst(World, singletonId);
+
             return ref this;
         }
 

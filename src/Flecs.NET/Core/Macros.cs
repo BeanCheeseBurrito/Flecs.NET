@@ -147,34 +147,58 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Returns the first part of a pair.
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="pair"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong PairFirst(ulong entity)
+        public static ulong PairFirst(ulong pair)
         {
-            return EntityHi(entity & ECS_COMPONENT_MASK);
+            return EntityHi(pair & ECS_COMPONENT_MASK);
+        }
+
+        /// <summary>
+        ///     Returns the first part of a pair.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="pair"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong PairFirst(ecs_world_t* world, ulong pair)
+        {
+            return ecs_get_alive(world, PairFirst(pair));
         }
 
         /// <summary>
         ///     Returns the second part of a pair.
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="pair"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong PairSecond(ulong entity)
+        public static ulong PairSecond(ulong pair)
         {
-            return EntityLow(entity);
+            return EntityLow(pair);
+        }
+
+        /// <summary>
+        ///     Returns the second part of a pair.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="pair"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong PairSecond(ecs_world_t* world, ulong pair)
+        {
+            return ecs_get_alive(world, PairSecond(pair));
         }
 
         /// <summary>
         ///     Tests whether an id is a pair.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="pair"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsPair(ulong id)
+        public static bool IsPair(ulong pair)
         {
-            return (id & ECS_ID_FLAGS_MASK) == ECS_PAIR;
+            return (pair & ECS_ID_FLAGS_MASK) == ECS_PAIR;
         }
 
         /// <summary>
