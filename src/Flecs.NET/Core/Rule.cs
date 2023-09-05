@@ -34,6 +34,8 @@ namespace Flecs.NET.Core
             _world = world;
 
             ecs_filter_desc_t* filterDesc = &filterBuilder.FilterDesc;
+            filterDesc->terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
+            filterDesc->terms_buffer_count = filterBuilder.Terms.Count;
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -120,6 +122,17 @@ namespace Flecs.NET.Core
         public string RuleStr()
         {
             return NativeString.GetStringAndFree(ecs_rule_str(Handle));
+        }
+
+        /// <summary>
+        ///     Searches for a variable by name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public int FindVar(string name)
+        {
+            using NativeString nativeName = (NativeString)name;
+            return ecs_rule_find_var(Handle, nativeName);
         }
 
         /// <summary>
