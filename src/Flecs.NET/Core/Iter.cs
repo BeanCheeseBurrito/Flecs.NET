@@ -268,11 +268,11 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Entity Pair(int index)
+        public Id Pair(int index)
         {
             ulong id = ecs_field_id(Handle, index);
             Assert.True(Macros.EntityHasIdFlag(id, ECS_PAIR) != 0, nameof(ECS_INVALID_PARAMETER));
-            return new Entity(Handle->world, id);
+            return new Id(Handle->world, id);
         }
 
         /// <summary>
