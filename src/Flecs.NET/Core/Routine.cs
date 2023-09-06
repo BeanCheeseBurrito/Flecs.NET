@@ -138,6 +138,38 @@ namespace Flecs.NET.Core
         ///     Creates a routine for the provided world.
         /// </summary>
         /// <param name="world"></param>
+        /// <param name="filterBuilder"></param>
+        /// <param name="queryBuilder"></param>
+        /// <param name="routineBuilder"></param>
+        /// <param name="callback"></param>
+        /// <param name="name"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Routine(
+            ecs_world_t* world,
+            FilterBuilder filterBuilder = default,
+            QueryBuilder queryBuilder = default,
+            RoutineBuilder routineBuilder = default,
+            Ecs.EachIndexCallback? callback = null,
+            string name = "")
+            : this(world, &routineBuilder.RoutineDesc, ref filterBuilder, ref queryBuilder, ref routineBuilder, ref name)
+        {
+            if (callback == null)
+                throw new ArgumentNullException(nameof(callback), "Callback is null");
+
+            ecs_system_desc_t* routineDesc = &routineBuilder.RoutineDesc;
+            routineDesc->callback = BindingContext.RoutineEachIndexPointer;
+
+            BindingContext.RoutineContext* context = (BindingContext.RoutineContext*)routineDesc->binding_ctx;
+            BindingContext.SetCallback(ref context->Iterator, callback);
+
+            _entity = new Entity(world, ecs_system_init(world, routineDesc));
+            filterBuilder.Dispose();
+        }
+
+        /// <summary>
+        ///     Creates a routine for the provided world.
+        /// </summary>
+        /// <param name="world"></param>
         /// <param name="entity"></param>
         public Routine(ecs_world_t* world, ulong entity)
         {

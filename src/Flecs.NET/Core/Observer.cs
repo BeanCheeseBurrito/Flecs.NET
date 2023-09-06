@@ -109,6 +109,36 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Creates an observer for the provided world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="filterBuilder"></param>
+        /// <param name="observerBuilder"></param>
+        /// <param name="callback"></param>
+        /// <param name="name"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Observer(
+            ecs_world_t* world,
+            FilterBuilder filterBuilder = default,
+            ObserverBuilder observerBuilder = default,
+            Ecs.EachIndexCallback? callback = null,
+            string name = "")
+            : this(world, &observerBuilder.ObserverDesc, ref filterBuilder, ref observerBuilder, ref name)
+        {
+            if (callback == null)
+                throw new ArgumentNullException(nameof(callback), "Callback is null");
+
+            ecs_observer_desc_t* observerDesc = &observerBuilder.ObserverDesc;
+            observerDesc->callback = BindingContext.ObserverEachIndexPointer;
+
+            BindingContext.ObserverContext* context = (BindingContext.ObserverContext*)observerDesc->binding_ctx;
+            BindingContext.SetCallback(ref context->Iterator, callback);
+
+            _entity = new Entity(world, ecs_observer_init(world, observerDesc));
+            filterBuilder.Dispose();
+        }
+
+        /// <summary>
         ///     Gets an observer from the provided world an entity.
         /// </summary>
         /// <param name="world"></param>

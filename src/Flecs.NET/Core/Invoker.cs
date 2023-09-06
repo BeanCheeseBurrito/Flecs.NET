@@ -27,7 +27,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="iter"></param>
         /// <param name="callback"></param>
-        public static void EachEntity(ecs_iter_t* iter, Ecs.EachEntityCallback callback)
+        public static void Each(ecs_iter_t* iter, Ecs.EachEntityCallback callback)
         {
             Macros.TableLock(iter->world, iter->table);
 
@@ -38,6 +38,28 @@ namespace Flecs.NET.Core
 
             for (int i = 0; i < count; i++)
                 callback(new Entity(world, iter->entities[i]));
+
+            Macros.TableUnlock(iter->world, iter->table);
+        }
+
+        /// <summary>
+        ///     Invokes an each callback using a delegate.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void Each(ecs_iter_t* iter, Ecs.EachIndexCallback callback)
+        {
+            int count = iter->count;
+
+            if (count == 0)
+                count = 1;
+
+            Iter it = new Iter(iter);
+
+            Macros.TableLock(iter->world, iter->table);
+
+            for (int i = 0; i < count; i++)
+                callback(it, i);
 
             Macros.TableUnlock(iter->world, iter->table);
         }
@@ -72,7 +94,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="iter"></param>
         /// <param name="callback"></param>
-        public static void EachEntity(ecs_iter_t* iter, delegate* managed<Entity, void> callback)
+        public static void Each(ecs_iter_t* iter, delegate* managed<Entity, void> callback)
         {
             Macros.TableLock(iter->world, iter->table);
 
@@ -92,7 +114,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="iter"></param>
         /// <param name="callback"></param>
-        public static void EachEntity(ecs_iter_t* iter, delegate* unmanaged<Entity, void> callback)
+        public static void Each(ecs_iter_t* iter, delegate* unmanaged<Entity, void> callback)
         {
             Macros.TableLock(iter->world, iter->table);
 
@@ -103,6 +125,50 @@ namespace Flecs.NET.Core
 
             for (int i = 0; i < count; i++)
                 callback(new Entity(world, iter->entities[i]));
+
+            Macros.TableUnlock(iter->world, iter->table);
+        }
+
+        /// <summary>
+        ///      Invokes an each callback using a managed function pointer.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void Each(ecs_iter_t* iter, delegate* managed<Iter, int, void> callback)
+        {
+            int count = iter->count;
+
+            if (count == 0)
+                count = 1;
+
+            Iter it = new Iter(iter);
+
+            Macros.TableLock(iter->world, iter->table);
+
+            for (int i = 0; i < count; i++)
+                callback(it, i);
+
+            Macros.TableUnlock(iter->world, iter->table);
+        }
+
+        /// <summary>
+        ///      Invokes an each callback using an unmanaged function pointer.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void Each(ecs_iter_t* iter, delegate* unmanaged<Iter, int, void> callback)
+        {
+            int count = iter->count;
+
+            if (count == 0)
+                count = 1;
+
+            Iter it = new Iter(iter);
+
+            Macros.TableLock(iter->world, iter->table);
+
+            for (int i = 0; i < count; i++)
+                callback(it, i);
 
             Macros.TableUnlock(iter->world, iter->table);
         }

@@ -29,6 +29,11 @@ namespace Flecs.NET.Core
         public delegate void EachIdCallback(Id id);
 
         /// <summary>
+        ///     Each index callback.
+        /// </summary>
+        public delegate void EachIndexCallback(Iter it, int i);
+
+        /// <summary>
         ///     Finish action.
         /// </summary>
         public delegate void FiniAction(ecs_world_t* world, void* ctx);
@@ -59,14 +64,14 @@ namespace Flecs.NET.Core
         public delegate void IterAction(ecs_iter_t* it);
 
         /// <summary>
+        ///     Iter next action.
+        /// </summary>
+        public delegate byte IterNextAction(ecs_iter_t* it);
+
+        /// <summary>
         ///     Iter callback.
         /// </summary>
         public delegate void IterCallback(Iter it);
-
-        /// <summary>
-        ///     Iter next.
-        /// </summary>
-        public delegate byte IterNext(ecs_iter_t* it);
 
         /// <summary>
         ///     OrderBy action.

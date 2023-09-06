@@ -387,7 +387,7 @@ namespace Flecs.NET.Core
 
             ecs_iter_t it = ecs_filter_iter(World, &filter);
             while (ecs_filter_next_instanced(&it) == 1)
-                Invoker.EachEntity(&it, callback);
+                Invoker.Each(&it, callback);
             ecs_filter_fini(&filter);
         }
 
@@ -537,6 +537,7 @@ namespace Flecs.NET.Core
         public ref readonly T Get<T>()
         {
             ulong id = Type<T>.Id(World);
+            Assert.True(!typeof(T).IsEnum, "Cannot use .Get<T>() on an enum type. Use .GetEnum<T>() instead.");
             Assert.True(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             return ref Managed.GetTypeRef<T>(ecs_get_id(World, Id, id));
         }
@@ -548,13 +549,13 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref readonly TEnum GetEnum<TEnum>() where TEnum : Enum
         {
-            ulong enumTypeId = Type<TEnum>.Id(World);
-            ulong target = ecs_get_target(World, Id, enumTypeId, 0);
+            ulong r = Type<TEnum>.Id(World);
+            ulong c = ecs_get_target(World, Id, r, 0);
 
-            if (target == 0)
-                return ref Managed.GetTypeRef<TEnum>(ecs_get_id(World, Id, enumTypeId));
+            if (c == 0)
+                return ref Managed.GetTypeRef<TEnum>(ecs_get_id(World, Id, r));
 
-            void* ptr = ecs_get_id(World, enumTypeId, target);
+            void* ptr = ecs_get_id(World, c, r);
             Assert.True(ptr != null, "Missing enum constant value");
             return ref Managed.GetTypeRef<TEnum>(ptr);
         }

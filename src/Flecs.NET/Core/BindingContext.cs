@@ -25,6 +25,12 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr RoutineEachEntityPointer =
             (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&RoutineEachEntity;
 
+        internal static readonly IntPtr ObserverEachIndexPointer =
+            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&ObserverEachIndex;
+
+        internal static readonly IntPtr RoutineEachIndexPointer =
+            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&RoutineEachIndex;
+
         internal static readonly IntPtr WorldContextFreePointer =
             (IntPtr)(delegate* unmanaged<void*, void>)&WorldContextFree;
 
@@ -49,6 +55,9 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr ObserverEachEntityPointer;
         internal static readonly IntPtr RoutineEachEntityPointer;
 
+        internal static readonly IntPtr ObserverEachIndexPointer;
+        internal static readonly IntPtr RoutineEachIndexPointer;
+
         internal static readonly IntPtr WorldContextFreePointer;
         internal static readonly IntPtr ObserverContextFreePointer;
         internal static readonly IntPtr RoutineContextFreePointer;
@@ -63,6 +72,9 @@ namespace Flecs.NET.Core
 
         private static readonly Ecs.IterAction ObserverEachEntityReference = ObserverEachEntity;
         private static readonly Ecs.IterAction RoutineEachEntityReference = RoutineEachEntity;
+
+        private static readonly Ecs.IterAction ObserverEachIndexReference = ObserverEachIndex;
+        private static readonly Ecs.IterAction RoutineEachIndexReference = RoutineEachIndex;
 
         private static readonly Ecs.ContextFree WorldContextFreeReference = WorldContextFree;
         private static readonly Ecs.ContextFree ObserverContextFreeReference = ObserverContextFree;
@@ -81,6 +93,9 @@ namespace Flecs.NET.Core
 
             ObserverEachEntityPointer = Marshal.GetFunctionPointerForDelegate(ObserverEachEntityReference);
             RoutineEachEntityPointer = Marshal.GetFunctionPointerForDelegate(RoutineEachEntityReference);
+
+            ObserverEachIndexPointer = Marshal.GetFunctionPointerForDelegate(ObserverEachIndexReference);
+            RoutineEachIndexPointer = Marshal.GetFunctionPointerForDelegate(RoutineEachIndexReference);
 
             WorldContextFreePointer = Marshal.GetFunctionPointerForDelegate(WorldContextFreeReference);
             ObserverContextFreePointer = Marshal.GetFunctionPointerForDelegate(ObserverContextFreeReference);
@@ -135,7 +150,7 @@ namespace Flecs.NET.Core
                 Marshal.GetDelegateForFunctionPointer<Ecs.EachEntityCallback>(context->Iterator.Function);
 #endif
 
-            Invoker.EachEntity(iter, callback);
+            Invoker.Each(iter, callback);
         }
 
         [UnmanagedCallersOnly]
@@ -150,7 +165,37 @@ namespace Flecs.NET.Core
                 Marshal.GetDelegateForFunctionPointer<Ecs.EachEntityCallback>(context->Iterator.Function);
 #endif
 
-            Invoker.EachEntity(iter, callback);
+            Invoker.Each(iter, callback);
+        }
+
+        [UnmanagedCallersOnly]
+        private static void ObserverEachIndex(ecs_iter_t* iter)
+        {
+            ObserverContext* context = (ObserverContext*)iter->binding_ctx;
+
+#if NET5_0_OR_GREATER
+            delegate* unmanaged<Iter, int, void> callback = (delegate* unmanaged<Iter, int, void>)context->Iterator.Function;
+#else
+            Ecs.EachIndexCallback callback =
+                Marshal.GetDelegateForFunctionPointer<Ecs.EachIndexCallback>(context->Iterator.Function);
+#endif
+
+            Invoker.Each(iter, callback);
+        }
+
+        [UnmanagedCallersOnly]
+        private static void RoutineEachIndex(ecs_iter_t* iter)
+        {
+            RoutineContext* context = (RoutineContext*)iter->binding_ctx;
+
+#if NET5_0_OR_GREATER
+            delegate* unmanaged<Iter, int, void> callback = (delegate* unmanaged<Iter, int, void>)context->Iterator.Function;
+#else
+            Ecs.EachIndexCallback callback =
+                Marshal.GetDelegateForFunctionPointer<Ecs.EachIndexCallback>(context->Iterator.Function);
+#endif
+
+            Invoker.Each(iter, callback);
         }
 
         [UnmanagedCallersOnly]
