@@ -22,20 +22,17 @@ world.Observer(
         .Term<Position>()
         .Term<Position>().Parent(), // select 2nd Position from parent
     observer: world.ObserverBuilder().Event(EcsOnSet),
-    callback: (Iter it) =>
+    callback: (Iter it, int i) =>
     {
         Column<Position> pSelf = it.Field<Position>(1);
         Column<Position> pParent = it.Field<Position>(2);
 
-        foreach (int i in it)
-        {
-            Console.Write($" - {it.Event().Name()}: ");
-            Console.Write($"{it.EventId().Str()}: ");
-            Console.Write($"{it.Entity(i).Name()}: ");
-            Console.Write($"self: ({pSelf[i].X}, {pSelf[i].Y}) ");
-            Console.Write($"parent: ({pParent[i].X}, {pParent[i].Y})");
-            Console.WriteLine();
-        }
+        Console.Write($" - {it.Event().Name()}: ");
+        Console.Write($"{it.EventId().Str()}: ");
+        Console.Write($"{it.Entity(i).Name()}: ");
+        Console.Write($"self: ({pSelf[i].X}, {pSelf[i].Y}) ");
+        Console.Write($"parent: ({pParent[i].X}, {pParent[i].Y})");
+        Console.WriteLine();
     }
 );
 

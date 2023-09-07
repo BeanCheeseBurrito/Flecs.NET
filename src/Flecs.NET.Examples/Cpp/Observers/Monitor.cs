@@ -21,18 +21,12 @@ world.Observer(
         .Term<Velocity>(),
     observer: world.ObserverBuilder()
         .Event(EcsMonitor), // Monitor entities entering/leaving the query
-    callback: (Iter it) =>
+    callback: (Iter it, int i) =>
     {
         if (it.Event() == EcsOnAdd)
-        {
-            foreach (int i in it)
-                Console.WriteLine($" - Enter: {it.EventId().Str()}: {it.Entity(i).Name()}");
-        }
+            Console.WriteLine($" - Enter: {it.EventId().Str()}: {it.Entity(i).Name()}");
         else if (it.Event() == EcsOnRemove)
-        {
-            foreach (int i in it)
-                Console.WriteLine($" - Leave: {it.EventId().Str()}: {it.Entity(i).Name()}");
-        }
+            Console.WriteLine($" - Leave: {it.EventId().Str()}: {it.Entity(i).Name()}");
     }
 );
 

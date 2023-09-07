@@ -22,18 +22,15 @@ world.Observer(
     observer: world.ObserverBuilder()
         .Event(EcsOnSet)
         .YieldExisting(),
-    callback: (Iter it) =>
+    callback: (Iter it, int i) =>
     {
         Column<Position> p = it.Field<Position>(1);
 
-        foreach (int i in it)
-        {
-            Console.Write($" - {it.Event().Name()}: ");
-            Console.Write($"{it.EventId().Str()}: ");
-            Console.Write($"{it.Entity(i).Name()}: ");
-            Console.Write($"({p[i].X}, {p[i].Y})");
-            Console.WriteLine();
-        }
+        Console.Write($" - {it.Event().Name()}: ");
+        Console.Write($"{it.EventId().Str()}: ");
+        Console.Write($"{it.Entity(i).Name()}: ");
+        Console.Write($"({p[i].X}, {p[i].Y})");
+        Console.WriteLine();
     }
 );
 

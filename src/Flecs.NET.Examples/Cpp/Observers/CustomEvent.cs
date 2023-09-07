@@ -18,10 +18,9 @@ using World world = World.Create(args);
 world.Observer(
     filter: world.FilterBuilder().Term<Position>(),
     observer: world.ObserverBuilder().Event<MyEvent>(),
-    callback: (Iter it) =>
+    callback: (Iter it, int i) =>
     {
-        foreach (int i in it)
-            Console.WriteLine($" - {it.Event().Name()}: {it.EventId().Str()}: {it.Entity(i).Name()}");
+        Console.WriteLine($" - {it.Event().Name()}: {it.EventId().Str()}: {it.Entity(i).Name()}");
     }
 );
 

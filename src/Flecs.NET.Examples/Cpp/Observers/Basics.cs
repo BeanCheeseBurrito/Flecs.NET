@@ -34,22 +34,21 @@ world.Observer(
         .Event(EcsOnAdd)
         .Event(EcsOnRemove)
         .Event(EcsOnSet),
-    callback: (Iter it) =>
+    callback: (Iter it, int i) =>
     {
+        Column<Position> p = it.Field<Position>(1);
+
         if (it.Event() == EcsOnAdd)
         {
             // No assumptions about the component value should be made here. If
             // a ctor for the component was registered it will be called before
             // the EcsOnAdd event, but a value assigned by set won't be visible.
-            foreach (int i in it)
-                Console.WriteLine($" - OnAdd: {it.EventId().Str()}: {it.Entity(i).Name()}");
+            Console.WriteLine($" - OnAdd: {it.EventId().Str()}: {it.Entity(i).Name()}");
         }
         else
         {
-            Column<Position> p = it.Field<Position>(1);
             // EcsOnSet or EcsOnRemove event
-            foreach (int i in it)
-                Console.WriteLine($" - OnAdd: {it.Event().Name()}: {it.EventId().Str()}: {it.Entity(i).Name()}: ({p[i].X}, {p[i].Y})");
+            Console.WriteLine($" - OnAdd: {it.Event().Name()}: {it.EventId().Str()}: {it.Entity(i).Name()}: ({p[i].X}, {p[i].Y})");
         }
     }
 );
