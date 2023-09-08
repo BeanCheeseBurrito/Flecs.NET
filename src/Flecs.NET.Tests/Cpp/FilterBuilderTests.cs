@@ -1,6 +1,5 @@
 using Flecs.NET.Core;
 using Xunit;
-
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Tests.Cpp
@@ -17,7 +16,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Filter filter = world.Filter(
+            using Filter filter = world.Filter(
                 filter: world.FilterBuilder()
                     .Term<Position>()
                     .Term<Velocity>()
@@ -60,6 +59,7 @@ namespace Flecs.NET.Tests.Cpp
             });
 
             Assert.Equal(1, count);
+            f.Get<FilterWrapper>().Filter.Dispose();
         }
 
         //
@@ -185,14 +185,15 @@ namespace Flecs.NET.Tests.Cpp
         // }
         //
         [Fact]
-        private void AddPair() {
+        private void AddPair()
+        {
             using World world = World.Create();
 
             Entity likes = world.Entity();
             Entity bob = world.Entity();
             Entity alice = world.Entity();
 
-            Filter q = world.Filter(
+            using Filter q = world.Filter(
                 filter: world.FilterBuilder().Term(likes, bob)
             );
 
@@ -210,16 +211,17 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void AddNot() {
+        private void AddNot()
+        {
             using World world = World.Create();
 
-            Filter q = world.Filter(
+            using Filter q = world.Filter(
                 filter: world.FilterBuilder()
                     .Term<Position>()
                     .Term<Velocity>().Oper(EcsNot)
             );
 
-            var e1 = world.Entity().Add<Position>();
+            Entity e1 = world.Entity().Add<Position>();
             world.Entity().Add<Position>().Add<Velocity>();
 
             int count = 0;
@@ -233,17 +235,18 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void AddOr() {
+        private void AddOr()
+        {
             using World world = World.Create();
 
-            Filter q = world.Filter(
+            using Filter q = world.Filter(
                 filter: world.FilterBuilder()
                     .Term<Position>().Oper(EcsOr)
                     .Term<Velocity>()
             );
 
-            var e1 = world.Entity().Add<Position>();
-            var e2 = world.Entity().Add<Velocity>();
+            Entity e1 = world.Entity().Add<Position>();
+            Entity e2 = world.Entity().Add<Velocity>();
             world.Entity().Add<Mass>();
 
             int count = 0;
@@ -255,194 +258,192 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal(2, count);
         }
-        //
-        // [Fact]
-        // private void add_optional() {
-        //     using World world = World.Create();
-        //
-        //     var q = world.filter_builder<>()
-        //         .Term<Position>()
-        //         .Term<Velocity>().Oper(flecs::Optional)
-        //         .build();
-        //
-        //     var e1 = world.Entity().Add<Position>();
-        //     var e2 = world.Entity().Add<Position>().Add<Velocity>();
-        //     world.Entity().Add<Velocity>().Add<Mass>();
-        //
-        //     int count = 0;
-        //     q.each([&](flecs::entity e) {
-        //         count ++;
-        //         Assert.True(e == e1 || e == e2);
-        //     });
-        //
-        //     Assert.Equal(2, count);
-        // }
-        //
-        // [Fact]
-        // private void ptr_type() {
-        //     using World world = World.Create();
-        //
-        //     var q = world.filter_builder<Position, Velocity*>().build();
-        //
-        //     var e1 = world.Entity().Add<Position>();
-        //     var e2 = world.Entity().Add<Position>().Add<Velocity>();
-        //     world.Entity().Add<Velocity>().Add<Mass>();
-        //
-        //     int count = 0;
-        //     q.each([&](flecs::entity e, Position& p, Velocity* v) {
-        //         count ++;
-        //         Assert.True(e == e1 || e == e2);
-        //     });
-        //
-        //     Assert.Equal(2, count);
-        // }
-        //
-        // [Fact]
-        // private void const_type() {
-        //     using World world = World.Create();
-        //
-        //     var q = world.filter_builder<const Position>().build();
-        //
-        //     var e1 = world.Entity().Add<Position>();
-        //     world.Entity().Add<Velocity>();
-        //
-        //     int count = 0;
-        //     q.each([&](flecs::entity e, const Position& p) {
-        //         count ++;
-        //         Assert.True(e == e1);
-        //     });
-        //
-        //     Assert.Equal(1, count);
-        // }
-        //
-        // [Fact]
-        // private void string_term() {
-        //     using World world = World.Create();
-        //
-        //     world.component<Position>();
-        //
-        //     var q = world.filter_builder<>()
-        //         .expr("Position")
-        //         .build();
-        //
-        //     var e1 = world.Entity().Add<Position>();
-        //     world.Entity().Add<Velocity>();
-        //
-        //     int count = 0;
-        //     q.each([&](flecs::entity e) {
-        //         count ++;
-        //         Assert.True(e == e1);
-        //     });
-        //
-        //     Assert.Equal(1, count);
-        // }
-        //
-        // [Fact]
-        // private void singleton_term() {
-        //     using World world = World.Create();
-        //
-        //     world.set<Other>({10});
-        //
-        //     var q = world.filter_builder<Self>()
-        //         .Term<Other>().singleton()
-        //         .build();
-        //
-        //     auto
-        //     e = world.Entity(); e.set<Self>({e});
-        //     e = world.Entity(); e.set<Self>({e});
-        //     e = world.Entity(); e.set<Self>({e});
-        //
-        //     int count = 0;
-        //
-        //     q.iter([&](flecs::iter& it, Self *s) {
-        //         var o = it.field<const Other>(2);
-        //         Assert.True(!it.is_self(2));
-        //         Assert.Equal(o->value, 10);
-        //
-        //         const Other& o_ref = *o;
-        //         Assert.Equal(o_ref.value, 10);
-        //
-        //         for (var i : it) {
-        //             Assert.True(it.entity(i) == s[i].value);
-        //             count ++;
-        //         }
-        //     });
-        //
-        //     Assert.Equal(count, 3);
-        // }
-        //
-        // [Fact]
-        // private void isa_superset_term() {
-        //     using World world = World.Create();
-        //
-        //     var q = world.filter_builder<Self>()
-        //         .Term<Other>().src().up()
-        //         .build();
-        //
-        //     var base = world.Entity().set<Other>({10});
-        //
-        //     auto
-        //     e = world.Entity().Add(flecs::IsA, base); e.set<Self>({e});
-        //     e = world.Entity().Add(flecs::IsA, base); e.set<Self>({e});
-        //     e = world.Entity().Add(flecs::IsA, base); e.set<Self>({e});
-        //
-        //     int count = 0;
-        //
-        //     q.iter([&](flecs::iter& it, Self *s) {
-        //         var o = it.field<const Other>(2);
-        //         Assert.True(!it.is_self(2));
-        //         Assert.Equal(o->value, 10);
-        //
-        //         for (var i : it) {
-        //             Assert.True(it.entity(i) == s[i].value);
-        //             count ++;
-        //         }
-        //     });
-        //
-        //     Assert.Equal(count, 3);
-        // }
-        //
-        // [Fact]
-        // private void isa_self_superset_term() {
-        //     using World world = World.Create();
-        //
-        //     var q = world.filter_builder<Self>()
-        //         .Term<Other>().src().self().up()
-        //         .build();
-        //
-        //     var base = world.Entity().set<Other>({10});
-        //
-        //     auto
-        //     e = world.Entity().Add(flecs::IsA, base); e.set<Self>({e});
-        //     e = world.Entity().Add(flecs::IsA, base); e.set<Self>({e});
-        //     e = world.Entity().Add(flecs::IsA, base); e.set<Self>({e});
-        //     e = world.Entity().set<Other>({20}); e.set<Self>({e});
-        //     e = world.Entity().set<Other>({20}); e.set<Self>({e});
-        //
-        //     int count = 0;
-        //     int owned_count = 0;
-        //
-        //     q.iter([&](flecs::iter& it, Self *s) {
-        //         var o = it.field<const Other>(2);
-        //
-        //         if (!it.is_self(2)) {
-        //             Assert.Equal(o->value, 10);
-        //         } else {
-        //             for (var i : it) {
-        //                 Assert.Equal(o[i].value, 20);
-        //                 owned_count ++;
-        //             }
-        //         }
-        //
-        //         for (var i : it) {
-        //             Assert.True(it.entity(i) == s[i].value);
-        //             count ++;
-        //         }
-        //     });
-        //
-        //     Assert.Equal(count, 5);
-        //     Assert.Equal(owned_count, 2);
-        // }
+
+        [Fact]
+        private void AddOptional()
+        {
+            using World world = World.Create();
+
+            using Filter q = world.Filter(
+                filter: world.FilterBuilder()
+                    .Term<Position>()
+                    .Term<Velocity>().Oper(EcsOptional)
+            );
+
+            Entity e1 = world.Entity().Add<Position>();
+            Entity e2 = world.Entity().Add<Position>().Add<Velocity>();
+            world.Entity().Add<Velocity>().Add<Mass>();
+
+            int count = 0;
+            q.Each((Entity e) =>
+            {
+                count++;
+                Assert.True(e == e1 || e == e2);
+            });
+
+            Assert.Equal(2, count);
+        }
+
+
+        [Fact]
+        private void StringTerm()
+        {
+            using World world = World.Create();
+
+            world.Component<Position>();
+
+            using Filter q = world.Filter(
+                filter: world.FilterBuilder()
+                    .Expr("Position")
+            );
+
+            Entity e1 = world.Entity().Add<Position>();
+            world.Entity().Add<Velocity>();
+
+            int count = 0;
+            q.Each((Entity e) =>
+            {
+                count++;
+                Assert.True(e == e1);
+            });
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void SingletonTerm()
+        {
+            using World world = World.Create();
+
+            world.Set(new Other { Value = 10 });
+
+            using Filter q = world.Filter(
+                filter: world.FilterBuilder()
+                    .Term<Self>()
+                    .Term<Other>().Singleton()
+            );
+
+            Entity e = world.Entity();
+            e.Set(new Self { Value = e });
+            e = world.Entity();
+            e.Set(new Self { Value = e });
+            e = world.Entity();
+            e.Set(new Self { Value = e });
+
+            int count = 0;
+
+            q.Iter(it =>
+            {
+                Column<Self> s = it.Field<Self>(1);
+                Column<Other> o = it.Field<Other>(2);
+
+                Assert.True(!it.IsSelf(2));
+                Assert.Equal(10, o[0].Value);
+
+                ref readonly Other oRef = ref o[0];
+                Assert.Equal(10, oRef.Value);
+
+                foreach (int i in it)
+                {
+                    Assert.True(it.Entity(i) == s[i].Value);
+                    count++;
+                }
+            });
+
+            Assert.Equal(3, count);
+        }
+
+        [Fact]
+        private void IsASupersetTerm()
+        {
+            using World world = World.Create();
+
+            using Filter q = world.Filter(
+                filter: world.FilterBuilder()
+                    .Term<Self>()
+                    .Term<Other>().Src().Up()
+            );
+
+            Entity @base = world.Entity().Set(new Other { Value = 10 });
+
+            Entity e = world.Entity().Add(EcsIsA, @base);
+            e.Set(new Self { Value = e });
+            e = world.Entity().Add(EcsIsA, @base);
+            e.Set(new Self { Value = e });
+            e = world.Entity().Add(EcsIsA, @base);
+            e.Set(new Self { Value = e });
+
+            int count = 0;
+
+            q.Iter(it =>
+            {
+                Column<Self> s = it.Field<Self>(1);
+                Column<Other> o = it.Field<Other>(2);
+
+                Assert.True(!it.IsSelf(2));
+                Assert.Equal(10, o[0].Value);
+
+                foreach (int i in it)
+                {
+                    Assert.True(it.Entity(i) == s[i].Value);
+                    count++;
+                }
+            });
+
+            Assert.Equal(3, count);
+        }
+
+        [Fact]
+        private void IsASelfSupersetTerm()
+        {
+            using World world = World.Create();
+
+            using Filter q = world.Filter(
+                filter: world.FilterBuilder()
+                    .Term<Self>()
+                    .Term<Other>().Src().Self().Up()
+            );
+
+            Entity @base = world.Entity().Set(new Other { Value = 10 });
+
+            Entity e = world.Entity().Add(EcsIsA, @base);
+            e.Set(new Self { Value = e });
+            e = world.Entity().Add(EcsIsA, @base);
+            e.Set(new Self { Value = e });
+            e = world.Entity().Add(EcsIsA, @base);
+            e.Set(new Self { Value = e });
+            e = world.Entity().Set(new Other { Value = 20 });
+            e.Set(new Self { Value = e });
+            e = world.Entity().Set(new Other { Value = 20 });
+            e.Set(new Self { Value = e });
+
+            int count = 0;
+            int ownedCount = 0;
+
+            q.Iter(it =>
+            {
+                Column<Self> s = it.Field<Self>(1);
+                Column<Other> o = it.Field<Other>(2);
+
+                if (!it.IsSelf(2))
+                    Assert.Equal(10, o[0].Value);
+                else
+                    foreach (int i in it)
+                    {
+                        Assert.Equal(20, o[i].Value);
+                        ownedCount++;
+                    }
+
+                foreach (int i in it)
+                {
+                    Assert.True(it.Entity(i) == s[i].Value);
+                    count++;
+                }
+            });
+
+            Assert.Equal(5, count);
+            Assert.Equal(2, ownedCount);
+        }
         //
         // [Fact]
         // private void childof_superset_term() {
@@ -452,27 +453,27 @@ namespace Flecs.NET.Tests.Cpp
         //         .Term<Other>().src().up(flecs::ChildOf)
         //         .build();
         //
-        //     var base = world.Entity().set<Other>({10});
+        //     var @base = world.Entity().Set(new Other { Value = 10 });
         //
-        //     auto
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
         //
         //     int count = 0;
         //
         //     q.iter([&](flecs::iter& it, Self *s) {
         //         var o = it.field<const Other>(2);
-        //         Assert.True(!it.is_self(2));
+        //         Assert.True(!it.IsSelf(2));
         //         Assert.Equal(o->value, 10);
         //
-        //         for (var i : it) {
-        //             Assert.True(it.entity(i) == s[i].value);
+        //         foreach (int i in it) {
+        //             Assert.True(it.Entity(i) == s[i].Value);
         //             count ++;
         //         }
         //     });
         //
-        //     Assert.Equal(count, 3);
+        //     Assert.Equal(3, count);
         // }
         //
         // [Fact]
@@ -483,14 +484,14 @@ namespace Flecs.NET.Tests.Cpp
         //         .Term<Other>().src().self().up(flecs::ChildOf)
         //         .build();
         //
-        //     var base = world.Entity().set<Other>({10});
+        //     var @base = world.Entity().Set(new Other { Value = 10 });
         //
-        //     auto
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().set<Other>({20}); e.set<Self>({e});
-        //     e = world.Entity().set<Other>({20}); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().Set(new Other { Value = 20 }); e.Set(new Self { Value = e });
+        //     e = world.Entity().Set(new Other { Value = 20 }); e.Set(new Self { Value = e });
         //
         //     int count = 0;
         //     int owned_count = 0;
@@ -498,17 +499,17 @@ namespace Flecs.NET.Tests.Cpp
         //     q.iter([&](flecs::iter& it, Self *s) {
         //         var o = it.field<const Other>(2);
         //
-        //         if (!it.is_self(2)) {
+        //         if (!it.IsSelf(2)) {
         //             Assert.Equal(o->value, 10);
         //         } else {
-        //             for (var i : it) {
-        //                 Assert.Equal(o[i].value, 20);
+        //             foreach (int i in it) {
+        //                 Assert.Equal(o[i].Value, 20);
         //                 owned_count ++;
         //             }
         //         }
         //
-        //         for (var i : it) {
-        //             Assert.True(it.entity(i) == s[i].value);
+        //         foreach (int i in it) {
+        //             Assert.True(it.Entity(i) == s[i].Value);
         //             count ++;
         //         }
         //     });
@@ -525,22 +526,22 @@ namespace Flecs.NET.Tests.Cpp
         //         .arg(2).src().up()
         //         .build();
         //
-        //     var base = world.Entity().set<Other>({10});
+        //     var @base = world.Entity().Set(new Other { Value = 10 });
         //
-        //     auto
-        //     e = world.Entity().Add(flecs::IsA, base); e.set<Self>({e});
-        //     e = world.Entity().Add(flecs::IsA, base); e.set<Self>({e});
-        //     e = world.Entity().Add(flecs::IsA, base); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().Add(EcsIsA, @base); e.Set(new Self { Value = e });
+        //     e = world.Entity().Add(EcsIsA, @base); e.Set(new Self { Value = e });
+        //     e = world.Entity().Add(EcsIsA, @base); e.Set(new Self { Value = e });
         //
         //     int count = 0;
         //
         //     q.each([&](flecs::entity e, Self& s, Other& o) {
-        //         Assert.True(e == s.value);
-        //         Assert.Equal(o.value, 10);
+        //         Assert.True(e == s.Value);
+        //         Assert.Equal(o.Value, 10);
         //         count ++;
         //     });
         //
-        //     Assert.Equal(count, 3);
+        //     Assert.Equal(3, count);
         // }
         //
         // [Fact]
@@ -551,20 +552,20 @@ namespace Flecs.NET.Tests.Cpp
         //         .arg(2).src().self().up()
         //         .build();
         //
-        //     var base = world.Entity().set<Other>({10});
+        //     var @base = world.Entity().Set(new Other { Value = 10 });
         //
-        //     auto
-        //     e = world.Entity().Add(flecs::IsA, base); e.set<Self>({e});
-        //     e = world.Entity().Add(flecs::IsA, base); e.set<Self>({e});
-        //     e = world.Entity().Add(flecs::IsA, base); e.set<Self>({e});
-        //     e = world.Entity().set<Other>({10}); e.set<Self>({e});
-        //     e = world.Entity().set<Other>({10}); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().Add(EcsIsA, @base); e.Set(new Self { Value = e });
+        //     e = world.Entity().Add(EcsIsA, @base); e.Set(new Self { Value = e });
+        //     e = world.Entity().Add(EcsIsA, @base); e.Set(new Self { Value = e });
+        //     e = world.Entity().Set(new Other { Value = 10 }); e.Set(new Self { Value = e });
+        //     e = world.Entity().Set(new Other { Value = 10 }); e.Set(new Self { Value = e });
         //
         //     int count = 0;
         //
         //     q.each([&](flecs::entity e, Self& s, Other& o) {
-        //         Assert.True(e == s.value);
-        //         Assert.Equal(o.value, 10);
+        //         Assert.True(e == s.Value);
+        //         Assert.Equal(o.Value, 10);
         //         count ++;
         //     });
         //
@@ -579,22 +580,22 @@ namespace Flecs.NET.Tests.Cpp
         //         .arg(2).src().up(flecs::ChildOf)
         //         .build();
         //
-        //     var base = world.Entity().set<Other>({10});
+        //     var @base = world.Entity().Set(new Other { Value = 10 });
         //
-        //     auto
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
         //
         //     int count = 0;
         //
         //     q.each([&](flecs::entity e, Self& s, Other& o) {
-        //         Assert.True(e == s.value);
-        //         Assert.Equal(o.value, 10);
+        //         Assert.True(e == s.Value);
+        //         Assert.Equal(o.Value, 10);
         //         count ++;
         //     });
         //
-        //     Assert.Equal(count, 3);
+        //     Assert.Equal(3, count);
         // }
         //
         // [Fact]
@@ -605,20 +606,20 @@ namespace Flecs.NET.Tests.Cpp
         //         .arg(2).src().self().up(flecs::ChildOf)
         //         .build();
         //
-        //     var base = world.Entity().set<Other>({10});
+        //     var @base = world.Entity().Set(new Other { Value = 10 });
         //
-        //     auto
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().set<Other>({10}); e.set<Self>({e});
-        //     e = world.Entity().set<Other>({10}); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().Set(new Other { Value = 10 }); e.Set(new Self { Value = e });
+        //     e = world.Entity().Set(new Other { Value = 10 }); e.Set(new Self { Value = e });
         //
         //     int count = 0;
         //
         //     q.each([&](flecs::entity e, Self& s, Other& o) {
-        //         Assert.True(e == s.value);
-        //         Assert.Equal(o.value, 10);
+        //         Assert.True(e == s.Value);
+        //         Assert.Equal(o.Value, 10);
         //         count ++;
         //     });
         //
@@ -633,22 +634,22 @@ namespace Flecs.NET.Tests.Cpp
         //         .arg(2).up()
         //         .build();
         //
-        //     var base = world.Entity().set<Other>({10});
+        //     var @base = world.Entity().Set(new Other { Value = 10 });
         //
-        //     auto
-        //     e = world.Entity().is_a(base); e.set<Self>({e});
-        //     e = world.Entity().is_a(base); e.set<Self>({e});
-        //     e = world.Entity().is_a(base); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().is_a(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().is_a(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().is_a(@base); e.Set(new Self { Value = e });
         //
         //     int count = 0;
         //
         //     q.each([&](flecs::entity e, Self& s, Other& o) {
-        //         Assert.True(e == s.value);
-        //         Assert.Equal(o.value, 10);
+        //         Assert.True(e == s.Value);
+        //         Assert.Equal(o.Value, 10);
         //         count ++;
         //     });
         //
-        //     Assert.Equal(count, 3);
+        //     Assert.Equal(3, count);
         // }
         //
         // [Fact]
@@ -656,23 +657,23 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     var q = world.filter_builder<Self, Other>()
-        //         .arg(2).self().up(flecs::IsA)
+        //         .arg(2).self().up(EcsIsA)
         //         .build();
         //
-        //     var base = world.Entity().set<Other>({10});
+        //     var @base = world.Entity().Set(new Other { Value = 10 });
         //
-        //     auto
-        //     e = world.Entity().is_a(base); e.set<Self>({e});
-        //     e = world.Entity().is_a(base); e.set<Self>({e});
-        //     e = world.Entity().is_a(base); e.set<Self>({e});
-        //     e = world.Entity().set<Other>({10}); e.set<Self>({e});
-        //     e = world.Entity().set<Other>({10}); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().is_a(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().is_a(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().is_a(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().Set(new Other { Value = 10 }); e.Set(new Self { Value = e });
+        //     e = world.Entity().Set(new Other { Value = 10 }); e.Set(new Self { Value = e });
         //
         //     int count = 0;
         //
         //     q.each([&](flecs::entity e, Self& s, Other& o) {
-        //         Assert.True(e == s.value);
-        //         Assert.Equal(o.value, 10);
+        //         Assert.True(e == s.Value);
+        //         Assert.Equal(o.Value, 10);
         //         count ++;
         //     });
         //
@@ -687,22 +688,22 @@ namespace Flecs.NET.Tests.Cpp
         //         .arg(2).up(flecs::ChildOf)
         //         .build();
         //
-        //     var base = world.Entity().set<Other>({10});
+        //     var @base = world.Entity().Set(new Other { Value = 10 });
         //
-        //     auto
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
         //
         //     int count = 0;
         //
         //     q.each([&](flecs::entity e, Self& s, Other& o) {
-        //         Assert.True(e == s.value);
-        //         Assert.Equal(o.value, 10);
+        //         Assert.True(e == s.Value);
+        //         Assert.Equal(o.Value, 10);
         //         count ++;
         //     });
         //
-        //     Assert.Equal(count, 3);
+        //     Assert.Equal(3, count);
         // }
         //
         // [Fact]
@@ -713,20 +714,20 @@ namespace Flecs.NET.Tests.Cpp
         //         .arg(2).self().up(flecs::ChildOf)
         //         .build();
         //
-        //     var base = world.Entity().set<Other>({10});
+        //     var @base = world.Entity().Set(new Other { Value = 10 });
         //
-        //     auto
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().child_of(base); e.set<Self>({e});
-        //     e = world.Entity().set<Other>({10}); e.set<Self>({e});
-        //     e = world.Entity().set<Other>({10}); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().child_of(@base); e.Set(new Self { Value = e });
+        //     e = world.Entity().Set(new Other { Value = 10 }); e.Set(new Self { Value = e });
+        //     e = world.Entity().Set(new Other { Value = 10 }); e.Set(new Self { Value = e });
         //
         //     int count = 0;
         //
         //     q.each([&](flecs::entity e, Self& s, Other& o) {
-        //         Assert.True(e == s.value);
-        //         Assert.Equal(o.value, 10);
+        //         Assert.True(e == s.Value);
+        //         Assert.Equal(o.Value, 10);
         //         count ++;
         //     });
         //
@@ -745,9 +746,9 @@ namespace Flecs.NET.Tests.Cpp
         //         .term(Likes, Bob)
         //         .build();
         //
-        //     auto
-        //     e = world.Entity().Add(Likes, Bob); e.set<Self>({e});
-        //     e = world.Entity().Add(Likes, Bob); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().Add(Likes, Bob); e.Set(new Self { Value = e });
+        //     e = world.Entity().Add(Likes, Bob); e.Set(new Self { Value = e });
         //
         //     e = world.Entity().Add(Likes, Alice); e.set<Self>({0});
         //     e = world.Entity().Add(Likes, Alice); e.set<Self>({0});
@@ -755,7 +756,7 @@ namespace Flecs.NET.Tests.Cpp
         //     int count = 0;
         //
         //     q.each([&](flecs::entity e, Self& s) {
-        //         Assert.True(e == s.value);
+        //         Assert.True(e == s.Value);
         //         count ++;
         //     });
         //
@@ -774,12 +775,12 @@ namespace Flecs.NET.Tests.Cpp
         //         .term(Likes, flecs::Wildcard)
         //         .build();
         //
-        //     auto
-        //     e = world.Entity().Add(Likes, Bob); e.set<Self>({e});
-        //     e = world.Entity().Add(Likes, Bob); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().Add(Likes, Bob); e.Set(new Self { Value = e });
+        //     e = world.Entity().Add(Likes, Bob); e.Set(new Self { Value = e });
         //
-        //     e = world.Entity().Add(Likes, Alice); e.set<Self>({e});
-        //     e = world.Entity().Add(Likes, Alice); e.set<Self>({e});
+        //     e = world.Entity().Add(Likes, Alice); e.Set(new Self { Value = e });
+        //     e = world.Entity().Add(Likes, Alice); e.Set(new Self { Value = e });
         //
         //     e = world.Entity(); e.set<Self>({0});
         //     e = world.Entity(); e.set<Self>({0});
@@ -787,7 +788,7 @@ namespace Flecs.NET.Tests.Cpp
         //     int count = 0;
         //
         //     q.each([&](flecs::entity e, Self& s) {
-        //         Assert.True(e == s.value);
+        //         Assert.True(e == s.Value);
         //         count ++;
         //     });
         //
@@ -807,9 +808,9 @@ namespace Flecs.NET.Tests.Cpp
         //         .term(flecs::Wildcard, Alice)
         //         .build();
         //
-        //     auto
-        //     e = world.Entity().Add(Likes, Alice); e.set<Self>({e});
-        //     e = world.Entity().Add(Dislikes, Alice); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().Add(Likes, Alice); e.Set(new Self { Value = e });
+        //     e = world.Entity().Add(Dislikes, Alice); e.Set(new Self { Value = e });
         //
         //     e = world.Entity().Add(Likes, Bob); e.set<Self>({0});
         //     e = world.Entity().Add(Dislikes, Bob); e.set<Self>({0});
@@ -817,7 +818,7 @@ namespace Flecs.NET.Tests.Cpp
         //     int count = 0;
         //
         //     q.each([&](flecs::entity e, Self& s) {
-        //         Assert.True(e == s.value);
+        //         Assert.True(e == s.Value);
         //         count ++;
         //     });
         //
@@ -838,17 +839,17 @@ namespace Flecs.NET.Tests.Cpp
         //         .Term<Likes>(flecs::Wildcard)
         //         .build();
         //
-        //     auto
-        //     e = world.Entity().Add<Likes>(Alice); e.set<Self>({e});
+        //     var
+        //     e = world.Entity().Add<Likes>(Alice); e.Set(new Self { Value = e });
         //     e = world.Entity().Add(Dislikes, Alice); e.set<Self>({0});
         //
-        //     e = world.Entity().Add<Likes>(Bob); e.set<Self>({e});
+        //     e = world.Entity().Add<Likes>(Bob); e.Set(new Self { Value = e });
         //     e = world.Entity().Add(Dislikes, Bob); e.set<Self>({0});
         //
         //     int count = 0;
         //
         //     q.each([&](flecs::entity e, Self& s) {
-        //         Assert.True(e == s.value);
+        //         Assert.True(e == s.Value);
         //         count ++;
         //     });
         //
@@ -920,9 +921,9 @@ namespace Flecs.NET.Tests.Cpp
         // private void explicit_object_w_id() {
         //     using World world = World.Create();
         //
-        //     var Likes = world.entity("Likes");
-        //     var Alice = world.entity("Alice");
-        //     var Bob = world.entity("Bob");
+        //     var Likes = world.Entity("Likes");
+        //     var Alice = world.Entity("Alice");
+        //     var Bob = world.Entity("Bob");
         //
         //     var q = world.filter_builder<>()
         //         .term(Likes).second(Alice)
@@ -1122,7 +1123,7 @@ namespace Flecs.NET.Tests.Cpp
         //     int count = 0;
         //
         //     f.each([&](flecs::entity e, Self& s) {
-        //         Assert.True(e == s.value);
+        //         Assert.True(e == s.Value);
         //         count ++;
         //     });
         //
@@ -1136,13 +1137,13 @@ namespace Flecs.NET.Tests.Cpp
         //     var f = world.filter<Self>();
         //
         //     var e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     Assert.Equal(filter_arg(f), 3);
         // }
@@ -1152,7 +1153,7 @@ namespace Flecs.NET.Tests.Cpp
         //     int count = 0;
         //
         //     f.each([&](flecs::entity e, Self& s) {
-        //         Assert.True(e == s.value);
+        //         Assert.True(e == s.Value);
         //         count ++;
         //     });
         //
@@ -1166,13 +1167,13 @@ namespace Flecs.NET.Tests.Cpp
         //     var f = world.filter<Self>();
         //
         //     var e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     Assert.Equal(filter_move_arg(world.filter<Self>()), 3);
         // }
@@ -1187,24 +1188,24 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     var e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     var f = filter_return(ecs);
         //
         //     int count = 0;
         //
         //     f.each([&](flecs::entity e, Self& s) {
-        //         Assert.True(e == s.value);
+        //         Assert.True(e == s.Value);
         //         count ++;
         //     });
         //
-        //     Assert.Equal(count, 3);
+        //     Assert.Equal(3, count);
         // }
         //
         // [Fact]
@@ -1212,13 +1213,13 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     var e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     var f = world.filter<Self>();
         //
@@ -1227,11 +1228,11 @@ namespace Flecs.NET.Tests.Cpp
         //     int count = 0;
         //
         //     f_2.each([&](flecs::entity e, Self& s) {
-        //         Assert.True(e == s.value);
+        //         Assert.True(e == s.Value);
         //         count ++;
         //     });
         //
-        //     Assert.Equal(count, 3);
+        //     Assert.Equal(3, count);
         // }
         //
         // [Fact]
@@ -1239,22 +1240,22 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     var e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     e = world.Entity();
-        //     e.set<Self>({e});
+        //     e.Set(new Self { Value = e });
         //
         //     int count = 0;
         //
         //     world.each([&](flecs::entity e, Self& s) {
-        //         Assert.True(e == s.value);
+        //         Assert.True(e == s.Value);
         //         count ++;
         //     });
         //
-        //     Assert.Equal(count, 3);
+        //     Assert.Equal(3, count);
         // }
         //
         // [Fact]
@@ -1262,27 +1263,27 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     var e = world.Entity();
-        //     e.set<Self>({e})
+        //     e.Set(new Self { Value = e })
         //      .Set(new Position { X = 10, Y = 20 });
         //
         //     e = world.Entity();
-        //     e.set<Self>({e})
+        //     e.Set(new Self { Value = e })
         //         .Set(new Position { X = 10, Y = 20 });
         //
         //     e = world.Entity();
-        //     e.set<Self>({e})
+        //     e.Set(new Self { Value = e })
         //      .Set(new Position { X = 10, Y = 20 });
         //
         //     int count = 0;
         //
         //     world.each([&](flecs::entity e, Self& s, Position& p) {
-        //         Assert.True(e == s.value);
+        //         Assert.True(e == s.Value);
         //         Assert.Equal(p.x, 10);
         //         Assert.Equal(p.y, 20);
         //         count ++;
         //     });
         //
-        //     Assert.Equal(count, 3);
+        //     Assert.Equal(3, count);
         // }
         //
         // [Fact]
@@ -1307,7 +1308,7 @@ namespace Flecs.NET.Tests.Cpp
         //         count ++;
         //     });
         //
-        //     Assert.Equal(count, 3);
+        //     Assert.Equal(3, count);
         // }
         //
         // [Fact]
@@ -1342,7 +1343,7 @@ namespace Flecs.NET.Tests.Cpp
         //         count ++;
         //     });
         //
-        //     Assert.Equal(count, 3);
+        //     Assert.Equal(3, count);
         // }
         //
         // [Fact]
@@ -1379,7 +1380,7 @@ namespace Flecs.NET.Tests.Cpp
         //     int count = 0;
         //     f.iter([&](flecs::iter& it) {
         //         Assert.Equal(it.count(), 1);
-        //         Assert.True(it.entity(0) == e);
+        //         Assert.True(it.Entity(0) == e);
         //         Assert.Equal(it.field_count(), 10);
         //         count ++;
         //     });
@@ -1441,7 +1442,7 @@ namespace Flecs.NET.Tests.Cpp
         //     int count = 0;
         //     f.iter([&](flecs::iter& it) {
         //         Assert.Equal(it.count(), 1);
-        //         Assert.True(it.entity(0) == e);
+        //         Assert.True(it.Entity(0) == e);
         //         Assert.Equal(it.field_count(), 20);
         //         count ++;
         //     });
@@ -1482,7 +1483,7 @@ namespace Flecs.NET.Tests.Cpp
         // private void name_arg() {
         //     using World world = World.Create();
         //
-        //     var e = world.entity("Foo").Set(new Position { X = 10, Y = 20 });
+        //     var e = world.Entity("Foo").Set(new Position { X = 10, Y = 20 });
         //
         //     var f = world.filter_builder<Position>()
         //         .arg(1).src().name("Foo")
@@ -1513,7 +1514,7 @@ namespace Flecs.NET.Tests.Cpp
         //     f.iter([&](flecs::iter& it) {
         //         var p = it.field<const Position>(1);
         //         Assert.True(it.is_readonly(1));
-        //         for (var i : it) {
+        //         foreach (int i in it) {
         //             count ++;
         //             Assert.Equal(p[i].x, 10);
         //             Assert.Equal(p[i].y, 20);
@@ -1570,8 +1571,8 @@ namespace Flecs.NET.Tests.Cpp
         // private void 2_terms_w_expr() {
         //     using World world = World.Create();
         //
-        //     var a = world.entity("A");
-        //     var b = world.entity("B");
+        //     var a = world.Entity("A");
+        //     var b = world.Entity("B");
         //
         //     var e1 = world.Entity().Add(a).Add(b);
         //
@@ -1583,7 +1584,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     int count = 0;
         //     f.each([&](flecs::iter& it, size_t index) {
-        //         if (it.entity(index) == e1) {
+        //         if (it.Entity(index) == e1) {
         //             Assert.True(it.id(1) == a);
         //             Assert.True(it.id(2) == b);
         //             count ++;
@@ -1599,8 +1600,8 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     using World world = World.Create();
         //
-        //     world.entity("A");
-        //     world.entity("B");
+        //     world.Entity("A");
+        //     world.Entity("B");
         //
         //     test_expect_abort();
         //
@@ -1712,7 +1713,7 @@ namespace Flecs.NET.Tests.Cpp
         //     int count = 0;
         //     f.iter([&](flecs::iter& it) {
         //         const var p = it.field<Position>(1);
-        //         for (var i : it) {
+        //         foreach (int i in it) {
         //             p[i].x += 1;
         //             p[i].y += 2;
         //
@@ -1737,9 +1738,9 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     var f = world.filter<Position>();
         //
-        //     var base = world.prefab().Set(new Position { X = 10, Y = 20 });
-        //     world.Entity().is_a(base);
-        //     world.Entity().is_a(base);
+        //     var @base = world.prefab().Set(new Position { X = 10, Y = 20 });
+        //     world.Entity().is_a(@base);
+        //     world.Entity().is_a(@base);
         //
         //     int count = 0;
         //     f.iter([&](flecs::iter& it) {
@@ -1760,9 +1761,9 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     var f = world.filter<Position>();
         //
-        //     var base = world.prefab().Set(new Position { X = 10, Y = 20 });
-        //     world.Entity().is_a(base);
-        //     world.Entity().is_a(base);
+        //     var @base = world.prefab().Set(new Position { X = 10, Y = 20 });
+        //     world.Entity().is_a(@base);
+        //     world.Entity().is_a(@base);
         //
         //     int count = 0;
         //     f.iter([&](flecs::iter& it) {
@@ -1804,7 +1805,7 @@ namespace Flecs.NET.Tests.Cpp
         // private void with_name() {
         //     using World world = World.Create();
         //
-        //     world.component<Velocity>();
+        //     world.Component<Velocity>();
         //
         //     flecs::filter<> q =
         //         world.filter_builder()
@@ -1876,9 +1877,9 @@ namespace Flecs.NET.Tests.Cpp
         // private void with_pair_name() {
         //     using World world = World.Create();
         //
-        //     flecs::entity Likes = world.entity("Likes");
-        //     flecs::entity Apples = world.entity("Apples");
-        //     flecs::entity Pears = world.entity("Pears");
+        //     flecs::entity Likes = world.Entity("Likes");
+        //     flecs::entity Apples = world.Entity("Apples");
+        //     flecs::entity Pears = world.Entity("Pears");
         //
         //     flecs::filter<> q =
         //         world.filter_builder()
@@ -1955,8 +1956,8 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     struct Likes { };
-        //     flecs::entity Apples = world.entity("Apples");
-        //     flecs::entity Pears = world.entity("Pears");
+        //     flecs::entity Apples = world.Entity("Apples");
+        //     flecs::entity Pears = world.Entity("Pears");
         //
         //     flecs::filter<> q =
         //         world.filter_builder()
@@ -2024,7 +2025,7 @@ namespace Flecs.NET.Tests.Cpp
         // private void without_name() {
         //     using World world = World.Create();
         //
-        //     world.component<Velocity>();
+        //     world.Component<Velocity>();
         //
         //     flecs::filter<> q =
         //         world.filter_builder()
@@ -2096,9 +2097,9 @@ namespace Flecs.NET.Tests.Cpp
         // private void without_pair_name() {
         //     using World world = World.Create();
         //
-        //     flecs::entity Likes = world.entity("Likes");
-        //     flecs::entity Apples = world.entity("Apples");
-        //     flecs::entity Pears = world.entity("Pears");
+        //     flecs::entity Likes = world.Entity("Likes");
+        //     flecs::entity Apples = world.Entity("Apples");
+        //     flecs::entity Pears = world.Entity("Pears");
         //
         //     flecs::filter<> q =
         //         world.filter_builder()
@@ -2175,8 +2176,8 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     struct Likes { };
-        //     flecs::entity Apples = world.entity("Apples");
-        //     flecs::entity Pears = world.entity("Pears");
+        //     flecs::entity Apples = world.Entity("Apples");
+        //     flecs::entity Pears = world.Entity("Pears");
         //
         //     flecs::filter<> q =
         //         world.filter_builder()
@@ -2237,7 +2238,7 @@ namespace Flecs.NET.Tests.Cpp
         // private void write_name() {
         //     using World world = World.Create();
         //
-        //     world.component<Position>();
+        //     world.Component<Position>();
         //
         //     var q =
         //         world.filter_builder()
@@ -2254,7 +2255,7 @@ namespace Flecs.NET.Tests.Cpp
         // private void write_component() {
         //     using World world = World.Create();
         //
-        //     world.component<Position>();
+        //     world.Component<Position>();
         //
         //     var q =
         //         world.filter_builder()
@@ -2290,8 +2291,8 @@ namespace Flecs.NET.Tests.Cpp
         // private void write_pair_name() {
         //     using World world = World.Create();
         //
-        //     flecs::entity Likes = world.entity("Likes");
-        //     flecs::entity Apples = world.entity("Apples");
+        //     flecs::entity Likes = world.Entity("Likes");
+        //     flecs::entity Apples = world.Entity("Apples");
         //
         //     flecs::filter<> q =
         //         world.filter_builder()
@@ -2348,7 +2349,7 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     struct Likes { };
-        //     flecs::entity Apples = world.entity("Apples");
+        //     flecs::entity Apples = world.Entity("Apples");
         //
         //     flecs::filter<> q =
         //         world.filter_builder()
@@ -2397,7 +2398,7 @@ namespace Flecs.NET.Tests.Cpp
         // private void read_name() {
         //     using World world = World.Create();
         //
-        //     world.component<Position>();
+        //     world.Component<Position>();
         //
         //     var q =
         //         world.filter_builder()
@@ -2414,7 +2415,7 @@ namespace Flecs.NET.Tests.Cpp
         // private void read_component() {
         //     using World world = World.Create();
         //
-        //     world.component<Position>();
+        //     world.Component<Position>();
         //
         //     var q =
         //         world.filter_builder()
@@ -2450,8 +2451,8 @@ namespace Flecs.NET.Tests.Cpp
         // private void read_pair_name() {
         //     using World world = World.Create();
         //
-        //     flecs::entity Likes = world.entity("Likes");
-        //     flecs::entity Apples = world.entity("Apples");
+        //     flecs::entity Likes = world.Entity("Likes");
+        //     flecs::entity Apples = world.Entity("Apples");
         //
         //     flecs::filter<> q =
         //         world.filter_builder()
@@ -2508,7 +2509,7 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     struct Likes { };
-        //     flecs::entity Apples = world.entity("Apples");
+        //     flecs::entity Apples = world.Entity("Apples");
         //
         //     flecs::filter<> q =
         //         world.filter_builder()
@@ -2573,7 +2574,7 @@ namespace Flecs.NET.Tests.Cpp
         //     int count = 0;
         //     q.each(stage, [&](flecs::iter& it, size_t i, Position&) {
         //         Assert.True(it.world() == stage);
-        //         Assert.True(it.entity(i) == e1);
+        //         Assert.True(it.Entity(i) == e1);
         //         count ++;
         //     });
         //

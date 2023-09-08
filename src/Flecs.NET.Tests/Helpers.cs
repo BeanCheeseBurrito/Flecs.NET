@@ -55,6 +55,11 @@ public struct Parent
     }
 }
 
+public struct Other
+{
+    public int Value { get; set; }
+}
+
 public struct Pod
 {
     public int Value { get; set; }
@@ -84,6 +89,10 @@ public struct MyTag
 }
 
 public struct Tgt
+{
+}
+
+public struct Rel
 {
 }
 
