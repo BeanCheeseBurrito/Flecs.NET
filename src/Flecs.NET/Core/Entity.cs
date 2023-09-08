@@ -1005,6 +1005,39 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Short for Has(EcsChildOf, entity).
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public bool IsChildOf(ulong entity)
+        {
+            Assert.True(!Macros.IsPair(entity), "Cannot use pairs as an argument.");
+            return Has(EcsChildOf, entity);
+        }
+
+        /// <summary>
+        ///    Short for Has(EcsChildOf, entity).
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public bool IsChildOf<T>()
+        {
+            return IsChildOf(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Short for Has(EcsChildOf, entity).
+        /// </summary>
+        /// <param name="enumMember"></param>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        public bool IsChildOf<TEnum>(TEnum enumMember) where TEnum : Enum
+        {
+            ulong enumId = EnumType<TEnum>.Id(enumMember, World);
+            return IsChildOf(enumId);
+        }
+
+        /// <summary>
         ///     Add an entity to entity.
         /// </summary>
         /// <param name="id"></param>
