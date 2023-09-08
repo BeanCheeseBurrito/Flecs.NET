@@ -79,61 +79,412 @@ namespace Flecs.NET.Core
         public delegate int OrderByAction(ulong e1, void* ptr1, ulong e2, void* ptr2);
     }
 
-    // Builtin pipeline tags
+    // Built-in global entities, tags, and flags.
     public static partial class Ecs
     {
+        // Built-in term flags
+
         /// <summary>
-        ///     Reference to EcsOnStart tag.
+        ///     Equivalent to <see cref="EcsSelf"/>
+        /// </summary>
+        public const uint Self = EcsSelf;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsUp"/>
+        /// </summary>
+        public const uint Up = EcsUp;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsDown"/>
+        /// </summary>
+        public const uint Down = EcsDown;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsCascade"/>
+        /// </summary>
+        public const uint Cascade = EcsCascade;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsParent"/>
+        /// </summary>
+        public const uint Parent = EcsParent;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsIsVariable"/>
+        /// </summary>
+        public const uint IsVariable = EcsIsVariable;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsIsEntity"/>
+        /// </summary>
+        public const uint IsEntity = EcsIsEntity;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsFilter"/>
+        /// </summary>
+        public const uint Filter = EcsFilter;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsTraverseFlags"/>
+        /// </summary>
+        public const uint TraverseFlags = EcsTraverseFlags;
+
+        // Build-in id flags
+
+        /// <summary>
+        ///     Reference to <see cref="ECS_PAIR"/>.
+        /// </summary>
+        public static ref ulong Pair => ref ECS_PAIR;
+
+        /// <summary>
+        ///     Reference to <see cref="ECS_OVERRIDE"/>.
+        /// </summary>
+        public static ref ulong Override => ref ECS_OVERRIDE;
+
+        /// <summary>
+        ///     Reference to <see cref="ECS_TOGGLE"/>.
+        /// </summary>
+        public static ref ulong Toggle => ref ECS_TOGGLE;
+
+        // Built-in tags
+
+        /// <summary>
+        ///     Reference to <see cref="EcsQuery"/>.
+        /// </summary>
+        public static ref ulong Query => ref EcsQuery;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsObserver"/>.
+        /// </summary>
+        public static ref ulong Observer => ref EcsObserver;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsPrivate"/>.
+        /// </summary>
+        public static ref ulong Private => ref EcsPrivate;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsModule"/>.
+        /// </summary>
+        public static ref ulong Module => ref EcsModule;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsPrefab"/>.
+        /// </summary>
+        public static ref ulong Prefab => ref EcsPrefab;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsDisabled"/>.
+        /// </summary>
+        public static ref ulong Disabled => ref EcsDisabled;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsEmpty"/>.
+        /// </summary>
+        public static ref ulong Empty => ref EcsEmpty;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsMonitor"/>.
+        /// </summary>
+        public static ref ulong MonitorId => ref EcsMonitor;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsSystem"/>.
+        /// </summary>
+        public static ref ulong System => ref EcsSystem;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDEcsPipelineID_"/>.
+        /// </summary>
+        public static ref ulong Pipeline => ref FLECS_IDEcsPipelineID_;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsPhase"/>.
+        /// </summary>
+        public static ref ulong Phase => ref EcsPhase;
+
+        // Built-in event tags
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOnAdd"/>.
+        /// </summary>
+        public static ref ulong OnAdd => ref EcsOnAdd;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOnRemove"/>.
+        /// </summary>
+        public static ref ulong OnRemove => ref EcsOnRemove;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOnSet"/>.
+        /// </summary>
+        public static ref ulong OnSet => ref EcsOnSet;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsUnSet"/>.
+        /// </summary>
+        public static ref ulong UnSet => ref EcsUnSet;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOnTableCreate"/>.
+        /// </summary>
+        public static ref ulong OnTableCreate => ref EcsOnTableCreate;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOnTableDelete"/>.
+        /// </summary>
+        public static ref ulong OnTableDelete => ref EcsOnTableDelete;
+
+        // Built-in entity ids
+
+        /// <summary>
+        ///     Reference to <see cref="EcsFlecs"/>.
+        /// </summary>
+        public static ref ulong Flecs => ref EcsFlecs;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsFlecsCore"/>.
+        /// </summary>
+        public static ref ulong FlecsCore => ref EcsFlecsCore;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsWorld"/>.
+        /// </summary>
+        public static ref ulong World => ref EcsWorld;
+
+        // Relationship properties
+
+        /// <summary>
+        ///     Reference to <see cref="EcsWildcard"/>.
+        /// </summary>
+        public static ref ulong Wildcard => ref EcsWildcard;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsAny"/>.
+        /// </summary>
+        public static ref ulong Any => ref EcsAny;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsThis"/>.
+        /// </summary>
+        public static ref ulong This => ref EcsThis;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsTransitive"/>.
+        /// </summary>
+        public static ref ulong Transitive => ref EcsTransitive;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsReflexive"/>.
+        /// </summary>
+        public static ref ulong Reflexive => ref EcsReflexive;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsFinal"/>.
+        /// </summary>
+        public static ref ulong Final => ref EcsFinal;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsDontInherit"/>.
+        /// </summary>
+        public static ref ulong DontInherit => ref EcsDontInherit;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsTag"/>.
+        /// </summary>
+        public static ref ulong Tag => ref EcsTag;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsUnion"/>.
+        /// </summary>
+        public static ref ulong Union => ref EcsUnion;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsExclusive"/>.
+        /// </summary>
+        public static ref ulong Exclusive => ref EcsExclusive;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsAcyclic"/>.
+        /// </summary>
+        public static ref ulong Acyclic => ref EcsAcyclic;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsTraversable"/>.
+        /// </summary>
+        public static ref ulong Traversable => ref EcsTraversable;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsSymmetric"/>.
+        /// </summary>
+        public static ref ulong Symmetric => ref EcsSymmetric;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsWith"/>.
+        /// </summary>
+        public static ref ulong With => ref EcsWith;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOneOf"/>.
+        /// </summary>
+        public static ref ulong OneOf => ref EcsOneOf;
+
+        // Built-in relationships
+
+        /// <summary>
+        ///     Reference to <see cref="EcsIsA"/>.
+        /// </summary>
+        public static ref ulong IsA => ref EcsIsA;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsChildOf"/>.
+        /// </summary>
+        public static ref ulong ChildOf => ref EcsChildOf;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsDependsOn"/>.
+        /// </summary>
+        public static ref ulong DependsOn => ref EcsDependsOn;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsSlotOf"/>.
+        /// </summary>
+        public static ref ulong SlotOf => ref EcsSlotOf;
+
+        // Built-in identifiers
+
+        /// <summary>
+        ///     Reference to <see cref="EcsName"/>.
+        /// </summary>
+        public static ref ulong Name => ref EcsName;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsSymbol"/>.
+        /// </summary>
+        public static ref ulong Symbol => ref EcsSymbol;
+
+        // Cleanup policies
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOnDelete"/>.
+        /// </summary>
+        public static ref ulong OnDelete => ref EcsOnDelete;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOnDeleteTarget"/>.
+        /// </summary>
+        public static ref ulong OnDeleteTarget => ref EcsOnDeleteTarget;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsRemove"/>.
+        /// </summary>
+        public static ref ulong Remove => ref EcsRemove;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsDelete"/>.
+        /// </summary>
+        public static ref ulong Delete => ref EcsDelete;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsPanic"/>.
+        /// </summary>
+        public static ref ulong Panic => ref EcsPanic;
+
+        // Misc
+
+        /// <summary>
+        ///     Reference to <see cref="EcsFlatten"/>.
+        /// </summary>
+        public static ref ulong Flatten => ref EcsFlatten;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsDefaultChildComponent"/>.
+        /// </summary>
+        public static ref ulong DefaultChildComponent => ref EcsDefaultChildComponent;
+
+        // Built-in predicates for comparing entity ids in queries. Only supported by rules.
+
+        /// <summary>
+        ///     Reference to <see cref="EcsPredEq"/>.
+        /// </summary>
+        public static ref ulong PredEq => ref EcsPredEq;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsPredMatch"/>.
+        /// </summary>
+        public static ref ulong PredMatch => ref EcsPredMatch;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsPredLookup"/>.
+        /// </summary>
+        public static ref ulong PredLookup => ref EcsPredLookup;
+
+        // Built-in marker entities for query scopes
+
+        /// <summary>
+        ///     Reference to <see cref="EcsScopeOpen"/>.
+        /// </summary>
+        public static ref ulong ScopeOpen => ref EcsScopeOpen;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsScopeClose"/>.
+        /// </summary>
+        public static ref ulong ScopeClose => ref EcsScopeClose;
+
+        // Built-in pipeline tags
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOnStart"/>.
         /// </summary>
         public static ref ulong OnStart => ref EcsOnStart;
 
         /// <summary>
-        ///     Reference to EcsPreFrame tag.
+        ///     Reference to <see cref="EcsPreFrame"/>.
         /// </summary>
         public static ref ulong PreFrame => ref EcsPreFrame;
 
         /// <summary>
-        ///     Reference to EcsOnLoad tag.
+        ///     Reference to <see cref="EcsOnLoad"/>.
         /// </summary>
         public static ref ulong OnLoad => ref EcsOnLoad;
 
         /// <summary>
-        ///     Reference to EcsPostLoad tag.
+        ///     Reference to <see cref="EcsPostLoad"/>.
         /// </summary>
         public static ref ulong PostLoad => ref EcsPostLoad;
 
         /// <summary>
-        ///     Reference to EcsPreUpdate tag.
+        ///     Reference to <see cref="EcsPreUpdate"/>.
         /// </summary>
         public static ref ulong PreUpdate => ref EcsPreUpdate;
 
         /// <summary>
-        ///     Reference to EcsOnUpdate tag.
+        ///     Reference to <see cref="EcsOnUpdate"/>.
         /// </summary>
         public static ref ulong OnUpdate => ref EcsOnUpdate;
 
         /// <summary>
-        ///     Reference to EcsOnValidate tag.
+        ///     Reference to <see cref="EcsOnValidate"/>.
         /// </summary>
         public static ref ulong OnValidate => ref EcsOnValidate;
 
         /// <summary>
-        ///     Reference to EcsPostUpdate tag.
+        ///     Reference to <see cref="EcsPostUpdate"/>.
         /// </summary>
         public static ref ulong PostUpdate => ref EcsPostUpdate;
 
         /// <summary>
-        ///     Reference to EcsPreStore tag.
+        ///     Reference to <see cref="EcsPreStore"/>.
         /// </summary>
         public static ref ulong PreStore => ref EcsPreStore;
 
         /// <summary>
-        ///     Reference to EcsOnStore tag.
+        ///     Reference to <see cref="EcsOnStore"/>.
         /// </summary>
         public static ref ulong OnStore => ref EcsOnStore;
 
         /// <summary>
-        ///     Reference to EcsPostFrame tag.
+        ///     Reference to <see cref="EcsPostFrame"/>.
         /// </summary>
         public static ref ulong PostFrame => ref EcsPostFrame;
     }
