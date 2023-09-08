@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET.Tests", "src\Flec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET.Native", "src\Flecs.NET.Native\Flecs.NET.Native.csproj", "{C20BC4CB-D946-44C1-A003-3236781F650A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET.Benchmarks", "src\Flecs.NET.Benchmarks\Flecs.NET.Benchmarks.csproj", "{E92A406C-7470-44C7-9C1D-5613D9209A63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{C20BC4CB-D946-44C1-A003-3236781F650A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C20BC4CB-D946-44C1-A003-3236781F650A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C20BC4CB-D946-44C1-A003-3236781F650A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E92A406C-7470-44C7-9C1D-5613D9209A63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E92A406C-7470-44C7-9C1D-5613D9209A63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E92A406C-7470-44C7-9C1D-5613D9209A63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E92A406C-7470-44C7-9C1D-5613D9209A63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
