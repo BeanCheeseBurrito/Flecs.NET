@@ -78,4 +78,63 @@ namespace Flecs.NET.Core
         /// </summary>
         public delegate int OrderByAction(ulong e1, void* ptr1, ulong e2, void* ptr2);
     }
+
+    // Builtin pipeline tags
+    public static partial class Ecs
+    {
+        /// <summary>
+        ///     Reference to EcsOnStart tag.
+        /// </summary>
+        public static ref ulong OnStart => ref EcsOnStart;
+
+        /// <summary>
+        ///     Reference to EcsPreFrame tag.
+        /// </summary>
+        public static ref ulong PreFrame => ref EcsPreFrame;
+
+        /// <summary>
+        ///     Reference to EcsOnLoad tag.
+        /// </summary>
+        public static ref ulong OnLoad => ref EcsOnLoad;
+
+        /// <summary>
+        ///     Reference to EcsPostLoad tag.
+        /// </summary>
+        public static ref ulong PostLoad => ref EcsPostLoad;
+
+        /// <summary>
+        ///     Reference to EcsPreUpdate tag.
+        /// </summary>
+        public static ref ulong PreUpdate => ref EcsPreUpdate;
+
+        /// <summary>
+        ///     Reference to EcsOnUpdate tag.
+        /// </summary>
+        public static ref ulong OnUpdate => ref EcsOnUpdate;
+
+        /// <summary>
+        ///     Reference to EcsOnValidate tag.
+        /// </summary>
+        public static ref ulong OnValidate => ref EcsOnValidate;
+
+        /// <summary>
+        ///     Reference to EcsPostUpdate tag.
+        /// </summary>
+        public static ref ulong PostUpdate => ref EcsPostUpdate;
+
+        /// <summary>
+        ///     Reference to EcsPreStore tag.
+        /// </summary>
+        public static ref ulong PreStore => ref EcsPreStore;
+
+        /// <summary>
+        ///     Reference to EcsOnStore tag.
+        /// </summary>
+        public static ref ulong OnStore => ref EcsOnStore;
+
+        /// <summary>
+        ///     Reference to EcsPostFrame tag.
+        /// </summary>
+        public static ref ulong PostFrame => ref EcsPostFrame;
+    }
 }
