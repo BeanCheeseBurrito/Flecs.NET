@@ -23,7 +23,6 @@
 #if Cpp_Observers_Basics
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create(args);
 
@@ -31,14 +30,14 @@ using World world = World.Create(args);
 world.Observer(
     filter: world.FilterBuilder().Term<Position>(),
     observer: world.ObserverBuilder()
-        .Event(EcsOnAdd)
-        .Event(EcsOnRemove)
-        .Event(EcsOnSet),
+        .Event(Ecs.OnAdd)
+        .Event(Ecs.OnRemove)
+        .Event(Ecs.OnSet),
     callback: (Iter it, int i) =>
     {
         Column<Position> p = it.Field<Position>(1);
 
-        if (it.Event() == EcsOnAdd)
+        if (it.Event() == Ecs.OnAdd)
         {
             // No assumptions about the component value should be made here. If
             // a ctor for the component was registered it will be called before

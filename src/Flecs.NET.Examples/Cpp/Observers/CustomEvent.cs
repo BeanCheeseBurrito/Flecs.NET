@@ -10,7 +10,6 @@
 #if Cpp_Observers_CustomEvent
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create(args);
 

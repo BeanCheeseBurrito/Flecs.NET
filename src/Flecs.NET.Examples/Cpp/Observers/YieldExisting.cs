@@ -8,7 +8,6 @@
 #if Cpp_Observers_YieldExisting
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create(args);
 
@@ -20,7 +19,7 @@ world.Entity("e2").Set(new Position { X = 20, Y = 30 });
 world.Observer(
     filter: world.FilterBuilder().Term<Position>(),
     observer: world.ObserverBuilder()
-        .Event(EcsOnSet)
+        .Event(Ecs.OnSet)
         .YieldExisting(),
     callback: (Iter it, int i) =>
     {

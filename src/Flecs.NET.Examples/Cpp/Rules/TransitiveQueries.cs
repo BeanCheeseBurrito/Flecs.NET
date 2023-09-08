@@ -7,18 +7,17 @@
 // San Francisco is located in the United States
 // Therefore Bob also lives in the United States.
 //
-// An example of transitivity can be seen in the component_inheritance example.
+// An example of transitivity can be seen in the ComponentInheritance example.
 // This example uses the builtin IsA relationship, which is transitive. This
 // example shows how to achieve similar behavior with a user-defined relationship.
 #if Cpp_Rules_TransitiveQueries
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create();
 
 // Register the LocatedIn relationship as transitive
-world.Component<LocatedIn>().Entity.Add(EcsTransitive);
+world.Component<LocatedIn>().Entity.Add(Ecs.Transitive);
 
 // Populate the store with locations
 Entity earth = world.Entity("Earth")

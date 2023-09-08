@@ -1,13 +1,12 @@
 #if Cpp_Relationships_ExclusiveRelations
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create(args);
 
 // Register Platoon as exclusive relationship. This ensures that an entity
 // can only belong to a single Platoon.
-world.Component<Platoon>().Entity.Add(EcsExclusive);
+world.Component<Platoon>().Entity.Add(Ecs.Exclusive);
 
 // Create two platoons
 Entity platoon1 = world.Entity();
@@ -25,7 +24,7 @@ Console.WriteLine($"Unit in platoon 2: {unit.Has<Platoon>(platoon2)}");
 Console.WriteLine();
 
 // Add unit to platoon 2. Because Platoon is an exclusive relationship, this
-// both removes (Platoon, platoon_1) and adds (Platoon, platoon_2) in a
+// both removes (Platoon, platoon1) and adds (Platoon, platoon2) in a
 // single operation.
 unit.Add<Platoon>(platoon2);
 

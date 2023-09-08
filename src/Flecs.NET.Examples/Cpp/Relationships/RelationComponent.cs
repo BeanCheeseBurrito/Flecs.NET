@@ -4,7 +4,6 @@
 #if Cpp_Relationships_RelationComponent
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create(args);
 
@@ -30,13 +29,13 @@ Console.WriteLine($"expires: {e.Timeout}");
 
 // You can prevent a pair from assuming the type of a component by adding
 // the Tag property to a relationship:
-world.Component<MustHave>().Entity.Add(EcsTag);
+world.Component<MustHave>().Entity.Add(Ecs.Tag);
 
 // Even though Position is a component, <MustHave, Position> contains no
 // data because MustHave has the Tag property.
 world.Entity().Add<MustHave, Position>();
 
-// The id::type_id method can be used to find the component type for a pair:
+// The Id.TypeId method can be used to find the component type for a pair:
 Console.WriteLine(world.Pair<Requires, Gigawatts>().TypeId().Path());
 Console.WriteLine(world.Pair<Gigawatts, Requires>().TypeId().Path());
 Console.WriteLine(world.Pair<Expires, Position>().TypeId().Path());

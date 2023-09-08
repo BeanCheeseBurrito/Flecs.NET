@@ -1,20 +1,19 @@
 #if Cpp_Relationships_SymmetricRelations
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create(args);
 
 // Register TradesWith as symmetric relationship. Symmetric relationships
 // go both ways, adding (R, B) to A will also add (R, A) to B.
-world.Component<TradesWith>().Entity.Add(EcsSymmetric);
+world.Component<TradesWith>().Entity.Add(Ecs.Symmetric);
 
 // Create two players
 Entity player1 = world.Entity();
 Entity player2 = world.Entity();
 
-// Add (TradesWith, player_2) to player_1. This also adds
-// (TradesWith, player_1) to player_2.
+// Add (TradesWith, player2) to player1. This also adds
+// (TradesWith, player1) to player2.
 player1.Add<TradesWith>(player2);
 
 // Log platoon of unit

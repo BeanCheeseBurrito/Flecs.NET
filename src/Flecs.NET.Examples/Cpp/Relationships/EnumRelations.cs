@@ -15,7 +15,6 @@
 #if Cpp_Relationships_EnumRelations
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create(args);
 
@@ -47,7 +46,7 @@ world.Entity().Add(Tile.Sand).Add(TileStatus.Occupied);
 
 // Iterate all entities with a Tile relationship
 using Filter filter1 = world.Filter(
-    filter: world.FilterBuilder().With<Tile>(EcsWildcard)
+    filter: world.FilterBuilder().With<Tile>(Ecs.Wildcard)
 );
 
 filter1.Each((Iter it, int i) =>
@@ -64,7 +63,7 @@ filter1.Each((Iter it, int i) =>
 // Iterate only occupied tiles
 using Filter filter2 = world.Filter(
     filter: world.FilterBuilder()
-        .With<Tile>(EcsWildcard)
+        .With<Tile>(Ecs.Wildcard)
         .With(TileStatus.Occupied)
 );
 

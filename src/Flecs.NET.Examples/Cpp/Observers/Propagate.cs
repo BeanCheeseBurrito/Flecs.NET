@@ -12,7 +12,6 @@
 #if Cpp_Observers_Propagate
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create(args);
 
@@ -21,7 +20,7 @@ world.Observer(
     filter: world.FilterBuilder()
         .Term<Position>()
         .Term<Position>().Parent(), // select 2nd Position from parent
-    observer: world.ObserverBuilder().Event(EcsOnSet),
+    observer: world.ObserverBuilder().Event(Ecs.OnSet),
     callback: (Iter it, int i) =>
     {
         Column<Position> pSelf = it.Field<Position>(1);

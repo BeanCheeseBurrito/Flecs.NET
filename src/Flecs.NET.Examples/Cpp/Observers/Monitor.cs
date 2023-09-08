@@ -1,6 +1,6 @@
 // A monitor observer triggers when an entity starts/stop matching the observer
 // filter. The observer communicates whether an entity is "entering/leaving" the
-// monitor by setting ecs_iter_t::event to EcsOnAdd (for entering) or
+// monitor by setting ecs_iter_t.event to EcsOnAdd (for entering) or
 // EcsOnRemove (for leaving).
 //
 // To specify that an observer is a monitor observer, the EcsMonitor tag must be
@@ -10,7 +10,6 @@
 #if Cpp_Observers_Monitor
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create(args);
 
@@ -20,12 +19,12 @@ world.Observer(
         .Term<Position>()
         .Term<Velocity>(),
     observer: world.ObserverBuilder()
-        .Event(EcsMonitor), // Monitor entities entering/leaving the query
+        .Event(Ecs.MonitorId), // Monitor entities entering/leaving the query
     callback: (Iter it, int i) =>
     {
-        if (it.Event() == EcsOnAdd)
+        if (it.Event() == Ecs.OnAdd)
             Console.WriteLine($" - Enter: {it.EventId().Str()}: {it.Entity(i).Name()}");
-        else if (it.Event() == EcsOnRemove)
+        else if (it.Event() == Ecs.OnRemove)
             Console.WriteLine($" - Leave: {it.EventId().Str()}: {it.Entity(i).Name()}");
     }
 );

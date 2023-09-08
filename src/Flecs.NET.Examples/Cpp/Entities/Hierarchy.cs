@@ -1,7 +1,6 @@
 #if Cpp_Entities_Hierarchy
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 void IterateTree(Entity e, Position pParent = default)
 {
@@ -22,7 +21,7 @@ void IterateTree(Entity e, Position pParent = default)
 using World world = World.Create();
 
 // Create a simple hierarchy.
-// Hierarchies use ECS relationships and the builtin flecs::ChildOf relationship to
+// Hierarchies use ECS relationships and the builtin EcsChildOf relationship to
 // create entities as children of other entities.
 
 Entity sun = world.Entity("Sun")
@@ -30,7 +29,7 @@ Entity sun = world.Entity("Sun")
     .Set(new Position { X = 1, Y = 1 });
 
 world.Entity("Mercury")
-    .ChildOf(sun) // Shortcut for add(flecs::ChildOf, sun)
+    .ChildOf(sun) // Shortcut for Add(Ecs.ChildOf, sun)
     .Add<Planet>()
     .Set(new Position { X = 1, Y = 1 });
 
@@ -50,7 +49,7 @@ Entity earth = world.Entity("Earth")
         .Set(new Position { X = 0.1, Y = 0.1 });
 
 // Is the Moon a child of Earth?
-Console.WriteLine($"Child of Earth? {moon.Has(EcsChildOf, earth)}\n");
+Console.WriteLine($"Child of Earth? {moon.IsChildOf(earth)}\n");
 
 // Do a depth-first walk of the tree
 IterateTree(sun);

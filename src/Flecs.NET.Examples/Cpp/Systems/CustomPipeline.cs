@@ -3,22 +3,21 @@
 // the hood, and custom pipelines override the query used for system matching.
 
 // If you only want to use custom phases in addition or in place of the builtin
-// phases see the custom_phases and custom_phases_no_builtin examples, as this
+// phases see the CustomPhases and CustomPhasesNoBuiltIn examples, as this
 // does not require using a custom pipeline.
 
 #if Cpp_Systems_CustomPipeline
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create(args);
 
 // Create a pipeline that matches systems with Physics. Note that this
-// pipeline does not require the use of phases (see custom_phases) or of the
+// pipeline does not require the use of phases (see CustomPhases) or of the
 // DependsOn relationship.
 Pipeline pipeline = world.Pipeline(
     filter: world.FilterBuilder()
-        .With(EcsSystem) // Mandatory, must always match systems
+        .With(Ecs.System) // Mandatory, must always match systems
         .With<Physics>()
 );
 // Configure the world to use the custom pipeline

@@ -10,25 +10,24 @@
 // entities with multiple targets, queries need to do a bit of extra work to
 // only return the requested target.
 //
-// This code uses enumeration relationships. See the enum_relations example for
+// This code uses enumeration relationships. See the EnumRelations example for
 // more details.
 
 #if Cpp_Relationships_Union
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create(args);
 
-world.Component<Movement>().Entity.Add(EcsUnion);
-world.Component<Direction>().Entity.Add(EcsUnion);
+world.Component<Movement>().Entity.Add(Ecs.Union);
+world.Component<Direction>().Entity.Add(Ecs.Union);
 
 // Create a query that subscribes for all entities that have a Direction
 // and that are walking
 Query q = world.Query(
     filter: world.FilterBuilder()
         .With(Movement.Walking)
-        .With<Direction>(EcsWildcard)
+        .With<Direction>(Ecs.Wildcard)
 );
 
 // Create a few entities with various state combinations

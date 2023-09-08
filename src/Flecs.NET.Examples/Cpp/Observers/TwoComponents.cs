@@ -5,7 +5,6 @@
 #if Cpp_Observers_TwoComponents
 
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
 using World world = World.Create(args);
 
@@ -14,7 +13,7 @@ world.Observer(
     filter: world.FilterBuilder()
         .Term<Position>()
         .Term<Velocity>(),
-    observer: world.ObserverBuilder().Event(EcsOnSet),
+    observer: world.ObserverBuilder().Event(Ecs.OnSet),
     callback: (Iter it, int i) =>
     {
         Column<Position> p = it.Field<Position>(1);

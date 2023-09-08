@@ -20,7 +20,7 @@ Entity spaceship = world.Prefab("Spaceship")
     .Override<Position>();
 
     Entity freighter = world.Prefab("Freighter")
-        // Short for .add(flecs::IsA, spaceship). This ensures the entity
+        // Short for .Add(Ecs.IsA, spaceship). This ensures the entity
         // inherits all components from spaceship.
         .IsA(spaceship)
         .Add<HasFTL>()
