@@ -35,4 +35,4 @@ jobs:
     - name: Build native libraries
       run: dotnet build src/Flecs.NET.Native
     - name: Run tests
-      run: dotnet test --verbosity normal
+      run: dotnet test --verbosity minimal
