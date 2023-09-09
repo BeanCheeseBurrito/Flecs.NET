@@ -1624,6 +1624,16 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Create a prefab that's associated with a type.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Entity Prefab<T>()
+        {
+            return new Component<T>(Handle).Entity.Add(EcsPrefab);
+        }
+
+        /// <summary>
+        ///     Create a prefab that's associated with a type.
+        /// </summary>
         /// <param name="name"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
