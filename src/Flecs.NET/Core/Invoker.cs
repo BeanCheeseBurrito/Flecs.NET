@@ -47,6 +47,26 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="iter"></param>
         /// <param name="callback"></param>
+        public static void Each<T>(ecs_iter_t* iter, Ecs.EachEntityCallback<T> callback)
+        {
+            Macros.TableLock(iter->world, iter->table);
+
+            ecs_world_t* world = iter->world;
+            int count = iter->count;
+
+            Assert.True(count > 0, "No entities returned, use Each() without Entity argument");
+
+            for (int i = 0; i < count; i++)
+                callback(new Entity(world, iter->entities[i]), ref Managed.GetTypeRef<T>(iter->ptrs[0], i));
+
+            Macros.TableUnlock(iter->world, iter->table);
+        }
+
+        /// <summary>
+        ///     Invokes an each callback using a delegate.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
         public static void Each(ecs_iter_t* iter, Ecs.EachIndexCallback callback)
         {
             int count = iter->count;

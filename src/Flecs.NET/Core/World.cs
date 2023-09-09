@@ -1652,7 +1652,35 @@ namespace Flecs.NET.Core
             return new EventBuilder(Handle, Type<T>.Id(Handle));
         }
 
-        // TODO: Add World.Each stuff here later
+        /// <summary>
+        ///     Iterate over all entities with provided component.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Each<T>(Ecs.EachEntityCallback<T> callback)
+        {
+            ecs_term_t t = default;
+            t.id = Type<T>.Id(Handle);
+            ecs_iter_t it = ecs_term_iter(Handle, &t);
+
+            while (ecs_term_next(&it) == 1)
+                Invoker.Each(&it, callback);
+        }
+
+        /// <summary>
+        ///     Iterate over all entities with provided (component) id.
+        /// </summary>
+        /// <param name="termId"></param>
+        /// <param name="callback"></param>
+        public void Each(ulong termId, Ecs.EachEntityCallback callback)
+        {
+            ecs_term_t t = default;
+            t.id = termId;
+            ecs_iter_t it = ecs_term_iter(Handle, &t);
+
+            while (ecs_term_next(&it) == 1)
+                Invoker.Each(&it, callback);
+        }
 
         /// <summary>
         ///     Define a module.

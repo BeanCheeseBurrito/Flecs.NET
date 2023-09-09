@@ -24,6 +24,11 @@ namespace Flecs.NET.Core
         public delegate void EachEntityCallback(Entity entity);
 
         /// <summary>
+        ///     Each entity callback.
+        /// </summary>
+        public delegate void EachEntityCallback<T>(Entity entity, ref T comp);
+
+        /// <summary>
         ///     Each id callback.
         /// </summary>
         public delegate void EachIdCallback(Id id);
