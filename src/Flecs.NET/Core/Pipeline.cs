@@ -17,6 +17,11 @@ namespace Flecs.NET.Core
         public ref Entity Entity => ref _entity;
 
         /// <summary>
+        ///     A reference to the entity.
+        /// </summary>
+        public ref Id Id => ref _entity.Id;
+
+        /// <summary>
         ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _entity.World;
