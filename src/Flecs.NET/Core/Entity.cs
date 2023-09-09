@@ -956,6 +956,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Returns the entity's doc brief.
+        /// </summary>
+        /// <returns></returns>
+        public string DocBrief()
+        {
+            return NativeString.GetString(ecs_doc_get_brief(World, Id));
+        }
+
+        /// <summary>
         ///     Returns the entity's doc detail.
         /// </summary>
         /// <returns></returns>
