@@ -60,6 +60,15 @@ public struct Other
     public int Value { get; set; }
 }
 
+public struct MyModule : IFlecsModule
+{
+    public void InitModule(ref World world)
+    {
+        world.Module<MyModule>();
+        world.Component<Position>();
+    }
+}
+
 public struct Pod
 {
     public int Value { get; set; }
