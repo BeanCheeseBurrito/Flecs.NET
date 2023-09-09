@@ -13,7 +13,7 @@ namespace Flecs.NET.Core
             ///     Initializes meta module.
             /// </summary>
             /// <param name="world"></param>
-            public void InitModule(ref World world)
+            public readonly void InitModule(ref World world)
             {
                 Type<bool>.SetSymbolName("bool");
                 Type<byte>.SetSymbolName("u8");

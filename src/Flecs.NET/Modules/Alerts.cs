@@ -11,34 +11,6 @@ namespace Flecs.NET.Core
         public struct Alerts : IFlecsModule
         {
             /// <summary>
-            ///     Alert
-            /// </summary>
-            public struct Alert
-            {
-            }
-
-            /// <summary>
-            ///     Info
-            /// </summary>
-            public struct Info
-            {
-            }
-
-            /// <summary>
-            ///     Warning
-            /// </summary>
-            public struct Warning
-            {
-            }
-
-            /// <summary>
-            ///     Error
-            /// </summary>
-            public struct Err
-            {
-            }
-
-            /// <summary>
             ///     Initializes the alerts module.
             /// </summary>
             /// <param name="world"></param>
@@ -50,6 +22,34 @@ namespace Flecs.NET.Core
                 world.Entity<Info>("::flecs::alerts::Info");
                 world.Entity<Warning>("::flecs::alerts::Warning");
                 world.Entity<Err>("::flecs::alerts::Error");
+            }
+
+            /// <summary>
+            ///     Alert tag.
+            /// </summary>
+            public struct Alert
+            {
+            }
+
+            /// <summary>
+            ///     Info tag.
+            /// </summary>
+            public struct Info
+            {
+            }
+
+            /// <summary>
+            ///     Warning tag.
+            /// </summary>
+            public struct Warning
+            {
+            }
+
+            /// <summary>
+            ///     Error tag.
+            /// </summary>
+            public struct Err
+            {
             }
         }
     }

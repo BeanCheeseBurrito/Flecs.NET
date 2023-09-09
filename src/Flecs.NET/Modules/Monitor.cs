@@ -7,13 +7,13 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Monitor module.
         /// </summary>
-        public unsafe struct Monitor : IFlecsModule
+        public struct Monitor : IFlecsModule
         {
             /// <summary>
             ///     Initializes monitor module.
             /// </summary>
             /// <param name="world"></param>
-            public void InitModule(ref World world)
+            public readonly void InitModule(ref World world)
             {
                 FlecsMonitorImport(world);
             }

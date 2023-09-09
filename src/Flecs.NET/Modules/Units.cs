@@ -15,7 +15,7 @@ namespace Flecs.NET.Core
             ///     Initializes units module.
             /// </summary>
             /// <param name="world"></param>
-            public void InitModule(ref World world)
+            public readonly void InitModule(ref World world)
             {
                 FlecsUnitsImport(world);
 
