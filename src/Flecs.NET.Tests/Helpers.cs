@@ -96,6 +96,14 @@ public struct Rel
 {
 }
 
+public struct Likes
+{
+}
+
+public struct Bob
+{
+}
+
 public struct Tag
 {
 }

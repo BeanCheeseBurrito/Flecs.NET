@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Flecs.NET.Core;
 using Xunit;
 using static Flecs.NET.Bindings.Native;
@@ -597,7 +596,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void GetRO()
+        private void GetRelO()
         {
             using World world = World.Create();
 
@@ -684,664 +683,411 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(10, ptr->X);
             Assert.Equal(20, ptr->Y);
         }
-        //
-        // [Fact]
-        // private void each() {
-        //     using World world = World.Create();
-        //
-        //     auto p_1 = world.Entity();
-        //     auto p_2 = world.Entity();
-        //
-        //     Entity e = world.Entity()
-        //         .Add(p_1)
-        //         .Add(p_2);
-        //
-        //     int32_t count = 0;
-        //
-        //     e.each([&](Id e) {
-        //         if (count == 0) {
-        //             Assert.True(e == p_1);
-        //         } else if (count == 1) {
-        //             Assert.True(e == p_2);
-        //         } else {
-        //             Assert.True(false);
-        //         }
-        //
-        //         count ++;
-        //     });
-        //
-        //     Assert.Equal(count, 2);
-        // }
-        //
-        // [Fact]
-        // private void each_pair() {
-        //     using World world = World.Create();
-        //
-        //     auto pair = world.Component<Pair>();
-        //     auto pos = world.Component<Position>();
-        //     auto vel = world.Component<Velocity>();
-        //
-        //     Entity e = world.Entity()
-        //         .Add<Pair, Position>()
-        //         .Add<Pair, Velocity>();
-        //
-        //     int32_t count = 0;
-        //
-        //     e.each(pair, [&](flecs::entity object) {
-        //         if (count == 0) {
-        //             Assert.True(object == pos);
-        //         } else if (count == 1) {
-        //             Assert.True(object == vel);
-        //         } else {
-        //             Assert.True(false);
-        //         }
-        //
-        //         count ++;
-        //     });
-        //
-        //     Assert.Equal(count, 2);
-        // }
-        //
-        // [Fact]
-        // private void each_pair_by_type() {
-        //     using World world = World.Create();
-        //
-        //     auto pos = world.Component<Position>();
-        //     auto vel = world.Component<Velocity>();
-        //
-        //     Entity e = world.Entity()
-        //         .Add<Pair, Position>()
-        //         .Add<Pair, Velocity>();
-        //
-        //     int32_t count = 0;
-        //
-        //     e.each<Pair>([&](flecs::entity object) {
-        //         if (count == 0) {
-        //             Assert.True(object == pos);
-        //         } else if (count == 1) {
-        //             Assert.True(object == vel);
-        //         } else {
-        //             Assert.True(false);
-        //         }
-        //
-        //         count ++;
-        //     });
-        //
-        //     Assert.Equal(count, 2);
-        // }
-        //
-        // [Fact]
-        // private void each_pair_w_isa() {
-        //     using World world = World.Create();
-        //
-        //     auto p_1 = world.Entity();
-        //     auto p_2 = world.Entity();
-        //
-        //     Entity e = world.Entity()
-        //         .is_a(p_1)
-        //         .is_a(p_2);
-        //
-        //     int32_t count = 0;
-        //
-        //     e.each(flecs::IsA, [&](flecs::entity object) {
-        //         if (count == 0) {
-        //             Assert.True(object == p_1);
-        //         } else if (count == 1) {
-        //             Assert.True(object == p_2);
-        //         } else {
-        //             Assert.True(false);
-        //         }
-        //
-        //         count ++;
-        //     });
-        //
-        //     Assert.Equal(count, 2);
-        // }
-        //
-        // [Fact]
-        // private void each_pair_w_recycled_rel() {
-        //     using World world = World.Create();
-        //
-        //     auto e_1 = world.Entity();
-        //     auto e_2 = world.Entity();
-        //
-        //     world.Entity().Destruct(); // force recycling
-        //
-        //     Entity pair = world.Entity();
-        //
-        //     Assert.True((uint)pair.Id != pair.Id); // ensure recycled
-        //
-        //     Entity e = world.Entity()
-        //         .Add(pair, e_1)
-        //         .Add(pair, e_2);
-        //
-        //     int32_t count = 0;
-        //
-        //     // should work correctly
-        //     e.each(pair, [&](flecs::entity object) {
-        //         if (count == 0) {
-        //             Assert.True(object == e_1);
-        //         } else if (count == 1) {
-        //             Assert.True(object == e_2);
-        //         } else {
-        //             Assert.True(false);
-        //         }
-        //
-        //         count ++;
-        //     });
-        //
-        //     Assert.Equal(count, 2);
-        // }
-        //
-        // [Fact]
-        // private void each_pair_w_recycled_obj() {
-        //     using World world = World.Create();
-        //
-        //     auto pair = world.Component<Pair>();
-        //
-        //     world.Entity().Destruct(); // force recycling
-        //     auto e_1 = world.Entity();
-        //     Assert.True((uint)e_1.Id != e_1.Id); // ensure recycled
-        //
-        //     world.Entity().Destruct();
-        //     auto e_2 = world.Entity();
-        //     Assert.True((uint)e_2.Id != e_2.Id);
-        //
-        //     Entity e = world.Entity()
-        //         .Add<Pair>(e_1)
-        //         .Add<Pair>(e_2);
-        //
-        //     int32_t count = 0;
-        //
-        //     // should work correctly
-        //     e.each(pair, [&](flecs::entity object) {
-        //         if (count == 0) {
-        //             Assert.True(object == e_1);
-        //         } else if (count == 1) {
-        //             Assert.True(object == e_2);
-        //         } else {
-        //             Assert.True(false);
-        //         }
-        //
-        //         count ++;
-        //     });
-        //
-        //     Assert.Equal(count, 2);
-        // }
-        //
-        // [Fact]
-        // private void match_pair() {
-        //     using World world = World.Create();
-        //
-        //     auto Eats = world.Entity();
-        //     auto Dislikes = world.Entity();
-        //
-        //     auto Apples = world.Entity();
-        //     auto Pears = world.Entity();
-        //     auto Bananas = world.Entity();
-        //
-        //     Entity e = world.Entity()
-        //         .Set<Position>({10, 20}) // should not be matched
-        //         .Add(Eats, Apples)
-        //         .Add(Eats, Pears)
-        //         .Add(Dislikes, Bananas);
-        //
-        //     int32_t count = 0;
-        //
-        //     e.each(Eats, Apples,
-        //         [&](Id id) {
-        //             Assert.True(id.First() == Eats);
-        //             Assert.True(id.Second() == Apples);
-        //             count ++;
-        //         });
-        //
-        //     Assert.Equal(count, 1);
-        // }
-        //
-        // [Fact]
-        // private void match_pair_obj_wildcard() {
-        //     using World world = World.Create();
-        //
-        //     auto Eats = world.Entity();
-        //     auto Dislikes = world.Entity();
-        //
-        //     auto Apples = world.Entity();
-        //     auto Pears = world.Entity();
-        //     auto Bananas = world.Entity();
-        //
-        //     Entity e = world.Entity()
-        //         .Set<Position>({10, 20}) // should not be matched
-        //         .Add(Eats, Apples)
-        //         .Add(Eats, Pears)
-        //         .Add(Dislikes, Bananas);
-        //
-        //     int32_t count = 0;
-        //
-        //     e.each(Eats, flecs::Wildcard,
-        //         [&](Id id) {
-        //             Assert.True(id.First() == Eats);
-        //             Assert.True(id.Second() == Apples || id.Second() == Pears);
-        //             count ++;
-        //         });
-        //
-        //     Assert.Equal(count, 2);
-        // }
-        //
-        // [Fact]
-        // private void match_pair_rel_wildcard() {
-        //     using World world = World.Create();
-        //
-        //     auto Eats = world.Entity();
-        //     auto Dislikes = world.Entity();
-        //
-        //     auto Apples = world.Entity();
-        //     auto Pears = world.Entity();
-        //     auto Bananas = world.Entity();
-        //
-        //     Entity e = world.Entity()
-        //         .Set<Position>({10, 20}) // should not be matched
-        //         .Add(Eats, Apples)
-        //         .Add(Eats, Pears)
-        //         .Add(Dislikes, Bananas);
-        //
-        //     int32_t count = 0;
-        //
-        //     e.each(flecs::Wildcard, Pears,
-        //         [&](Id id) {
-        //             Assert.True(id.First() == Eats);
-        //             Assert.True(id.Second() == Pears);
-        //             count ++;
-        //         });
-        //
-        //     Assert.Equal(count, 1);
-        // }
-        //
-        // [Fact]
-        // private void match_pair_both_wildcard() {
-        //     using World world = World.Create();
-        //
-        //     auto Eats = world.Entity();
-        //     auto Dislikes = world.Entity();
-        //
-        //     auto Apples = world.Entity();
-        //     auto Pears = world.Entity();
-        //     auto Bananas = world.Entity();
-        //
-        //     Entity e = world.Entity()
-        //         .Set<Position>({10, 20}) // should not be matched
-        //         .Add(Eats, Apples)
-        //         .Add(Eats, Pears)
-        //         .Add(Dislikes, Bananas);
-        //
-        //     int32_t count = 0;
-        //
-        //     e.each(flecs::Wildcard, flecs::Wildcard,
-        //         [&](Id id) {
-        //             count ++;
-        //         });
-        //
-        //     Assert.Equal(count, 3);
-        // }
-        //
-        // [Fact]
-        // private void has_tag_w_object() {
-        //     using World world = World.Create();
-        //
-        //     struct Likes { };
-        //
-        //     auto Bob = world.Entity();
-        //     Entity e = world.Entity().Add<Likes>(Bob);
-        //     Assert.True(e.Has<Likes>(Bob));
-        // }
-        //
-        // [Fact]
-        // private void has_second_tag() {
-        //     using World world = World.Create();
-        //
-        //     struct Bob { };
-        //
-        //     auto Likes = world.Entity();
-        //     Entity e = world.Entity().AddSecond<Bob>(Likes);
-        //     Assert.True(e.HasSecond<Bob>(Likes));
-        // }
-        //
-        // struct Eats { int amount; };
-        // struct Apples { };
-        // struct Pears { };
-        //
-        // using EatsApples = flecs::pair<Eats, Apples>;
-        // using EatsPears = flecs::pair<Eats, Pears>;
-        //
-        // [Fact]
-        // private void add_pair_type() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity().Add<EatsApples>();
-        //     Assert.True((e.Has<Eats, Apples>()));
-        //     Assert.True((e.Has<EatsApples>()));
-        // }
-        //
-        // [Fact]
-        // private void remove_pair_type() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity().Add<EatsApples>();
-        //     Assert.True((e.Has<Eats, Apples>()));
-        //     Assert.True((e.Has<EatsApples>()));
-        //
-        //     e.Remove<EatsApples>();
-        //     Assert.True(!(e.Has<Eats, Apples>()));
-        //     Assert.True(!(e.Has<EatsApples>()));
-        // }
-        //
-        // [Fact]
-        // private void set_pair_type() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity().Set<EatsApples>({10});
-        //     Assert.True((e.Has<Eats, Apples>()));
-        //     Assert.True((e.Has<EatsApples>()));
-        //
-        //     const Eats *ptr = e.GetPtr<EatsApples>();
-        //     Assert.Equal(ptr->amount, 10);
-        //
-        //     Assert.True((ptr == e.GetPtr<Eats, Apples>()));
-        // }
-        //
-        // [Fact]
-        // private void has_pair_type() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity().Add<Eats, Apples>();
-        //     Assert.True((e.Has<Eats, Apples>()));
-        //     Assert.True((e.Has<EatsApples>()));
-        // }
-        //
-        // [Fact]
-        // private void get_1_pair_arg() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity().Set<EatsApples>({10});
-        //     Assert.True((e.Has<Eats, Apples>()));
-        //     Assert.True((e.Has<EatsApples>()));
-        //
-        //     test_bool(e.get([](const EatsApples& a) {
-        //         Assert.Equal(a->amount, 10);
-        //     }), true);
-        // }
-        //
-        // [Fact]
-        // private void get2_pair_arg() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity()
-        //         .Set<EatsApples>({10})
-        //         .Set<EatsPears>({20});
-        //
-        //     Assert.True((e.Has<Eats, Apples>()));
-        //     Assert.True((e.Has<Eats, Pears>()));
-        //     Assert.True((e.Has<EatsApples>()));
-        //     Assert.True((e.Has<EatsPears>()));
-        //
-        //     test_bool(e.get([](const EatsApples& a, const EatsPears& p) {
-        //         Assert.Equal(a->amount, 10);
-        //         Assert.Equal(p->amount, 20);
-        //     }), true);
-        // }
-        //
-        // [Fact]
-        // private void set_1_pair_arg() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity()
-        //         .set([](EatsApples&& a) {
-        //             a->amount = 10;
-        //         });
-        //
-        //     auto eats = e.GetPtr<EatsApples>();
-        //     Assert.Equal(eats->amount, 10);
-        // }
-        //
-        // [Fact]
-        // private void set2_pair_arg() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity()
-        //         .set([](EatsApples&& a, EatsPears&& p) {
-        //             a->amount = 10;
-        //             p->amount = 20;
-        //         });
-        //
-        //     auto eats = e.GetPtr<EatsApples>();
-        //     Assert.Equal(eats->amount, 10);
-        //
-        //     eats = e.GetPtr<EatsPears>();
-        //     Assert.Equal(eats->amount, 20);
-        // }
-        //
-        // [Fact]
-        // private void get_inline_pair_type() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity().Set<EatsApples>({10});
-        //     Assert.True((e.Has<Eats, Apples>()));
-        //     Assert.True((e.Has<EatsApples>()));
-        //
-        //     test_bool(e.get([](const flecs::pair<Eats, Apples>& a) {
-        //         Assert.Equal(a->amount, 10);
-        //     }), true);
-        // }
-        //
-        // [Fact]
-        // private void set_inline_pair_type() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity()
-        //         .set([](flecs::pair<Eats, Apples>&& a) {
-        //             a->amount = 10;
-        //         });
-        //
-        //     auto eats = e.GetPtr<EatsApples>();
-        //     Assert.Equal(eats->amount, 10);
-        // }
-        //
-        // [Fact]
-        // private void get_pair_type_object() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity().SetSecond<Apples, Eats>({10});
-        //     Assert.True((e.Has<Apples, Eats>()));
-        //
-        //     test_bool(e.get([](const flecs::pair_object<Apples, Eats>& a) {
-        //         Assert.Equal(a->amount, 10);
-        //     }), true);
-        // }
-        //
-        // [Fact]
-        // private void set_pair_type_object() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity()
-        //         .set([](flecs::pair_object<Apples, Eats>&& a) {
-        //             a->amount = 10;
-        //         });
-        //
-        //     auto eats = e.GetSecondPtr<Apples, Eats>();
-        //     Assert.Equal(eats->amount, 10);
-        // }
-        //
-        // struct Event {
-        //     const char *value;
-        // };
-        //
-        // struct Begin { };
-        // struct End { };
-        //
-        // using BeginEvent = flecs::pair<Begin, Event>;
-        // using EndEvent = flecs::pair<End, Event>;
-        //
-        // [Fact]
-        // private void set_get_second_variants() {
-        //     using World world = World.Create();
-        //
-        //     auto e1 = world.Entity().SetSecond<Begin, Event>({"Big Bang"});
-        //     Assert.True((e1.Has<Begin, Event>()));
-        //     const Event* v = e1.GetSecondPtr<Begin, Event>();
-        //     Assert.True(v != null);
-        //     Assert.Equal(v->value, "Big Bang");
-        //
-        //     auto e2 = world.Entity().Set<Begin, Event>({"Big Bang"});
-        //     Assert.True((e2.Has<Begin, Event>()));
-        //     v = e2.GetPtr<Begin, Event>();
-        //     Assert.True(v != null);
-        //     Assert.Equal(v->value, "Big Bang");
-        //
-        //     auto e3 = world.Entity().Set<flecs::pair<Begin, Event>>({"Big Bang"});
-        //     Assert.True((e3.Has<flecs::pair<Begin, Event>>()));
-        //     v = e3.GetPtr<flecs::pair<Begin, Event>>();
-        //     Assert.True(v != null);
-        //     Assert.Equal(v->value, "Big Bang");
-        //
-        //     auto e4 = world.Entity().Set<BeginEvent>({"Big Bang"});
-        //     Assert.True((e4.Has<BeginEvent>()));
-        //     v = e4.GetPtr<BeginEvent>();
-        //     Assert.True(v != null);
-        //     Assert.Equal(v->value, "Big Bang");
-        // }
-        //
-        // [Fact]
-        // private void get_object_for_type_self() {
-        //     using World world = World.Create();
-        //
-        //     auto @base = world.Entity().Add<Tag>();
-        //     auto self = world.Entity().is_a(@base).Add<Tag>();
-        //
-        //     auto obj = self.target_for<Tag>(flecs::IsA);
-        //     Assert.True(obj != 0);
-        //     Assert.True(obj == self);
-        // }
-        //
-        // [Fact]
-        // private void get_object_for_type_base() {
-        //     using World world = World.Create();
-        //
-        //     auto @base = world.Entity().Add<Tag>();
-        //     auto self = world.Entity().is_a(@base);
-        //
-        //     auto obj = self.target_for<Tag>(flecs::IsA);
-        //     Assert.True(obj != 0);
-        //     Assert.True(obj == @base);
-        // }
-        //
-        // [Fact]
-        // private void get_object_for_id_self() {
-        //     using World world = World.Create();
-        //
-        //     auto tag = world.Entity();
-        //     auto @base = world.Entity().Add(tag);
-        //     auto self = world.Entity().is_a(@base).Add(tag);
-        //
-        //     auto obj = self.target_for(flecs::IsA, tag);
-        //     Assert.True(obj != 0);
-        //     Assert.True(obj == self);
-        // }
-        //
-        // [Fact]
-        // private void get_object_for_id_base() {
-        //     using World world = World.Create();
-        //
-        //     auto tag = world.Entity();
-        //     auto @base = world.Entity().Add(tag);
-        //     auto self = world.Entity().is_a(@base);
-        //
-        //     auto obj = self.target_for(flecs::IsA, tag);
-        //     Assert.True(obj != 0);
-        //     Assert.True(obj == @base);
-        // }
-        //
-        // [Fact]
-        // private void get_object_for_id_not_found() {
-        //     using World world = World.Create();
-        //
-        //     auto tag = world.Entity();
-        //     auto @base = world.Entity();
-        //     auto self = world.Entity().is_a(@base);
-        //
-        //     auto obj = self.target_for(flecs::IsA, tag);
-        //     Assert.True(obj == 0);
-        // }
-        //
-        // [Fact]
-        // private void deref_pair() {
-        //     using World world = World.Create();
-        //
-        //     Position v = {10, 20};
-        //
-        //     flecs::pair<Position, Tag> p(v);
-        //     Assert.Equal(p->X, 10);
-        //     Assert.Equal(p->Y, 20);
-        //
-        //     Position pos = *p;
-        //     Assert.Equal(pos->X, 10);
-        //     Assert.Equal(pos->Y, 20);
-        // }
-        //
-        // [Fact]
-        // private void deref_const_pair() {
-        //     using World world = World.Create();
-        //
-        //     Position v = {10, 20};
-        //
-        //     const flecs::pair<Position, Tag> p(v);
-        //     Assert.Equal(p->X, 10);
-        //     Assert.Equal(p->Y, 20);
-        //
-        //     Position pos = *p;
-        //     Assert.Equal(pos->X, 10);
-        //     Assert.Equal(pos->Y, 20);
-        // }
-        //
-        // [Fact]
-        // private void deref_pair_obj() {
-        //     using World world = World.Create();
-        //
-        //     Position v = {10, 20};
-        //
-        //     flecs::pair<Tag, Position> p(v);
-        //     Assert.Equal(p->X, 10);
-        //     Assert.Equal(p->Y, 20);
-        //
-        //     Position pos = *p;
-        //     Assert.Equal(pos->X, 10);
-        //     Assert.Equal(pos->Y, 20);
-        // }
-        //
-        // [Fact]
-        // private void deref_const_pair_obj() {
-        //     using World world = World.Create();
-        //
-        //     Position v = {10, 20};
-        //
-        //     const flecs::pair<Tag, Position> p(v);
-        //     Assert.Equal(p->X, 10);
-        //     Assert.Equal(p->Y, 20);
-        //
-        //     Position pos = *p;
-        //     Assert.Equal(pos->X, 10);
-        //     Assert.Equal(pos->Y, 20);
-        // }
-        //
-        // [Fact]
-        // private void set_R_existing_value() {
-        //     using World world = World.Create();
-        //
-        //     Position p{10, 20};
-        //     flecs::entity e = world.Entity().Set<Position, Tag>(p);
-        //
-        //     Position* ptr = e.GetPtr<Position, Tag>();
-        //     Assert.True(ptr != null);
-        //     Assert.Equal(10, ptr->X);
-        //     Assert.Equal(20, ptr->Y);
-        // }
+
+        [Fact]
+        private void Each()
+        {
+            using World world = World.Create();
+
+            Entity p1 = world.Entity();
+            Entity p2 = world.Entity();
+
+            Entity e = world.Entity()
+                .Add(p1)
+                .Add(p2);
+
+            int count = 0;
+
+            e.Each(entity =>
+            {
+                if (count == 0)
+                    Assert.True(entity == p1);
+                else if (count == 1)
+                    Assert.True(entity == p2);
+                else
+                    Assert.True(false);
+
+                count++;
+            });
+
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        private void EachPair()
+        {
+            using World world = World.Create();
+
+            Component<Pair> pair = world.Component<Pair>();
+            Component<Position> pos = world.Component<Position>();
+            Component<Velocity> vel = world.Component<Velocity>();
+
+            Entity e = world.Entity()
+                .Add<Pair, Position>()
+                .Add<Pair, Velocity>();
+
+            int count = 0;
+
+            e.Each(pair, obj =>
+            {
+                if (count == 0)
+                    Assert.True(obj == pos);
+                else if (count == 1)
+                    Assert.True(obj == vel);
+                else
+                    Assert.True(false);
+
+                count++;
+            });
+
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        private void EachPairByType()
+        {
+            using World world = World.Create();
+
+            Component<Position> pos = world.Component<Position>();
+            Component<Velocity> vel = world.Component<Velocity>();
+
+            Entity e = world.Entity()
+                .Add<Pair, Position>()
+                .Add<Pair, Velocity>();
+
+            int count = 0;
+
+            e.Each<Pair>(obj =>
+            {
+                if (count == 0)
+                    Assert.True(obj == pos);
+                else if (count == 1)
+                    Assert.True(obj == vel);
+                else
+                    Assert.True(false);
+
+                count++;
+            });
+
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        private void EachPairWithIsA()
+        {
+            using World world = World.Create();
+
+            Entity p1 = world.Entity();
+            Entity p2 = world.Entity();
+
+            Entity e = world.Entity()
+                .IsA(p1)
+                .IsA(p2);
+
+            int count = 0;
+
+            e.Each(EcsIsA, obj =>
+            {
+                if (count == 0)
+                    Assert.True(obj == p1);
+                else if (count == 1)
+                    Assert.True(obj == p2);
+                else
+                    Assert.True(false);
+
+                count++;
+            });
+
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        private void EachPairWithRecycledRel()
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity();
+            Entity e2 = world.Entity();
+
+            world.Entity().Destruct(); // force recycling
+
+            Entity pair = world.Entity();
+
+            Assert.True((uint)pair.Id != pair.Id); // ensure recycled
+
+            Entity e = world.Entity()
+                .Add(pair, e1)
+                .Add(pair, e2);
+
+            int count = 0;
+
+            // should work correctly
+            e.Each(pair, obj =>
+            {
+                if (count == 0)
+                    Assert.True(obj == e1);
+                else if (count == 1)
+                    Assert.True(obj == e2);
+                else
+                    Assert.True(false);
+
+                count++;
+            });
+
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        private void EachPairWithRecycledObj()
+        {
+            using World world = World.Create();
+
+            Component<Pair> pair = world.Component<Pair>();
+
+            world.Entity().Destruct(); // force recycling
+            Entity e1 = world.Entity();
+            Assert.True((uint)e1.Id != e1.Id); // ensure recycled
+
+            world.Entity().Destruct();
+            Entity e2 = world.Entity();
+            Assert.True((uint)e2.Id != e2.Id);
+
+            Entity e = world.Entity()
+                .Add<Pair>(e1)
+                .Add<Pair>(e2);
+
+            int count = 0;
+
+            // should work correctly
+            e.Each(pair, obj =>
+            {
+                if (count == 0)
+                    Assert.True(obj == e1);
+                else if (count == 1)
+                    Assert.True(obj == e2);
+                else
+                    Assert.True(false);
+
+                count++;
+            });
+
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        private void MatchPair()
+        {
+            using World world = World.Create();
+
+            Entity eats = world.Entity();
+            Entity dislikes = world.Entity();
+
+            Entity apples = world.Entity();
+            Entity pears = world.Entity();
+            Entity bananas = world.Entity();
+
+            Entity e = world.Entity()
+                .Set(new Position { X = 10, Y = 20 }) // should not be matched
+                .Add(eats, apples)
+                .Add(eats, pears)
+                .Add(dislikes, bananas);
+
+            int count = 0;
+
+            e.Each(eats, apples, id =>
+            {
+                Assert.True(id.First() == eats);
+                Assert.True(id.Second() == apples);
+                count++;
+            });
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void MatchPairObjWildcard()
+        {
+            using World world = World.Create();
+
+            Entity eats = world.Entity();
+            Entity dislikes = world.Entity();
+
+            Entity apples = world.Entity();
+            Entity pears = world.Entity();
+            Entity bananas = world.Entity();
+
+            Entity e = world.Entity()
+                .Set(new Position { X = 10, Y = 20 }) // should not be matched
+                .Add(eats, apples)
+                .Add(eats, pears)
+                .Add(dislikes, bananas);
+
+            int count = 0;
+
+            e.Each(eats, EcsWildcard, id =>
+            {
+                Assert.True(id.First() == eats);
+                Assert.True(id.Second() == apples || id.Second() == pears);
+                count++;
+            });
+
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        private void MatchPairRelWildcard()
+        {
+            using World world = World.Create();
+
+            Entity eats = world.Entity();
+            Entity dislikes = world.Entity();
+
+            Entity apples = world.Entity();
+            Entity pears = world.Entity();
+            Entity bananas = world.Entity();
+
+            Entity e = world.Entity()
+                .Set(new Position { X = 10, Y = 20 }) // should not be matched
+                .Add(eats, apples)
+                .Add(eats, pears)
+                .Add(dislikes, bananas);
+
+            int count = 0;
+
+            e.Each(EcsWildcard, pears, id =>
+            {
+                Assert.True(id.First() == eats);
+                Assert.True(id.Second() == pears);
+                count++;
+            });
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void MatchPairBothWildcard()
+        {
+            using World world = World.Create();
+
+            Entity eats = world.Entity();
+            Entity dislikes = world.Entity();
+
+            Entity apples = world.Entity();
+            Entity pears = world.Entity();
+            Entity bananas = world.Entity();
+
+            Entity e = world.Entity()
+                .Set(new Position { X = 10, Y = 20 }) // should not be matched
+                .Add(eats, apples)
+                .Add(eats, pears)
+                .Add(dislikes, bananas);
+
+            int count = 0;
+
+            e.Each(EcsWildcard, EcsWildcard, _ => { count++; });
+
+            Assert.Equal(3, count);
+        }
+
+        [Fact]
+        private void HasTagWithObject()
+        {
+            using World world = World.Create();
+
+            Entity bob = world.Entity();
+            Entity e = world.Entity().Add<Likes>(bob);
+            Assert.True(e.Has<Likes>(bob));
+        }
+
+        [Fact]
+        private void HasSecondTag()
+        {
+            using World world = World.Create();
+
+            Entity likes = world.Entity();
+            Entity e = world.Entity().AddSecond<Bob>(likes);
+            Assert.True(e.HasSecond<Bob>(likes));
+        }
+
+        [Fact]
+        private void GetObjectForTypeSelf()
+        {
+            using World world = World.Create();
+
+            Entity @base = world.Entity().Add<Tag>();
+            Entity self = world.Entity().IsA(@base).Add<Tag>();
+
+            Entity obj = self.TargetFor<Tag>(EcsIsA);
+            Assert.True(obj != 0);
+            Assert.True(obj == self);
+        }
+
+        [Fact]
+        private void GetObjectForTypeBase()
+        {
+            using World world = World.Create();
+
+            Entity @base = world.Entity().Add<Tag>();
+            Entity self = world.Entity().IsA(@base);
+
+            Entity obj = self.TargetFor<Tag>(EcsIsA);
+            Assert.True(obj != 0);
+            Assert.True(obj == @base);
+        }
+
+        [Fact]
+        private void GetObjectForIdSelf()
+        {
+            using World world = World.Create();
+
+            Entity tag = world.Entity();
+            Entity @base = world.Entity().Add(tag);
+            Entity self = world.Entity().IsA(@base).Add(tag);
+
+            Entity obj = self.TargetFor(EcsIsA, tag);
+            Assert.True(obj != 0);
+            Assert.True(obj == self);
+        }
+
+        [Fact]
+        private void GetObjectForIdBase()
+        {
+            using World world = World.Create();
+
+            Entity tag = world.Entity();
+            Entity @base = world.Entity().Add(tag);
+            Entity self = world.Entity().IsA(@base);
+
+            Entity obj = self.TargetFor(EcsIsA, tag);
+            Assert.True(obj != 0);
+            Assert.True(obj == @base);
+        }
+
+        [Fact]
+        private void GetObjectForIdNotFound()
+        {
+            using World world = World.Create();
+
+            Entity tag = world.Entity();
+            Entity @base = world.Entity();
+            Entity self = world.Entity().IsA(@base);
+
+            Entity obj = self.TargetFor(EcsIsA, tag);
+            Assert.True(obj == 0);
+        }
+
+        [Fact]
+        private void SetRelExistingValue()
+        {
+            using World world = World.Create();
+
+            Position p = new Position { X = 10, Y = 20 };
+            Entity e = world.Entity().SetFirst<Position, Tag>(p);
+
+            Position* ptr = e.GetFirstPtr<Position, Tag>();
+            Assert.True(ptr != null);
+            Assert.Equal(10, ptr->X);
+            Assert.Equal(20, ptr->Y);
+        }
     }
 }
