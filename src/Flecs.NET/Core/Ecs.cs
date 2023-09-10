@@ -199,6 +199,11 @@ namespace Flecs.NET.Core
         public static ref ulong System => ref EcsSystem;
 
         /// <summary>
+        ///     Reference to <see cref="EcsSystem"/>.
+        /// </summary>
+        public static ref ulong Routine => ref EcsSystem;
+
+        /// <summary>
         ///     Reference to <see cref="FLECS_IDEcsPipelineID_"/>.
         /// </summary>
         public static ref ulong Pipeline => ref FLECS_IDEcsPipelineID_;
