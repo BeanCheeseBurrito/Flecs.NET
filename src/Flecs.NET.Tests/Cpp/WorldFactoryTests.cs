@@ -249,7 +249,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Import<MyModule>();
 
-            Entity p = world.Lookup("MyModule::Position");
+            Entity p = world.Lookup("MyModule.Position");
             Assert.True(p.Id != 0);
         }
     }

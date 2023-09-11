@@ -201,10 +201,10 @@ namespace Flecs.NET.Core
         public ref AlertBuilder Member<T>(string member, string var = "")
         {
             using NativeString nativeMember = (NativeString)member;
-            using NativeString nativeSep = (NativeString)"::";
 
             ulong id = Type<T>.Id(World);
-            ulong memberId = ecs_lookup_path_w_sep(World, id, nativeMember, nativeSep, nativeSep, Macros.False);
+            ulong memberId = ecs_lookup_path_w_sep(World, id, nativeMember,
+                BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.False);
 
             Var(var);
 

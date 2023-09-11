@@ -174,10 +174,10 @@ namespace Flecs.NET.Core
             using NativeString nativeTypeName = (NativeString)GetTypeName();
             using NativeString nativeSymbolName = (NativeString)symbol;
 
-            RawId = ecs_cpp_component_register_explicit(
+            RawId = FlecsInternal.ComponentRegisterExplicit(
                 world, RawId, id,
                 nativeName, nativeTypeName, nativeSymbolName,
-                (IntPtr)Size, (IntPtr)Alignment,
+                Size, Alignment,
                 Macros.Bool(isComponent), (byte*)existing
             );
 
@@ -307,8 +307,7 @@ namespace Flecs.NET.Core
             if (TypeName != null)
                 return TypeName;
 
-            string symbol = SymbolName ?? GetSymbolName();
-            return TypeName = symbol.Replace(".", "::", StringComparison.Ordinal);
+            return TypeName = SymbolName ?? GetSymbolName();
         }
 
         /// <summary>

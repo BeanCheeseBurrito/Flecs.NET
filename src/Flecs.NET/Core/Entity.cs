@@ -77,12 +77,11 @@ namespace Flecs.NET.Core
         public Entity(ecs_world_t* world, string name)
         {
             using NativeString nativeName = (NativeString)name;
-            using NativeString nativeSeparator = (NativeString)"::";
 
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
-            desc.sep = nativeSeparator;
-            desc.root_sep = nativeSeparator;
+            desc.sep = BindingContext.DefaultSeparator;
+            desc.root_sep = BindingContext.DefaultRootSeparator;
 
             _id = new Id(world, ecs_entity_init(world, &desc));
         }
@@ -138,7 +137,7 @@ namespace Flecs.NET.Core
         /// <param name="sep"></param>
         /// <param name="initSep"></param>
         /// <returns></returns>
-        public string Path(string sep = "::", string initSep = "::")
+        public string Path(string sep = ".", string initSep = "global::")
         {
             return PathFrom(0, sep, initSep);
         }
@@ -150,7 +149,7 @@ namespace Flecs.NET.Core
         /// <param name="sep"></param>
         /// <param name="initSep"></param>
         /// <returns></returns>
-        public string PathFrom(ulong parent, string sep = "::", string initSep = "::")
+        public string PathFrom(ulong parent, string sep = ".", string initSep = "")
         {
             using NativeString nativeSep = (NativeString)sep;
             using NativeString nativeInitSep = (NativeString)initSep;
@@ -165,7 +164,7 @@ namespace Flecs.NET.Core
         /// <param name="initSep"></param>
         /// <typeparam name="TParent"></typeparam>
         /// <returns></returns>
-        public string PathFrom<TParent>(string sep = "::", string initSep = "::")
+        public string PathFrom<TParent>(string sep = ".", string initSep = "")
         {
             return PathFrom(Type<TParent>.Id(World), sep, initSep);
         }
@@ -726,9 +725,9 @@ namespace Flecs.NET.Core
         public Entity Lookup(string path)
         {
             Assert.True(Id != 0, "invalid lookup from null handle");
-            using NativeString nativeSep = (NativeString)"::";
             using NativeString nativePath = (NativeString)path;
-            ulong id = ecs_lookup_path_w_sep(World, Id, nativePath, nativeSep, nativeSep, Macros.False);
+            ulong id = ecs_lookup_path_w_sep(World, Id, nativePath,
+                BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.False);
             return new Entity(World, id);
         }
 
