@@ -137,7 +137,7 @@ namespace Flecs.NET.Core
         /// <param name="sep"></param>
         /// <param name="initSep"></param>
         /// <returns></returns>
-        public string Path(string sep = ".", string initSep = "global::")
+        public string Path(string sep = ".", string initSep = "")
         {
             return PathFrom(0, sep, initSep);
         }

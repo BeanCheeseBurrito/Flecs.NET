@@ -1,11 +1,33 @@
 using System;
+using System.Diagnostics;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
     /// <summary>
-    ///     A static class for storing ECS related types, delegates, and methods.
+    ///     A static class for storing ECS related globals.
     /// </summary>
+    public static partial class Ecs
+    {
+    }
+
+    // TODO: Add proper logging
+    // Debug
+    public static partial class Ecs
+    {
+        [Conditional("DEBUG")]
+        internal static void Assert(bool condition, string message)
+        {
+            Debug.Assert(condition, "[Flecs.NET Assertion]: " + message);
+        }
+
+        internal static void Error(string message)
+        {
+            Debug.Fail("[Flecs.NET Error]: " + message);
+        }
+    }
+
+    // Delegates
     public static unsafe partial class Ecs
     {
         /// <summary>
