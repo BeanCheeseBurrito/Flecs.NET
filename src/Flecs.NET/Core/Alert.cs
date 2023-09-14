@@ -51,5 +51,14 @@ namespace Flecs.NET.Core
             filterBuilder.Dispose();
             alertBuilder.Dispose();
         }
+
+        /// <summary>
+        ///      Returns the entity's name if it has one, otherwise return its id.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Entity.ToString();
+        }
     }
 }

@@ -211,5 +211,14 @@ namespace Flecs.NET.Core
         {
             return observer.Entity;
         }
+
+        /// <summary>
+        ///      Returns the entity's name if it has one, otherwise return its id.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Entity.ToString();
+        }
     }
 }

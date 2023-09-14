@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
@@ -2527,6 +2528,16 @@ namespace Flecs.NET.Core
         public static bool operator !=(Entity left, Entity right)
         {
             return !(left == right);
+        }
+
+        /// <summary>
+        ///     Returns the entity's name if it has one, otherwise return its id.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            string name = Name();
+            return string.IsNullOrEmpty(name) ? Id.Value.ToString(CultureInfo.InvariantCulture) : name;
         }
     }
 }
