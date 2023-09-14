@@ -930,6 +930,36 @@ namespace Flecs.NET.Core
             return new Entity(Id).SetStage(entity.World);
         }
 
+        /// <summary>
+        ///     Return mutable entity handle for current stage.
+        /// </summary>
+        /// <param name="stage"></param>
+        /// <returns></returns>
+        public Entity Mut(World stage)
+        {
+            return Mut(ref stage);
+        }
+
+        /// <summary>
+        ///     Return mutable entity handle for current iter.
+        /// </summary>
+        /// <param name="it"></param>
+        /// <returns></returns>
+        public Entity Mut(Iter it)
+        {
+            return Mut(ref it);
+        }
+
+        /// <summary>
+        ///     Return mutable entity handle for current entity.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public Entity Mut(Entity entity)
+        {
+            return Mut(ref entity);
+        }
+
         private Entity SetStage(ecs_world_t* stage)
         {
             return new Entity(stage, Id);
