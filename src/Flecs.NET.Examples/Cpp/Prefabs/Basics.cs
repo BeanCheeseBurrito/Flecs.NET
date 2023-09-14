@@ -56,4 +56,4 @@ public struct Defense
 // Output:
 // Defense: 50
 // Defense after set: 100
-// ::my_spaceship: 100
+// my_spaceship: 100

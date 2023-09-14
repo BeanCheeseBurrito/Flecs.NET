@@ -62,6 +62,6 @@ Console.WriteLine("Instance Seat:    " + instSeat.Path());
 #endif
 
 // Output:
-// Instance Engine:  ::my_spaceship::Engine
-// Instance Cockpit: ::my_spaceship::Cockpit
-// Instance Seat:    ::my_spaceship::Cockpit::PilotSeat
+// Instance Engine:  my_spaceship.Engine
+// Instance Cockpit: my_spaceship.Cockpit
+// Instance Seat:    my_spaceship.Cockpit.PilotSeat

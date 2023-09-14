@@ -51,6 +51,6 @@ public struct Railgun
 #endif
 
 // Output:
-// Instance Base: ::my_railgun::Base
-// Instance Head: ::my_railgun::Head
-// Instance Beam: ::my_railgun::Beam
+// Instance Base: my_railgun.Base
+// Instance Head: my_railgun.Head
+// Instance Beam: my_railgun.Beam

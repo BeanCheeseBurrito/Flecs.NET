@@ -18,10 +18,10 @@ namespace Flecs.NET.Core
             {
                 FlecsAlertsImport(world);
 
-                world.Entity<Alert>("::flecs::alerts::Alert");
-                world.Entity<Info>("::flecs::alerts::Info");
-                world.Entity<Warning>("::flecs::alerts::Warning");
-                world.Entity<Err>("::flecs::alerts::Error");
+                world.Entity<Alert>("::flecs.alerts.Alert");
+                world.Entity<Info>("::flecs.alerts.Info");
+                world.Entity<Warning>("::flecs.alerts.Warning");
+                world.Entity<Err>("::flecs.alerts.Error");
             }
 
             /// <summary>

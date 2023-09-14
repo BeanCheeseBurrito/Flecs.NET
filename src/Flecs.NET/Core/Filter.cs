@@ -48,12 +48,11 @@ namespace Flecs.NET.Core
             if (!string.IsNullOrEmpty(name))
             {
                 using NativeString nativeName = (NativeString)name;
-                using NativeString nativeSep = (NativeString)"::";
 
                 ecs_entity_desc_t entityDesc = default;
                 entityDesc.name = nativeName;
-                entityDesc.sep = nativeSep;
-                entityDesc.root_sep = nativeSep;
+                entityDesc.sep = BindingContext.DefaultSeparator;
+                entityDesc.root_sep = BindingContext.DefaultRootSeparator;
                 filterDesc->entity = ecs_entity_init(world, &entityDesc);
             }
 

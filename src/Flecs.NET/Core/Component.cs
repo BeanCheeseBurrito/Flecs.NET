@@ -57,12 +57,14 @@ namespace Flecs.NET.Core
             if (Type<TComponent>.IsRegistered(world))
             {
                 id = Type<TComponent>.IdExplicit(world, name, allowTag, id);
+
                 using NativeString nativeName = (NativeString)name;
-                ecs_cpp_component_validate(
+
+                FlecsInternal.ComponentValidate(
                     world, id, nativeName,
                     nativeSymbolName,
-                    (IntPtr)Type<TComponent>.GetSize(),
-                    (IntPtr)Type<TComponent>.GetAlignment(),
+                    Type<TComponent>.GetSize(),
+                    Type<TComponent>.GetAlignment(),
                     Macros.Bool(implicitName)
                 );
             }
@@ -77,18 +79,21 @@ namespace Flecs.NET.Core
                     {
                         int index = start;
 
-                        while (index != 0 && name[index] != ':')
+                        while (index != 0 && name[index] != '.' && name[index] != ':')
                             index--;
 
-                        if (name[index] == ':')
+                        if (name[index] == '.' || name[index] == ':')
                             lastElem = index;
                     }
                     else
                     {
-                        lastElem = name.IndexOf(':', StringComparison.Ordinal);
+                        lastElem = name.LastIndexOf('.');
+
+                        if (lastElem == -1)
+                            lastElem = name.LastIndexOf(':');
                     }
 
-                    if (lastElem != 0) name = name[(lastElem + 1)..];
+                    name = name[(lastElem + 1)..];
                 }
 
                 using NativeString nativeName = (NativeString)name;
@@ -96,27 +101,36 @@ namespace Flecs.NET.Core
                 Type type = typeof(TComponent);
                 StructLayoutAttribute attribute = type.StructLayoutAttribute!;
 
-                int size = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
-                    ? sizeof(IntPtr)
-                    : sizeof(TComponent);
+                int size;
+                int alignment;
 
-                int alignment = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
-                    ? sizeof(IntPtr)
-                    : attribute.Value == LayoutKind.Explicit
-                        ? attribute.Pack
-                        : Type<TComponent>.AlignOf();
+                if (RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>())
+                {
+                    size = sizeof(GCHandle);
+                    alignment = Type<GCHandle>.AlignOf();
+                }
+                else if (attribute.Value == LayoutKind.Explicit)
+                {
+                    size = attribute.Size == 0 ? sizeof(TComponent) : attribute.Size;
+                    alignment = attribute.Pack == 0 ? Type<TComponent>.AlignOf() : attribute.Pack;
+                }
+                else
+                {
+                    size = sizeof(TComponent);
+                    alignment = Type<TComponent>.AlignOf();
+                }
 
-                bool existing;
+                byte existing;
 
-                id = ecs_cpp_component_register(
+                id = FlecsInternal.ComponentRegister(
                     world, id, nativeName, nativeSymbolName,
                     size, alignment,
-                    Macros.Bool(implicitName), (byte*)&existing
+                    Macros.Bool(implicitName), &existing
                 );
 
                 id = Type<TComponent>.IdExplicit(world, name, allowTag, id);
 
-                if (Type<TComponent>.GetSize() != 0 && !existing)
+                if (Type<TComponent>.GetSize() != 0 && existing == Macros.False)
                     Type<TComponent>.RegisterLifeCycleActions(world);
             }
 

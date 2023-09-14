@@ -35,11 +35,11 @@ namespace Flecs.NET.Core
             ref string name)
         {
             using NativeString nativeName = (NativeString)name;
-            using NativeString nativeSep = (NativeString)"::";
 
             ecs_entity_desc_t entityDesc = default;
             entityDesc.name = nativeName;
-            entityDesc.sep = nativeSep;
+            entityDesc.sep = BindingContext.DefaultSeparator;
+            entityDesc.root_sep = BindingContext.DefaultRootSeparator;
 
             ulong entity = ecs_entity_init(world, &entityDesc);
             ulong currentPhase = ecs_get_target(world, entity, EcsDependsOn, 0);

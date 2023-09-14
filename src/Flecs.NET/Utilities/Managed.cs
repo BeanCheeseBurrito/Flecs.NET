@@ -74,5 +74,15 @@ namespace Flecs.NET.Utilities
             StrongBox<T> obj = (StrongBox<T>)handle.Target!;
             return ref obj.Value;
         }
+
+        internal static ref T GetTypeRef<T>(IntPtr data, int index = 0)
+        {
+            if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+                return ref ((T*)data)[index];
+
+            GCHandle handle = GCHandle.FromIntPtr(((IntPtr*)data)[index]);
+            StrongBox<T> obj = (StrongBox<T>)handle.Target!;
+            return ref obj.Value;
+        }
     }
 }

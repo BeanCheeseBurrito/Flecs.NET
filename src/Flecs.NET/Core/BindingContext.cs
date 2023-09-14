@@ -12,6 +12,11 @@ namespace Flecs.NET.Core
     /// </summary>
     public static unsafe class BindingContext
     {
+        private static readonly BindingContextCleanup _ = new BindingContextCleanup();
+
+        internal static readonly byte* DefaultSeparator;
+        internal static readonly byte* DefaultRootSeparator;
+
 #if NET5_0_OR_GREATER
         internal static readonly IntPtr ObserverIterPointer =
             (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&ObserverIter;
@@ -84,10 +89,15 @@ namespace Flecs.NET.Core
         private static readonly Ecs.ContextFree TypeHooksContextFreeReference = TypeHooksContextFree;
 
         private static readonly Action OsApiAbortReference = OsApiAbort;
+#endif
 
         [SuppressMessage("Usage", "CA1810")]
         static BindingContext()
         {
+            DefaultSeparator = (byte*)Marshal.StringToHGlobalAnsi(".");
+            DefaultRootSeparator = (byte*)Marshal.StringToHGlobalAnsi("::");
+
+#if !NET5_0_OR_GREATER
             ObserverIterPointer = Marshal.GetFunctionPointerForDelegate(ObserverIterReference);
             RoutineIterPointer = Marshal.GetFunctionPointerForDelegate(RoutineIterReference);
 
@@ -105,8 +115,8 @@ namespace Flecs.NET.Core
             TypeHooksContextFreePointer = Marshal.GetFunctionPointerForDelegate(TypeHooksContextFreeReference);
 
             OsApiAbortPointer = Marshal.GetFunctionPointerForDelegate(OsApiAbortReference);
-        }
 #endif
+        }
 
         [UnmanagedCallersOnly]
         private static void ObserverIter(ecs_iter_t* iter)
@@ -364,6 +374,16 @@ namespace Flecs.NET.Core
                 FreeCallback(ref OnSet);
                 FreeCallback(ref OnRemove);
                 FreeCallback(ref ContextFree);
+            }
+        }
+
+        // Free native resources on program exit
+        private class BindingContextCleanup
+        {
+            ~BindingContextCleanup()
+            {
+                Memory.Free(DefaultSeparator);
+                Memory.Free(DefaultRootSeparator);
             }
         }
     }

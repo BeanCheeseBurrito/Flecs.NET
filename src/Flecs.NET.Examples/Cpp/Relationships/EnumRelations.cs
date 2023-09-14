@@ -32,7 +32,7 @@ tile.Add(TileStatus.Occupied);
 // (Tile, Tile.Stone), (TileStatus, TileStatus.Occupied)
 Console.WriteLine(tile.Type().Str());
 
-// Check if the entity has the Tile relationship and the Tile::Stone pair
+// Check if the entity has the Tile relationship and the Tile.Stone pair
 Console.WriteLine(tile.Has<Tile>()); // True
 Console.WriteLine(tile.Has(Tile.Stone)); // True
 
@@ -56,9 +56,9 @@ filter1.Each((Iter it, int i) =>
 });
 
 // Outputs:
-//  ::Tile::Stone
-//  ::Tile::Grass
-//  ::Tile::Sand
+//  Tile.Stone
+//  Tile.Grass
+//  Tile.Sand
 
 // Iterate only occupied tiles
 using Filter filter2 = world.Filter(
@@ -74,8 +74,8 @@ filter2.Each((Iter it, int i) =>
 });
 
 // Outputs:
-//  ::Tile::Stone
-//  ::Tile::Sand
+//  Tile.Stone
+//  Tile.Sand
 
 // Remove any instance of the TileStatus relationship
 tile.Remove<TileStatus>();
@@ -101,8 +101,8 @@ public enum TileStatus
 // True
 // True
 // True
-// ::Tile::Stone
-// ::Tile::Grass
-// ::Tile::Sand
-// ::Tile::Stone
-// ::Tile::Sand
+// Tile.Stone
+// Tile.Grass
+// Tile.Sand
+// Tile.Stone
+// Tile.Sand

@@ -24,5 +24,5 @@ Console.WriteLine($"Instance Cockpit: {instCockpit.Path()}");
 #endif
 
 // Output:
-// Instance Engine: ::my_spaceship::Engine
-// Instance Cockpit: ::my_spaceship::Cockpit
+// Instance Engine: my_spaceship.Engine
+// Instance Cockpit: my_spaceship.Cockpit

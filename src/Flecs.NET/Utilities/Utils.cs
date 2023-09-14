@@ -8,6 +8,21 @@ namespace Flecs.NET.Utilities
     public static unsafe class Utils
     {
         /// <summary>
+        ///     Checks if 2 native strings are equal.
+        /// </summary>
+        /// <param name="s1"></param>
+        /// <param name="s2"></param>
+        /// <returns></returns>
+        public static bool StringEqual(byte* s1, byte* s2)
+        {
+            while (*s1 == *s2++)
+                if (*s1++ == 0)
+                    return true;
+
+            return *s1 - *--s1 == 0;
+        }
+
+        /// <summary>
         ///     Gets the next power of 2 for the provided number.
         /// </summary>
         /// <param name="num"></param>

@@ -375,9 +375,12 @@ namespace Flecs.NET.Core
         public Entity Lookup(string name)
         {
             using NativeString nativeName = (NativeString)name;
-            using NativeString nativeSep = (NativeString)"::";
 
-            return new Entity(Handle, ecs_lookup_path_w_sep(Handle, 0, nativeName, nativeSep, nativeSep, Macros.True));
+            return new Entity(
+                Handle,
+                ecs_lookup_path_w_sep(Handle, 0, nativeName,
+                    BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.True)
+            );
         }
 
         /// <summary>
@@ -925,9 +928,10 @@ namespace Flecs.NET.Core
         public Entity Use(string name, string alias = "")
         {
             using NativeString nativeName = (NativeString)name;
-            using NativeString nativeSep = (NativeString)"::";
 
-            ulong entity = ecs_lookup_path_w_sep(Handle, 0, nativeName, nativeSep, nativeSep, Macros.True);
+            ulong entity = ecs_lookup_path_w_sep(Handle, 0, nativeName,
+                BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.True);
+
             Assert.True(entity != 0, nameof(ECS_INVALID_PARAMETER));
 
             using NativeString nativeAlias = (NativeString)alias;
@@ -1705,8 +1709,8 @@ namespace Flecs.NET.Core
             if (!string.IsNullOrEmpty(name))
             {
                 using NativeString nativeName = (NativeString)name;
-                using NativeString nativeSep = (NativeString)"::";
-                ecs_add_path_w_sep(Handle, result, 0, nativeName, nativeSep, nativeSep);
+                ecs_add_path_w_sep(Handle, result, 0, nativeName,
+                    BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator);
             }
 
             ecs_set_scope(Handle, result);

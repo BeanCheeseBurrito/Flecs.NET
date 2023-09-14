@@ -47,7 +47,7 @@ namespace Flecs.NET.Tests.Cpp
             world.SetScope(prev);
 
             Assert.Equal("Bar", child.Name());
-            Assert.Equal("::Foo::Bar", child.Path());
+            Assert.Equal("Foo.Bar", child.Path());
         }
 
         [Fact]
@@ -55,20 +55,20 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity entity = new Entity(world, "Foo::Bar");
+            Entity entity = new Entity(world, "Foo.Bar");
             Assert.True(entity != 0);
             Assert.Equal("Bar", entity.Name());
-            Assert.Equal("::Foo::Bar", entity.Path());
+            Assert.Equal("Foo.Bar", entity.Path());
 
             Entity prev = world.SetScope(entity);
 
-            Entity child = world.Entity("Hello::World");
+            Entity child = world.Entity("Hello.World");
             Assert.True(child != 0);
 
             world.SetScope(prev);
 
             Assert.Equal("World", child.Name());
-            Assert.Equal("::Foo::Bar::Hello::World", child.Path());
+            Assert.Equal("Foo.Bar.Hello.World", child.Path());
         }
 
         [Fact]
@@ -1364,7 +1364,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     Entity e = world.Entity()
         //         .Set<Pod>({10});
-        //     Assert.Equal(Pod::copy_invoked, 0);
+        //     Assert.Equal(Pod.copy_invoked, 0);
         //
         //     Assert.True(e.Has<Pod>());
         //     const Pod *p = e.GetPtr<Pod>();
@@ -1380,7 +1380,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     Entity e = world.Entity()
         //         .Set<Pod>(val);
-        //     Assert.Equal(Pod::copy_invoked, 1);
+        //     Assert.Equal(Pod.copy_invoked, 1);
         //
         //     Assert.True(e.Has<Pod>());
         //     const Pod *p = e.GetPtr<Pod>();
@@ -1648,7 +1648,7 @@ namespace Flecs.NET.Tests.Cpp
 
             using ScopedWorld scope = world.Scope(parent);
             Entity child = world.Entity("child");
-            Assert.Equal("::parent::child", child.Path());
+            Assert.Equal("parent.child", child.Path());
         }
 
         [Fact]
@@ -1664,8 +1664,8 @@ namespace Flecs.NET.Tests.Cpp
             using ScopedWorld childScope = world.Scope(child);
             Entity grandchild = world.Entity("grandchild");
 
-            Assert.Equal("::parent::child::grandchild", grandchild.Path());
-            Assert.Equal("child::grandchild", grandchild.PathFrom(parent));
+            Assert.Equal("parent.child.grandchild", grandchild.Path());
+            Assert.Equal("child.grandchild", grandchild.PathFrom(parent));
         }
 
         [Fact]
@@ -1680,8 +1680,8 @@ namespace Flecs.NET.Tests.Cpp
             using ScopedWorld childScope = world.Scope(child);
             Entity grandchild = world.Entity("grandchild");
 
-            Assert.Equal("::Parent::child::grandchild", grandchild.Path());
-            Assert.Equal("child::grandchild", grandchild.PathFrom<Parent>());
+            Assert.Equal("Parent.child.grandchild", grandchild.Path());
+            Assert.Equal("child.grandchild", grandchild.PathFrom<Parent>());
         }
 
         [Fact]
@@ -1708,7 +1708,7 @@ namespace Flecs.NET.Tests.Cpp
             using ScopedWorld childScope = world.Scope(child);
             Entity grandchild = world.Entity("grandchild");
 
-            Assert.Equal("::parent::child::grandchild", grandchild.Path());
+            Assert.Equal("parent.child.grandchild", grandchild.Path());
             Assert.Equal("child_grandchild", grandchild.PathFrom(parent, "_"));
         }
 
@@ -1724,7 +1724,7 @@ namespace Flecs.NET.Tests.Cpp
             using ScopedWorld childScope = world.Scope(child);
             Entity grandchild = world.Entity("grandchild");
 
-            Assert.Equal("::Parent::child::grandchild", grandchild.Path());
+            Assert.Equal("Parent.child.grandchild", grandchild.Path());
             Assert.Equal("child_grandchild", grandchild.PathFrom<Parent>("_"));
         }
 
@@ -1733,11 +1733,11 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity entity = new Entity(world, "Foo::Bar");
+            Entity entity = new Entity(world, "Foo.Bar");
             Assert.True(entity != 0);
             Assert.Equal("Bar", entity.Name());
 
-            Assert.Equal("::Foo::Bar", entity.Path());
+            Assert.Equal("Foo.Bar", entity.Path());
         }
 
         [Fact]
@@ -1796,7 +1796,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //         auto q = world.query_builder<>().term(Tag).build();
         //
-        //     q.each([&](flecs::entity e) {
+        //     q.each([&](flecs.entity e) {
         //         test_assert(e.has(Tag));
         //
         //         test_bool(e.get([&](const Self& s){
@@ -1849,13 +1849,13 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Defer(() =>
             {
-                e = world.Entity("Foo::Bar");
+                e = world.Entity("Foo.Bar");
                 Assert.True(e != 0);
             });
 
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Bar", e.Name());
-            Assert.Equal("::Foo::Bar", e.Path());
+            Assert.Equal("Foo.Bar", e.Path());
         }
 
 
@@ -1878,7 +1878,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Foo", e.Name());
-            Assert.Equal("::Parent::Foo", e.Path());
+            Assert.Equal("Parent.Foo", e.Path());
         }
 
         [Fact]
@@ -1893,14 +1893,14 @@ namespace Flecs.NET.Tests.Cpp
             {
                 parent.Scope(() =>
                 {
-                    e = world.Entity("Foo::Bar");
+                    e = world.Entity("Foo.Bar");
                     Assert.True(e != 0);
                 });
             });
 
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Bar", e.Name());
-            Assert.Equal("::Parent::Foo::Bar", e.Path());
+            Assert.Equal("Parent.Foo.Bar", e.Path());
         }
 
         [Fact]
@@ -1915,18 +1915,18 @@ namespace Flecs.NET.Tests.Cpp
             {
                 parent = world.Entity("Parent").Scope(() =>
                 {
-                    e = world.Entity("Foo::Bar");
+                    e = world.Entity("Foo.Bar");
                     Assert.True(e != 0);
                 });
             });
 
             Assert.True(parent.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Parent", parent.Name());
-            Assert.Equal("::Parent", parent.Path());
+            Assert.Equal("Parent", parent.Path());
 
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Bar", e.Name());
-            Assert.Equal("::Parent::Foo::Bar", e.Path());
+            Assert.Equal("Parent.Foo.Bar", e.Path());
         }
 
         [Fact]
@@ -1997,7 +1997,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(tag));
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Foo", e.Name());
-            Assert.Equal("::Parent::Foo", e.Path());
+            Assert.Equal("Parent.Foo", e.Path());
         }
 
         [Fact]
@@ -2015,7 +2015,7 @@ namespace Flecs.NET.Tests.Cpp
                 {
                     parent.Scope(() =>
                     {
-                        e = world.Entity("Foo::Bar");
+                        e = world.Entity("Foo.Bar");
                         Assert.True(e != 0);
                         Assert.True(!e.Has(tag));
                     });
@@ -2027,7 +2027,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(tag));
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Bar", e.Name());
-            Assert.Equal("::Parent::Foo::Bar", e.Path());
+            Assert.Equal("Parent.Foo.Bar", e.Path());
         }
         //
         // [Fact]
@@ -2188,7 +2188,7 @@ namespace Flecs.NET.Tests.Cpp
         //             world.Entity("C");
         //         });
         //
-        //     var C = world.Lookup("P::C");
+        //     var C = world.Lookup("P.C");
         //     Assert.True(C != 0);
         // }
         //
@@ -2202,7 +2202,7 @@ namespace Flecs.NET.Tests.Cpp
         //         })
         //         .Set(new Position() { X = 10, Y = 20 });
         //
-        //     var C = world.Lookup("P::C");
+        //     var C = world.Lookup("P.C");
         //     Assert.True(C != 0);
         // }
         //
@@ -2243,7 +2243,7 @@ namespace Flecs.NET.Tests.Cpp
         // void role_id_str() {
         //     using World world = World.Create();
         //
-        //     Id id = flecs::id(ecs, ECS_OVERRIDE | world.Entity("Foo"));
+        //     Id id = flecs.id(ecs, ECS_OVERRIDE | world.Entity("Foo"));
         //
         //     Assert.Equal("OVERRIDE|Foo", id.str());
         // }
@@ -2252,7 +2252,7 @@ namespace Flecs.NET.Tests.Cpp
         // void id_str_from_entity_view() {
         //     using World world = World.Create();
         //
-        //     flecs::entity_view id = world.Entity("Foo");
+        //     flecs.entity_view id = world.Entity("Foo");
         //
         //     Assert.Equal("Foo", id.str());
         // }
@@ -2268,7 +2268,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         // [Fact]
         // void null_entity() {
-        //     Entity e = flecs::entity::null();
+        //     Entity e = flecs.entity.null();
         //     Assert.True(e.id() == 0);
         // }
         //
@@ -2276,14 +2276,14 @@ namespace Flecs.NET.Tests.Cpp
         // void null_entity_w_world() {
         //     using World world = World.Create();
         //
-        //     Entity e = flecs::entity::null(ecs);
+        //     Entity e = flecs.entity.null(ecs);
         //     Assert.True(e.id() == 0);
         //     Assert.True(e.world().c_ptr() == world.c_ptr());
         // }
         //
         // [Fact]
         // void null_entity_w_0() {
-        //     Entity e = flecs::entity(static_cast<ulong>(0));
+        //     Entity e = flecs.entity(static_cast<ulong>(0));
         //     Assert.True(e.id() == 0);
         //     Assert.True(e.world().c_ptr() == null);
         // }
@@ -2292,14 +2292,14 @@ namespace Flecs.NET.Tests.Cpp
         // void null_entity_w_world_w_0() {
         //     using World world = World.Create();
         //
-        //     Entity e = flecs::entity::null(ecs);
+        //     Entity e = flecs.entity.null(ecs);
         //     Assert.True(e.id() == 0);
         //     Assert.True(e.world().c_ptr() == world.c_ptr());
         // }
         //
         // [Fact]
         // void entity_view_null_entity() {
-        //     flecs::entity_view e = flecs::entity::null();
+        //     flecs.entity_view e = flecs.entity.null();
         //     Assert.True(e.id() == 0);
         // }
         //
@@ -2307,14 +2307,14 @@ namespace Flecs.NET.Tests.Cpp
         // void entity_view_null_entity_w_world() {
         //     using World world = World.Create();
         //
-        //     flecs::entity_view e = flecs::entity::null(ecs);
+        //     flecs.entity_view e = flecs.entity.null(ecs);
         //     Assert.True(e.id() == 0);
         //     Assert.True(e.world().c_ptr() == world.c_ptr());
         // }
         //
         // [Fact]
         // void entity_view_null_entity_w_0() {
-        //     flecs::entity_view e = flecs::entity(static_cast<ulong>(0));
+        //     flecs.entity_view e = flecs.entity(static_cast<ulong>(0));
         //     Assert.True(e.id() == 0);
         //     Assert.True(e.world().c_ptr() == null);
         // }
@@ -2323,7 +2323,7 @@ namespace Flecs.NET.Tests.Cpp
         // void entity_view_null_entity_w_world_w_0() {
         //     using World world = World.Create();
         //
-        //     flecs::entity_view e = flecs::entity::null(ecs);
+        //     flecs.entity_view e = flecs.entity.null(ecs);
         //     Assert.True(e.id() == 0);
         //     Assert.True(e.world().c_ptr() == world.c_ptr());
         // }
@@ -2337,9 +2337,9 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     var p0 = e1;
         //     var p1 = world.pair(e1, e2);
-        //     var p2 = world.pair(e1, flecs::Wildcard);
-        //     var p3 = world.pair(flecs::Wildcard, e2);
-        //     var p4 = world.pair(flecs::Wildcard, flecs::Wildcard);
+        //     var p2 = world.pair(e1, flecs.Wildcard);
+        //     var p3 = world.pair(flecs.Wildcard, e2);
+        //     var p4 = world.pair(flecs.Wildcard, flecs.Wildcard);
         //
         //     test_bool(e1.is_wildcard(), false);
         //     test_bool(e2.is_wildcard(), false);
@@ -2413,10 +2413,10 @@ namespace Flecs.NET.Tests.Cpp
         // void has_id() {
         //     using World world = World.Create();
         //
-        //     flecs::id id_1 = world.Entity();
+        //     flecs.id id_1 = world.Entity();
         //     Assert.True(id_1 != 0);
         //
-        //     flecs::id id_2 = world.Entity();
+        //     flecs.id id_2 = world.Entity();
         //     Assert.True(id_2 != 0);
         //
         //     Entity e = world.Entity()
@@ -2431,13 +2431,13 @@ namespace Flecs.NET.Tests.Cpp
         // void has_pair_id() {
         //     using World world = World.Create();
         //
-        //     flecs::id id_1 = world.Entity();
+        //     flecs.id id_1 = world.Entity();
         //     Assert.True(id_1 != 0);
         //
-        //     flecs::id id_2 = world.Entity();
+        //     flecs.id id_2 = world.Entity();
         //     Assert.True(id_2 != 0);
         //
-        //     flecs::id id_3 = world.Entity();
+        //     flecs.id id_3 = world.Entity();
         //     Assert.True(id_3 != 0);
         //
         //     Entity e = world.Entity()
@@ -2454,10 +2454,10 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     struct Rel { };
         //
-        //     flecs::id id_2 = world.Entity();
+        //     flecs.id id_2 = world.Entity();
         //     Assert.True(id_2 != 0);
         //
-        //     flecs::id id_3 = world.Entity();
+        //     flecs.id id_3 = world.Entity();
         //     Assert.True(id_3 != 0);
         //
         //     Entity e = world.Entity()
@@ -2481,25 +2481,25 @@ namespace Flecs.NET.Tests.Cpp
         //     Assert.True(e1 != 0);
         //     Assert.True(e2 != 0);
         //
-        //     test_bool(e1.Has(flecs::Wildcard), true);
-        //     test_bool(e2.Has(flecs::Wildcard), false);
+        //     test_bool(e1.Has(flecs.Wildcard), true);
+        //     test_bool(e2.Has(flecs.Wildcard), false);
         // }
         //
         // [Fact]
         // void has_wildcard_pair_id() {
         //     using World world = World.Create();
         //
-        //     flecs::id rel = world.Entity();
+        //     flecs.id rel = world.Entity();
         //     Assert.True(rel != 0);
         //
-        //     flecs::id obj = world.Entity();
+        //     flecs.id obj = world.Entity();
         //     Assert.True(obj != 0);
         //
-        //     flecs::id obj_2 = world.Entity();
+        //     flecs.id obj_2 = world.Entity();
         //     Assert.True(obj_2 != 0);
         //
-        //     flecs::id w1 = world.id(rel, flecs::Wildcard);
-        //     flecs::id w2 = world.id(flecs::Wildcard, obj);
+        //     flecs.id w1 = world.id(rel, flecs.Wildcard);
+        //     flecs.id w2 = world.id(flecs.Wildcard, obj);
         //
         //     var e1 = world.Entity().Add(rel, obj);
         //     var e2 = world.Entity().Add(rel, obj_2);
@@ -2577,10 +2577,10 @@ namespace Flecs.NET.Tests.Cpp
         // void owns_id() {
         //     using World world = World.Create();
         //
-        //     flecs::id id_1 = world.Entity();
+        //     flecs.id id_1 = world.Entity();
         //     Assert.True(id_1 != 0);
         //
-        //     flecs::id id_2 = world.Entity();
+        //     flecs.id id_2 = world.Entity();
         //     Assert.True(id_2 != 0);
         //
         //     Entity e = world.Entity()
@@ -2595,13 +2595,13 @@ namespace Flecs.NET.Tests.Cpp
         // void owns_pair_id() {
         //     using World world = World.Create();
         //
-        //     flecs::id id_1 = world.Entity();
+        //     flecs.id id_1 = world.Entity();
         //     Assert.True(id_1 != 0);
         //
-        //     flecs::id id_2 = world.Entity();
+        //     flecs.id id_2 = world.Entity();
         //     Assert.True(id_2 != 0);
         //
-        //     flecs::id id_3 = world.Entity();
+        //     flecs.id id_3 = world.Entity();
         //     Assert.True(id_3 != 0);
         //
         //     Entity e = world.Entity()
@@ -2625,25 +2625,25 @@ namespace Flecs.NET.Tests.Cpp
         //     Assert.True(e1 != 0);
         //     Assert.True(e2 != 0);
         //
-        //     test_bool(e1.Owns(flecs::Wildcard), true);
-        //     test_bool(e2.Owns(flecs::Wildcard), false);
+        //     test_bool(e1.Owns(flecs.Wildcard), true);
+        //     test_bool(e2.Owns(flecs.Wildcard), false);
         // }
         //
         // [Fact]
         // void owns_wildcard_pair() {
         //     using World world = World.Create();
         //
-        //     flecs::id rel = world.Entity();
+        //     flecs.id rel = world.Entity();
         //     Assert.True(rel != 0);
         //
-        //     flecs::id obj = world.Entity();
+        //     flecs.id obj = world.Entity();
         //     Assert.True(obj != 0);
         //
-        //     flecs::id obj_2 = world.Entity();
+        //     flecs.id obj_2 = world.Entity();
         //     Assert.True(obj_2 != 0);
         //
-        //     flecs::id w1 = world.id(rel, flecs::Wildcard);
-        //     flecs::id w2 = world.id(flecs::Wildcard, obj);
+        //     flecs.id w1 = world.id(rel, flecs.Wildcard);
+        //     flecs.id w2 = world.id(flecs.Wildcard, obj);
         //
         //     var e1 = world.Entity().Add(rel, obj);
         //     var e2 = world.Entity().Add(rel, obj_2);
@@ -2664,10 +2664,10 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     struct Rel { };
         //
-        //     flecs::id id_2 = world.Entity();
+        //     flecs.id id_2 = world.Entity();
         //     Assert.True(id_2 != 0);
         //
-        //     flecs::id id_3 = world.Entity();
+        //     flecs.id id_3 = world.Entity();
         //     Assert.True(id_3 != 0);
         //
         //     Entity e = world.Entity()
@@ -2685,16 +2685,16 @@ namespace Flecs.NET.Tests.Cpp
         //     Entity e = world.Entity();
         //     Assert.True(e != 0);
         //
-        //     flecs::id id_1 = world.id(e);
+        //     flecs.id id_1 = world.id(e);
         //     Assert.True(id_1 != 0);
         //     Assert.True(id_1 == e);
         //     Assert.True(id_1.world() == ecs);
         //     test_bool(id_1.is_pair(), false);
         //     test_bool(id_1.is_wildcard(), false);
         //
-        //     flecs::id id_2 = world.id(flecs::Wildcard);
+        //     flecs.id id_2 = world.id(flecs.Wildcard);
         //     Assert.True(id_2 != 0);
-        //     Assert.True(id_2 == flecs::Wildcard);
+        //     Assert.True(id_2 == flecs.Wildcard);
         //     Assert.True(id_2.world() == ecs);
         //     test_bool(id_2.is_pair(), false);
         //     test_bool(id_2.is_wildcard(), true);
@@ -2710,7 +2710,7 @@ namespace Flecs.NET.Tests.Cpp
         //     var obj = world.Entity();
         //     Assert.True(obj != 0);
         //
-        //     flecs::id id_1 = world.id(rel, obj);
+        //     flecs.id id_1 = world.id(rel, obj);
         //     Assert.True(id_1 != 0);
         //     Assert.True(id_1.first() == rel);
         //     Assert.True(id_1.second() == obj);
@@ -2718,10 +2718,10 @@ namespace Flecs.NET.Tests.Cpp
         //     test_bool(id_1.is_pair(), true);
         //     test_bool(id_1.is_wildcard(), false);
         //
-        //     flecs::id id_2 = world.id(rel, flecs::Wildcard);
+        //     flecs.id id_2 = world.id(rel, flecs.Wildcard);
         //     Assert.True(id_2 != 0);
         //     Assert.True(id_2.first() == rel);
-        //     Assert.True(id_2.second() == flecs::Wildcard);
+        //     Assert.True(id_2.second() == flecs.Wildcard);
         //     Assert.True(id_2.world() == ecs);
         //     test_bool(id_2.is_pair(), true);
         //     test_bool(id_2.is_wildcard(), true);
@@ -2731,7 +2731,7 @@ namespace Flecs.NET.Tests.Cpp
         // void id_default_from_world() {
         //     using World world = World.Create();
         //
-        //     flecs::id id_default = world.id();
+        //     flecs.id id_default = world.id();
         //     Assert.True(id_default == 0);
         // }
         //
@@ -2794,10 +2794,10 @@ namespace Flecs.NET.Tests.Cpp
         //         .ChildOf(@base)
         //         .slot_of(@base);
         //
-        //     Assert.True(base_child.Has(flecs::SlotOf, @base));
+        //     Assert.True(base_child.Has(flecs.SlotOf, @base));
         //
         //     var inst = world.Entity().is_a(@base);
-        //     Assert.True(inst.Has(base_child, flecs::Wildcard));
+        //     Assert.True(inst.Has(base_child, flecs.Wildcard));
         // }
         //
         // [Fact]
@@ -2811,10 +2811,10 @@ namespace Flecs.NET.Tests.Cpp
         //         .ChildOf(@base)
         //         .slot_of<Parent>();
         //
-        //     Assert.True(base_child.Has(flecs::SlotOf, @base));
+        //     Assert.True(base_child.Has(flecs.SlotOf, @base));
         //
         //     var inst = world.Entity().is_a(@base);
-        //     Assert.True(inst.Has(base_child, flecs::Wildcard));
+        //     Assert.True(inst.Has(base_child, flecs.Wildcard));
         // }
         //
         // [Fact]
@@ -2825,10 +2825,10 @@ namespace Flecs.NET.Tests.Cpp
         //     var base_child = world.Prefab()
         //         .ChildOf(@base).slot();
         //
-        //     Assert.True(base_child.Has(flecs::SlotOf, @base));
+        //     Assert.True(base_child.Has(flecs.SlotOf, @base));
         //
         //     var inst = world.Entity().is_a(@base);
-        //     Assert.True(inst.Has(base_child, flecs::Wildcard));
+        //     Assert.True(inst.Has(base_child, flecs.Wildcard));
         // }
         //
         // [Fact]
@@ -2916,7 +2916,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     world.readonly_begin();
         //
-        //     flecs::world stage = world.get_stage(0);
+        //     flecs.world stage = world.get_stage(0);
         //
         //     bool invoked = false;
         //     e.mut(stage).Get([&](const Position& p) {
@@ -2936,11 +2936,11 @@ namespace Flecs.NET.Tests.Cpp
         //     Entity e1;
         //     Entity e2 = {};
         //
-        //     flecs::entity_view e3;
-        //     flecs::entity_view e4 = {};
+        //     flecs.entity_view e3;
+        //     flecs.entity_view e4 = {};
         //
-        //     flecs::id id1;
-        //     flecs::id id2 = {};
+        //     flecs.id id1;
+        //     flecs.id id2 = {};
         //
         //     e1 = world.Entity();
         //     e2 = world.Entity();
@@ -2982,17 +2982,17 @@ namespace Flecs.NET.Tests.Cpp
         //     var e1 = world.Entity("e");
         //     var e2 = world.Entity("e");
         //
-        //     var f1 = world.Entity("p::f");
-        //     var f2 = world.Entity("p::f");
+        //     var f1 = world.Entity("p.f");
+        //     var f2 = world.Entity("p.f");
         //
         //     var g1 = world.Scope(world.Entity("q")).Entity("g");
         //     var g2 = world.Scope(world.Entity("q")).Entity("g");
         //
         //     world.defer_end();
         //
-        //     Assert.Equal(e1.Path(), "::e");
-        //     Assert.Equal(f1.Path(), "::p::f");
-        //     Assert.Equal(g1.Path(), "::q::g");
+        //     Assert.Equal(e1.Path(), "e");
+        //     Assert.Equal(f1.Path(), "p.f");
+        //     Assert.Equal(g1.Path(), "q.g");
         //
         //     Assert.True(e1 == e2);
         //     Assert.True(f1 == f2);
@@ -3122,9 +3122,9 @@ namespace Flecs.NET.Tests.Cpp
         // void entity_w_root_name() {
         //     using World world = World.Create();
         //
-        //     var e = world.Entity("::foo");
+        //     var e = world.Entity("foo");
         //     Assert.Equal("Foo", e.Name());
-        //     Assert.Equal(e.Path(), "::foo");
+        //     Assert.Equal(e.Path(), "foo");
         // }
         //
         // [Fact]
@@ -3133,11 +3133,11 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     var p = world.Entity("parent");
         //     world.set_scope(p);
-        //     var e = world.Entity("::foo");
+        //     var e = world.Entity("foo");
         //     world.set_scope(0);
         //
         //     Assert.Equal("Foo", e.Name());
-        //     Assert.Equal(e.Path(), "::foo");
+        //     Assert.Equal(e.Path(), "foo");
         // }
         //
         // struct EntityType { };
@@ -3149,8 +3149,8 @@ namespace Flecs.NET.Tests.Cpp
         //     var e = world.Entity<EntityType>();
         //
         //     Assert.Equal(e.Name(), "EntityType");
-        //     Assert.Equal(e.Path(), "::EntityType");
-        //     Assert.True(!e.Has<flecs::Component>());
+        //     Assert.Equal(e.Path(), "EntityType");
+        //     Assert.True(!e.Has<flecs.Component>());
         //
         //     var e_2 = world.Entity<EntityType>();
         //     Assert.True(e == e_2);
@@ -3171,22 +3171,22 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     var turret = world.prefab<Turret>();
-        //         var turret_base = world.prefab<Turret::Base>();
+        //         var turret_base = world.prefab<Turret.Base>();
         //
         //     Assert.True(turret != 0);
         //     Assert.True(turret_base != 0);
         //     Assert.True(turret_base.Has(EcsChildOf, turret));
         //
-        //     Assert.Equal(turret.Path(), "::Turret");
-        //     Assert.Equal(turret_base.Path(), "::Turret::Base");
+        //     Assert.Equal(turret.Path(), "Turret");
+        //     Assert.Equal(turret_base.Path(), "Turret.Base");
         //
         //     Assert.Equal(turret.symbol(), "Turret");
         //     Assert.Equal(turret_base.symbol(), "Turret.Base");
         //
         //     var railgun = world.prefab<Railgun>().is_a<Turret>();
         //         var railgun_base = railgun.Lookup("Base");
-        //         var railgun_head = world.prefab<Railgun::Head>();
-        //         var railgun_beam = world.prefab<Railgun::Beam>();
+        //         var railgun_head = world.prefab<Railgun.Head>();
+        //         var railgun_beam = world.prefab<Railgun.Beam>();
         //
         //     Assert.True(railgun != 0);
         //     Assert.True(railgun_base != 0);
@@ -3196,10 +3196,10 @@ namespace Flecs.NET.Tests.Cpp
         //     Assert.True(railgun_head.Has(EcsChildOf, railgun));
         //     Assert.True(railgun_beam.Has(EcsChildOf, railgun));
         //
-        //     Assert.Equal(railgun.Path(), "::Railgun");
-        //     Assert.Equal(railgun_base.Path(), "::Railgun::Base");
-        //     Assert.Equal(railgun_head.Path(), "::Railgun::Head");
-        //     Assert.Equal(railgun_beam.Path(), "::Railgun::Beam");
+        //     Assert.Equal(railgun.Path(), "Railgun");
+        //     Assert.Equal(railgun_base.Path(), "Railgun.Base");
+        //     Assert.Equal(railgun_head.Path(), "Railgun.Head");
+        //     Assert.Equal(railgun_beam.Path(), "Railgun.Beam");
         //
         //     Assert.Equal(railgun.symbol(), "Railgun");
         //     Assert.Equal(railgun_head.symbol(), "Railgun.Head");
@@ -3219,8 +3219,8 @@ namespace Flecs.NET.Tests.Cpp
         //     Assert.True(turret_base != 0);
         //     Assert.True(turret_base.Has(EcsChildOf, turret));
         //
-        //     Assert.Equal(turret.Path(), "::Turret");
-        //     Assert.Equal(turret_base.Path(), "::Turret::Base");
+        //     Assert.Equal(turret.Path(), "Turret");
+        //     Assert.Equal(turret_base.Path(), "Turret.Base");
         //
         //     Assert.Equal(turret.symbol(), "Turret");
         //     Assert.Equal(turret_base.symbol(), "Base");
@@ -3240,12 +3240,12 @@ namespace Flecs.NET.Tests.Cpp
         //     struct Bar {};
         //
         //     var t = world.prefab<Turret>();
-        //     var tb = world.prefab<Turret::Base>().Add<Foo>();
+        //     var tb = world.prefab<Turret.Base>().Add<Foo>();
         //     Assert.True(t != 0);
         //     Assert.True(tb != 0);
         //
         //     var r = world.prefab<Railgun>().is_a<Turret>();
-        //     var rb = world.prefab<Railgun::Base>().Add<Bar>();
+        //     var rb = world.prefab<Railgun.Base>().Add<Bar>();
         //     Assert.True(r != 0);
         //     Assert.True(rb != 0);
         //
@@ -3261,15 +3261,15 @@ namespace Flecs.NET.Tests.Cpp
         // void entity_w_nested_type() {
         //     using World world = World.Create();
         //
-        //     var e = world.Entity<Parent::EntityType>();
+        //     var e = world.Entity<Parent.EntityType>();
         //     var p = world.Entity<Parent>();
         //
         //     Assert.Equal(e.Name(), "EntityType");
-        //     Assert.Equal(e.Path(), "::Parent::EntityType");
+        //     Assert.Equal(e.Path(), "Parent.EntityType");
         //     Assert.True(e.Has(EcsChildOf, p));
-        //     Assert.True(!e.Has<flecs::Component>());
+        //     Assert.True(!e.Has<flecs.Component>());
         //
-        //     var e_2 = world.Entity<Parent::EntityType>();
+        //     var e_2 = world.Entity<Parent.EntityType>();
         //     Assert.True(e == e_2);
         // }
         //
@@ -3280,7 +3280,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     using World world = World.Create();
         //
-        //     flecs::to_array({
+        //     flecs.to_array({
         //         world.Entity(),
         //         world.Entity(),
         //         world.Entity()
@@ -3447,7 +3447,7 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     Entity e = world.Entity();
-        //     var r = world.Entity().Add(flecs::Exclusive);
+        //     var r = world.Entity().Add(flecs.Exclusive);
         //     var o_1 = world.Entity();
         //     var o_2 = world.Entity();
         //
@@ -3469,7 +3469,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     struct First { };
         //
-        //     world.Component<First>().Add(flecs::Exclusive);
+        //     world.Component<First>().Add(flecs.Exclusive);
         //
         //     Entity e = world.Entity();
         //     var o_1 = world.Entity();
@@ -3495,7 +3495,7 @@ namespace Flecs.NET.Tests.Cpp
         //     struct O_1 { };
         //     struct O_2 { };
         //
-        //     world.Component<R>().Add(flecs::Exclusive);
+        //     world.Component<R>().Add(flecs.Exclusive);
         //
         //     Entity e = world.Entity();
         //
@@ -3524,7 +3524,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     e.add_if(0, r, 0);
         //     Assert.True(!e.Has(r, o_1));
-        //     Assert.True(!e.Has(r, flecs::Wildcard));
+        //     Assert.True(!e.Has(r, flecs.Wildcard));
         // }
         //
         // [Fact]
@@ -3590,7 +3590,7 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     int32_t count = 0;
-        //     world.Entity(flecs::This).children([&](flecs::entity) {
+        //     world.Entity(flecs.This).children([&](flecs.entity) {
         //         count ++;
         //     });
         //     Assert.True(count == 0);
@@ -3601,7 +3601,7 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     int32_t count = 0;
-        //     world.Entity(flecs::Wildcard).children([&](flecs::entity) {
+        //     world.Entity(flecs.Wildcard).children([&](flecs.entity) {
         //         count ++;
         //     });
         //     Assert.True(count == 0);
@@ -3612,7 +3612,7 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     int32_t count = 0;
-        //     world.Entity(flecs::Any).children([&](flecs::entity) {
+        //     world.Entity(flecs.Any).children([&](flecs.entity) {
         //         count ++;
         //     });
         //     Assert.True(count == 0);
@@ -3685,7 +3685,7 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     Entity e = world.Entity();
-        //     flecs::entity_view ev = e.view();
+        //     flecs.entity_view ev = e.view();
         //     Assert.True(e == ev);
         // }
         //
@@ -3696,7 +3696,7 @@ namespace Flecs.NET.Tests.Cpp
         //     var stage = world.get_stage(0);
         //
         //     Entity e = stage.Entity();
-        //     flecs::entity_view ev = e.view();
+        //     flecs.entity_view ev = e.view();
         //     Assert.True(e == ev);
         //     Assert.True(e.world() == stage);
         //     Assert.True(ev.world() == world);
@@ -3707,10 +3707,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity e = world.Entity("parent::child");
+            Entity e = world.Entity("parent.child");
             e.SetAlias("parent_child");
 
-            Assert.True(e == world.Lookup("parent::child"));
+            Assert.True(e == world.Lookup("parent.child"));
             Assert.True(e == world.Lookup("parent_child"));
         }
         //
@@ -3719,7 +3719,7 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     world.observer<Position>()
-        //         .event(flecs::OnAdd)
+        //         .event(flecs.OnAdd)
         //         .each([](Entity e, Position&) {
         //             e.emplace<Velocity>(1.0f, 2.0f);
         //         });

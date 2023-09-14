@@ -71,7 +71,7 @@ namespace Flecs.NET.Utilities
             return (sbyte*)To(nativeString);
         }
 
-        public static explicit operator NativeString(string str)
+        public static explicit operator NativeString(string? str)
         {
             return FromString(str);
         }
@@ -96,7 +96,7 @@ namespace Flecs.NET.Utilities
             return (void*)nativeString.Data;
         }
 
-        public static NativeString FromString(string str)
+        public static NativeString FromString(string? str)
         {
             return new NativeString(Marshal.StringToHGlobalAnsi(str), false);
         }
