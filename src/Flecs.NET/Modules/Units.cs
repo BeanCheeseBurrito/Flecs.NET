@@ -21,135 +21,135 @@ namespace Flecs.NET.Core
 
                 world.Module<Units>();
 
-                world.Entity<Prefixes>("global::flecs.units.prefixes");
+                world.Entity<Prefixes>("::flecs.units.prefixes");
 
-                world.Entity<Yocto>("global::flecs.units.prefixes.Yocto");
-                world.Entity<Zepto>("global::flecs.units.prefixes.Zepto");
-                world.Entity<Atto>("global::flecs.units.prefixes.Atto");
-                world.Entity<Femto>("global::flecs.units.prefixes.Femto");
-                world.Entity<Pico>("global::flecs.units.prefixes.Pico");
-                world.Entity<Nano>("global::flecs.units.prefixes.Nano");
-                world.Entity<Micro>("global::flecs.units.prefixes.Micro");
-                world.Entity<Milli>("global::flecs.units.prefixes.Milli");
-                world.Entity<Centi>("global::flecs.units.prefixes.Centi");
-                world.Entity<Deci>("global::flecs.units.prefixes.Deci");
-                world.Entity<Deca>("global::flecs.units.prefixes.Deca");
-                world.Entity<Hecto>("global::flecs.units.prefixes.Hecto");
-                world.Entity<Kilo>("global::flecs.units.prefixes.Kilo");
-                world.Entity<Mega>("global::flecs.units.prefixes.Mega");
-                world.Entity<Giga>("global::flecs.units.prefixes.Giga");
-                world.Entity<Tera>("global::flecs.units.prefixes.Tera");
-                world.Entity<Peta>("global::flecs.units.prefixes.Peta");
-                world.Entity<Exa>("global::flecs.units.prefixes.Exa");
-                world.Entity<Zetta>("global::flecs.units.prefixes.Zetta");
-                world.Entity<Yotta>("global::flecs.units.prefixes.Yotta");
-                world.Entity<Kibi>("global::flecs.units.prefixes.Kibi");
-                world.Entity<Mebi>("global::flecs.units.prefixes.Mebi");
-                world.Entity<Gibi>("global::flecs.units.prefixes.Gibi");
-                world.Entity<Tebi>("global::flecs.units.prefixes.Tebi");
-                world.Entity<Pebi>("global::flecs.units.prefixes.Pebi");
-                world.Entity<Exbi>("global::flecs.units.prefixes.Exbi");
-                world.Entity<Zebi>("global::flecs.units.prefixes.Zebi");
-                world.Entity<Yobi>("global::flecs.units.prefixes.Yobi");
+                world.Entity<Yocto>("::flecs.units.prefixes.Yocto");
+                world.Entity<Zepto>("::flecs.units.prefixes.Zepto");
+                world.Entity<Atto>("::flecs.units.prefixes.Atto");
+                world.Entity<Femto>("::flecs.units.prefixes.Femto");
+                world.Entity<Pico>("::flecs.units.prefixes.Pico");
+                world.Entity<Nano>("::flecs.units.prefixes.Nano");
+                world.Entity<Micro>("::flecs.units.prefixes.Micro");
+                world.Entity<Milli>("::flecs.units.prefixes.Milli");
+                world.Entity<Centi>("::flecs.units.prefixes.Centi");
+                world.Entity<Deci>("::flecs.units.prefixes.Deci");
+                world.Entity<Deca>("::flecs.units.prefixes.Deca");
+                world.Entity<Hecto>("::flecs.units.prefixes.Hecto");
+                world.Entity<Kilo>("::flecs.units.prefixes.Kilo");
+                world.Entity<Mega>("::flecs.units.prefixes.Mega");
+                world.Entity<Giga>("::flecs.units.prefixes.Giga");
+                world.Entity<Tera>("::flecs.units.prefixes.Tera");
+                world.Entity<Peta>("::flecs.units.prefixes.Peta");
+                world.Entity<Exa>("::flecs.units.prefixes.Exa");
+                world.Entity<Zetta>("::flecs.units.prefixes.Zetta");
+                world.Entity<Yotta>("::flecs.units.prefixes.Yotta");
+                world.Entity<Kibi>("::flecs.units.prefixes.Kibi");
+                world.Entity<Mebi>("::flecs.units.prefixes.Mebi");
+                world.Entity<Gibi>("::flecs.units.prefixes.Gibi");
+                world.Entity<Tebi>("::flecs.units.prefixes.Tebi");
+                world.Entity<Pebi>("::flecs.units.prefixes.Pebi");
+                world.Entity<Exbi>("::flecs.units.prefixes.Exbi");
+                world.Entity<Zebi>("::flecs.units.prefixes.Zebi");
+                world.Entity<Yobi>("::flecs.units.prefixes.Yobi");
 
-                world.Entity<Duration>("global::flecs.units.Duration");
-                world.Entity<Time>("global::flecs.units.Time");
-                world.Entity<Mass>("global::flecs.units.Mass");
-                world.Entity<Force>("global::flecs.units.Force");
-                world.Entity<ElectricCurrent>("global::flecs.units.ElectricCurrent");
-                world.Entity<Amount>("global::flecs.units.Amount");
-                world.Entity<LuminousIntensity>("global::flecs.units.LuminousIntensity");
-                world.Entity<Length>("global::flecs.units.Length");
-                world.Entity<Pressure>("global::flecs.units.Pressure");
-                world.Entity<Speed>("global::flecs.units.Speed");
-                world.Entity<Temperature>("global::flecs.units.Temperature");
-                world.Entity<Data>("global::flecs.units.Data");
-                world.Entity<DataRate>("global::flecs.units.DataRate");
-                world.Entity<Angle>("global::flecs.units.Angle");
-                world.Entity<Frequency>("global::flecs.units.Frequency");
-                world.Entity<Uri>("global::flecs.units.Uri");
+                world.Entity<Duration>("::flecs.units.Duration");
+                world.Entity<Time>("::flecs.units.Time");
+                world.Entity<Mass>("::flecs.units.Mass");
+                world.Entity<Force>("::flecs.units.Force");
+                world.Entity<ElectricCurrent>("::flecs.units.ElectricCurrent");
+                world.Entity<Amount>("::flecs.units.Amount");
+                world.Entity<LuminousIntensity>("::flecs.units.LuminousIntensity");
+                world.Entity<Length>("::flecs.units.Length");
+                world.Entity<Pressure>("::flecs.units.Pressure");
+                world.Entity<Speed>("::flecs.units.Speed");
+                world.Entity<Temperature>("::flecs.units.Temperature");
+                world.Entity<Data>("::flecs.units.Data");
+                world.Entity<DataRate>("::flecs.units.DataRate");
+                world.Entity<Angle>("::flecs.units.Angle");
+                world.Entity<Frequency>("::flecs.units.Frequency");
+                world.Entity<Uri>("::flecs.units.Uri");
 
-                world.Entity<Durations.PicoSeconds>("global::flecs.units.Duration.PicoSeconds");
-                world.Entity<Durations.NanoSeconds>("global::flecs.units.Duration.NanoSeconds");
-                world.Entity<Durations.MicroSeconds>("global::flecs.units.Duration.MicroSeconds");
-                world.Entity<Durations.MilliSeconds>("global::flecs.units.Duration.MilliSeconds");
-                world.Entity<Durations.Seconds>("global::flecs.units.Duration.Seconds");
-                world.Entity<Durations.Minutes>("global::flecs.units.Duration.Minutes");
-                world.Entity<Durations.Hours>("global::flecs.units.Duration.Hours");
-                world.Entity<Durations.Days>("global::flecs.units.Duration.Days");
+                world.Entity<Durations.PicoSeconds>("::flecs.units.Duration.PicoSeconds");
+                world.Entity<Durations.NanoSeconds>("::flecs.units.Duration.NanoSeconds");
+                world.Entity<Durations.MicroSeconds>("::flecs.units.Duration.MicroSeconds");
+                world.Entity<Durations.MilliSeconds>("::flecs.units.Duration.MilliSeconds");
+                world.Entity<Durations.Seconds>("::flecs.units.Duration.Seconds");
+                world.Entity<Durations.Minutes>("::flecs.units.Duration.Minutes");
+                world.Entity<Durations.Hours>("::flecs.units.Duration.Hours");
+                world.Entity<Durations.Days>("::flecs.units.Duration.Days");
 
-                world.Entity<Times.CalenderDate>("global::flecs.units.Time.Date");
+                world.Entity<Times.CalenderDate>("::flecs.units.Time.Date");
 
-                world.Entity<Masses.Grams>("global::flecs.units.Mass.Grams");
-                world.Entity<Masses.KiloGrams>("global::flecs.units.Mass.KiloGrams");
+                world.Entity<Masses.Grams>("::flecs.units.Mass.Grams");
+                world.Entity<Masses.KiloGrams>("::flecs.units.Mass.KiloGrams");
 
-                world.Entity<ElectricCurrents.Ampere>("global::flecs.units.ElectricCurrent.Ampere");
+                world.Entity<ElectricCurrents.Ampere>("::flecs.units.ElectricCurrent.Ampere");
 
-                world.Entity<Amounts.Mole>("global::flecs.units.Amount.Mole");
+                world.Entity<Amounts.Mole>("::flecs.units.Amount.Mole");
 
-                world.Entity<LuminousIntensities.Candela>("global::flecs.units.LuminousIntensity.Candela");
+                world.Entity<LuminousIntensities.Candela>("::flecs.units.LuminousIntensity.Candela");
 
-                world.Entity<Forces.Newton>("global::flecs.units.Force.Newton");
+                world.Entity<Forces.Newton>("::flecs.units.Force.Newton");
 
-                world.Entity<Lengths.Meters>("global::flecs.units.Length.Meters");
-                world.Entity<Lengths.PicoMeters>("global::flecs.units.Length.PicoMeters");
-                world.Entity<Lengths.NanoMeters>("global::flecs.units.Length.NanoMeters");
-                world.Entity<Lengths.MicroMeters>("global::flecs.units.Length.MicroMeters");
-                world.Entity<Lengths.MilliMeters>("global::flecs.units.Length.MilliMeters");
-                world.Entity<Lengths.CentiMeters>("global::flecs.units.Length.CentiMeters");
-                world.Entity<Lengths.KiloMeters>("global::flecs.units.Length.KiloMeters");
-                world.Entity<Lengths.Miles>("global::flecs.units.Length.Miles");
-                world.Entity<Lengths.Pixels>("global::flecs.units.Length.Pixels");
+                world.Entity<Lengths.Meters>("::flecs.units.Length.Meters");
+                world.Entity<Lengths.PicoMeters>("::flecs.units.Length.PicoMeters");
+                world.Entity<Lengths.NanoMeters>("::flecs.units.Length.NanoMeters");
+                world.Entity<Lengths.MicroMeters>("::flecs.units.Length.MicroMeters");
+                world.Entity<Lengths.MilliMeters>("::flecs.units.Length.MilliMeters");
+                world.Entity<Lengths.CentiMeters>("::flecs.units.Length.CentiMeters");
+                world.Entity<Lengths.KiloMeters>("::flecs.units.Length.KiloMeters");
+                world.Entity<Lengths.Miles>("::flecs.units.Length.Miles");
+                world.Entity<Lengths.Pixels>("::flecs.units.Length.Pixels");
 
-                world.Entity<Pressures.Pascal>("global::flecs.units.Pressure.Pascal");
-                world.Entity<Pressures.Bar>("global::flecs.units.Pressure.Bar");
+                world.Entity<Pressures.Pascal>("::flecs.units.Pressure.Pascal");
+                world.Entity<Pressures.Bar>("::flecs.units.Pressure.Bar");
 
-                world.Entity<Speeds.MetersPerSecond>("global::flecs.units.Speed.MetersPerSecond");
-                world.Entity<Speeds.KiloMetersPerSecond>("global::flecs.units.Speed.KiloMetersPerSecond");
-                world.Entity<Speeds.KiloMetersPerHour>("global::flecs.units.Speed.KiloMetersPerHour");
-                world.Entity<Speeds.MilesPerHour>("global::flecs.units.Speed.MilesPerHour");
+                world.Entity<Speeds.MetersPerSecond>("::flecs.units.Speed.MetersPerSecond");
+                world.Entity<Speeds.KiloMetersPerSecond>("::flecs.units.Speed.KiloMetersPerSecond");
+                world.Entity<Speeds.KiloMetersPerHour>("::flecs.units.Speed.KiloMetersPerHour");
+                world.Entity<Speeds.MilesPerHour>("::flecs.units.Speed.MilesPerHour");
 
-                world.Entity<Temperatures.Kelvin>("global::flecs.units.Temperature.Kelvin");
-                world.Entity<Temperatures.Celsius>("global::flecs.units.Temperature.Celsius");
-                world.Entity<Temperatures.Fahrenheit>("global::flecs.units.Temperature.Fahrenheit");
+                world.Entity<Temperatures.Kelvin>("::flecs.units.Temperature.Kelvin");
+                world.Entity<Temperatures.Celsius>("::flecs.units.Temperature.Celsius");
+                world.Entity<Temperatures.Fahrenheit>("::flecs.units.Temperature.Fahrenheit");
 
-                world.Entity<Datas.Bits>("global::flecs.units.Data.Bits");
-                world.Entity<Datas.KiloBits>("global::flecs.units.Data.KiloBits");
-                world.Entity<Datas.MegaBits>("global::flecs.units.Data.MegaBits");
-                world.Entity<Datas.GigaBits>("global::flecs.units.Data.GigaBits");
-                world.Entity<Datas.Bytes>("global::flecs.units.Data.Bytes");
-                world.Entity<Datas.KiloBytes>("global::flecs.units.Data.KiloBytes");
-                world.Entity<Datas.MegaBytes>("global::flecs.units.Data.MegaBytes");
-                world.Entity<Datas.GigaBytes>("global::flecs.units.Data.GigaBytes");
-                world.Entity<Datas.KibiBytes>("global::flecs.units.Data.KibiBytes");
-                world.Entity<Datas.MebiBytes>("global::flecs.units.Data.MebiBytes");
-                world.Entity<Datas.GibiBytes>("global::flecs.units.Data.GibiBytes");
+                world.Entity<Datas.Bits>("::flecs.units.Data.Bits");
+                world.Entity<Datas.KiloBits>("::flecs.units.Data.KiloBits");
+                world.Entity<Datas.MegaBits>("::flecs.units.Data.MegaBits");
+                world.Entity<Datas.GigaBits>("::flecs.units.Data.GigaBits");
+                world.Entity<Datas.Bytes>("::flecs.units.Data.Bytes");
+                world.Entity<Datas.KiloBytes>("::flecs.units.Data.KiloBytes");
+                world.Entity<Datas.MegaBytes>("::flecs.units.Data.MegaBytes");
+                world.Entity<Datas.GigaBytes>("::flecs.units.Data.GigaBytes");
+                world.Entity<Datas.KibiBytes>("::flecs.units.Data.KibiBytes");
+                world.Entity<Datas.MebiBytes>("::flecs.units.Data.MebiBytes");
+                world.Entity<Datas.GibiBytes>("::flecs.units.Data.GibiBytes");
 
-                world.Entity<DataRates.BitsPerSecond>("global::flecs.units.DataRate.BitsPerSecond");
-                world.Entity<DataRates.KiloBitsPerSecond>("global::flecs.units.DataRate.KiloBitsPerSecond");
-                world.Entity<DataRates.MegaBitsPerSecond>("global::flecs.units.DataRate.MegaBitsPerSecond");
-                world.Entity<DataRates.GigaBitsPerSecond>("global::flecs.units.DataRate.GigaBitsPerSecond");
-                world.Entity<DataRates.BytesPerSecond>("global::flecs.units.DataRate.BytesPerSecond");
-                world.Entity<DataRates.KiloBytesPerSecond>("global::flecs.units.DataRate.KiloBytesPerSecond");
-                world.Entity<DataRates.MegaBytesPerSecond>("global::flecs.units.DataRate.MegaBytesPerSecond");
-                world.Entity<DataRates.GigaBytesPerSecond>("global::flecs.units.DataRate.GigaBytesPerSecond");
+                world.Entity<DataRates.BitsPerSecond>("::flecs.units.DataRate.BitsPerSecond");
+                world.Entity<DataRates.KiloBitsPerSecond>("::flecs.units.DataRate.KiloBitsPerSecond");
+                world.Entity<DataRates.MegaBitsPerSecond>("::flecs.units.DataRate.MegaBitsPerSecond");
+                world.Entity<DataRates.GigaBitsPerSecond>("::flecs.units.DataRate.GigaBitsPerSecond");
+                world.Entity<DataRates.BytesPerSecond>("::flecs.units.DataRate.BytesPerSecond");
+                world.Entity<DataRates.KiloBytesPerSecond>("::flecs.units.DataRate.KiloBytesPerSecond");
+                world.Entity<DataRates.MegaBytesPerSecond>("::flecs.units.DataRate.MegaBytesPerSecond");
+                world.Entity<DataRates.GigaBytesPerSecond>("::flecs.units.DataRate.GigaBytesPerSecond");
 
-                world.Entity<Frequencies.Hertz>("global::flecs.units.Frequency.Hertz");
-                world.Entity<Frequencies.KiloHertz>("global::flecs.units.Frequency.KiloHertz");
-                world.Entity<Frequencies.MegaHertz>("global::flecs.units.Frequency.MegaHertz");
-                world.Entity<Frequencies.GigaHertz>("global::flecs.units.Frequency.GigaHertz");
+                world.Entity<Frequencies.Hertz>("::flecs.units.Frequency.Hertz");
+                world.Entity<Frequencies.KiloHertz>("::flecs.units.Frequency.KiloHertz");
+                world.Entity<Frequencies.MegaHertz>("::flecs.units.Frequency.MegaHertz");
+                world.Entity<Frequencies.GigaHertz>("::flecs.units.Frequency.GigaHertz");
 
-                world.Entity<Uris.Hyperlink>("global::flecs.units.Uri.Hyperlink");
-                world.Entity<Uris.Image>("global::flecs.units.Uri.Image");
-                world.Entity<Uris.File>("global::flecs.units.Uri.File");
+                world.Entity<Uris.Hyperlink>("::flecs.units.Uri.Hyperlink");
+                world.Entity<Uris.Image>("::flecs.units.Uri.Image");
+                world.Entity<Uris.File>("::flecs.units.Uri.File");
 
-                world.Entity<Angles.Radians>("global::flecs.units.Angle.Radians");
-                world.Entity<Angles.Degrees>("global::flecs.units.Angle.Degrees");
+                world.Entity<Angles.Radians>("::flecs.units.Angle.Radians");
+                world.Entity<Angles.Degrees>("::flecs.units.Angle.Degrees");
 
-                world.Entity<Percentage>("global::flecs.units.Percentage");
+                world.Entity<Percentage>("::flecs.units.Percentage");
 
-                world.Entity<Bel>("global::flecs.units.Bel");
-                world.Entity<DeciBel>("global::flecs.units.DeciBel");
+                world.Entity<Bel>("::flecs.units.Bel");
+                world.Entity<DeciBel>("::flecs.units.DeciBel");
             }
 
             /// <summary>

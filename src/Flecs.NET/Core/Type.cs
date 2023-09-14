@@ -308,7 +308,7 @@ namespace Flecs.NET.Core
                 return TypeName;
 
             string symbolName = SymbolName ?? GetSymbolName();
-            return TypeName = "global::" + symbolName;
+            return TypeName = "::" + symbolName;
         }
 
         /// <summary>

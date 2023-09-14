@@ -95,7 +95,7 @@ namespace Flecs.NET.Core
         static BindingContext()
         {
             DefaultSeparator = (byte*)Marshal.StringToHGlobalAnsi(".");
-            DefaultRootSeparator = (byte*)Marshal.StringToHGlobalAnsi("global::");
+            DefaultRootSeparator = (byte*)Marshal.StringToHGlobalAnsi("::");
 
 #if !NET5_0_OR_GREATER
             ObserverIterPointer = Marshal.GetFunctionPointerForDelegate(ObserverIterReference);

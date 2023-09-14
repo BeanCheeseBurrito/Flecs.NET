@@ -19,12 +19,12 @@ namespace Flecs.NET.Core
 
                 FlecsMetricsImport(world);
 
-                world.Entity<Instance>("global::flecs.metrics.Instance");
-                world.Entity<Metric>("global::flecs.metrics.Metric");
-                world.Entity<Counter>("global::flecs.metrics.Metric.Counter");
-                world.Entity<CounterId>("global::flecs.metrics.Metric.CounterId");
-                world.Entity<CounterIncrement>("global::flecs.metrics.Metric.CounterIncrement");
-                world.Entity<Gauge>("global::flecs.metrics.Metric.Gauge");
+                world.Entity<Instance>("::flecs.metrics.Instance");
+                world.Entity<Metric>("::flecs.metrics.Metric");
+                world.Entity<Counter>("::flecs.metrics.Metric.Counter");
+                world.Entity<CounterId>("::flecs.metrics.Metric.CounterId");
+                world.Entity<CounterIncrement>("::flecs.metrics.Metric.CounterIncrement");
+                world.Entity<Gauge>("::flecs.metrics.Metric.Gauge");
             }
 
             /// <summary>
