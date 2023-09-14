@@ -96,11 +96,8 @@ namespace Flecs.NET.Core
                             Ecs.Error(
                                 $"Component with name '{managedName}' is already registered for type '{managedSym}' (trying to register for type {managedSymbol}");
                         }
-#if NET5_0_OR_GREATER
-                        ((delegate* unmanaged[Cdecl]<IntPtr, void>)ecs_os_api.free_)((IntPtr)typePath);
-#else
-                        Marshal.GetDelegateForFunctionPointer<Ecs.Free>(ecs_os_api.free_)((IntPtr)typePath);
-#endif
+
+                        Macros.OsFree(typePath);
                     }
                     else if (sym == null)
                     {
@@ -212,15 +209,75 @@ namespace Flecs.NET.Core
             Assert.True(staticId == 0 || staticId == entity, nameof(ECS_INTERNAL_ERROR));
 
             if (existingName != null)
-            {
-#if NET5_0_OR_GREATER
-                ((delegate* unmanaged[Cdecl]<IntPtr, void>)ecs_os_api.free_)((IntPtr)existingName);
-#else
-                Marshal.GetDelegateForFunctionPointer<Ecs.Free>(ecs_os_api.free_)((IntPtr)existingName);
-#endif
-            }
+                Macros.OsFree(existingName);
 
             return entity;
+        }
+
+        internal static void ComponentValidate(
+            ecs_world_t* world,
+            ulong id,
+            byte* name,
+            byte* symbol,
+            int size,
+            int alignment,
+            byte implicitName)
+        {
+            if (ecs_is_valid(world, id) == Macros.True && ecs_get_name(world, id) != null)
+            {
+                if (implicitName == Macros.False && id >= EcsFirstUserComponentId)
+                {
+#if DEBUG
+                    byte* path = ecs_get_path_w_sep(world, 0, id, BindingContext.DefaultRootSeparator, null);
+
+                    if (!Utils.StringEqual(path, name))
+                    {
+                        string? managedName = Marshal.PtrToStringAnsi((IntPtr)name);
+                        string? managedPath = Marshal.PtrToStringAnsi((IntPtr)path);
+                        Ecs.Error($"Component '{managedName}' already registered with name '{managedPath}'");
+                    }
+
+                    Macros.OsFree(path);
+#endif
+                }
+
+                if (symbol != null)
+                {
+                    byte* existingSymbol = ecs_get_symbol(world, id);
+
+                    if (existingSymbol != null)
+                        if (!Utils.StringEqual(symbol, existingSymbol))
+                        {
+                            string? managedName = Marshal.PtrToStringAnsi((IntPtr)name);
+                            string? managedSymbol = Marshal.PtrToStringAnsi((IntPtr)symbol);
+                            string? managedExistingSymbol = Marshal.PtrToStringAnsi((IntPtr)existingSymbol);
+
+                            Ecs.Error(
+                                $"Component '{managedName}' with symbol '{managedSymbol}' already registered with symbol '{managedExistingSymbol}'");
+                        }
+                }
+            }
+            else
+            {
+                if (ecs_is_alive(world, id) == Macros.False)
+                    ecs_ensure(world, id);
+
+                ecs_add_path_w_sep(world, id, 0, name,
+                    BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator);
+            }
+
+            ecs_component_desc_t componentDesc = new ecs_component_desc_t
+            {
+                entity = id,
+                type = new ecs_type_info_t
+                {
+                    size = size,
+                    alignment = alignment
+                }
+            };
+
+            ulong ent = ecs_component_init(world, &componentDesc);
+            Ecs.Assert(ent == id, nameof(ECS_INTERNAL_ERROR));
         }
     }
 }

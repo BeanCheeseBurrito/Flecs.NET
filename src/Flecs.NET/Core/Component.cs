@@ -57,12 +57,14 @@ namespace Flecs.NET.Core
             if (Type<TComponent>.IsRegistered(world))
             {
                 id = Type<TComponent>.IdExplicit(world, name, allowTag, id);
+
                 using NativeString nativeName = (NativeString)name;
-                ecs_cpp_component_validate(
+
+                FlecsInternal.ComponentValidate(
                     world, id, nativeName,
                     nativeSymbolName,
-                    (IntPtr)Type<TComponent>.GetSize(),
-                    (IntPtr)Type<TComponent>.GetAlignment(),
+                    Type<TComponent>.GetSize(),
+                    Type<TComponent>.GetAlignment(),
                     Macros.Bool(implicitName)
                 );
             }
@@ -77,15 +79,18 @@ namespace Flecs.NET.Core
                     {
                         int index = start;
 
-                        while (index != 0 && name[index] != '.')
+                        while (index != 0 && name[index] != '.' && name[index] != ':')
                             index--;
 
-                        if (name[index] == '.')
+                        if (name[index] == '.' || name[index] == ':')
                             lastElem = index;
                     }
                     else
                     {
                         lastElem = name.LastIndexOf('.');
+
+                        if (lastElem == -1)
+                            lastElem = name.LastIndexOf(':');
                     }
 
                     name = name[(lastElem + 1)..];

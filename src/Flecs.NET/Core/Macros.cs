@@ -1,5 +1,7 @@
+using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -57,6 +59,32 @@ namespace Flecs.NET.Core
 #else
             return Unsafe.AsPointer(ref Unsafe.AsRef(obj)) == null;
 #endif
+        }
+
+        /// <summary>
+        ///     Calls the os api free function.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void OsFree(IntPtr data)
+        {
+#if NET5_0_OR_GREATER
+            ((delegate* unmanaged[Cdecl]<IntPtr, void>)ecs_os_api.free_)(data);
+#else
+            Marshal.GetDelegateForFunctionPointer<Ecs.Free>(ecs_os_api.free_)(data);
+#endif
+        }
+
+        /// <summary>
+        ///     Calls the os api free function.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void OsFree(void* data)
+        {
+            OsFree((IntPtr)data);
         }
 
         /// <summary>

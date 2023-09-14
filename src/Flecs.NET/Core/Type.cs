@@ -307,7 +307,8 @@ namespace Flecs.NET.Core
             if (TypeName != null)
                 return TypeName;
 
-            return TypeName = SymbolName ?? GetSymbolName();
+            string symbolName = SymbolName ?? GetSymbolName();
+            return TypeName = "global::" + symbolName;
         }
 
         /// <summary>
@@ -326,8 +327,7 @@ namespace Flecs.NET.Core
                 IsAlias = true;
 
             csName = csName
-                .Replace(nativeClass, string.Empty,
-                    StringComparison.Ordinal) // Types from the bindings don't use namespaces
+                .Replace(nativeClass, string.Empty, StringComparison.Ordinal) // Strip namespace from binding types
                 .Replace('+', '.')
                 .Replace('[', '<')
                 .Replace(']', '>');
@@ -356,7 +356,6 @@ namespace Flecs.NET.Core
 
             stringBuilder.Append(csName.AsSpan(start));
             SymbolName = stringBuilder.ToString();
-
             return SymbolName;
         }
 
