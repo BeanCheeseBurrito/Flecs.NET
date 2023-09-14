@@ -2,7 +2,8 @@
 
 using Flecs.NET.Core;
 
-void IterateComponents(Entity e) {
+void IterateComponents(Entity e)
+{
     // 1. The easiest way to print the components is to use Types.Str
     Console.WriteLine(e.Type().Str() + "\n");
 

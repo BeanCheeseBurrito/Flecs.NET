@@ -10,7 +10,7 @@
 
 using Flecs.NET.Core;
 
-using World world = World.Create(args);
+using World world = World.Create();
 
 // Create a pipeline that matches systems with Physics. Note that this
 // pipeline does not require the use of phases (see CustomPhases) or of the

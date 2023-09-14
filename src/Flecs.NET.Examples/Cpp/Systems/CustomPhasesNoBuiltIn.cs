@@ -12,7 +12,7 @@ void Sys(Iter it)
     Console.WriteLine("System " + it.System().Name());
 }
 
-using World world = World.Create(args);
+using World world = World.Create();
 
 // Create three custom phases. Note that the phases have the Phase tag,
 // which is necessary for the builtin pipeline to discover which systems it
