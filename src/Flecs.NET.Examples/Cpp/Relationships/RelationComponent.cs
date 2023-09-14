@@ -80,8 +80,8 @@ public struct MustHave { }
 // requires: 1.21
 // requires: 1.21
 // expires: 0.5
-// ::Requires
-// ::Requires
-// ::Expires
+// Requires
+// Requires
+// Expires
 // 0
 // requires 1.21 gigawatts

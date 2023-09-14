@@ -69,17 +69,17 @@ public struct Moon { }
 // Output:
 // Child of Earth? True
 //
-// ::Sun [Star, Position, (Identifier,Name)]
+// Sun [Star, Position, (Identifier,Name)]
 // (1, 1)
 //
-// ::Sun::Mercury [Position, Planet, (Identifier,Name), (ChildOf,Sun)]
+// Sun.Mercury [Position, Planet, (Identifier,Name), (ChildOf,Sun)]
 // (2, 2)
 //
-// ::Sun::Venus [Position, Planet, (Identifier,Name), (ChildOf,Sun)]
+// Sun.Venus [Position, Planet, (Identifier,Name), (ChildOf,Sun)]
 // (3, 3)
 //
-// ::Sun::Earth [Position, Planet, (Identifier,Name), (ChildOf,Sun)]
+// Sun.Earth [Position, Planet, (Identifier,Name), (ChildOf,Sun)]
 // (4, 4)
 //
-// ::Sun::Earth::Moon [Position, Moon, (Identifier,Name), (ChildOf,Sun.Earth)]
+// Sun.Earth.Moon [Position, Moon, (Identifier,Name), (ChildOf,Sun.Earth)]
 // (4.1, 4.1)
