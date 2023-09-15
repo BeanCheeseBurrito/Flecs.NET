@@ -27,7 +27,7 @@ Entity bob = world.Entity("Bob")
     .Add<Eats, Apples>();
 
 // Show us what you got
-Console.WriteLine($"{bob.Name()}'s got [{bob.Type().Str()}]");
+Console.WriteLine($"{bob.Name()}'s got [{bob.Type()}]");
 
 // Run systems twice. Usually this function is called once per frame
 world.Progress();

@@ -73,7 +73,8 @@ unsafe
     );
 
     // Create a few test entities
-    for (int i = 0; i < 10; i ++) {
+    for (int i = 0; i < 10; i ++)
+    {
         world.Entity()
             .Set(new Position { X = Rand(100), Y = Rand(100) })
             .Set(new Radius { Value = Rand(10) + 1 });

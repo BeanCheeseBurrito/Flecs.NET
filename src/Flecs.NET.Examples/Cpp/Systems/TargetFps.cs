@@ -18,7 +18,8 @@ world.Routine(
 world.SetTargetFps(1);
 
 // Run 5 frames
-for (int i = 0; i < 5; i ++) {
+for (int i = 0; i < 5; i ++)
+{
     // To make sure the frame doesn't run faster than the specified target
     // FPS ecs_progress will insert a sleep if the measured delta_time is
     // smaller than 1 / target_fps.
