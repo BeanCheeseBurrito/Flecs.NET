@@ -1758,9 +1758,9 @@ namespace Flecs.NET.Core
         ///     Progress world one tick.
         /// </summary>
         /// <returns></returns>
-        public bool Progress()
+        public bool Progress(float deltaTime = 0)
         {
-            return ecs_progress(Handle, 0) == 1;
+            return ecs_progress(Handle, deltaTime) == 1;
         }
 
         /// <summary>
