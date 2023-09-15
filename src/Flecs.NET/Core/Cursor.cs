@@ -111,7 +111,7 @@ namespace Flecs.NET.Core
         ///     Get type of value.
         /// </summary>
         /// <returns></returns>
-        public Entity GetType()
+        public new Entity GetType()
         {
             fixed (ecs_meta_cursor_t* cursor = &_cursor)
             {

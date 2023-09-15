@@ -111,7 +111,7 @@ namespace Flecs.NET.Utilities
             return Data == other.Data;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is NativeString nativeString && Equals(nativeString);
         }
