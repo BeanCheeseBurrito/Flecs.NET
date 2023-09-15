@@ -4,6 +4,9 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
+    /// <summary>
+    ///     Wrapper around ecs_event_desc_t.
+    /// </summary>
     public unsafe struct EventBuilder
     {
         private ecs_world_t* _world;
