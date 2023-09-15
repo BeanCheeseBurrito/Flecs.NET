@@ -384,5 +384,14 @@ namespace Flecs.NET.Core
         {
             return Depth(Type<T>.Id(World));
         }
+
+        /// <summary>
+        ///     Returns a string representation of the table.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Str();
+        }
     }
 }

@@ -135,5 +135,14 @@ namespace Flecs.NET.Core
         {
             return !(left == right);
         }
+
+        /// <summary>
+        ///     Returns comma separated string of type names.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Str();
+        }
     }
 }
