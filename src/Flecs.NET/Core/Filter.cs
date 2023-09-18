@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -8,7 +9,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A filter allows for uncached, adhoc iteration over ECS data.
     /// </summary>
-    public unsafe struct Filter : IDisposable
+    public unsafe partial struct Filter : IDisposable
     {
         private ecs_world_t* _world;
         private ecs_filter_t _filter;
@@ -119,6 +120,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Create an iterator object that can be modified before iterating.
+        /// </summary>
+        /// <returns></returns>
+        public IterIterable Iter()
+        {
+            return new IterIterable(ecs_filter_iter(World, FilterPtr), _next, _nextInstanced);
+        }
+
+        /// <summary>
         ///     Iterates the filter using the provided callback.
         /// </summary>
         /// <param name="func"></param>
@@ -151,4 +161,27 @@ namespace Flecs.NET.Core
                 Invoker.Each(&iter, func);
         }
     }
+
+#if NET5_0_OR_GREATER
+    public unsafe partial struct Filter
+    {
+        private static IntPtr _next = (IntPtr)(delegate* <ecs_iter_t*, byte>)&ecs_filter_next;
+        private static IntPtr _nextInstanced = (IntPtr)(delegate* <ecs_iter_t*, byte>)&ecs_filter_next_instanced;
+    }
+#else
+    public unsafe partial struct Filter
+    {
+        private static IntPtr _next;
+        private static IntPtr _nextInstanced;
+
+        private static Ecs.IterNextAction _nextReference = ecs_filter_next;
+        private static Ecs.IterNextAction _nextInstancedReference = ecs_filter_next_instanced;
+
+        static Filter()
+        {
+            _next = Marshal.GetFunctionPointerForDelegate(_nextReference);
+            _nextInstanced = Marshal.GetFunctionPointerForDelegate(_nextInstancedReference);
+        }
+    }
+#endif
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -7,7 +8,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_query_t.
     /// </summary>
-    public unsafe struct Query : IDisposable
+    public unsafe partial struct Query : IDisposable
     {
         private ecs_world_t* _world;
         private ecs_query_t* _handle;
@@ -182,6 +183,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Create an iterator object that can be modified before iterating.
+        /// </summary>
+        /// <returns></returns>
+        public IterIterable Iter()
+        {
+            return new IterIterable(ecs_query_iter(World, Handle), _next, _nextInstanced);
+        }
+
+        /// <summary>
         ///     Iterates the query.
         /// </summary>
         /// <param name="func"></param>
@@ -214,4 +224,27 @@ namespace Flecs.NET.Core
                 Invoker.Each(&iter, func);
         }
     }
+
+#if NET5_0_OR_GREATER
+    public unsafe partial struct Query
+    {
+        private static IntPtr _next = (IntPtr)(delegate* <ecs_iter_t*, byte>)&ecs_query_next;
+        private static IntPtr _nextInstanced = (IntPtr)(delegate* <ecs_iter_t*, byte>)&ecs_query_next_instanced;
+    }
+#else
+    public unsafe partial struct Query
+    {
+        private static IntPtr _next;
+        private static IntPtr _nextInstanced;
+
+        private static Ecs.IterNextAction _nextReference = ecs_query_next;
+        private static Ecs.IterNextAction _nextInstancedReference = ecs_query_next_instanced;
+
+        static Query()
+        {
+            _next = Marshal.GetFunctionPointerForDelegate(_nextReference);
+            _nextInstanced = Marshal.GetFunctionPointerForDelegate(_nextInstancedReference);
+        }
+    }
+#endif
 }

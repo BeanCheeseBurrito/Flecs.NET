@@ -14,7 +14,7 @@
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
         <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
-        <NoWarn>$(NoWarn);CA1000;CS9087;CS9084;CS8500;CA1034;CA1062;CA1024</NoWarn>
+        <NoWarn>$(NoWarn);CA1000;CS9087;CS9084;CS8500;CA1034;CA1062;CA1024;CA2207</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>

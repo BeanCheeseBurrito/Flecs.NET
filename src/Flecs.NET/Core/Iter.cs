@@ -258,9 +258,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Entity Id(int index)
+        public Id Id(int index)
         {
-            return new Entity(Handle->world, ecs_field_id(Handle, index));
+            return new Id(Handle->world, ecs_field_id(Handle, index));
         }
 
         /// <summary>
