@@ -16,7 +16,7 @@ namespace Flecs.NET.Core
         private TermIdType _termIdType;
         private int _termIndex;
         private int _exprCount;
-        private readonly ref ecs_term_t CurrentTerm => ref Terms[_termIndex - 1];
+        private readonly ref ecs_term_t CurrentTerm => ref Terms[_termIndex];
 
         private readonly ref ecs_term_id_t CurrentTermId
         {
@@ -1241,10 +1241,9 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref FilterBuilder IncrementTerm()
         {
-            if (Terms.Count >= _termIndex)
-                Terms.Add(default);
-
-            _termIndex++;
+            Terms.Add(default);
+            _termIndex = Terms.Count - 1;
+            _termIdType = TermIdType.Src;
             return ref this;
         }
 
@@ -1255,12 +1254,10 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref FilterBuilder TermAt(int termIndex)
         {
-            Assert.True(termIndex > 0, nameof(ECS_INVALID_PARAMETER));
+            Assert.True(termIndex > 0 && termIndex <= Terms.Count, nameof(ECS_INVALID_PARAMETER));
 
-            int prevIndex = _termIndex;
             _termIndex = termIndex - 1;
-            IncrementTerm();
-            _termIndex = prevIndex;
+            _termIdType = TermIdType.Src;
 
             Assert.True(ecs_term_is_initialized((ecs_term_t*)Unsafe.AsPointer(ref CurrentTerm)) == 1,
                 nameof(ECS_INVALID_PARAMETER));
