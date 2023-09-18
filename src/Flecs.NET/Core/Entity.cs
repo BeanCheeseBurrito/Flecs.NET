@@ -2536,8 +2536,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public override string ToString()
         {
-            string name = Name();
-            return string.IsNullOrEmpty(name) ? Id.Value.ToString(CultureInfo.InvariantCulture) : name;
+            return Id.Str();
         }
     }
 }

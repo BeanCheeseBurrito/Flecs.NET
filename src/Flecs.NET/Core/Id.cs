@@ -348,5 +348,14 @@ namespace Flecs.NET.Core
         {
             return Value.GetHashCode();
         }
+
+        /// <summary>
+        ///     Returns the string representation of the Id.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Str();
+        }
     }
 }
