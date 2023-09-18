@@ -108,7 +108,7 @@ namespace Flecs.NET.Core
             else if (implicitName == Macros.False)
             {
                 ent = ecs_lookup_symbol(world, symbol, Macros.False, Macros.False);
-                Assert.True(ent == 0 || ent == id, nameof(ECS_INCONSISTENT_COMPONENT_ID));
+                Ecs.Assert(ent == 0 || ent == id, nameof(ECS_INCONSISTENT_COMPONENT_ID));
             }
 
             if (existingOut != null)
@@ -175,7 +175,7 @@ namespace Flecs.NET.Core
                 };
 
                 entity = ecs_entity_init(world, &entityDesc);
-                Assert.True(entity != 0, nameof(ECS_INVALID_OPERATION));
+                Ecs.Assert(entity != 0, nameof(ECS_INVALID_OPERATION));
 
                 ecs_component_desc_t componentDesc = new ecs_component_desc_t
                 {
@@ -188,7 +188,7 @@ namespace Flecs.NET.Core
                 };
 
                 entity = ecs_component_init(world, &componentDesc);
-                Assert.True(entity != 0, nameof(ECS_INVALID_OPERATION));
+                Ecs.Assert(entity != 0, nameof(ECS_INVALID_OPERATION));
             }
             else
             {
@@ -205,8 +205,8 @@ namespace Flecs.NET.Core
                 entity = ecs_entity_init(world, &entityDesc);
             }
 
-            Assert.True(entity != 0, nameof(ECS_INTERNAL_ERROR));
-            Assert.True(staticId == 0 || staticId == entity, nameof(ECS_INTERNAL_ERROR));
+            Ecs.Assert(entity != 0, nameof(ECS_INTERNAL_ERROR));
+            Ecs.Assert(staticId == 0 || staticId == entity, nameof(ECS_INTERNAL_ERROR));
 
             if (existingName != null)
                 Macros.OsFree(existingName);

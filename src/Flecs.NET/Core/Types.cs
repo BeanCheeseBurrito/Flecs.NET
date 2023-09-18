@@ -67,8 +67,8 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Get(int index)
         {
-            Assert.True(Handle != null, nameof(ECS_INVALID_PARAMETER));
-            Assert.True(Handle->count > index, nameof(ECS_OUT_OF_RANGE));
+            Ecs.Assert(Handle != null, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(Handle->count > index, nameof(ECS_OUT_OF_RANGE));
             return Handle == null ? new Id(null) : new Id(World, Handle->array[index]);
         }
 

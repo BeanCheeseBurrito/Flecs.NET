@@ -39,7 +39,7 @@ namespace Flecs.NET.Core
         {
             fixed (ecs_iter_t* it = &_iter)
             {
-                Assert.True(varId != -1, nameof(ECS_INVALID_PARAMETER));
+                Ecs.Assert(varId != -1, nameof(ECS_INVALID_PARAMETER));
                 ecs_iter_set_var(it, varId, value);
                 return ref this;
             }
@@ -60,7 +60,7 @@ namespace Flecs.NET.Core
                 ecs_rule_iter_t* rit = &it->priv.iter.rule;
                 int varId = ecs_rule_find_var(rit->rule, nativeName);
 
-                Assert.True(varId != -1, nameof(ECS_INVALID_PARAMETER));
+                Ecs.Assert(varId != -1, nameof(ECS_INVALID_PARAMETER));
                 ecs_iter_set_var(it, varId, value);
 
                 return ref this;

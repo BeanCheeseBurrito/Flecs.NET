@@ -34,7 +34,7 @@ namespace Flecs.NET.Core
             ecs_world_t* world = iter->world;
             int count = iter->count;
 
-            Assert.True(count > 0, "No entities returned, use Iter() instead.");
+            Ecs.Assert(count > 0, "No entities returned, use Iter() instead.");
 
             for (int i = 0; i < count; i++)
                 callback(new Entity(world, iter->entities[i]));
@@ -54,7 +54,7 @@ namespace Flecs.NET.Core
             ecs_world_t* world = iter->world;
             int count = iter->count;
 
-            Assert.True(count > 0, "No entities returned, use Iter() instead.");
+            Ecs.Assert(count > 0, "No entities returned, use Iter() instead.");
             Core.Iter.AssertFieldId<T>(iter, 1);
 
             for (int i = 0; i < count; i++)
@@ -122,7 +122,7 @@ namespace Flecs.NET.Core
             ecs_world_t* world = iter->world;
             int count = iter->count;
 
-            Assert.True(count > 0, "No entities returned, use Iter() instead.");
+            Ecs.Assert(count > 0, "No entities returned, use Iter() instead.");
 
             for (int i = 0; i < count; i++)
                 callback(new Entity(world, iter->entities[i]));
@@ -142,7 +142,7 @@ namespace Flecs.NET.Core
             ecs_world_t* world = iter->world;
             int count = iter->count;
 
-            Assert.True(count > 0, "No entities returned, use Iter() instead.");
+            Ecs.Assert(count > 0, "No entities returned, use Iter() instead.");
 
             for (int i = 0; i < count; i++)
                 callback(new Entity(world, iter->entities[i]));

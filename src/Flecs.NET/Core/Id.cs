@@ -121,8 +121,8 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Entity()
         {
-            Assert.True(!IsPair());
-            Assert.True(Flags() == 0);
+            Ecs.Assert(!IsPair());
+            Ecs.Assert(Flags() == 0);
             return new Entity(World, Value);
         }
 
@@ -143,7 +143,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity RemoveFlags(ulong flags)
         {
-            Assert.True((Value & ECS_ID_FLAGS_MASK) == flags);
+            Ecs.Assert((Value & ECS_ID_FLAGS_MASK) == flags);
             return new Entity(World, Value & ECS_COMPONENT_MASK);
         }
 
@@ -221,7 +221,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity First()
         {
-            Assert.True(IsPair());
+            Ecs.Assert(IsPair());
             ulong entity = Macros.PairFirst(Value);
             return World == null ? new Entity(entity) : new Entity(World, ecs_get_alive(World, entity));
         }

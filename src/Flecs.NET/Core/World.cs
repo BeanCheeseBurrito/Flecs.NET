@@ -100,7 +100,7 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Reset()
         {
-            Assert.True(Owned, nameof(ECS_INVALID_OPERATION));
+            Ecs.Assert(Owned, nameof(ECS_INVALID_OPERATION));
             _ = ecs_fini(Handle);
             Handle = ecs_init();
         }
@@ -228,7 +228,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool IsStage()
         {
-            Assert.True(
+            Ecs.Assert(
                 ecs_poly_is_(Handle, ecs_world_t_magic) == 1 &&
                 ecs_poly_is_(Handle, ecs_stage_t_magic) == 1,
                 nameof(ECS_INVALID_PARAMETER)
@@ -932,7 +932,7 @@ namespace Flecs.NET.Core
             ulong entity = ecs_lookup_path_w_sep(Handle, 0, nativeName,
                 BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.True);
 
-            Assert.True(entity != 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(entity != 0, nameof(ECS_INVALID_PARAMETER));
 
             using NativeString nativeAlias = (NativeString)alias;
 
@@ -1499,7 +1499,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair(ulong first, ulong second)
         {
-            Assert.True(!Macros.IsPair(first) && !Macros.IsPair(second), "Cannot create nested pairs.");
+            Ecs.Assert(!Macros.IsPair(first) && !Macros.IsPair(second), "Cannot create nested pairs.");
             return Id(first, second);
         }
 
@@ -1511,7 +1511,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair<TFirst>(ulong second)
         {
-            Assert.True(!Macros.IsPair(second), "Cannot create nested pairs.");
+            Ecs.Assert(!Macros.IsPair(second), "Cannot create nested pairs.");
             return Id<TFirst>(second);
         }
 
@@ -2030,7 +2030,7 @@ namespace Flecs.NET.Core
             desc.kind = kind;
 
             ulong id = ecs_primitive_init(Handle, &desc);
-            Assert.True(id != 0, nameof(ECS_INVALID_OPERATION));
+            Ecs.Assert(id != 0, nameof(ECS_INVALID_OPERATION));
 
             return Entity(id);
         }
@@ -2048,7 +2048,7 @@ namespace Flecs.NET.Core
             desc.count = arrayCount;
 
             ulong id = ecs_array_init(Handle, &desc);
-            Assert.True(id != 0, nameof(ECS_INVALID_OPERATION));
+            Ecs.Assert(id != 0, nameof(ECS_INVALID_OPERATION));
 
             return Entity(id);
         }
@@ -2074,7 +2074,7 @@ namespace Flecs.NET.Core
             ecs_vector_desc_t desc = default;
             desc.type = elemId;
             ulong id = ecs_vector_init(Handle, &desc);
-            Assert.True(id != 0, nameof(ECS_INVALID_OPERATION));
+            Ecs.Assert(id != 0, nameof(ECS_INVALID_OPERATION));
             return Entity(id);
         }
 

@@ -106,8 +106,8 @@ namespace Flecs.NET.Core
         {
             ecs_record_t *r = ecs_record_find(World, entity);
 
-            Assert.True(r != null, nameof(ECS_INVALID_PARAMETER));
-            Assert.True(r->table != null, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(r != null, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(r->table != null, nameof(ECS_INVALID_PARAMETER));
 
             _desc.table = r->table;
             _desc.offset = Macros.RecordToRow(r->row);
@@ -158,8 +158,8 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Emit()
         {
-            Assert.True(_ids.count != 0, nameof(ECS_INVALID_PARAMETER));
-            Assert.True(_desc.table != null, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(_ids.count != 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(_desc.table != null, nameof(ECS_INVALID_PARAMETER));
 
             fixed (EventBuilder* self = &this)
             {

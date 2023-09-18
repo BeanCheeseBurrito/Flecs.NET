@@ -82,13 +82,13 @@ namespace Flecs.NET.Core
         [Conditional("DEBUG")]
         private readonly void AssertTermId()
         {
-            Assert.True(!Unsafe.IsNullRef(ref CurrentTermId), "No active term (call .Term() first)");
+            Ecs.Assert(!Unsafe.IsNullRef(ref CurrentTermId), "No active term (call .Term() first)");
         }
 
         [Conditional("DEBUG")]
         private readonly void AssertTerm()
         {
-            Assert.True(!Unsafe.IsNullRef(ref CurrentTermId), "No active term (call .term() first)");
+            Ecs.Assert(!Unsafe.IsNullRef(ref CurrentTermId), "No active term (call .term() first)");
         }
 
         /// <summary>
@@ -585,12 +585,12 @@ namespace Flecs.NET.Core
         public ref FilterBuilder Singleton()
         {
             AssertTerm();
-            Assert.True(CurrentTerm.id != 0 || CurrentTerm.first.id != 0, "no component specified for singleton");
+            Ecs.Assert(CurrentTerm.id != 0 || CurrentTerm.first.id != 0, "no component specified for singleton");
 
             ulong singletonId = CurrentTerm.id;
             if (singletonId == 0) singletonId = CurrentTerm.first.id;
 
-            Assert.True(singletonId != 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(singletonId != 0, nameof(ECS_INVALID_PARAMETER));
             CurrentTerm.src.id = !Macros.IsPair(singletonId) ? singletonId : Macros.PairFirst(World, singletonId);
 
             return ref this;
@@ -638,7 +638,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref FilterBuilder Expr(string expr)
         {
-            Assert.True(_exprCount == 0, "FilterBuilder.Expr() called more than once");
+            Ecs.Assert(_exprCount == 0, "FilterBuilder.Expr() called more than once");
 
             NativeString nativeExpr = (NativeString)expr;
             Strings.Add(nativeExpr);
@@ -1254,12 +1254,12 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref FilterBuilder TermAt(int termIndex)
         {
-            Assert.True(termIndex > 0 && termIndex <= Terms.Count, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(termIndex > 0 && termIndex <= Terms.Count, nameof(ECS_INVALID_PARAMETER));
 
             _termIndex = termIndex - 1;
             _termIdType = TermIdType.Src;
 
-            Assert.True(ecs_term_is_initialized((ecs_term_t*)Unsafe.AsPointer(ref CurrentTerm)) == 1,
+            Ecs.Assert(ecs_term_is_initialized((ecs_term_t*)Unsafe.AsPointer(ref CurrentTerm)) == 1,
                 nameof(ECS_INVALID_PARAMETER));
 
             return ref this;

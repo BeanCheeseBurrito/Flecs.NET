@@ -53,9 +53,9 @@ namespace Flecs.NET.Core
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                Assert.True(index < Length, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
-                Assert.True(index == 0 || !IsShared, nameof(ECS_INVALID_PARAMETER));
-                Assert.True(Data != null, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
+                Ecs.Assert(index < Length, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
+                Ecs.Assert(index == 0 || !IsShared, nameof(ECS_INVALID_PARAMETER));
+                Ecs.Assert(Data != null, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
                 return ref Managed.GetTypeRef<T>(Data, index);
             }
         }

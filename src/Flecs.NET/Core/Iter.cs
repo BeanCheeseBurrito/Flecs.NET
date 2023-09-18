@@ -190,7 +190,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Entity(int row)
         {
-            Assert.True(row < Handle->count, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
+            Ecs.Assert(row < Handle->count, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
             return new Entity(Handle->world, Handle->entities[row]);
         }
 
@@ -272,7 +272,7 @@ namespace Flecs.NET.Core
         public Id Pair(int index)
         {
             ulong id = ecs_field_id(Handle, index);
-            Assert.True(Macros.EntityHasIdFlag(id, ECS_PAIR) != 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(Macros.EntityHasIdFlag(id, ECS_PAIR) != 0, nameof(ECS_INVALID_PARAMETER));
             return new Id(Handle->world, id);
         }
 
@@ -361,7 +361,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetVar(int varId)
         {
-            Assert.True(varId != -1, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(varId != -1, nameof(ECS_INVALID_PARAMETER));
             return new Entity(Handle->world, ecs_iter_get_var(Handle, varId));
         }
 
@@ -377,7 +377,7 @@ namespace Flecs.NET.Core
 
             using NativeString nativeName = (NativeString)name;
             int varId = ecs_rule_find_var(rule, nativeName);
-            Assert.True(varId != -1, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(varId != -1, nameof(ECS_INVALID_PARAMETER));
 
             return new Entity(Handle->world, ecs_iter_get_var(Handle, varId));
         }
@@ -398,7 +398,7 @@ namespace Flecs.NET.Core
         {
             ulong termId = ecs_field_id(iter, index);
             ulong typeId = Type<T>.Id(iter->world);
-            Assert.True(
+            Ecs.Assert(
                 termId == typeId || ecs_get_typeid(iter->world, termId) == typeId,
                 nameof(ECS_COLUMN_TYPE_MISMATCH));
         }

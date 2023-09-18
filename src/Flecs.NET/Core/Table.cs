@@ -312,7 +312,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Column<T> Get<T>()
         {
-            Assert.True(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             return new Column<T>(GetPtr(Type<T>.Id(World)), ColumnSize(ColumnIndex<T>()));
         }
 
@@ -324,7 +324,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Column<TFirst> GetFirst<TFirst, TSecond>()
         {
-            Assert.True(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             ulong pair = Macros.Pair<TFirst, TSecond>(World);
             return new Column<TFirst>(GetPtr(pair), ColumnSize(ColumnIndex<TFirst, TSecond>()));
         }
@@ -337,7 +337,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Column<TSecond> GetSecond<TFirst, TSecond>()
         {
-            Assert.True(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             ulong pair = Macros.Pair<TFirst, TSecond>(World);
             return new Column<TSecond>(GetPtr(pair), ColumnSize(ColumnIndex<TFirst, TSecond>()));
         }
@@ -350,7 +350,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Column<TSecond> GetSecond<TSecond>(ulong first)
         {
-            Assert.True(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             ulong pair = Macros.PairSecond<TSecond>(first, World);
             return new Column<TSecond>(GetPtr(pair), ColumnSize(ColumnIndexSecond<TSecond>(first)));
         }

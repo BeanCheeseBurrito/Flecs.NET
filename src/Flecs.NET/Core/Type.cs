@@ -94,8 +94,8 @@ namespace Flecs.NET.Core
         {
             if (RawId != 0)
             {
-                Assert.True(RawId == entity, $"{nameof(ECS_INCONSISTENT_COMPONENT_ID)} {GetTypeName()}");
-                Assert.True(allowTag == AllowTag, nameof(ECS_INVALID_PARAMETER));
+                Ecs.Assert(RawId == entity, $"{nameof(ECS_INCONSISTENT_COMPONENT_ID)} {GetTypeName()}");
+                Ecs.Assert(allowTag == AllowTag, nameof(ECS_INVALID_PARAMETER));
             }
 
             Type type = typeof(T);
@@ -153,19 +153,19 @@ namespace Flecs.NET.Core
             ulong id = default, bool isComponent = true, bool* existing = null)
         {
             if (RawId == 0)
-                Assert.True(world != null, $"{nameof(ECS_COMPONENT_NOT_REGISTERED)} {name}");
+                Ecs.Assert(world != null, $"{nameof(ECS_COMPONENT_NOT_REGISTERED)} {name}");
 
-            Assert.True(id == 0 || RawId == id, nameof(ECS_INCONSISTENT_COMPONENT_ID));
+            Ecs.Assert(id == 0 || RawId == id, nameof(ECS_INCONSISTENT_COMPONENT_ID));
 
             if (IsRegistered(world))
             {
-                Assert.True(RawId != 0 && ecs_exists(world, RawId) == 1, nameof(ECS_INTERNAL_ERROR));
+                Ecs.Assert(RawId != 0 && ecs_exists(world, RawId) == 1, nameof(ECS_INTERNAL_ERROR));
                 return RawId;
             }
 
             Init(RawId != 0 ? RawId : id, allowTag);
 
-            Assert.True(id == 0 || RawId == id, nameof(ECS_INTERNAL_ERROR));
+            Ecs.Assert(id == 0 || RawId == id, nameof(ECS_INTERNAL_ERROR));
 
             string symbol = id == 0 ? GetSymbolName() : NativeString.GetString(ecs_get_symbol(world, id));
 
@@ -198,7 +198,7 @@ namespace Flecs.NET.Core
         {
             if (IsRegistered(world))
             {
-                Assert.True(RawId != 0, nameof(ECS_INTERNAL_ERROR));
+                Ecs.Assert(RawId != 0, nameof(ECS_INTERNAL_ERROR));
                 return RawId;
             }
 
@@ -284,7 +284,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public static int GetSize()
         {
-            Assert.True(RawId != 0, nameof(ECS_INTERNAL_ERROR));
+            Ecs.Assert(RawId != 0, nameof(ECS_INTERNAL_ERROR));
             return Size;
         }
 
@@ -294,7 +294,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public static int GetAlignment()
         {
-            Assert.True(RawId != 0, nameof(ECS_INTERNAL_ERROR));
+            Ecs.Assert(RawId != 0, nameof(ECS_INTERNAL_ERROR));
             return Alignment;
         }
 

@@ -35,7 +35,7 @@ namespace Flecs.NET.Utilities
 
         public static string GetString(sbyte* data)
         {
-            Assert.True(data != null, "Pointer to string is null");
+            Ecs.Assert(data != null, "Pointer to string is null");
             return Marshal.PtrToStringAnsi((IntPtr)data) ?? string.Empty;
         }
 

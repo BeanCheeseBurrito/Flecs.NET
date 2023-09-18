@@ -18,7 +18,7 @@ namespace Flecs.NET.Core
     public static partial class Ecs
     {
         [Conditional("DEBUG")]
-        internal static void Assert(bool condition, string message)
+        internal static void Assert(bool condition, string message = "")
         {
             Debug.Assert(condition, "[Flecs.NET Assertion]: " + message);
         }

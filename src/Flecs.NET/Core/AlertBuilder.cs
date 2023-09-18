@@ -132,8 +132,8 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref AlertBuilder SeverityFilter(ulong kind, ulong with, string var = "")
         {
-            Assert.True(_severityFilterCount < ECS_ALERT_MAX_SEVERITY_FILTERS,
-                "Maxium number of severity filters reached");
+            Ecs.Assert(_severityFilterCount < ECS_ALERT_MAX_SEVERITY_FILTERS,
+                "Maximum number of severity filters reached");
 
             ref ecs_alert_severity_filter_t filter = ref Desc.severity_filters[_severityFilterCount++];
             filter.severity = kind;
