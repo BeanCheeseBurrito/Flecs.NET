@@ -1667,31 +1667,90 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Iterate over all entities with provided component.
+        ///     Iterate over all entities with the provided (component) id.
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="callback"></param>
-        /// <typeparam name="T"></typeparam>
-        public void Each<T>(Ecs.EachEntityCallback<T> callback)
+        public void Each(ulong id, Ecs.EachEntityCallback callback)
         {
-            ecs_term_t t = default;
-            t.id = Type<T>.Id(Handle);
-            ecs_iter_t it = ecs_term_iter(Handle, &t);
-
+            ecs_iter_t it = Macros.TermIter(Handle, id);
             while (ecs_term_next(&it) == 1)
                 Invoker.Each(&it, callback);
         }
 
         /// <summary>
-        ///     Iterate over all entities with provided (component) id.
+        ///     Iterate over all entities with the provided pair.
         /// </summary>
-        /// <param name="termId"></param>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
         /// <param name="callback"></param>
-        public void Each(ulong termId, Ecs.EachEntityCallback callback)
+        public void Each(ulong first, ulong second, Ecs.EachEntityCallback callback)
         {
-            ecs_term_t t = default;
-            t.id = termId;
-            ecs_iter_t it = ecs_term_iter(Handle, &t);
+            ecs_iter_t it = Macros.TermIter(Handle, Macros.Pair(first, second));
+            while (ecs_term_next(&it) == 1)
+                Invoker.Each(&it, callback);
+        }
 
+        /// <summary>
+        ///     Iterate over all entities with the provided component.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Each<T>(Ecs.EachEntityCallback<T> callback)
+        {
+            ecs_iter_t it = Macros.TermIter(Handle, Type<T>.Id(Handle));
+            while (ecs_term_next(&it) == 1)
+                Invoker.Each(&it, callback);
+        }
+
+        /// <summary>
+        ///     Iterate over all entities with the provided pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        public void Each<TFirst>(ulong second, Ecs.EachEntityCallback<TFirst> callback)
+        {
+            ecs_iter_t it = Macros.TermIter(Handle, Macros.Pair<TFirst>(second, Handle));
+            while (ecs_term_next(&it) == 1)
+                Invoker.Each(&it, callback);
+        }
+
+        /// <summary>
+        ///     Iterate over all entities with the provided pair.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void Each<TFirst, TSecond>(Ecs.EachEntityCallback callback)
+        {
+            ecs_iter_t it = Macros.TermIter(Handle, Macros.Pair<TFirst, TSecond>(Handle));
+            while (ecs_term_next(&it) == 1)
+                Invoker.Each(&it, callback);
+        }
+
+        /// <summary>
+        ///     Iterate over all entities with the provided pair.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void EachFirst<TFirst, TSecond>(Ecs.EachEntityCallback<TFirst> callback)
+        {
+            ecs_iter_t it = Macros.TermIter(Handle, Macros.Pair<TFirst, TSecond>(Handle));
+            while (ecs_term_next(&it) == 1)
+                Invoker.Each(&it, callback);
+        }
+
+        /// <summary>
+        ///     Iterate over all entities with the provided pair.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void EachSecond<TFirst, TSecond>(Ecs.EachEntityCallback<TSecond> callback)
+        {
+            ecs_iter_t it = Macros.TermIter(Handle, Macros.Pair<TFirst, TSecond>(Handle));
             while (ecs_term_next(&it) == 1)
                 Invoker.Each(&it, callback);
         }

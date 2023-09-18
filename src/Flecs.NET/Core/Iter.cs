@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -383,16 +384,23 @@ namespace Flecs.NET.Core
 
         private Column<T> GetField<T>(int index)
         {
-#if DEBUG
-            ulong termId = ecs_field_id(Handle, index);
-            Assert.True(Macros.EntityHasIdFlag(termId, ECS_PAIR) != 0 || termId == Type<T>.Id(Handle->world),
-                nameof(ECS_COLUMN_TYPE_MISMATCH));
-#endif
+            AssertFieldId<T>(Handle, index);
+
             bool isShared = ecs_field_is_self(Handle, index) == 0;
             int count = isShared ? 1 : Handle->count;
 
             void* ptr = ecs_field_w_size(Handle, (IntPtr)Managed.ManagedSize<T>(), index);
             return new Column<T>(ptr, count, isShared);
+        }
+
+        [Conditional("DEBUG")]
+        internal static void AssertFieldId<T>(ecs_iter_t* iter, int index)
+        {
+            ulong termId = ecs_field_id(iter, index);
+            ulong typeId = Type<T>.Id(iter->world);
+            Assert.True(
+                termId == typeId || ecs_get_typeid(iter->world, termId) == typeId,
+                nameof(ECS_COLUMN_TYPE_MISMATCH));
         }
 
         /// <summary>

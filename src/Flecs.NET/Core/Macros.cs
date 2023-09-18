@@ -285,5 +285,18 @@ namespace Flecs.NET.Core
         {
             ecs_table_unlock(world, table);
         }
+
+        /// <summary>
+        ///     Get an iter for all entities with the provided id.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ecs_iter_t TermIter(ecs_world_t* world, ulong id)
+        {
+            ecs_term_t term = new ecs_term_t { id = id };
+            return ecs_term_iter(world, &term);
+        }
     }
 }
