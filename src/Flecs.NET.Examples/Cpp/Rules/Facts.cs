@@ -55,7 +55,6 @@ int yVar = friends.FindVar("Y");
 
 // Check a few facts
 
-
 Console.Write("Are Bob and Alice friends? ");
 Console.WriteLine(
     friends.Iter()

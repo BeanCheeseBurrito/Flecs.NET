@@ -24,7 +24,8 @@ world.Component<Wizard>().Entity.IsA<RangedUnit>();
 world.Component<Marksman>().Entity.IsA<RangedUnit>();
 
 // Populate store with players and platoons
-for (int p = 0; p < playerCount; p++) {
+for (int p = 0; p < playerCount; p++)
+{
     Entity player;
 
     // Give first player a name so we can look it up later
@@ -36,7 +37,8 @@ for (int p = 0; p < playerCount; p++) {
     // Add player tag so we can query for all players if we want to
     player.Add<Player>();
 
-    for (int pl = 0; pl < platoonsPerPlayer; pl++) {
+    for (int pl = 0; pl < platoonsPerPlayer; pl++)
+    {
         Entity platoon = world.Entity().Add<Player>(player);
 
         // Add platoon tag so we can query for all platoons if we want to
