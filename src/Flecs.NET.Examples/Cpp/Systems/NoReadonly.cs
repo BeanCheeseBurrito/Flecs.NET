@@ -39,7 +39,7 @@ world.Routine(
             Entity plate = it.Entity(i);
 
             // Find an available waiter
-            Entity waiter = qWaiter.First(); // TODO: Implement iter_iterable
+            Entity waiter = qWaiter.Iter().First();
 
             if (waiter != 0)
             {
@@ -62,7 +62,7 @@ world.Routine(
                 // different table while we're iterating it.
                 plate.Add<Waiter>(waiter);
 
-                Console.WriteLine($"Assigned {waiter.Name()} to {plate.Name()}");
+                Console.WriteLine($"Assigned {waiter.Name()} to {plate}!");
             }
             else
             {
@@ -93,3 +93,5 @@ public struct Plate { }
 #endif
 
 // Output:
+// Assigned waiter_3 to plate_1!
+// Assigned waiter_2 to plate_3!

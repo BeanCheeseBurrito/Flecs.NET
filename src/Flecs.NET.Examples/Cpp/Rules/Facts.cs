@@ -16,7 +16,6 @@
 // the query. A rule that checks a fact does not return entities, but will
 // instead return the reasons why a fact is true (if it is true).
 
-// TODO: Finish this
 #if Cpp_Rules_Facts
 
 using Flecs.NET.Core;
@@ -56,12 +55,40 @@ int yVar = friends.FindVar("Y");
 
 // Check a few facts
 
-friends.Iter((Iter it) =>
-{
-    Entity x = it.GetVar(xVar);
-    Entity y = it.GetVar(yVar);
-    Console.WriteLine($"{x.Name()} likes {y.Name()}");
-});
+
+Console.Write("Are Bob and Alice friends? ");
+Console.WriteLine(
+    friends.Iter()
+        .SetVar(xVar, bob)
+        .SetVar(yVar, alice)
+        .IsTrue()
+);
+
+Console.Write("Are Bob and John friends? ");
+Console.WriteLine(
+    friends.Iter()
+        .SetVar(xVar, bob)
+        .SetVar(yVar, john)
+        .IsTrue()
+);
+
+Console.Write("Are Jane and John friends? ");
+Console.WriteLine(
+    friends.Iter()
+        .SetVar(xVar, jane)
+        .SetVar(yVar, john)
+        .IsTrue()
+);
+
+// It doesn't matter who we assign to X or Y. After the variables are
+// substituted, either yields a fact that is true.
+Console.Write("Are John and Jane friends? ");
+Console.WriteLine(
+    friends.Iter()
+        .SetVar(xVar, john)
+        .SetVar(yVar, jane)
+        .IsTrue()
+);
 
 friends.Destruct();
 
@@ -70,7 +97,7 @@ public struct Likes { }
 #endif
 
 // Output:
-// Alice likes Bob
-// John likes Jane
-// Jane likes John
-// Bob likes Alice
+// Are Bob and Alice friends? True
+// Are Bob and John friends? False
+// Are Jane and John friends? True
+// Are John and Jane friends? True
