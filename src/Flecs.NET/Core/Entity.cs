@@ -2536,7 +2536,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return Id.Str();
+            return Id.ToString();
         }
     }
 }

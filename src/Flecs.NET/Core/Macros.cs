@@ -263,6 +263,30 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Test if pointer is of specified type.
+        /// </summary>
+        /// <param name="poly"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool PolyIs(void* poly, int type)
+        {
+            ecs_header_t* hdr = (ecs_header_t*)poly;
+            return hdr->type == type;
+        }
+
+        /// <summary>
+        ///     Test if pointer is a stage or world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsStageOrWorld(ecs_world_t* world)
+        {
+            return PolyIs(world, ecs_stage_t_magic) || PolyIs(world, ecs_world_t_magic);
+        }
+
+        /// <summary>
         ///     Locks a table.
         /// </summary>
         /// <param name="world"></param>

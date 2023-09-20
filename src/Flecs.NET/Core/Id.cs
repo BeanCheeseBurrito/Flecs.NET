@@ -355,7 +355,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return Str();
+            return Macros.IsStageOrWorld(World) ? Str() : string.Empty;
         }
     }
 }
