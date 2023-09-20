@@ -18,7 +18,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Version>3.2.7-build.7</Version>
+        <Version>3.2.7-build.8</Version>
         <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Debug</Title>
         <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Release</Title>
         <Authors>BeanCheeseBurrito</Authors>
@@ -33,6 +33,7 @@
         <RepositoryType>Github</RepositoryType>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 
+        <DebugType>embedded</DebugType>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
