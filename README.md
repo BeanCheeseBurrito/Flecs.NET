@@ -6,7 +6,7 @@
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](https://github.com/SanderMertens/flecs/blob/master/LICENSE)
 [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Flecs.NET.Release?style=for-the-badge&color=blue)](https://www.nuget.org/packages/Flecs.NET.Release)
 
-[Docs](https://beancheeseburrito.github.io/Flecs.NET-Docs/) · [Examples](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET.Examples) · [Discord](https://discord.gg/BEzP5Rgrrp)
+[Docs](https://beancheeseburrito.github.io/Flecs.NET.Docs/) · [Examples](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET.Examples) · [Discord](https://discord.gg/BEzP5Rgrrp)
 
 </div>
 
@@ -35,10 +35,19 @@ dotnet add PROJECT package Flecs.NET.Native.Release --version *-*
 **Flecs.NET** provides both [release](https://www.nuget.org/packages/Flecs.NET.Release) and [debug](https://www.nuget.org/packages/Flecs.NET.Debug) packages for nuget.
 To include both of them in your project based on your build configuration, use the package references below. The latest stable or prerelease versions will be added to your project.
 ```xml
-<ItemGroup>
-    <PackageReference Include="Flecs.NET.Debug" Version="*-*" Condition="'$(Configuration)' == 'Debug'" />
-    <PackageReference Include="Flecs.NET.Release" Version="*-*" Condition="'$(Configuration)' == 'Release'" />
-</ItemGroup>
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Flecs.NET.Debug" Version="*-*" Condition="'$(Configuration)' == 'Debug'" />
+        <PackageReference Include="Flecs.NET.Release" Version="*-*" Condition="'$(Configuration)' == 'Release'" />
+    </ItemGroup>
+
+</Project>
 ```
 
 ## Show me the code!
@@ -49,7 +58,7 @@ using World world = World.Create();
 
 Routine routine = world.Routine(
     filter: world.FilterBuilder().Term<Position>().Term<Velocity>(),
-    query: world.QueryBuilder(),
+    query: world.QueryBuilder(), // You can omit unused parameters!
     routine: world.RoutineBuilder(),
     callback: (Iter it) =>
     {
