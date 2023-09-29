@@ -588,7 +588,9 @@ namespace Flecs.NET.Core
             Ecs.Assert(CurrentTerm.id != 0 || CurrentTerm.first.id != 0, "no component specified for singleton");
 
             ulong singletonId = CurrentTerm.id;
-            if (singletonId == 0) singletonId = CurrentTerm.first.id;
+
+            if (singletonId == 0)
+                singletonId = CurrentTerm.first.id;
 
             Ecs.Assert(singletonId != 0, nameof(ECS_INVALID_PARAMETER));
             CurrentTerm.src.id = !Macros.IsPair(singletonId) ? singletonId : Macros.PairFirst(World, singletonId);

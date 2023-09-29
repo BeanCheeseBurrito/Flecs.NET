@@ -1,9 +1,10 @@
 using BenchmarkDotNet.Attributes;
 using Flecs.NET.Core;
+using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Benchmarks.Core
 {
-    public class AddRemoveTag
+    public unsafe class AddRemoveRawTag
     {
         [Params(100000)]
         public int EntityCount;
@@ -36,7 +37,7 @@ namespace Flecs.NET.Benchmarks.Core
         }
 
         [Benchmark]
-        public void Benchmark()
+        public void Wrapper()
         {
             for (int e = 0; e < EntityCount; e++)
             {
@@ -45,6 +46,19 @@ namespace Flecs.NET.Benchmarks.Core
 
                 for (int tag = 0; tag < TagCount; tag++)
                     Entities[e].Remove(Tags[tag]);
+            }
+        }
+
+        [Benchmark]
+        public void Bindings()
+        {
+            for (int e = 0; e < EntityCount; e++)
+            {
+                for (int tag = 0; tag < TagCount; tag++)
+                    ecs_add_id(World, Entities[e], Tags[tag]);
+
+                for (int tag = 0; tag < TagCount; tag++)
+                    ecs_remove_id(World, Entities[e], Tags[tag]);
             }
         }
     }
