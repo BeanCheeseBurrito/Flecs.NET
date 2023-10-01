@@ -26,7 +26,7 @@ Query q = world.Query(
 q.Each((Iter it, int i) =>
 {
     Column<Velocity> v = it.Field<Velocity>(1);
-    ref Gravity g = ref it.Field<Gravity>(2)[0];
+    ref Gravity g = ref it.Single<Gravity>(2);
 
     v[i].Y += g.Value;
     Console.WriteLine($"{it.Entity(i)} velocity is ({v[i].X}, {v[i].Y})");

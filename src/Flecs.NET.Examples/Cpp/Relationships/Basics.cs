@@ -43,6 +43,12 @@ bob.Each(EcsWildcard, pears, (Id id) =>
     Console.WriteLine($"Bob {id.First().Name()} pears");
 });
 
+// Get first target of relationship
+Console.WriteLine($"Bob eats {bob.Target<Eats>().Name()}");
+
+// Get second target of relationship
+Console.WriteLine($"Bob also eats {bob.Target<Eats>(1).Name()}");
+
 public struct Eats { }
 
 #endif
@@ -55,3 +61,5 @@ public struct Eats { }
 // Bob eats Pears
 // Bob Eats pears
 // Bob Grows pears
+// Bob eats Apples
+// Bob also eats Pears
