@@ -38,8 +38,8 @@ namespace Flecs.NET.Core
         }
 
         internal ecs_filter_desc_t FilterDesc;
-        internal UnsafeList<ecs_term_t> Terms;
-        internal UnsafeList<NativeString> Strings;
+        internal NativeList<ecs_term_t> Terms;
+        internal NativeList<NativeString> Strings;
 
         /// <summary>
         ///     A reference to the world.

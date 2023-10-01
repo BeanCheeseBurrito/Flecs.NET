@@ -8,12 +8,12 @@ namespace Flecs.NET.Collections
     ///     Unsafe array.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public unsafe struct UnsafeArray<T> : IDisposable
+    public unsafe struct NativeArray<T> : IDisposable where T : unmanaged
     {
         /// <summary>
         ///     Data storage for the array.
         /// </summary>
-        public void* Data { get; private set; }
+        public T* Data { get; private set; }
 
         /// <summary>
         ///     The length of the array.
@@ -29,14 +29,9 @@ namespace Flecs.NET.Collections
         ///     Creates an unsafe array with the provided length.
         /// </summary>
         /// <param name="length"></param>
-        /// <param name="isZeroed"></param>
-        public UnsafeArray(int length, bool isZeroed = true)
+        public NativeArray(int length)
         {
-            if (isZeroed)
-                Data = length > 0 ? Memory.AllocZeroed(length * Managed.ManagedSize<T>()) : null;
-            else
-                Data = length > 0 ? Memory.Alloc(length * Managed.ManagedSize<T>()) : null;
-
+            Data = length > 0 ? Memory.AllocZeroed<T>(length) : null;
             Length = length;
         }
 
@@ -45,7 +40,7 @@ namespace Flecs.NET.Collections
         /// </summary>
         /// <param name="data"></param>
         /// <param name="length"></param>
-        public UnsafeArray(void* data, int length)
+        public NativeArray(T* data, int length)
         {
             Data = data;
             Length = length;
@@ -56,15 +51,21 @@ namespace Flecs.NET.Collections
         /// </summary>
         /// <param name="index"></param>
         /// <exception cref="ArgumentException"></exception>
-        public readonly ref T this[int index]
+        public readonly T this[int index]
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 if ((uint)index >= (uint)Length)
-                    throw new ArgumentException($"Unsafe array index {index} is out of range.", nameof(index));
+                    throw new ArgumentException($"Array index \"{index}\" is out of range.", nameof(index));
 
-                return ref Managed.GetTypeRef<T>(Data, index);
+                return Data[index];
+            }
+            set
+            {
+                if ((uint)index >= (uint)Length)
+                    throw new ArgumentException($"Array index \"{index}\" is out of range.", nameof(index));
+
+                Data[index] = value;
             }
         }
 

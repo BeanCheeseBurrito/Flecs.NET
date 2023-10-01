@@ -8,12 +8,12 @@ namespace Flecs.NET.Collections
     ///     Unsafe list.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public unsafe struct UnsafeList<T> : IDisposable
+    public unsafe struct NativeList<T> : IDisposable, IEquatable<NativeList<T>> where T : unmanaged
     {
         /// <summary>
         ///     Data storage for the unsafe list.
         /// </summary>
-        public void* Data { get; private set; }
+        public T* Data { get; private set; }
 
         /// <summary>
         ///     The capacity of the unsafe list.
@@ -31,15 +31,10 @@ namespace Flecs.NET.Collections
         public readonly bool IsNull => Data == null;
 
         /// <summary>
-        ///     Represents whether or not the unsafe list stores a managed type.
-        /// </summary>
-        public readonly bool IsManaged => RuntimeHelpers.IsReferenceOrContainsReferences<T>();
-
-        /// <summary>
         ///     Creates an unsafe list with the specified capacity.
         /// </summary>
         /// <param name="capacity"></param>
-        public UnsafeList(int capacity)
+        public NativeList(int capacity)
         {
             if (capacity <= 0)
             {
@@ -48,9 +43,21 @@ namespace Flecs.NET.Collections
                 Count = default;
             }
 
-            Data = Memory.AllocZeroed(capacity * Managed.ManagedSize<T>());
+            Data = Memory.AllocZeroed<T>(capacity);
             Capacity = capacity;
             Count = 0;
+        }
+
+        /// <summary>
+        ///     Disposes the unsafe list and frees resources.
+        /// </summary>
+        public void Dispose()
+        {
+            if (Data == null)
+                return;
+
+            Memory.Free(Data);
+            Data = null;
         }
 
         /// <summary>
@@ -79,27 +86,62 @@ namespace Flecs.NET.Collections
             if (Count == Capacity)
             {
                 int newCapacity = Utils.NextPowOf2(Count + 1);
-                Data = Memory.Realloc(Data, newCapacity * Managed.ManagedSize<T>());
+                Data = Memory.Realloc(Data, newCapacity);
                 Capacity = newCapacity;
             }
 
-            Managed.SetTypeRef(Data, item, Count++);
+            Data[Count++] = item;
         }
 
         /// <summary>
-        ///     Disposes the unsafe list and frees resources.
+        ///
         /// </summary>
-        public void Dispose()
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(NativeList<T> other)
         {
-            if (Data == null)
-                return;
+            return Data == other.Data;
+        }
 
-            if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
-                for (int i = 0; i < Count; i++)
-                    Managed.FreeGcHandle(Data, i);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is NativeList<T> other && Equals(other);
+        }
 
-            Memory.Free(Data);
-            Data = null;
+        /// <summary>
+        ///     Returns the hash code for this list.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Data->GetHashCode();
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(NativeList<T> left, NativeList<T> right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(NativeList<T> left, NativeList<T> right)
+        {
+            return !(left == right);
         }
     }
 }

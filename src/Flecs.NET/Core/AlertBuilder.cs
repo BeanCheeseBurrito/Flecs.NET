@@ -11,7 +11,7 @@ namespace Flecs.NET.Core
     public unsafe struct AlertBuilder : IDisposable
     {
         private ecs_world_t* _world;
-        private UnsafeList<NativeString> _strings;
+        private NativeList<NativeString> _strings;
         private int _severityFilterCount;
 
         internal ecs_alert_desc_t AlertDesc;
