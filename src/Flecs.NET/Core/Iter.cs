@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -296,7 +297,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get readonly access to field data.
+        ///     Get access to field data.
         /// </summary>
         /// <param name="index"></param>
         /// <typeparam name="T"></typeparam>
@@ -304,6 +305,18 @@ namespace Flecs.NET.Core
         public Column<T> Field<T>(int index)
         {
             return GetField<T>(index);
+        }
+
+        /// <summary>
+        ///     Get managed ref to the first element in a field.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [SuppressMessage("Usage", "CA1720")]
+        public ref T Single<T>(int index)
+        {
+            return ref GetField<T>(index)[0];
         }
 
         /// <summary>
