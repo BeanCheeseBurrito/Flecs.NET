@@ -5,7 +5,7 @@ namespace Flecs.NET.Utilities
     /// <summary>
     ///     Static class for simple utility functions.
     /// </summary>
-    public static unsafe class Utils
+    internal static unsafe class Utils
     {
         /// <summary>
         ///     Checks if 2 native strings are equal.

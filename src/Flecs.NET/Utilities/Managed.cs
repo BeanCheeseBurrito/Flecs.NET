@@ -72,7 +72,7 @@ namespace Flecs.NET.Utilities
 
             GCHandle handle = GCHandle.FromIntPtr(((IntPtr*)data)[index]);
             StrongBox<T> obj = (StrongBox<T>)handle.Target!;
-            return ref obj.Value;
+            return ref obj.Value!;
         }
 
         internal static ref T GetTypeRef<T>(IntPtr data, int index = 0)
@@ -82,7 +82,7 @@ namespace Flecs.NET.Utilities
 
             GCHandle handle = GCHandle.FromIntPtr(((IntPtr*)data)[index]);
             StrongBox<T> obj = (StrongBox<T>)handle.Target!;
-            return ref obj.Value;
+            return ref obj.Value!;
         }
     }
 }
