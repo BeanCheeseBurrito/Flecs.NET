@@ -65,14 +65,20 @@ namespace Flecs.NET.Utilities
             ((T*)data)[index] = item;
         }
 
+        internal static void SetTypeRef<T>(GCHandle handle, ref T item)
+        {
+            StrongBox<T> strongBox = (StrongBox<T>)handle.Target!;
+            strongBox.Value = item;
+        }
+
         internal static ref T GetTypeRef<T>(void* data, int index = 0)
         {
             if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
                 return ref ((T*)data)[index];
 
             GCHandle handle = GCHandle.FromIntPtr(((IntPtr*)data)[index]);
-            StrongBox<T> obj = (StrongBox<T>)handle.Target!;
-            return ref obj.Value!;
+            StrongBox<T> strongBox = (StrongBox<T>)handle.Target!;
+            return ref strongBox.Value!;
         }
 
         internal static ref T GetTypeRef<T>(IntPtr data, int index = 0)
@@ -81,8 +87,14 @@ namespace Flecs.NET.Utilities
                 return ref ((T*)data)[index];
 
             GCHandle handle = GCHandle.FromIntPtr(((IntPtr*)data)[index]);
-            StrongBox<T> obj = (StrongBox<T>)handle.Target!;
-            return ref obj.Value!;
+            StrongBox<T> strongBox = (StrongBox<T>)handle.Target!;
+            return ref strongBox.Value!;
+        }
+
+        internal static ref T GetTypeRef<T>(GCHandle handle)
+        {
+            StrongBox<T> strongBox = (StrongBox<T>)handle.Target!;
+            return ref strongBox.Value;
         }
     }
 }
