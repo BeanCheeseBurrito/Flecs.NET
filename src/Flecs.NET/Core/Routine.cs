@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -26,14 +27,121 @@ namespace Flecs.NET.Core
         /// </summary>
         public ref ecs_world_t* World => ref _entity.World;
 
-        private Routine(
+        /// <summary>
+        ///      Creates a routine for the provided world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="filterBuilder"></param>
+        /// <param name="queryBuilder"></param>
+        /// <param name="routineBuilder"></param>
+        /// <param name="callback"></param>
+        /// <param name="name"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Routine(
             ecs_world_t* world,
-            ecs_system_desc_t* routineDesc,
+            FilterBuilder filterBuilder = default,
+            QueryBuilder queryBuilder = default,
+            RoutineBuilder routineBuilder = default,
+            Ecs.IterCallback? callback = null,
+            string name = "")
+        {
+            _entity = default;
+
+            InitRoutine(
+                BindingContext.RoutineIterPointer,
+                ref callback,
+                ref world,
+                ref filterBuilder,
+                ref queryBuilder,
+                ref routineBuilder,
+                ref name
+            );
+        }
+
+        /// <summary>
+        ///     Creates a routine for the provided world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="filterBuilder"></param>
+        /// <param name="queryBuilder"></param>
+        /// <param name="routineBuilder"></param>
+        /// <param name="callback"></param>
+        /// <param name="name"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Routine(
+            ecs_world_t* world,
+            FilterBuilder filterBuilder = default,
+            QueryBuilder queryBuilder = default,
+            RoutineBuilder routineBuilder = default,
+            Ecs.EachEntityCallback? callback = null,
+            string name = "")
+        {
+            _entity = default;
+
+            InitRoutine(
+                BindingContext.RoutineEachEntityPointer,
+                ref callback,
+                ref world,
+                ref filterBuilder,
+                ref queryBuilder,
+                ref routineBuilder,
+                ref name
+            );
+        }
+
+        /// <summary>
+        ///     Creates a routine for the provided world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="filterBuilder"></param>
+        /// <param name="queryBuilder"></param>
+        /// <param name="routineBuilder"></param>
+        /// <param name="callback"></param>
+        /// <param name="name"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Routine(
+            ecs_world_t* world,
+            FilterBuilder filterBuilder = default,
+            QueryBuilder queryBuilder = default,
+            RoutineBuilder routineBuilder = default,
+            Ecs.EachIndexCallback? callback = null,
+            string name = "")
+        {
+            _entity = default;
+
+            InitRoutine(
+                BindingContext.RoutineEachIndexPointer,
+                ref callback,
+                ref world,
+                ref filterBuilder,
+                ref queryBuilder,
+                ref routineBuilder,
+                ref name
+            );
+        }
+
+        /// <summary>
+        ///     Creates a routine for the provided world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="entity"></param>
+        public Routine(ecs_world_t* world, ulong entity)
+        {
+            _entity = new Entity(world, entity);
+        }
+
+        private void InitRoutine<T>(
+            IntPtr internalCallback,
+            ref T? userCallback,
+            ref ecs_world_t* world,
             ref FilterBuilder filterBuilder,
             ref QueryBuilder queryBuilder,
             ref RoutineBuilder routineBuilder,
-            ref string name)
+            ref string name) where T : Delegate
         {
+            if (userCallback == null)
+                throw new ArgumentNullException(nameof(userCallback), "User provided routine callback is null");
+
             using NativeString nativeName = (NativeString)name;
 
             ecs_entity_desc_t entityDesc = default;
@@ -61,124 +169,24 @@ namespace Flecs.NET.Core
             BindingContext.RoutineContext* routineContext = Memory.Alloc<BindingContext.RoutineContext>(1);
             routineContext[0] = routineBuilder.RoutineContext;
             routineContext->QueryContext = queryBuilder.QueryContext;
+            BindingContext.SetCallback(ref routineContext->Iterator, userCallback);
+
+            ecs_system_desc_t* routineDesc =
+                (ecs_system_desc_t*)Unsafe.AsPointer(ref routineBuilder.RoutineDesc);
 
             routineDesc->entity = entity;
             routineDesc->query = queryBuilder.QueryDesc;
             routineDesc->query.filter = filterBuilder.Desc;
-            routineDesc->query.filter.terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
+            routineDesc->query.filter.terms_buffer = filterBuilder.Terms.Data;
             routineDesc->query.filter.terms_buffer_count = filterBuilder.Terms.Count;
             routineDesc->query.binding_ctx = queryContext;
             routineDesc->query.binding_ctx_free = BindingContext.QueryContextFreePointer;
             routineDesc->binding_ctx_free = BindingContext.RoutineContextFreePointer;
             routineDesc->binding_ctx = routineContext;
-
-            _entity = default;
-        }
-
-        /// <summary>
-        ///      Creates a routine for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="queryBuilder"></param>
-        /// <param name="routineBuilder"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Routine(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            QueryBuilder queryBuilder = default,
-            RoutineBuilder routineBuilder = default,
-            Ecs.IterCallback? callback = null,
-            string name = "")
-            : this(world, &routineBuilder.RoutineDesc, ref filterBuilder, ref queryBuilder, ref routineBuilder, ref name)
-        {
-            if (callback == null)
-                throw new ArgumentNullException(nameof(callback), "Callback is null");
-
-            ecs_system_desc_t* routineDesc = &routineBuilder.RoutineDesc;
-            routineDesc->callback = BindingContext.RoutineIterPointer;
-
-            BindingContext.RoutineContext* context = (BindingContext.RoutineContext*)routineDesc->binding_ctx;
-            BindingContext.SetCallback(ref context->Iterator, callback);
+            routineDesc->callback = internalCallback;
 
             _entity = new Entity(world, ecs_system_init(world, routineDesc));
             filterBuilder.Dispose();
-        }
-
-        /// <summary>
-        ///     Creates a routine for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="queryBuilder"></param>
-        /// <param name="routineBuilder"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Routine(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            QueryBuilder queryBuilder = default,
-            RoutineBuilder routineBuilder = default,
-            Ecs.EachEntityCallback? callback = null,
-            string name = "")
-            : this(world, &routineBuilder.RoutineDesc, ref filterBuilder, ref queryBuilder, ref routineBuilder, ref name)
-        {
-            if (callback == null)
-                throw new ArgumentNullException(nameof(callback), "Callback is null");
-
-            ecs_system_desc_t* routineDesc = &routineBuilder.RoutineDesc;
-            routineDesc->callback = BindingContext.RoutineEachEntityPointer;
-
-            BindingContext.RoutineContext* context = (BindingContext.RoutineContext*)routineDesc->binding_ctx;
-            BindingContext.SetCallback(ref context->Iterator, callback);
-
-            _entity = new Entity(world, ecs_system_init(world, routineDesc));
-            filterBuilder.Dispose();
-        }
-
-        /// <summary>
-        ///     Creates a routine for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="queryBuilder"></param>
-        /// <param name="routineBuilder"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Routine(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            QueryBuilder queryBuilder = default,
-            RoutineBuilder routineBuilder = default,
-            Ecs.EachIndexCallback? callback = null,
-            string name = "")
-            : this(world, &routineBuilder.RoutineDesc, ref filterBuilder, ref queryBuilder, ref routineBuilder, ref name)
-        {
-            if (callback == null)
-                throw new ArgumentNullException(nameof(callback), "Callback is null");
-
-            ecs_system_desc_t* routineDesc = &routineBuilder.RoutineDesc;
-            routineDesc->callback = BindingContext.RoutineEachIndexPointer;
-
-            BindingContext.RoutineContext* context = (BindingContext.RoutineContext*)routineDesc->binding_ctx;
-            BindingContext.SetCallback(ref context->Iterator, callback);
-
-            _entity = new Entity(world, ecs_system_init(world, routineDesc));
-            filterBuilder.Dispose();
-        }
-
-        /// <summary>
-        ///     Creates a routine for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="entity"></param>
-        public Routine(ecs_world_t* world, ulong entity)
-        {
-            _entity = new Entity(world, entity);
         }
 
         /// <summary>
