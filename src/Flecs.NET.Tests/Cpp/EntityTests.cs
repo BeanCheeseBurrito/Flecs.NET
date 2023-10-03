@@ -110,7 +110,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Component<Position>();
 
             Entity entity = world.Entity()
-                .Set(new Position() { X = 10, Y = 20 });
+                .Set(new Position { X = 10, Y = 20 });
 
             Assert.True(entity != 0);
             Assert.True(entity.Has<Position>());
@@ -129,8 +129,8 @@ namespace Flecs.NET.Tests.Cpp
             world.Component<Velocity>();
 
             Entity entity = world.Entity()
-                .Set(new Position() { X = 10, Y = 20 })
-                .Set(new Velocity() { X = 1, Y = 2 });
+                .Set(new Position { X = 10, Y = 20 })
+                .Set(new Velocity { X = 1, Y = 2 });
 
             Assert.True(entity != 0);
             Assert.True(entity.Has<Position>());
@@ -186,7 +186,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity entity = world.Entity();
             Assert.True(entity != 0);
 
-            entity.Set(new Position() { X = 10, Y = 20 });
+            entity.Set(new Position { X = 10, Y = 20 });
             Assert.True(entity.Has<Position>());
 
             Position* p = entity.GetPtr<Position>();
@@ -292,8 +292,8 @@ namespace Flecs.NET.Tests.Cpp
             Entity entity = world.Entity();
             Assert.True(entity != 0);
 
-            entity.Set(new Position() { X = 10, Y = 20 })
-                .Set(new Velocity() { X = 1, Y = 2 });
+            entity.Set(new Position { X = 10, Y = 20 })
+                .Set(new Velocity { X = 1, Y = 2 });
             Assert.True(entity.Has<Position>());
             Assert.True(entity.Has<Velocity>());
 
@@ -368,7 +368,7 @@ namespace Flecs.NET.Tests.Cpp
             Component<Position> position = world.Component<Position>();
 
             Entity entity = world.Entity()
-                .Set(new Position() { X = 10, Y = 20 });
+                .Set(new Position { X = 10, Y = 20 });
 
             Assert.True(entity != 0);
             Assert.True(entity.Has<Position>());
@@ -390,7 +390,7 @@ namespace Flecs.NET.Tests.Cpp
             Component<Position> position = world.Component<Position>();
 
             Entity entity = world.Entity()
-                .Set(new Position() { X = 10, Y = 20 });
+                .Set(new Position { X = 10, Y = 20 });
 
             Assert.True(entity != 0);
             Assert.True(entity.Has<Position>());
@@ -423,7 +423,7 @@ namespace Flecs.NET.Tests.Cpp
             Id id = position.Id;
 
             Entity entity = world.Entity()
-                .Set(new Position() { X = 10, Y = 20 });
+                .Set(new Position { X = 10, Y = 20 });
 
             Assert.True(entity != 0);
             Assert.True(entity.Has<Position>());
@@ -445,7 +445,7 @@ namespace Flecs.NET.Tests.Cpp
             ulong id = position;
 
             Entity entity = world.Entity()
-                .Set(new Position() { X = 10, Y = 20 });
+                .Set(new Position { X = 10, Y = 20 });
 
             Assert.True(entity != 0);
             Assert.True(entity.Has<Position>());
@@ -468,7 +468,7 @@ namespace Flecs.NET.Tests.Cpp
             Id id = position.Id;
 
             Entity entity = world.Entity()
-                .Set(new Position() { X = 10, Y = 20 });
+                .Set(new Position { X = 10, Y = 20 });
 
             Assert.True(entity != 0);
             Assert.True(entity.Has<Position>());
@@ -501,7 +501,7 @@ namespace Flecs.NET.Tests.Cpp
             ulong id = position;
 
             Entity entity = world.Entity()
-                .Set(new Position() { X = 10, Y = 20 });
+                .Set(new Position { X = 10, Y = 20 });
 
             Assert.True(entity != 0);
             Assert.True(entity.Has<Position>());
@@ -532,7 +532,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Component<Position> position = world.Component<Position>();
 
-            Position p = new Position() { X = 10, Y = 20 };
+            Position p = new Position { X = 10, Y = 20 };
 
             Entity e = world.Entity()
                 .SetPtr(position, sizeof(Position), &p);
@@ -553,7 +553,7 @@ namespace Flecs.NET.Tests.Cpp
             Component<Position> position = world.Component<Position>();
             Id id = position.Id;
 
-            Position p = new Position() { X = 10, Y = 20 };
+            Position p = new Position { X = 10, Y = 20 };
 
             Entity e = world.Entity()
                 .SetPtr(id, sizeof(Position), &p);
@@ -574,7 +574,7 @@ namespace Flecs.NET.Tests.Cpp
             Component<Position> position = world.Component<Position>();
             ulong id = position;
 
-            Position p = new Position() { X = 10, Y = 20 };
+            Position p = new Position { X = 10, Y = 20 };
 
             Entity e = world.Entity()
                 .SetPtr(id, sizeof(Position), &p);
@@ -594,7 +594,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Component<Position> position = world.Component<Position>();
 
-            Position p = new Position() { X = 10, Y = 20 };
+            Position p = new Position { X = 10, Y = 20 };
 
             Entity e = world.Entity()
                 .SetPtr(position, &p);
@@ -615,7 +615,7 @@ namespace Flecs.NET.Tests.Cpp
             Component<Position> position = world.Component<Position>();
             Id id = position.Id;
 
-            Position p = new Position() { X = 10, Y = 20 };
+            Position p = new Position { X = 10, Y = 20 };
 
             Entity e = world.Entity()
                 .SetPtr(id, &p);
@@ -636,7 +636,7 @@ namespace Flecs.NET.Tests.Cpp
             Component<Position> position = world.Component<Position>();
             ulong id = position;
 
-            Position p = new Position() { X = 10, Y = 20 };
+            Position p = new Position { X = 10, Y = 20 };
 
             Entity e = world.Entity()
                 .SetPtr(id, &p);

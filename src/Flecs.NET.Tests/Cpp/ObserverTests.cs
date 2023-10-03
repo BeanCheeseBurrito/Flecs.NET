@@ -30,10 +30,10 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity();
             Assert.Equal(0, count);
 
-            e.Set(new Position() { X = 10, Y = 20 });
+            e.Set(new Position { X = 10, Y = 20 });
             Assert.Equal(0, count);
 
-            e.Set(new Velocity() { X = 1, Y = 2 });
+            e.Set(new Velocity { X = 1, Y = 2 });
             Assert.Equal(1, count);
         }
 
@@ -66,10 +66,10 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity();
             Assert.Equal(0, count);
 
-            e.Set(new Position() { X = 10, Y = 20 });
+            e.Set(new Position { X = 10, Y = 20 });
             Assert.Equal(0, count);
 
-            e.Set(new Velocity() { X = 1, Y = 2 });
+            e.Set(new Velocity { X = 1, Y = 2 });
             Assert.Equal(0, count);
 
             e.Remove<Velocity>();
@@ -108,10 +108,10 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity();
             Assert.Equal(0, count);
 
-            e.Set(new Position() { X = 10, Y = 20 });
+            e.Set(new Position { X = 10, Y = 20 });
             Assert.Equal(0, count);
 
-            e.Set(new Velocity() { X = 1, Y = 2 });
+            e.Set(new Velocity { X = 1, Y = 2 });
             Assert.Equal(1, count);
         }
 
@@ -144,10 +144,10 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity();
             Assert.Equal(0, count);
 
-            e.Set(new Position() { X = 10, Y = 20 });
+            e.Set(new Position { X = 10, Y = 20 });
             Assert.Equal(0, count);
 
-            e.Set(new Velocity() { X = 1, Y = 2 });
+            e.Set(new Velocity { X = 1, Y = 2 });
             Assert.Equal(0, count);
 
             e.Remove<Velocity>();
@@ -308,11 +308,11 @@ namespace Flecs.NET.Tests.Cpp
                 }
             );
 
-            e1.Set(new Position() { X = 10, Y = 20 });
+            e1.Set(new Position { X = 10, Y = 20 });
             Assert.Equal(1, count);
             Assert.True(last == e1);
 
-            e2.Set(new Position() { X = 30, Y = 40 });
+            e2.Set(new Position { X = 30, Y = 40 });
             Assert.Equal(2, count);
             Assert.True(last == e2);
         }
@@ -359,11 +359,11 @@ namespace Flecs.NET.Tests.Cpp
                 }
             );
 
-            e1.Set(new Position() { X = 10, Y = 20 });
+            e1.Set(new Position { X = 10, Y = 20 });
             Assert.Equal(1, count);
             Assert.True(last == e1);
 
-            e2.Set(new Position() { X = 30, Y = 40 });
+            e2.Set(new Position { X = 30, Y = 40 });
             Assert.Equal(2, count);
             Assert.True(last == e2);
         }
@@ -654,7 +654,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity();
             Assert.Equal(0, count);
 
-            e.Set(new Position() { X = 10, Y = 20 });
+            e.Set(new Position { X = 10, Y = 20 });
             Assert.Equal(1, count);
         }
 
@@ -663,9 +663,9 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            world.Entity().Set(new Position() { X = 0, Y = 0 });
-            world.Entity().Set(new Position() { X = 1, Y = 0 });
-            world.Entity().Set(new Position() { X = 2, Y = 0 });
+            world.Entity().Set(new Position { X = 0, Y = 0 });
+            world.Entity().Set(new Position { X = 1, Y = 0 });
+            world.Entity().Set(new Position { X = 2, Y = 0 });
 
             int count = 0;
 
