@@ -18,40 +18,40 @@ namespace Flecs.NET.Core
 
 #if NET5_0_OR_GREATER
         internal static readonly IntPtr ObserverIterPointer =
-            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&ObserverIter;
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserverIter;
 
         internal static readonly IntPtr RoutineIterPointer =
-            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&RoutineIter;
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&RoutineIter;
 
         internal static readonly IntPtr ObserverEachEntityPointer =
-            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&ObserverEachEntity;
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserverEachEntity;
 
         internal static readonly IntPtr RoutineEachEntityPointer =
-            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&RoutineEachEntity;
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&RoutineEachEntity;
 
         internal static readonly IntPtr ObserverEachIndexPointer =
-            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&ObserverEachIndex;
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserverEachIndex;
 
         internal static readonly IntPtr RoutineEachIndexPointer =
-            (IntPtr)(delegate* unmanaged<ecs_iter_t*, void>)&RoutineEachIndex;
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&RoutineEachIndex;
 
         internal static readonly IntPtr WorldContextFreePointer =
-            (IntPtr)(delegate* unmanaged<void*, void>)&WorldContextFree;
+            (IntPtr)(delegate* <void*, void>)&WorldContextFree;
 
         internal static readonly IntPtr ObserverContextFreePointer =
-            (IntPtr)(delegate* unmanaged<void*, void>)&ObserverContextFree;
+            (IntPtr)(delegate* <void*, void>)&ObserverContextFree;
 
         internal static readonly IntPtr RoutineContextFreePointer =
-            (IntPtr)(delegate* unmanaged<void*, void>)&RoutineContextFree;
+            (IntPtr)(delegate* <void*, void>)&RoutineContextFree;
 
         internal static readonly IntPtr QueryContextFreePointer =
-            (IntPtr)(delegate* unmanaged<void*, void>)&QueryContextFree;
+            (IntPtr)(delegate* <void*, void>)&QueryContextFree;
 
         internal static readonly IntPtr TypeHooksContextFreePointer =
-            (IntPtr)(delegate* unmanaged<void*, void>)&TypeHooksContextFree;
+            (IntPtr)(delegate* <void*, void>)&TypeHooksContextFree;
 
         internal static readonly IntPtr OsApiAbortPointer =
-            (IntPtr)(delegate* unmanaged<void>)&OsApiAbort;
+            (IntPtr)(delegate* <void>)&OsApiAbort;
 #else
         internal static readonly IntPtr ObserverIterPointer =
             Marshal.GetFunctionPointerForDelegate(ObserverIterReference = ObserverIter);
@@ -108,97 +108,48 @@ namespace Flecs.NET.Core
         private static readonly Action OsApiAbortReference;
 #endif
 
-        [UnmanagedCallersOnly]
         private static void ObserverIter(ecs_iter_t* iter)
         {
             ObserverContext* context = (ObserverContext*)iter->binding_ctx;
-
-#if NET5_0_OR_GREATER
-            delegate* unmanaged<Iter, void> callback = (delegate* unmanaged<Iter, void>)context->Iterator.Function;
-#else
-            Ecs.IterCallback callback =
-                Marshal.GetDelegateForFunctionPointer<Ecs.IterCallback>(context->Iterator.Function);
-#endif
-
+            Ecs.IterCallback callback = (Ecs.IterCallback)context->Iterator.GcHandle.Target!;
             Invoker.Iter(iter, callback);
         }
 
-        [UnmanagedCallersOnly]
         private static void RoutineIter(ecs_iter_t* iter)
         {
             RoutineContext* context = (RoutineContext*)iter->binding_ctx;
-
-#if NET5_0_OR_GREATER
-            delegate* unmanaged<Iter, void> callback = (delegate* unmanaged<Iter, void>)context->Iterator.Function;
-#else
-            Ecs.IterCallback callback =
-                Marshal.GetDelegateForFunctionPointer<Ecs.IterCallback>(context->Iterator.Function);
-#endif
-
+            Ecs.IterCallback callback = (Ecs.IterCallback)context->Iterator.GcHandle.Target!;
             Invoker.Iter(iter, callback);
         }
 
-        [UnmanagedCallersOnly]
         private static void ObserverEachEntity(ecs_iter_t* iter)
         {
             ObserverContext* context = (ObserverContext*)iter->binding_ctx;
-
-#if NET5_0_OR_GREATER
-            delegate* unmanaged<Entity, void> callback = (delegate* unmanaged<Entity, void>)context->Iterator.Function;
-#else
-            Ecs.EachEntityCallback callback =
-                Marshal.GetDelegateForFunctionPointer<Ecs.EachEntityCallback>(context->Iterator.Function);
-#endif
-
+            Ecs.EachEntityCallback callback = (Ecs.EachEntityCallback)context->Iterator.GcHandle.Target!;
             Invoker.Each(iter, callback);
         }
 
-        [UnmanagedCallersOnly]
         private static void RoutineEachEntity(ecs_iter_t* iter)
         {
             RoutineContext* context = (RoutineContext*)iter->binding_ctx;
-
-#if NET5_0_OR_GREATER
-            delegate* unmanaged<Entity, void> callback = (delegate* unmanaged<Entity, void>)context->Iterator.Function;
-#else
-            Ecs.EachEntityCallback callback =
-                Marshal.GetDelegateForFunctionPointer<Ecs.EachEntityCallback>(context->Iterator.Function);
-#endif
-
+            Ecs.EachEntityCallback callback = (Ecs.EachEntityCallback)context->Iterator.GcHandle.Target!;
             Invoker.Each(iter, callback);
         }
 
-        [UnmanagedCallersOnly]
         private static void ObserverEachIndex(ecs_iter_t* iter)
         {
             ObserverContext* context = (ObserverContext*)iter->binding_ctx;
-
-#if NET5_0_OR_GREATER
-            delegate* unmanaged<Iter, int, void> callback = (delegate* unmanaged<Iter, int, void>)context->Iterator.Function;
-#else
-            Ecs.EachIndexCallback callback =
-                Marshal.GetDelegateForFunctionPointer<Ecs.EachIndexCallback>(context->Iterator.Function);
-#endif
-
+            Ecs.EachIndexCallback callback = (Ecs.EachIndexCallback)context->Iterator.GcHandle.Target!;
             Invoker.Each(iter, callback);
         }
 
-        [UnmanagedCallersOnly]
         private static void RoutineEachIndex(ecs_iter_t* iter)
         {
             RoutineContext* context = (RoutineContext*)iter->binding_ctx;
-
-#if NET5_0_OR_GREATER
-            delegate* unmanaged<Iter, int, void> callback = (delegate* unmanaged<Iter, int, void>)context->Iterator.Function;
-#else
-            Ecs.EachIndexCallback callback =
-                Marshal.GetDelegateForFunctionPointer<Ecs.EachIndexCallback>(context->Iterator.Function);
-#endif
-
+            Ecs.EachIndexCallback callback = (Ecs.EachIndexCallback)context->Iterator.GcHandle.Target!;
             Invoker.Each(iter, callback);
         }
 
-        [UnmanagedCallersOnly]
         private static void WorldContextFree(void* context)
         {
             WorldContext* worldContext = (WorldContext*)context;
@@ -206,7 +157,6 @@ namespace Flecs.NET.Core
             Memory.Free(context);
         }
 
-        [UnmanagedCallersOnly]
         private static void ObserverContextFree(void* context)
         {
             ObserverContext* observerContext = (ObserverContext*)context;
@@ -214,7 +164,6 @@ namespace Flecs.NET.Core
             Memory.Free(context);
         }
 
-        [UnmanagedCallersOnly]
         private static void RoutineContextFree(void* context)
         {
             RoutineContext* routineContext = (RoutineContext*)context;
@@ -222,7 +171,6 @@ namespace Flecs.NET.Core
             Memory.Free(context);
         }
 
-        [UnmanagedCallersOnly]
         private static void QueryContextFree(void* context)
         {
             QueryContext* queryContext = (QueryContext*)context;
@@ -230,7 +178,6 @@ namespace Flecs.NET.Core
             Memory.Free(context);
         }
 
-        [UnmanagedCallersOnly]
         private static void TypeHooksContextFree(void* context)
         {
             TypeHooksContext* typeHooks = (TypeHooksContext*)context;
@@ -238,16 +185,10 @@ namespace Flecs.NET.Core
             Memory.Free(context);
         }
 
-        [UnmanagedCallersOnly]
         private static void OsApiAbort()
         {
             Console.WriteLine(Environment.StackTrace);
-
-#if NET5_0_OR_GREATER
-            ((delegate* unmanaged<void>)FlecsInternal.OsAbortNative)();
-#else
             Marshal.GetDelegateForFunctionPointer<Action>(FlecsInternal.OsAbortNative)();
-#endif
         }
 
         private static void FreeCallback(ref Callback dest)

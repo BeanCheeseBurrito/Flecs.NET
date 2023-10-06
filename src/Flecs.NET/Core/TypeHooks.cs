@@ -62,22 +62,22 @@ namespace Flecs.NET.Core
     {
 #if NET5_0_OR_GREATER
         internal static readonly IntPtr NormalCtorPointer =
-            (IntPtr)(delegate* unmanaged<void*, int, ecs_type_info_t*, void>)&NormalCtor;
+            (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&NormalCtor;
         internal static readonly IntPtr NormalDtorPointer =
-            (IntPtr)(delegate* unmanaged<void*, int, ecs_type_info_t*, void>)&NormalDtor;
+            (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&NormalDtor;
         internal static readonly IntPtr NormalMovePointer =
-            (IntPtr)(delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>)&NormalMove;
+            (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&NormalMove;
         internal static readonly IntPtr NormalCopyPointer =
-            (IntPtr)(delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>)&NormalCopy;
+            (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&NormalCopy;
 
         internal static readonly IntPtr GcHandleCtorPointer =
-            (IntPtr)(delegate* unmanaged<void*, int, ecs_type_info_t*, void>)&GcHandleCtor;
+            (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&GcHandleCtor;
         internal static readonly IntPtr GcHandleDtorPointer =
-            (IntPtr)(delegate* unmanaged<void*, int, ecs_type_info_t*, void>)&GcHandleDtor;
+            (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&GcHandleDtor;
         internal static readonly IntPtr GcHandleMovePointer =
-            (IntPtr)(delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>)&GcHandleMove;
+            (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&GcHandleMove;
         internal static readonly IntPtr GcHandleCopyPointer =
-            (IntPtr)(delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>)&GcHandleCopy;
+            (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&GcHandleCopy;
 #else
         internal static readonly IntPtr NormalCtorPointer =
             Marshal.GetFunctionPointerForDelegate(NormalCtorReference = NormalCtor);
@@ -108,7 +108,6 @@ namespace Flecs.NET.Core
         private static readonly UnmanagedCopy GcHandleCopyReference;
 #endif
 
-        [UnmanagedCallersOnly]
         private static void NormalCtor(void* data, int count, ecs_type_info_t* typeInfo)
         {
             CtorData ctorData = new CtorData(data, typeInfo);
@@ -126,7 +125,6 @@ namespace Flecs.NET.Core
             }
         }
 
-        [UnmanagedCallersOnly]
         private static void NormalDtor(void* data, int count, ecs_type_info_t* typeInfo)
         {
             DtorData dtorData = new DtorData(data, typeInfo);
@@ -144,7 +142,6 @@ namespace Flecs.NET.Core
             }
         }
 
-        [UnmanagedCallersOnly]
         private static void NormalMove(void* src, void* dst, int count, ecs_type_info_t* typeInfo)
         {
             MoveData moveData = new MoveData(src, dst, typeInfo);
@@ -163,7 +160,6 @@ namespace Flecs.NET.Core
             }
         }
 
-        [UnmanagedCallersOnly]
         private static void NormalCopy(void* src, void* dst, int count, ecs_type_info_t* typeInfo)
         {
             CopyData copyData = new CopyData(src, dst, typeInfo);
@@ -182,7 +178,6 @@ namespace Flecs.NET.Core
             }
         }
 
-        [UnmanagedCallersOnly]
         private static void GcHandleCtor(void* data, int count, ecs_type_info_t* typeInfo)
         {
             IntPtr* handles = (IntPtr*)data;
@@ -191,7 +186,6 @@ namespace Flecs.NET.Core
                 handles[i] = IntPtr.Zero;
         }
 
-        [UnmanagedCallersOnly]
         private static void GcHandleDtor(void* data, int count, ecs_type_info_t* typeInfo)
         {
             IntPtr* handles = (IntPtr*)data;
@@ -200,7 +194,6 @@ namespace Flecs.NET.Core
                 Managed.FreeGcHandle(handles[i]);
         }
 
-        [UnmanagedCallersOnly]
         private static void GcHandleMove(void* dst, void* src, int count, ecs_type_info_t* typeInfo)
         {
             IntPtr* handlesDst = (IntPtr*)dst;
@@ -214,7 +207,6 @@ namespace Flecs.NET.Core
             }
         }
 
-        [UnmanagedCallersOnly]
         private static void GcHandleCopy(void* dst, void* src, int count, ecs_type_info_t* typeInfo)
         {
             IntPtr* handlesDst = (IntPtr*)dst;
