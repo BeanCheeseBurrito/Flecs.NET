@@ -411,9 +411,13 @@ namespace Flecs.NET.Core
         {
             ulong termId = ecs_field_id(iter, index);
             ulong typeId = Type<T>.Id(iter->world);
-            Ecs.Assert(
-                termId == typeId || ecs_get_typeid(iter->world, termId) == typeId,
-                nameof(ECS_COLUMN_TYPE_MISMATCH));
+
+            if (termId == typeId || ecs_get_typeid(iter->world, termId) == typeId)
+                return;
+
+            Entity expected = new Entity(iter->world, termId);
+            Entity actual = new Entity(iter->world, typeId);
+            Ecs.Error($"Type argument mismatch at term index {index}.\nExpected Term: {expected}\nActual Term: {actual}");
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A static class for holding callback invokers.
     /// </summary>
-    public static unsafe class Invoker
+    public static unsafe partial class Invoker
     {
         /// <summary>
         ///     Invokes an iter callback using a delegate.
@@ -29,12 +29,12 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Each(ecs_iter_t* iter, Ecs.EachEntityCallback callback)
         {
-            Macros.TableLock(iter->world, iter->table);
-
             ecs_world_t* world = iter->world;
             int count = iter->count;
 
             Ecs.Assert(count > 0, "No entities returned, use Iter() instead.");
+
+            Macros.TableLock(iter->world, iter->table);
 
             for (int i = 0; i < count; i++)
                 callback(new Entity(world, iter->entities[i]));
@@ -47,33 +47,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="iter"></param>
         /// <param name="callback"></param>
-        public static void Each<T>(ecs_iter_t* iter, Ecs.EachEntityCallback<T> callback)
-        {
-            Macros.TableLock(iter->world, iter->table);
-
-            ecs_world_t* world = iter->world;
-            int count = iter->count;
-
-            Ecs.Assert(count > 0, "No entities returned, use Iter() instead.");
-            Core.Iter.AssertFieldId<T>(iter, 1);
-
-            for (int i = 0; i < count; i++)
-                callback(new Entity(world, iter->entities[i]), ref Managed.GetTypeRef<T>(iter->ptrs[0], i));
-
-            Macros.TableUnlock(iter->world, iter->table);
-        }
-
-        /// <summary>
-        ///     Invokes an each callback using a delegate.
-        /// </summary>
-        /// <param name="iter"></param>
-        /// <param name="callback"></param>
         public static void Each(ecs_iter_t* iter, Ecs.EachIndexCallback callback)
         {
-            int count = iter->count;
-
-            if (count == 0)
-                count = 1;
+            int count = iter->count == 0 ? 1 : iter->count;
 
             Iter it = new Iter(iter);
 

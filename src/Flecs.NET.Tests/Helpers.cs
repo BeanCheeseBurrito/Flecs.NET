@@ -83,12 +83,26 @@ public struct Pod
         {
             Ctor = (ref CtorData ctorData) =>
             {
-                ctorData.Get<Pod>().CtorInvoked++;
-                ctorData.Get<Pod>().Value = 10;
+                ref Pod data = ref ctorData.Get<Pod>();
+                //...
             },
-            Dtor = (ref DtorData dtorData) => { dtorData.Get<Pod>().DtorInvoked++; },
-            Move = (ref MoveData moveData) => { },
-            Copy = (ref CopyData copyData) => { }
+            Dtor = (ref DtorData dtorData) =>
+            {
+                ref Pod data = ref dtorData.Get<Pod>();
+                //...
+            },
+            Move = (ref MoveData moveData) =>
+            {
+                ref Pod src = ref moveData.Src<Pod>();
+                ref Pod dest = ref moveData.Dst<Pod>();
+                //...
+            },
+            Copy = (ref CopyData copyData) =>
+            {
+                ref Pod src = ref copyData.Src<Pod>();
+                ref Pod dest = ref copyData.Dst<Pod>();
+                //...
+            }
         });
     }
 };

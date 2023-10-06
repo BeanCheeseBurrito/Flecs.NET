@@ -8,7 +8,7 @@ namespace Flecs.NET.Core
     ///     The world is the container of all ECS data and systems. If the world is deleted, all data in the world will be
     ///     deleted as well.
     /// </summary>
-    public unsafe struct World : IDisposable, IEquatable<World>
+    public unsafe partial struct World : IDisposable, IEquatable<World>
     {
         private ecs_world_t* _handle;
         private bool _owned;

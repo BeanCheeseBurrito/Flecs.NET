@@ -20,12 +20,12 @@ namespace Flecs.NET.Core
         [Conditional("DEBUG")]
         internal static void Assert(bool condition, string message = "")
         {
-            Debug.Assert(condition, "[Flecs.NET Assertion]: " + message);
+            Debug.Assert(condition, $"[Flecs.NET Assertion]: {message}");
         }
 
         internal static void Error(string message)
         {
-            Debug.Fail("[Flecs.NET Error]: " + message);
+            Debug.Fail($"[Flecs.NET Error]: {message}");
         }
     }
 
@@ -183,11 +183,6 @@ namespace Flecs.NET.Core
         ///     Each entity callback.
         /// </summary>
         public delegate void EachEntityCallback(Entity entity);
-
-        /// <summary>
-        ///     Each entity callback.
-        /// </summary>
-        public delegate void EachEntityCallback<T>(Entity entity, ref T comp);
 
         /// <summary>
         ///     Each id callback.

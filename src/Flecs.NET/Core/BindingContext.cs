@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Flecs.NET.Polyfill;
 using Flecs.NET.Utilities;
@@ -10,12 +9,12 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A static class holding methods and types for binding contexts.
     /// </summary>
-    public static unsafe class BindingContext
+    public static unsafe partial class BindingContext
     {
         private static readonly BindingContextCleanup _ = new BindingContextCleanup();
 
-        internal static readonly byte* DefaultSeparator;
-        internal static readonly byte* DefaultRootSeparator;
+        internal static readonly byte* DefaultSeparator = (byte*)Marshal.StringToHGlobalAnsi(".");
+        internal static readonly byte* DefaultRootSeparator = (byte*)Marshal.StringToHGlobalAnsi("::");
 
 #if NET5_0_OR_GREATER
         internal static readonly IntPtr ObserverIterPointer =
@@ -54,69 +53,60 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr OsApiAbortPointer =
             (IntPtr)(delegate* unmanaged<void>)&OsApiAbort;
 #else
-        internal static readonly IntPtr ObserverIterPointer;
-        internal static readonly IntPtr RoutineIterPointer;
+        internal static readonly IntPtr ObserverIterPointer =
+            Marshal.GetFunctionPointerForDelegate(ObserverIterReference = ObserverIter);
 
-        internal static readonly IntPtr ObserverEachEntityPointer;
-        internal static readonly IntPtr RoutineEachEntityPointer;
+        internal static readonly IntPtr RoutineIterPointer =
+            Marshal.GetFunctionPointerForDelegate(RoutineIterReference = RoutineIter);
 
-        internal static readonly IntPtr ObserverEachIndexPointer;
-        internal static readonly IntPtr RoutineEachIndexPointer;
+        internal static readonly IntPtr ObserverEachEntityPointer =
+            Marshal.GetFunctionPointerForDelegate(ObserverEachEntityReference = ObserverEachEntity);
 
-        internal static readonly IntPtr WorldContextFreePointer;
-        internal static readonly IntPtr ObserverContextFreePointer;
-        internal static readonly IntPtr RoutineContextFreePointer;
-        internal static readonly IntPtr QueryContextFreePointer;
+        internal static readonly IntPtr RoutineEachEntityPointer =
+            Marshal.GetFunctionPointerForDelegate(RoutineEachEntityReference = RoutineEachEntity);
 
-        internal static readonly IntPtr TypeHooksContextFreePointer;
+        internal static readonly IntPtr ObserverEachIndexPointer =
+            Marshal.GetFunctionPointerForDelegate(ObserverEachIndexReference = ObserverEachIndex);
 
-        internal static readonly IntPtr OsApiAbortPointer;
+        internal static readonly IntPtr RoutineEachIndexPointer =
+            Marshal.GetFunctionPointerForDelegate(RoutineEachIndexReference = RoutineEachIndex);
 
-        private static readonly Ecs.IterAction ObserverIterReference = ObserverIter;
-        private static readonly Ecs.IterAction RoutineIterReference = RoutineIter;
+        internal static readonly IntPtr WorldContextFreePointer =
+            Marshal.GetFunctionPointerForDelegate(WorldContextFreeReference = WorldContextFree);
 
-        private static readonly Ecs.IterAction ObserverEachEntityReference = ObserverEachEntity;
-        private static readonly Ecs.IterAction RoutineEachEntityReference = RoutineEachEntity;
+        internal static readonly IntPtr ObserverContextFreePointer =
+            Marshal.GetFunctionPointerForDelegate(ObserverContextFreeReference = ObserverContextFree);
 
-        private static readonly Ecs.IterAction ObserverEachIndexReference = ObserverEachIndex;
-        private static readonly Ecs.IterAction RoutineEachIndexReference = RoutineEachIndex;
+        internal static readonly IntPtr RoutineContextFreePointer =
+            Marshal.GetFunctionPointerForDelegate(RoutineContextFreeReference = RoutineContextFree);
 
-        private static readonly Ecs.ContextFree WorldContextFreeReference = WorldContextFree;
-        private static readonly Ecs.ContextFree ObserverContextFreeReference = ObserverContextFree;
-        private static readonly Ecs.ContextFree RoutineContextFreeReference = RoutineContextFree;
-        private static readonly Ecs.ContextFree QueryContextFreeReference = QueryContextFree;
+        internal static readonly IntPtr QueryContextFreePointer =
+            Marshal.GetFunctionPointerForDelegate(QueryContextFreeReference = QueryContextFree);
 
-        private static readonly Ecs.ContextFree TypeHooksContextFreeReference = TypeHooksContextFree;
+        internal static readonly IntPtr TypeHooksContextFreePointer=
+            Marshal.GetFunctionPointerForDelegate(TypeHooksContextFreeReference = TypeHooksContextFree);
 
-        private static readonly Action OsApiAbortReference = OsApiAbort;
+        internal static readonly IntPtr OsApiAbortPointer =
+            Marshal.GetFunctionPointerForDelegate(OsApiAbortReference = OsApiAbort);
+
+        private static readonly Ecs.IterAction ObserverIterReference;
+        private static readonly Ecs.IterAction RoutineIterReference;
+
+        private static readonly Ecs.IterAction ObserverEachEntityReference;
+        private static readonly Ecs.IterAction RoutineEachEntityReference;
+
+        private static readonly Ecs.IterAction ObserverEachIndexReference;
+        private static readonly Ecs.IterAction RoutineEachIndexReference;
+
+        private static readonly Ecs.ContextFree WorldContextFreeReference;
+        private static readonly Ecs.ContextFree ObserverContextFreeReference;
+        private static readonly Ecs.ContextFree RoutineContextFreeReference;
+        private static readonly Ecs.ContextFree QueryContextFreeReference;
+
+        private static readonly Ecs.ContextFree TypeHooksContextFreeReference;
+
+        private static readonly Action OsApiAbortReference;
 #endif
-
-        [SuppressMessage("Usage", "CA1810")]
-        static BindingContext()
-        {
-            DefaultSeparator = (byte*)Marshal.StringToHGlobalAnsi(".");
-            DefaultRootSeparator = (byte*)Marshal.StringToHGlobalAnsi("::");
-
-#if !NET5_0_OR_GREATER
-            ObserverIterPointer = Marshal.GetFunctionPointerForDelegate(ObserverIterReference);
-            RoutineIterPointer = Marshal.GetFunctionPointerForDelegate(RoutineIterReference);
-
-            ObserverEachEntityPointer = Marshal.GetFunctionPointerForDelegate(ObserverEachEntityReference);
-            RoutineEachEntityPointer = Marshal.GetFunctionPointerForDelegate(RoutineEachEntityReference);
-
-            ObserverEachIndexPointer = Marshal.GetFunctionPointerForDelegate(ObserverEachIndexReference);
-            RoutineEachIndexPointer = Marshal.GetFunctionPointerForDelegate(RoutineEachIndexReference);
-
-            WorldContextFreePointer = Marshal.GetFunctionPointerForDelegate(WorldContextFreeReference);
-            ObserverContextFreePointer = Marshal.GetFunctionPointerForDelegate(ObserverContextFreeReference);
-            RoutineContextFreePointer = Marshal.GetFunctionPointerForDelegate(RoutineContextFreeReference);
-            QueryContextFreePointer = Marshal.GetFunctionPointerForDelegate(QueryContextFreeReference);
-
-            TypeHooksContextFreePointer = Marshal.GetFunctionPointerForDelegate(TypeHooksContextFreeReference);
-
-            OsApiAbortPointer = Marshal.GetFunctionPointerForDelegate(OsApiAbortReference);
-#endif
-        }
 
         [UnmanagedCallersOnly]
         private static void ObserverIter(ecs_iter_t* iter)
@@ -266,27 +256,29 @@ namespace Flecs.NET.Core
             dest = default;
         }
 
-        internal static Callback AllocCallback<T>(T? callback) where T : Delegate
+        internal static Callback AllocCallback<T>(T? callback, bool storePtr = true) where T : Delegate
         {
-            return callback == null
-                ? new Callback(IntPtr.Zero, IntPtr.Zero)
-                : new Callback(Marshal.GetFunctionPointerForDelegate(callback), (IntPtr)GCHandle.Alloc(callback));
+            if (callback == null)
+                return default;
+
+            IntPtr funcPtr = storePtr ? Marshal.GetFunctionPointerForDelegate(callback) : IntPtr.Zero;
+            return new Callback(funcPtr, GCHandle.Alloc(callback));
         }
 
-        internal static void SetCallback<T>(ref Callback dest, T? callback) where T : Delegate
+        internal static void SetCallback<T>(ref Callback dest, T? callback, bool storePtr = true) where T : Delegate
         {
-            if (dest.GcHandle != IntPtr.Zero)
+            if (dest.GcHandle != default)
                 FreeCallback(ref dest);
 
-            dest = AllocCallback(callback);
+            dest = AllocCallback(callback, storePtr);
         }
 
         internal struct Callback
         {
             public IntPtr Function;
-            public IntPtr GcHandle;
+            public GCHandle GcHandle;
 
-            public Callback(IntPtr function, IntPtr gcHandle)
+            public Callback(IntPtr function, GCHandle gcHandle)
             {
                 Function = function;
                 GcHandle = gcHandle;
