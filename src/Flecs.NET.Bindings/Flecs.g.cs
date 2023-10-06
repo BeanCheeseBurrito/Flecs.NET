@@ -2478,7 +2478,7 @@ namespace Flecs.NET.Bindings
                     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
                     get
                     {
-                        if (index >= 16)
+                        if (index >= 1)
                             throw new System.ArgumentOutOfRangeException($"Index {index} is out of range.");
                         fixed (byte** pThis = &Item0)
                             return ref pThis[index];
