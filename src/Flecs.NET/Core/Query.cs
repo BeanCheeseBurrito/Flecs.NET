@@ -13,8 +13,6 @@ namespace Flecs.NET.Core
         private ecs_world_t* _world;
         private ecs_query_t* _handle;
 
-        internal BindingContext.QueryContext QueryContext;
-
         /// <summary>
         ///     A reference to the world.
         /// </summary>
@@ -39,7 +37,6 @@ namespace Flecs.NET.Core
             QueryBuilder queryBuilder = default,
             string name = "")
         {
-            QueryContext = queryBuilder.QueryContext;
             _world = world;
 
             BindingContext.QueryContext* queryContext = Memory.Alloc<BindingContext.QueryContext>(1);
@@ -47,7 +44,7 @@ namespace Flecs.NET.Core
 
             ecs_query_desc_t* queryDesc = &queryBuilder.QueryDesc;
             queryDesc->filter = filterBuilder.Desc;
-            queryDesc->filter.terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
+            queryDesc->filter.terms_buffer = filterBuilder.Terms.Data;
             queryDesc->filter.terms_buffer_count = filterBuilder.Terms.Count;
             queryDesc->binding_ctx = queryContext;
             queryDesc->binding_ctx_free = BindingContext.QueryContextFreePointer;
@@ -78,7 +75,6 @@ namespace Flecs.NET.Core
         /// <param name="query"></param>
         public Query(ecs_world_t* world, ecs_query_t* query = null)
         {
-            QueryContext = default;
             _world = world;
             _handle = query;
         }
@@ -100,7 +96,6 @@ namespace Flecs.NET.Core
                 return;
 
             ecs_query_fini(Handle);
-            QueryContext.Dispose();
             World = null;
             Handle = null;
         }

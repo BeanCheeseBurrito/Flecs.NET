@@ -9,10 +9,10 @@ namespace Flecs.NET.Core
     public unsafe struct ObserverBuilder : IDisposable
     {
         private ecs_world_t* _world;
-        private int _eventCount;
 
         internal ecs_observer_desc_t ObserverDesc;
         internal BindingContext.ObserverContext ObserverContext;
+        internal int EventCount;
 
         /// <summary>
         ///     A reference to the world.
@@ -32,8 +32,8 @@ namespace Flecs.NET.Core
         {
             ObserverDesc = default;
             ObserverContext = default;
+            EventCount = default;
             _world = world;
-            _eventCount = default;
         }
 
         /// <summary>
@@ -52,10 +52,10 @@ namespace Flecs.NET.Core
         /// <exception cref="InvalidOperationException"></exception>
         public ref ObserverBuilder Event(ulong @event)
         {
-            if (_eventCount >= 8)
+            if (EventCount >= 8)
                 throw new InvalidOperationException();
 
-            ObserverDesc.events[_eventCount++] = @event;
+            ObserverDesc.events[EventCount++] = @event;
             return ref this;
         }
 

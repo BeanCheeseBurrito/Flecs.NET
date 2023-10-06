@@ -63,61 +63,49 @@ namespace Flecs.NET.Core
 #if NET5_0_OR_GREATER
         internal static readonly IntPtr NormalCtorPointer =
             (IntPtr)(delegate* unmanaged<void*, int, ecs_type_info_t*, void>)&NormalCtor;
-
         internal static readonly IntPtr NormalDtorPointer =
             (IntPtr)(delegate* unmanaged<void*, int, ecs_type_info_t*, void>)&NormalDtor;
-
         internal static readonly IntPtr NormalMovePointer =
             (IntPtr)(delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>)&NormalMove;
-
         internal static readonly IntPtr NormalCopyPointer =
             (IntPtr)(delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>)&NormalCopy;
 
         internal static readonly IntPtr GcHandleCtorPointer =
             (IntPtr)(delegate* unmanaged<void*, int, ecs_type_info_t*, void>)&GcHandleCtor;
-
         internal static readonly IntPtr GcHandleDtorPointer =
             (IntPtr)(delegate* unmanaged<void*, int, ecs_type_info_t*, void>)&GcHandleDtor;
-
         internal static readonly IntPtr GcHandleMovePointer =
             (IntPtr)(delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>)&GcHandleMove;
-
         internal static readonly IntPtr GcHandleCopyPointer =
             (IntPtr)(delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>)&GcHandleCopy;
 #else
-        internal static readonly IntPtr NormalCtorPointer;
-        internal static readonly IntPtr NormalDtorPointer;
-        internal static readonly IntPtr NormalMovePointer;
-        internal static readonly IntPtr NormalCopyPointer;
+        internal static readonly IntPtr NormalCtorPointer =
+            Marshal.GetFunctionPointerForDelegate(NormalCtorReference = NormalCtor);
+        internal static readonly IntPtr NormalDtorPointer =
+            Marshal.GetFunctionPointerForDelegate(NormalDtorReference = NormalDtor);
+        internal static readonly IntPtr NormalMovePointer =
+            Marshal.GetFunctionPointerForDelegate(NormalMoveReference = NormalMove);
+        internal static readonly IntPtr NormalCopyPointer =
+            Marshal.GetFunctionPointerForDelegate(NormalCopyReference = NormalCopy);
 
-        internal static readonly IntPtr GcHandleCtorPointer;
-        internal static readonly IntPtr GcHandleDtorPointer;
-        internal static readonly IntPtr GcHandleMovePointer;
-        internal static readonly IntPtr GcHandleCopyPointer;
+        internal static readonly IntPtr GcHandleCtorPointer =
+            Marshal.GetFunctionPointerForDelegate(GcHandleCtorReference = GcHandleCtor);
+        internal static readonly IntPtr GcHandleDtorPointer =
+            Marshal.GetFunctionPointerForDelegate(GcHandleDtorReference = GcHandleDtor);
+        internal static readonly IntPtr GcHandleMovePointer =
+            Marshal.GetFunctionPointerForDelegate(GcHandleMoveReference = GcHandleMove);
+        internal static readonly IntPtr GcHandleCopyPointer =
+            Marshal.GetFunctionPointerForDelegate(GcHandleCopyReference = GcHandleCopy);
 
-        private static readonly UnmanagedCtor NormalCtorReference = NormalCtor;
-        private static readonly UnmanagedDtor NormalDtorReference = NormalDtor;
-        private static readonly UnmanagedMove NormalMoveReference = NormalMove;
-        private static readonly UnmanagedCopy NormalCopyReference = NormalCopy;
+        private static readonly UnmanagedCtor NormalCtorReference;
+        private static readonly UnmanagedDtor NormalDtorReference;
+        private static readonly UnmanagedMove NormalMoveReference;
+        private static readonly UnmanagedCopy NormalCopyReference;
 
-        private static readonly UnmanagedCtor GcHandleCtorReference = GcHandleCtor;
-        private static readonly UnmanagedDtor GcHandleDtorReference = GcHandleDtor;
-        private static readonly UnmanagedMove GcHandleMoveReference = GcHandleMove;
-        private static readonly UnmanagedCopy GcHandleCopyReference = GcHandleCopy;
-
-        [SuppressMessage("Usage", "CA1810")]
-        static TypeHooks()
-        {
-            NormalCtorPointer = Marshal.GetFunctionPointerForDelegate(NormalCtorReference);
-            NormalDtorPointer = Marshal.GetFunctionPointerForDelegate(NormalDtorReference);
-            NormalMovePointer = Marshal.GetFunctionPointerForDelegate(NormalMoveReference);
-            NormalCopyPointer = Marshal.GetFunctionPointerForDelegate(NormalCopyReference);
-
-            GcHandleCtorPointer = Marshal.GetFunctionPointerForDelegate(GcHandleCtorReference);
-            GcHandleDtorPointer = Marshal.GetFunctionPointerForDelegate(GcHandleDtorReference);
-            GcHandleMovePointer = Marshal.GetFunctionPointerForDelegate(GcHandleMoveReference);
-            GcHandleCopyPointer = Marshal.GetFunctionPointerForDelegate(GcHandleCopyReference);
-        }
+        private static readonly UnmanagedCtor GcHandleCtorReference;
+        private static readonly UnmanagedDtor GcHandleDtorReference;
+        private static readonly UnmanagedMove GcHandleMoveReference;
+        private static readonly UnmanagedCopy GcHandleCopyReference;
 #endif
 
         [UnmanagedCallersOnly]

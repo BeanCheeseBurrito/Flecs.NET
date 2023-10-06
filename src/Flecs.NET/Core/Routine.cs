@@ -48,6 +48,7 @@ namespace Flecs.NET.Core
             _entity = default;
 
             InitRoutine(
+                true,
                 BindingContext.RoutineIterPointer,
                 ref callback,
                 ref world,
@@ -79,6 +80,7 @@ namespace Flecs.NET.Core
             _entity = default;
 
             InitRoutine(
+                true,
                 BindingContext.RoutineEachEntityPointer,
                 ref callback,
                 ref world,
@@ -110,6 +112,7 @@ namespace Flecs.NET.Core
             _entity = default;
 
             InitRoutine(
+                true,
                 BindingContext.RoutineEachIndexPointer,
                 ref callback,
                 ref world,
@@ -130,7 +133,8 @@ namespace Flecs.NET.Core
             _entity = new Entity(world, entity);
         }
 
-        private void InitRoutine<T>(
+        internal ref Routine InitRoutine<T>(
+            bool storeFunctionPointer,
             IntPtr internalCallback,
             ref T? userCallback,
             ref ecs_world_t* world,
@@ -169,7 +173,7 @@ namespace Flecs.NET.Core
             BindingContext.RoutineContext* routineContext = Memory.Alloc<BindingContext.RoutineContext>(1);
             routineContext[0] = routineBuilder.RoutineContext;
             routineContext->QueryContext = queryBuilder.QueryContext;
-            BindingContext.SetCallback(ref routineContext->Iterator, userCallback);
+            BindingContext.SetCallback(ref routineContext->Iterator, userCallback, storeFunctionPointer);
 
             ecs_system_desc_t* routineDesc =
                 (ecs_system_desc_t*)Unsafe.AsPointer(ref routineBuilder.RoutineDesc);
@@ -187,6 +191,8 @@ namespace Flecs.NET.Core
 
             _entity = new Entity(world, ecs_system_init(world, routineDesc));
             filterBuilder.Dispose();
+
+            return ref this;
         }
 
         /// <summary>

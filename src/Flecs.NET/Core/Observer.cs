@@ -46,6 +46,7 @@ namespace Flecs.NET.Core
             _entity = default;
 
            InitObserver(
+               true,
                BindingContext.ObserverIterPointer,
                ref callback,
                ref world,
@@ -74,6 +75,7 @@ namespace Flecs.NET.Core
             _entity = default;
 
             InitObserver(
+                true,
                 BindingContext.ObserverEachEntityPointer,
                 ref callback,
                 ref world,
@@ -102,6 +104,7 @@ namespace Flecs.NET.Core
             _entity = default;
 
             InitObserver(
+                true,
                 BindingContext.ObserverEachIndexPointer,
                 ref callback,
                 ref world,
@@ -121,7 +124,8 @@ namespace Flecs.NET.Core
             _entity = new Entity(world, entity);
         }
 
-        private void InitObserver<T>(
+        internal ref Observer InitObserver<T>(
+            bool storeFuncPtr,
             IntPtr internalCallback,
             ref T? userCallback,
             ref ecs_world_t* world,
@@ -141,10 +145,13 @@ namespace Flecs.NET.Core
 
             BindingContext.ObserverContext* observerContext = Memory.Alloc<BindingContext.ObserverContext>(1);
             observerContext[0] = observerBuilder.ObserverContext;
-            BindingContext.SetCallback(ref observerContext->Iterator, userCallback);
+            BindingContext.SetCallback(ref observerContext->Iterator, userCallback, storeFuncPtr);
 
             ecs_observer_desc_t* observerDesc =
                 (ecs_observer_desc_t*)Unsafe.AsPointer(ref observerBuilder.ObserverDesc);
+
+            Ecs.Assert(observerBuilder.EventCount != 0,
+                "Observer cannot have zero events. Use ObserverBuilder.Event() to add events.");
 
             observerDesc->entity = ecs_entity_init(world, &entityDesc);
             observerDesc->filter = filterBuilder.Desc;
@@ -156,6 +163,8 @@ namespace Flecs.NET.Core
 
             _entity = new Entity(world, ecs_observer_init(world, observerDesc));
             filterBuilder.Dispose();
+
+            return ref this;
         }
 
         /// <summary>

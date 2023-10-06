@@ -24,7 +24,7 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     A pointer to the filter.
         /// </summary>
-        public ecs_filter_t* FilterPtr => _isOwned ? (ecs_filter_t*)Unsafe.AsPointer(ref _filter) : _filterPtr;
+        public ecs_filter_t* Handle => _isOwned ? (ecs_filter_t*)Unsafe.AsPointer(ref _filter) : _filterPtr;
 
         /// <summary>
         ///     Creates a filter.
@@ -87,7 +87,7 @@ namespace Flecs.NET.Core
         {
             fixed (ecs_filter_t* mFilter = &_filter)
             {
-                if (mFilter == FilterPtr && FilterPtr != null)
+                if (mFilter == Handle && Handle != null)
                     ecs_filter_fini(mFilter);
             }
         }
@@ -98,7 +98,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Entity()
         {
-            return new Entity(World, ecs_get_entity(FilterPtr));
+            return new Entity(World, ecs_get_entity(Handle));
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public string Str()
         {
-            return NativeString.GetStringAndFree(ecs_filter_str(World, FilterPtr));
+            return NativeString.GetStringAndFree(ecs_filter_str(World, Handle));
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public IterIterable Iter()
         {
-            return new IterIterable(ecs_filter_iter(World, FilterPtr), _next, _nextInstanced);
+            return new IterIterable(ecs_filter_iter(World, Handle), _next, _nextInstanced);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Flecs.NET.Core
         /// <param name="func"></param>
         public void Iter(Ecs.IterCallback func)
         {
-            ecs_iter_t iter = ecs_filter_iter(World, FilterPtr);
+            ecs_iter_t iter = ecs_filter_iter(World, Handle);
             while (ecs_filter_next(&iter) == 1)
                 Invoker.Iter(&iter, func);
         }
@@ -145,7 +145,7 @@ namespace Flecs.NET.Core
         /// <param name="func"></param>
         public void Each(Ecs.EachEntityCallback func)
         {
-            ecs_iter_t iter = ecs_filter_iter(World, FilterPtr);
+            ecs_iter_t iter = ecs_filter_iter(World, Handle);
             while (ecs_filter_next_instanced(&iter) == 1)
                 Invoker.Each(&iter, func);
         }
@@ -156,7 +156,7 @@ namespace Flecs.NET.Core
         /// <param name="func"></param>
         public void Each(Ecs.EachIndexCallback func)
         {
-            ecs_iter_t iter = ecs_filter_iter(World, FilterPtr);
+            ecs_iter_t iter = ecs_filter_iter(World, Handle);
             while (ecs_filter_next_instanced(&iter) == 1)
                 Invoker.Each(&iter, func);
         }

@@ -54,7 +54,7 @@ namespace Flecs.NET.Core
             if (Handle != null)
                 ecs_snapshot_free(Handle);
 
-            ecs_iter_t it = ecs_filter_iter(World, filter.FilterPtr);
+            ecs_iter_t it = ecs_filter_iter(World, filter.Handle);
             Handle = ecs_snapshot_take_w_iter(&it);
         }
 
