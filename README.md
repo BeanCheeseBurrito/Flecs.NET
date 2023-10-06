@@ -57,19 +57,11 @@ using Flecs.NET.Core;
 using World world = World.Create();
 
 Routine routine = world.Routine(
-    filter: world.FilterBuilder().Term<Position>().Term<Velocity>(),
-    query: world.QueryBuilder(), // You can omit unused parameters!
-    routine: world.RoutineBuilder(),
-    callback: (Iter it) =>
+    filter: world.FilterBuilder<Position, Velocity>(),
+    callback: (ref Position p, ref Velocity v) =>
     {
-        Column<Position> p = it.Field<Position>(1);
-        Column<Velocity> v = it.Field<Velocity>(2);
-
-        foreach (int i in it)
-        {
-            p[i].X += v[i].X;
-            p[i].Y += v[i].Y;
-        }
+        p.X += v.X;
+        p.Y += v.Y;
     }
 );
 
