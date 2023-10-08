@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -90,6 +91,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="allowTag"></param>
+        [SuppressMessage("Usage", "CA1508")]
         public static void Init(ulong entity, bool allowTag = true)
         {
             if (RawId != 0)
@@ -133,9 +135,24 @@ namespace Flecs.NET.Core
                 Size = fields.Length == 0 ? 0 : Size;
                 Alignment = Size == 0 ? 0 : Alignment;
             }
-            else
+            else if (sizeof(T) == 1)
             {
-                // TODO: Reimplement NativeAOT support after move to .NET Standard 2.1
+                // Structs containing zero non-static fields will always return true when compared using .Equals().
+                // Test for tags by changing the underlying byte and checking equality.
+                // If the structs always return true, it's likely that the struct is a tag.
+
+                T aInstance = default;
+                T bInstance = default;
+
+                for (byte i = 0; i < 16; i++)
+                {
+                    *(byte*)&bInstance = i;
+                    if (!Equals(aInstance, bInstance))
+                        return;
+                }
+
+                Size = 0;
+                Alignment = 0;
             }
         }
 
