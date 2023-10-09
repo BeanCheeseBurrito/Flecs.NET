@@ -1692,18 +1692,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Iterate over all entities with the provided component.
-        /// </summary>
-        /// <param name="callback"></param>
-        /// <typeparam name="T"></typeparam>
-        public void Each<T>(Ecs.EachEntityCallback<T> callback)
-        {
-            ecs_iter_t it = Macros.TermIter(Handle, Type<T>.Id(Handle));
-            while (ecs_term_next(&it) == 1)
-                Invoker.Each(&it, callback);
-        }
-
-        /// <summary>
         ///     Iterate over all entities with the provided pair.
         /// </summary>
         /// <param name="second"></param>

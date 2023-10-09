@@ -47,6 +47,9 @@ namespace Flecs.NET.Codegen
                 {{
                     {GenerateFilterBuilderFactoryExtensions()}
 
+                    {GenerateWorldEachCallbackFunctions()}
+                    {GenerateWorldEachEntityCallbackFunction()}
+
                     {GenerateRoutineFactoryExtensions("IterCallback", "RoutineIter")}
                     {GenerateRoutineFactoryExtensions("EachCallback", "RoutineEach")}
                     {GenerateRoutineFactoryExtensions("EachEntityCallback", "RoutineEachEntity")}
@@ -188,6 +191,46 @@ namespace Flecs.NET.Codegen
                     public FilterBuilder FilterBuilder<{typeParams}>()
                     {{
                         return new FilterBuilder(Handle){termBuilders};
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateWorldEachCallbackFunctions()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                str.AppendLine($@"
+                    public void Each<{typeParams}>(Ecs.EachCallback<{typeParams}> callback) 
+                    {{
+                        using Filter filter = Filter(FilterBuilder<{typeParams}>());
+                        filter.Each(callback);   
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateWorldEachEntityCallbackFunction()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                str.AppendLine($@"
+                    public void Each<{typeParams}>(Ecs.EachEntityCallback<{typeParams}> callback) 
+                    {{
+                        using Filter filter = Filter(FilterBuilder<{typeParams}>());
+                        filter.Each(callback);
                     }}
                 ");
             }
