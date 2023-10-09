@@ -88,7 +88,7 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Dispose()
         {
-            if (Handle == null)
+            if (Handle == null || !Macros.IsStageOrWorld(Handle))
                 return;
 
             _ = ecs_fini(Handle);
