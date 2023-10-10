@@ -700,6 +700,9 @@ namespace Flecs.NET.Bindings
         public static extern byte* ecs_meta_get_member(ecs_meta_cursor_t* cursor);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern ulong ecs_meta_get_member_id(ecs_meta_cursor_t* cursor);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* ecs_meta_get_ptr(ecs_meta_cursor_t* cursor);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
@@ -1769,6 +1772,9 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* flecs_brealloc(ecs_block_allocator_t* dst, ecs_block_allocator_t* src, void* memory);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void flecs_dump_backtrace(void* stream);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* flecs_dup(ecs_allocator_t* a, int size, void* src);
@@ -3152,6 +3158,8 @@ namespace Flecs.NET.Bindings
 
             public ulong member;
 
+            public byte* dotmember;
+
             public ulong id;
 
             public byte targets;
@@ -4152,8 +4160,6 @@ namespace Flecs.NET.Bindings
             public int count;
 
             public int size;
-
-            public int elem_size;
         }
 
         public partial struct ecs_vector_desc_t
@@ -4509,6 +4515,12 @@ namespace Flecs.NET.Bindings
 
         public partial struct EcsAlertsActive
         {
+            public int info_count;
+
+            public int warning_count;
+
+            public int error_count;
+
             public ecs_map_t alerts;
         }
 

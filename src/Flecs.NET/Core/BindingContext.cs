@@ -311,6 +311,7 @@ namespace Flecs.NET.Core
         }
 
         // Free native resources on program exit
+        // TODO: This isn't guaranteed to be called at program exit?
         private class BindingContextCleanup
         {
             ~BindingContextCleanup()

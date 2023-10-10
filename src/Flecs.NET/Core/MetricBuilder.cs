@@ -1,3 +1,5 @@
+using System;
+using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -6,10 +8,11 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     Metric builder interface.
     /// </summary>
-    public unsafe struct MetricBuilder
+    public unsafe struct MetricBuilder : IDisposable
     {
         private ecs_world_t* _world;
         private ecs_metric_desc_t _desc;
+        private NativeList<NativeString> _strings;
 
         /// <summary>
         ///     The world.
@@ -28,12 +31,25 @@ namespace Flecs.NET.Core
         /// <param name="entity"></param>
         public MetricBuilder(ecs_world_t* world, ulong entity)
         {
-            _desc = default;
             _world = world;
+            _desc = default;
+            _strings = default;
             Desc.entity = entity;
         }
 
         /// <summary>
+        ///     Disposes resources.
+        /// </summary>
+        public void Dispose()
+        {
+            for (int i = 0; i < _strings.Count; i++)
+                _strings[i].Dispose();
+
+            _strings.Dispose();
+        }
+
+        /// <summary>
+        ///     Set member.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -44,6 +60,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set member.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -53,6 +70,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set member.
         /// </summary>
         /// <param name="name"></param>
         /// <typeparam name="T"></typeparam>
@@ -69,6 +87,35 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set dot member.
+        /// </summary>
+        /// <param name="expr"></param>
+        /// <returns></returns>
+        public ref MetricBuilder DotMember(string expr)
+        {
+            NativeString nativeExpr = (NativeString)expr;
+            Desc.dotmember = nativeExpr;
+            _strings.Add(nativeExpr);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Set dot member.
+        /// </summary>
+        /// <param name="expr"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref MetricBuilder DotMember<T>(string expr)
+        {
+            NativeString nativeExpr = (NativeString)expr;
+            Desc.dotmember = nativeExpr;
+            Desc.id = Type<T>.Id(World);
+            _strings.Add(nativeExpr);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Set id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -79,6 +126,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set id.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -89,6 +137,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set id.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -98,6 +147,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set id.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -108,6 +158,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set id.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -118,6 +169,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set id.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -128,6 +180,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set target.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -138,6 +191,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set kind.
         /// </summary>
         /// <param name="kind"></param>
         /// <returns></returns>
@@ -148,6 +202,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set kind.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -157,6 +212,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set doc brief.
         /// </summary>
         /// <param name="brief"></param>
         /// <returns></returns>

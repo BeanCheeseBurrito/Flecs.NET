@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Version>3.2.7.2</Version>
+        <Version>3.2.8</Version>
         <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Native.Debug</Title>
         <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Native.Release</Title>
         <Authors>BeanCheeseBurrito</Authors>
@@ -73,7 +73,7 @@
 
         <Content Condition="'$(Configuration)' == 'Release'" Include="buildTransitive/Flecs.NET.Native.props" PackagePath="buildTransitive/Flecs.NET.Native.Release.props" />
         <Content Condition="'$(Configuration)' == 'Release'" Include="buildTransitive/Flecs.NET.Native.targets" PackagePath="buildTransitive/Flecs.NET.Native.Release.targets" />
-        
+
         <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so" />
         <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-arm64/libflecs.so" PackagePath="runtimes/linux-arm64/native/libflecs.so" />
         <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-x64/libflecs.dylib" PackagePath="runtimes/osx-x64/native/libflecs.dylib" />
@@ -104,7 +104,7 @@
         <Content Condition="'$(Configuration)' == 'Release'" Include="release/win-x64/libflecs.lib" PackagePath="static_libraries/win-x64/libflecs.lib" />
         <Content Condition="'$(Configuration)' == 'Release'" Include="release/win-arm64/libflecs.lib" PackagePath="static_libraries/win-arm64/libflecs.lib" />
     </ItemGroup>
-    
+
     <Target Name="Compile Flecs" AfterTargets="build">
         <MakeDir Directories="debug/linux-x64" />
         <MakeDir Directories="debug/linux-arm64" />

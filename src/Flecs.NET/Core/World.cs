@@ -371,15 +371,16 @@ namespace Flecs.NET.Core
         ///     Lookup entity by name.
         /// </summary>
         /// <param name="name"></param>
+        /// <param name="searchPath"></param>
         /// <returns></returns>
-        public Entity Lookup(string name)
+        public Entity Lookup(string name, bool searchPath = true)
         {
             using NativeString nativeName = (NativeString)name;
 
             return new Entity(
                 Handle,
                 ecs_lookup_path_w_sep(Handle, 0, nativeName,
-                    BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.True)
+                    BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.Bool(searchPath))
             );
         }
 
@@ -951,7 +952,6 @@ namespace Flecs.NET.Core
                 alias = NativeString.GetString(ecs_get_name(Handle, entity));
 
             using NativeString nativeAlias = (NativeString)alias;
-
             ecs_set_alias(Handle, entity, nativeAlias);
         }
 
@@ -1411,6 +1411,15 @@ namespace Flecs.NET.Core
         public ecs_world_info_t* GetInfo()
         {
             return ecs_get_world_info(Handle);
+        }
+
+        /// <summary>
+        ///     Get delta time.
+        /// </summary>
+        /// <returns></returns>
+        public float DeltaTime()
+        {
+            return GetInfo()->delta_time;
         }
 
         /// <summary>

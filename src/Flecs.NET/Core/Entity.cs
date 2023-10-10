@@ -722,13 +722,14 @@ namespace Flecs.NET.Core
         ///     Lookup an entity by name.
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="searchPath"></param>
         /// <returns></returns>
-        public Entity Lookup(string path)
+        public Entity Lookup(string path, bool searchPath = false)
         {
             Ecs.Assert(Id != 0, "invalid lookup from null handle");
             using NativeString nativePath = (NativeString)path;
             ulong id = ecs_lookup_path_w_sep(World, Id, nativePath,
-                BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.False);
+                BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.Bool(searchPath));
             return new Entity(World, id);
         }
 
@@ -1363,6 +1364,17 @@ namespace Flecs.NET.Core
         public ref Entity Remove<T>()
         {
             return ref Remove(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Remove pair for enum.
+        ///     This operation will remove any (Enum, *) pair from the entity.
+        /// </summary>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        public ref Entity RemoveEnum<TEnum>() where TEnum : Enum
+        {
+            return ref Remove(Type<TEnum>.Id(World), EcsWildcard);
         }
 
         /// <summary>
@@ -2109,6 +2121,98 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set component from JSON.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="json"></param>
+        /// <param name="desc"></param>
+        /// <returns></returns>
+        public ref Entity SetJson(ulong e, string json, ecs_from_json_desc_t *desc = null)
+        {
+            ulong type = ecs_get_typeid(World, e);
+
+            if (type == 0)
+            {
+                Ecs.Error("Id is not a type");
+                return ref this;
+            }
+
+            void *ptr = ecs_get_mut_id(World, Id, e);
+            Ecs.Assert(ptr != null, nameof(ECS_INTERNAL_ERROR));
+
+            using NativeString nativeJson = (NativeString)json;
+
+            ecs_ptr_from_json(World, type, ptr, nativeJson, desc);
+            ecs_modified_id(World, Id, e);
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Set pair from JSON.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <param name="json"></param>
+        /// <param name="desc"></param>
+        /// <returns></returns>
+        public ref Entity SetJson(ulong first, ulong second, string json, ecs_from_json_desc_t *desc = null)
+        {
+            return ref SetJson(Macros.Pair(first, second), json, desc);
+        }
+
+        /// <summary>
+        ///     Set component from JSON.
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="desc"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetJson<T>(string json, ecs_from_json_desc_t* desc = null)
+        {
+            return ref SetJson(Type<T>.Id(World), json, desc);
+        }
+
+        /// <summary>
+        ///     Set pair from JSON.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="json"></param>
+        /// <param name="desc"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetJson<TFirst>(ulong second, string json, ecs_from_json_desc_t* desc = null)
+        {
+            return ref SetJson(Macros.Pair<TFirst>(second, World), json, desc);
+        }
+
+        /// <summary>
+        ///     Set pair from JSON.
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="desc"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetJson<TFirst, TSecond>(string json, ecs_from_json_desc_t* desc = null)
+        {
+            return ref SetJson(Macros.Pair<TFirst, TSecond>(World), json, desc);
+        }
+
+        /// <summary>
+        ///     Set pair from JSON.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="json"></param>
+        /// <param name="desc"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetJsonSecond<TSecond>(ulong first, string json, ecs_from_json_desc_t* desc = null)
+        {
+            return ref SetJson(Macros.PairSecond<TSecond>(first, World), json, desc);
+        }
+
+        /// <summary>
         ///     Get mutable component value (untyped).
         /// </summary>
         /// <param name="id"></param>
@@ -2160,7 +2264,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mutable pointer for a pair.
+        ///     Get mutable pointer for the first element of a pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -2241,7 +2345,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mutable managed reference for pair.
+        ///     Get mutable managed reference for the first element of a pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -2357,8 +2461,6 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Ref<T> GetRef<T>()
         {
-            Type<T>.Id(World);
-            Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             return new Ref<T>(World, Id);
         }
 
@@ -2370,9 +2472,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Ref<TFirst> GetRef<TFirst>(ulong second)
         {
-            ulong pair = Macros.Pair<TFirst>(second, World);
-            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return new Ref<TFirst>(World, Id, pair);
+            return new Ref<TFirst>(World, Id, Macros.Pair<TFirst>(second, World));
         }
 
         /// <summary>
@@ -2383,9 +2483,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Ref<TFirst> GetRefFirst<TFirst, TSecond>()
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return new Ref<TFirst>(World, Id, pair);
+            return new Ref<TFirst>(World, Id, Macros.Pair<TFirst, TSecond>(World));
         }
 
         /// <summary>
@@ -2396,9 +2494,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Ref<TSecond> GetRefSecond<TFirst, TSecond>()
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return new Ref<TSecond>(World, Id, pair);
+            return new Ref<TSecond>(World, Id, Macros.Pair<TFirst, TSecond>(World));
         }
 
         /// <summary>
@@ -2409,9 +2505,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Ref<TSecond> GetRefSecond<TSecond>(ulong first)
         {
-            ulong pair = Macros.PairSecond<TSecond>(first, World);
-            Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return new Ref<TSecond>(World, Id, pair);
+            return new Ref<TSecond>(World, Id, Macros.PairSecond<TSecond>(first, World));
         }
 
         /// <summary>

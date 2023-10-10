@@ -38,7 +38,7 @@ namespace Flecs.NET.Core
             World = world;
             Handle = table;
             Offset = 0;
-            Count = ecs_table_count(table);
+            Count = table == null ? 0 : ecs_table_count(table);
         }
 
         /// <summary>
