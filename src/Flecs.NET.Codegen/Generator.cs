@@ -20,7 +20,8 @@ namespace Flecs.NET.Codegen
         public static string Generate()
         {
             return $@"
-                #nullable enable                
+                #pragma warning disable 1591
+                #nullable enable              
 
                 using System;
                 using System.Runtime.InteropServices;
@@ -37,6 +38,8 @@ namespace Flecs.NET.Codegen
                     {GenerateQueryExtensions()}
                     {GenerateRuleExtensions()}
                 }}
+                
+                #pragma warning restore 1591
             ";
         }
 
@@ -68,10 +71,13 @@ namespace Flecs.NET.Codegen
             return $@"
                 public static partial class Ecs 
                 {{
-                    {GenerateIterCallbacks()}
-                    {GenerateEachCallbacks()}
-                    {GenerateEachEntityCallbacks()}
-                    {GenerateEachIndexCallbacks()}
+                    {GenerateIterCallbackDelegates()}
+                    {GenerateEachCallbackDelegates()}
+                    {GenerateEachEntityCallbackDelegates()}
+                    {GenerateEachIndexCallbackDelegates()}
+                    {GenerateFindCallbackDelegates()}
+                    {GenerateFindEntityCallbackDelegates()}
+                    {GenerateFindIndexCallbackDelegates()}
                 }}
             ";
         }
@@ -85,6 +91,9 @@ namespace Flecs.NET.Codegen
                     {GenerateEachInvokers()}
                     {GenerateEachEntityInvokers()}
                     {GenerateEachIndexInvokers()}
+                    {GenerateFindInvokers()}
+                    {GenerateFindEntityInvokers()}
+                    {GenerateFindIndexInvokers()}
                 }}
             ";
         }
@@ -98,6 +107,9 @@ namespace Flecs.NET.Codegen
                     {GenerateCallbackFunctions("Each", "EachCallback", "ecs_filter_iter", "ecs_filter_next_instanced")} 
                     {GenerateCallbackFunctions("Each", "EachEntityCallback", "ecs_filter_iter", "ecs_filter_next_instanced")} 
                     {GenerateCallbackFunctions("Each", "EachIndexCallback", "ecs_filter_iter", "ecs_filter_next_instanced")} 
+                    {GenerateFindCallbackFunctions("FindCallback", "ecs_filter_iter", "ecs_filter_next_instanced")}
+                    {GenerateFindCallbackFunctions("FindEntityCallback", "ecs_filter_iter", "ecs_filter_next_instanced")}
+                    {GenerateFindCallbackFunctions("FindIndexCallback", "ecs_filter_iter", "ecs_filter_next_instanced")}
                 }}
             ";
         }
@@ -110,7 +122,10 @@ namespace Flecs.NET.Codegen
                     {GenerateCallbackFunctions("Iter", "IterCallback", "ecs_query_iter", "ecs_query_next")}
                     {GenerateCallbackFunctions("Each", "EachCallback", "ecs_query_iter", "ecs_query_next_instanced")} 
                     {GenerateCallbackFunctions("Each", "EachEntityCallback", "ecs_query_iter", "ecs_query_next_instanced")} 
-                    {GenerateCallbackFunctions("Each", "EachIndexCallback", "ecs_query_iter", "ecs_query_next_instanced")} 
+                    {GenerateCallbackFunctions("Each", "EachIndexCallback", "ecs_query_iter", "ecs_query_next_instanced")}
+                    {GenerateFindCallbackFunctions("FindCallback", "ecs_query_iter", "ecs_query_next_instanced")}
+                    {GenerateFindCallbackFunctions("FindEntityCallback", "ecs_query_iter", "ecs_query_next_instanced")}
+                    {GenerateFindCallbackFunctions("FindIndexCallback", "ecs_query_iter", "ecs_query_next_instanced")}
                 }}
             ";
         }
@@ -123,7 +138,10 @@ namespace Flecs.NET.Codegen
                     {GenerateCallbackFunctions("Iter", "IterCallback", "ecs_rule_iter", "ecs_rule_next")}
                     {GenerateCallbackFunctions("Each", "EachCallback", "ecs_rule_iter", "ecs_rule_next_instanced")} 
                     {GenerateCallbackFunctions("Each", "EachEntityCallback", "ecs_rule_iter", "ecs_rule_next_instanced")} 
-                    {GenerateCallbackFunctions("Each", "EachIndexCallback", "ecs_rule_iter", "ecs_rule_next_instanced")} 
+                    {GenerateCallbackFunctions("Each", "EachIndexCallback", "ecs_rule_iter", "ecs_rule_next_instanced")}
+                    {GenerateFindCallbackFunctions("FindCallback", "ecs_rule_iter", "ecs_rule_next_instanced")}
+                    {GenerateFindCallbackFunctions("FindEntityCallback", "ecs_rule_iter", "ecs_rule_next_instanced")}
+                    {GenerateFindCallbackFunctions("FindIndexCallback", "ecs_rule_iter", "ecs_rule_next_instanced")}
                 }}
             ";
         }
@@ -302,7 +320,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateIterCallbacks()
+        public static string GenerateIterCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -316,7 +334,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEachCallbacks()
+        public static string GenerateEachCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -330,7 +348,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEachEntityCallbacks()
+        public static string GenerateEachEntityCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -344,7 +362,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEachIndexCallbacks()
+        public static string GenerateEachIndexCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -358,6 +376,48 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
+        public static string GenerateFindCallbackDelegates()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+                string funcParams = ConcatString(i + 1, ", ", index => $"ref T{index} comp{index}");
+                str.AppendLine($"public delegate bool FindCallback<{typeParams}>({funcParams});");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateFindEntityCallbackDelegates()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+                string funcParams = ConcatString(i + 1, ", ", index => $"ref T{index} comp{index}");
+                str.AppendLine($"public delegate bool FindEntityCallback<{typeParams}>(Entity entity, {funcParams});");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateFindIndexCallbackDelegates()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+                string funcParams = ConcatString(i + 1, ", ", index => $"ref T{index} comp{index}");
+                str.AppendLine($"public delegate bool FindIndexCallback<{typeParams}>(Iter it, int i, {funcParams});");
+            }
+
+            return str.ToString();
+        }
+
         public static string GenerateIterInvokers()
         {
             StringBuilder str = new StringBuilder();
@@ -365,7 +425,7 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"it.Field<{"T" + index}>({index + 1})");
+                string callbackArgs = ConcatString(i + 1, ", ", index => $"it.Field<T{index}>({index + 1})");
 
                 str.AppendLine($@"
                     public static void Iter<{typeParams}>(ecs_iter_t* iter, Ecs.IterCallback<{typeParams}> callback)
@@ -388,8 +448,8 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<{"T" + index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<{"T" + index}>(iter->ptrs[{index}], i)");
+                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachCallback<{typeParams}> callback)
@@ -418,8 +478,8 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<{"T" + index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<{"T" + index}>(iter->ptrs[{index}], i)");
+                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachEntityCallback<{typeParams}> callback)
@@ -450,8 +510,8 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<{"T" + index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<{"T" + index}>(iter->ptrs[{index}], i)");
+                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachIndexCallback<{typeParams}> callback)
@@ -468,6 +528,127 @@ namespace Flecs.NET.Codegen
                             callback(it, i, {callbackArgs});
 
                         Macros.TableUnlock(iter->world, iter->table);
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateFindInvokers()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                str.AppendLine($@"
+                    public static Entity Find<{typeParams}>(ecs_iter_t* iter, Ecs.FindCallback<{typeParams}> callback)
+                    {{
+                        Macros.TableLock(iter->world, iter->table);
+
+                        int count = iter->count == 0 ? 1 : iter->count;
+                        Iter it = new Iter(iter);
+                        Entity result = default;
+
+                        {typeAssertions}
+
+                        for (int i = 0; i < count; i++)
+                        {{
+                            if (!callback({callbackArgs}))
+                                continue;
+
+                            result = new Entity(iter->world, iter->entities[i]);
+                            break;
+                        }}
+
+                        Macros.TableUnlock(iter->world, iter->table);
+
+                        return result;
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateFindEntityInvokers()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                str.AppendLine($@"
+                    public static Entity Find<{typeParams}>(ecs_iter_t* iter, Ecs.FindEntityCallback<{typeParams}> callback)
+                    {{
+                        Macros.TableLock(iter->world, iter->table);
+
+                        int count = iter->count;
+                        ecs_world_t *world = iter->world;
+                        Entity result = default;
+
+                        Ecs.Assert(count > 0, ""No entities returned, use Find() without Entity argument"");
+                        {typeAssertions}
+
+                        for (int i = 0; i < count; i++)
+                        {{
+                            if (!callback(new Entity(world, iter->entities[i]), {callbackArgs}))
+                                continue;
+
+                            result = new Entity(world, iter->entities[i]);
+                            break;
+                        }}
+
+                        Macros.TableUnlock(iter->world, iter->table);
+
+                        return result;
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateFindIndexInvokers()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                str.AppendLine($@"
+                    public static Entity Find<{typeParams}>(ecs_iter_t* iter, Ecs.FindIndexCallback<{typeParams}> callback)
+                    {{
+                        Macros.TableLock(iter->world, iter->table);
+
+                        int count = iter->count == 0 ? 1 : iter->count;
+                        Iter it = new Iter(iter);
+                        Entity result = default;
+
+                        {typeAssertions}
+
+                        for (int i = 0; i < count; i++)
+                        {{
+                            if (!callback(it, i, {callbackArgs}))
+                                continue;
+
+                            result = new Entity(iter->world, iter->entities[i]);
+                            break;
+                        }}
+
+                        Macros.TableUnlock(iter->world, iter->table);
+
+                        return result;
                     }}
                 ");
             }
@@ -527,6 +708,34 @@ namespace Flecs.NET.Codegen
                         ecs_iter_t iter = {iterName}(World, Handle);
                         while ({nextName}(&iter) == 1)
                             Invoker.{functionName}(&iter, callback);
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateFindCallbackFunctions(string delegateName, string iterName, string nextName)
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                str.AppendLine($@"
+                    public Entity Find<{typeParams}>(Ecs.{delegateName}<{typeParams}> callback)
+                    {{
+                        ecs_iter_t iter = {iterName}(World, Handle);
+                        Entity result = default;
+
+                        while (result == 0 && {nextName}(&iter) == 1)
+                            result = Invoker.Find(&iter, callback);
+                        
+                        if (result != 0)
+                            ecs_iter_fini(&iter);
+
+                        return result;
                     }}
                 ");
             }
