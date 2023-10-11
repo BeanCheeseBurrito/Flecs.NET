@@ -6,50 +6,52 @@
 using System.Runtime.InteropServices;
 using Flecs.NET.Core;
 
-World world = World.Create(args);
-
-world.Component<NativeString>().SetHooks(new TypeHooks<NativeString>
 {
-    // Resource management hooks. These hooks should primarily be used for
-    // managing memory used by the component.
-    Ctor = Ctor,
-    Move = Move,
-    Copy = Copy,
-    Dtor = Dtor,
+    World world = World.Create(args);
 
-    // Lifecycle hooks. These hooks should be used for application logic.
-    OnAdd = HookCallback,
-    OnRemove = HookCallback,
-    OnSet = HookCallback
-});
+    world.Component<NativeString>().SetHooks(new TypeHooks<NativeString>
+    {
+        // Resource management hooks. These hooks should primarily be used for
+        // managing memory used by the component.
+        Ctor = Ctor,
+        Move = Move,
+        Copy = Copy,
+        Dtor = Dtor,
 
-Ecs.Log.SetLevel(0);
+        // Lifecycle hooks. These hooks should be used for application logic.
+        OnAdd = HookCallback,
+        OnRemove = HookCallback,
+        OnSet = HookCallback
+    });
 
-Entity e = world.Entity("Entity");
-Entity tag = world.Entity();
+    Ecs.Log.SetLevel(0);
 
-Ecs.Log.Trace("e.Add<NativeString>()");
-Ecs.Log.Push();
-    e.Add<NativeString>();
-Ecs.Log.Pop();
+    Entity e = world.Entity("Entity");
+    Entity tag = world.Entity();
 
-Ecs.Log.Trace("e.Set(new NativeString(\"Hello World\"))");
-Ecs.Log.Push();
-    e.Set(new NativeString("Hello World"));
-Ecs.Log.Pop();
+    Ecs.Log.Trace("e.Add<NativeString>()");
+    Ecs.Log.Push();
+        e.Add<NativeString>();
+    Ecs.Log.Pop();
 
-// This operation changes the entity's archetype, which invokes a move
-Ecs.Log.Trace("e.Add(tag)");
-Ecs.Log.Push();
-    e.Add(tag);
-Ecs.Log.Pop();
+    Ecs.Log.Trace("e.Set(new NativeString(\"Hello World\"))");
+    Ecs.Log.Push();
+        e.Set(new NativeString("Hello World"));
+    Ecs.Log.Pop();
 
-Ecs.Log.Trace("e.Destruct()");
-Ecs.Log.Push();
-    e.Destruct();
-Ecs.Log.Pop();
+    // This operation changes the entity's archetype, which invokes a move
+    Ecs.Log.Trace("e.Add(tag)");
+    Ecs.Log.Push();
+        e.Add(tag);
+    Ecs.Log.Pop();
 
-Ecs.Log.SetLevel(-1);
+    Ecs.Log.Trace("e.Destruct()");
+    Ecs.Log.Push();
+        e.Destruct();
+    Ecs.Log.Pop();
+
+    Ecs.Log.SetLevel(-1);
+}
 
 // Resource management hooks.
 // The constructor should initialize the component value.
