@@ -79,31 +79,13 @@ public struct Pod
 
     static Pod()
     {
-        Type<Pod>.SetTypeHooks(new TypeHooks
+        Type<Pod>.TypeHooks = new TypeHooks<Pod>
         {
-            Ctor = (ref CtorData ctorData) =>
-            {
-                ref Pod data = ref ctorData.Get<Pod>();
-                //...
-            },
-            Dtor = (ref DtorData dtorData) =>
-            {
-                ref Pod data = ref dtorData.Get<Pod>();
-                //...
-            },
-            Move = (ref MoveData moveData) =>
-            {
-                ref Pod src = ref moveData.Src<Pod>();
-                ref Pod dest = ref moveData.Dst<Pod>();
-                //...
-            },
-            Copy = (ref CopyData copyData) =>
-            {
-                ref Pod src = ref copyData.Src<Pod>();
-                ref Pod dest = ref copyData.Dst<Pod>();
-                //...
-            }
-        });
+            Ctor = (ref Pod data, TypeInfo typeInfo) => { },
+            Dtor = (ref Pod data, TypeInfo typeInfo) => { },
+            Move = (ref Pod src, ref Pod dst, TypeInfo typeInfo) => { },
+            Copy = (ref Pod src, ref Pod dst, TypeInfo typeInfo) => { }
+        };
     }
 };
 

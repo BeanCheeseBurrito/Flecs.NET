@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Flecs.NET.Core;
 
 namespace Flecs.NET.Utilities
 {
@@ -44,7 +45,7 @@ namespace Flecs.NET.Utilities
 
         internal static void* AllocGcHandle<T>(void* data, ref T comp, int index = 0)
         {
-            GCHandle handle = GCHandle.Alloc(new StrongBox<T>(comp));
+            GCHandle handle = GCHandle.Alloc(new BindingContext.Box<T>(comp, true));
             ((IntPtr*)data)[index] = GCHandle.ToIntPtr(handle);
             return data;
         }
@@ -67,8 +68,8 @@ namespace Flecs.NET.Utilities
 
         internal static void SetTypeRef<T>(GCHandle handle, ref T item)
         {
-            StrongBox<T> strongBox = (StrongBox<T>)handle.Target!;
-            strongBox.Value = item;
+            BindingContext.Box<T> box = (BindingContext.Box<T>)handle.Target!;
+            box.Value = item;
         }
 
         internal static ref T GetTypeRef<T>(void* data, int index = 0)
@@ -77,8 +78,8 @@ namespace Flecs.NET.Utilities
                 return ref ((T*)data)[index];
 
             GCHandle handle = GCHandle.FromIntPtr(((IntPtr*)data)[index]);
-            StrongBox<T> strongBox = (StrongBox<T>)handle.Target!;
-            return ref strongBox.Value!;
+            BindingContext.Box<T> box = (BindingContext.Box<T>)handle.Target!;
+            return ref box.Value!;
         }
 
         internal static ref T GetTypeRef<T>(IntPtr data, int index = 0)
@@ -87,14 +88,14 @@ namespace Flecs.NET.Utilities
                 return ref ((T*)data)[index];
 
             GCHandle handle = GCHandle.FromIntPtr(((IntPtr*)data)[index]);
-            StrongBox<T> strongBox = (StrongBox<T>)handle.Target!;
-            return ref strongBox.Value!;
+            BindingContext.Box<T> box = (BindingContext.Box<T>)handle.Target!;
+            return ref box.Value!;
         }
 
         internal static ref T GetTypeRef<T>(GCHandle handle)
         {
-            StrongBox<T> strongBox = (StrongBox<T>)handle.Target!;
-            return ref strongBox.Value;
+            BindingContext.Box<T> box = (BindingContext.Box<T>)handle.Target!;
+            return ref box.Value!;
         }
     }
 }

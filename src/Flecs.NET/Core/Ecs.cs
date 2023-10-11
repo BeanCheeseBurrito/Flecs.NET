@@ -238,6 +238,50 @@ namespace Flecs.NET.Core
         ///     OrderBy action.
         /// </summary>
         public delegate int OrderByAction(ulong e1, void* ptr1, ulong e2, void* ptr2);
+
+        /// <summary>
+        ///     Ctor type hook callback.
+        /// </summary>
+        public delegate void CtorCallback(void* data, int count, ecs_type_info_t* typeInfo);
+
+        /// <summary>
+        ///     Dtor type hook callback.
+        /// </summary>
+        public delegate void DtorCallback(void* data, int count, ecs_type_info_t* typeInfo);
+
+        /// <summary>
+        ///     Move type hook callback.
+        /// </summary>
+        public delegate void MoveCallback(void* src, void* dst, int count, ecs_type_info_t* typeInfo);
+
+        /// <summary>
+        ///     Copy type hook callback.
+        /// </summary>
+        public delegate void CopyCallback(void* src, void* dst, int count, ecs_type_info_t* typeInfo);
+
+        /// <summary>
+        ///     Ctor type hook callback.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public delegate void CtorCallback<T>(ref T data, TypeInfo typeInfo);
+
+        /// <summary>
+        ///     Dtor type hook callback.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public delegate void DtorCallback<T>(ref T data, TypeInfo typeInfo);
+
+        /// <summary>
+        ///     Move type hook callback.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public delegate void MoveCallback<T>(ref T src, ref T dst, TypeInfo typeInfo);
+
+        /// <summary>
+        ///     Copy type hook callback.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public delegate void CopyCallback<T>(ref T src, ref T dst, TypeInfo typeInfo);
     }
 
     // Built-in global entities, tags, and flags.

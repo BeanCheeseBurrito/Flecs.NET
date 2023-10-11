@@ -16,10 +16,6 @@ namespace Flecs.NET.Core
     /// <typeparam name="T"></typeparam>
     public static unsafe class Type<T>
     {
-        /// <summary>
-        ///     Registered type hooks.
-        /// </summary>
-        public static TypeHooks? Hooks;
 
         /// <summary>
         ///     The raw id of the type.
@@ -62,12 +58,20 @@ namespace Flecs.NET.Core
         public static string? SymbolName { get; private set; }
 
         /// <summary>
+        ///     Registered type hooks.
+        /// </summary>
+        public static TypeHooks<T>? TypeHooks;
+
+        /// <summary>
         ///     Sets type hooks for the type.
         /// </summary>
         /// <param name="typeHooks"></param>
-        public static void SetTypeHooks(TypeHooks typeHooks)
+        public static void SetTypeHooks(ecs_world_t* world, TypeHooks<T> typeHooks)
         {
-            Hooks = typeHooks;
+            TypeHooks = typeHooks;
+
+            if (IsRegistered(world))
+                RegisterLifeCycleActions(world);
         }
 
         /// <summary>
@@ -253,46 +257,51 @@ namespace Flecs.NET.Core
 
             if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
             {
-                typeHooksDesc.ctor = TypeHooks.GcHandleCtorPointer;
-                typeHooksDesc.dtor = TypeHooks.GcHandleDtorPointer;
-                typeHooksDesc.move = TypeHooks.GcHandleMovePointer;
-                typeHooksDesc.copy = TypeHooks.GcHandleCopyPointer;
-
-                if (Hooks == null)
-                    ecs_set_hooks_id(world, RawId, &typeHooksDesc);
+                typeHooksDesc.ctor = BindingContext<T>.DefaultManagedCtorPointer;
+                typeHooksDesc.dtor = BindingContext<T>.DefaultManagedDtorPointer;
+                typeHooksDesc.move = BindingContext<T>.DefaultManagedMovePointer;
+                typeHooksDesc.copy = BindingContext<T>.DefaultManagedCopyPointer;
             }
 
-            if (Hooks == null)
-                return;
+            if (TypeHooks == null)
+                goto SetHooks;
+
+            if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+            {
+                typeHooksDesc.ctor = TypeHooks.Ctor == null ? IntPtr.Zero : BindingContext<T>.ManagedCtorPointer;
+                typeHooksDesc.dtor = TypeHooks.Dtor == null ? IntPtr.Zero : BindingContext<T>.ManagedDtorPointer;
+                typeHooksDesc.move = TypeHooks.Move == null ? IntPtr.Zero : BindingContext<T>.ManagedMovePointer;
+                typeHooksDesc.copy = TypeHooks.Copy == null ? IntPtr.Zero : BindingContext<T>.ManagedCopyPointer;
+            }
+            else
+            {
+                typeHooksDesc.ctor = TypeHooks.Ctor == null ? IntPtr.Zero : BindingContext<T>.UnmanagedCtorPointer;
+                typeHooksDesc.dtor = TypeHooks.Dtor == null ? IntPtr.Zero : BindingContext<T>.UnmanagedDtorPointer;
+                typeHooksDesc.move = TypeHooks.Move == null ? IntPtr.Zero : BindingContext<T>.UnmanagedMovePointer;
+                typeHooksDesc.copy = TypeHooks.Copy == null ? IntPtr.Zero : BindingContext<T>.UnmanagedCopyPointer;
+            }
 
             BindingContext.TypeHooksContext* bindingContext = Memory.AllocZeroed<BindingContext.TypeHooksContext>(1);
-            bindingContext->OnAdd = BindingContext.AllocCallback(Hooks.OnAdd);
-            bindingContext->OnSet = BindingContext.AllocCallback(Hooks.OnSet);
-            bindingContext->OnRemove = BindingContext.AllocCallback(Hooks.OnRemove);
+            BindingContext.SetCallback(ref bindingContext->Ctor, TypeHooks.Ctor, false);
+            BindingContext.SetCallback(ref bindingContext->Dtor, TypeHooks.Dtor, false);
+            BindingContext.SetCallback(ref bindingContext->Move, TypeHooks.Move, false);
+            BindingContext.SetCallback(ref bindingContext->Copy, TypeHooks.Copy, false);
+            BindingContext.SetCallback(ref bindingContext->OnAdd, TypeHooks.OnAdd, false);
+            BindingContext.SetCallback(ref bindingContext->OnSet, TypeHooks.OnSet, false);
+            BindingContext.SetCallback(ref bindingContext->OnRemove, TypeHooks.OnRemove, false);
+            BindingContext.SetCallback(ref bindingContext->ContextFree, TypeHooks.ContextFree);
 
-            typeHooksDesc.on_add = bindingContext->OnAdd.Function;
-            typeHooksDesc.on_set = bindingContext->OnSet.Function;
-            typeHooksDesc.on_remove = bindingContext->OnRemove.Function;
+            typeHooksDesc.on_add = TypeHooks.OnAdd == null ? IntPtr.Zero : BindingContext<T>.OnAddHookPointer;
+            typeHooksDesc.on_set = TypeHooks.OnSet == null ? IntPtr.Zero : BindingContext<T>.OnSetHookPointer;
+            typeHooksDesc.on_remove = TypeHooks.OnRemove == null ? IntPtr.Zero : BindingContext<T>.OnRemoveHookPointer;
+            typeHooksDesc.ctx = TypeHooks.Context;
+            typeHooksDesc.ctx_free = bindingContext->ContextFree.Function;
             typeHooksDesc.binding_ctx = bindingContext;
             typeHooksDesc.binding_ctx_free = BindingContext.TypeHooksContextFreePointer;
 
-            if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
-            {
-                bindingContext->Ctor = BindingContext.AllocCallback(Hooks.Ctor);
-                bindingContext->Dtor = BindingContext.AllocCallback(Hooks.Dtor);
-                bindingContext->Move = BindingContext.AllocCallback(Hooks.Move);
-                bindingContext->Copy = BindingContext.AllocCallback(Hooks.Copy);
-                bindingContext->ContextFree = BindingContext.AllocCallback(Hooks.ContextFree);
-
-                typeHooksDesc.ctor = TypeHooks.NormalCtorPointer;
-                typeHooksDesc.dtor = TypeHooks.NormalDtorPointer;
-                typeHooksDesc.move = TypeHooks.NormalMovePointer;
-                typeHooksDesc.copy = TypeHooks.NormalCopyPointer;
-                typeHooksDesc.ctx = Hooks.Context;
-                typeHooksDesc.ctx_free = bindingContext->ContextFree.Function;
-            }
-
-            ecs_set_hooks_id(world, RawId, &typeHooksDesc);
+            SetHooks:
+            if (!Equals(typeHooksDesc, default))
+                ecs_set_hooks_id(world, RawId, &typeHooksDesc);
         }
 
         /// <summary>

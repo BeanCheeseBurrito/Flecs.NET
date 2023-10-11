@@ -10,7 +10,7 @@ namespace Flecs.NET.Core
     ///     Struct used to register components and component metadata.
     /// </summary>
     /// <typeparam name="TComponent"></typeparam>
-    public unsafe struct Component<TComponent> : IEquatable<Component<TComponent>>, IEquatable<ulong>
+    public unsafe partial struct Component<TComponent> : IEquatable<Component<TComponent>>, IEquatable<ulong>
     {
         private UntypedComponent _untypedComponent;
 
@@ -397,6 +397,19 @@ namespace Flecs.NET.Core
         public override int GetHashCode()
         {
             return Entity.Id.Value.GetHashCode();
+        }
+    }
+
+    // Flecs.NET
+    public unsafe partial struct Component<TComponent>
+    {
+        /// <summary>
+        ///     Sets the component's type hooks.
+        /// </summary>
+        /// <param name="typeHooks"></param>
+        public void SetHooks(TypeHooks<TComponent> typeHooks)
+        {
+            Type<TComponent>.SetTypeHooks(World, typeHooks);
         }
     }
 }
