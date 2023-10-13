@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Utilities;
@@ -10,7 +11,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     Class for iterating over query results.
     /// </summary>
-    public readonly unsafe struct Iter : IEnumerable
+    public readonly unsafe struct Iter : IEnumerable<int>, IEquatable<Iter>
     {
         /// <summary>
         ///     Reference to handle.
@@ -78,7 +79,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count()
         {
-            return (Handle->count);
+            return Handle->count;
         }
 
         /// <summary>
@@ -417,7 +418,8 @@ namespace Flecs.NET.Core
 
             Entity expected = new Entity(iter->world, termId);
             Entity actual = new Entity(iter->world, typeId);
-            Ecs.Error($"Type argument mismatch at term index {index}.\nExpected Term: {expected}\nActual Term: {actual}");
+            Ecs.Error(
+                $"Type argument mismatch at term index {index}.\nExpected Term: {expected}\nActual Term: {actual}");
         }
 
         /// <summary>
@@ -425,6 +427,11 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        IEnumerator<int> IEnumerable<int>.GetEnumerator()
         {
             return GetEnumerator();
         }
@@ -437,12 +444,66 @@ namespace Flecs.NET.Core
         {
             return new IterEnumerator(Handle->count);
         }
+
+        /// <summary>
+        ///     Checks if two <see cref="Iter"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public bool Equals(Iter other)
+        {
+            return Handle == other.Handle;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Iter"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override bool Equals(object? obj)
+        {
+            return obj is Iter other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of te <see cref="Iter"/>.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override int GetHashCode()
+        {
+            return Handle->GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Iter"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Iter left, Iter right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Iter"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Iter left, Iter right)
+        {
+            return !(left == right);
+        }
     }
 
     /// <summary>
     ///     Enumerator for iters.
     /// </summary>
-    public struct IterEnumerator : IEnumerator
+    public struct IterEnumerator : IEnumerator<int>
     {
         /// <summary>
         ///     Length of the iter.
@@ -485,6 +546,13 @@ namespace Flecs.NET.Core
         public void Reset()
         {
             Current = -1;
+        }
+
+        /// <summary>
+        ///     Disposes of resources.
+        /// </summary>
+        public void Dispose()
+        {
         }
     }
 }

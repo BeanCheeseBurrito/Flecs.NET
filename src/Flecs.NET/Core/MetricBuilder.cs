@@ -8,7 +8,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     Metric builder interface.
     /// </summary>
-    public unsafe struct MetricBuilder : IDisposable
+    public unsafe struct MetricBuilder : IDisposable, IEquatable<MetricBuilder>
     {
         private ecs_world_t* _world;
         private ecs_metric_desc_t _desc;
@@ -221,6 +221,59 @@ namespace Flecs.NET.Core
             using NativeString nativeBrief = (NativeString)brief;
             Desc.brief = nativeBrief;
             return ref this;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="MetricBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(MetricBuilder other)
+        {
+            return Equals(Desc, other.Desc);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="MetricBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override bool Equals(object? obj)
+        {
+            return obj is MetricBuilder other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="MetricBuilder"/>.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override int GetHashCode()
+        {
+            return Desc.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="MetricBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(MetricBuilder left, MetricBuilder right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="MetricBuilder"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(MetricBuilder left, MetricBuilder right)
+        {
+            return !(left == right);
         }
     }
 }

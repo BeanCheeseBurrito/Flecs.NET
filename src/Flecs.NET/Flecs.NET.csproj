@@ -18,6 +18,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
+        <IsPackable>true</IsPackable>
         <Version>3.2.8</Version>
         <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Debug</Title>
         <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Release</Title>
@@ -41,16 +42,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0"/>
 
-        <ProjectReference Include="..\Flecs.NET.Bindings\Flecs.NET.Bindings.csproj" />
-        <ProjectReference Include="..\Flecs.NET.Native\Flecs.NET.Native.csproj" />
-        <ProjectReference Include="..\Flecs.NET.Codegen\Flecs.NET.Codegen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\Flecs.NET.Bindings\Flecs.NET.Bindings.csproj"/>
+        <ProjectReference Include="..\Flecs.NET.Native\Flecs.NET.Native.csproj"/>
+        <ProjectReference Include="..\Flecs.NET.Codegen\Flecs.NET.Codegen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="../../docs/icon.png" PackagePath="icon.png" />
+        <Content Include="../../docs/icon.png" PackagePath="icon.png"/>
     </ItemGroup>
 
 </Project>

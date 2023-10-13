@@ -8,7 +8,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper for ecs_rule_t.
     /// </summary>
-    public unsafe partial struct Rule : IDisposable
+    public unsafe partial struct Rule : IEquatable<Rule>, IDisposable
     {
         private ecs_world_t* _world;
         private ecs_rule_t* _handle;
@@ -35,7 +35,7 @@ namespace Flecs.NET.Core
             _world = world;
 
             ecs_filter_desc_t* filterDesc = &filterBuilder.FilterDesc;
-            filterDesc->terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
+            filterDesc->terms_buffer = filterBuilder.Terms.Data;
             filterDesc->terms_buffer_count = filterBuilder.Terms.Count;
 
             if (!string.IsNullOrEmpty(name))
@@ -176,6 +176,57 @@ namespace Flecs.NET.Core
             while (ecs_rule_next_instanced(&iter) == 1)
                 Invoker.Each(&iter, func);
         }
+
+        /// <summary>
+        ///     Checks if two <see cref="Rule"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Rule other)
+        {
+            return Handle == other.Handle;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Rule"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is Rule other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="Rule"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Handle->GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Rule"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Rule left, Rule right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="RoutineBuilder"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Rule left, Rule right)
+        {
+            return !(left == right);
+        }
     }
 
 #if NET5_0_OR_GREATER
@@ -187,11 +238,11 @@ namespace Flecs.NET.Core
 #else
     public unsafe partial struct Rule
     {
-        private static IntPtr _next;
-        private static IntPtr _nextInstanced;
+        private static readonly IntPtr _next;
+        private static readonly IntPtr _nextInstanced;
 
-        private static Ecs.IterNextAction _nextReference = ecs_rule_next;
-        private static Ecs.IterNextAction _nextInstancedReference = ecs_rule_next_instanced;
+        private static readonly Ecs.IterNextAction _nextReference = ecs_rule_next;
+        private static readonly Ecs.IterNextAction _nextInstancedReference = ecs_rule_next_instanced;
 
         static Rule()
         {

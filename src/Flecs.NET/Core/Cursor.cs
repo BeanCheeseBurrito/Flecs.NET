@@ -1,3 +1,4 @@
+using System;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -6,7 +7,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     Class for reading/writing dynamic values.
     /// </summary>
-    public unsafe struct Cursor
+    public unsafe struct Cursor : IEquatable<Cursor>
     {
         private ecs_meta_cursor_t _cursor;
 
@@ -342,6 +343,57 @@ namespace Flecs.NET.Core
             {
                 return new Entity(_cursor.world, ecs_meta_get_entity(cursor));
             }
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Cursor"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Cursor other)
+        {
+            return Equals(_cursor, other._cursor);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Cursor"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is Cursor other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Gets the hash code of the <see cref="Cursor"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return _cursor.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Cursor"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Cursor left, Cursor right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Cursor"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Cursor left, Cursor right)
+        {
+            return !(left == right);
         }
     }
 }

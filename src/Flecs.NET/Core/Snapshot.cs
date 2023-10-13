@@ -6,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A snapshot stores the state of a world in a particular point in time.
     /// </summary>
-    public unsafe struct Snapshot : IDisposable
+    public unsafe struct Snapshot : IDisposable, IEquatable<Snapshot>
     {
         private ecs_world_t* _world;
         private ecs_snapshot_t* _handle;
@@ -86,6 +86,57 @@ namespace Flecs.NET.Core
 
             ecs_snapshot_free(Handle);
             Handle = null;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Snapshot"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Snapshot other)
+        {
+            return Handle == other.Handle;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Snapshot"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is Snapshot other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="Snapshot"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Handle->GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Snapshot"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Snapshot left, Snapshot right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Snapshot"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Snapshot left, Snapshot right)
+        {
+            return !(left == right);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     An untyped component.
     /// </summary>
-    public unsafe struct UntypedComponent
+    public unsafe struct UntypedComponent : IEquatable<UntypedComponent>
     {
         private Entity _entity;
 
@@ -316,7 +316,58 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///      Returns the entity's name if it has one, otherwise return its id.
+        ///     Checks if two <see cref="UntypedComponent"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(UntypedComponent other)
+        {
+            return Entity == other.Entity;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="UntypedComponent"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is UntypedComponent other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="UntypedComponent"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Entity.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="UntypedComponent"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(UntypedComponent left, UntypedComponent right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="UntypedComponent"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(UntypedComponent left, UntypedComponent right)
+        {
+            return !(left == right);
+        }
+
+        /// <summary>
+        ///     Returns the entity's name if it has one, otherwise return its id.
         /// </summary>
         /// <returns></returns>
         public override string ToString()

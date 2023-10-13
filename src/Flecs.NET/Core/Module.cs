@@ -4,9 +4,9 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    ///     Static class for importng modules.
+    ///     Static class for importing modules.
     /// </summary>
-    public static unsafe class Module
+    internal static unsafe class Module
     {
         /// <summary>
         ///     Imports a module.

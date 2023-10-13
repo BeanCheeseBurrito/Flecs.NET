@@ -1,4 +1,4 @@
-using Flecs.NET.Core;
+using System;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -8,7 +8,7 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Alerts module
         /// </summary>
-        public struct Alerts : IFlecsModule
+        public struct Alerts : IFlecsModule, IEquatable<Alerts>
         {
             /// <summary>
             ///     Initializes the alerts module.
@@ -50,6 +50,57 @@ namespace Flecs.NET.Core
             /// </summary>
             public struct Err
             {
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Alerts"/> instances are equal.
+            /// </summary>
+            /// <param name="other"></param>
+            /// <returns></returns>
+            public bool Equals(Alerts other)
+            {
+                return true;
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Alerts"/> instances are equal.
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <returns></returns>
+            public override bool Equals(object? obj)
+            {
+                return obj is Alerts;
+            }
+
+            /// <summary>
+            ///     Returns the hash code of the <see cref="Alerts"/>.
+            /// </summary>
+            /// <returns></returns>
+            public override int GetHashCode()
+            {
+                return 0;
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Alerts"/> instances are equal.
+            /// </summary>
+            /// <param name="left"></param>
+            /// <param name="right"></param>
+            /// <returns></returns>
+            public static bool operator ==(Alerts left, Alerts right)
+            {
+                return left.Equals(right);
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Alerts"/> instances are not equal.
+            /// </summary>
+            /// <param name="left"></param>
+            /// <param name="right"></param>
+            /// <returns></returns>
+            public static bool operator !=(Alerts left, Alerts right)
+            {
+                return !(left == right);
             }
         }
     }

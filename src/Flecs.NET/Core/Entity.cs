@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Runtime.CompilerServices;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
@@ -267,7 +266,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Range()
         {
-            ecs_record_t *r = ecs_record_find(World, Id);
+            ecs_record_t* r = ecs_record_find(World, Id);
             return r != null ? new Table(World, r->table, Macros.RecordToRow(r->row), 1) : new Table();
         }
 
@@ -1056,7 +1055,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///    Short for Has(EcsChildOf, entity).
+        ///     Short for Has(EcsChildOf, entity).
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -2127,7 +2126,7 @@ namespace Flecs.NET.Core
         /// <param name="json"></param>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public ref Entity SetJson(ulong e, string json, ecs_from_json_desc_t *desc = null)
+        public ref Entity SetJson(ulong e, string json, ecs_from_json_desc_t* desc = null)
         {
             ulong type = ecs_get_typeid(World, e);
 
@@ -2137,7 +2136,7 @@ namespace Flecs.NET.Core
                 return ref this;
             }
 
-            void *ptr = ecs_get_mut_id(World, Id, e);
+            void* ptr = ecs_get_mut_id(World, Id, e);
             Ecs.Assert(ptr != null, nameof(ECS_INTERNAL_ERROR));
 
             using NativeString nativeJson = (NativeString)json;
@@ -2156,7 +2155,7 @@ namespace Flecs.NET.Core
         /// <param name="json"></param>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public ref Entity SetJson(ulong first, ulong second, string json, ecs_from_json_desc_t *desc = null)
+        public ref Entity SetJson(ulong first, ulong second, string json, ecs_from_json_desc_t* desc = null)
         {
             return ref SetJson(Macros.Pair(first, second), json, desc);
         }
@@ -2547,7 +2546,8 @@ namespace Flecs.NET.Core
 
         private ref Entity SetInternal<T>(ulong id, ref T component)
         {
-            Ecs.Assert(Type<T>.GetSize() != 0, "Zero-sized types can't be used as components. Use .Add() to add them as tags instead.");
+            Ecs.Assert(Type<T>.GetSize() != 0,
+                "Zero-sized types can't be used as components. Use .Add() to add them as tags instead.");
 
             bool isRef = RuntimeHelpers.IsReferenceOrContainsReferences<T>();
             int size = isRef ? sizeof(IntPtr) : sizeof(T);
@@ -2579,6 +2579,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Entity"/> instances are equal.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -2588,6 +2589,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Entity"/> instances are equal.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -2597,6 +2599,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Returns the hash code of the <see cref="Entity"/>.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -2605,6 +2608,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Entity"/> instances are equal.
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -2615,6 +2619,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Entity"/> instances are not equal.
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>

@@ -168,10 +168,8 @@ namespace Flecs.NET.Collections
         public int IndexOf(T item)
         {
             for (int i = 0; i < Count; i++)
-            {
                 if (EqualityComparer<T>.Default.Equals(Data[i], item))
                     return i;
-            }
 
             return -1;
         }

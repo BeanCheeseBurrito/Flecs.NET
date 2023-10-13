@@ -8,7 +8,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     Wrapper around system.
     /// </summary>
-    public unsafe struct Routine
+    public unsafe struct Routine : IEquatable<Routine>
     {
         private Entity _entity;
 
@@ -28,7 +28,7 @@ namespace Flecs.NET.Core
         public ref ecs_world_t* World => ref _entity.World;
 
         /// <summary>
-        ///      Creates a routine for the provided world.
+        ///     Creates a routine for the provided world.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="filterBuilder"></param>
@@ -264,7 +264,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///      Run the routine.
+        ///     Run the routine.
         /// </summary>
         /// <param name="stageCurrent"></param>
         /// <param name="stageCount"></param>
@@ -282,7 +282,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///      Run the routine with a param.
+        ///     Run the routine with a param.
         /// </summary>
         /// <param name="stageCurrent"></param>
         /// <param name="stageCount"></param>
@@ -384,12 +384,64 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///      Returns the entity's name if it has one, otherwise return its id.
+        ///     Returns the entity's name if it has one, otherwise return its id.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
             return Entity.ToString();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Routine"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Routine other)
+        {
+            return Entity == other.Entity;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Routine"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is Routine routine && Equals(routine);
+        }
+
+        /// <summary>
+        ///     Return the hash code of the <see cref="Routine"/>.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override int GetHashCode()
+        {
+            return Entity.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Routine"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Routine left, Routine right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Routine"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Routine left, Routine right)
+        {
+            return !(left == right);
         }
     }
 }

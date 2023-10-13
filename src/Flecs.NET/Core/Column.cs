@@ -61,6 +61,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Column{T}"/> instances are equal.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -70,6 +71,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Column{T}"/> instances are equal.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -79,6 +81,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Returns the hash code of the &lt;see cref="Entity"/&gt;.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -87,6 +90,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Entity"/> instances are equal.
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -97,6 +101,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Entity"/> instances are not equal.
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>

@@ -6,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     Wrapper around ecs_query_desc_t.
     /// </summary>
-    public unsafe struct QueryBuilder : IDisposable
+    public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>
     {
         private ecs_world_t* _world;
 
@@ -183,6 +183,59 @@ namespace Flecs.NET.Core
         {
             QueryDesc.parent = parent.Handle;
             return ref this;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="QueryBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(QueryBuilder other)
+        {
+            return Equals(Desc, other.Desc);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="QueryBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override bool Equals(object? obj)
+        {
+            return obj is QueryBuilder other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="QueryBuilder"/>.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override int GetHashCode()
+        {
+            return Desc.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="QueryBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(QueryBuilder left, QueryBuilder right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="QueryBuilder"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(QueryBuilder left, QueryBuilder right)
+        {
+            return !(left == right);
         }
     }
 }

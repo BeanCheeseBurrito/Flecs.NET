@@ -11,7 +11,8 @@ namespace Flecs.NET.Core
     /// </summary>
     public static unsafe partial class BindingContext
     {
-        private static readonly BindingContextCleanup _ = new BindingContextCleanup();
+        [SuppressMessage("Usage", "CA1823")]
+        private static readonly BindingContextCleanup _cleanup = new BindingContextCleanup();
 
         internal static readonly byte* DefaultSeparator = (byte*)Marshal.StringToHGlobalAnsi(".");
         internal static readonly byte* DefaultRootSeparator = (byte*)Marshal.StringToHGlobalAnsi("::");
@@ -83,7 +84,7 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr QueryContextFreePointer =
             Marshal.GetFunctionPointerForDelegate(QueryContextFreeReference = QueryContextFree);
 
-        internal static readonly IntPtr TypeHooksContextFreePointer=
+        internal static readonly IntPtr TypeHooksContextFreePointer =
             Marshal.GetFunctionPointerForDelegate(TypeHooksContextFreeReference = TypeHooksContextFree);
 
         internal static readonly IntPtr OsApiAbortPointer =
@@ -228,11 +229,12 @@ namespace Flecs.NET.Core
 
         internal class Box<T>
         {
+            public bool ShouldFree;
             [MaybeNull] public T Value = default!;
 
-            public bool ShouldFree;
-
-            public Box() { }
+            public Box()
+            {
+            }
 
             public Box(T value, bool shouldFree = false)
             {
@@ -342,69 +344,91 @@ namespace Flecs.NET.Core
 #if NET5_0_OR_GREATER
         internal static readonly IntPtr UnmanagedCtorPointer =
             (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&UnmanagedCtor;
+
         internal static readonly IntPtr UnmanagedDtorPointer =
             (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&UnmanagedDtor;
+
         internal static readonly IntPtr UnmanagedMovePointer =
             (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&UnmanagedMove;
+
         internal static readonly IntPtr UnmanagedCopyPointer =
             (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&UnmanagedCopy;
 
         internal static readonly IntPtr ManagedCtorPointer =
             (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&ManagedCtor;
+
         internal static readonly IntPtr ManagedDtorPointer =
             (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&ManagedDtor;
+
         internal static readonly IntPtr ManagedMovePointer =
             (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&ManagedMove;
+
         internal static readonly IntPtr ManagedCopyPointer =
             (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&ManagedCopy;
 
         internal static readonly IntPtr DefaultManagedCtorPointer =
             (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&DefaultManagedCtor;
+
         internal static readonly IntPtr DefaultManagedDtorPointer =
             (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&DefaultManagedDtor;
+
         internal static readonly IntPtr DefaultManagedMovePointer =
             (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&DefaultManagedMove;
+
         internal static readonly IntPtr DefaultManagedCopyPointer =
             (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&DefaultManagedCopy;
 
         internal static readonly IntPtr OnAddHookPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddHook;
+
         internal static readonly IntPtr OnSetHookPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetHook;
+
         internal static readonly IntPtr OnRemoveHookPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveHook;
 #else
         internal static readonly IntPtr UnmanagedCtorPointer =
             Marshal.GetFunctionPointerForDelegate(UnmanagedCtorReference = UnmanagedCtor);
+
         internal static readonly IntPtr UnmanagedDtorPointer =
             Marshal.GetFunctionPointerForDelegate(UnmanagedDtorReference = UnmanagedDtor);
+
         internal static readonly IntPtr UnmanagedMovePointer =
             Marshal.GetFunctionPointerForDelegate(UnmanagedMoveReference = UnmanagedMove);
+
         internal static readonly IntPtr UnmanagedCopyPointer =
             Marshal.GetFunctionPointerForDelegate(UnmanagedCopyReference = UnmanagedCopy);
 
         internal static readonly IntPtr ManagedCtorPointer =
             Marshal.GetFunctionPointerForDelegate(ManagedCtorReference = ManagedCtor);
+
         internal static readonly IntPtr ManagedDtorPointer =
             Marshal.GetFunctionPointerForDelegate(ManagedDtorReference = ManagedDtor);
+
         internal static readonly IntPtr ManagedMovePointer =
             Marshal.GetFunctionPointerForDelegate(ManagedMoveReference = ManagedMove);
+
         internal static readonly IntPtr ManagedCopyPointer =
             Marshal.GetFunctionPointerForDelegate(ManagedCopyReference = ManagedCopy);
 
         internal static readonly IntPtr DefaultManagedCtorPointer =
             Marshal.GetFunctionPointerForDelegate(DefaultManagedCtorReference = DefaultManagedCtor);
+
         internal static readonly IntPtr DefaultManagedDtorPointer =
             Marshal.GetFunctionPointerForDelegate(DefaultManagedDtorReference = DefaultManagedDtor);
+
         internal static readonly IntPtr DefaultManagedMovePointer =
             Marshal.GetFunctionPointerForDelegate(DefaultManagedMoveReference = DefaultManagedMove);
+
         internal static readonly IntPtr DefaultManagedCopyPointer =
             Marshal.GetFunctionPointerForDelegate(DefaultManagedCopyReference = DefaultManagedCopy);
 
         internal static readonly IntPtr OnAddHookPointer =
             Marshal.GetFunctionPointerForDelegate(OnAddHookReference = OnAddHook);
+
         internal static readonly IntPtr OnSetHookPointer =
             Marshal.GetFunctionPointerForDelegate(OnSetHookReference = OnSetHook);
+
         internal static readonly IntPtr OnRemoveHookPointer =
             Marshal.GetFunctionPointerForDelegate(OnRemoveHookCopyReference = OnRemoveHook);
 
@@ -492,7 +516,8 @@ namespace Flecs.NET.Core
 
         private static void ManagedCtor(void* data, int count, ecs_type_info_t* typeInfoHandle)
         {
-            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
+            BindingContext.TypeHooksContext* context =
+                (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
             Ecs.CtorCallback<T0> callback = (Ecs.CtorCallback<T0>)context->Ctor.GcHandle.Target!;
 
             GCHandle* handles = (GCHandle*)data;
@@ -509,7 +534,8 @@ namespace Flecs.NET.Core
 
         private static void ManagedDtor(void* data, int count, ecs_type_info_t* typeInfoHandle)
         {
-            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
+            BindingContext.TypeHooksContext* context =
+                (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
             Ecs.DtorCallback<T0> callback = (Ecs.DtorCallback<T0>)context->Dtor.GcHandle.Target!;
 
             GCHandle* handles = (GCHandle*)data;
@@ -527,7 +553,8 @@ namespace Flecs.NET.Core
 
         private static void ManagedMove(void* dst, void* src, int count, ecs_type_info_t* typeInfoHandle)
         {
-            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
+            BindingContext.TypeHooksContext* context =
+                (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
             Ecs.MoveCallback<T0> callback = (Ecs.MoveCallback<T0>)context->Move.GcHandle.Target!;
 
             GCHandle* dstHandles = (GCHandle*)dst;
@@ -548,7 +575,8 @@ namespace Flecs.NET.Core
 
         private static void ManagedCopy(void* dst, void* src, int count, ecs_type_info_t* typeInfoHandle)
         {
-            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
+            BindingContext.TypeHooksContext* context =
+                (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
             Ecs.CopyCallback<T0> callback = (Ecs.CopyCallback<T0>)context->Copy.GcHandle.Target!;
 
             GCHandle* dstHandles = (GCHandle*)dst;
@@ -578,8 +606,13 @@ namespace Flecs.NET.Core
             {
                 BindingContext.Box<T0> box = new BindingContext.Box<T0>();
 
-                try { box.Value = Activator.CreateInstance<T0>(); }
-                catch (MissingMethodException) { }
+                try
+                {
+                    box.Value = Activator.CreateInstance<T0>();
+                }
+                catch (MissingMethodException)
+                {
+                }
 
                 handles[i] = GCHandle.Alloc(box);
             }

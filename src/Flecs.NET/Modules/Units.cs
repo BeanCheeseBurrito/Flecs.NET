@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using static Flecs.NET.Bindings.Native;
 
@@ -9,7 +10,7 @@ namespace Flecs.NET.Core
         ///     Units module.
         /// </summary>
         [SuppressMessage("Usage", "CA1815")]
-        public struct Units : IFlecsModule
+        private struct Units : IEquatable<Units>, IFlecsModule
         {
             /// <summary>
             ///     Initializes units module.
@@ -1010,6 +1011,57 @@ namespace Flecs.NET.Core
             /// </summary>
             public struct DeciBel
             {
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Units"/> instances are equal.
+            /// </summary>
+            /// <param name="other"></param>
+            /// <returns></returns>
+            public bool Equals(Units other)
+            {
+                return true;
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Units"/> instances are equal.
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <returns></returns>
+            public override bool Equals(object? obj)
+            {
+                return obj is Units;
+            }
+
+            /// <summary>
+            ///     Returns the hash code of teh <see cref="Units"/>.
+            /// </summary>
+            /// <returns></returns>
+            public override int GetHashCode()
+            {
+                return 0;
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Units"/> instances are equal.
+            /// </summary>
+            /// <param name="left"></param>
+            /// <param name="right"></param>
+            /// <returns></returns>
+            public static bool operator ==(Units left, Units right)
+            {
+                return left.Equals(right);
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Units"/> instances are not equal.
+            /// </summary>
+            /// <param name="left"></param>
+            /// <param name="right"></param>
+            /// <returns></returns>
+            public static bool operator !=(Units left, Units right)
+            {
+                return !(left == right);
             }
         }
     }

@@ -6,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_system_desc_t.
     /// </summary>
-    public unsafe struct RoutineBuilder : IDisposable
+    public unsafe struct RoutineBuilder : IDisposable, IEquatable<RoutineBuilder>
     {
         private ecs_world_t* _world;
 
@@ -154,6 +154,59 @@ namespace Flecs.NET.Core
             BindingContext.SetCallback(ref RoutineContext.Run, action);
             RoutineDesc.run = RoutineContext.Run.Function;
             return ref this;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="RoutineBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(RoutineBuilder other)
+        {
+            return Equals(Desc, other.Desc);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="RoutineBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override bool Equals(object? obj)
+        {
+            return obj is RoutineBuilder other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="RoutineBuilder"/>.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override int GetHashCode()
+        {
+            return Desc.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="RoutineBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(RoutineBuilder left, RoutineBuilder right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="RoutineBuilder"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(RoutineBuilder left, RoutineBuilder right)
+        {
+            return !(left == right);
         }
     }
 }
