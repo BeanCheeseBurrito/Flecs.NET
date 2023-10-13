@@ -14,9 +14,9 @@ namespace Flecs.NET.Core
     ///     Static class that registers and stores information about types.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [SuppressMessage("Usage", "CA1721")]
     public static unsafe class Type<T>
     {
-
         /// <summary>
         ///     The raw id of the type.
         /// </summary>
@@ -60,11 +60,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Registered type hooks.
         /// </summary>
-        public static TypeHooks<T>? TypeHooks;
+        public static TypeHooks<T>? TypeHooks { get; set; }
 
         /// <summary>
         ///     Sets type hooks for the type.
         /// </summary>
+        /// <param name="world"></param>
         /// <param name="typeHooks"></param>
         public static void SetTypeHooks(ecs_world_t* world, TypeHooks<T> typeHooks)
         {
@@ -145,8 +146,8 @@ namespace Flecs.NET.Core
                 // Test for tags by changing the underlying byte and checking equality.
                 // If the structs always return true, it's likely that the struct is a tag.
 
-                T aInstance = default;
-                T bInstance = default;
+                T aInstance = default!;
+                T bInstance = default!;
 
                 for (byte i = 0; i < 16; i++)
                 {

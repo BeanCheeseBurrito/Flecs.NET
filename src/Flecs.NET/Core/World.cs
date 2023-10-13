@@ -26,7 +26,7 @@ namespace Flecs.NET.Core
         public ref bool Owned => ref _owned;
 
         /// <summary>
-        ///     Constructs a world from an <see cref="ecs_world_t" /> pointer.
+        ///     Constructs a world from an <see cref="ecs_world_t"/> pointer.
         /// </summary>
         /// <param name="handle">The world handle.</param>
         /// <param name="owned">The owned boolean.</param>
@@ -52,7 +52,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates a flecs world from an <see cref="ecs_world_t" /> pointer that is not owned.
+        ///     Creates a flecs world from an <see cref="ecs_world_t"/> pointer that is not owned.
         /// </summary>
         /// <param name="world">A C world.</param>
         /// <returns>A newly created world.</returns>
@@ -84,7 +84,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Calls <see cref="ecs_fini" /> and cleans up resources.
+        ///     Calls <see cref="ecs_fini"/> and cleans up resources.
         /// </summary>
         public void Dispose()
         {
@@ -106,7 +106,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Signals that the application should quit. The next call to <see cref="Progress" /> returns false.
+        ///     Signals that the application should quit. The next call to <see cref="Progress"/> returns false.
         /// </summary>
         public void Quit()
         {
@@ -2439,6 +2439,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="World"/> instances are equal.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -2448,6 +2449,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="World"/> instances are eqaul.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -2457,6 +2459,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Returns the hash code of the <see cref="World"/>.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -2465,6 +2468,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="World"/> instances are equal.
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
@@ -2475,6 +2479,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="World"/> instances are not equal.
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>

@@ -286,26 +286,6 @@ namespace Flecs.NET.Core
 
         /// <summary>
         /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
-        public static bool operator ==(Id left, Id right)
-        {
-            return left.Equals(right);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
-        public static bool operator !=(Id left, Id right)
-        {
-            return !(left == right);
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public static Id FromUInt64(ulong id)
@@ -323,6 +303,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Id"/> instances are equal.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -332,6 +313,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Id"/> instances are equal.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -341,12 +323,34 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Returns a hash code.
+        ///     Returns the hash code of the <see cref="Id"/>.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
         {
             return Value.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Id"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Id left, Id right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Id"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Id left, Id right)
+        {
+            return !(left == right);
         }
 
         /// <summary>

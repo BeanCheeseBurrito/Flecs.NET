@@ -8,7 +8,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_app_desc_t.
     /// </summary>
-    public unsafe struct AppBuilder : IDisposable
+    public unsafe struct AppBuilder : IDisposable, IEquatable<AppBuilder>
     {
         private ecs_world_t* _world;
         private ecs_app_desc_t _desc;
@@ -158,6 +158,57 @@ namespace Flecs.NET.Core
                 Dispose();
                 return result;
             }
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="AppBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(AppBuilder other)
+        {
+            return Equals(Desc, other.Desc);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="AppBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is AppBuilder other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Gets the hash code of the <see cref="AppBuilder"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Desc.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="AppBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(AppBuilder left, AppBuilder right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="AlertBuilder"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(AppBuilder left, AppBuilder right)
+        {
+            return !(left == right);
         }
     }
 }

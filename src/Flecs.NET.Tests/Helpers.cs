@@ -83,8 +83,12 @@ public struct Pod
         {
             Ctor = (ref Pod data, TypeInfo typeInfo) => { },
             Dtor = (ref Pod data, TypeInfo typeInfo) => { },
-            Move = (ref Pod src, ref Pod dst, TypeInfo typeInfo) => { },
-            Copy = (ref Pod src, ref Pod dst, TypeInfo typeInfo) => { }
+            Move = (ref Pod dst, ref Pod src, TypeInfo typeInfo) => { },
+            Copy = (ref Pod dst, ref Pod src, TypeInfo typeInfo) => { },
+
+            OnAdd = (Iter it, Column<Pod> pod) => { },
+            OnSet = (Iter it, Column<Pod> pod) => { },
+            OnRemove = (Iter it, Column<Pod> pod) => { }
         };
     }
 };

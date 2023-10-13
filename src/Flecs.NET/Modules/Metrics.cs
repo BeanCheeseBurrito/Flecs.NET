@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics.CodeAnalysis;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -7,7 +9,8 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Metrics module.
         /// </summary>
-        public struct Metrics : IFlecsModule
+        [SuppressMessage("Usage", "CA1724")]
+        public struct Metrics : IFlecsModule, IEquatable<Metrics>
         {
             /// <summary>
             ///     Initializes metrics module.
@@ -67,6 +70,57 @@ namespace Flecs.NET.Core
             /// </summary>
             public struct Gauge
             {
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Metrics"/> instances are equal.
+            /// </summary>
+            /// <param name="other"></param>
+            /// <returns></returns>
+            public bool Equals(Metrics other)
+            {
+                return true;
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Metrics"/> instances are equal.
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <returns></returns>
+            public override bool Equals(object? obj)
+            {
+                return obj is Metrics;
+            }
+
+            /// <summary>
+            ///     Returns the hash code of the <see cref="Metrics"/>.
+            /// </summary>
+            /// <returns></returns>
+            public override int GetHashCode()
+            {
+                return 0;
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Metrics"/> instances are equal.
+            /// </summary>
+            /// <param name="left"></param>
+            /// <param name="right"></param>
+            /// <returns></returns>
+            public static bool operator ==(Metrics left, Metrics right)
+            {
+                return left.Equals(right);
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Metrics"/> instances are not equal.
+            /// </summary>
+            /// <param name="left"></param>
+            /// <param name="right"></param>
+            /// <returns></returns>
+            public static bool operator !=(Metrics left, Metrics right)
+            {
+                return !(left == right);
             }
         }
     }

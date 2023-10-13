@@ -9,7 +9,7 @@ namespace Flecs.NET.Core
     ///     Reference to a component from a specific entity.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public unsafe struct Ref<T>
+    public unsafe struct Ref<T> : IEquatable<Ref<T>>
     {
         private ecs_world_t* _world;
         private ecs_ref_t _ref;
@@ -73,6 +73,57 @@ namespace Flecs.NET.Core
         public Entity Entity()
         {
             return new Entity(World, _ref.entity);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Ref{T}"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Ref<T> other)
+        {
+            return Equals(_ref, other._ref);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Ref{T}"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is Ref<T> other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="Ref{T}"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return _ref.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Ref{T}"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Ref<T> left, Ref<T> right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Ref{T}"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Ref<T> left, Ref<T> right)
+        {
+            return !(left == right);
         }
     }
 }

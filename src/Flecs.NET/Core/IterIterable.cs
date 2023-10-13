@@ -1,8 +1,8 @@
-using System;
-using Flecs.NET.Utilities;
 #if !NET5_0_OR_GREATER
 using System.Runtime.InteropServices;
 #endif
+using System;
+using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -10,11 +10,11 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     An iterator object that can be modified before iterating.
     /// </summary>
-    public unsafe struct IterIterable
+    public unsafe struct IterIterable : IEquatable<IterIterable>
     {
         private ecs_iter_t _iter;
-        private IntPtr _next;
-        private IntPtr _nextEach;
+        private readonly IntPtr _next;
+        private readonly IntPtr _nextEach;
 
         /// <summary>
         ///     Creates an iter iterable.
@@ -72,9 +72,12 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public string ToJson(ecs_iter_to_json_desc_t *desc = null) {
+        public string ToJson(ecs_iter_to_json_desc_t* desc = null)
+        {
             fixed (ecs_iter_t* it = &_iter)
+            {
                 return NativeString.GetStringAndFree(ecs_iter_to_json(it->real_world, it, desc));
+            }
         }
 
         /// <summary>
@@ -121,6 +124,7 @@ namespace Flecs.NET.Core
                     result = new Entity(it->world, it->entities[0]);
                     ecs_iter_fini(it);
                 }
+
                 return result;
             }
         }
@@ -208,6 +212,57 @@ namespace Flecs.NET.Core
 #else
             return Marshal.GetDelegateForFunctionPointer<Ecs.IterNextAction>(_nextEach)(it) == 1;
 #endif
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="IterIterable"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(IterIterable other)
+        {
+            return Equals(_iter, other._iter);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="IterIterable"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is IterIterable other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="IterIterable"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return _iter.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="IterIterable"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(IterIterable left, IterIterable right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="IterIterable"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(IterIterable left, IterIterable right)
+        {
+            return !(left == right);
         }
     }
 }

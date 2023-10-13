@@ -8,7 +8,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_query_t.
     /// </summary>
-    public unsafe partial struct Query : IDisposable
+    public unsafe partial struct Query : IEquatable<Query>, IDisposable
     {
         private ecs_world_t* _world;
         private ecs_query_t* _handle;
@@ -135,7 +135,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public void* GroupCtx(ulong groupId)
         {
-            ecs_query_group_info_t* groupInfo = GroupInfo((groupId));
+            ecs_query_group_info_t* groupInfo = GroupInfo(groupId);
             return groupInfo == null ? null : groupInfo->ctx;
         }
 
@@ -218,6 +218,57 @@ namespace Flecs.NET.Core
             while (ecs_query_next_instanced(&iter) == 1)
                 Invoker.Each(&iter, func);
         }
+
+        /// <summary>
+        ///     Checks if two <see cref="Query"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Query other)
+        {
+            return Handle == other.Handle;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Query"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is Query other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="Query"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Handle->GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Query"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Query left, Query right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Query"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Query left, Query right)
+        {
+            return !(left == right);
+        }
     }
 
 #if NET5_0_OR_GREATER
@@ -229,11 +280,11 @@ namespace Flecs.NET.Core
 #else
     public unsafe partial struct Query
     {
-        private static IntPtr _next;
-        private static IntPtr _nextInstanced;
+        private static readonly IntPtr _next;
+        private static readonly IntPtr _nextInstanced;
 
-        private static Ecs.IterNextAction _nextReference = ecs_query_next;
-        private static Ecs.IterNextAction _nextInstancedReference = ecs_query_next_instanced;
+        private static readonly Ecs.IterNextAction _nextReference = ecs_query_next;
+        private static readonly Ecs.IterNextAction _nextInstancedReference = ecs_query_next_instanced;
 
         static Query()
         {

@@ -1,5 +1,4 @@
-using Flecs.NET.Collections;
-using Flecs.NET.Utilities;
+using System;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -7,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     Wrapper around ecs_event_desc_t.
     /// </summary>
-    public unsafe struct EventBuilder
+    public unsafe struct EventBuilder : IEquatable<EventBuilder>
     {
         private ecs_world_t* _world;
         private ecs_event_desc_t _desc;
@@ -104,7 +103,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref EventBuilder Entity(ulong entity)
         {
-            ecs_record_t *r = ecs_record_find(World, entity);
+            ecs_record_t* r = ecs_record_find(World, entity);
 
             Ecs.Assert(r != null, nameof(ECS_INVALID_PARAMETER));
             Ecs.Assert(r->table != null, nameof(ECS_INVALID_PARAMETER));
@@ -122,7 +121,7 @@ namespace Flecs.NET.Core
         /// <param name="offset"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public ref EventBuilder Table(ecs_table_t *t, int offset = 0, int count = 0)
+        public ref EventBuilder Table(ecs_table_t* t, int offset = 0, int count = 0)
         {
             _desc.table = t;
             _desc.offset = offset;
@@ -168,6 +167,57 @@ namespace Flecs.NET.Core
                 _desc.observable = ecs_get_world(World);
                 ecs_emit(World, &self->_desc);
             }
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="EventBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(EventBuilder other)
+        {
+            return Equals(Desc, other.Desc);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="EventBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is EventBuilder other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Gets the hash code of the <see cref="EventBuilder"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Desc.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="EventBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(EventBuilder left, EventBuilder right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="EventBuilder"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(EventBuilder left, EventBuilder right)
+        {
+            return !(left == right);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_filter_desc_t.
     /// </summary>
-    public unsafe struct FilterBuilder : IDisposable
+    public unsafe struct FilterBuilder : IDisposable, IEquatable<FilterBuilder>
     {
         private ecs_world_t* _world;
         private TermIdType _termIdType;
@@ -357,7 +357,7 @@ namespace Flecs.NET.Core
         public ref FilterBuilder First(string name)
         {
             First();
-            return ref (name[0] == '$' ? ref Var(name[1..]) : ref Name(name));
+            return ref name[0] == '$' ? ref Var(name[1..]) : ref Name(name);
         }
 
         /// <summary>
@@ -389,7 +389,7 @@ namespace Flecs.NET.Core
         public ref FilterBuilder Second(string secondName)
         {
             Second();
-            return ref (secondName[0] == '$' ? ref Var(secondName[1..]) : ref Name(secondName));
+            return ref secondName[0] == '$' ? ref Var(secondName[1..]) : ref Name(secondName);
         }
 
         /// <summary>
@@ -1463,16 +1463,16 @@ namespace Flecs.NET.Core
         {
             if ((id & ECS_ID_FLAGS_MASK) != 0)
             {
-                CurrentTerm = new ecs_term_t() { id = id };
+                CurrentTerm = new ecs_term_t { id = id };
                 return;
             }
 
-            CurrentTerm = new ecs_term_t() { first = new ecs_term_id_t() { id = id } };
+            CurrentTerm = new ecs_term_t { first = new ecs_term_id_t { id = id } };
         }
 
         private void SetTermId(ulong first, ulong second)
         {
-            CurrentTerm = new ecs_term_t() { id = Macros.Pair(first, second) };
+            CurrentTerm = new ecs_term_t { id = Macros.Pair(first, second) };
         }
 
         private enum TermIdType
@@ -1480,6 +1480,60 @@ namespace Flecs.NET.Core
             Src,
             First,
             Second
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="FilterBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public bool Equals(FilterBuilder other)
+        {
+            return Equals(Desc, other);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="FilterBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override bool Equals(object? obj)
+        {
+            return obj is EventBuilder other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code for the <see cref="EventBuilder"/>.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override int GetHashCode()
+        {
+            return Desc.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="FilterBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(FilterBuilder left, FilterBuilder right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="FilterBuilder"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(FilterBuilder left, FilterBuilder right)
+        {
+            return !(left == right);
         }
     }
 }

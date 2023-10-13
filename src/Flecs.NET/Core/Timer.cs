@@ -1,3 +1,4 @@
+using System;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -5,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     Timer struct.
     /// </summary>
-    public unsafe struct Timer
+    public unsafe struct Timer : IEquatable<Timer>
     {
         private Entity _entity;
 
@@ -121,12 +122,63 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///      Returns the entity's name if it has one, otherwise return its id.
+        ///     Returns the entity's name if it has one, otherwise return its id.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
             return Entity.ToString();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Timer"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Timer other)
+        {
+            return Entity == other.Entity;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Timer"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is Timer other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="Timer"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Entity.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Timer"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Timer left, Timer right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Timer"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Timer left, Timer right)
+        {
+            return !(left == right);
         }
     }
 }

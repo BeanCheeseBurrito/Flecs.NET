@@ -1,3 +1,4 @@
+using System;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -5,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_type_info_t.
     /// </summary>
-    public unsafe struct TypeInfo
+    public unsafe struct TypeInfo : IEquatable<TypeInfo>
     {
         private ecs_type_info_t* _handle;
 
@@ -21,6 +22,57 @@ namespace Flecs.NET.Core
         public TypeInfo(ecs_type_info_t* typeInfo)
         {
             _handle = typeInfo;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="TypeInfo"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(TypeInfo other)
+        {
+            return Handle == other.Handle;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="TypeInfo"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is TypeInfo other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="TypeInfo"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Handle->GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="TypeInfo"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(TypeInfo left, TypeInfo right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="TypeInfo"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(TypeInfo left, TypeInfo right)
+        {
+            return !(left == right);
         }
     }
 }

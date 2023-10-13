@@ -70,7 +70,7 @@ namespace Flecs.NET.Core
             }
             else
             {
-                if (implicitName && (ecs_get_scope(world) != 0))
+                if (implicitName && ecs_get_scope(world) != 0)
                 {
                     int start = name.IndexOf('<', StringComparison.Ordinal);
                     int lastElem = 0;
@@ -305,6 +305,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Component{TComponent}"/> instances are equal.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -314,6 +315,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if the <see cref="Component{TComponent}"/> instances is equal to an entity id.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -323,15 +325,18 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if the <see cref="Component{TComponent}"/> instance is equal to a <see cref="Component{TComponent}"/> or
+        ///     entity id.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object? obj)
         {
-            return (obj is Component<TComponent> component && Equals(component)) || obj is ulong id && Equals(id);
+            return (obj is Component<TComponent> component && Equals(component)) || (obj is ulong id && Equals(id));
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Component{TComponent}"/> instances are equal.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -342,6 +347,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if two <see cref="Component{TComponent}"/> instances are not equal.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -352,6 +358,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if the <see cref="Component{TComponent}"/> is equal to an entity id.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -362,6 +369,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if the <see cref="Component{TComponent}"/> instance does not equal an entity id.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -372,6 +380,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if an entity id is equal to a <see cref="Component{TComponent}"/> instance.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -382,6 +391,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if an entity id is not equal to a <see cref="Component{TComponent}"/> instance.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -392,6 +402,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Returns the hash code of the <see cref="Component{TComponent}"/>
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()

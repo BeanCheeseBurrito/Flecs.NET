@@ -8,7 +8,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_alert_desc_t.
     /// </summary>
-    public unsafe struct AlertBuilder : IDisposable
+    public unsafe struct AlertBuilder : IDisposable, IEquatable<AlertBuilder>
     {
         private ecs_world_t* _world;
         private NativeList<NativeString> _strings;
@@ -237,6 +237,57 @@ namespace Flecs.NET.Core
             Desc.var = nativeVar;
 
             return ref this;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="AlertBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(AlertBuilder other)
+        {
+            return Equals(Desc, other.Desc);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="AlertBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is AlertBuilder other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Gets the hash code of the <see cref="AlertBuilder"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return AlertDesc.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="AlertBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(AlertBuilder left, AlertBuilder right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="AlertBuilder"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(AlertBuilder left, AlertBuilder right)
+        {
+            return !(left == right);
         }
     }
 }

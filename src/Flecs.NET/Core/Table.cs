@@ -1,3 +1,4 @@
+using System;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -6,7 +7,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A table is where entities and components are stored.
     /// </summary>
-    public readonly unsafe struct Table
+    public readonly unsafe struct Table : IEquatable<Table>
     {
         /// <summary>
         ///     A reference to the world.
@@ -392,6 +393,57 @@ namespace Flecs.NET.Core
         public override string ToString()
         {
             return Macros.IsStageOrWorld(World) ? Str() : string.Empty;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Table"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Table other)
+        {
+            return Handle == other.Handle;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Table"/> instance equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is Table other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="Table"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Handle->GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Table"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Table left, Table right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Table"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Table left, Table right)
+        {
+            return !(left == right);
         }
     }
 }

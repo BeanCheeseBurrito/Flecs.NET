@@ -9,12 +9,12 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A filter allows for uncached, adhoc iteration over ECS data.
     /// </summary>
-    public unsafe partial struct Filter : IDisposable
+    public unsafe partial struct Filter : IEquatable<Filter>, IDisposable
     {
         private ecs_world_t* _world;
         private ecs_filter_t _filter;
-        private ecs_filter_t* _filterPtr;
-        private bool _isOwned;
+        private readonly ecs_filter_t* _filterPtr;
+        private readonly bool _isOwned;
 
         /// <summary>
         ///     A reference to the world.
@@ -43,7 +43,7 @@ namespace Flecs.NET.Core
             _isOwned = true;
 
             ecs_filter_desc_t* filterDesc = &filterBuilder.FilterDesc;
-            filterDesc->terms_buffer = (ecs_term_t*)filterBuilder.Terms.Data;
+            filterDesc->terms_buffer = filterBuilder.Terms.Data;
             filterDesc->terms_buffer_count = filterBuilder.Terms.Count;
 
             if (!string.IsNullOrEmpty(name))
@@ -160,6 +160,57 @@ namespace Flecs.NET.Core
             while (ecs_filter_next_instanced(&iter) == 1)
                 Invoker.Each(&iter, func);
         }
+
+        /// <summary>
+        ///     Checks if two <see cref="Filter"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Filter other)
+        {
+            return _filterPtr == other._filterPtr;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Filter"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is Filter other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Gets the hash code of the <see cref="Filter"/>.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return _filterPtr->GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Filter"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Filter left, Filter right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Filter"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Filter left, Filter right)
+        {
+            return !(left == right);
+        }
     }
 
 #if NET5_0_OR_GREATER
@@ -171,11 +222,11 @@ namespace Flecs.NET.Core
 #else
     public unsafe partial struct Filter
     {
-        private static IntPtr _next;
-        private static IntPtr _nextInstanced;
+        private static readonly IntPtr _next;
+        private static readonly IntPtr _nextInstanced;
 
-        private static Ecs.IterNextAction _nextReference = ecs_filter_next;
-        private static Ecs.IterNextAction _nextInstancedReference = ecs_filter_next_instanced;
+        private static readonly Ecs.IterNextAction _nextReference = ecs_filter_next;
+        private static readonly Ecs.IterNextAction _nextInstancedReference = ecs_filter_next_instanced;
 
         static Filter()
         {

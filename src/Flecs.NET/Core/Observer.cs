@@ -6,9 +6,9 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    ///     A wrapper around observer..
+    ///     A wrapper around observer.
     /// </summary>
-    public unsafe struct Observer
+    public unsafe struct Observer : IEquatable<Observer>
     {
         private Entity _entity;
 
@@ -28,7 +28,7 @@ namespace Flecs.NET.Core
         public ref ecs_world_t* World => ref _entity.World;
 
         /// <summary>
-        ///      Creates an observer for the provided world.
+        ///     Creates an observer for the provided world.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="filterBuilder"></param>
@@ -45,19 +45,19 @@ namespace Flecs.NET.Core
         {
             _entity = default;
 
-           InitObserver(
-               true,
-               BindingContext.ObserverIterPointer,
-               ref callback,
-               ref world,
-               ref filterBuilder,
-               ref observerBuilder,
-               ref name
+            InitObserver(
+                true,
+                BindingContext.ObserverIterPointer,
+                ref callback,
+                ref world,
+                ref filterBuilder,
+                ref observerBuilder,
+                ref name
             );
         }
 
         /// <summary>
-        ///      Creates an observer for the provided world.
+        ///     Creates an observer for the provided world.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="filterBuilder"></param>
@@ -218,6 +218,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts a <see cref="Observer"/> to a <see cref="ulong"/>.
+        /// </summary>
+        /// <returns></returns>
+        public ulong ToUInt64()
+        {
+            return Entity;
+        }
+
+        /// <summary>
         /// </summary>
         /// <param name="observer"></param>
         /// <returns></returns>
@@ -227,7 +236,61 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///      Returns the entity's name if it has one, otherwise return its id.
+        ///     Checks if two <see cref="Observer"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public bool Equals(Observer other)
+        {
+            return Entity == other.Entity;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Observer"/> instances are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override bool Equals(object? obj)
+        {
+            return obj is Observer other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="Observer"/>.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override int GetHashCode()
+        {
+            return Entity.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Observer"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(Observer left, Observer right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="Observer"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(Observer left, Observer right)
+        {
+            return !(left == right);
+        }
+
+        /// <summary>
+        ///     Returns the entity's name if it has one, otherwise return its id.
         /// </summary>
         /// <returns></returns>
         public override string ToString()

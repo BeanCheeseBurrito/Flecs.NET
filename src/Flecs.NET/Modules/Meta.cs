@@ -1,4 +1,4 @@
-using Flecs.NET.Bindings;
+using System;
 
 namespace Flecs.NET.Core
 {
@@ -7,7 +7,7 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Meta module.
         /// </summary>
-        public struct Meta : IFlecsModule
+        public struct Meta : IEquatable<Meta>, IFlecsModule
         {
             /// <summary>
             ///     Initializes meta module.
@@ -40,6 +40,57 @@ namespace Flecs.NET.Core
                 world.Entity<double>("::flecs.meta.f64");
 
                 // TODO: Add support for string, char and native sized integers
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Meta"/> instances are equal.
+            /// </summary>
+            /// <param name="other"></param>
+            /// <returns></returns>
+            public bool Equals(Meta other)
+            {
+                return true;
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Meta"/> instances are equal.
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <returns></returns>
+            public override bool Equals(object? obj)
+            {
+                return obj is Meta;
+            }
+
+            /// <summary>
+            ///     Returns the hash code of the <see cref="Meta"/>.
+            /// </summary>
+            /// <returns></returns>
+            public override int GetHashCode()
+            {
+                return 0;
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Meta"/> instances are equal.
+            /// </summary>
+            /// <param name="left"></param>
+            /// <param name="right"></param>
+            /// <returns></returns>
+            public static bool operator ==(Meta left, Meta right)
+            {
+                return left.Equals(right);
+            }
+
+            /// <summary>
+            ///     Checks if two <see cref="Meta"/> instances are not equal.
+            /// </summary>
+            /// <param name="left"></param>
+            /// <param name="right"></param>
+            /// <returns></returns>
+            public static bool operator !=(Meta left, Meta right)
+            {
+                return !(left == right);
             }
         }
     }

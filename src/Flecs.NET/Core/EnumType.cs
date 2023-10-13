@@ -34,7 +34,7 @@ namespace Flecs.NET.Core
                 {
                     object obj = values.GetValue(i);
 
-                    T member = (T)obj;
+                    T member = (T)obj!;
                     int value = Convert.ToInt32(obj, CultureInfo.InvariantCulture);
 
                     using NativeString nativeName = (NativeString)member.ToString();
@@ -43,10 +43,7 @@ namespace Flecs.NET.Core
                     _data[i] = new EnumPair(value, enumEntity);
                 }
             }
-            else
-            {
-                // TODO: Reimplement NativeAOT support after move to .NET Standard 2.1
-            }
+            // TODO: Reimplement NativeAOT support after move to .NET Standard 2.1
         }
 
         /// <summary>

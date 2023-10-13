@@ -6,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_observer_desc_t.
     /// </summary>
-    public unsafe struct ObserverBuilder : IDisposable
+    public unsafe struct ObserverBuilder : IDisposable, IEquatable<ObserverBuilder>
     {
         private ecs_world_t* _world;
 
@@ -101,6 +101,59 @@ namespace Flecs.NET.Core
             BindingContext.SetCallback(ref ObserverContext.Run, action);
             ObserverDesc.run = ObserverContext.Run.Function;
             return ref this;
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="ObserverBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ObserverBuilder other)
+        {
+            return Equals(Desc, other.Desc);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="ObserverBuilder"/> instance are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override bool Equals(object? obj)
+        {
+            return obj is ObserverBuilder other && Equals(other);
+        }
+
+        /// <summary>
+        ///     Returns the hash code of the <see cref="ObserverBuilder"/>.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public override int GetHashCode()
+        {
+            return Desc.GetHashCode();
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="ObserverBuilder"/> instances are equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator ==(ObserverBuilder left, ObserverBuilder right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        ///     Checks if two <see cref="ObserverBuilder"/> instances are not equal.
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static bool operator !=(ObserverBuilder left, ObserverBuilder right)
+        {
+            return !(left == right);
         }
     }
 }
