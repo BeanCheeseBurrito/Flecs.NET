@@ -339,7 +339,7 @@ namespace Flecs.NET.Core
         }
     }
 
-    internal static unsafe partial class BindingContext<T0>
+    internal static unsafe partial class BindingContext<T0> where T0 : new()
     {
 #if NET5_0_OR_GREATER
         internal static readonly IntPtr UnmanagedCtorPointer =
@@ -605,15 +605,7 @@ namespace Flecs.NET.Core
             for (int i = 0; i < count; i++)
             {
                 BindingContext.Box<T0> box = new BindingContext.Box<T0>();
-
-                try
-                {
-                    box.Value = Activator.CreateInstance<T0>();
-                }
-                catch (MissingMethodException)
-                {
-                }
-
+                box.Value = new T0();
                 handles[i] = GCHandle.Alloc(box);
             }
         }
