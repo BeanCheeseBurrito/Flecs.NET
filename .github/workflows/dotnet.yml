@@ -1,6 +1,3 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: .NET
 
 on:
@@ -36,3 +33,15 @@ jobs:
       run: dotnet build src/Flecs.NET.Native
     - name: Run tests
       run: dotnet test --verbosity minimal
+    - name: Pack Nuget packages
+      run: |
+        dotnet pack --property:FlecsAutoVersion=true -c Debug
+        dotnet pack --property:FlecsAutoVersion=true -c Release
+    - name: Upload artifacts
+      if: matrix.os == 'ubuntu-latest'
+      uses: actions/upload-artifact@v3
+      with:
+          name: Nuget Packages
+          path: |
+            src/**/*.nupkg
+            src/**/*.snupkg
