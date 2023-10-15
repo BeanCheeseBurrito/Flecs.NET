@@ -2,11 +2,13 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <IncludeBuildOutput>false</IncludeBuildOutput>
-        <IncludeContentInPack>true</IncludeContentInPack>
     </PropertyGroup>
 
     <PropertyGroup>
+        <IsPackable>true</IsPackable>
+        <IncludeContentInPack>true</IncludeContentInPack>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        
         <Version>3.2.8</Version>
         <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Native.Debug</Title>
         <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Native.Release</Title>
@@ -73,36 +75,36 @@
 
         <Content Condition="'$(Configuration)' == 'Release'" Include="buildTransitive/Flecs.NET.Native.props" PackagePath="buildTransitive/Flecs.NET.Native.Release.props" />
         <Content Condition="'$(Configuration)' == 'Release'" Include="buildTransitive/Flecs.NET.Native.targets" PackagePath="buildTransitive/Flecs.NET.Native.Release.targets" />
+        
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/linux-x64/libflecs.so')"    Include="debug/linux-x64/libflecs.so"    PackagePath="runtimes/linux-x64/native/libflecs.so" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/linux-arm64/libflecs.so')"  Include="debug/linux-arm64/libflecs.so"  PackagePath="runtimes/linux-arm64/native/libflecs.so" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/osx-x64/libflecs.dylib')"   Include="debug/osx-x64/libflecs.dylib"   PackagePath="runtimes/osx-x64/native/libflecs.dylib" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/osx-arm64/libflecs.dylib')" Include="debug/osx-arm64/libflecs.dylib" PackagePath="runtimes/osx-arm64/native/libflecs.dylib" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-x64/libflecs.dll')"     Include="debug/win-x64/libflecs.dll"     PackagePath="runtimes/win-x64/native/libflecs.dll" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-x64/libflecs.pdb')"     Include="debug/win-x64/libflecs.pdb"     PackagePath="runtimes/win-x64/native/libflecs.pdb" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-arm64/libflecs.dll')"   Include="debug/win-arm64/libflecs.dll"   PackagePath="runtimes/win-arm64/native/libflecs.dll" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-arm64/libflecs.pdb')"   Include="debug/win-arm64/libflecs.pdb"   PackagePath="runtimes/win-arm64/native/libflecs.pdb" />
 
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so" />
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-arm64/libflecs.so" PackagePath="runtimes/linux-arm64/native/libflecs.so" />
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-x64/libflecs.dylib" PackagePath="runtimes/osx-x64/native/libflecs.dylib" />
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-arm64/libflecs.dylib" PackagePath="runtimes/osx-arm64/native/libflecs.dylib" />
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/libflecs.dll" PackagePath="runtimes/win-x64/native/libflecs.dll" />
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/libflecs.pdb" PackagePath="runtimes/win-x64/native/libflecs.pdb" />
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/win-arm64/libflecs.dll" PackagePath="runtimes/win-arm64/native/libflecs.dll" />
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/win-arm64/libflecs.pdb" PackagePath="runtimes/win-arm64/native/libflecs.pdb" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/linux-x64/libflecs.a')"   Include="debug/linux-x64/libflecs.a"   PackagePath="static_libraries/linux-x64/libflecs.a" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/linux-arm64/libflecs.a')" Include="debug/linux-arm64/libflecs.a" PackagePath="static_libraries/linux-arm64/libflecs.a" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/osx-x64/libflecs.a')"     Include="debug/osx-x64/libflecs.a"     PackagePath="static_libraries/osx-x64/libflecs.a" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/osx-arm64/libflecs.a')"   Include="debug/osx-arm64/libflecs.a"   PackagePath="static_libraries/osx-arm64/libflecs.a" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-x64/libflecs.lib')"   Include="debug/win-x64/libflecs.lib"   PackagePath="static_libraries/win-x64/libflecs.lib" />
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-arm64/libflecs.lib')" Include="debug/win-arm64/libflecs.lib" PackagePath="static_libraries/win-arm64/libflecs.lib" />
 
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-x64/libflecs.a" PackagePath="static_libraries/linux-x64/libflecs.a" />
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-arm64/libflecs.a" PackagePath="static_libraries/linux-arm64/libflecs.a" />
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-x64/libflecs.a" PackagePath="static_libraries/osx-x64/libflecs.a" />
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-arm64/libflecs.a" PackagePath="static_libraries/osx-arm64/libflecs.a" />
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/libflecs.lib" PackagePath="static_libraries/win-x64/libflecs.lib" />
-        <Content Condition="'$(Configuration)' == 'Debug'" Include="debug/win-arm64/libflecs.lib" PackagePath="static_libraries/win-arm64/libflecs.lib" />
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/linux-x64/libflecs.so')"    Include="release/linux-x64/libflecs.so"    PackagePath="runtimes/linux-x64/native/libflecs.so" />
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/linux-arm64/libflecs.so')"  Include="release/linux-arm64/libflecs.so"  PackagePath="runtimes/linux-arm64/native/libflecs.so" />
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/osx-x64/libflecs.dylib')"   Include="release/osx-x64/libflecs.dylib"   PackagePath="runtimes/osx-x64/native/libflecs.dylib" />
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/osx-arm64/libflecs.dylib')" Include="release/osx-arm64/libflecs.dylib" PackagePath="runtimes/osx-arm64/native/libflecs.dylib" />
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/win-x64/libflecs.dll')"     Include="release/win-x64/libflecs.dll"     PackagePath="runtimes/win-x64/native/libflecs.dll" />
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/win-arm64/libflecs.dll')"   Include="release/win-arm64/libflecs.dll"   PackagePath="runtimes/win-arm64/native/libflecs.dll" />
 
-        <Content Condition="'$(Configuration)' == 'Release'" Include="release/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so" />
-        <Content Condition="'$(Configuration)' == 'Release'" Include="release/linux-arm64/libflecs.so" PackagePath="runtimes/linux-arm64/native/libflecs.so" />
-        <Content Condition="'$(Configuration)' == 'Release'" Include="release/osx-x64/libflecs.dylib" PackagePath="runtimes/osx-x64/native/libflecs.dylib" />
-        <Content Condition="'$(Configuration)' == 'Release'" Include="release/osx-arm64/libflecs.dylib" PackagePath="runtimes/osx-arm64/native/libflecs.dylib" />
-        <Content Condition="'$(Configuration)' == 'Release'" Include="release/win-x64/libflecs.dll" PackagePath="runtimes/win-x64/native/libflecs.dll" />
-        <Content Condition="'$(Configuration)' == 'Release'" Include="release/win-arm64/libflecs.dll" PackagePath="runtimes/win-arm64/native/libflecs.dll" />
-
-        <Content Condition="'$(Configuration)' == 'Release'" Include="release/linux-x64/libflecs.a" PackagePath="static_libraries/linux-x64/libflecs.a" />
-        <Content Condition="'$(Configuration)' == 'Release'" Include="release/linux-arm64/libflecs.a" PackagePath="static_libraries/linux-arm64/libflecs.a" />
-        <Content Condition="'$(Configuration)' == 'Release'" Include="release/osx-x64/libflecs.a" PackagePath="static_libraries/osx-x64/libflecs.a" />
-        <Content Condition="'$(Configuration)' == 'Release'" Include="release/osx-arm64/libflecs.a" PackagePath="static_libraries/osx-arm64/libflecs.a" />
-        <Content Condition="'$(Configuration)' == 'Release'" Include="release/win-x64/libflecs.lib" PackagePath="static_libraries/win-x64/libflecs.lib" />
-        <Content Condition="'$(Configuration)' == 'Release'" Include="release/win-arm64/libflecs.lib" PackagePath="static_libraries/win-arm64/libflecs.lib" />
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/linux-x64/libflecs.a')"   Include="release/linux-x64/libflecs.a"   PackagePath="static_libraries/linux-x64/libflecs.a" />
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/linux-arm64/libflecs.a')" Include="release/linux-arm64/libflecs.a" PackagePath="static_libraries/linux-arm64/libflecs.a" />
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/osx-x64/libflecs.a')"     Include="release/osx-x64/libflecs.a"     PackagePath="static_libraries/osx-x64/libflecs.a" />
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/osx-arm64/libflecs.a')"   Include="release/osx-arm64/libflecs.a"   PackagePath="static_libraries/osx-arm64/libflecs.a" />
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/win-x64/libflecs.lib')"   Include="release/win-x64/libflecs.lib"   PackagePath="static_libraries/win-x64/libflecs.lib" />
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/win-arm64/libflecs.lib')" Include="release/win-arm64/libflecs.lib" PackagePath="static_libraries/win-arm64/libflecs.lib" />
     </ItemGroup>
 
     <Target Name="Compile Flecs" AfterTargets="build">

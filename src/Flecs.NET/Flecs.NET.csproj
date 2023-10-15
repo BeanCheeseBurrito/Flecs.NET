@@ -6,7 +6,6 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RootNamespace>Flecs.NET</RootNamespace>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <IncludeContentInPack>true</IncludeContentInPack>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -19,6 +18,8 @@
 
     <PropertyGroup>
         <IsPackable>true</IsPackable>
+        <IncludeContentInPack>true</IncludeContentInPack>
+
         <Version>3.2.8</Version>
         <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Debug</Title>
         <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Release</Title>

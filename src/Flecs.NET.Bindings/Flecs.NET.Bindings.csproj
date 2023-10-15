@@ -4,10 +4,12 @@
         <TargetFrameworks>netstandard2.1;net5.0;net7.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <IncludeContentInPack>true</IncludeContentInPack>
     </PropertyGroup>
 
     <PropertyGroup>
+        <IsPackable>true</IsPackable>
+        <IncludeContentInPack>true</IncludeContentInPack>
+
         <Version>3.2.8</Version>
         <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Bindings.Debug</Title>
         <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Bindings.Release</Title>

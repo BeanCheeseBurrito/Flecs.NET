@@ -81,7 +81,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Returns the hash code of the &lt;see cref="Entity"/&gt;.
+        ///     Returns the hash code of the <see cref="Entity"/>.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
