@@ -1,28 +1,28 @@
 <Project>
     <ItemGroup>
         <Content Condition="'$(Configuration)' == 'Debug' And '$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)' == 'X64'"
-                 Include="$(MSBuildThisFileDirectory)debug/linux-x64/libflecs.so;$(MSBuildThisFileDirectory)debug/osx-x64/libflecs.dylib;$(MSBuildThisFileDirectory)debug/win-x64/libflecs.dll;$(MSBuildThisFileDirectory)debug/win-x64/libflecs.pdb">
+                 Include="$(MSBuildThisFileDirectory)debug/linux-x64/libflecs.so;$(MSBuildThisFileDirectory)debug/osx-x64/libflecs.dylib;$(MSBuildThisFileDirectory)debug/win-x64/flecs.dll;$(MSBuildThisFileDirectory)debug/win-x64/flecs.pdb">
             <Link>%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <Pack>false</Pack>
         </Content>
 
         <Content Condition="'$(Configuration)' == 'Debug' And '$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)' == 'Arm64'"
-                 Include="$(MSBuildThisFileDirectory)debug/linux-arm64/libflecs.so;$(MSBuildThisFileDirectory)debug/osx-arm64/libflecs.dylib;$(MSBuildThisFileDirectory)debug/win-arm64/libflecs.dll;$(MSBuildThisFileDirectory)debug/win-arm64/libflecs.pdb">
+                 Include="$(MSBuildThisFileDirectory)debug/linux-arm64/libflecs.so;$(MSBuildThisFileDirectory)debug/osx-arm64/libflecs.dylib;$(MSBuildThisFileDirectory)debug/win-arm64/flecs.dll;$(MSBuildThisFileDirectory)debug/win-arm64/flecs.pdb">
             <Link>%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <Pack>false</Pack>
         </Content>
 
         <Content Condition="'$(Configuration)' == 'Release' And '$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)' == 'X64'"
-                 Include="$(MSBuildThisFileDirectory)release/linux-x64/libflecs.so;$(MSBuildThisFileDirectory)release/osx-x64/libflecs.dylib;$(MSBuildThisFileDirectory)release/win-x64/libflecs.dll">
+                 Include="$(MSBuildThisFileDirectory)release/linux-x64/libflecs.so;$(MSBuildThisFileDirectory)release/osx-x64/libflecs.dylib;$(MSBuildThisFileDirectory)release/win-x64/flecs.dll">
             <Link>%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <Pack>false</Pack>
         </Content>
 
         <Content Condition="'$(Configuration)' == 'Release' And '$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)' == 'Arm64'"
-                 Include="$(MSBuildThisFileDirectory)release/linux-arm64/libflecs.so;$(MSBuildThisFileDirectory)release/osx-arm64/libflecs.dylib;$(MSBuildThisFileDirectory)release/win-arm64/libflecs.dll">
+                 Include="$(MSBuildThisFileDirectory)release/linux-arm64/libflecs.so;$(MSBuildThisFileDirectory)release/osx-arm64/libflecs.dylib;$(MSBuildThisFileDirectory)release/win-arm64/flecs.dll">
             <Link>%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <Pack>false</Pack>
