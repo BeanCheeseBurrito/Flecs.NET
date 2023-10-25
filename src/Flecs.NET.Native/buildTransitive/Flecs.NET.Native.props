@@ -6,8 +6,8 @@
         <FlecsStaticLibrary_linux-arm64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)linux-arm64/libflecs.a'))</FlecsStaticLibrary_linux-arm64>
         <FlecsStaticLibrary_osx-x64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)osx-x64/libflecs.a'))</FlecsStaticLibrary_osx-x64>
         <FlecsStaticLibrary_osx-arm64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)osx-arm64/libflecs.a'))</FlecsStaticLibrary_osx-arm64>
-        <FlecsStaticLibrary_win-x64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)win-x64/libflecs.lib'))</FlecsStaticLibrary_win-x64>
-        <FlecsStaticLibrary_win-arm64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)win-arm64/libflecs.lib'))</FlecsStaticLibrary_win-arm64>
+        <FlecsStaticLibrary_win-x64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)win-x64/flecs.lib'))</FlecsStaticLibrary_win-x64>
+        <FlecsStaticLibrary_win-arm64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)win-arm64/flecs.lib'))</FlecsStaticLibrary_win-arm64>
 
         <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'linux-x64'">$(FlecsStaticLibrary_linux-x64)</FlecsStaticLibrary>
         <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">$(FlecsStaticLibrary_linux-arm64)</FlecsStaticLibrary>
