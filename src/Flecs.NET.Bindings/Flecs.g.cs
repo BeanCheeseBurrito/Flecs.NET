@@ -4799,7 +4799,7 @@ namespace Flecs.NET.Bindings
             public ulong hash;
         }
 
-        public enum ecs_http_method_t : int
+        public enum ecs_http_method_t : uint
         {
             EcsHttpGet = 0,
             EcsHttpPost = 1,
@@ -4809,7 +4809,7 @@ namespace Flecs.NET.Bindings
             EcsHttpMethodUnsupported = 5
         }
 
-        public enum ecs_inout_kind_t : int
+        public enum ecs_inout_kind_t : uint
         {
             EcsInOutDefault = 0,
             EcsInOutNone = 1,
@@ -4818,7 +4818,7 @@ namespace Flecs.NET.Bindings
             EcsOut = 4
         }
 
-        public enum ecs_iter_kind_t : int
+        public enum ecs_iter_kind_t : uint
         {
             EcsIterEvalCondition = 0,
             EcsIterEvalTables = 1,
@@ -4826,7 +4826,7 @@ namespace Flecs.NET.Bindings
             EcsIterEvalNone = 3
         }
 
-        public enum ecs_meta_type_op_kind_t : int
+        public enum ecs_meta_type_op_kind_t : uint
         {
             EcsOpArray = 0,
             EcsOpVector = 1,
@@ -4857,7 +4857,7 @@ namespace Flecs.NET.Bindings
             EcsMetaTypeOpKindLast = 25
         }
 
-        public enum ecs_oper_kind_t : int
+        public enum ecs_oper_kind_t : uint
         {
             EcsAnd = 0,
             EcsOr = 1,
@@ -4868,7 +4868,7 @@ namespace Flecs.NET.Bindings
             EcsNotFrom = 6
         }
 
-        public enum ecs_primitive_kind_t : int
+        public enum ecs_primitive_kind_t : uint
         {
             EcsBool = 1,
             EcsChar = 2,
@@ -4890,7 +4890,7 @@ namespace Flecs.NET.Bindings
             EcsPrimitiveKindLast = 17
         }
 
-        public enum ecs_type_kind_t : int
+        public enum ecs_type_kind_t : uint
         {
             EcsPrimitiveType = 0,
             EcsBitmaskType = 1,
