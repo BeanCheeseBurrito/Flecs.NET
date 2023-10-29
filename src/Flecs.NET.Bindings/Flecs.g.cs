@@ -1914,7 +1914,7 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FlecsUnitsImport", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void FlecsUnitsImport(ecs_world_t* world);
 
-        public partial struct ecs_alert_desc_t
+        public partial struct ecs_alert_desc_t : System.IEquatable<ecs_alert_desc_t>
         {
             public int _canary;
 
@@ -1940,7 +1940,7 @@ namespace Flecs.NET.Bindings
 
             public byte* var;
 
-            public partial struct severity_filters_FixedBuffer
+            public partial struct severity_filters_FixedBuffer : System.IEquatable<severity_filters_FixedBuffer>
             {
                 public ecs_alert_severity_filter_t Item0;
 
@@ -1954,10 +1954,84 @@ namespace Flecs.NET.Bindings
 
                 [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
                 public System.Span<ecs_alert_severity_filter_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 4);
+
+                public bool Equals(severity_filters_FixedBuffer other)
+                {
+                    fixed (severity_filters_FixedBuffer* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(severity_filters_FixedBuffer)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(severity_filters_FixedBuffer)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is severity_filters_FixedBuffer other && Equals(other);
+                }
+
+                public static bool operator ==(severity_filters_FixedBuffer left, severity_filters_FixedBuffer right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(severity_filters_FixedBuffer left, severity_filters_FixedBuffer right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (severity_filters_FixedBuffer* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(severity_filters_FixedBuffer)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_alert_desc_t other)
+            {
+                fixed (ecs_alert_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_alert_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_alert_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_alert_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_alert_desc_t left, ecs_alert_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_alert_desc_t left, ecs_alert_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_alert_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_alert_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_alert_severity_filter_t
+        public partial struct ecs_alert_severity_filter_t : System.IEquatable<ecs_alert_severity_filter_t>
         {
             public ulong severity;
 
@@ -1966,16 +2040,90 @@ namespace Flecs.NET.Bindings
             public byte* var;
 
             public int _var_index;
+
+            public bool Equals(ecs_alert_severity_filter_t other)
+            {
+                fixed (ecs_alert_severity_filter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_alert_severity_filter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_alert_severity_filter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_alert_severity_filter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_alert_severity_filter_t left, ecs_alert_severity_filter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_alert_severity_filter_t left, ecs_alert_severity_filter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_alert_severity_filter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_alert_severity_filter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_allocator_t
+        public partial struct ecs_allocator_t : System.IEquatable<ecs_allocator_t>
         {
             public ecs_block_allocator_t chunks;
 
             public ecs_sparse_t sizes;
+
+            public bool Equals(ecs_allocator_t other)
+            {
+                fixed (ecs_allocator_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_allocator_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_allocator_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_allocator_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_allocator_t left, ecs_allocator_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_allocator_t left, ecs_allocator_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_allocator_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_allocator_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_app_desc_t
+        public partial struct ecs_app_desc_t : System.IEquatable<ecs_app_desc_t>
         {
             public float target_fps;
 
@@ -1994,33 +2142,144 @@ namespace Flecs.NET.Bindings
             public System.IntPtr init; // delegate* unmanaged<ecs_world_t*, int>
 
             public void* ctx;
+
+            public bool Equals(ecs_app_desc_t other)
+            {
+                fixed (ecs_app_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_app_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_app_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_app_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_app_desc_t left, ecs_app_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_app_desc_t left, ecs_app_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_app_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_app_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_array_desc_t
+        public partial struct ecs_array_desc_t : System.IEquatable<ecs_array_desc_t>
         {
             public ulong entity;
 
             public ulong type;
 
             public int count;
+
+            public bool Equals(ecs_array_desc_t other)
+            {
+                fixed (ecs_array_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_array_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_array_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_array_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_array_desc_t left, ecs_array_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_array_desc_t left, ecs_array_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_array_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_array_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_bitmask_constant_t
+        public partial struct ecs_bitmask_constant_t : System.IEquatable<ecs_bitmask_constant_t>
         {
             public byte* name;
 
             public uint value;
 
             public ulong constant;
+
+            public bool Equals(ecs_bitmask_constant_t other)
+            {
+                fixed (ecs_bitmask_constant_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_bitmask_constant_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_bitmask_constant_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_bitmask_constant_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_bitmask_constant_t left, ecs_bitmask_constant_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_bitmask_constant_t left, ecs_bitmask_constant_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_bitmask_constant_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_bitmask_constant_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_bitmask_desc_t
+        public partial struct ecs_bitmask_desc_t : System.IEquatable<ecs_bitmask_desc_t>
         {
             public ulong entity;
 
             public constants_FixedBuffer constants;
 
-            public partial struct constants_FixedBuffer
+            public partial struct constants_FixedBuffer : System.IEquatable<constants_FixedBuffer>
             {
                 public ecs_bitmask_constant_t Item0;
 
@@ -2090,22 +2349,170 @@ namespace Flecs.NET.Bindings
 
                 [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
                 public System.Span<ecs_bitmask_constant_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
+
+                public bool Equals(constants_FixedBuffer other)
+                {
+                    fixed (constants_FixedBuffer* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(constants_FixedBuffer)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(constants_FixedBuffer)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is constants_FixedBuffer other && Equals(other);
+                }
+
+                public static bool operator ==(constants_FixedBuffer left, constants_FixedBuffer right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(constants_FixedBuffer left, constants_FixedBuffer right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (constants_FixedBuffer* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(constants_FixedBuffer)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_bitmask_desc_t other)
+            {
+                fixed (ecs_bitmask_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_bitmask_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_bitmask_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_bitmask_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_bitmask_desc_t left, ecs_bitmask_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_bitmask_desc_t left, ecs_bitmask_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_bitmask_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_bitmask_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_block_allocator_block_t
+        public partial struct ecs_block_allocator_block_t : System.IEquatable<ecs_block_allocator_block_t>
         {
             public void* memory;
 
             public ecs_block_allocator_block_t* next;
+
+            public bool Equals(ecs_block_allocator_block_t other)
+            {
+                fixed (ecs_block_allocator_block_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_block_allocator_block_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_block_allocator_block_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_block_allocator_block_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_block_allocator_block_t left, ecs_block_allocator_block_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_block_allocator_block_t left, ecs_block_allocator_block_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_block_allocator_block_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_block_allocator_block_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_block_allocator_chunk_header_t
+        public partial struct ecs_block_allocator_chunk_header_t : System.IEquatable<ecs_block_allocator_chunk_header_t>
         {
             public ecs_block_allocator_chunk_header_t* next;
+
+            public bool Equals(ecs_block_allocator_chunk_header_t other)
+            {
+                fixed (ecs_block_allocator_chunk_header_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_block_allocator_chunk_header_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_block_allocator_chunk_header_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_block_allocator_chunk_header_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_block_allocator_chunk_header_t left, ecs_block_allocator_chunk_header_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_block_allocator_chunk_header_t left, ecs_block_allocator_chunk_header_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_block_allocator_chunk_header_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_block_allocator_chunk_header_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_block_allocator_t
+        public partial struct ecs_block_allocator_t : System.IEquatable<ecs_block_allocator_t>
         {
             public ecs_block_allocator_chunk_header_t* head;
 
@@ -2122,23 +2529,134 @@ namespace Flecs.NET.Bindings
             public int block_size;
 
             public int alloc_count;
+
+            public bool Equals(ecs_block_allocator_t other)
+            {
+                fixed (ecs_block_allocator_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_block_allocator_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_block_allocator_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_block_allocator_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_block_allocator_t left, ecs_block_allocator_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_block_allocator_t left, ecs_block_allocator_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_block_allocator_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_block_allocator_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_bucket_entry_t
+        public partial struct ecs_bucket_entry_t : System.IEquatable<ecs_bucket_entry_t>
         {
             public ulong key;
 
             public ulong value;
 
             public ecs_bucket_entry_t* next;
+
+            public bool Equals(ecs_bucket_entry_t other)
+            {
+                fixed (ecs_bucket_entry_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_bucket_entry_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_bucket_entry_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_bucket_entry_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_bucket_entry_t left, ecs_bucket_entry_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_bucket_entry_t left, ecs_bucket_entry_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_bucket_entry_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_bucket_entry_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_bucket_t
+        public partial struct ecs_bucket_t : System.IEquatable<ecs_bucket_t>
         {
             public ecs_bucket_entry_t* first;
+
+            public bool Equals(ecs_bucket_t other)
+            {
+                fixed (ecs_bucket_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_bucket_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_bucket_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_bucket_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_bucket_t left, ecs_bucket_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_bucket_t left, ecs_bucket_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_bucket_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_bucket_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_bulk_desc_t
+        public partial struct ecs_bulk_desc_t : System.IEquatable<ecs_bulk_desc_t>
         {
             public int _canary;
 
@@ -2151,29 +2669,176 @@ namespace Flecs.NET.Bindings
             public void** data;
 
             public ecs_table_t* table;
+
+            public bool Equals(ecs_bulk_desc_t other)
+            {
+                fixed (ecs_bulk_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_bulk_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_bulk_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_bulk_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_bulk_desc_t left, ecs_bulk_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_bulk_desc_t left, ecs_bulk_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_bulk_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_bulk_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_component_desc_t
+        public partial struct ecs_component_desc_t : System.IEquatable<ecs_component_desc_t>
         {
             public int _canary;
 
             public ulong entity;
 
             public ecs_type_info_t type;
+
+            public bool Equals(ecs_component_desc_t other)
+            {
+                fixed (ecs_component_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_component_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_component_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_component_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_component_desc_t left, ecs_component_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_component_desc_t left, ecs_component_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_component_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_component_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_counter_t
+        public partial struct ecs_counter_t : System.IEquatable<ecs_counter_t>
         {
             public ecs_gauge_t rate;
 
             public fixed double value[60];
+
+            public bool Equals(ecs_counter_t other)
+            {
+                fixed (ecs_counter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_counter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_counter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_counter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_counter_t left, ecs_counter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_counter_t left, ecs_counter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_counter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_counter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_data_t
+        public partial struct ecs_data_t : System.IEquatable<ecs_data_t>
         {
+            public bool Equals(ecs_data_t other)
+            {
+                fixed (ecs_data_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_data_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_data_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_data_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_data_t left, ecs_data_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_data_t left, ecs_data_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_data_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_data_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_entity_desc_t
+        public partial struct ecs_entity_desc_t : System.IEquatable<ecs_entity_desc_t>
         {
             public int _canary;
 
@@ -2192,9 +2857,46 @@ namespace Flecs.NET.Bindings
             public fixed ulong add[32];
 
             public byte* add_expr;
+
+            public bool Equals(ecs_entity_desc_t other)
+            {
+                fixed (ecs_entity_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_entity_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_entity_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_entity_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_entity_desc_t left, ecs_entity_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_entity_desc_t left, ecs_entity_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_entity_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_entity_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_entity_to_json_desc_t
+        public partial struct ecs_entity_to_json_desc_t : System.IEquatable<ecs_entity_to_json_desc_t>
         {
             public byte serialize_path;
 
@@ -2225,24 +2927,98 @@ namespace Flecs.NET.Bindings
             public ulong serialize_refs;
 
             public byte serialize_matches;
+
+            public bool Equals(ecs_entity_to_json_desc_t other)
+            {
+                fixed (ecs_entity_to_json_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_entity_to_json_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_entity_to_json_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_entity_to_json_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_entity_to_json_desc_t left, ecs_entity_to_json_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_entity_to_json_desc_t left, ecs_entity_to_json_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_entity_to_json_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_entity_to_json_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_enum_constant_t
+        public partial struct ecs_enum_constant_t : System.IEquatable<ecs_enum_constant_t>
         {
             public byte* name;
 
             public int value;
 
             public ulong constant;
+
+            public bool Equals(ecs_enum_constant_t other)
+            {
+                fixed (ecs_enum_constant_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_enum_constant_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_enum_constant_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_enum_constant_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_enum_constant_t left, ecs_enum_constant_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_enum_constant_t left, ecs_enum_constant_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_enum_constant_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_enum_constant_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_enum_desc_t
+        public partial struct ecs_enum_desc_t : System.IEquatable<ecs_enum_desc_t>
         {
             public ulong entity;
 
             public constants_FixedBuffer constants;
 
-            public partial struct constants_FixedBuffer
+            public partial struct constants_FixedBuffer : System.IEquatable<constants_FixedBuffer>
             {
                 public ecs_enum_constant_t Item0;
 
@@ -2312,10 +3088,84 @@ namespace Flecs.NET.Bindings
 
                 [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
                 public System.Span<ecs_enum_constant_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
+
+                public bool Equals(constants_FixedBuffer other)
+                {
+                    fixed (constants_FixedBuffer* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(constants_FixedBuffer)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(constants_FixedBuffer)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is constants_FixedBuffer other && Equals(other);
+                }
+
+                public static bool operator ==(constants_FixedBuffer left, constants_FixedBuffer right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(constants_FixedBuffer left, constants_FixedBuffer right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (constants_FixedBuffer* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(constants_FixedBuffer)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_enum_desc_t other)
+            {
+                fixed (ecs_enum_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_enum_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_enum_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_enum_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_enum_desc_t left, ecs_enum_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_enum_desc_t left, ecs_enum_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_enum_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_enum_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_event_desc_t
+        public partial struct ecs_event_desc_t : System.IEquatable<ecs_event_desc_t>
         {
             public ulong @event;
 
@@ -2336,9 +3186,46 @@ namespace Flecs.NET.Bindings
             public void* observable;
 
             public uint flags;
+
+            public bool Equals(ecs_event_desc_t other)
+            {
+                fixed (ecs_event_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_event_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_event_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_event_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_event_desc_t left, ecs_event_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_event_desc_t left, ecs_event_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_event_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_event_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_event_record_t
+        public partial struct ecs_event_record_t : System.IEquatable<ecs_event_record_t>
         {
             public ecs_event_id_record_t* any;
 
@@ -2350,30 +3237,177 @@ namespace Flecs.NET.Bindings
 
             public ulong @event;
 
-            public partial struct ecs_event_id_record_t
+            public partial struct ecs_event_id_record_t : System.IEquatable<ecs_event_id_record_t>
             {
+                public bool Equals(ecs_event_id_record_t other)
+                {
+                    fixed (ecs_event_id_record_t* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_event_id_record_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_event_id_record_t)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is ecs_event_id_record_t other && Equals(other);
+                }
+
+                public static bool operator ==(ecs_event_id_record_t left, ecs_event_id_record_t right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(ecs_event_id_record_t left, ecs_event_id_record_t right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (ecs_event_id_record_t* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_event_id_record_t)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_event_record_t other)
+            {
+                fixed (ecs_event_record_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_event_record_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_event_record_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_event_record_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_event_record_t left, ecs_event_record_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_event_record_t left, ecs_event_record_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_event_record_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_event_record_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_expr_var_scope_t
+        public partial struct ecs_expr_var_scope_t : System.IEquatable<ecs_expr_var_scope_t>
         {
             public ecs_hashmap_t var_index;
 
             public ecs_vec_t vars;
 
             public ecs_expr_var_scope_t* parent;
+
+            public bool Equals(ecs_expr_var_scope_t other)
+            {
+                fixed (ecs_expr_var_scope_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_expr_var_scope_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_expr_var_scope_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_expr_var_scope_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_expr_var_scope_t left, ecs_expr_var_scope_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_expr_var_scope_t left, ecs_expr_var_scope_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_expr_var_scope_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_expr_var_scope_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_expr_var_t
+        public partial struct ecs_expr_var_t : System.IEquatable<ecs_expr_var_t>
         {
             public byte* name;
 
             public ecs_value_t value;
 
             public byte owned;
+
+            public bool Equals(ecs_expr_var_t other)
+            {
+                fixed (ecs_expr_var_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_expr_var_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_expr_var_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_expr_var_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_expr_var_t left, ecs_expr_var_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_expr_var_t left, ecs_expr_var_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_expr_var_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_expr_var_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_filter_desc_t
+        public partial struct ecs_filter_desc_t : System.IEquatable<ecs_filter_desc_t>
         {
             public int _canary;
 
@@ -2393,7 +3427,7 @@ namespace Flecs.NET.Bindings
 
             public ulong entity;
 
-            public partial struct terms_FixedBuffer
+            public partial struct terms_FixedBuffer : System.IEquatable<terms_FixedBuffer>
             {
                 public ecs_term_t Item0;
 
@@ -2431,10 +3465,84 @@ namespace Flecs.NET.Bindings
 
                 [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
                 public System.Span<ecs_term_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 16);
+
+                public bool Equals(terms_FixedBuffer other)
+                {
+                    fixed (terms_FixedBuffer* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(terms_FixedBuffer)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(terms_FixedBuffer)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is terms_FixedBuffer other && Equals(other);
+                }
+
+                public static bool operator ==(terms_FixedBuffer left, terms_FixedBuffer right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(terms_FixedBuffer left, terms_FixedBuffer right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (terms_FixedBuffer* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(terms_FixedBuffer)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_filter_desc_t other)
+            {
+                fixed (ecs_filter_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_filter_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_filter_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_filter_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_filter_desc_t left, ecs_filter_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_filter_desc_t left, ecs_filter_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_filter_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_filter_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_filter_iter_t
+        public partial struct ecs_filter_iter_t : System.IEquatable<ecs_filter_iter_t>
         {
             public ecs_filter_t* filter;
 
@@ -2445,9 +3553,46 @@ namespace Flecs.NET.Bindings
             public int matches_left;
 
             public int pivot_term;
+
+            public bool Equals(ecs_filter_iter_t other)
+            {
+                fixed (ecs_filter_iter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_filter_iter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_filter_iter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_filter_iter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_filter_iter_t left, ecs_filter_iter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_filter_iter_t left, ecs_filter_iter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_filter_iter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_filter_iter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_filter_t
+        public partial struct ecs_filter_t : System.IEquatable<ecs_filter_t>
         {
             public ecs_header_t hdr;
 
@@ -2475,7 +3620,7 @@ namespace Flecs.NET.Bindings
 
             public ecs_world_t* world;
 
-            public partial struct variable_names_FixedBuffer
+            public partial struct variable_names_FixedBuffer : System.IEquatable<variable_names_FixedBuffer>
             {
                 public byte* Item0;
 
@@ -2490,17 +3635,128 @@ namespace Flecs.NET.Bindings
                             return ref pThis[index];
                     }
                 }
+
+                public bool Equals(variable_names_FixedBuffer other)
+                {
+                    fixed (variable_names_FixedBuffer* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(variable_names_FixedBuffer)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(variable_names_FixedBuffer)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is variable_names_FixedBuffer other && Equals(other);
+                }
+
+                public static bool operator ==(variable_names_FixedBuffer left, variable_names_FixedBuffer right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(variable_names_FixedBuffer left, variable_names_FixedBuffer right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (variable_names_FixedBuffer* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(variable_names_FixedBuffer)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_filter_t other)
+            {
+                fixed (ecs_filter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_filter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_filter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_filter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_filter_t left, ecs_filter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_filter_t left, ecs_filter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_filter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_filter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_flatten_desc_t
+        public partial struct ecs_flatten_desc_t : System.IEquatable<ecs_flatten_desc_t>
         {
             public byte keep_names;
 
             public byte lose_depth;
+
+            public bool Equals(ecs_flatten_desc_t other)
+            {
+                fixed (ecs_flatten_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_flatten_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_flatten_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_flatten_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_flatten_desc_t left, ecs_flatten_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_flatten_desc_t left, ecs_flatten_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_flatten_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_flatten_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_from_json_desc_t
+        public partial struct ecs_from_json_desc_t : System.IEquatable<ecs_from_json_desc_t>
         {
             public byte* name;
 
@@ -2509,18 +3765,92 @@ namespace Flecs.NET.Bindings
             public System.IntPtr lookup_action; // delegate* unmanaged<ecs_world_t*, byte*, void*, ulong>
 
             public void* lookup_ctx;
+
+            public bool Equals(ecs_from_json_desc_t other)
+            {
+                fixed (ecs_from_json_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_from_json_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_from_json_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_from_json_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_from_json_desc_t left, ecs_from_json_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_from_json_desc_t left, ecs_from_json_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_from_json_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_from_json_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_gauge_t
+        public partial struct ecs_gauge_t : System.IEquatable<ecs_gauge_t>
         {
             public fixed float avg[60];
 
             public fixed float min[60];
 
             public fixed float max[60];
+
+            public bool Equals(ecs_gauge_t other)
+            {
+                fixed (ecs_gauge_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_gauge_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_gauge_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_gauge_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_gauge_t left, ecs_gauge_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_gauge_t left, ecs_gauge_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_gauge_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_gauge_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_hashmap_t
+        public partial struct ecs_hashmap_t : System.IEquatable<ecs_hashmap_t>
         {
             public System.IntPtr hash; // delegate* unmanaged<void*, ulong>
 
@@ -2535,25 +3865,136 @@ namespace Flecs.NET.Bindings
             public ecs_block_allocator_t bucket_allocator;
 
             public ecs_map_t impl;
+
+            public bool Equals(ecs_hashmap_t other)
+            {
+                fixed (ecs_hashmap_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_hashmap_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_hashmap_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_hashmap_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_hashmap_t left, ecs_hashmap_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_hashmap_t left, ecs_hashmap_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_hashmap_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_hashmap_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_header_t
+        public partial struct ecs_header_t : System.IEquatable<ecs_header_t>
         {
             public int magic;
 
             public int type;
 
             public ecs_mixins_t* mixins;
+
+            public bool Equals(ecs_header_t other)
+            {
+                fixed (ecs_header_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_header_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_header_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_header_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_header_t left, ecs_header_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_header_t left, ecs_header_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_header_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_header_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_hm_bucket_t
+        public partial struct ecs_hm_bucket_t : System.IEquatable<ecs_hm_bucket_t>
         {
             public ecs_vec_t keys;
 
             public ecs_vec_t values;
+
+            public bool Equals(ecs_hm_bucket_t other)
+            {
+                fixed (ecs_hm_bucket_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_hm_bucket_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_hm_bucket_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_hm_bucket_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_hm_bucket_t left, ecs_hm_bucket_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_hm_bucket_t left, ecs_hm_bucket_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_hm_bucket_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_hm_bucket_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_http_connection_t
+        public partial struct ecs_http_connection_t : System.IEquatable<ecs_http_connection_t>
         {
             public ulong id;
 
@@ -2562,16 +4003,90 @@ namespace Flecs.NET.Bindings
             public fixed byte host[128];
 
             public fixed byte port[16];
+
+            public bool Equals(ecs_http_connection_t other)
+            {
+                fixed (ecs_http_connection_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_http_connection_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_http_connection_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_http_connection_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_http_connection_t left, ecs_http_connection_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_http_connection_t left, ecs_http_connection_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_http_connection_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_http_connection_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_http_key_value_t
+        public partial struct ecs_http_key_value_t : System.IEquatable<ecs_http_key_value_t>
         {
             public byte* key;
 
             public byte* value;
+
+            public bool Equals(ecs_http_key_value_t other)
+            {
+                fixed (ecs_http_key_value_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_http_key_value_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_http_key_value_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_http_key_value_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_http_key_value_t left, ecs_http_key_value_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_http_key_value_t left, ecs_http_key_value_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_http_key_value_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_http_key_value_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_http_reply_t
+        public partial struct ecs_http_reply_t : System.IEquatable<ecs_http_reply_t>
         {
             public int code;
 
@@ -2582,9 +4097,46 @@ namespace Flecs.NET.Bindings
             public byte* content_type;
 
             public ecs_strbuf_t headers;
+
+            public bool Equals(ecs_http_reply_t other)
+            {
+                fixed (ecs_http_reply_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_http_reply_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_http_reply_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_http_reply_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_http_reply_t left, ecs_http_reply_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_http_reply_t left, ecs_http_reply_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_http_reply_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_http_reply_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_http_request_t
+        public partial struct ecs_http_request_t : System.IEquatable<ecs_http_request_t>
         {
             public ulong id;
 
@@ -2604,7 +4156,7 @@ namespace Flecs.NET.Bindings
 
             public ecs_http_connection_t* conn;
 
-            public partial struct headers_FixedBuffer
+            public partial struct headers_FixedBuffer : System.IEquatable<headers_FixedBuffer>
             {
                 public ecs_http_key_value_t Item0;
 
@@ -2674,9 +4226,46 @@ namespace Flecs.NET.Bindings
 
                 [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
                 public System.Span<ecs_http_key_value_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
+
+                public bool Equals(headers_FixedBuffer other)
+                {
+                    fixed (headers_FixedBuffer* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(headers_FixedBuffer)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(headers_FixedBuffer)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is headers_FixedBuffer other && Equals(other);
+                }
+
+                public static bool operator ==(headers_FixedBuffer left, headers_FixedBuffer right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(headers_FixedBuffer left, headers_FixedBuffer right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (headers_FixedBuffer* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(headers_FixedBuffer)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
             }
 
-            public partial struct @params_FixedBuffer
+            public partial struct @params_FixedBuffer : System.IEquatable<@params_FixedBuffer>
             {
                 public ecs_http_key_value_t Item0;
 
@@ -2746,10 +4335,84 @@ namespace Flecs.NET.Bindings
 
                 [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
                 public System.Span<ecs_http_key_value_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
+
+                public bool Equals(@params_FixedBuffer other)
+                {
+                    fixed (@params_FixedBuffer* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(@params_FixedBuffer)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(@params_FixedBuffer)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is @params_FixedBuffer other && Equals(other);
+                }
+
+                public static bool operator ==(@params_FixedBuffer left, @params_FixedBuffer right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(@params_FixedBuffer left, @params_FixedBuffer right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (@params_FixedBuffer* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(@params_FixedBuffer)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_http_request_t other)
+            {
+                fixed (ecs_http_request_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_http_request_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_http_request_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_http_request_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_http_request_t left, ecs_http_request_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_http_request_t left, ecs_http_request_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_http_request_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_http_request_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_http_server_desc_t
+        public partial struct ecs_http_server_desc_t : System.IEquatable<ecs_http_server_desc_t>
         {
             public System.IntPtr callback; // delegate* unmanaged<ecs_http_request_t*, ecs_http_reply_t*, void*, byte>
 
@@ -2760,26 +4423,172 @@ namespace Flecs.NET.Bindings
             public byte* ipaddr;
 
             public int send_queue_wait_ms;
+
+            public bool Equals(ecs_http_server_desc_t other)
+            {
+                fixed (ecs_http_server_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_http_server_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_http_server_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_http_server_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_http_server_desc_t left, ecs_http_server_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_http_server_desc_t left, ecs_http_server_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_http_server_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_http_server_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_http_server_t
+        public partial struct ecs_http_server_t : System.IEquatable<ecs_http_server_t>
         {
+            public bool Equals(ecs_http_server_t other)
+            {
+                fixed (ecs_http_server_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_http_server_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_http_server_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_http_server_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_http_server_t left, ecs_http_server_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_http_server_t left, ecs_http_server_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_http_server_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_http_server_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_id_record_t
+        public partial struct ecs_id_record_t : System.IEquatable<ecs_id_record_t>
         {
+            public bool Equals(ecs_id_record_t other)
+            {
+                fixed (ecs_id_record_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_id_record_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_id_record_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_id_record_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_id_record_t left, ecs_id_record_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_id_record_t left, ecs_id_record_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_id_record_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_id_record_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_iter_cache_t
+        public partial struct ecs_iter_cache_t : System.IEquatable<ecs_iter_cache_t>
         {
             public ecs_stack_cursor_t* stack_cursor;
 
             public byte used;
 
             public byte allocated;
+
+            public bool Equals(ecs_iter_cache_t other)
+            {
+                fixed (ecs_iter_cache_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_iter_cache_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_iter_cache_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_iter_cache_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_iter_cache_t left, ecs_iter_cache_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_iter_cache_t left, ecs_iter_cache_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_iter_cache_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_iter_cache_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_iter_private_t
+        public partial struct ecs_iter_private_t : System.IEquatable<ecs_iter_private_t>
         {
             public iter_AnonymousRecord iter;
 
@@ -2788,7 +4597,7 @@ namespace Flecs.NET.Bindings
             public ecs_iter_cache_t cache;
 
             [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Explicit)]
-            public partial struct iter_AnonymousRecord
+            public partial struct iter_AnonymousRecord : System.IEquatable<iter_AnonymousRecord>
             {
                 [System.Runtime.InteropServices.FieldOffset(0)]
                 public ecs_term_iter_t term;
@@ -2810,10 +4619,84 @@ namespace Flecs.NET.Bindings
 
                 [System.Runtime.InteropServices.FieldOffset(0)]
                 public ecs_worker_iter_t worker;
+
+                public bool Equals(iter_AnonymousRecord other)
+                {
+                    fixed (iter_AnonymousRecord* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(iter_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(iter_AnonymousRecord)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is iter_AnonymousRecord other && Equals(other);
+                }
+
+                public static bool operator ==(iter_AnonymousRecord left, iter_AnonymousRecord right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(iter_AnonymousRecord left, iter_AnonymousRecord right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (iter_AnonymousRecord* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(iter_AnonymousRecord)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_iter_private_t other)
+            {
+                fixed (ecs_iter_private_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_iter_private_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_iter_private_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_iter_private_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_iter_private_t left, ecs_iter_private_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_iter_private_t left, ecs_iter_private_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_iter_private_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_iter_private_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_iter_t
+        public partial struct ecs_iter_t : System.IEquatable<ecs_iter_t>
         {
             public ecs_world_t* world;
 
@@ -2896,9 +4779,46 @@ namespace Flecs.NET.Bindings
             public System.IntPtr fini; // delegate* unmanaged<ecs_iter_t*, void>
 
             public ecs_iter_t* chain_it;
+
+            public bool Equals(ecs_iter_t other)
+            {
+                fixed (ecs_iter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_iter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_iter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_iter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_iter_t left, ecs_iter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_iter_t left, ecs_iter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_iter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_iter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_iter_to_json_desc_t
+        public partial struct ecs_iter_to_json_desc_t : System.IEquatable<ecs_iter_to_json_desc_t>
         {
             public byte serialize_term_ids;
 
@@ -2937,14 +4857,88 @@ namespace Flecs.NET.Bindings
             public byte serialize_type_info;
 
             public byte serialize_table;
+
+            public bool Equals(ecs_iter_to_json_desc_t other)
+            {
+                fixed (ecs_iter_to_json_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_iter_to_json_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_iter_to_json_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_iter_to_json_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_iter_to_json_desc_t left, ecs_iter_to_json_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_iter_to_json_desc_t left, ecs_iter_to_json_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_iter_to_json_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_iter_to_json_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_iterable_t
+        public partial struct ecs_iterable_t : System.IEquatable<ecs_iterable_t>
         {
             public System.IntPtr init; // delegate* unmanaged<ecs_world_t*, void*, ecs_iter_t*, ecs_term_t*, void>
+
+            public bool Equals(ecs_iterable_t other)
+            {
+                fixed (ecs_iterable_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_iterable_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_iterable_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_iterable_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_iterable_t left, ecs_iterable_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_iterable_t left, ecs_iterable_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_iterable_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_iterable_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_map_iter_t
+        public partial struct ecs_map_iter_t : System.IEquatable<ecs_map_iter_t>
         {
             public ecs_map_t* map;
 
@@ -2953,16 +4947,90 @@ namespace Flecs.NET.Bindings
             public ecs_bucket_entry_t* entry;
 
             public ulong* res;
+
+            public bool Equals(ecs_map_iter_t other)
+            {
+                fixed (ecs_map_iter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_map_iter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_map_iter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_map_iter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_map_iter_t left, ecs_map_iter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_map_iter_t left, ecs_map_iter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_map_iter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_map_iter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_map_params_t
+        public partial struct ecs_map_params_t : System.IEquatable<ecs_map_params_t>
         {
             public ecs_allocator_t* allocator;
 
             public ecs_block_allocator_t entry_allocator;
+
+            public bool Equals(ecs_map_params_t other)
+            {
+                fixed (ecs_map_params_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_map_params_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_map_params_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_map_params_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_map_params_t left, ecs_map_params_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_map_params_t left, ecs_map_params_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_map_params_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_map_params_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_map_t
+        public partial struct ecs_map_t : System.IEquatable<ecs_map_t>
         {
             public byte bucket_shift;
 
@@ -2977,9 +5045,46 @@ namespace Flecs.NET.Bindings
             public ecs_block_allocator_t* entry_allocator;
 
             public ecs_allocator_t* allocator;
+
+            public bool Equals(ecs_map_t other)
+            {
+                fixed (ecs_map_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_map_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_map_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_map_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_map_t left, ecs_map_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_map_t left, ecs_map_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_map_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_map_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_member_t
+        public partial struct ecs_member_t : System.IEquatable<ecs_member_t>
         {
             public byte* name;
 
@@ -3000,16 +5105,90 @@ namespace Flecs.NET.Bindings
             public int size;
 
             public ulong member;
+
+            public bool Equals(ecs_member_t other)
+            {
+                fixed (ecs_member_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_member_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_member_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_member_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_member_t left, ecs_member_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_member_t left, ecs_member_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_member_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_member_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_member_value_range_t
+        public partial struct ecs_member_value_range_t : System.IEquatable<ecs_member_value_range_t>
         {
             public double min;
 
             public double max;
+
+            public bool Equals(ecs_member_value_range_t other)
+            {
+                fixed (ecs_member_value_range_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_member_value_range_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_member_value_range_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_member_value_range_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_member_value_range_t left, ecs_member_value_range_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_member_value_range_t left, ecs_member_value_range_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_member_value_range_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_member_value_range_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_meta_cursor_t
+        public partial struct ecs_meta_cursor_t : System.IEquatable<ecs_meta_cursor_t>
         {
             public ecs_world_t* world;
 
@@ -3025,7 +5204,7 @@ namespace Flecs.NET.Bindings
 
             public void* lookup_ctx;
 
-            public partial struct scope_FixedBuffer
+            public partial struct scope_FixedBuffer : System.IEquatable<scope_FixedBuffer>
             {
                 public ecs_meta_scope_t Item0;
 
@@ -3095,10 +5274,84 @@ namespace Flecs.NET.Bindings
 
                 [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
                 public System.Span<ecs_meta_scope_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
+
+                public bool Equals(scope_FixedBuffer other)
+                {
+                    fixed (scope_FixedBuffer* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(scope_FixedBuffer)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(scope_FixedBuffer)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is scope_FixedBuffer other && Equals(other);
+                }
+
+                public static bool operator ==(scope_FixedBuffer left, scope_FixedBuffer right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(scope_FixedBuffer left, scope_FixedBuffer right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (scope_FixedBuffer* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(scope_FixedBuffer)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_meta_cursor_t other)
+            {
+                fixed (ecs_meta_cursor_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_meta_cursor_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_meta_cursor_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_meta_cursor_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_meta_cursor_t left, ecs_meta_cursor_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_meta_cursor_t left, ecs_meta_cursor_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_meta_cursor_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_meta_cursor_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_meta_scope_t
+        public partial struct ecs_meta_scope_t : System.IEquatable<ecs_meta_scope_t>
         {
             public ulong type;
 
@@ -3127,9 +5380,46 @@ namespace Flecs.NET.Bindings
             public byte is_inline_array;
 
             public byte is_empty_scope;
+
+            public bool Equals(ecs_meta_scope_t other)
+            {
+                fixed (ecs_meta_scope_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_meta_scope_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_meta_scope_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_meta_scope_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_meta_scope_t left, ecs_meta_scope_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_meta_scope_t left, ecs_meta_scope_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_meta_scope_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_meta_scope_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_meta_type_op_t
+        public partial struct ecs_meta_type_op_t : System.IEquatable<ecs_meta_type_op_t>
         {
             public ecs_meta_type_op_kind_t kind;
 
@@ -3148,9 +5438,46 @@ namespace Flecs.NET.Bindings
             public int member_index;
 
             public ecs_hashmap_t* members;
+
+            public bool Equals(ecs_meta_type_op_t other)
+            {
+                fixed (ecs_meta_type_op_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_meta_type_op_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_meta_type_op_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_meta_type_op_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_meta_type_op_t left, ecs_meta_type_op_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_meta_type_op_t left, ecs_meta_type_op_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_meta_type_op_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_meta_type_op_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_metric_desc_t
+        public partial struct ecs_metric_desc_t : System.IEquatable<ecs_metric_desc_t>
         {
             public int _canary;
 
@@ -3167,23 +5494,133 @@ namespace Flecs.NET.Bindings
             public ulong kind;
 
             public byte* brief;
+
+            public bool Equals(ecs_metric_desc_t other)
+            {
+                fixed (ecs_metric_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_metric_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_metric_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_metric_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_metric_desc_t left, ecs_metric_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_metric_desc_t left, ecs_metric_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_metric_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_metric_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
         [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Explicit)]
-        public partial struct ecs_metric_t
+        public partial struct ecs_metric_t : System.IEquatable<ecs_metric_t>
         {
             [System.Runtime.InteropServices.FieldOffset(0)]
             public ecs_gauge_t gauge;
 
             [System.Runtime.InteropServices.FieldOffset(0)]
             public ecs_counter_t counter;
+
+            public bool Equals(ecs_metric_t other)
+            {
+                fixed (ecs_metric_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_metric_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_metric_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_metric_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_metric_t left, ecs_metric_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_metric_t left, ecs_metric_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_metric_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_metric_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_mixins_t
+        public partial struct ecs_mixins_t : System.IEquatable<ecs_mixins_t>
         {
+            public bool Equals(ecs_mixins_t other)
+            {
+                fixed (ecs_mixins_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_mixins_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_mixins_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_mixins_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_mixins_t left, ecs_mixins_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_mixins_t left, ecs_mixins_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_mixins_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_mixins_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_observable_t
+        public partial struct ecs_observable_t : System.IEquatable<ecs_observable_t>
         {
             public ecs_event_record_t on_add;
 
@@ -3196,9 +5633,46 @@ namespace Flecs.NET.Bindings
             public ecs_event_record_t on_wildcard;
 
             public ecs_sparse_t events;
+
+            public bool Equals(ecs_observable_t other)
+            {
+                fixed (ecs_observable_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_observable_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_observable_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_observable_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_observable_t left, ecs_observable_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_observable_t left, ecs_observable_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_observable_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_observable_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_observer_desc_t
+        public partial struct ecs_observer_desc_t : System.IEquatable<ecs_observer_desc_t>
         {
             public int _canary;
 
@@ -3227,9 +5701,46 @@ namespace Flecs.NET.Bindings
             public int* last_event_id;
 
             public int term_index;
+
+            public bool Equals(ecs_observer_desc_t other)
+            {
+                fixed (ecs_observer_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_observer_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_observer_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_observer_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_observer_desc_t left, ecs_observer_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_observer_desc_t left, ecs_observer_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_observer_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_observer_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_observer_t
+        public partial struct ecs_observer_t : System.IEquatable<ecs_observer_t>
         {
             public ecs_header_t hdr;
 
@@ -3266,16 +5777,90 @@ namespace Flecs.NET.Bindings
             public byte is_multi;
 
             public System.IntPtr dtor; // delegate* unmanaged<void*, void>
+
+            public bool Equals(ecs_observer_t other)
+            {
+                fixed (ecs_observer_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_observer_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_observer_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_observer_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_observer_t left, ecs_observer_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_observer_t left, ecs_observer_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_observer_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_observer_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_opaque_desc_t
+        public partial struct ecs_opaque_desc_t : System.IEquatable<ecs_opaque_desc_t>
         {
             public ulong entity;
 
             public EcsOpaque type;
+
+            public bool Equals(ecs_opaque_desc_t other)
+            {
+                fixed (ecs_opaque_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_opaque_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_opaque_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_opaque_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_opaque_desc_t left, ecs_opaque_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_opaque_desc_t left, ecs_opaque_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_opaque_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_opaque_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_os_api_t
+        public partial struct ecs_os_api_t : System.IEquatable<ecs_os_api_t>
         {
             public System.IntPtr init_; // delegate* unmanaged<void>
 
@@ -3356,18 +5941,92 @@ namespace Flecs.NET.Bindings
             public long log_last_timestamp_;
 
             public uint flags_;
+
+            public bool Equals(ecs_os_api_t other)
+            {
+                fixed (ecs_os_api_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_os_api_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_os_api_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_os_api_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_os_api_t left, ecs_os_api_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_os_api_t left, ecs_os_api_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_os_api_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_os_api_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_page_iter_t
+        public partial struct ecs_page_iter_t : System.IEquatable<ecs_page_iter_t>
         {
             public int offset;
 
             public int limit;
 
             public int remaining;
+
+            public bool Equals(ecs_page_iter_t other)
+            {
+                fixed (ecs_page_iter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_page_iter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_page_iter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_page_iter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_page_iter_t left, ecs_page_iter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_page_iter_t left, ecs_page_iter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_page_iter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_page_iter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_parse_expr_desc_t
+        public partial struct ecs_parse_expr_desc_t : System.IEquatable<ecs_parse_expr_desc_t>
         {
             public byte* name;
 
@@ -3378,16 +6037,90 @@ namespace Flecs.NET.Bindings
             public void* lookup_ctx;
 
             public ecs_vars_t* vars;
+
+            public bool Equals(ecs_parse_expr_desc_t other)
+            {
+                fixed (ecs_parse_expr_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_parse_expr_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_parse_expr_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_parse_expr_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_parse_expr_desc_t left, ecs_parse_expr_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_parse_expr_desc_t left, ecs_parse_expr_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_parse_expr_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_parse_expr_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_pipeline_desc_t
+        public partial struct ecs_pipeline_desc_t : System.IEquatable<ecs_pipeline_desc_t>
         {
             public ulong entity;
 
             public ecs_query_desc_t query;
+
+            public bool Equals(ecs_pipeline_desc_t other)
+            {
+                fixed (ecs_pipeline_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_pipeline_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_pipeline_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_pipeline_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_pipeline_desc_t left, ecs_pipeline_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_pipeline_desc_t left, ecs_pipeline_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_pipeline_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_pipeline_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_pipeline_stats_t
+        public partial struct ecs_pipeline_stats_t : System.IEquatable<ecs_pipeline_stats_t>
         {
             public byte canary_;
 
@@ -3404,16 +6137,90 @@ namespace Flecs.NET.Bindings
             public int active_system_count;
 
             public int rebuild_count;
+
+            public bool Equals(ecs_pipeline_stats_t other)
+            {
+                fixed (ecs_pipeline_stats_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_pipeline_stats_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_pipeline_stats_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_pipeline_stats_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_pipeline_stats_t left, ecs_pipeline_stats_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_pipeline_stats_t left, ecs_pipeline_stats_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_pipeline_stats_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_pipeline_stats_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_primitive_desc_t
+        public partial struct ecs_primitive_desc_t : System.IEquatable<ecs_primitive_desc_t>
         {
             public ulong entity;
 
             public ecs_primitive_kind_t kind;
+
+            public bool Equals(ecs_primitive_desc_t other)
+            {
+                fixed (ecs_primitive_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_primitive_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_primitive_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_primitive_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_primitive_desc_t left, ecs_primitive_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_primitive_desc_t left, ecs_primitive_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_primitive_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_primitive_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_query_desc_t
+        public partial struct ecs_query_desc_t : System.IEquatable<ecs_query_desc_t>
         {
             public int _canary;
 
@@ -3446,18 +6253,92 @@ namespace Flecs.NET.Bindings
             public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
 
             public System.IntPtr binding_ctx_free; // delegate* unmanaged<void*, void>
+
+            public bool Equals(ecs_query_desc_t other)
+            {
+                fixed (ecs_query_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_query_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_query_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_query_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_query_desc_t left, ecs_query_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_query_desc_t left, ecs_query_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_query_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_query_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_query_group_info_t
+        public partial struct ecs_query_group_info_t : System.IEquatable<ecs_query_group_info_t>
         {
             public int match_count;
 
             public int table_count;
 
             public void* ctx;
+
+            public bool Equals(ecs_query_group_info_t other)
+            {
+                fixed (ecs_query_group_info_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_query_group_info_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_query_group_info_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_query_group_info_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_query_group_info_t left, ecs_query_group_info_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_query_group_info_t left, ecs_query_group_info_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_query_group_info_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_query_group_info_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_query_iter_t
+        public partial struct ecs_query_iter_t : System.IEquatable<ecs_query_iter_t>
         {
             public ecs_query_t* query;
 
@@ -3474,9 +6355,46 @@ namespace Flecs.NET.Bindings
             public int bitset_first;
 
             public int skip_count;
+
+            public bool Equals(ecs_query_iter_t other)
+            {
+                fixed (ecs_query_iter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_query_iter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_query_iter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_query_iter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_query_iter_t left, ecs_query_iter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_query_iter_t left, ecs_query_iter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_query_iter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_query_iter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_query_stats_t
+        public partial struct ecs_query_stats_t : System.IEquatable<ecs_query_stats_t>
         {
             public long first_;
 
@@ -3489,17 +6407,126 @@ namespace Flecs.NET.Bindings
             public long last_;
 
             public int t;
+
+            public bool Equals(ecs_query_stats_t other)
+            {
+                fixed (ecs_query_stats_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_query_stats_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_query_stats_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_query_stats_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_query_stats_t left, ecs_query_stats_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_query_stats_t left, ecs_query_stats_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_query_stats_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_query_stats_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_query_t
+        public partial struct ecs_query_t : System.IEquatable<ecs_query_t>
         {
+            public bool Equals(ecs_query_t other)
+            {
+                fixed (ecs_query_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_query_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_query_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_query_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_query_t left, ecs_query_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_query_t left, ecs_query_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_query_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_query_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_query_table_match_t
+        public partial struct ecs_query_table_match_t : System.IEquatable<ecs_query_table_match_t>
         {
+            public bool Equals(ecs_query_table_match_t other)
+            {
+                fixed (ecs_query_table_match_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_query_table_match_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_query_table_match_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_query_table_match_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_query_table_match_t left, ecs_query_table_match_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_query_table_match_t left, ecs_query_table_match_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_query_table_match_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_query_table_match_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_record_t
+        public partial struct ecs_record_t : System.IEquatable<ecs_record_t>
         {
             public ecs_id_record_t* idr;
 
@@ -3508,9 +6535,46 @@ namespace Flecs.NET.Bindings
             public uint row;
 
             public int dense;
+
+            public bool Equals(ecs_record_t other)
+            {
+                fixed (ecs_record_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_record_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_record_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_record_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_record_t left, ecs_record_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_record_t left, ecs_record_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_record_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_record_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_ref_t
+        public partial struct ecs_ref_t : System.IEquatable<ecs_ref_t>
         {
             public ulong entity;
 
@@ -3519,9 +6583,46 @@ namespace Flecs.NET.Bindings
             public ecs_table_record_t* tr;
 
             public ecs_record_t* record;
+
+            public bool Equals(ecs_ref_t other)
+            {
+                fixed (ecs_ref_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_ref_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_ref_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_ref_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_ref_t left, ecs_ref_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_ref_t left, ecs_ref_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_ref_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_ref_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_rule_iter_t
+        public partial struct ecs_rule_iter_t : System.IEquatable<ecs_rule_iter_t>
         {
             public ecs_rule_t* rule;
 
@@ -3543,38 +6644,293 @@ namespace Flecs.NET.Bindings
 
             public short sp;
 
-            public partial struct ecs_rule_var_t
+            public partial struct ecs_rule_var_t : System.IEquatable<ecs_rule_var_t>
             {
+                public bool Equals(ecs_rule_var_t other)
+                {
+                    fixed (ecs_rule_var_t* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_rule_var_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_rule_var_t)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is ecs_rule_var_t other && Equals(other);
+                }
+
+                public static bool operator ==(ecs_rule_var_t left, ecs_rule_var_t right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(ecs_rule_var_t left, ecs_rule_var_t right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (ecs_rule_var_t* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_rule_var_t)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
             }
 
-            public partial struct ecs_rule_op_t
+            public partial struct ecs_rule_op_t : System.IEquatable<ecs_rule_op_t>
             {
+                public bool Equals(ecs_rule_op_t other)
+                {
+                    fixed (ecs_rule_op_t* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_rule_op_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_rule_op_t)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is ecs_rule_op_t other && Equals(other);
+                }
+
+                public static bool operator ==(ecs_rule_op_t left, ecs_rule_op_t right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(ecs_rule_op_t left, ecs_rule_op_t right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (ecs_rule_op_t* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_rule_op_t)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
             }
 
-            public partial struct ecs_rule_op_ctx_t
+            public partial struct ecs_rule_op_ctx_t : System.IEquatable<ecs_rule_op_ctx_t>
             {
+                public bool Equals(ecs_rule_op_ctx_t other)
+                {
+                    fixed (ecs_rule_op_ctx_t* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_rule_op_ctx_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_rule_op_ctx_t)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is ecs_rule_op_ctx_t other && Equals(other);
+                }
+
+                public static bool operator ==(ecs_rule_op_ctx_t left, ecs_rule_op_ctx_t right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(ecs_rule_op_ctx_t left, ecs_rule_op_ctx_t right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (ecs_rule_op_ctx_t* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_rule_op_ctx_t)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_rule_iter_t other)
+            {
+                fixed (ecs_rule_iter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_rule_iter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_rule_iter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_rule_iter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_rule_iter_t left, ecs_rule_iter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_rule_iter_t left, ecs_rule_iter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_rule_iter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_rule_iter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_rule_op_profile_t
+        public partial struct ecs_rule_op_profile_t : System.IEquatable<ecs_rule_op_profile_t>
         {
             public fixed int count[2];
+
+            public bool Equals(ecs_rule_op_profile_t other)
+            {
+                fixed (ecs_rule_op_profile_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_rule_op_profile_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_rule_op_profile_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_rule_op_profile_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_rule_op_profile_t left, ecs_rule_op_profile_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_rule_op_profile_t left, ecs_rule_op_profile_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_rule_op_profile_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_rule_op_profile_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_rule_t
+        public partial struct ecs_rule_t : System.IEquatable<ecs_rule_t>
         {
+            public bool Equals(ecs_rule_t other)
+            {
+                fixed (ecs_rule_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_rule_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_rule_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_rule_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_rule_t left, ecs_rule_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_rule_t left, ecs_rule_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_rule_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_rule_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_script_desc_t
+        public partial struct ecs_script_desc_t : System.IEquatable<ecs_script_desc_t>
         {
             public ulong entity;
 
             public byte* filename;
 
             public byte* str;
+
+            public bool Equals(ecs_script_desc_t other)
+            {
+                fixed (ecs_script_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_script_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_script_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_script_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_script_desc_t left, ecs_script_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_script_desc_t left, ecs_script_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_script_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_script_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_serializer_t
+        public partial struct ecs_serializer_t : System.IEquatable<ecs_serializer_t>
         {
             public System.IntPtr value; // delegate* unmanaged<ecs_serializer_t*, ulong, void*, int>
 
@@ -3583,22 +6939,132 @@ namespace Flecs.NET.Bindings
             public ecs_world_t* world;
 
             public void* ctx;
+
+            public bool Equals(ecs_serializer_t other)
+            {
+                fixed (ecs_serializer_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_serializer_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_serializer_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_serializer_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_serializer_t left, ecs_serializer_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_serializer_t left, ecs_serializer_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_serializer_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_serializer_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_snapshot_iter_t
+        public partial struct ecs_snapshot_iter_t : System.IEquatable<ecs_snapshot_iter_t>
         {
             public ecs_filter_t filter;
 
             public ecs_vec_t tables;
 
             public int index;
+
+            public bool Equals(ecs_snapshot_iter_t other)
+            {
+                fixed (ecs_snapshot_iter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_snapshot_iter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_snapshot_iter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_snapshot_iter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_snapshot_iter_t left, ecs_snapshot_iter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_snapshot_iter_t left, ecs_snapshot_iter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_snapshot_iter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_snapshot_iter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_snapshot_t
+        public partial struct ecs_snapshot_t : System.IEquatable<ecs_snapshot_t>
         {
+            public bool Equals(ecs_snapshot_t other)
+            {
+                fixed (ecs_snapshot_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_snapshot_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_snapshot_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_snapshot_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_snapshot_t left, ecs_snapshot_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_snapshot_t left, ecs_snapshot_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_snapshot_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_snapshot_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_sparse_t
+        public partial struct ecs_sparse_t : System.IEquatable<ecs_sparse_t>
         {
             public ecs_vec_t dense;
 
@@ -3614,7 +7080,7 @@ namespace Flecs.NET.Bindings
 
             public ecs_block_allocator_t* page_allocator;
 
-            public partial struct ecs_block_allocator_t
+            public partial struct ecs_block_allocator_t : System.IEquatable<ecs_block_allocator_t>
             {
                 public ecs_block_allocator_chunk_header_t* head;
 
@@ -3631,10 +7097,84 @@ namespace Flecs.NET.Bindings
                 public int block_size;
 
                 public int alloc_count;
+
+                public bool Equals(ecs_block_allocator_t other)
+                {
+                    fixed (ecs_block_allocator_t* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_block_allocator_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_block_allocator_t)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is ecs_block_allocator_t other && Equals(other);
+                }
+
+                public static bool operator ==(ecs_block_allocator_t left, ecs_block_allocator_t right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(ecs_block_allocator_t left, ecs_block_allocator_t right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (ecs_block_allocator_t* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_block_allocator_t)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_sparse_t other)
+            {
+                fixed (ecs_sparse_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_sparse_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_sparse_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_sparse_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_sparse_t left, ecs_sparse_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_sparse_t left, ecs_sparse_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_sparse_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_sparse_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_stack_cursor_t
+        public partial struct ecs_stack_cursor_t : System.IEquatable<ecs_stack_cursor_t>
         {
             public ecs_stack_cursor_t* prev;
 
@@ -3646,20 +7186,165 @@ namespace Flecs.NET.Bindings
 
             public ecs_stack_t* owner;
 
-            public partial struct ecs_stack_t
+            public partial struct ecs_stack_t : System.IEquatable<ecs_stack_t>
             {
+                public bool Equals(ecs_stack_t other)
+                {
+                    fixed (ecs_stack_t* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_stack_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_stack_t)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is ecs_stack_t other && Equals(other);
+                }
+
+                public static bool operator ==(ecs_stack_t left, ecs_stack_t right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(ecs_stack_t left, ecs_stack_t right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (ecs_stack_t* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_stack_t)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_stack_cursor_t other)
+            {
+                fixed (ecs_stack_cursor_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_stack_cursor_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_stack_cursor_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_stack_cursor_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_stack_cursor_t left, ecs_stack_cursor_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_stack_cursor_t left, ecs_stack_cursor_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_stack_cursor_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_stack_cursor_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_stack_page_t
+        public partial struct ecs_stack_page_t : System.IEquatable<ecs_stack_page_t>
         {
+            public bool Equals(ecs_stack_page_t other)
+            {
+                fixed (ecs_stack_page_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_stack_page_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_stack_page_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_stack_page_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_stack_page_t left, ecs_stack_page_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_stack_page_t left, ecs_stack_page_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_stack_page_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_stack_page_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_stage_t
+        public partial struct ecs_stage_t : System.IEquatable<ecs_stage_t>
         {
+            public bool Equals(ecs_stage_t other)
+            {
+                fixed (ecs_stage_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_stage_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_stage_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_stage_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_stage_t left, ecs_stage_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_stage_t left, ecs_stage_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_stage_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_stage_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_strbuf_element
+        public partial struct ecs_strbuf_element : System.IEquatable<ecs_strbuf_element>
         {
             public byte buffer_embedded;
 
@@ -3668,30 +7353,178 @@ namespace Flecs.NET.Bindings
             public byte* buf;
 
             public ecs_strbuf_element* next;
+
+            public bool Equals(ecs_strbuf_element other)
+            {
+                fixed (ecs_strbuf_element* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_element)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_strbuf_element)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_strbuf_element other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_strbuf_element left, ecs_strbuf_element right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_strbuf_element left, ecs_strbuf_element right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_strbuf_element* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_element)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_strbuf_element_embedded
+        public partial struct ecs_strbuf_element_embedded : System.IEquatable<ecs_strbuf_element_embedded>
         {
             public ecs_strbuf_element super;
 
             public fixed byte buf[512];
+
+            public bool Equals(ecs_strbuf_element_embedded other)
+            {
+                fixed (ecs_strbuf_element_embedded* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_element_embedded)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_strbuf_element_embedded)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_strbuf_element_embedded other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_strbuf_element_embedded left, ecs_strbuf_element_embedded right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_strbuf_element_embedded left, ecs_strbuf_element_embedded right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_strbuf_element_embedded* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_element_embedded)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_strbuf_element_str
+        public partial struct ecs_strbuf_element_str : System.IEquatable<ecs_strbuf_element_str>
         {
             public ecs_strbuf_element super;
 
             public byte* alloc_str;
+
+            public bool Equals(ecs_strbuf_element_str other)
+            {
+                fixed (ecs_strbuf_element_str* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_element_str)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_strbuf_element_str)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_strbuf_element_str other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_strbuf_element_str left, ecs_strbuf_element_str right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_strbuf_element_str left, ecs_strbuf_element_str right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_strbuf_element_str* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_element_str)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_strbuf_list_elem
+        public partial struct ecs_strbuf_list_elem : System.IEquatable<ecs_strbuf_list_elem>
         {
             public int count;
 
             public byte* separator;
+
+            public bool Equals(ecs_strbuf_list_elem other)
+            {
+                fixed (ecs_strbuf_list_elem* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_list_elem)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_strbuf_list_elem)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_strbuf_list_elem other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_strbuf_list_elem left, ecs_strbuf_list_elem right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_strbuf_list_elem left, ecs_strbuf_list_elem right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_strbuf_list_elem* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_list_elem)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_strbuf_t
+        public partial struct ecs_strbuf_t : System.IEquatable<ecs_strbuf_t>
         {
             public byte* buf;
 
@@ -3713,7 +7546,7 @@ namespace Flecs.NET.Bindings
 
             public int length;
 
-            public partial struct list_stack_FixedBuffer
+            public partial struct list_stack_FixedBuffer : System.IEquatable<list_stack_FixedBuffer>
             {
                 public ecs_strbuf_list_elem Item0;
 
@@ -3783,16 +7616,90 @@ namespace Flecs.NET.Bindings
 
                 [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
                 public System.Span<ecs_strbuf_list_elem> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
+
+                public bool Equals(list_stack_FixedBuffer other)
+                {
+                    fixed (list_stack_FixedBuffer* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(list_stack_FixedBuffer)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(list_stack_FixedBuffer)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is list_stack_FixedBuffer other && Equals(other);
+                }
+
+                public static bool operator ==(list_stack_FixedBuffer left, list_stack_FixedBuffer right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(list_stack_FixedBuffer left, list_stack_FixedBuffer right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (list_stack_FixedBuffer* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(list_stack_FixedBuffer)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_strbuf_t other)
+            {
+                fixed (ecs_strbuf_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_strbuf_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_strbuf_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_strbuf_t left, ecs_strbuf_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_strbuf_t left, ecs_strbuf_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_strbuf_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_struct_desc_t
+        public partial struct ecs_struct_desc_t : System.IEquatable<ecs_struct_desc_t>
         {
             public ulong entity;
 
             public members_FixedBuffer members;
 
-            public partial struct members_FixedBuffer
+            public partial struct members_FixedBuffer : System.IEquatable<members_FixedBuffer>
             {
                 public ecs_member_t Item0;
 
@@ -3862,14 +7769,124 @@ namespace Flecs.NET.Bindings
 
                 [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
                 public System.Span<ecs_member_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
+
+                public bool Equals(members_FixedBuffer other)
+                {
+                    fixed (members_FixedBuffer* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(members_FixedBuffer)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(members_FixedBuffer)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is members_FixedBuffer other && Equals(other);
+                }
+
+                public static bool operator ==(members_FixedBuffer left, members_FixedBuffer right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(members_FixedBuffer left, members_FixedBuffer right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (members_FixedBuffer* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(members_FixedBuffer)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_struct_desc_t other)
+            {
+                fixed (ecs_struct_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_struct_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_struct_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_struct_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_struct_desc_t left, ecs_struct_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_struct_desc_t left, ecs_struct_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_struct_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_struct_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_switch_t
+        public partial struct ecs_switch_t : System.IEquatable<ecs_switch_t>
         {
+            public bool Equals(ecs_switch_t other)
+            {
+                fixed (ecs_switch_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_switch_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_switch_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_switch_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_switch_t left, ecs_switch_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_switch_t left, ecs_switch_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_switch_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_switch_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_sync_stats_t
+        public partial struct ecs_sync_stats_t : System.IEquatable<ecs_sync_stats_t>
         {
             public long first_;
 
@@ -3884,9 +7901,46 @@ namespace Flecs.NET.Bindings
             public byte multi_threaded;
 
             public byte no_readonly;
+
+            public bool Equals(ecs_sync_stats_t other)
+            {
+                fixed (ecs_sync_stats_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_sync_stats_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_sync_stats_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_sync_stats_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_sync_stats_t left, ecs_sync_stats_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_sync_stats_t left, ecs_sync_stats_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_sync_stats_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_sync_stats_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_system_desc_t
+        public partial struct ecs_system_desc_t : System.IEquatable<ecs_system_desc_t>
         {
             public int _canary;
 
@@ -3915,9 +7969,46 @@ namespace Flecs.NET.Bindings
             public byte multi_threaded;
 
             public byte no_readonly;
+
+            public bool Equals(ecs_system_desc_t other)
+            {
+                fixed (ecs_system_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_system_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_system_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_system_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_system_desc_t left, ecs_system_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_system_desc_t left, ecs_system_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_system_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_system_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_system_stats_t
+        public partial struct ecs_system_stats_t : System.IEquatable<ecs_system_stats_t>
         {
             public long first_;
 
@@ -3930,9 +8021,46 @@ namespace Flecs.NET.Bindings
             public byte task;
 
             public ecs_query_stats_t query;
+
+            public bool Equals(ecs_system_stats_t other)
+            {
+                fixed (ecs_system_stats_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_system_stats_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_system_stats_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_system_stats_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_system_stats_t left, ecs_system_stats_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_system_stats_t left, ecs_system_stats_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_system_stats_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_system_stats_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_table_cache_iter_t
+        public partial struct ecs_table_cache_iter_t : System.IEquatable<ecs_table_cache_iter_t>
         {
             public ecs_table_cache_hdr_t* cur;
 
@@ -3940,29 +8068,211 @@ namespace Flecs.NET.Bindings
 
             public ecs_table_cache_hdr_t* next_list;
 
-            public partial struct ecs_table_cache_hdr_t
+            public partial struct ecs_table_cache_hdr_t : System.IEquatable<ecs_table_cache_hdr_t>
             {
+                public bool Equals(ecs_table_cache_hdr_t other)
+                {
+                    fixed (ecs_table_cache_hdr_t* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_cache_hdr_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_table_cache_hdr_t)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is ecs_table_cache_hdr_t other && Equals(other);
+                }
+
+                public static bool operator ==(ecs_table_cache_hdr_t left, ecs_table_cache_hdr_t right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(ecs_table_cache_hdr_t left, ecs_table_cache_hdr_t right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (ecs_table_cache_hdr_t* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_cache_hdr_t)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_table_cache_iter_t other)
+            {
+                fixed (ecs_table_cache_iter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_cache_iter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_table_cache_iter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_table_cache_iter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_table_cache_iter_t left, ecs_table_cache_iter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_table_cache_iter_t left, ecs_table_cache_iter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_table_cache_iter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_cache_iter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_table_range_t
+        public partial struct ecs_table_range_t : System.IEquatable<ecs_table_range_t>
         {
             public ecs_table_t* table;
 
             public int offset;
 
             public int count;
+
+            public bool Equals(ecs_table_range_t other)
+            {
+                fixed (ecs_table_range_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_range_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_table_range_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_table_range_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_table_range_t left, ecs_table_range_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_table_range_t left, ecs_table_range_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_table_range_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_range_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_table_record_t
+        public partial struct ecs_table_record_t : System.IEquatable<ecs_table_record_t>
         {
+            public bool Equals(ecs_table_record_t other)
+            {
+                fixed (ecs_table_record_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_record_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_table_record_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_table_record_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_table_record_t left, ecs_table_record_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_table_record_t left, ecs_table_record_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_table_record_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_record_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_table_t
+        public partial struct ecs_table_t : System.IEquatable<ecs_table_t>
         {
+            public bool Equals(ecs_table_t other)
+            {
+                fixed (ecs_table_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_table_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_table_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_table_t left, ecs_table_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_table_t left, ecs_table_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_table_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_term_id_t
+        public partial struct ecs_term_id_t : System.IEquatable<ecs_term_id_t>
         {
             public ulong id;
 
@@ -3971,9 +8281,46 @@ namespace Flecs.NET.Bindings
             public ulong trav;
 
             public uint flags;
+
+            public bool Equals(ecs_term_id_t other)
+            {
+                fixed (ecs_term_id_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_term_id_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_term_id_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_term_id_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_term_id_t left, ecs_term_id_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_term_id_t left, ecs_term_id_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_term_id_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_term_id_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_term_iter_t
+        public partial struct ecs_term_iter_t : System.IEquatable<ecs_term_iter_t>
         {
             public ecs_term_t term;
 
@@ -4008,9 +8355,46 @@ namespace Flecs.NET.Bindings
             public int size;
 
             public void* ptr;
+
+            public bool Equals(ecs_term_iter_t other)
+            {
+                fixed (ecs_term_iter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_term_iter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_term_iter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_term_iter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_term_iter_t left, ecs_term_iter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_term_iter_t left, ecs_term_iter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_term_iter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_term_iter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_term_t
+        public partial struct ecs_term_t : System.IEquatable<ecs_term_t>
         {
             public ulong id;
 
@@ -4035,16 +8419,90 @@ namespace Flecs.NET.Bindings
             public ushort flags;
 
             public byte move;
+
+            public bool Equals(ecs_term_t other)
+            {
+                fixed (ecs_term_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_term_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_term_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_term_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_term_t left, ecs_term_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_term_t left, ecs_term_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_term_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_term_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_time_t
+        public partial struct ecs_time_t : System.IEquatable<ecs_time_t>
         {
             public uint sec;
 
             public uint nanosec;
+
+            public bool Equals(ecs_time_t other)
+            {
+                fixed (ecs_time_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_time_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_time_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_time_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_time_t left, ecs_time_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_time_t left, ecs_time_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_time_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_time_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_type_hooks_t
+        public partial struct ecs_type_hooks_t : System.IEquatable<ecs_type_hooks_t>
         {
             public System.IntPtr ctor; // delegate* unmanaged<void*, int, ecs_type_info_t*, void>
 
@@ -4075,9 +8533,46 @@ namespace Flecs.NET.Bindings
             public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
 
             public System.IntPtr binding_ctx_free; // delegate* unmanaged<void*, void>
+
+            public bool Equals(ecs_type_hooks_t other)
+            {
+                fixed (ecs_type_hooks_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_type_hooks_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_type_hooks_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_type_hooks_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_type_hooks_t left, ecs_type_hooks_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_type_hooks_t left, ecs_type_hooks_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_type_hooks_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_type_hooks_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_type_info_t
+        public partial struct ecs_type_info_t : System.IEquatable<ecs_type_info_t>
         {
             public int size;
 
@@ -4088,16 +8583,90 @@ namespace Flecs.NET.Bindings
             public ulong component;
 
             public byte* name;
+
+            public bool Equals(ecs_type_info_t other)
+            {
+                fixed (ecs_type_info_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_type_info_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_type_info_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_type_info_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_type_info_t left, ecs_type_info_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_type_info_t left, ecs_type_info_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_type_info_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_type_info_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_type_t
+        public partial struct ecs_type_t : System.IEquatable<ecs_type_t>
         {
             public ulong* array;
 
             public int count;
+
+            public bool Equals(ecs_type_t other)
+            {
+                fixed (ecs_type_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_type_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_type_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_type_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_type_t left, ecs_type_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_type_t left, ecs_type_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_type_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_type_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_unit_desc_t
+        public partial struct ecs_unit_desc_t : System.IEquatable<ecs_unit_desc_t>
         {
             public ulong entity;
 
@@ -4112,71 +8681,404 @@ namespace Flecs.NET.Bindings
             public ecs_unit_translation_t translation;
 
             public ulong prefix;
+
+            public bool Equals(ecs_unit_desc_t other)
+            {
+                fixed (ecs_unit_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_unit_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_unit_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_unit_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_unit_desc_t left, ecs_unit_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_unit_desc_t left, ecs_unit_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_unit_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_unit_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_unit_prefix_desc_t
+        public partial struct ecs_unit_prefix_desc_t : System.IEquatable<ecs_unit_prefix_desc_t>
         {
             public ulong entity;
 
             public byte* symbol;
 
             public ecs_unit_translation_t translation;
+
+            public bool Equals(ecs_unit_prefix_desc_t other)
+            {
+                fixed (ecs_unit_prefix_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_unit_prefix_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_unit_prefix_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_unit_prefix_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_unit_prefix_desc_t left, ecs_unit_prefix_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_unit_prefix_desc_t left, ecs_unit_prefix_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_unit_prefix_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_unit_prefix_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_unit_translation_t
+        public partial struct ecs_unit_translation_t : System.IEquatable<ecs_unit_translation_t>
         {
             public int factor;
 
             public int power;
+
+            public bool Equals(ecs_unit_translation_t other)
+            {
+                fixed (ecs_unit_translation_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_unit_translation_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_unit_translation_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_unit_translation_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_unit_translation_t left, ecs_unit_translation_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_unit_translation_t left, ecs_unit_translation_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_unit_translation_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_unit_translation_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_value_t
+        public partial struct ecs_value_t : System.IEquatable<ecs_value_t>
         {
             public ulong type;
 
             public void* ptr;
+
+            public bool Equals(ecs_value_t other)
+            {
+                fixed (ecs_value_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_value_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_value_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_value_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_value_t left, ecs_value_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_value_t left, ecs_value_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_value_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_value_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_var_t
+        public partial struct ecs_var_t : System.IEquatable<ecs_var_t>
         {
             public ecs_table_range_t range;
 
             public ulong entity;
+
+            public bool Equals(ecs_var_t other)
+            {
+                fixed (ecs_var_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_var_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_var_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_var_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_var_t left, ecs_var_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_var_t left, ecs_var_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_var_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_var_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_vars_t
+        public partial struct ecs_vars_t : System.IEquatable<ecs_vars_t>
         {
             public ecs_world_t* world;
 
             public ecs_expr_var_scope_t root;
 
             public ecs_expr_var_scope_t* cur;
+
+            public bool Equals(ecs_vars_t other)
+            {
+                fixed (ecs_vars_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_vars_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_vars_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_vars_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_vars_t left, ecs_vars_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_vars_t left, ecs_vars_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_vars_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_vars_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_vec_t
+        public partial struct ecs_vec_t : System.IEquatable<ecs_vec_t>
         {
             public void* array;
 
             public int count;
 
             public int size;
+
+            public bool Equals(ecs_vec_t other)
+            {
+                fixed (ecs_vec_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_vec_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_vec_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_vec_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_vec_t left, ecs_vec_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_vec_t left, ecs_vec_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_vec_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_vec_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_vector_desc_t
+        public partial struct ecs_vector_desc_t : System.IEquatable<ecs_vector_desc_t>
         {
             public ulong entity;
 
             public ulong type;
+
+            public bool Equals(ecs_vector_desc_t other)
+            {
+                fixed (ecs_vector_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_vector_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_vector_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_vector_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_vector_desc_t left, ecs_vector_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_vector_desc_t left, ecs_vector_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_vector_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_vector_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_worker_iter_t
+        public partial struct ecs_worker_iter_t : System.IEquatable<ecs_worker_iter_t>
         {
             public int index;
 
             public int count;
+
+            public bool Equals(ecs_worker_iter_t other)
+            {
+                fixed (ecs_worker_iter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_worker_iter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_worker_iter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_worker_iter_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_worker_iter_t left, ecs_worker_iter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_worker_iter_t left, ecs_worker_iter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_worker_iter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_worker_iter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_world_info_t
+        public partial struct ecs_world_info_t : System.IEquatable<ecs_world_info_t>
         {
             public ulong last_component_id;
 
@@ -4252,7 +9154,7 @@ namespace Flecs.NET.Bindings
 
             public byte* name_prefix;
 
-            public partial struct cmd_AnonymousRecord
+            public partial struct cmd_AnonymousRecord : System.IEquatable<cmd_AnonymousRecord>
             {
                 public long add_count;
 
@@ -4275,10 +9177,84 @@ namespace Flecs.NET.Bindings
                 public long batched_entity_count;
 
                 public long batched_command_count;
+
+                public bool Equals(cmd_AnonymousRecord other)
+                {
+                    fixed (cmd_AnonymousRecord* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(cmd_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(cmd_AnonymousRecord)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is cmd_AnonymousRecord other && Equals(other);
+                }
+
+                public static bool operator ==(cmd_AnonymousRecord left, cmd_AnonymousRecord right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(cmd_AnonymousRecord left, cmd_AnonymousRecord right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (cmd_AnonymousRecord* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(cmd_AnonymousRecord)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_world_info_t other)
+            {
+                fixed (ecs_world_info_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_world_info_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_world_info_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_world_info_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_world_info_t left, ecs_world_info_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_world_info_t left, ecs_world_info_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_world_info_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_world_info_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_world_stats_t
+        public partial struct ecs_world_stats_t : System.IEquatable<ecs_world_stats_t>
         {
             public long first_;
 
@@ -4306,14 +9282,51 @@ namespace Flecs.NET.Bindings
 
             public int t;
 
-            public partial struct entities_AnonymousRecord
+            public partial struct entities_AnonymousRecord : System.IEquatable<entities_AnonymousRecord>
             {
                 public ecs_metric_t count;
 
                 public ecs_metric_t not_alive_count;
+
+                public bool Equals(entities_AnonymousRecord other)
+                {
+                    fixed (entities_AnonymousRecord* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(entities_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(entities_AnonymousRecord)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is entities_AnonymousRecord other && Equals(other);
+                }
+
+                public static bool operator ==(entities_AnonymousRecord left, entities_AnonymousRecord right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(entities_AnonymousRecord left, entities_AnonymousRecord right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (entities_AnonymousRecord* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(entities_AnonymousRecord)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
             }
 
-            public partial struct ids_AnonymousRecord
+            public partial struct ids_AnonymousRecord : System.IEquatable<ids_AnonymousRecord>
             {
                 public ecs_metric_t count;
 
@@ -4330,9 +9343,46 @@ namespace Flecs.NET.Bindings
                 public ecs_metric_t create_count;
 
                 public ecs_metric_t delete_count;
+
+                public bool Equals(ids_AnonymousRecord other)
+                {
+                    fixed (ids_AnonymousRecord* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ids_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ids_AnonymousRecord)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is ids_AnonymousRecord other && Equals(other);
+                }
+
+                public static bool operator ==(ids_AnonymousRecord left, ids_AnonymousRecord right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(ids_AnonymousRecord left, ids_AnonymousRecord right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (ids_AnonymousRecord* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ids_AnonymousRecord)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
             }
 
-            public partial struct tables_AnonymousRecord
+            public partial struct tables_AnonymousRecord : System.IEquatable<tables_AnonymousRecord>
             {
                 public ecs_metric_t count;
 
@@ -4349,18 +9399,92 @@ namespace Flecs.NET.Bindings
                 public ecs_metric_t create_count;
 
                 public ecs_metric_t delete_count;
+
+                public bool Equals(tables_AnonymousRecord other)
+                {
+                    fixed (tables_AnonymousRecord* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(tables_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(tables_AnonymousRecord)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is tables_AnonymousRecord other && Equals(other);
+                }
+
+                public static bool operator ==(tables_AnonymousRecord left, tables_AnonymousRecord right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(tables_AnonymousRecord left, tables_AnonymousRecord right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (tables_AnonymousRecord* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(tables_AnonymousRecord)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
             }
 
-            public partial struct queries_AnonymousRecord
+            public partial struct queries_AnonymousRecord : System.IEquatable<queries_AnonymousRecord>
             {
                 public ecs_metric_t query_count;
 
                 public ecs_metric_t observer_count;
 
                 public ecs_metric_t system_count;
+
+                public bool Equals(queries_AnonymousRecord other)
+                {
+                    fixed (queries_AnonymousRecord* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(queries_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(queries_AnonymousRecord)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is queries_AnonymousRecord other && Equals(other);
+                }
+
+                public static bool operator ==(queries_AnonymousRecord left, queries_AnonymousRecord right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(queries_AnonymousRecord left, queries_AnonymousRecord right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (queries_AnonymousRecord* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(queries_AnonymousRecord)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
             }
 
-            public partial struct commands_AnonymousRecord
+            public partial struct commands_AnonymousRecord : System.IEquatable<commands_AnonymousRecord>
             {
                 public ecs_metric_t add_count;
 
@@ -4383,9 +9507,46 @@ namespace Flecs.NET.Bindings
                 public ecs_metric_t batched_entity_count;
 
                 public ecs_metric_t batched_count;
+
+                public bool Equals(commands_AnonymousRecord other)
+                {
+                    fixed (commands_AnonymousRecord* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(commands_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(commands_AnonymousRecord)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is commands_AnonymousRecord other && Equals(other);
+                }
+
+                public static bool operator ==(commands_AnonymousRecord left, commands_AnonymousRecord right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(commands_AnonymousRecord left, commands_AnonymousRecord right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (commands_AnonymousRecord* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(commands_AnonymousRecord)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
             }
 
-            public partial struct frame_AnonymousRecord
+            public partial struct frame_AnonymousRecord : System.IEquatable<frame_AnonymousRecord>
             {
                 public ecs_metric_t frame_count;
 
@@ -4400,9 +9561,46 @@ namespace Flecs.NET.Bindings
                 public ecs_metric_t observers_ran;
 
                 public ecs_metric_t event_emit_count;
+
+                public bool Equals(frame_AnonymousRecord other)
+                {
+                    fixed (frame_AnonymousRecord* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(frame_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(frame_AnonymousRecord)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is frame_AnonymousRecord other && Equals(other);
+                }
+
+                public static bool operator ==(frame_AnonymousRecord left, frame_AnonymousRecord right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(frame_AnonymousRecord left, frame_AnonymousRecord right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (frame_AnonymousRecord* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(frame_AnonymousRecord)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
             }
 
-            public partial struct performance_AnonymousRecord
+            public partial struct performance_AnonymousRecord : System.IEquatable<performance_AnonymousRecord>
             {
                 public ecs_metric_t world_time_raw;
 
@@ -4421,9 +9619,46 @@ namespace Flecs.NET.Bindings
                 public ecs_metric_t fps;
 
                 public ecs_metric_t delta_time;
+
+                public bool Equals(performance_AnonymousRecord other)
+                {
+                    fixed (performance_AnonymousRecord* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(performance_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(performance_AnonymousRecord)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is performance_AnonymousRecord other && Equals(other);
+                }
+
+                public static bool operator ==(performance_AnonymousRecord left, performance_AnonymousRecord right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(performance_AnonymousRecord left, performance_AnonymousRecord right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (performance_AnonymousRecord* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(performance_AnonymousRecord)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
             }
 
-            public partial struct memory_AnonymousRecord
+            public partial struct memory_AnonymousRecord : System.IEquatable<memory_AnonymousRecord>
             {
                 public ecs_metric_t alloc_count;
 
@@ -4444,9 +9679,46 @@ namespace Flecs.NET.Bindings
                 public ecs_metric_t stack_free_count;
 
                 public ecs_metric_t stack_outstanding_alloc_count;
+
+                public bool Equals(memory_AnonymousRecord other)
+                {
+                    fixed (memory_AnonymousRecord* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(memory_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(memory_AnonymousRecord)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is memory_AnonymousRecord other && Equals(other);
+                }
+
+                public static bool operator ==(memory_AnonymousRecord left, memory_AnonymousRecord right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(memory_AnonymousRecord left, memory_AnonymousRecord right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (memory_AnonymousRecord* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(memory_AnonymousRecord)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
             }
 
-            public partial struct rest_AnonymousRecord
+            public partial struct rest_AnonymousRecord : System.IEquatable<rest_AnonymousRecord>
             {
                 public ecs_metric_t request_count;
 
@@ -4473,9 +9745,46 @@ namespace Flecs.NET.Bindings
                 public ecs_metric_t pipeline_stats_count;
 
                 public ecs_metric_t stats_error_count;
+
+                public bool Equals(rest_AnonymousRecord other)
+                {
+                    fixed (rest_AnonymousRecord* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(rest_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(rest_AnonymousRecord)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is rest_AnonymousRecord other && Equals(other);
+                }
+
+                public static bool operator ==(rest_AnonymousRecord left, rest_AnonymousRecord right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(rest_AnonymousRecord left, rest_AnonymousRecord right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (rest_AnonymousRecord* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(rest_AnonymousRecord)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
             }
 
-            public partial struct http_AnonymousRecord
+            public partial struct http_AnonymousRecord : System.IEquatable<http_AnonymousRecord>
             {
                 public ecs_metric_t request_received_count;
 
@@ -4494,26 +9803,210 @@ namespace Flecs.NET.Bindings
                 public ecs_metric_t send_error_count;
 
                 public ecs_metric_t busy_count;
+
+                public bool Equals(http_AnonymousRecord other)
+                {
+                    fixed (http_AnonymousRecord* __self = &this)
+                    {
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(http_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(http_AnonymousRecord)));
+                    }
+                }
+
+                public override bool Equals(object? obj)
+                {
+                    return obj is http_AnonymousRecord other && Equals(other);
+                }
+
+                public static bool operator ==(http_AnonymousRecord left, http_AnonymousRecord right)
+                {
+                    return left.Equals(right);
+                }
+
+                public static bool operator !=(http_AnonymousRecord left, http_AnonymousRecord right)
+                {
+                    return !(left == right);
+                }
+
+                public override int GetHashCode()
+                {
+                    fixed (http_AnonymousRecord* __self = &this)
+                    {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(http_AnonymousRecord)));
+                    return hash.ToHashCode();
+#else
+                        return base.GetHashCode();
+#endif
+                    }
+                }
+            }
+
+            public bool Equals(ecs_world_stats_t other)
+            {
+                fixed (ecs_world_stats_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_world_stats_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_world_stats_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_world_stats_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_world_stats_t left, ecs_world_stats_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_world_stats_t left, ecs_world_stats_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_world_stats_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_world_stats_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
             }
         }
 
-        public partial struct ecs_world_t
+        public partial struct ecs_world_t : System.IEquatable<ecs_world_t>
         {
+            public bool Equals(ecs_world_t other)
+            {
+                fixed (ecs_world_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_world_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_world_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_world_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_world_t left, ecs_world_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_world_t left, ecs_world_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_world_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_world_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct ecs_world_to_json_desc_t
+        public partial struct ecs_world_to_json_desc_t : System.IEquatable<ecs_world_to_json_desc_t>
         {
             public byte serialize_builtin;
 
             public byte serialize_modules;
+
+            public bool Equals(ecs_world_to_json_desc_t other)
+            {
+                fixed (ecs_world_to_json_desc_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_world_to_json_desc_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_world_to_json_desc_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_world_to_json_desc_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_world_to_json_desc_t left, ecs_world_to_json_desc_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_world_to_json_desc_t left, ecs_world_to_json_desc_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_world_to_json_desc_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_world_to_json_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsAlertInstance
+        public partial struct EcsAlertInstance : System.IEquatable<EcsAlertInstance>
         {
             public byte* message;
+
+            public bool Equals(EcsAlertInstance other)
+            {
+                fixed (EcsAlertInstance* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsAlertInstance)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsAlertInstance)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsAlertInstance other && Equals(other);
+            }
+
+            public static bool operator ==(EcsAlertInstance left, EcsAlertInstance right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsAlertInstance left, EcsAlertInstance right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsAlertInstance* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsAlertInstance)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsAlertsActive
+        public partial struct EcsAlertsActive : System.IEquatable<EcsAlertsActive>
         {
             public int info_count;
 
@@ -4522,38 +10015,260 @@ namespace Flecs.NET.Bindings
             public int error_count;
 
             public ecs_map_t alerts;
+
+            public bool Equals(EcsAlertsActive other)
+            {
+                fixed (EcsAlertsActive* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsAlertsActive)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsAlertsActive)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsAlertsActive other && Equals(other);
+            }
+
+            public static bool operator ==(EcsAlertsActive left, EcsAlertsActive right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsAlertsActive left, EcsAlertsActive right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsAlertsActive* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsAlertsActive)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsArray
+        public partial struct EcsArray : System.IEquatable<EcsArray>
         {
             public ulong type;
 
             public int count;
+
+            public bool Equals(EcsArray other)
+            {
+                fixed (EcsArray* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsArray)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsArray)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsArray other && Equals(other);
+            }
+
+            public static bool operator ==(EcsArray left, EcsArray right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsArray left, EcsArray right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsArray* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsArray)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsBitmask
+        public partial struct EcsBitmask : System.IEquatable<EcsBitmask>
         {
             public ecs_map_t constants;
+
+            public bool Equals(EcsBitmask other)
+            {
+                fixed (EcsBitmask* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsBitmask)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsBitmask)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsBitmask other && Equals(other);
+            }
+
+            public static bool operator ==(EcsBitmask left, EcsBitmask right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsBitmask left, EcsBitmask right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsBitmask* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsBitmask)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsComponent
+        public partial struct EcsComponent : System.IEquatable<EcsComponent>
         {
             public int size;
 
             public int alignment;
+
+            public bool Equals(EcsComponent other)
+            {
+                fixed (EcsComponent* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsComponent)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsComponent)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsComponent other && Equals(other);
+            }
+
+            public static bool operator ==(EcsComponent left, EcsComponent right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsComponent left, EcsComponent right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsComponent* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsComponent)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsDocDescription
+        public partial struct EcsDocDescription : System.IEquatable<EcsDocDescription>
         {
             public byte* value;
+
+            public bool Equals(EcsDocDescription other)
+            {
+                fixed (EcsDocDescription* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsDocDescription)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsDocDescription)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsDocDescription other && Equals(other);
+            }
+
+            public static bool operator ==(EcsDocDescription left, EcsDocDescription right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsDocDescription left, EcsDocDescription right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsDocDescription* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsDocDescription)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsEnum
+        public partial struct EcsEnum : System.IEquatable<EcsEnum>
         {
             public ecs_map_t constants;
+
+            public bool Equals(EcsEnum other)
+            {
+                fixed (EcsEnum* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsEnum)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsEnum)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsEnum other && Equals(other);
+            }
+
+            public static bool operator ==(EcsEnum left, EcsEnum right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsEnum left, EcsEnum right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsEnum* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsEnum)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsIdentifier
+        public partial struct EcsIdentifier : System.IEquatable<EcsIdentifier>
         {
             public byte* value;
 
@@ -4564,9 +10279,46 @@ namespace Flecs.NET.Bindings
             public ulong index_hash;
 
             public ecs_hashmap_t* index;
+
+            public bool Equals(EcsIdentifier other)
+            {
+                fixed (EcsIdentifier* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsIdentifier)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsIdentifier)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsIdentifier other && Equals(other);
+            }
+
+            public static bool operator ==(EcsIdentifier left, EcsIdentifier right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsIdentifier left, EcsIdentifier right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsIdentifier* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsIdentifier)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsMember
+        public partial struct EcsMember : System.IEquatable<EcsMember>
         {
             public ulong type;
 
@@ -4575,42 +10327,264 @@ namespace Flecs.NET.Bindings
             public ulong unit;
 
             public int offset;
+
+            public bool Equals(EcsMember other)
+            {
+                fixed (EcsMember* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMember)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsMember)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsMember other && Equals(other);
+            }
+
+            public static bool operator ==(EcsMember left, EcsMember right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsMember left, EcsMember right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsMember* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMember)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsMemberRanges
+        public partial struct EcsMemberRanges : System.IEquatable<EcsMemberRanges>
         {
             public ecs_member_value_range_t value;
 
             public ecs_member_value_range_t warning;
 
             public ecs_member_value_range_t error;
+
+            public bool Equals(EcsMemberRanges other)
+            {
+                fixed (EcsMemberRanges* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMemberRanges)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsMemberRanges)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsMemberRanges other && Equals(other);
+            }
+
+            public static bool operator ==(EcsMemberRanges left, EcsMemberRanges right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsMemberRanges left, EcsMemberRanges right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsMemberRanges* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMemberRanges)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsMetaType
+        public partial struct EcsMetaType : System.IEquatable<EcsMetaType>
         {
             public ecs_type_kind_t kind;
 
             public byte existing;
 
             public byte partial;
+
+            public bool Equals(EcsMetaType other)
+            {
+                fixed (EcsMetaType* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMetaType)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsMetaType)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsMetaType other && Equals(other);
+            }
+
+            public static bool operator ==(EcsMetaType left, EcsMetaType right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsMetaType left, EcsMetaType right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsMetaType* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMetaType)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsMetaTypeSerialized
+        public partial struct EcsMetaTypeSerialized : System.IEquatable<EcsMetaTypeSerialized>
         {
             public ecs_vec_t ops;
+
+            public bool Equals(EcsMetaTypeSerialized other)
+            {
+                fixed (EcsMetaTypeSerialized* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMetaTypeSerialized)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsMetaTypeSerialized)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsMetaTypeSerialized other && Equals(other);
+            }
+
+            public static bool operator ==(EcsMetaTypeSerialized left, EcsMetaTypeSerialized right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsMetaTypeSerialized left, EcsMetaTypeSerialized right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsMetaTypeSerialized* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMetaTypeSerialized)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsMetricSource
+        public partial struct EcsMetricSource : System.IEquatable<EcsMetricSource>
         {
             public ulong entity;
+
+            public bool Equals(EcsMetricSource other)
+            {
+                fixed (EcsMetricSource* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMetricSource)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsMetricSource)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsMetricSource other && Equals(other);
+            }
+
+            public static bool operator ==(EcsMetricSource left, EcsMetricSource right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsMetricSource left, EcsMetricSource right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsMetricSource* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMetricSource)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsMetricValue
+        public partial struct EcsMetricValue : System.IEquatable<EcsMetricValue>
         {
             public double value;
+
+            public bool Equals(EcsMetricValue other)
+            {
+                fixed (EcsMetricValue* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMetricValue)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsMetricValue)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsMetricValue other && Equals(other);
+            }
+
+            public static bool operator ==(EcsMetricValue left, EcsMetricValue right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsMetricValue left, EcsMetricValue right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsMetricValue* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMetricValue)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsOpaque
+        public partial struct EcsOpaque : System.IEquatable<EcsOpaque>
         {
             public ulong as_type;
 
@@ -4641,26 +10615,174 @@ namespace Flecs.NET.Bindings
             public System.IntPtr count; // delegate* unmanaged<void*, System.IntPtr>
 
             public System.IntPtr resize; // delegate* unmanaged<void*, System.IntPtr, void>
+
+            public bool Equals(EcsOpaque other)
+            {
+                fixed (EcsOpaque* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsOpaque)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsOpaque)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsOpaque other && Equals(other);
+            }
+
+            public static bool operator ==(EcsOpaque left, EcsOpaque right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsOpaque left, EcsOpaque right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsOpaque* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsOpaque)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsPipelineStats
+        public partial struct EcsPipelineStats : System.IEquatable<EcsPipelineStats>
         {
             public EcsStatsHeader hdr;
 
             public ecs_pipeline_stats_t stats;
+
+            public bool Equals(EcsPipelineStats other)
+            {
+                fixed (EcsPipelineStats* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsPipelineStats)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsPipelineStats)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsPipelineStats other && Equals(other);
+            }
+
+            public static bool operator ==(EcsPipelineStats left, EcsPipelineStats right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsPipelineStats left, EcsPipelineStats right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsPipelineStats* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsPipelineStats)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsPoly
+        public partial struct EcsPoly : System.IEquatable<EcsPoly>
         {
             public void* poly;
+
+            public bool Equals(EcsPoly other)
+            {
+                fixed (EcsPoly* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsPoly)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsPoly)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsPoly other && Equals(other);
+            }
+
+            public static bool operator ==(EcsPoly left, EcsPoly right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsPoly left, EcsPoly right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsPoly* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsPoly)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsPrimitive
+        public partial struct EcsPrimitive : System.IEquatable<EcsPrimitive>
         {
             public ecs_primitive_kind_t kind;
+
+            public bool Equals(EcsPrimitive other)
+            {
+                fixed (EcsPrimitive* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsPrimitive)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsPrimitive)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsPrimitive other && Equals(other);
+            }
+
+            public static bool operator ==(EcsPrimitive left, EcsPrimitive right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsPrimitive left, EcsPrimitive right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsPrimitive* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsPrimitive)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsRateFilter
+        public partial struct EcsRateFilter : System.IEquatable<EcsRateFilter>
         {
             public ulong src;
 
@@ -4669,18 +10791,92 @@ namespace Flecs.NET.Bindings
             public int tick_count;
 
             public float time_elapsed;
+
+            public bool Equals(EcsRateFilter other)
+            {
+                fixed (EcsRateFilter* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsRateFilter)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsRateFilter)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsRateFilter other && Equals(other);
+            }
+
+            public static bool operator ==(EcsRateFilter left, EcsRateFilter right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsRateFilter left, EcsRateFilter right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsRateFilter* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsRateFilter)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsRest
+        public partial struct EcsRest : System.IEquatable<EcsRest>
         {
             public ushort port;
 
             public byte* ipaddr;
 
             public void* impl;
+
+            public bool Equals(EcsRest other)
+            {
+                fixed (EcsRest* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsRest)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsRest)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsRest other && Equals(other);
+            }
+
+            public static bool operator ==(EcsRest left, EcsRest right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsRest left, EcsRest right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsRest* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsRest)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsScript
+        public partial struct EcsScript : System.IEquatable<EcsScript>
         {
             public ecs_vec_t using_;
 
@@ -4689,35 +10885,220 @@ namespace Flecs.NET.Bindings
             public ecs_vec_t prop_defaults;
 
             public ecs_world_t* world;
+
+            public bool Equals(EcsScript other)
+            {
+                fixed (EcsScript* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsScript)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsScript)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsScript other && Equals(other);
+            }
+
+            public static bool operator ==(EcsScript left, EcsScript right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsScript left, EcsScript right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsScript* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsScript)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsStatsHeader
+        public partial struct EcsStatsHeader : System.IEquatable<EcsStatsHeader>
         {
             public float elapsed;
 
             public int reduce_count;
+
+            public bool Equals(EcsStatsHeader other)
+            {
+                fixed (EcsStatsHeader* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsStatsHeader)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsStatsHeader)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsStatsHeader other && Equals(other);
+            }
+
+            public static bool operator ==(EcsStatsHeader left, EcsStatsHeader right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsStatsHeader left, EcsStatsHeader right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsStatsHeader* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsStatsHeader)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsStruct
+        public partial struct EcsStruct : System.IEquatable<EcsStruct>
         {
             public ecs_vec_t members;
+
+            public bool Equals(EcsStruct other)
+            {
+                fixed (EcsStruct* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsStruct)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsStruct)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsStruct other && Equals(other);
+            }
+
+            public static bool operator ==(EcsStruct left, EcsStruct right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsStruct left, EcsStruct right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsStruct* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsStruct)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsTarget
+        public partial struct EcsTarget : System.IEquatable<EcsTarget>
         {
             public int count;
 
             public ecs_record_t* target;
+
+            public bool Equals(EcsTarget other)
+            {
+                fixed (EcsTarget* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsTarget)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsTarget)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsTarget other && Equals(other);
+            }
+
+            public static bool operator ==(EcsTarget left, EcsTarget right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsTarget left, EcsTarget right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsTarget* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsTarget)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsTickSource
+        public partial struct EcsTickSource : System.IEquatable<EcsTickSource>
         {
             public byte tick;
 
             public float time_elapsed;
+
+            public bool Equals(EcsTickSource other)
+            {
+                fixed (EcsTickSource* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsTickSource)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsTickSource)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsTickSource other && Equals(other);
+            }
+
+            public static bool operator ==(EcsTickSource left, EcsTickSource right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsTickSource left, EcsTickSource right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsTickSource* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsTickSource)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsTimer
+        public partial struct EcsTimer : System.IEquatable<EcsTimer>
         {
             public float timeout;
 
@@ -4730,9 +11111,46 @@ namespace Flecs.NET.Bindings
             public byte active;
 
             public byte single_shot;
+
+            public bool Equals(EcsTimer other)
+            {
+                fixed (EcsTimer* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsTimer)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsTimer)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsTimer other && Equals(other);
+            }
+
+            public static bool operator ==(EcsTimer left, EcsTimer right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsTimer left, EcsTimer right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsTimer* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsTimer)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsUnit
+        public partial struct EcsUnit : System.IEquatable<EcsUnit>
         {
             public byte* symbol;
 
@@ -4743,28 +11161,176 @@ namespace Flecs.NET.Bindings
             public ulong over;
 
             public ecs_unit_translation_t translation;
+
+            public bool Equals(EcsUnit other)
+            {
+                fixed (EcsUnit* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsUnit)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsUnit)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsUnit other && Equals(other);
+            }
+
+            public static bool operator ==(EcsUnit left, EcsUnit right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsUnit left, EcsUnit right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsUnit* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsUnit)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsUnitPrefix
+        public partial struct EcsUnitPrefix : System.IEquatable<EcsUnitPrefix>
         {
             public byte* symbol;
 
             public ecs_unit_translation_t translation;
+
+            public bool Equals(EcsUnitPrefix other)
+            {
+                fixed (EcsUnitPrefix* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsUnitPrefix)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsUnitPrefix)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsUnitPrefix other && Equals(other);
+            }
+
+            public static bool operator ==(EcsUnitPrefix left, EcsUnitPrefix right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsUnitPrefix left, EcsUnitPrefix right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsUnitPrefix* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsUnitPrefix)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsVector
+        public partial struct EcsVector : System.IEquatable<EcsVector>
         {
             public ulong type;
+
+            public bool Equals(EcsVector other)
+            {
+                fixed (EcsVector* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsVector)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsVector)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsVector other && Equals(other);
+            }
+
+            public static bool operator ==(EcsVector left, EcsVector right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsVector left, EcsVector right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsVector* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsVector)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsWorldStats
+        public partial struct EcsWorldStats : System.IEquatable<EcsWorldStats>
         {
             public EcsStatsHeader hdr;
 
             public ecs_world_stats_t stats;
+
+            public bool Equals(EcsWorldStats other)
+            {
+                fixed (EcsWorldStats* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsWorldStats)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsWorldStats)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsWorldStats other && Equals(other);
+            }
+
+            public static bool operator ==(EcsWorldStats left, EcsWorldStats right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsWorldStats left, EcsWorldStats right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsWorldStats* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsWorldStats)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct EcsWorldSummary
+        public partial struct EcsWorldSummary : System.IEquatable<EcsWorldSummary>
         {
             public double target_fps;
 
@@ -4779,24 +11345,135 @@ namespace Flecs.NET.Bindings
             public double system_time_last;
 
             public double merge_time_last;
+
+            public bool Equals(EcsWorldSummary other)
+            {
+                fixed (EcsWorldSummary* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsWorldSummary)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsWorldSummary)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsWorldSummary other && Equals(other);
+            }
+
+            public static bool operator ==(EcsWorldSummary left, EcsWorldSummary right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsWorldSummary left, EcsWorldSummary right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsWorldSummary* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsWorldSummary)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct flecs_hashmap_iter_t
+        public partial struct flecs_hashmap_iter_t : System.IEquatable<flecs_hashmap_iter_t>
         {
             public ecs_map_iter_t it;
 
             public ecs_hm_bucket_t* bucket;
 
             public int index;
+
+            public bool Equals(flecs_hashmap_iter_t other)
+            {
+                fixed (flecs_hashmap_iter_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(flecs_hashmap_iter_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(flecs_hashmap_iter_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is flecs_hashmap_iter_t other && Equals(other);
+            }
+
+            public static bool operator ==(flecs_hashmap_iter_t left, flecs_hashmap_iter_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(flecs_hashmap_iter_t left, flecs_hashmap_iter_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (flecs_hashmap_iter_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(flecs_hashmap_iter_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
-        public partial struct flecs_hashmap_result_t
+        public partial struct flecs_hashmap_result_t : System.IEquatable<flecs_hashmap_result_t>
         {
             public void* key;
 
             public void* value;
 
             public ulong hash;
+
+            public bool Equals(flecs_hashmap_result_t other)
+            {
+                fixed (flecs_hashmap_result_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(flecs_hashmap_result_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(flecs_hashmap_result_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is flecs_hashmap_result_t other && Equals(other);
+            }
+
+            public static bool operator ==(flecs_hashmap_result_t left, flecs_hashmap_result_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(flecs_hashmap_result_t left, flecs_hashmap_result_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (flecs_hashmap_result_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(flecs_hashmap_result_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
         }
 
         public enum ecs_http_method_t : uint

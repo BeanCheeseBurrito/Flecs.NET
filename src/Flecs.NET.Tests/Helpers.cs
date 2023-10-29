@@ -17,6 +17,13 @@ public struct Velocity
     public float Y { get; set; }
 }
 
+public enum StandardEnum
+{
+    Red,
+    Green,
+    Blue
+}
+
 public struct Mass
 {
     public float Value { get; set; }

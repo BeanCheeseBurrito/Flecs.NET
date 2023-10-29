@@ -25,7 +25,8 @@ BindingOptions bindingOptions = new()
     OutputFile = GetBindingsOutputPath(),
 
     GenerateMacros = true,
-    GenerateExternVariables = true
+    GenerateExternVariables = true,
+    GenerateStructEqualityFunctions = true
 };
 
 if (OperatingSystem.IsMacOS())

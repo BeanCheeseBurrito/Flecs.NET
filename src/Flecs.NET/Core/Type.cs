@@ -301,7 +301,7 @@ namespace Flecs.NET.Core
             typeHooksDesc.binding_ctx_free = BindingContext.TypeHooksContextFreePointer;
 
             SetHooks:
-            if (!Equals(typeHooksDesc, default))
+            if (typeHooksDesc != default)
                 ecs_set_hooks_id(world, RawId, &typeHooksDesc);
         }
 
