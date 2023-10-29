@@ -413,8 +413,20 @@ namespace Flecs.NET.Core
             ulong termId = ecs_field_id(iter, index);
             ulong typeId = Type<T>.Id(iter->world);
 
-            if (termId == typeId || ecs_get_typeid(iter->world, termId) == typeId)
+            if (termId == typeId)
                 return;
+
+            ulong termTypeid = ecs_get_typeid(iter->world, termId);
+
+            if (termTypeid == typeId)
+                return;
+
+            if (typeof(T) == typeof(ulong) &&
+                (ecs_id_is_tag(iter->world, termId) == Macros.True ||
+                 ecs_id_is_union(iter->world, termId) == Macros.True))
+            {
+                return;
+            }
 
             Entity expected = new Entity(iter->world, termId);
             Entity actual = new Entity(iter->world, typeId);
