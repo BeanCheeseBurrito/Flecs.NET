@@ -3,6 +3,7 @@ name: .NET
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,8 +22,9 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: | 
+        dotnet-version: |
           3.1.x
+          5.0.x
           6.0.x
           7.0.x
     - name: Restore dependencies
@@ -38,7 +40,7 @@ jobs:
         dotnet pack --property:FlecsAutoVersion=true -c Debug
         dotnet pack --property:FlecsAutoVersion=true -c Release
     - name: Upload artifacts
-      if: matrix.os == 'ubuntu-latest'
+      if: github.event_name == 'workflow_dispatch' && matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v3
       with:
           name: Nuget Packages
