@@ -40,7 +40,7 @@ jobs:
         dotnet pack --property:FlecsAutoVersion=true -c Debug
         dotnet pack --property:FlecsAutoVersion=true -c Release
     - name: Upload artifacts
-      if: github.event_name == 'workflow_dispatch' && matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v3
       with:
           name: Nuget Packages
