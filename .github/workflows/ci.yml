@@ -93,14 +93,13 @@ jobs:
       shell: bash
       run: |
         if [ '${{ github.event.inputs.nuget-registry }}' == 'GitLab' ]; then
-          dotnet push src/**/*.nupkg --api-key $GITLAB_ACCESS_TOKEN --source https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json
+          dotnet nuget push src/**/*.nupkg --api-key $GITLAB_ACCESS_TOKEN --source https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json
         elif [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
-          dotnet push src/**/*.nupkg --api-key $NUGET_ACCESS_TOKEN --source https://api.nuget.org/v3/index.json
+          dotnet nuget push src/**/*.nupkg --api-key $NUGET_ACCESS_TOKEN --source https://api.nuget.org/v3/index.json
         fi        
 
     - name: Push NuGet Packages Temp Test
       if: matrix.os == 'ubuntu-latest'
       shell: bash
       run: |
-        cd src
-        dotnet push **/*.nupkg --api-key $GITLAB_ACCESS_TOKEN --source https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json
+        dotnet nuget push src/**/*.nupkg --api-key $GITLAB_ACCESS_TOKEN --source https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json
