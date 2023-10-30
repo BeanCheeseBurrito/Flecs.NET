@@ -4,6 +4,27 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      push-packages:
+        description: 'Push nuget packages'
+        required: true
+        default: 'false'
+        type: boolean
+
+      use-auto-generated-version:
+        description: 'Use auto-generated version'
+        required: true
+        default: 'true'
+        type: boolean
+
+      nuget-registry:
+        description: 'NuGet registry'
+        required: true
+        default: 'GitLab'
+        type: choice
+        options:
+          - GitLab
+          - NuGet
 
 jobs:
   build:
@@ -19,6 +40,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         submodules: 'recursive'
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
@@ -27,19 +49,31 @@ jobs:
           5.0.x
           6.0.x
           7.0.x
-    - name: Restore dependencies
+
+    - name: Set Version Suffix
+      run: |
+        if [ '${{ github.event.inputs.use-auto-generated-version }}' != 'false' ]; then
+          echo "FlecsVersionSuffix=-build-$(date +'%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
+        fi
+
+    - name: Restore Dependencies
       run: dotnet restore
+
     - name: Generate Bindings
       run: dotnet run --project src/Flecs.NET.Bindgen
-    - name: Build native libraries
+
+    - name: Build Native Libraries
       run: dotnet build src/Flecs.NET.Native
-    - name: Run tests
+
+    - name: Run Tests
       run: dotnet test --verbosity minimal
-    - name: Pack Nuget packages
+
+    - name: Pack Nuget Packages
       run: |
-        dotnet pack --property:FlecsAutoVersion=true -c Debug
-        dotnet pack --property:FlecsAutoVersion=true -c Release
-    - name: Upload artifacts
+        dotnet pack /p:FlecsVersionSuffix=$FlecsVersionSuffix /p:ContinuousIntegrationBuild=true -c Debug
+        dotnet pack /p:FlecsVersionSuffix=$FlecsVersionSuffix /p:ContinuousIntegrationBuild=true -c Release
+
+    - name: Upload Artifacts
       if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v3
       with:
@@ -47,3 +81,16 @@ jobs:
         path: |
           src/**/*.nupkg
           src/**/*.snupkg
+
+    - name: Push NuGet Packages
+      if: matrix.os == 'ubuntu-latest' && github.event_name == 'workflow_dispatch' && github.event.inputs.push-packages == 'true'
+      run: |
+        if [ '${{ github.event.inputs.nuget-registry }}' == 'GitLab' ]; then
+          dotnet push src/**/*.nupkg --api-key $GITLAB_ACCESS_TOKEN --source https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json
+        elif [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
+          dotnet push src/**/*.nupkg --api-key $NUGET_ACCESS_TOKEN --source https://api.nuget.org/v3/index.json
+        fi        
+
+    - name: Push NuGet Packages Temp Test
+      if: matrix.os == 'ubuntu-latest'
+      run: dotnet push src/**/*.nupkg --api-key $GITLAB_ACCESS_TOKEN --source https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json
