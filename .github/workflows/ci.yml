@@ -76,8 +76,13 @@ jobs:
     - name: Pack Nuget Packages
       shell: bash
       run: |
-        dotnet pack /p:FlecsVersionSuffix=$FlecsVersionSuffix /p:ContinuousIntegrationBuild=true -c Debug
-        dotnet pack /p:FlecsVersionSuffix=$FlecsVersionSuffix /p:ContinuousIntegrationBuild=true -c Release
+        if [ '${{ github.event.inputs.nuget-registry }}' == 'GitLab' ]; then
+          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Debug
+          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Release
+        else
+          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Debug
+          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Release
+        fi
 
     - name: Upload Artifacts
       if: matrix.os == 'ubuntu-latest'
