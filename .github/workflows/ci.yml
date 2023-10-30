@@ -51,24 +51,30 @@ jobs:
           7.0.x
 
     - name: Set Version Suffix
+      shell: bash
       run: |
         if [ '${{ github.event.inputs.use-auto-generated-version }}' != 'false' ]; then
           echo "FlecsVersionSuffix=-build-$(date +'%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
         fi
 
     - name: Restore Dependencies
+      shell: bash
       run: dotnet restore
 
     - name: Generate Bindings
+      shell: bash
       run: dotnet run --project src/Flecs.NET.Bindgen
 
     - name: Build Native Libraries
+      shell: bash
       run: dotnet build src/Flecs.NET.Native
 
     - name: Run Tests
+      shell: bash
       run: dotnet test --verbosity minimal
 
     - name: Pack Nuget Packages
+      shell: bash
       run: |
         dotnet pack /p:FlecsVersionSuffix=$FlecsVersionSuffix /p:ContinuousIntegrationBuild=true -c Debug
         dotnet pack /p:FlecsVersionSuffix=$FlecsVersionSuffix /p:ContinuousIntegrationBuild=true -c Release
@@ -84,6 +90,7 @@ jobs:
 
     - name: Push NuGet Packages
       if: matrix.os == 'ubuntu-latest' && github.event_name == 'workflow_dispatch' && github.event.inputs.push-packages == 'true'
+      shell: bash
       run: |
         if [ '${{ github.event.inputs.nuget-registry }}' == 'GitLab' ]; then
           dotnet push src/**/*.nupkg --api-key $GITLAB_ACCESS_TOKEN --source https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json
@@ -93,4 +100,7 @@ jobs:
 
     - name: Push NuGet Packages Temp Test
       if: matrix.os == 'ubuntu-latest'
-      run: dotnet push src/**/*.nupkg --api-key $GITLAB_ACCESS_TOKEN --source https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json
+      shell: bash
+      run: |
+        cd src
+        dotnet push **/*.nupkg --api-key $GITLAB_ACCESS_TOKEN --source https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json
