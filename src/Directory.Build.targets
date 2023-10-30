@@ -1,5 +1,5 @@
 <Project>
     <PropertyGroup>
-        <Version Condition="'$(FlecsAutoVersion)' == 'True'">$(Version)-preview.$([System.DateTime]::Now.ToString("y.M.d.Hm"))</Version>
+        <Version Condition="'$(FlecsAutoVersion)' == 'True'">$(Version)-preview-$([System.DateTime]::Now.ToString("MM-dd-yyyy-HH-mm-ss"))</Version>
     </PropertyGroup>
 </Project>
