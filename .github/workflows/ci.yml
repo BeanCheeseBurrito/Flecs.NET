@@ -54,7 +54,7 @@ jobs:
       shell: bash
       run: |
         if [ '${{ github.event.inputs.use-auto-generated-version }}' != 'false' ]; then
-          echo "FlecsVersionSuffix=-build-$(date +'%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
+          echo "FlecsVersionSuffix=-dev-$(date +'%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
         fi
 
     - name: Restore Dependencies
@@ -80,8 +80,8 @@ jobs:
           dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Debug
           dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Release
         else
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Debug
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Release
+          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true -c Debug
+          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true -c Release
         fi
 
     - name: Upload Artifacts
@@ -98,12 +98,7 @@ jobs:
       shell: bash
       run: |
         if [ '${{ github.event.inputs.nuget-registry }}' == 'GitLab' ]; then
-          dotnet nuget push src/**/*.nupkg --api-key '${{ secrets.GITLAB_ACCESS_TOKEN }}' --source 'https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json'
+          dotnet nuget push src/**/*.nupkg --api-key '${{ secrets.GITLAB_ACCESS_TOKEN }}' --source 'https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/main/nuget/index.json'
         elif [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
           dotnet nuget push src/**/*.nupkg --api-key '${{ secrets.NUGET_ACCESS_TOKEN }}' --source 'https://api.nuget.org/v3/index.json'
         fi
-
-    - name: Push NuGet Packages Temp Test
-      if: matrix.os == 'ubuntu-latest'
-      shell: bash
-      run: dotnet nuget push src/**/*.nupkg --api-key '${{ secrets.GITLAB_ACCESS_TOKEN }}' --source 'https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json'
