@@ -14,7 +14,7 @@
 > **Warning**
 > This repo is a work in progress. Bugs are expected and the API is subject to change.
 
-## Nuget
+## NuGet
 You can download the nuget package and use **Flecs.NET** right away!
 
 **Flecs.NET (Wrapper + bindings + native libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Debug/)**
@@ -49,6 +49,28 @@ To include both of them in your project based on your build configuration, use t
 
 </Project>
 ```
+
+## GitLab Package Registry
+For more up-to-date packages, development builds are available on the [GitLab package registry](https://gitlab.com/BeanCheeseBurrito/Flecs.NET/-/packages). To add the development feed to your project, add a link to the [index.json](https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/main/nuget/index.json) file as a restore source. You can now reference any package version listed [here](https://gitlab.com/BeanCheeseBurrito/Flecs.NET/-/packages)! 
+
+> **Warning**
+> Development feed packages may be deleted without warning to free up space.
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <RestoreSources>$(RestoreSources);https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/main/nuget/index.json</RestoreSources>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Flecs.NET.Debug" Version="3.2.8-dev-2023-10-30-11-06-14"/>
+    </ItemGroup>
+
+</Project>
+```
+
 
 ## Show me the code!
 ```csharp
