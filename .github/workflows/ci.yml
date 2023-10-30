@@ -79,11 +79,6 @@ jobs:
         dotnet pack /p:FlecsVersionSuffix=$FlecsVersionSuffix /p:ContinuousIntegrationBuild=true -c Debug
         dotnet pack /p:FlecsVersionSuffix=$FlecsVersionSuffix /p:ContinuousIntegrationBuild=true -c Release
 
-    - name: Push NuGet Packages Temp Test
-      if: matrix.os == 'ubuntu-latest'
-      shell: bash
-      run: dotnet nuget push src/**/*.nupkg --api-key $GITLAB_ACCESS_TOKEN --source https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json
-
     - name: Upload Artifacts
       if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v3
@@ -98,7 +93,12 @@ jobs:
       shell: bash
       run: |
         if [ '${{ github.event.inputs.nuget-registry }}' == 'GitLab' ]; then
-          dotnet nuget push src/**/*.nupkg --api-key $GITLAB_ACCESS_TOKEN --source https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json
+          dotnet nuget push src/**/*.nupkg --api-key '${{ secrets.GITLAB_ACCESS_TOKEN }}' --source 'https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json'
         elif [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
-          dotnet nuget push src/**/*.nupkg --api-key $NUGET_ACCESS_TOKEN --source https://api.nuget.org/v3/index.json
+          dotnet nuget push src/**/*.nupkg --api-key '${{ secrets.NUGET_ACCESS_TOKEN }}' --source 'https://api.nuget.org/v3/index.json'
         fi
+
+    - name: Push NuGet Packages Temp Test
+      if: matrix.os == 'ubuntu-latest'
+      shell: bash
+      run: dotnet nuget push src/**/*.nupkg --api-key '${{ secrets.GITLAB_ACCESS_TOKEN }}' --source 'https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/gitlab-nuget-package-actions/nuget/index.json'
