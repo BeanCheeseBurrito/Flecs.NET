@@ -1,4 +1,4 @@
-name: .NET
+name: CI
 
 on:
   push:
@@ -43,7 +43,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v3
       with:
-          name: Nuget Packages
-          path: |
-            src/**/*.nupkg
-            src/**/*.snupkg
+        name: Nuget Packages
+        path: |
+          src/**/*.nupkg
+          src/**/*.snupkg
