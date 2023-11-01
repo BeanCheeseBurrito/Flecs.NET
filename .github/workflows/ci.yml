@@ -98,7 +98,7 @@ jobs:
       shell: bash
       run: |
         if [ '${{ github.event.inputs.nuget-registry }}' == 'GitLab' ]; then
-          dotnet nuget push src/**/*.nupkg --api-key '${{ secrets.GITLAB_ACCESS_TOKEN }}' --source 'https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/main/nuget/index.json'
+          dotnet nuget push src/**/*.nupkg --api-key '${{ secrets.GITLAB_ACCESS_TOKEN }}' --source 'https://gitlab.com/api/v4/projects/51698729/packages/nuget/index.json'
         elif [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
           dotnet nuget push src/**/*.nupkg --api-key '${{ secrets.NUGET_ACCESS_TOKEN }}' --source 'https://api.nuget.org/v3/index.json'
         fi

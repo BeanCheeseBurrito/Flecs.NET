@@ -17,17 +17,17 @@
 ## NuGet
 You can download the nuget package and use **Flecs.NET** right away!
 
-**Flecs.NET (Wrapper + bindings + native libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Debug/)**
+**Flecs.NET (Wrapper + Bindings + Native Libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Debug/)**
 ```console
 dotnet add PROJECT package Flecs.NET.Release --version *-*
 ```
 
-**Flecs.NET.Bindings (Bindings + native libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Bindings.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Bindings.Debug/)**
+**Flecs.NET.Bindings (Bindings + Native Libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Bindings.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Bindings.Debug/)**
 ```console
 dotnet add PROJECT package Flecs.NET.Bindings.Release --version *-*
 ```
 
-**Flecs.NET.Native (Native libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Native.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Native.Debug/)**
+**Flecs.NET.Native (Native Libraries): [Release](https://www.nuget.org/packages/Flecs.NET.Native.Release/) | [Debug](https://www.nuget.org/packages/Flecs.NET.Native.Debug/)**
 ```console
 dotnet add PROJECT package Flecs.NET.Native.Release --version *-*
 ```
@@ -51,8 +51,7 @@ To include both of them in your project based on your build configuration, use t
 ```
 
 ## GitLab Package Registry
-For more up-to-date packages, development builds are available on the [GitLab package registry](https://gitlab.com/BeanCheeseBurrito/Flecs.NET/-/packages). To add the development feed to your project, add a link to the [index.json](https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/main/nuget/index.json) file as a restore source. You can now reference any package version listed [here](https://gitlab.com/BeanCheeseBurrito/Flecs.NET/-/packages)! 
-
+For more up-to-date packages, development builds are available on the [GitLab package registry](https://gitlab.com/BeanCheeseBurrito/Flecs.NET/-/packages). To add the development feed to your project, add the GitLab link below  as a restore source. You can now reference any package version listed [here](https://gitlab.com/BeanCheeseBurrito/Flecs.NET/-/packages)!
 > **Warning**
 > Development feed packages may be deleted without warning to free up space.
 ```xml
@@ -61,7 +60,7 @@ For more up-to-date packages, development builds are available on the [GitLab pa
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net7.0</TargetFramework>
-        <RestoreSources>$(RestoreSources);https://raw.githubusercontent.com/BeanCheeseBurrito/Flecs.NET/main/nuget/index.json</RestoreSources>
+        <RestoreSources>$(RestoreSources);https://gitlab.com/api/v4/projects/51698729/packages/nuget/index.json</RestoreSources>
     </PropertyGroup>
 
     <ItemGroup>
