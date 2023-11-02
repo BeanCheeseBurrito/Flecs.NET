@@ -2,9 +2,10 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Flecs.NET.Core;
 using static Flecs.NET.Bindings.Native;
 
-namespace Flecs.NET.Core
+namespace Flecs.NET.Utilities
 {
     /// <summary>
     ///     Helper macros for working with flecs.
