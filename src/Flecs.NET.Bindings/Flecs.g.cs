@@ -39,8 +39,8 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_asprintf", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_asprintf(byte* fmt);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_assert_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_assert_(byte condition, int error_code, byte* condition_str, byte* file, int line, byte* fmt);
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_assert_log_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ecs_assert_log_(int error_code, byte* condition_str, byte* file, int line, byte* fmt);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_astresc", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_astresc(byte delimiter, byte* @in);
@@ -904,7 +904,7 @@ namespace Flecs.NET.Bindings
         public static extern byte* ecs_parse_identifier(byte* name, byte* expr, byte* ptr, byte* token_out);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_parse_term", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_parse_term(ecs_world_t* world, byte* name, byte* expr, byte* ptr, ecs_term_t* term_out);
+        public static extern byte* ecs_parse_term(ecs_world_t* world, byte* name, byte* expr, byte* ptr, ecs_term_t* term_out, ecs_term_id_t* extra_args);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_parse_token", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_parse_token(byte* name, byte* expr, byte* ptr, byte* token_out, byte delim);
@@ -11841,6 +11841,8 @@ namespace Flecs.NET.Bindings
 
         public const int ECS_OUT_OF_RANGE = 5;
 
+        public const int ECS_PARSER_MAX_ARGS = 16;
+
         public const int ecs_query_t_magic = 1701016433;
 
         public const string ECS_RED = "[0;31m";
@@ -11881,6 +11883,8 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsCascade = 32;
 
+        public const uint EcsDesc = 64;
+
         public const uint EcsDown = 8;
 
         public const uint EcsEntityIsId = 2147483648;
@@ -11893,7 +11897,7 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsEventTableOnly = 16;
 
-        public const uint EcsFilter = 1024;
+        public const uint EcsFilter = 2048;
 
         public const uint EcsFilterHasCondSet = 1024;
 
@@ -11975,11 +11979,11 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsIdWith = 1024;
 
-        public const uint EcsIsEntity = 256;
+        public const uint EcsIsEntity = 512;
 
-        public const uint EcsIsName = 512;
+        public const uint EcsIsName = 1024;
 
-        public const uint EcsIsVariable = 128;
+        public const uint EcsIsVariable = 256;
 
         public const uint EcsIterEntityOptional = 32;
 
@@ -12017,7 +12021,7 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsOsApiLogWithTimeStamp = 4;
 
-        public const uint EcsParent = 64;
+        public const uint EcsParent = 128;
 
         public const uint EcsQueryHasMonitor = 64;
 
@@ -12115,7 +12119,7 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsTraverseAll = 16;
 
-        public const uint EcsTraverseFlags = 126;
+        public const uint EcsTraverseFlags = 254;
 
         public const uint EcsUp = 4;
 
