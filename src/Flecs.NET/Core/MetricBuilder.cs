@@ -66,7 +66,14 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref MetricBuilder Member(string name)
         {
-            return ref Member(new World(World).Lookup(name));
+            Entity m = Desc.id == 0
+                ? new World(World).Lookup(name)
+                : new Entity(World, ecs_get_typeid(World, Desc.id)).Lookup(name);
+
+            if (m == 0)
+                Ecs.Log.Err("member '%s' not found", name);
+
+            return ref Member(m);
         }
 
         /// <summary>

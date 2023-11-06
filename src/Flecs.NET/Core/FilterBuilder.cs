@@ -651,6 +651,8 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
+        // TODO: Evaluate whether this commit should be added? https://github.com/SanderMertens/flecs/commit/bea64d33a5941b7156a379fa3434bfa28ee82c16
+
         /// <summary>
         ///     Alternative form of Term().
         /// </summary>
