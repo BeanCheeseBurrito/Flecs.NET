@@ -1083,6 +1083,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity Add(ulong id)
         {
+            Ecs.Assert(ecs_id_is_valid(World, id) == Macros.True, nameof(ECS_INVALID_OPERATION));
             ecs_add_id(World, Id, id);
             return ref this;
         }
