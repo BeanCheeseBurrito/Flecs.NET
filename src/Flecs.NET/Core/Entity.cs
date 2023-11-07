@@ -1044,6 +1044,27 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Emits an event for this entity.
+        /// </summary>
+        /// <param name="evt"></param>
+        public void Emit(ulong evt)
+        {
+            new World(World)
+                .Event(evt)
+                .Entity(Id)
+                .Emit();
+        }
+
+        /// <summary>
+        ///     Emits an event for this entity.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void Emit<T>()
+        {
+            Emit(Type<T>.Id(World));
+        }
+
+        /// <summary>
         ///     Short for Has(EcsChildOf, entity).
         /// </summary>
         /// <param name="entity"></param>
@@ -2210,6 +2231,38 @@ namespace Flecs.NET.Core
         public ref Entity SetJsonSecond<TSecond>(ulong first, string json, ecs_from_json_desc_t* desc = null)
         {
             return ref SetJson(Macros.PairSecond<TSecond>(first, World), json, desc);
+        }
+
+        /// <summary>
+        ///     Observe an event on this entity.
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public ref Entity Observe(ulong evt, Ecs.IterCallback callback)
+        {
+            World world = new World(World);
+
+            Observer observer = world.Observer(
+                filter: world.FilterBuilder().With(EcsAny).Src(Id),
+                observer: world.ObserverBuilder().Event(evt),
+                callback: callback
+            );
+
+            observer.Entity.ChildOf(Id);
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Observe an event on this entity.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Entity Observe<T>(Ecs.IterCallback callback)
+        {
+            return ref Observe(Type<T>.Id(World), callback);
         }
 
         /// <summary>

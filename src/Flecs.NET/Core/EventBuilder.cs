@@ -104,14 +104,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref EventBuilder Entity(ulong entity)
         {
-            ecs_record_t* r = ecs_record_find(World, entity);
-
-            Ecs.Assert(r != null, nameof(ECS_INVALID_PARAMETER));
-            Ecs.Assert(r->table != null, nameof(ECS_INVALID_PARAMETER));
-
-            _desc.table = r->table;
-            _desc.offset = Macros.RecordToRow(r->row);
-            _desc.count = 1;
+            Desc.entity = entity;
             return ref this;
         }
 
@@ -158,9 +151,6 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Emit()
         {
-            Ecs.Assert(_ids.count != 0, nameof(ECS_INVALID_PARAMETER));
-            Ecs.Assert(_desc.table != null, nameof(ECS_INVALID_PARAMETER));
-
             fixed (EventBuilder* self = &this)
             {
                 _ids.array = self->_idsArray;
