@@ -311,6 +311,11 @@ namespace Flecs.NET.Core
         public const uint Cascade = EcsCascade;
 
         /// <summary>
+        ///     Equivalent to <see cref="EcsDesc"/>
+        /// </summary>
+        public const uint Desc = EcsDesc;
+
+        /// <summary>
         ///     Equivalent to <see cref="EcsParent"/>
         /// </summary>
         public const uint Parent = EcsParent;

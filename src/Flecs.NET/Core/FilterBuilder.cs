@@ -161,6 +161,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Use with cascade to iterate results in descending (bottom -> top) order
+        /// </summary>
+        /// <returns></returns>
+        public ref FilterBuilder Descend() {
+            AssertTermId();
+            CurrentTermId.flags |= EcsDesc;
+            return ref this;
+        }
+
+        /// <summary>
         ///     The parent flag is short for Up(EcsChildOf).
         /// </summary>
         /// <returns></returns>
