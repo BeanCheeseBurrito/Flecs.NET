@@ -146,6 +146,17 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
+        // TODO: Temporarily internal for use in entity observers.
+        // TODO: This should be public once we figure out a safe way to support managed types.
+        internal ref EventBuilder Ctx<T>(ref T data)
+        {
+            fixed (T* ptr = &data)
+            {
+                _desc.param = ptr;
+                return ref this;
+            }
+        }
+
         /// <summary>
         ///     Emits the event.
         /// </summary>

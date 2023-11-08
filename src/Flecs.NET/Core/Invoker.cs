@@ -61,6 +61,40 @@ namespace Flecs.NET.Core
             Macros.TableUnlock(iter->world, iter->table);
         }
 
+        /// <summary>
+        ///     Invokes an entity observer using a delegate.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void Observe(ecs_iter_t* iter, Ecs.EachEntityCallback callback)
+        {
+            callback(new Entity(iter->world, ecs_field_src(iter, 1)));
+        }
+
+        /// <summary>
+        ///     Invokes an entity observer using a delegate.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Observe<T>(ecs_iter_t* iter, Ecs.EachCallback<T> callback)
+        {
+            Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
+            callback(ref Managed.GetTypeRef<T>(iter->param));
+        }
+
+        /// <summary>
+        ///     Invokes an entity observer using a delegate.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Observe<T>(ecs_iter_t* iter, Ecs.EachEntityCallback<T> callback)
+        {
+            Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
+            callback(new Entity(iter->world, ecs_field_src(iter, 1)), ref Managed.GetTypeRef<T>(iter->param));
+        }
+
 #if NET5_0_OR_GREATER
         /// <summary>
         ///     Invokes an iter callback using a managed function pointer.

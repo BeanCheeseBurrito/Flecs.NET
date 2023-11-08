@@ -14,25 +14,49 @@ using Flecs.NET.Core;
 {
     using World world = World.Create();
 
-    // Create a widget entity
+    // Create a widget entity.
     Entity widget = world.Entity("MyWidget");
 
-    // Observe the OnClick event on the widget entity
-    widget.Observe<OnClick>((Iter it) =>
+    // Observe the Click event on the widget entity.
+    widget.Observe<Click>(() =>
     {
-        // The event source can be obtained with it.Src(1). This allows the same
-        // event function to be used for different entities.
-        Console.WriteLine($"Clicked on {it.Src(1).Path()}!");
+        Console.WriteLine($"Clicked!");
     });
 
-    // Emit the OnClick event for the widget
-    widget.Emit<OnClick>();
+    // Observers can have an entity argument that holds the event source.
+    // This allows the same function to be reused for different entities.
+    widget.Observe<Click>((Entity src) =>
+    {
+        Console.WriteLine($"Clicked on {src.Path()}!");
+    });
+
+    // Observe the Resize event. Events with payload are passed as arguments
+    // to the observer callback.
+    widget.Observe((ref Resize p) =>
+    {
+        Console.WriteLine($"Resized to ({p.Width}, {p.Height})!");
+    });
+
+    // Emit the Click event.
+    widget.Emit<Click>();
+
+    // Emit the Resize event.
+    widget.Emit<Resize>(new () { Width = 100, Height = 200});
 }
 
-// The event to emit.
-public struct OnClick { }
+// An event without payload.
+public struct Click { }
+
+// An event with payload.
+public struct Resize
+{
+    public double Width;
+    public double Height;
+}
 
 #endif
 
 // Output:
 // Clicked on MyWidget!
+// Clicked!
+// Resized to (100, 200)!

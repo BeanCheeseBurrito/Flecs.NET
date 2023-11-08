@@ -21,26 +21,29 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr ObserverActionPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserverAction;
 
-        internal static readonly IntPtr RoutineActionPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&RoutineAction;
-
         internal static readonly IntPtr ObserverIterPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserverIter;
-
-        internal static readonly IntPtr RoutineIterPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&RoutineIter;
 
         internal static readonly IntPtr ObserverEachEntityPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserverEachEntity;
 
-        internal static readonly IntPtr RoutineEachEntityPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&RoutineEachEntity;
-
         internal static readonly IntPtr ObserverEachIndexPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserverEachIndex;
 
+        internal static readonly IntPtr RoutineActionPointer =
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&RoutineAction;
+
+        internal static readonly IntPtr RoutineIterPointer =
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&RoutineIter;
+
+        internal static readonly IntPtr RoutineEachEntityPointer =
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&RoutineEachEntity;
+
         internal static readonly IntPtr RoutineEachIndexPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&RoutineEachIndex;
+
+        internal static readonly IntPtr EntityObserverEachEntityPointer =
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEachEntity;
 
         internal static readonly IntPtr WorldContextFreePointer =
             (IntPtr)(delegate* <void*, void>)&WorldContextFree;
@@ -63,26 +66,29 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr ObserverActionPointer =
             Marshal.GetFunctionPointerForDelegate(ObserverActionReference = ObserverAction);
 
-        internal static readonly IntPtr RoutineActionPointer =
-            Marshal.GetFunctionPointerForDelegate(RoutineActionReference = RoutineAction);
-
         internal static readonly IntPtr ObserverIterPointer =
             Marshal.GetFunctionPointerForDelegate(ObserverIterReference = ObserverIter);
-
-        internal static readonly IntPtr RoutineIterPointer =
-            Marshal.GetFunctionPointerForDelegate(RoutineIterReference = RoutineIter);
 
         internal static readonly IntPtr ObserverEachEntityPointer =
             Marshal.GetFunctionPointerForDelegate(ObserverEachEntityReference = ObserverEachEntity);
 
-        internal static readonly IntPtr RoutineEachEntityPointer =
-            Marshal.GetFunctionPointerForDelegate(RoutineEachEntityReference = RoutineEachEntity);
-
         internal static readonly IntPtr ObserverEachIndexPointer =
             Marshal.GetFunctionPointerForDelegate(ObserverEachIndexReference = ObserverEachIndex);
 
+        internal static readonly IntPtr RoutineActionPointer =
+            Marshal.GetFunctionPointerForDelegate(RoutineActionReference = RoutineAction);
+
+        internal static readonly IntPtr RoutineIterPointer =
+            Marshal.GetFunctionPointerForDelegate(RoutineIterReference = RoutineIter);
+
+        internal static readonly IntPtr RoutineEachEntityPointer =
+            Marshal.GetFunctionPointerForDelegate(RoutineEachEntityReference = RoutineEachEntity);
+
         internal static readonly IntPtr RoutineEachIndexPointer =
             Marshal.GetFunctionPointerForDelegate(RoutineEachIndexReference = RoutineEachIndex);
+
+        internal static readonly IntPtr EntityObserverEachEntityPointer =
+            Marshal.GetFunctionPointerForDelegate(EntityObserverEachEntityReference = EntityObserverEachEntity);
 
         internal static readonly IntPtr WorldContextFreePointer =
             Marshal.GetFunctionPointerForDelegate(WorldContextFreeReference = WorldContextFree);
@@ -103,16 +109,16 @@ namespace Flecs.NET.Core
             Marshal.GetFunctionPointerForDelegate(OsApiAbortReference = OsApiAbort);
 
         private static readonly Ecs.IterAction ObserverActionReference;
-        private static readonly Ecs.IterAction RoutineActionReference;
-
         private static readonly Ecs.IterAction ObserverIterReference;
-        private static readonly Ecs.IterAction RoutineIterReference;
-
         private static readonly Ecs.IterAction ObserverEachEntityReference;
-        private static readonly Ecs.IterAction RoutineEachEntityReference;
-
         private static readonly Ecs.IterAction ObserverEachIndexReference;
+
+        private static readonly Ecs.IterAction RoutineActionReference;
+        private static readonly Ecs.IterAction RoutineIterReference;
+        private static readonly Ecs.IterAction RoutineEachEntityReference;
         private static readonly Ecs.IterAction RoutineEachIndexReference;
+
+        private static readonly Ecs.IterAction EntityObserverEachEntityReference;
 
         private static readonly Ecs.ContextFree WorldContextFreeReference;
         private static readonly Ecs.ContextFree ObserverContextFreeReference;
@@ -131,23 +137,9 @@ namespace Flecs.NET.Core
             callback();
         }
 
-        private static void RoutineAction(ecs_iter_t* iter)
-        {
-            RoutineContext* context = (RoutineContext*)iter->binding_ctx;
-            Action callback = (Action)context->Iterator.GcHandle.Target!;
-            callback();
-        }
-
         private static void ObserverIter(ecs_iter_t* iter)
         {
             ObserverContext* context = (ObserverContext*)iter->binding_ctx;
-            Ecs.IterCallback callback = (Ecs.IterCallback)context->Iterator.GcHandle.Target!;
-            Invoker.Iter(iter, callback);
-        }
-
-        private static void RoutineIter(ecs_iter_t* iter)
-        {
-            RoutineContext* context = (RoutineContext*)iter->binding_ctx;
             Ecs.IterCallback callback = (Ecs.IterCallback)context->Iterator.GcHandle.Target!;
             Invoker.Iter(iter, callback);
         }
@@ -159,17 +151,31 @@ namespace Flecs.NET.Core
             Invoker.Each(iter, callback);
         }
 
-        private static void RoutineEachEntity(ecs_iter_t* iter)
-        {
-            RoutineContext* context = (RoutineContext*)iter->binding_ctx;
-            Ecs.EachEntityCallback callback = (Ecs.EachEntityCallback)context->Iterator.GcHandle.Target!;
-            Invoker.Each(iter, callback);
-        }
-
         private static void ObserverEachIndex(ecs_iter_t* iter)
         {
             ObserverContext* context = (ObserverContext*)iter->binding_ctx;
             Ecs.EachIndexCallback callback = (Ecs.EachIndexCallback)context->Iterator.GcHandle.Target!;
+            Invoker.Each(iter, callback);
+        }
+
+        private static void RoutineAction(ecs_iter_t* iter)
+        {
+            RoutineContext* context = (RoutineContext*)iter->binding_ctx;
+            Action callback = (Action)context->Iterator.GcHandle.Target!;
+            callback();
+        }
+
+        private static void RoutineIter(ecs_iter_t* iter)
+        {
+            RoutineContext* context = (RoutineContext*)iter->binding_ctx;
+            Ecs.IterCallback callback = (Ecs.IterCallback)context->Iterator.GcHandle.Target!;
+            Invoker.Iter(iter, callback);
+        }
+
+        private static void RoutineEachEntity(ecs_iter_t* iter)
+        {
+            RoutineContext* context = (RoutineContext*)iter->binding_ctx;
+            Ecs.EachEntityCallback callback = (Ecs.EachEntityCallback)context->Iterator.GcHandle.Target!;
             Invoker.Each(iter, callback);
         }
 
@@ -178,6 +184,13 @@ namespace Flecs.NET.Core
             RoutineContext* context = (RoutineContext*)iter->binding_ctx;
             Ecs.EachIndexCallback callback = (Ecs.EachIndexCallback)context->Iterator.GcHandle.Target!;
             Invoker.Each(iter, callback);
+        }
+
+        private static void EntityObserverEachEntity(ecs_iter_t* iter)
+        {
+            ObserverContext* context = (ObserverContext*)iter->binding_ctx;
+            Ecs.EachEntityCallback callback = (Ecs.EachEntityCallback)context->Iterator.GcHandle.Target!;
+            Invoker.Observe(iter, callback);
         }
 
         private static void WorldContextFree(void* context)
@@ -371,6 +384,12 @@ namespace Flecs.NET.Core
     internal static unsafe partial class BindingContext<T0>
     {
 #if NET5_0_OR_GREATER
+        internal static readonly IntPtr EntityObserverEachPointer =
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEach;
+
+        internal static readonly IntPtr EntityObserverEachEntityPointer =
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEachEntity;
+
         internal static readonly IntPtr UnmanagedCtorPointer =
             (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&UnmanagedCtor;
 
@@ -416,6 +435,12 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr OnRemoveHookPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveHook;
 #else
+        internal static readonly IntPtr EntityObserverEachPointer =
+            Marshal.GetFunctionPointerForDelegate(EntityObserverEachReference = EntityObserverEach);
+
+        internal static readonly IntPtr EntityObserverEachEntityPointer =
+            Marshal.GetFunctionPointerForDelegate(EntityObserverEachEntityReference = EntityObserverEachEntity);
+
         internal static readonly IntPtr UnmanagedCtorPointer =
             Marshal.GetFunctionPointerForDelegate(UnmanagedCtorReference = UnmanagedCtor);
 
@@ -461,6 +486,9 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr OnRemoveHookPointer =
             Marshal.GetFunctionPointerForDelegate(OnRemoveHookCopyReference = OnRemoveHook);
 
+        private static readonly Ecs.IterAction EntityObserverEachReference;
+        private static readonly Ecs.IterAction EntityObserverEachEntityReference;
+
         private static readonly Ecs.CtorCallback UnmanagedCtorReference;
         private static readonly Ecs.DtorCallback UnmanagedDtorReference;
         private static readonly Ecs.MoveCallback UnmanagedMoveReference;
@@ -480,6 +508,20 @@ namespace Flecs.NET.Core
         private static readonly Ecs.IterAction OnSetHookReference;
         private static readonly Ecs.IterAction OnRemoveHookCopyReference;
 #endif
+
+        private static void EntityObserverEach(ecs_iter_t* iter)
+        {
+            BindingContext.ObserverContext* context = (BindingContext.ObserverContext*)iter->binding_ctx;
+            Ecs.EachCallback<T0> callback = (Ecs.EachCallback<T0>)context->Iterator.GcHandle.Target!;
+            Invoker.Observe(iter, callback);
+        }
+
+        private static void EntityObserverEachEntity(ecs_iter_t* iter)
+        {
+            BindingContext.ObserverContext* context = (BindingContext.ObserverContext*)iter->binding_ctx;
+            Ecs.EachEntityCallback<T0> callback = (Ecs.EachEntityCallback<T0>)context->Iterator.GcHandle.Target!;
+            Invoker.Observe(iter, callback);
+        }
 
         private static void UnmanagedCtor(void* dataHandle, int count, ecs_type_info_t* typeInfoHandle)
         {

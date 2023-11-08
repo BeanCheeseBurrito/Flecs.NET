@@ -100,6 +100,23 @@ public struct Pod
     }
 };
 
+public struct EvtData
+{
+    public int Value;
+}
+
+public struct Evt
+{
+}
+
+public struct IdA
+{
+}
+
+public struct IdB
+{
+}
+
 public struct MyTag
 {
 }

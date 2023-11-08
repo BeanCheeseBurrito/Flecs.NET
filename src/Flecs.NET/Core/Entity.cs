@@ -1046,13 +1046,22 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Emits an event for this entity.
         /// </summary>
-        /// <param name="evt"></param>
-        public void Emit(ulong evt)
+        /// <param name="eventId"></param>
+        public void Emit(ulong eventId)
         {
             new World(World)
-                .Event(evt)
+                .Event(eventId)
                 .Entity(Id)
                 .Emit();
+        }
+
+        /// <summary>
+        ///     Emits an event for this entity.
+        /// </summary>
+        /// <param name="eventId"></param>
+        public void Emit(Entity eventId)
+        {
+            Emit(eventId.Id.Value);
         }
 
         /// <summary>
@@ -1062,6 +1071,19 @@ namespace Flecs.NET.Core
         public void Emit<T>()
         {
             Emit(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Emits an event for this entity.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void Emit<T>(T payload)
+        {
+            new World(World)
+                .Event(Type<T>.Id(World))
+                .Entity(Id)
+                .Ctx(ref payload)
+                .Emit();
         }
 
         /// <summary>
@@ -2236,22 +2258,23 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Observe an event on this entity.
         /// </summary>
-        /// <param name="evt"></param>
+        /// <param name="eventId"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public ref Entity Observe(ulong evt, Ecs.IterCallback callback)
+        public ref Entity Observe(ulong eventId, Action callback)
         {
-            World world = new World(World);
+            return ref ObserveInternal(eventId, callback, BindingContext.ObserverActionPointer);
+        }
 
-            Observer observer = world.Observer(
-                filter: world.FilterBuilder().With(EcsAny).Src(Id),
-                observer: world.ObserverBuilder().Event(evt),
-                callback: callback
-            );
-
-            observer.Entity.ChildOf(Id);
-
-            return ref this;
+        /// <summary>
+        ///     Observe an event on this entity.
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public ref Entity Observe(ulong eventId, Ecs.EachEntityCallback callback)
+        {
+            return ref ObserveInternal(eventId, callback, BindingContext.EntityObserverEachEntityPointer);
         }
 
         /// <summary>
@@ -2260,9 +2283,42 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref Entity Observe<T>(Ecs.IterCallback callback)
+        public ref Entity Observe<T>(Action callback)
         {
             return ref Observe(Type<T>.Id(World), callback);
+        }
+
+        /// <summary>
+        ///     Observe an event on this entity.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Entity Observe<T>(Ecs.EachEntityCallback callback)
+        {
+            return ref Observe(Type<T>.Id(World), callback);
+        }
+
+        /// <summary>
+        ///     Observe an event on this entity.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Entity Observe<T>(Ecs.EachCallback<T> callback)
+        {
+            return ref ObserveInternal(Type<T>.Id(World), callback, BindingContext<T>.EntityObserverEachPointer);
+        }
+
+        /// <summary>
+        ///     Observe an event on this entity.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Entity Observe<T>(Ecs.EachEntityCallback<T> callback)
+        {
+            return ref ObserveInternal(Type<T>.Id(World), callback, BindingContext<T>.EntityObserverEachEntityPointer);
         }
 
         /// <summary>
@@ -2612,6 +2668,25 @@ namespace Flecs.NET.Core
                 ecs_set_id(World, Id, id, (IntPtr)size, isRef ? Managed.AllocGcHandle(&ptr, ref component) : data);
                 return ref this;
             }
+        }
+
+        private ref Entity ObserveInternal<T>(ulong eventId, T callback, IntPtr bindingContextCallback) where T : Delegate
+        {
+            BindingContext.ObserverContext* observerContext = Memory.AllocZeroed<BindingContext.ObserverContext>(1);
+            BindingContext.SetCallback(ref observerContext->Iterator, callback, false);
+
+            ecs_observer_desc_t desc = default;
+            desc.events[0] = eventId;
+            desc.filter.terms[0].id = EcsAny;
+            desc.filter.terms[0].src.id = Id;
+            desc.callback = bindingContextCallback;
+            desc.binding_ctx = observerContext;
+            desc.binding_ctx_free = BindingContext.ObserverContextFreePointer;
+
+            ulong observer = ecs_observer_init(World, &desc);
+            ecs_add_id(World, observer, Macros.Pair(EcsChildOf, Id));
+
+            return ref this;
         }
 
         /// <summary>
