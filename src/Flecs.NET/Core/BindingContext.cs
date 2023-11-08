@@ -18,6 +18,12 @@ namespace Flecs.NET.Core
         internal static readonly byte* DefaultRootSeparator = (byte*)Marshal.StringToHGlobalAnsi("::");
 
 #if NET5_0_OR_GREATER
+        internal static readonly IntPtr ObserverActionPointer =
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserverAction;
+
+        internal static readonly IntPtr RoutineActionPointer =
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&RoutineAction;
+
         internal static readonly IntPtr ObserverIterPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserverIter;
 
@@ -54,6 +60,12 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr OsApiAbortPointer =
             (IntPtr)(delegate* <void>)&OsApiAbort;
 #else
+        internal static readonly IntPtr ObserverActionPointer =
+            Marshal.GetFunctionPointerForDelegate(ObserverActionReference = ObserverAction);
+
+        internal static readonly IntPtr RoutineActionPointer =
+            Marshal.GetFunctionPointerForDelegate(RoutineActionReference = RoutineAction);
+
         internal static readonly IntPtr ObserverIterPointer =
             Marshal.GetFunctionPointerForDelegate(ObserverIterReference = ObserverIter);
 
@@ -90,6 +102,9 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr OsApiAbortPointer =
             Marshal.GetFunctionPointerForDelegate(OsApiAbortReference = OsApiAbort);
 
+        private static readonly Ecs.IterAction ObserverActionReference;
+        private static readonly Ecs.IterAction RoutineActionReference;
+
         private static readonly Ecs.IterAction ObserverIterReference;
         private static readonly Ecs.IterAction RoutineIterReference;
 
@@ -108,6 +123,20 @@ namespace Flecs.NET.Core
 
         private static readonly Action OsApiAbortReference;
 #endif
+
+        private static void ObserverAction(ecs_iter_t* iter)
+        {
+            ObserverContext* context = (ObserverContext*)iter->binding_ctx;
+            Action callback = (Action)context->Iterator.GcHandle.Target!;
+            callback();
+        }
+
+        private static void RoutineAction(ecs_iter_t* iter)
+        {
+            RoutineContext* context = (RoutineContext*)iter->binding_ctx;
+            Action callback = (Action)context->Iterator.GcHandle.Target!;
+            callback();
+        }
 
         private static void ObserverIter(ecs_iter_t* iter)
         {

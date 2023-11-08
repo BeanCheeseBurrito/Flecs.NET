@@ -42,6 +42,38 @@ namespace Flecs.NET.Core
             FilterBuilder filterBuilder = default,
             QueryBuilder queryBuilder = default,
             RoutineBuilder routineBuilder = default,
+            Action? callback = null,
+            string name = "")
+        {
+            _entity = default;
+
+            InitRoutine(
+                true,
+                BindingContext.RoutineActionPointer,
+                ref callback,
+                ref world,
+                ref filterBuilder,
+                ref queryBuilder,
+                ref routineBuilder,
+                ref name
+            );
+        }
+
+        /// <summary>
+        ///     Creates a routine for the provided world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="filterBuilder"></param>
+        /// <param name="queryBuilder"></param>
+        /// <param name="routineBuilder"></param>
+        /// <param name="callback"></param>
+        /// <param name="name"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Routine(
+            ecs_world_t* world,
+            FilterBuilder filterBuilder = default,
+            QueryBuilder queryBuilder = default,
+            RoutineBuilder routineBuilder = default,
             Ecs.IterCallback? callback = null,
             string name = "")
         {

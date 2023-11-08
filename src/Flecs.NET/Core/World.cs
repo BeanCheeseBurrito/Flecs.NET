@@ -2284,6 +2284,23 @@ namespace Flecs.NET.Core
         public Observer Observer(
             FilterBuilder filter = default,
             ObserverBuilder observer = default,
+            Action? callback = null,
+            string name = "")
+        {
+            return new Observer(Handle, filter, observer, callback, name);
+        }
+
+        /// <summary>
+        ///     Create an observer.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="observer"></param>
+        /// <param name="callback"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Observer Observer(
+            FilterBuilder filter = default,
+            ObserverBuilder observer = default,
             Ecs.IterCallback? callback = null,
             string name = "")
         {
@@ -2332,6 +2349,25 @@ namespace Flecs.NET.Core
         public Observer Observer(ulong entity)
         {
             return new Observer(Handle, entity);
+        }
+
+        /// <summary>
+        ///     Create routine.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="query"></param>
+        /// <param name="routine"></param>
+        /// <param name="callback"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Routine Routine(
+            FilterBuilder filter = default,
+            QueryBuilder query = default,
+            RoutineBuilder routine = default,
+            Action? callback = null,
+            string name = "")
+        {
+            return new Routine(Handle, filter, query, routine, callback, name);
         }
 
         /// <summary>

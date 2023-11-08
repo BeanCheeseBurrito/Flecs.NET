@@ -40,6 +40,35 @@ namespace Flecs.NET.Core
             ecs_world_t* world,
             FilterBuilder filterBuilder = default,
             ObserverBuilder observerBuilder = default,
+            Action? callback = null,
+            string name = "")
+        {
+            _entity = default;
+
+            InitObserver(
+                true,
+                BindingContext.ObserverActionPointer,
+                ref callback,
+                ref world,
+                ref filterBuilder,
+                ref observerBuilder,
+                ref name
+            );
+        }
+
+        /// <summary>
+        ///     Creates an observer for the provided world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="filterBuilder"></param>
+        /// <param name="observerBuilder"></param>
+        /// <param name="callback"></param>
+        /// <param name="name"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Observer(
+            ecs_world_t* world,
+            FilterBuilder filterBuilder = default,
+            ObserverBuilder observerBuilder = default,
             Ecs.IterCallback? callback = null,
             string name = "")
         {
