@@ -61,16 +61,11 @@ jobs:
       if: matrix.os == 'macos-latest'
       shell: bash
       run: |
-        IPHONEOS_SDK=$(xcrun --sdk iphoneos --show-sdk-path)
-        IPHONEOS_SDK_INCLUDE=$IPHONEOS_SDK/usr/include
-        IPHONESIMULATOR_SDK=$(xcrun --sdk iphonesimulator --show-sdk-path)
-        IPHONESIMULATOR_SDK_INCLUDE=$IPHONESIMULATOR_SDK/usr/include
+        IOS_SDK=$(xcrun --sdk iphoneos --show-sdk-path)
+        IOS_SIMULATOR_SDK=$(xcrun --sdk iphonesimulator --show-sdk-path)
         
-        echo "IPHONEOS_SDK=$IPHONEOS_SDK" >> $GITHUB_ENV
-        echo "IPHONEOS_SDK_INCLUDE=$IPHONEOS_SDK_INCLUDE" >> $GITHUB_ENV
-        
-        echo "IPHONESIMULATOR_SDK=$IPHONESIMULATOR_SDK" >> $GITHUB_ENV
-        echo "IPHONESIMULATOR_SDK_INCLUDE=$IPHONESIMULATOR_SDK_INCLUDE" >> $GITHUB_ENV
+        echo "IOS_SDK=IOS_SDK" >> $GITHUB_ENV
+        echo "IOS_SIMULATOR_SDK=IOS_SIMULATOR_SDK" >> $GITHUB_ENV
 
     - name: Restore Dependencies
       shell: bash
@@ -80,29 +75,30 @@ jobs:
       shell: bash
       run: dotnet run --project src/Flecs.NET.Bindgen
 
-    - name: Build Native Libraries
+    - name: Build
       shell: bash
       run: |
         if [ '${{ matrix.os }}' == 'macos-latest' ]; then
-          dotnet build src/Flecs.NET.Native --property:IosSdkPath=$IPHONEOS_SDK
-          ls src/Flecs.NET.Native/debug/ios-arm64
+          dotnet build -c Debug   --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
+          dotnet build -c Release --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
         else
-          dotnet build src/Flecs.NET.Native
+          dotnet build -c Debug
+          dotnet build -c Release
         fi
 
     - name: Run Tests
       shell: bash
-      run: dotnet test --verbosity minimal
+      run: dotnet test --no-build --verbosity minimal
 
     - name: Pack Nuget Packages
       shell: bash
       run: |
         if [ '${{ github.event.inputs.nuget-registry }}' == 'GitLab' ]; then
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Debug
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Release
+          dotnet pack --no-build --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Debug
+          dotnet pack --no-build --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Release
         else
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true -c Debug
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true -c Release
+          dotnet pack --no-build --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true -c Debug
+          dotnet pack --no-build --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true -c Release
         fi
 
     - name: Upload Artifacts
