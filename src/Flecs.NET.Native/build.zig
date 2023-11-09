@@ -24,7 +24,7 @@ pub fn compileFlecs(options: Options, b: *Build, lib: *Build.Step.Compile) void 
 
             if (lib.target.getAbi() == .simulator and options.ios_simulator_sdk_path != null) {
                 b.sysroot = options.ios_simulator_sdk_path;
-            } else if (options.ios_simulator_sdk_path != null) {
+            } else if (options.ios_sdk_path != null) {
                 b.sysroot = options.ios_sdk_path;
             } else {
                 @panic("A path to an IOS SDK needs to be provided when compiling for IOS.");
