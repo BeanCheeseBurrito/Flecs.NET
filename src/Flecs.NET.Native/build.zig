@@ -20,9 +20,12 @@ pub fn compileFlecs(options: Options, b: *Build, lib: *Build.Step.Compile) void 
             lib.linkSystemLibraryName("ws2_32");
         },
         .ios => {
-            if (options.ios_sdk_path) |ios_sdk_path| {
-                b.sysroot = ios_sdk_path;
-                lib.addSystemIncludePath(.{ .path = "/usr/include" });
+            lib.addSystemIncludePath(.{ .path = "/usr/include" });
+
+            if (lib.target.getAbi() == .simulator and options.ios_simulator_sdk_path != null) {
+                b.sysroot = options.ios_simulator_sdk_path;
+            } else if (options.ios_simulator_sdk_path != null) {
+                b.sysroot = options.ios_sdk_path;
             } else {
                 @panic("A path to an IOS SDK needs to be provided when compiling for IOS.");
             }
