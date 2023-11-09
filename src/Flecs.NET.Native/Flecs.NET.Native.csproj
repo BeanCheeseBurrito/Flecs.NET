@@ -106,13 +106,11 @@
         <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/linux-x64/libflecs.a')" Include="debug/linux-x64/libflecs.a" PackagePath="static_libraries/linux-x64/libflecs.a"/>
         <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/osx-x64/libflecs.a')" Include="debug/osx-x64/libflecs.a" PackagePath="static_libraries/osx-x64/libflecs.a"/>
         <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-x64/flecs.lib')" Include="debug/win-x64/flecs.lib" PackagePath="static_libraries/win-x64/flecs.lib"/>
-        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/ios-x64/libflecs.a')" Include="debug/ios-x64/libflecs.a" PackagePath="static_libraries/ios-x64/libflecs.a"/>
         <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/iossimulator-x64/libflecs.a')" Include="debug/iossimulator-x64/libflecs.a" PackagePath="static_libraries/iossimulator-x64/libflecs.a"/>
 
         <Content Condition="'$(Configuration)' == 'Release' And Exists('release/linux-x64/libflecs.a')" Include="release/linux-x64/libflecs.a" PackagePath="static_libraries/linux-x64/libflecs.a"/>
         <Content Condition="'$(Configuration)' == 'Release' And Exists('release/osx-x64/libflecs.a')" Include="release/osx-x64/libflecs.a" PackagePath="static_libraries/osx-x64/libflecs.a"/>
         <Content Condition="'$(Configuration)' == 'Release' And Exists('release/win-x64/flecs.lib')" Include="release/win-x64/flecs.lib" PackagePath="static_libraries/win-x64/flecs.lib"/>
-        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/ios-x64/libflecs.a')" Include="release/ios-x64/libflecs.a" PackagePath="static_libraries/ios-x64/libflecs.a"/>
         <Content Condition="'$(Configuration)' == 'Release' And Exists('release/iossimulator-x64/libflecs.a')" Include="release/iossimulator-x64/libflecs.a" PackagePath="static_libraries/iossimulator-x64/libflecs.a"/>
 
         <!--Arm64-->
@@ -134,13 +132,11 @@
         <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir linux-x64          -Dtarget=x86_64-linux-gnu"/>
         <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir win-x64            -Dtarget=x86_64-windows-gnu"/>
         <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir osx-x64            -Dtarget=x86_64-macos"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir ios-x64            -Dtarget=x86_64-ios           -Dios-sdk-path=$(IosSdkPath)" Condition="'$(IosSdkPath)' != ''"/>
         <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir iossimulator-x64   -Dtarget=x86_64-ios-simulator -Dios-simulator-sdk-path=$(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
 
         <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir linux-x64          -Dtarget=x86_64-linux-gnu"/>
         <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir win-x64            -Dtarget=x86_64-windows-gnu"/>
         <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir osx-x64            -Dtarget=x86_64-macos"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir ios-x64            -Dtarget=x86_64-ios           -Dios-sdk-path=$(IosSdkPath)" Condition="'$(IosSdkPath)' != ''"/>
         <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir iossimulator-x64   -Dtarget=x86_64-ios-simulator -Dios-simulator-sdk-path=$(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
 
         <!--Arm64-->
