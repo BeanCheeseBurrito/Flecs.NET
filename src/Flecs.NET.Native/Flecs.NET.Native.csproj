@@ -115,6 +115,7 @@
         <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir linux-arm64 -Dtarget=aarch64-linux-gnu"/>
         <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir win-arm64   -Dtarget=aarch64-windows-gnu"/>
         <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir osx-arm64   -Dtarget=aarch64-macos"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir ios-arm64   -Dtarget=aarch64-ios -Dios-sdk-path=$(IosSdkPath)" Condition="'$(IosSdkPath)' != ''"/>
 
         <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir linux-x64   -Dtarget=x86_64-linux-gnu"/>
         <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir win-x64     -Dtarget=x86_64-windows-gnu"/>
