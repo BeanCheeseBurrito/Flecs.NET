@@ -75,15 +75,15 @@ jobs:
       shell: bash
       run: dotnet run --project src/Flecs.NET.Bindgen
 
-    - name: Build
+    - name: Build Projects
       shell: bash
       run: |
         if [ '${{ matrix.os }}' == 'macos-latest' ]; then
-          dotnet build -c Debug   --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
-          dotnet build -c Release --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
+          dotnet build --property:Deterministic=true -c Debug   --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
+          dotnet build --property:Deterministic=true -c Release --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
         else
-          dotnet build -c Debug
-          dotnet build -c Release
+          dotnet build --property:Deterministic=true -c Debug
+          dotnet build --property:Deterministic=true -c Release
         fi
 
     - name: Run Tests

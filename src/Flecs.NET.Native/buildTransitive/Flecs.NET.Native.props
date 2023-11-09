@@ -3,17 +3,27 @@
         <FlecsStaticLibraryFolder>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)../static_libraries'))</FlecsStaticLibraryFolder>
 
         <FlecsStaticLibrary_linux-x64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)linux-x64/libflecs.a'))</FlecsStaticLibrary_linux-x64>
-        <FlecsStaticLibrary_linux-arm64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)linux-arm64/libflecs.a'))</FlecsStaticLibrary_linux-arm64>
-        <FlecsStaticLibrary_osx-x64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)osx-x64/libflecs.a'))</FlecsStaticLibrary_osx-x64>
-        <FlecsStaticLibrary_osx-arm64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)osx-arm64/libflecs.a'))</FlecsStaticLibrary_osx-arm64>
         <FlecsStaticLibrary_win-x64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)win-x64/flecs.lib'))</FlecsStaticLibrary_win-x64>
+        <FlecsStaticLibrary_osx-x64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)osx-x64/libflecs.a'))</FlecsStaticLibrary_osx-x64>
+        <FlecsStaticLibrary_ios-x64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)ios-x64/libflecs.a'))</FlecsStaticLibrary_ios-x64>
+        <FlecsStaticLibrary_iossimulator-x64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)iossimulator-x64/libflecs.a'))</FlecsStaticLibrary_iossimulator-x64>
+
+        <FlecsStaticLibrary_linux-arm64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)linux-arm64/libflecs.a'))</FlecsStaticLibrary_linux-arm64>
+        <FlecsStaticLibrary_osx-arm64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)osx-arm64/libflecs.a'))</FlecsStaticLibrary_osx-arm64>
         <FlecsStaticLibrary_win-arm64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)win-arm64/flecs.lib'))</FlecsStaticLibrary_win-arm64>
+        <FlecsStaticLibrary_ios-arm64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)ios-arm64/libflecs.a'))</FlecsStaticLibrary_ios-arm64>
+        <FlecsStaticLibrary_iossimulator-arm64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)iossimulator-arm64/libflecs.a'))</FlecsStaticLibrary_iossimulator-arm64>
 
         <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'linux-x64'">$(FlecsStaticLibrary_linux-x64)</FlecsStaticLibrary>
-        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">$(FlecsStaticLibrary_linux-arm64)</FlecsStaticLibrary>
         <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'osx-x64'">$(FlecsStaticLibrary_osx-x64)</FlecsStaticLibrary>
-        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">$(FlecsStaticLibrary_osx-arm64)</FlecsStaticLibrary>
         <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'win-x64'">$(FlecsStaticLibrary_win-x64)</FlecsStaticLibrary>
+        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'ios-x64'">$(FlecsStaticLibrary_ios-x64</FlecsStaticLibrary>
+        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'iossimulator-x64'">$(FlecsStaticLibrary_iossimulator-x64)</FlecsStaticLibrary>
+
+        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">$(FlecsStaticLibrary_linux-arm64)</FlecsStaticLibrary>
+        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">$(FlecsStaticLibrary_osx-arm64)</FlecsStaticLibrary>
         <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'win-arm64'">$(FlecsStaticLibrary_win-arm64)</FlecsStaticLibrary>
+        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'ios-arm64'">$(FlecsStaticLibrary_ios-arm64</FlecsStaticLibrary>
+        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'iossimulator-arm64'">$(FlecsStaticLibrary_iossimulator-arm64)</FlecsStaticLibrary>
     </PropertyGroup>
 </Project>
