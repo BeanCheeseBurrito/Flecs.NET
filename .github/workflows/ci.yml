@@ -64,8 +64,8 @@ jobs:
         IOS_SDK=$(xcrun --sdk iphoneos --show-sdk-path)
         IOS_SIMULATOR_SDK=$(xcrun --sdk iphonesimulator --show-sdk-path)
         
-        echo "IOS_SDK=IOS_SDK" >> $GITHUB_ENV
-        echo "IOS_SIMULATOR_SDK=IOS_SIMULATOR_SDK" >> $GITHUB_ENV
+        echo "IOS_SDK=$IOS_SDK" >> $GITHUB_ENV
+        echo "IOS_SIMULATOR_SDK=$IOS_SIMULATOR_SDK" >> $GITHUB_ENV
 
     - name: Restore Dependencies
       shell: bash
