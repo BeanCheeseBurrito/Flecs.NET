@@ -21,6 +21,7 @@ pub fn compileFlecs(options: Options, b: *Build, lib: *Build.Step.Compile) void 
         },
         .ios => {
             if (options.ios_sdk_path) |ios_sdk_path| {
+                b.sysroot = ios_sdk_path;
                 lib.addSystemIncludePath(.{ .path = b.fmt("{s}/usr/include", .{ios_sdk_path}) });
             } else {
                 @panic("A path to an IOS SDK needs to be provided when compiling for IOS.");
