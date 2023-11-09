@@ -57,6 +57,16 @@ jobs:
           echo "FlecsVersionSuffix=-dev-$(date +'%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
         fi
 
+    - name: Setup Osx Environment
+      if: matrix.os == 'macos-latest'
+      shell: bash
+      run: |
+        IOS_SDK=$(xcrun --sdk iphoneos --show-sdk-path)
+        IOS_SIMULATOR_SDK=$(xcrun --sdk iphonesimulator --show-sdk-path)
+        
+        echo "IOS_SDK=$IOS_SDK" >> $GITHUB_ENV
+        echo "IOS_SIMULATOR_SDK=$IOS_SIMULATOR_SDK" >> $GITHUB_ENV
+
     - name: Restore Dependencies
       shell: bash
       run: dotnet restore
@@ -65,27 +75,34 @@ jobs:
       shell: bash
       run: dotnet run --project src/Flecs.NET.Bindgen
 
-    - name: Build Native Libraries
+    - name: Build Projects
       shell: bash
-      run: dotnet build src/Flecs.NET.Native
+      run: |
+        if [ '${{ matrix.os }}' == 'macos-latest' ]; then
+          dotnet build --property:Deterministic=true -c Debug   --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
+          dotnet build --property:Deterministic=true -c Release --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
+        else
+          dotnet build --property:Deterministic=true -c Debug
+          dotnet build --property:Deterministic=true -c Release
+        fi
 
     - name: Run Tests
       shell: bash
-      run: dotnet test --verbosity minimal
+      run: dotnet test --no-build --verbosity minimal
 
     - name: Pack Nuget Packages
       shell: bash
       run: |
         if [ '${{ github.event.inputs.nuget-registry }}' == 'GitLab' ]; then
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Debug
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Release
+          dotnet pack --no-build --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Debug
+          dotnet pack --no-build --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true --property:DebugType=embedded -c Release
         else
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true -c Debug
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true -c Release
+          dotnet pack --no-build --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true -c Debug
+          dotnet pack --no-build --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:ContinuousIntegrationBuild=true -c Release
         fi
 
     - name: Upload Artifacts
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'macos-latest'
       uses: actions/upload-artifact@v3
       with:
         name: Nuget Packages
@@ -94,7 +111,7 @@ jobs:
           src/**/Flecs.NET.*.snupkg
 
     - name: Push NuGet Packages
-      if: matrix.os == 'ubuntu-latest' && github.event_name == 'workflow_dispatch' && github.event.inputs.push-packages == 'true'
+      if: matrix.os == 'macos-latest' && github.event_name == 'workflow_dispatch' && github.event.inputs.push-packages == 'true'
       shell: bash
       run: |
         if [ '${{ github.event.inputs.nuget-registry }}' == 'GitLab' ]; then

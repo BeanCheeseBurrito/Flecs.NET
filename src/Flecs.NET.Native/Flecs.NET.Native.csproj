@@ -71,56 +71,85 @@
     </ItemGroup>
 
     <ItemGroup>
+        <!--Build Files-->
         <Content Condition="'$(Configuration)' == 'Debug'" Include="buildTransitive/Flecs.NET.Native.props" PackagePath="buildTransitive/Flecs.NET.Native.Debug.props"/>
         <Content Condition="'$(Configuration)' == 'Debug'" Include="buildTransitive/Flecs.NET.Native.targets" PackagePath="buildTransitive/Flecs.NET.Native.Debug.targets"/>
 
         <Content Condition="'$(Configuration)' == 'Release'" Include="buildTransitive/Flecs.NET.Native.props" PackagePath="buildTransitive/Flecs.NET.Native.Release.props"/>
         <Content Condition="'$(Configuration)' == 'Release'" Include="buildTransitive/Flecs.NET.Native.targets" PackagePath="buildTransitive/Flecs.NET.Native.Release.targets"/>
 
+        <!--Shared Libraries-->
+
+        <!--X64-->
         <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/linux-x64/libflecs.so')" Include="debug/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so"/>
-        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/linux-arm64/libflecs.so')" Include="debug/linux-arm64/libflecs.so" PackagePath="runtimes/linux-arm64/native/libflecs.so"/>
         <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/osx-x64/libflecs.dylib')" Include="debug/osx-x64/libflecs.dylib" PackagePath="runtimes/osx-x64/native/libflecs.dylib"/>
-        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/osx-arm64/libflecs.dylib')" Include="debug/osx-arm64/libflecs.dylib" PackagePath="runtimes/osx-arm64/native/libflecs.dylib"/>
         <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-x64/flecs.dll')" Include="debug/win-x64/flecs.dll" PackagePath="runtimes/win-x64/native/flecs.dll"/>
         <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-x64/flecs.pdb')" Include="debug/win-x64/flecs.pdb" PackagePath="runtimes/win-x64/native/flecs.pdb"/>
+
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/linux-x64/libflecs.so')" Include="release/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so"/>
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/osx-x64/libflecs.dylib')" Include="release/osx-x64/libflecs.dylib" PackagePath="runtimes/osx-x64/native/libflecs.dylib"/>
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/win-x64/flecs.dll')" Include="release/win-x64/flecs.dll" PackagePath="runtimes/win-x64/native/flecs.dll"/>
+
+        <!--Arm64-->
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/linux-arm64/libflecs.so')" Include="debug/linux-arm64/libflecs.so" PackagePath="runtimes/linux-arm64/native/libflecs.so"/>
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/osx-arm64/libflecs.dylib')" Include="debug/osx-arm64/libflecs.dylib" PackagePath="runtimes/osx-arm64/native/libflecs.dylib"/>
         <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-arm64/flecs.dll')" Include="debug/win-arm64/flecs.dll" PackagePath="runtimes/win-arm64/native/flecs.dll"/>
         <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-arm64/flecs.pdb')" Include="debug/win-arm64/flecs.pdb" PackagePath="runtimes/win-arm64/native/flecs.pdb"/>
 
-        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/linux-x64/libflecs.a')" Include="debug/linux-x64/libflecs.a" PackagePath="static_libraries/linux-x64/libflecs.a"/>
-        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/linux-arm64/libflecs.a')" Include="debug/linux-arm64/libflecs.a" PackagePath="static_libraries/linux-arm64/libflecs.a"/>
-        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/osx-x64/libflecs.a')" Include="debug/osx-x64/libflecs.a" PackagePath="static_libraries/osx-x64/libflecs.a"/>
-        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/osx-arm64/libflecs.a')" Include="debug/osx-arm64/libflecs.a" PackagePath="static_libraries/osx-arm64/libflecs.a"/>
-        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-x64/flecs.lib')" Include="debug/win-x64/flecs.lib" PackagePath="static_libraries/win-x64/flecs.lib"/>
-        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-arm64/flecs.lib')" Include="debug/win-arm64/flecs.lib" PackagePath="static_libraries/win-arm64/flecs.lib"/>
-
-        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/linux-x64/libflecs.so')" Include="release/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so"/>
         <Content Condition="'$(Configuration)' == 'Release' And Exists('release/linux-arm64/libflecs.so')" Include="release/linux-arm64/libflecs.so" PackagePath="runtimes/linux-arm64/native/libflecs.so"/>
-        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/osx-x64/libflecs.dylib')" Include="release/osx-x64/libflecs.dylib" PackagePath="runtimes/osx-x64/native/libflecs.dylib"/>
         <Content Condition="'$(Configuration)' == 'Release' And Exists('release/osx-arm64/libflecs.dylib')" Include="release/osx-arm64/libflecs.dylib" PackagePath="runtimes/osx-arm64/native/libflecs.dylib"/>
-        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/win-x64/flecs.dll')" Include="release/win-x64/flecs.dll" PackagePath="runtimes/win-x64/native/flecs.dll"/>
         <Content Condition="'$(Configuration)' == 'Release' And Exists('release/win-arm64/flecs.dll')" Include="release/win-arm64/flecs.dll" PackagePath="runtimes/win-arm64/native/flecs.dll"/>
 
+        <!--Static Libraries-->
+
+        <!--X64-->
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/linux-x64/libflecs.a')" Include="debug/linux-x64/libflecs.a" PackagePath="static_libraries/linux-x64/libflecs.a"/>
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/osx-x64/libflecs.a')" Include="debug/osx-x64/libflecs.a" PackagePath="static_libraries/osx-x64/libflecs.a"/>
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-x64/flecs.lib')" Include="debug/win-x64/flecs.lib" PackagePath="static_libraries/win-x64/flecs.lib"/>
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/iossimulator-x64/libflecs.a')" Include="debug/iossimulator-x64/libflecs.a" PackagePath="static_libraries/iossimulator-x64/libflecs.a"/>
+
         <Content Condition="'$(Configuration)' == 'Release' And Exists('release/linux-x64/libflecs.a')" Include="release/linux-x64/libflecs.a" PackagePath="static_libraries/linux-x64/libflecs.a"/>
-        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/linux-arm64/libflecs.a')" Include="release/linux-arm64/libflecs.a" PackagePath="static_libraries/linux-arm64/libflecs.a"/>
         <Content Condition="'$(Configuration)' == 'Release' And Exists('release/osx-x64/libflecs.a')" Include="release/osx-x64/libflecs.a" PackagePath="static_libraries/osx-x64/libflecs.a"/>
-        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/osx-arm64/libflecs.a')" Include="release/osx-arm64/libflecs.a" PackagePath="static_libraries/osx-arm64/libflecs.a"/>
         <Content Condition="'$(Configuration)' == 'Release' And Exists('release/win-x64/flecs.lib')" Include="release/win-x64/flecs.lib" PackagePath="static_libraries/win-x64/flecs.lib"/>
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/iossimulator-x64/libflecs.a')" Include="release/iossimulator-x64/libflecs.a" PackagePath="static_libraries/iossimulator-x64/libflecs.a"/>
+
+        <!--Arm64-->
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/linux-arm64/libflecs.a')" Include="debug/linux-arm64/libflecs.a" PackagePath="static_libraries/linux-arm64/libflecs.a"/>
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/osx-arm64/libflecs.a')" Include="debug/osx-arm64/libflecs.a" PackagePath="static_libraries/osx-arm64/libflecs.a"/>
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/win-arm64/flecs.lib')" Include="debug/win-arm64/flecs.lib" PackagePath="static_libraries/win-arm64/flecs.lib"/>
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/ios-arm64/libflecs.a')" Include="debug/ios-arm64/libflecs.a" PackagePath="static_libraries/ios-arm64/libflecs.a"/>
+        <Content Condition="'$(Configuration)' == 'Debug' And Exists('debug/iossimulator-arm64/libflecs.a')" Include="debug/iossimulator-arm64/libflecs.a" PackagePath="static_libraries/iossimulator-arm64/libflecs.a"/>
+
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/linux-arm64/libflecs.a')" Include="release/linux-arm64/libflecs.a" PackagePath="static_libraries/linux-arm64/libflecs.a"/>
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/osx-arm64/libflecs.a')" Include="release/osx-arm64/libflecs.a" PackagePath="static_libraries/osx-arm64/libflecs.a"/>
         <Content Condition="'$(Configuration)' == 'Release' And Exists('release/win-arm64/flecs.lib')" Include="release/win-arm64/flecs.lib" PackagePath="static_libraries/win-arm64/flecs.lib"/>
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/ios-arm64/libflecs.a')" Include="release/ios-arm64/libflecs.a" PackagePath="static_libraries/ios-arm64/libflecs.a"/>
+        <Content Condition="'$(Configuration)' == 'Release' And Exists('release/iossimulator-arm64/libflecs.a')" Include="release/iossimulator-arm64/libflecs.a" PackagePath="static_libraries/iossimulator-arm64/libflecs.a"/>
     </ItemGroup>
 
     <Target Name="Compile Flecs" AfterTargets="build">
-        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir linux-x64   -Dtarget=x86_64-linux-gnu"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir win-x64     -Dtarget=x86_64-windows-gnu"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir osx-x64     -Dtarget=x86_64-macos"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir linux-arm64 -Dtarget=aarch64-linux-gnu"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir win-arm64   -Dtarget=aarch64-windows-gnu"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir osx-arm64   -Dtarget=aarch64-macos"/>
+        <!--X64-->
+        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir linux-x64          -Dtarget=x86_64-linux-gnu"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir win-x64            -Dtarget=x86_64-windows-gnu"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir osx-x64            -Dtarget=x86_64-macos"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir iossimulator-x64   -Dtarget=x86_64-ios-simulator -Dios-simulator-sdk-path=$(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
 
-        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir linux-x64   -Dtarget=x86_64-linux-gnu"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir win-x64     -Dtarget=x86_64-windows-gnu"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir osx-x64     -Dtarget=x86_64-macos"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir linux-arm64 -Dtarget=aarch64-linux-gnu"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir win-arm64   -Dtarget=aarch64-windows-gnu"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir osx-arm64   -Dtarget=aarch64-macos"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir linux-x64          -Dtarget=x86_64-linux-gnu"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir win-x64            -Dtarget=x86_64-windows-gnu"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir osx-x64            -Dtarget=x86_64-macos"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir iossimulator-x64   -Dtarget=x86_64-ios-simulator -Dios-simulator-sdk-path=$(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
+
+        <!--Arm64-->
+        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir linux-arm64        -Dtarget=aarch64-linux-gnu"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir win-arm64          -Dtarget=aarch64-windows-gnu"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir osx-arm64          -Dtarget=aarch64-macos"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir ios-arm64          -Dtarget=aarch64-ios           -Dios-sdk-path=$(IosSdkPath)" Condition="'$(IosSdkPath)' != ''"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=Debug --prefix debug --prefix-lib-dir iossimulator-arm64 -Dtarget=aarch64-ios-simulator -Dios-simulator-sdk-path=$(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
+
+        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir linux-arm64        -Dtarget=aarch64-linux-gnu"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir win-arm64          -Dtarget=aarch64-windows-gnu"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir osx-arm64          -Dtarget=aarch64-macos"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir ios-arm64          -Dtarget=aarch64-ios           -Dios-sdk-path=$(IosSdkPath)" Condition="'$(IosSdkPath)' != ''"/>
+        <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir iossimulator-arm64 -Dtarget=aarch64-ios-simulator -Dios-simulator-sdk-path=$(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
     </Target>
 </Project>

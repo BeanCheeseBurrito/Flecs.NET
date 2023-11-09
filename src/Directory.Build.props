@@ -2,5 +2,6 @@
     <PropertyGroup>
         <IsPackable>false</IsPackable>
         <NoWarn>$(NoWarn);NETSDK1138</NoWarn>
+        <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     </PropertyGroup>
 </Project>
