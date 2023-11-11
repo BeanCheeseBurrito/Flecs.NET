@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Flecs.NET.Bindings;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -504,6 +505,11 @@ namespace Flecs.NET.Core
         ///     Reference to <see cref="EcsDontInherit"/>.
         /// </summary>
         public static ref ulong DontInherit => ref EcsDontInherit;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsAlwaysOverride"/>.
+        /// </summary>
+        public static ref ulong AlwaysOverride => ref EcsAlwaysOverride;
 
         /// <summary>
         ///     Reference to <see cref="EcsTag"/>.
