@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Flecs.NET.Unity</RootNamespace>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Flecs.NET\Flecs.NET.csproj"/>
+        <ProjectReference Include="..\Flecs.NET\Flecs.NET.Bindings.csproj"/>
+        <ProjectReference Include="..\Flecs.NET\Flecs.NET.Native.csproj"/>
+    </ItemGroup>
+
+
+</Project>
