@@ -152,4 +152,23 @@
         <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir ios-arm64          -Dtarget=aarch64-ios           -Dios-sdk-path=$(IosSdkPath)" Condition="'$(IosSdkPath)' != ''"/>
         <Exec Command="$(ZigExePath) build -Doptimize=ReleaseFast --prefix release --prefix-lib-dir iossimulator-arm64 -Dtarget=aarch64-ios-simulator -Dios-simulator-sdk-path=$(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
     </Target>
+
+    <ItemGroup>
+        <!-- Unity exports are limited to linux-x64 and win-x64 to ensure that lib files without matching meta files do not create conflicts. -->
+        <!-- TODO add meta files for linux-arm64 using Unity Embedded Linux target -->
+        <!-- TODO add meta files for osx-arm64 and osx-x64 -->
+        <!-- TODO add meta files for win-x64 in Unity 2023 -->
+
+        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/flecs.dll" PackagePath="runtimes/win-x64/native/flecs.dll"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/flecs.pdb" PackagePath="runtimes/win-x64/native/flecs.pdb"/>
+
+        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/win-x64/flecs.dll" PackagePath="runtimes/win-x64/native/flecs.dll"/>
+    </ItemGroup>
+
+    <Target Name="ExportUnityArtifacts" AfterTargets="Compile Flecs" Condition="$(TargetFramework) == 'netstandard2.1'">
+        <Copy SourceFiles="@(UnityArtifacts)" DestinationFiles="../../upm/$(AssemblyName)/$(Configuration)/%(PackagePath)" />
+    </Target>
+
 </Project>
