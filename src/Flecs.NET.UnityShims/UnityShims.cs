@@ -1,5 +1,9 @@
 ﻿#pragma warning disable CS8618 // Non-nullable property should contain value when exiting constructor
 
+// Mocked UnityEngine symbols so that Flecs.NET.Unity can compile without errors. Implementation
+// is unnecessary because Flecs.NET.Unity is distributed as source and so will get linked with
+// the real UnityEngine symbols.
+
 using System;
 
 namespace UnityEngine
@@ -24,4 +28,10 @@ namespace UnityEngine
     {
         public static void LogError(string _) {}
     }
+}
+
+namespace UnityEngine.Scripting
+{
+    [AttributeUsage(AttributeTargets.Assembly)]
+    public class AlwaysLinkAssemblyAttribute : Attribute {}
 }
