@@ -481,3 +481,6 @@ $RECYCLE.BIN/
 
 # JetBrains Rider cache directory
 .idea/
+
+# zig build cache
+zig-cache/
