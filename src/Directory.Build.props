@@ -4,4 +4,9 @@
         <NoWarn>$(NoWarn);NETSDK1138</NoWarn>
         <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <UnityPackageRoot>$(MSBuildThisFileDirectory)..\upm</UnityPackageRoot>
+    </PropertyGroup>
+
 </Project>

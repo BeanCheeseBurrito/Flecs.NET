@@ -484,5 +484,3 @@ $RECYCLE.BIN/
 
 # zig build cache
 zig-cache/
-
-!upm/**/*
