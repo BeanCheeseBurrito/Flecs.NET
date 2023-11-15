@@ -280,63 +280,37 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        // TODO: Come back to this test once ctx function is done.
-        // [Fact]
-        // public void EventTypedContext()
-        // {
-        //     using World world = World.Create();
-        //
-        //     var id = world.Entity();
-        //     var e1 = world.Entity().Add(id);
-        //
-        //     int count = 0;
-        //
-        //     world.Observer(
-        //         filter: world.FilterBuilder().Term(id),
-        //         observer: world.ObserverBuilder().Event<EvtData>(),
-        //         callback: (Iter it) =>
-        //         {
-        //             Assert.True(it.Entity(0) == e1);
-        //             Assert.Equal(10, it.Param<EvtData>().Value);
-        //             count++;
-        //         }
-        //     );
-        //
-        //     world.Event<EvtData>()
-        //         .Id(id)
-        //         .Entity(e1)
-        //         .Ctx(new EvtData { Value = 10 })
-        //         .Emit();
-        //
-        //     Assert.Equal(1, count);
-        // }
+        [Fact]
+        public void EventTypedContext()
+        {
+            using World world = World.Create();
 
-        // [Fact]
-        // public void evt_implicit_typed_ctx() {
-        //     using World world = World.Create();
-        //
-        //     var id = world.Entity();
-        //     var e1 = world.Entity().Add(id);
-        //
-        //     int count = 0;
-        //
-        //     world.Observer()
-        //         .Event<EvtData>()
-        //         .term(id)
-        //         .iter((flecs::iter& it) {
-        //             Assert.True(it.Entity(0) == e1);
-        //             Assert.Equal(it.param<EvtData>()->value, 10);
-        //             count++;
-        //         });
-        //
-        //     world.Event<EvtData>()
-        //         .Id(id)
-        //         .Entity(e1)
-        //         .ctx({10})
-        //         .Emit();
-        //
-        //     Assert.Equal(1, count);
-        // }
+            Entity id = world.Entity();
+            Entity e1 = world.Entity().Add(id);
+
+            int count = 0;
+
+            world.Observer(
+                world.FilterBuilder().Term(id),
+                world.ObserverBuilder().Event<EvtData>(),
+                (Iter it) =>
+                {
+                    Assert.True(it.Entity(0) == e1);
+                    Assert.Equal(10, it.Param<EvtData>().Value);
+                    count++;
+                }
+            );
+
+            EvtData evtData = new EvtData { Value = 10 };
+
+            world.Event<EvtData>()
+                .Id(id)
+                .Entity(e1)
+                .Ctx(&evtData)
+                .Emit();
+
+            Assert.Equal(1, count);
+        }
 
         [Fact]
         public void Event1IdPairRelIdObjIdEntity()
@@ -711,6 +685,132 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(0, count);
 
             e.Emit(new Position { X = 10, Y = 20 });
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        public void EnqueueEvent()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            Entity evt = world.Entity();
+            Entity idA = world.Entity();
+            Entity e1 = world.Entity().Add(idA);
+
+            world.Observer(
+                world.FilterBuilder().Term(idA),
+                world.ObserverBuilder().Event(evt),
+                (Entity e) =>
+                {
+                    Assert.True(e == e1);
+                    count++;
+                }
+            );
+
+            world.DeferBegin();
+
+            world.Event(evt)
+                .Id(idA)
+                .Entity(e1)
+                .Enqueue();
+
+            Assert.Equal(0, count);
+
+            world.DeferEnd();
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        public void EnqueueEntityEvent()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            Entity evt = world.Entity();
+            Entity idA = world.Entity();
+            Entity e1 = world.Entity().Add(idA);
+
+            e1.Observe(evt, () => { count++; });
+
+            world.DeferBegin();
+
+            e1.Enqueue(evt);
+
+            Assert.Equal(0, count);
+
+            world.DeferEnd();
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        public void EnqueueEventWithPayload()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            Entity idA = world.Entity();
+            Entity e1 = world.Entity().Add(idA);
+
+            world.Observer(
+                world.FilterBuilder().Term(idA),
+                world.ObserverBuilder().Event<Position>(),
+                (Iter it, int i) =>
+                {
+                    Assert.True(it.Entity(i) == e1);
+                    Assert.Equal(10, it.Param<Position>().X);
+                    Assert.Equal(20, it.Param<Position>().Y);
+                    count++;
+                }
+            );
+
+            world.DeferBegin();
+
+            Position position = new Position { X = 10, Y = 20 };
+
+            world.Event<Position>()
+                .Id(idA)
+                .Entity(e1)
+                .Ctx(&position)
+                .Enqueue();
+
+            Assert.Equal(0, count);
+
+            world.DeferEnd();
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        public void EnqueueEntityEventWithPayload()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            Entity idA = world.Entity();
+            Entity e1 = world.Entity().Add(idA);
+
+            e1.Observe((ref Position p) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+                count++;
+            });
+
+            world.DeferBegin();
+
+            e1.Enqueue(new Position { X = 10, Y = 20 });
+
+            Assert.Equal(0, count);
+
+            world.DeferEnd();
 
             Assert.Equal(1, count);
         }

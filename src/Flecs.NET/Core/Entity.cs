@@ -1077,13 +1077,119 @@ namespace Flecs.NET.Core
         ///     Emits an event for this entity.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void Emit<T>(T payload)
+        public void Emit<T>(T payload) where T : unmanaged
         {
             new World(World)
                 .Event(Type<T>.Id(World))
                 .Entity(Id)
-                .Ctx(ref payload)
+                .Ctx(&payload)
                 .Emit();
+        }
+
+        /// <summary>
+        ///     Emits an event for this entity.
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Emit<T>(ref T payload)
+        {
+            fixed (T* ptr = &payload)
+            {
+                if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+                {
+                    // TODO: Get rid of GC handle here and just use raw pointer since the object is pinned.
+                    IntPtr gcHandle;
+                    Managed.AllocGcHandle(&gcHandle, ref payload);
+
+                    new World(World)
+                        .Event(Type<T>.Id(World))
+                        .Entity(Id)
+                        .Ctx(&gcHandle)
+                        .Emit();
+                }
+                else
+                {
+                    new World(World)
+                        .Event(Type<T>.Id(World))
+                        .Entity(Id)
+                        .Ctx(ptr)
+                        .Emit();
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Enqueues an event for this entity.
+        /// </summary>
+        /// <param name="eventId"></param>
+        public void Enqueue(ulong eventId)
+        {
+            new World(World)
+                .Event(eventId)
+                .Entity(Id)
+                .Enqueue();
+        }
+
+        /// <summary>
+        ///     Enqueues an event for this entity.
+        /// </summary>
+        /// <param name="eventId"></param>
+        public void Enqueue(Entity eventId)
+        {
+            Enqueue(eventId.Id.Value);
+        }
+
+        /// <summary>
+        ///     Enqueues an event for this entity.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void Enqueue<T>()
+        {
+            Enqueue(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Enqueues an event for this entity.
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Enqueue<T>(T payload) where T : unmanaged
+        {
+            new World(World)
+                .Event(Type<T>.Id(World))
+                .Entity(Id)
+                .Ctx(&payload)
+                .Enqueue();
+        }
+
+        /// <summary>
+        ///     Enqueues an event for this entity.
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Enqueue<T>(ref T payload)
+        {
+            fixed (T* ptr = &payload)
+            {
+                if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+                {
+                    IntPtr gcHandle = default;
+
+                    new World(World)
+                        .Event(Type<T>.Id(World))
+                        .Entity(Id)
+                        .Ctx(Managed.AllocGcHandle(&gcHandle, ref payload))
+                        .Enqueue();
+                }
+                else
+                {
+                    new World(World)
+                        .Event(Type<T>.Id(World))
+                        .Entity(Id)
+                        .Ctx(ptr)
+                        .Enqueue();
+                }
+            }
         }
 
         /// <summary>

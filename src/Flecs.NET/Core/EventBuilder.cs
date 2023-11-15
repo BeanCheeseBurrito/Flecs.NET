@@ -146,17 +146,6 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        // TODO: Temporarily internal for use in entity observers.
-        // TODO: This should be public once we figure out a safe way to support managed types.
-        internal ref EventBuilder Ctx<T>(ref T data)
-        {
-            fixed (T* ptr = &data)
-            {
-                _desc.param = ptr;
-                return ref this;
-            }
-        }
-
         /// <summary>
         ///     Emits the event.
         /// </summary>
@@ -168,6 +157,20 @@ namespace Flecs.NET.Core
                 _desc.ids = &self->_ids;
                 _desc.observable = ecs_get_world(World);
                 ecs_emit(World, &self->_desc);
+            }
+        }
+
+        /// <summary>
+        ///     Enqueues the event.
+        /// </summary>
+        public void Enqueue()
+        {
+            fixed (EventBuilder* self = &this)
+            {
+                _ids.array = self->_idsArray;
+                _desc.ids = &self->_ids;
+                _desc.observable = ecs_get_world(World);
+                ecs_enqueue(World, &self->_desc);
             }
         }
 
