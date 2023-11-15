@@ -201,6 +201,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_enable_range_check", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte ecs_enable_range_check(ecs_world_t* world, byte enable);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_enqueue", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ecs_enqueue(ecs_world_t* world, ecs_event_desc_t* desc);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_ensure", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_ensure(ecs_world_t* world, ulong entity);
 
@@ -3182,6 +3185,8 @@ namespace Flecs.NET.Bindings
             public ulong entity;
 
             public void* param;
+
+            public void* const_param;
 
             public void* observable;
 
