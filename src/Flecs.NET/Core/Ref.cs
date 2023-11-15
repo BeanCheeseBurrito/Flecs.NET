@@ -67,6 +67,27 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Attempts to get a pointer to the ref component.
+        /// </summary>
+        /// <returns></returns>
+        public T* TryGetPtr()
+        {
+            if (World == null || _ref.entity == 0)
+                return null;
+
+            return GetPtr();
+        }
+
+        /// <summary>
+        ///     Attempts to get a reference to the ref component.
+        /// </summary>
+        /// <returns></returns>
+        public ref T TryGet()
+        {
+            return ref Managed.GetTypeRef<T>(GetPtr());
+        }
+
+        /// <summary>
         ///     Returns the entity associated with the ref.
         /// </summary>
         /// <returns></returns>
