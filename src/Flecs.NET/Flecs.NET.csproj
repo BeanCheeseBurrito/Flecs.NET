@@ -20,7 +20,7 @@
         <IsPackable>true</IsPackable>
         <IncludeContentInPack>true</IncludeContentInPack>
 
-        <Version>3.2.8</Version>
+        <Version>3.2.9</Version>
         <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Debug</Title>
         <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Release</Title>
         <Authors>BeanCheeseBurrito</Authors>
