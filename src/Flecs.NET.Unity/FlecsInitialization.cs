@@ -14,6 +14,8 @@ namespace Flecs.NET.Unity
 {
     internal static class FlecsInitialization
     {
+        private const string PackageName = "dev.flecs.net";
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Initialize()
         {
@@ -40,8 +42,8 @@ namespace Flecs.NET.Unity
 #endif
             return new []
             {
-                Path.GetFullPath($"Packages/flecs/Flecs.NET.Native/{config}/runtimes/linux-x64/native/{import}"),
-                Path.GetFullPath($"Packages/flecs/Flecs.NET.Native/{config}/runtimes/win-x64/native/{import}"),
+                Path.GetFullPath($"Packages/{PackageName}/Flecs.NET.Native/{config}/runtimes/linux-x64/native/{import}"),
+                Path.GetFullPath($"Packages/{PackageName}/Flecs.NET.Native/{config}/runtimes/win-x64/native/{import}"),
             };
         }
 
