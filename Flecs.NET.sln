@@ -16,6 +16,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET.Benchmarks", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET.Codegen", "src\Flecs.NET.Codegen\Flecs.NET.Codegen.csproj", "{A76AE670-D7DD-47DE-8F5C-DDF7B31C030A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET.Unity", "src\Flecs.NET.Unity\Flecs.NET.Unity.csproj", "{887CF1C6-F681-4228-8568-6A3093A2B07A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flecs.NET.UnityShims", "src\Flecs.NET.UnityShims\Flecs.NET.UnityShims.csproj", "{9D55605F-6EA8-46B0-8067-D7E67A82606B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +58,13 @@ Global
 		{A76AE670-D7DD-47DE-8F5C-DDF7B31C030A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A76AE670-D7DD-47DE-8F5C-DDF7B31C030A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A76AE670-D7DD-47DE-8F5C-DDF7B31C030A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{887CF1C6-F681-4228-8568-6A3093A2B07A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{887CF1C6-F681-4228-8568-6A3093A2B07A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{887CF1C6-F681-4228-8568-6A3093A2B07A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{887CF1C6-F681-4228-8568-6A3093A2B07A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D55605F-6EA8-46B0-8067-D7E67A82606B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D55605F-6EA8-46B0-8067-D7E67A82606B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D55605F-6EA8-46B0-8067-D7E67A82606B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D55605F-6EA8-46B0-8067-D7E67A82606B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

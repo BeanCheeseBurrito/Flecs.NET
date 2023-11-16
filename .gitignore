@@ -478,3 +478,9 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# JetBrains Rider cache directory
+.idea/
+
+# zig build cache
+zig-cache/

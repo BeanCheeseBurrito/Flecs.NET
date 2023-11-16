@@ -1,0 +1,8 @@
+{
+  "name": "dev.flecs.net",
+  "displayName": "Flecs.NET",
+  "version": "3.2.8",
+  "unity": "2021.3",
+  "description": "High-level C# wrapper for flecs",
+  "license": "MIT"
+}
