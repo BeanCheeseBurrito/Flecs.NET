@@ -13830,7 +13830,11 @@ namespace Flecs.NET.Bindings
 
         public partial class BindgenInternal
         {
+#if (UNITY_EDITOR || UNITY_STANDALONE) && !FLECS_UNITY_NDEBUG
+            public const string DllImportPath = "flecs-debug";
+#else
             public const string DllImportPath = "flecs";
+#endif
 
             static BindgenInternal()
             {

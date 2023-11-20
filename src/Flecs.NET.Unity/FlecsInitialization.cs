@@ -35,15 +35,14 @@ namespace Flecs.NET.Unity
         private static string[] EditorPackagePaths()
         {
             const string import = Native.BindgenInternal.DllImportPath;
-#if FLECS_DEBUG
-            const string config = "Debug";
-#else
+#if FLECS_UNITY_NDEBUG
             const string config = "Release";
+#else
+            const string config = "Debug";
 #endif
             return new []
             {
-                Path.GetFullPath($"Packages/{PackageName}/Flecs.NET.Native/{config}/runtimes/linux-x64/native/{import}"),
-                Path.GetFullPath($"Packages/{PackageName}/Flecs.NET.Native/{config}/runtimes/win-x64/native/{import}"),
+                Path.GetFullPath($"Packages/{PackageName}/Flecs.NET.Native/{config}/{import}"),
             };
         }
 
@@ -58,5 +57,4 @@ namespace Flecs.NET.Unity
             };
         }
     }
-
 }

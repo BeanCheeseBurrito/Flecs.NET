@@ -489,11 +489,14 @@ src/Flecs.NET.Native/release
 
 # Bin files
 **/*.so
+**/*.dylib
 **/*.dll
 **/*.xml
 **/*.pdb
 
 # Unity
 upm/**/*.cs
+!upm/**/Debug
+!upm/**/Release
 !upm/**/*.meta
 !upm/System.Runtime.CompilerServices.Unsafe/**/*

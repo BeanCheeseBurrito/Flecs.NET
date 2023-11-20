@@ -8,6 +8,7 @@ BindingOptions bindingOptions = new()
     Class = "Native",
 
     DllImportPath = "flecs",
+
     DllFilePaths =
     {
         "flecs",
@@ -17,6 +18,11 @@ BindingOptions bindingOptions = new()
         "runtimes/osx-arm64/native/flecs",
         "runtimes/win-x64/native/flecs",
         "runtimes/win-arm64/native/flecs"
+    },
+
+    RemappedDefineConstantsToDllImportPaths =
+    {
+        ("(UNITY_EDITOR || UNITY_STANDALONE) && !FLECS_UNITY_NDEBUG", "flecs-debug") // Unity specific define
     },
 
     IncludeBuiltInClangHeaders = true,

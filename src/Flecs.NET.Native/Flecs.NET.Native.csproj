@@ -159,12 +159,14 @@
         <!-- TODO add meta files for osx-arm64 and osx-x64 -->
         <!-- TODO add meta files for win-x64 in Unity 2023 -->
 
-        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/flecs.dll" PackagePath="runtimes/win-x64/native/flecs.dll"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/flecs.pdb" PackagePath="runtimes/win-x64/native/flecs.pdb"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-x64/libflecs.so" PackagePath="libflecs-debug.so"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-x64/libflecs.dylib" PackagePath="libflecs-debug.dylib"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/flecs.dll" PackagePath="flecs-debug.dll"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/flecs.pdb" PackagePath="flecs-debug.pdb"/>
 
-        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/linux-x64/libflecs.so" PackagePath="runtimes/linux-x64/native/libflecs.so"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/win-x64/flecs.dll" PackagePath="runtimes/win-x64/native/flecs.dll"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/linux-x64/libflecs.so" PackagePath="libflecs.so"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/osx-x64/libflecs.dylib" PackagePath="libflecs.dylib"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/win-x64/flecs.dll" PackagePath="flecs.dll"/>
     </ItemGroup>
 
     <Target Name="ExportUnityArtifacts" AfterTargets="Build" DependsOnTargets="Compile Flecs" Condition="$(TargetFramework) == 'netstandard2.1'">
