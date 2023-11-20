@@ -1,9 +1,0 @@
-﻿!**/*
-
-**/*.cs
-**/*.so
-**/*.dll
-**/*.xml
-**/*.pdb
-
-!System.Runtime.CompilerServices.Unsafe/**/*

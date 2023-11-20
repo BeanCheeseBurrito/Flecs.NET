@@ -482,5 +482,17 @@ $RECYCLE.BIN/
 # JetBrains Rider cache directory
 .idea/
 
-# zig build cache
+# Zig
 zig-cache/
+src/Flecs.NET.Native/debug
+src/Flecs.NET.Native/release
+
+# Bin files
+**/*.so
+**/*.dll
+**/*.xml
+**/*.pdb
+
+# Unity
+upm/**/*.cs
+!upm/System.Runtime.CompilerServices.Unsafe/**/*
