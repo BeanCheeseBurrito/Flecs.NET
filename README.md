@@ -11,8 +11,57 @@
 </div>
 
 **Flecs.NET** is a high-level wrapper for [flecs](https://github.com/SanderMertens/flecs). Low-level bindings to the C api are included and generated with [Bindgen.NET](https://github.com/BeanCheeseBurrito/Bindgen.NET). Native libraries are cross-compiled with [Vezel-Dev's Zig Toolsets](https://github.com/vezel-dev/zig-toolsets).
-> **Warning**
-> This repo is a work in progress. Bugs are expected and the API is subject to change.
+
+## Show me the code!
+```csharp
+using Flecs.NET.Core;
+
+using World world = World.Create();
+
+Routine routine = world.Routine(
+    filter: world.FilterBuilder<Position, Velocity>(),
+    callback: (ref Position p, ref Velocity v) =>
+    {
+        p.X += v.X;
+        p.Y += v.Y;
+    }
+);
+
+Entity entity = world.Entity("Bob")
+    .Set(new Position { X = 10, Y = 20 })
+    .Set(new Velocity { X = 1, Y = 2 });
+
+while (world.Progress()) { }
+
+public struct Position
+{
+    public float X { get; set; }
+    public float Y { get; set; }
+}
+
+public struct Velocity
+{
+    public float X { get; set; }
+    public float Y { get; set; }
+}
+```
+
+## Overview
+**Flecs.NET - High-level C# port of the C++ wrapper**
+- Compatible with .NET Standard 2.1 and NativeAOT
+- Near feature parity with the C++ API
+- Struct-based API with minimal GC interaction
+- Supports both unmanaged and managed types as components
+- Implicitly registers components on-the-fly
+
+**Flecs.NET.Bindings - Low-level bindings of the C API**
+- Build your own wrapper to suite your personal needs
+- Auto-generated bindings for the entire flecs API
+- Fully blittable interface with no runtime marshalling
+
+**Flecs.NET.Native - Precompiled native libraries**
+- Provides both shared and static libraries for Windows, MacOS, and Linux
+- Packaged with Zig for dependency free cross-compilation everywhere
 
 ## NuGet
 You can download the nuget package and use **Flecs.NET** right away!
@@ -52,8 +101,6 @@ To include both of them in your project based on your build configuration, use t
 
 ## GitLab Package Registry
 For more up-to-date packages, development builds are available on the [GitLab package registry](https://gitlab.com/BeanCheeseBurrito/Flecs.NET/-/packages). To add the development feed to your project, add the GitLab link below  as a restore source. You can now reference any package version listed [here](https://gitlab.com/BeanCheeseBurrito/Flecs.NET/-/packages)!
-> **Warning**
-> Development feed packages may be deleted without warning to free up space.
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
 
@@ -69,41 +116,20 @@ For more up-to-date packages, development builds are available on the [GitLab pa
 
 </Project>
 ```
+> [!WARNING] 
+> Development feed packages may be deleted without warning to free up space.
 
-
-## Show me the code!
-```csharp
-using Flecs.NET.Core;
-
-using World world = World.Create();
-
-Routine routine = world.Routine(
-    filter: world.FilterBuilder<Position, Velocity>(),
-    callback: (ref Position p, ref Velocity v) =>
-    {
-        p.X += v.X;
-        p.Y += v.Y;
-    }
-);
-
-Entity entity = world.Entity("Bob")
-    .Set(new Position { X = 10, Y = 20 })
-    .Set(new Velocity { X = 1, Y = 2 });
-
-while (world.Progress()) { }
-
-public struct Position
-{
-    public float X { get; set; }
-    public float Y { get; set; }
-}
-
-public struct Velocity
-{
-    public float X { get; set; }
-    public float Y { get; set; }
-}
+## Unity Package Manager
+The **Flecs.NET** [Unity Package](https://github.com/BeanCheeseBurrito/Flecs.NET.Unity.git) is hosted on github and can be downloaded using the URL below.
+- Open the package manager window ``Window > Package Manager``
+- Click the ``+`` icon
+- Click ``Add package from git URL...``
+- Enter the **Flecs.NET.Unity** git URL
+```console
+https://github.com/BeanCheeseBurrito/Flecs.NET.Unity.git
 ```
+> [!NOTE]
+> Only Windows, MacOS, and Linux builds on x64 Mono are supported. IL2CPP, web, and mobile support are planned for the future.
 
 ## Running examples
 > **Note**
