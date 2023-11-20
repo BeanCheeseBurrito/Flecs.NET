@@ -14,7 +14,7 @@ namespace Flecs.NET.Unity
 {
     internal static class FlecsInitialization
     {
-        private const string PackageName = "dev.flecs.net";
+        private const string PackageName = "Flecs.NET";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Initialize()
