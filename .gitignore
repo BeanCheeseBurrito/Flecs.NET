@@ -495,4 +495,5 @@ src/Flecs.NET.Native/release
 
 # Unity
 upm/**/*.cs
+!upm/**/*.meta
 !upm/System.Runtime.CompilerServices.Unsafe/**/*
