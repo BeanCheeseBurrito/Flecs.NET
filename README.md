@@ -16,33 +16,34 @@
 ```csharp
 using Flecs.NET.Core;
 
+// Main Function
 using World world = World.Create();
 
-Routine routine = world.Routine(
-    filter: world.FilterBuilder<Position, Velocity>(),
-    callback: (ref Position p, ref Velocity v) =>
-    {
-        p.X += v.X;
-        p.Y += v.Y;
-    }
-);
+Entity entity = world.Entity()
+    .Set(new Position(10, 20))
+    .Set(new Velocity(1, 2));
 
-Entity entity = world.Entity("Bob")
-    .Set(new Position { X = 10, Y = 20 })
-    .Set(new Velocity { X = 1, Y = 2 });
+Query query = world.Query(filter: world.FilterBuilder<Position, Velocity>());
 
-while (world.Progress()) { }
-
-public struct Position
+query.Each((ref Position p, ref Velocity v) =>
 {
-    public float X { get; set; }
-    public float Y { get; set; }
+    p.X += v.X;
+    p.Y += v.Y;
+});
+
+return 0;
+
+// Components
+public struct Position(float x, float y)
+{
+    public float X { get; set; } = x;
+    public float Y { get; set; } = y;
 }
 
-public struct Velocity
+public struct Velocity(float x, float y)
 {
-    public float X { get; set; }
-    public float Y { get; set; }
+    public float X { get; set; } = x;
+    public float Y { get; set; } = y;
 }
 ```
 
