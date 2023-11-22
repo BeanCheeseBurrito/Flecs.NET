@@ -1,7 +1,7 @@
 <Project>
     <PropertyGroup>
-        <FlecsStaticLibraryFolder Condition="'$(Configuration)' == 'Debug'">$(MSBuildThisFileDirectory)debug</FlecsStaticLibraryFolder>
-        <FlecsStaticLibraryFolder Condition="'$(Configuration)' == 'Release'">$(MSBuildThisFileDirectory)release</FlecsStaticLibraryFolder>
+        <FlecsStaticLibraryFolder Condition="'$(Configuration)' == 'Debug'">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)debug'))</FlecsStaticLibraryFolder>
+        <FlecsStaticLibraryFolder Condition="'$(Configuration)' == 'Release'">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)release'))</FlecsStaticLibraryFolder>
 
         <FlecsStaticLibrary_linux-x64 Condition="">$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)linux-x64/libflecs.a'))</FlecsStaticLibrary_linux-x64>
         <FlecsStaticLibrary_osx-x64>$([MSBuild]::NormalizePath('$(FlecsStaticLibraryFolder)osx-x64/libflecs.a'))</FlecsStaticLibrary_osx-x64>
