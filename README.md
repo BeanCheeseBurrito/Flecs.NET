@@ -187,3 +187,13 @@ Reference the project and import the native libraries.
 
 </Project>
 ```
+## Contributing
+Feel free to open an issue or pull request. All contributions are welcome!
+
+**Ways to contribute:**
+- Bug Fixes/Reports
+- Feature Requests
+- Documentation
+- Examples/Snippets
+- Demos
+- Typo Corrections
