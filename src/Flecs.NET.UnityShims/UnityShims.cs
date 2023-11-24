@@ -6,6 +6,14 @@
 
 using System;
 
+namespace UnityEditor
+{
+    public class EditorApplication
+    {
+        public static void ExitPlaymode() { }
+    }
+}
+
 namespace UnityEngine
 {
     [AttributeUsage(AttributeTargets.Method)]
@@ -26,6 +34,7 @@ namespace UnityEngine
 
     public static class Debug
     {
+        public static void Log(string _) {}
         public static void LogError(string _) {}
     }
 }
