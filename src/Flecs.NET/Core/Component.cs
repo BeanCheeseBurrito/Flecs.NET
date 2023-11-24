@@ -97,30 +97,9 @@ namespace Flecs.NET.Core
                 }
 
                 using NativeString nativeName = (NativeString)name;
-
-                Type type = typeof(TComponent);
-                StructLayoutAttribute attribute = type.StructLayoutAttribute!;
-
-                int size;
-                int alignment;
-
-                if (RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>())
-                {
-                    size = sizeof(GCHandle);
-                    alignment = Type<GCHandle>.AlignOf();
-                }
-                else if (attribute.Value == LayoutKind.Explicit)
-                {
-                    size = attribute.Size == 0 ? sizeof(TComponent) : attribute.Size;
-                    alignment = attribute.Pack == 0 ? Type<TComponent>.AlignOf() : attribute.Pack;
-                }
-                else
-                {
-                    size = sizeof(TComponent);
-                    alignment = Type<TComponent>.AlignOf();
-                }
-
                 byte existing;
+
+                Type<TComponent>.NativeLayout(out int size, out int alignment, allowTag);
 
                 id = FlecsInternal.ComponentRegister(
                     world, id, nativeName, nativeSymbolName,

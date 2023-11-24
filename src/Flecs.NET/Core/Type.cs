@@ -105,60 +105,13 @@ namespace Flecs.NET.Core
                 Ecs.Assert(allowTag == AllowTag, nameof(ECS_INVALID_PARAMETER));
             }
 
-            Type type = typeof(T);
-            StructLayoutAttribute attribute = type.StructLayoutAttribute!;
+            NativeLayout(out int size, out int alignment, allowTag);
 
+            Size = size;
+            Alignment = alignment;
             ResetCount = FlecsInternal.ResetCount;
             RawId = entity;
             AllowTag = allowTag;
-
-            if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
-            {
-                Size = sizeof(GCHandle);
-                Alignment = Type<GCHandle>.AlignOf();
-                return;
-            }
-
-            if (attribute.Value == LayoutKind.Explicit)
-            {
-                Size = attribute.Size == 0 ? sizeof(T) : attribute.Size;
-                Alignment = attribute.Pack == 0 ? AlignOf() : attribute.Pack;
-            }
-            else
-            {
-                Size = sizeof(T);
-                Alignment = AlignOf();
-            }
-
-            if (!allowTag)
-                return;
-
-            if (RuntimeFeature.IsDynamicCodeSupported)
-            {
-                FieldInfo[] fields =
-                    type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                Size = fields.Length == 0 ? 0 : Size;
-                Alignment = Size == 0 ? 0 : Alignment;
-            }
-            else if (sizeof(T) == 1)
-            {
-                // Structs containing zero non-static fields will always return true when compared using .Equals().
-                // Test for tags by changing the underlying byte and checking equality.
-                // If the structs always return true, it's likely that the struct is a tag.
-
-                T aInstance = default!;
-                T bInstance = default!;
-
-                for (byte i = 0; i < 16; i++)
-                {
-                    *(byte*)&bInstance = i;
-                    if (!Equals(aInstance, bInstance))
-                        return;
-                }
-
-                Size = 0;
-                Alignment = 0;
-            }
         }
 
         /// <summary>
@@ -403,6 +356,66 @@ namespace Flecs.NET.Core
             Size = 0;
             Alignment = 0;
             AllowTag = true;
+        }
+
+        /// <summary>
+        ///     Calculates the size of the type.
+        /// </summary>
+        /// <param name="size"></param>
+        /// <param name="alignment"></param>
+        /// <param name="allowTag"></param>
+        public static void NativeLayout(out int size, out int alignment, bool allowTag = true)
+        {
+            Type type = typeof(T);
+            StructLayoutAttribute attribute = type.StructLayoutAttribute!;
+
+            if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+            {
+                size = sizeof(GCHandle);
+                alignment = Type<GCHandle>.AlignOf();
+                return;
+            }
+
+            if (attribute.Value == LayoutKind.Explicit)
+            {
+                size = attribute.Size == 0 ? sizeof(T) : attribute.Size;
+                alignment = attribute.Pack == 0 ? AlignOf() : attribute.Pack;
+            }
+            else
+            {
+                size = sizeof(T);
+                alignment = AlignOf();
+            }
+
+            if (!allowTag)
+                return;
+
+            if (RuntimeFeature.IsDynamicCodeSupported)
+            {
+                FieldInfo[] fields =
+                    type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                size = fields.Length == 0 ? 0 : size;
+                alignment = size == 0 ? 0 : alignment;
+            }
+            else if (sizeof(T) == 1)
+            {
+                // Structs containing zero non-static fields will always return true when compared using .Equals().
+                // Test for tags by changing the underlying byte and checking equality.
+                // If the structs always return true, it's likely that the struct is a tag.
+
+                T aInstance = default!;
+                T bInstance = default!;
+
+                for (byte i = 0; i < 16; i++)
+                {
+                    *(byte*)&bInstance = i;
+                    if (!Equals(aInstance, bInstance))
+                        return;
+                }
+
+                size = 0;
+                alignment = 0;
+            }
         }
 
         /// <summary>
