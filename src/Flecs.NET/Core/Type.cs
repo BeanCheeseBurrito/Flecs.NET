@@ -96,7 +96,6 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="allowTag"></param>
-        [SuppressMessage("Usage", "CA1508")]
         public static void Init(ulong entity, bool allowTag = true)
         {
             if (RawId != 0)
@@ -364,6 +363,7 @@ namespace Flecs.NET.Core
         /// <param name="size"></param>
         /// <param name="alignment"></param>
         /// <param name="allowTag"></param>
+        [SuppressMessage("Usage", "CA1508")]
         public static void NativeLayout(out int size, out int alignment, bool allowTag = true)
         {
             Type type = typeof(T);
