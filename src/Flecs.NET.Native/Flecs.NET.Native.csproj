@@ -33,7 +33,7 @@
 
         <FlecsNativeProcessorArch>$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)</FlecsNativeProcessorArch>
 
-        <FlecsCompileOptions Condition="'$(FlecsSoftAssert)' == 'True' Or '$(FlecsExportUnityArtifacts)' == 'True'">$(FlecsCompileOptions)-Dsoft-assert=true</FlecsCompileOptions>
+        <FlecsCompileOptions Condition="'$(FlecsSoftAssert)' == 'True'">$(FlecsCompileOptions)-Dsoft-assert=true</FlecsCompileOptions>
     </PropertyGroup>
 
     <ItemGroup>
