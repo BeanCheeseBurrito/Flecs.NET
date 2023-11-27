@@ -20,8 +20,8 @@ using Flecs.NET.Core;
 using World world = World.Create();
 
 Entity entity = world.Entity()
-    .Set(new Position(10, 20))
-    .Set(new Velocity(1, 2));
+    .Set<Position>(new(10, 20))
+    .Set<Velocity>(new(1, 2));
 
 Query query = world.Query(filter: world.FilterBuilder<Position, Velocity>());
 
