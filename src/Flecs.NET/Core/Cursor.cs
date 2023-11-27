@@ -251,6 +251,19 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set (component) id value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public int SetId(ulong value)
+        {
+            fixed (ecs_meta_cursor_t* cursor = &_cursor)
+            {
+                return ecs_meta_set_id(cursor, value);
+            }
+        }
+
+        /// <summary>
         ///     Set null value.
         /// </summary>
         /// <returns></returns>

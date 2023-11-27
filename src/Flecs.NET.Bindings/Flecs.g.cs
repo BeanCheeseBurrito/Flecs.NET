@@ -696,6 +696,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_meta_get_float", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern double ecs_meta_get_float(ecs_meta_cursor_t* cursor);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_meta_get_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern ulong ecs_meta_get_id(ecs_meta_cursor_t* cursor);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_meta_get_int", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern long ecs_meta_get_int(ecs_meta_cursor_t* cursor);
 
@@ -744,11 +747,17 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_meta_set_char", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_meta_set_char(ecs_meta_cursor_t* cursor, byte value);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_meta_set_component", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern int ecs_meta_set_component(ecs_meta_cursor_t* cursor, ulong value);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_meta_set_entity", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_meta_set_entity(ecs_meta_cursor_t* cursor, ulong value);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_meta_set_float", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_meta_set_float(ecs_meta_cursor_t* cursor, double value);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_meta_set_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern int ecs_meta_set_id(ecs_meta_cursor_t* cursor, ulong value);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_meta_set_int", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_meta_set_int(ecs_meta_cursor_t* cursor, long value);
@@ -6641,6 +6650,8 @@ namespace Flecs.NET.Bindings
 
             public ulong* written;
 
+            public uint source_set;
+
             public ecs_rule_op_profile_t* profile;
 
             public byte redo;
@@ -9133,27 +9144,15 @@ namespace Flecs.NET.Bindings
 
             public long observers_ran_frame;
 
-            public int id_count;
-
             public int tag_id_count;
 
             public int component_id_count;
 
             public int pair_id_count;
 
-            public int wildcard_id_count;
-
             public int table_count;
 
-            public int tag_table_count;
-
-            public int trivial_table_count;
-
             public int empty_table_count;
-
-            public int table_record_count;
-
-            public int table_storage_count;
 
             public cmd_AnonymousRecord cmd;
 
@@ -9265,7 +9264,7 @@ namespace Flecs.NET.Bindings
 
             public entities_AnonymousRecord entities;
 
-            public ids_AnonymousRecord ids;
+            public components_AnonymousRecord components;
 
             public tables_AnonymousRecord tables;
 
@@ -9278,8 +9277,6 @@ namespace Flecs.NET.Bindings
             public performance_AnonymousRecord performance;
 
             public memory_AnonymousRecord memory;
-
-            public rest_AnonymousRecord rest;
 
             public http_AnonymousRecord http;
 
@@ -9331,17 +9328,13 @@ namespace Flecs.NET.Bindings
                 }
             }
 
-            public partial struct ids_AnonymousRecord : System.IEquatable<ids_AnonymousRecord>
+            public partial struct components_AnonymousRecord : System.IEquatable<components_AnonymousRecord>
             {
-                public ecs_metric_t count;
-
                 public ecs_metric_t tag_count;
 
                 public ecs_metric_t component_count;
 
                 public ecs_metric_t pair_count;
-
-                public ecs_metric_t wildcard_count;
 
                 public ecs_metric_t type_count;
 
@@ -9349,36 +9342,36 @@ namespace Flecs.NET.Bindings
 
                 public ecs_metric_t delete_count;
 
-                public bool Equals(ids_AnonymousRecord other)
+                public bool Equals(components_AnonymousRecord other)
                 {
-                    fixed (ids_AnonymousRecord* __self = &this)
+                    fixed (components_AnonymousRecord* __self = &this)
                     {
-                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ids_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ids_AnonymousRecord)));
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(components_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(components_AnonymousRecord)));
                     }
                 }
 
                 public override bool Equals(object? obj)
                 {
-                    return obj is ids_AnonymousRecord other && Equals(other);
+                    return obj is components_AnonymousRecord other && Equals(other);
                 }
 
-                public static bool operator ==(ids_AnonymousRecord left, ids_AnonymousRecord right)
+                public static bool operator ==(components_AnonymousRecord left, components_AnonymousRecord right)
                 {
                     return left.Equals(right);
                 }
 
-                public static bool operator !=(ids_AnonymousRecord left, ids_AnonymousRecord right)
+                public static bool operator !=(components_AnonymousRecord left, components_AnonymousRecord right)
                 {
                     return !(left == right);
                 }
 
                 public override int GetHashCode()
                 {
-                    fixed (ids_AnonymousRecord* __self = &this)
+                    fixed (components_AnonymousRecord* __self = &this)
                     {
 #if NET6_0_OR_GREATER
                     System.HashCode hash = new System.HashCode();
-                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ids_AnonymousRecord)));
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(components_AnonymousRecord)));
                     return hash.ToHashCode();
 #else
                         return base.GetHashCode();
@@ -9392,14 +9385,6 @@ namespace Flecs.NET.Bindings
                 public ecs_metric_t count;
 
                 public ecs_metric_t empty_count;
-
-                public ecs_metric_t tag_only_count;
-
-                public ecs_metric_t trivial_only_count;
-
-                public ecs_metric_t record_count;
-
-                public ecs_metric_t storage_count;
 
                 public ecs_metric_t create_count;
 
@@ -9715,72 +9700,6 @@ namespace Flecs.NET.Bindings
 #if NET6_0_OR_GREATER
                     System.HashCode hash = new System.HashCode();
                     hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(memory_AnonymousRecord)));
-                    return hash.ToHashCode();
-#else
-                        return base.GetHashCode();
-#endif
-                    }
-                }
-            }
-
-            public partial struct rest_AnonymousRecord : System.IEquatable<rest_AnonymousRecord>
-            {
-                public ecs_metric_t request_count;
-
-                public ecs_metric_t entity_count;
-
-                public ecs_metric_t entity_error_count;
-
-                public ecs_metric_t query_count;
-
-                public ecs_metric_t query_error_count;
-
-                public ecs_metric_t query_name_count;
-
-                public ecs_metric_t query_name_error_count;
-
-                public ecs_metric_t query_name_from_cache_count;
-
-                public ecs_metric_t enable_count;
-
-                public ecs_metric_t enable_error_count;
-
-                public ecs_metric_t world_stats_count;
-
-                public ecs_metric_t pipeline_stats_count;
-
-                public ecs_metric_t stats_error_count;
-
-                public bool Equals(rest_AnonymousRecord other)
-                {
-                    fixed (rest_AnonymousRecord* __self = &this)
-                    {
-                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(rest_AnonymousRecord)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(rest_AnonymousRecord)));
-                    }
-                }
-
-                public override bool Equals(object? obj)
-                {
-                    return obj is rest_AnonymousRecord other && Equals(other);
-                }
-
-                public static bool operator ==(rest_AnonymousRecord left, rest_AnonymousRecord right)
-                {
-                    return left.Equals(right);
-                }
-
-                public static bool operator !=(rest_AnonymousRecord left, rest_AnonymousRecord right)
-                {
-                    return !(left == right);
-                }
-
-                public override int GetHashCode()
-                {
-                    fixed (rest_AnonymousRecord* __self = &this)
-                    {
-#if NET6_0_OR_GREATER
-                    System.HashCode hash = new System.HashCode();
-                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(rest_AnonymousRecord)));
                     return hash.ToHashCode();
 #else
                         return base.GetHashCode();
@@ -10608,6 +10527,8 @@ namespace Flecs.NET.Bindings
             public System.IntPtr assign_string; // delegate* unmanaged<void*, byte*, void>
 
             public System.IntPtr assign_entity; // delegate* unmanaged<void*, ecs_world_t*, ulong, void>
+
+            public System.IntPtr assign_id; // delegate* unmanaged<void*, ecs_world_t*, ulong, void>
 
             public System.IntPtr assign_null; // delegate* unmanaged<void*, void>
 
@@ -11536,7 +11457,8 @@ namespace Flecs.NET.Bindings
             EcsOpIPtr = 23,
             EcsOpString = 24,
             EcsOpEntity = 25,
-            EcsMetaTypeOpKindLast = 25
+            EcsOpId = 26,
+            EcsMetaTypeOpKindLast = 26
         }
 
         public enum ecs_oper_kind_t : uint
@@ -11569,7 +11491,8 @@ namespace Flecs.NET.Bindings
             EcsIPtr = 15,
             EcsString = 16,
             EcsEntity = 17,
-            EcsPrimitiveKindLast = 17
+            EcsId = 18,
+            EcsPrimitiveKindLast = 18
         }
 
         public enum ecs_type_kind_t : uint
@@ -11666,6 +11589,8 @@ namespace Flecs.NET.Bindings
 
         public const ecs_meta_type_op_kind_t EcsOpEntity = ecs_meta_type_op_kind_t.EcsOpEntity;
 
+        public const ecs_meta_type_op_kind_t EcsOpId = ecs_meta_type_op_kind_t.EcsOpId;
+
         public const ecs_meta_type_op_kind_t EcsMetaTypeOpKindLast = ecs_meta_type_op_kind_t.EcsMetaTypeOpKindLast;
 
         public const ecs_oper_kind_t EcsAnd = ecs_oper_kind_t.EcsAnd;
@@ -11715,6 +11640,8 @@ namespace Flecs.NET.Bindings
         public const ecs_primitive_kind_t EcsString = ecs_primitive_kind_t.EcsString;
 
         public const ecs_primitive_kind_t EcsEntity = ecs_primitive_kind_t.EcsEntity;
+
+        public const ecs_primitive_kind_t EcsId = ecs_primitive_kind_t.EcsId;
 
         public const ecs_primitive_kind_t EcsPrimitiveKindLast = ecs_primitive_kind_t.EcsPrimitiveKindLast;
 
@@ -12220,36 +12147,6 @@ namespace Flecs.NET.Bindings
 
         private static void* ECS_PAIR_Ptr;
 
-        private static void* ecs_rest_delete_count_Ptr;
-
-        private static void* ecs_rest_delete_error_count_Ptr;
-
-        private static void* ecs_rest_enable_count_Ptr;
-
-        private static void* ecs_rest_enable_error_count_Ptr;
-
-        private static void* ecs_rest_entity_count_Ptr;
-
-        private static void* ecs_rest_entity_error_count_Ptr;
-
-        private static void* ecs_rest_pipeline_stats_count_Ptr;
-
-        private static void* ecs_rest_query_count_Ptr;
-
-        private static void* ecs_rest_query_error_count_Ptr;
-
-        private static void* ecs_rest_query_name_count_Ptr;
-
-        private static void* ecs_rest_query_name_error_count_Ptr;
-
-        private static void* ecs_rest_query_name_from_cache_count_Ptr;
-
-        private static void* ecs_rest_request_count_Ptr;
-
-        private static void* ecs_rest_stats_error_count_Ptr;
-
-        private static void* ecs_rest_world_stats_count_Ptr;
-
         private static void* ecs_stack_allocator_alloc_count_Ptr;
 
         private static void* ecs_stack_allocator_free_count_Ptr;
@@ -12674,6 +12571,8 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDecs_i8_tID__Ptr;
 
+        private static void* FLECS_IDecs_id_tID__Ptr;
+
         private static void* FLECS_IDecs_iptr_tID__Ptr;
 
         private static void* FLECS_IDecs_string_tID__Ptr;
@@ -13043,36 +12942,6 @@ namespace Flecs.NET.Bindings
         public static ref ulong ECS_OVERRIDE => ref *(ulong*)(ECS_OVERRIDE_Ptr == null ? BindgenInternal.LoadDllSymbol("ECS_OVERRIDE", out ECS_OVERRIDE_Ptr) : ECS_OVERRIDE_Ptr);
 
         public static ref ulong ECS_PAIR => ref *(ulong*)(ECS_PAIR_Ptr == null ? BindgenInternal.LoadDllSymbol("ECS_PAIR", out ECS_PAIR_Ptr) : ECS_PAIR_Ptr);
-
-        public static ref long ecs_rest_delete_count => ref *(long*)(ecs_rest_delete_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_delete_count", out ecs_rest_delete_count_Ptr) : ecs_rest_delete_count_Ptr);
-
-        public static ref long ecs_rest_delete_error_count => ref *(long*)(ecs_rest_delete_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_delete_error_count", out ecs_rest_delete_error_count_Ptr) : ecs_rest_delete_error_count_Ptr);
-
-        public static ref long ecs_rest_enable_count => ref *(long*)(ecs_rest_enable_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_enable_count", out ecs_rest_enable_count_Ptr) : ecs_rest_enable_count_Ptr);
-
-        public static ref long ecs_rest_enable_error_count => ref *(long*)(ecs_rest_enable_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_enable_error_count", out ecs_rest_enable_error_count_Ptr) : ecs_rest_enable_error_count_Ptr);
-
-        public static ref long ecs_rest_entity_count => ref *(long*)(ecs_rest_entity_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_entity_count", out ecs_rest_entity_count_Ptr) : ecs_rest_entity_count_Ptr);
-
-        public static ref long ecs_rest_entity_error_count => ref *(long*)(ecs_rest_entity_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_entity_error_count", out ecs_rest_entity_error_count_Ptr) : ecs_rest_entity_error_count_Ptr);
-
-        public static ref long ecs_rest_pipeline_stats_count => ref *(long*)(ecs_rest_pipeline_stats_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_pipeline_stats_count", out ecs_rest_pipeline_stats_count_Ptr) : ecs_rest_pipeline_stats_count_Ptr);
-
-        public static ref long ecs_rest_query_count => ref *(long*)(ecs_rest_query_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_query_count", out ecs_rest_query_count_Ptr) : ecs_rest_query_count_Ptr);
-
-        public static ref long ecs_rest_query_error_count => ref *(long*)(ecs_rest_query_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_query_error_count", out ecs_rest_query_error_count_Ptr) : ecs_rest_query_error_count_Ptr);
-
-        public static ref long ecs_rest_query_name_count => ref *(long*)(ecs_rest_query_name_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_query_name_count", out ecs_rest_query_name_count_Ptr) : ecs_rest_query_name_count_Ptr);
-
-        public static ref long ecs_rest_query_name_error_count => ref *(long*)(ecs_rest_query_name_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_query_name_error_count", out ecs_rest_query_name_error_count_Ptr) : ecs_rest_query_name_error_count_Ptr);
-
-        public static ref long ecs_rest_query_name_from_cache_count => ref *(long*)(ecs_rest_query_name_from_cache_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_query_name_from_cache_count", out ecs_rest_query_name_from_cache_count_Ptr) : ecs_rest_query_name_from_cache_count_Ptr);
-
-        public static ref long ecs_rest_request_count => ref *(long*)(ecs_rest_request_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_request_count", out ecs_rest_request_count_Ptr) : ecs_rest_request_count_Ptr);
-
-        public static ref long ecs_rest_stats_error_count => ref *(long*)(ecs_rest_stats_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_stats_error_count", out ecs_rest_stats_error_count_Ptr) : ecs_rest_stats_error_count_Ptr);
-
-        public static ref long ecs_rest_world_stats_count => ref *(long*)(ecs_rest_world_stats_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_rest_world_stats_count", out ecs_rest_world_stats_count_Ptr) : ecs_rest_world_stats_count_Ptr);
 
         public static ref long ecs_stack_allocator_alloc_count => ref *(long*)(ecs_stack_allocator_alloc_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_stack_allocator_alloc_count", out ecs_stack_allocator_alloc_count_Ptr) : ecs_stack_allocator_alloc_count_Ptr);
 
@@ -13497,6 +13366,8 @@ namespace Flecs.NET.Bindings
         public static ref ulong FLECS_IDecs_i64_tID_ => ref *(ulong*)(FLECS_IDecs_i64_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_i64_tID_", out FLECS_IDecs_i64_tID__Ptr) : FLECS_IDecs_i64_tID__Ptr);
 
         public static ref ulong FLECS_IDecs_i8_tID_ => ref *(ulong*)(FLECS_IDecs_i8_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_i8_tID_", out FLECS_IDecs_i8_tID__Ptr) : FLECS_IDecs_i8_tID__Ptr);
+
+        public static ref ulong FLECS_IDecs_id_tID_ => ref *(ulong*)(FLECS_IDecs_id_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_id_tID_", out FLECS_IDecs_id_tID__Ptr) : FLECS_IDecs_id_tID__Ptr);
 
         public static ref ulong FLECS_IDecs_iptr_tID_ => ref *(ulong*)(FLECS_IDecs_iptr_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_iptr_tID_", out FLECS_IDecs_iptr_tID__Ptr) : FLECS_IDecs_iptr_tID__Ptr);
 
