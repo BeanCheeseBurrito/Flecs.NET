@@ -62,8 +62,8 @@ using Flecs.NET.Core;
 
     filter.Each((Entity e, ref ImpulseSpeed s, ref Position p) =>
     {
-            p.X += s.Value;
-            Console.WriteLine($"{e}: ({p.X:0.0}, {p.Y:0.0})");
+        p.X += s.Value;
+        Console.WriteLine($"{e}: ({p.X:0.0}, {p.Y:0.0})");
     });
 
     return 0;
