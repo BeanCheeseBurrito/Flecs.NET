@@ -2,6 +2,25 @@
 
 using Flecs.NET.Core;
 
+{
+    using World world = World.Create();
+
+    Entity bob = world.Entity()
+        .Set(new Position { X = 10, Y = 20 })
+        .Set(new Velocity { X = 1, Y = 1 })
+        .Add<Human>()
+        .Add<Eats, Apples>();
+
+    Console.WriteLine("Bob's components:");
+    IterateComponents(bob);
+
+    // We can use the same function to iterate the components of a component
+    Console.WriteLine("Position's components:");
+    IterateComponents(world.Component<Position>().Entity);
+
+    return 0;
+}
+
 void IterateComponents(Entity e)
 {
     // 1. The easiest way to print the components is to use Types.Str
@@ -39,21 +58,6 @@ void IterateComponents(Entity e)
 
     Console.WriteLine("\n");
 }
-
-using World world = World.Create();
-
-Entity bob = world.Entity()
-    .Set(new Position { X = 10, Y = 20 })
-    .Set(new Velocity { X = 1, Y = 1 })
-    .Add<Human>()
-    .Add<Eats, Apples>();
-
-Console.WriteLine("Bob's components:");
-IterateComponents(bob);
-
-// We can use the same function to iterate the components of a component
-Console.WriteLine("Position's components:");
-IterateComponents(world.Component<Position>().Entity);
 
 // Ordinary components
 public struct Position

@@ -6,18 +6,19 @@
 
 using Flecs.NET.Core;
 
-using World world = World.Create();
+{
+    using World world = World.Create();
 
-// Create a prefab hierarchy.
-Entity spaceship = world.Prefab("Spaceship")
-    // Add components to prefab entity as usual
-    .Set(new ImpulseSpeed { Value = 50 })
-    .Set(new Defense { Value = 50 })
+    // Create a prefab hierarchy.
+    Entity spaceship = world.Prefab("Spaceship")
+        // Add components to prefab entity as usual
+        .Set(new ImpulseSpeed { Value = 50 })
+        .Set(new Defense { Value = 50 })
 
-    // By default components in an inheritance hierarchy are shared between
-    // entities. The override function ensures that instances have a private
-    // copy of the component.
-    .Override<Position>();
+        // By default components in an inheritance hierarchy are shared between
+        // entities. The override function ensures that instances have a private
+        // copy of the component.
+        .Override<Position>();
 
     Entity freighter = world.Prefab("Freighter")
         // Short for .Add(Ecs.IsA, spaceship). This ensures the entity
@@ -27,10 +28,10 @@ Entity spaceship = world.Prefab("Spaceship")
         .Set(new FreightCapacity { Value = 100 })
         .Set(new Defense { Value = 100 });
 
-        Entity mammothFreighter = world.Prefab("MammothFreighter")
-            .IsA(freighter)
-            .Set(new FreightCapacity { Value = 500 })
-            .Set(new Defense { Value = 300 });
+    Entity mammothFreighter = world.Prefab("MammothFreighter")
+        .IsA(freighter)
+        .Set(new FreightCapacity { Value = 500 })
+        .Set(new Defense { Value = 300 });
 
     world.Prefab("Frigate")
         .IsA(spaceship)
@@ -39,39 +40,34 @@ Entity spaceship = world.Prefab("Spaceship")
         .Set(new Defense { Value = 75 })
         .Set(new ImpulseSpeed { Value = 125 });
 
-// Create a regular entity from a prefab.
-// The instance will have a private copy of the Position component, because
-// of the override in the spaceship entity. All other components are shared.
-Entity inst = world.Entity("MyMammothFreighter")
-    .IsA(mammothFreighter);
+    // Create a regular entity from a prefab.
+    // The instance will have a private copy of the Position component, because
+    // of the override in the spaceship entity. All other components are shared.
+    Entity inst = world.Entity("MyMammothFreighter")
+        .IsA(mammothFreighter);
 
-// Inspect the type of the entity. This outputs:
-//    Position,(Identifier,Name),(IsA,MammothFreighter)
-Console.WriteLine($"Instance type: [{inst.Type().Str()}]");
+    // Inspect the type of the entity. This outputs:
+    //    Position,(Identifier,Name),(IsA,MammothFreighter)
+    Console.WriteLine($"Instance type: [{inst.Type().Str()}]");
 
-// Even though the instance doesn't have a private copy of ImpulseSpeed, we
-// can still get it using the regular API (outputs 50)
-ref readonly ImpulseSpeed ptr = ref inst.Get<ImpulseSpeed>();
-Console.WriteLine($"Impulse speed: {ptr.Value}");
+    // Even though the instance doesn't have a private copy of ImpulseSpeed, we
+    // can still get it using the regular API (outputs 50)
+    ref readonly ImpulseSpeed ptr = ref inst.Get<ImpulseSpeed>();
+    Console.WriteLine($"Impulse speed: {ptr.Value}");
 
-// Prefab components can be iterated just like regular components:
-using Filter filter = world.Filter(
-    filter: world.FilterBuilder()
-        .Term<ImpulseSpeed>()
-        .Term<Position>()
-);
+    // Prefab components can be iterated just like regular components:
+    using Filter filter = world.Filter(
+        filter: world.FilterBuilder<ImpulseSpeed, Position>()
+    );
 
-filter.Iter((Iter it) =>
-{
-    Column<ImpulseSpeed> s = it.Field<ImpulseSpeed>(1);
-    Column<Position> p = it.Field<Position>(2);
-
-    foreach (int i in it)
+    filter.Each((Entity e, ref ImpulseSpeed s, ref Position p) =>
     {
-        p[i].X += s[i].Value;
-        Console.WriteLine($"{it.Entity(i).Name()}: ({p[i].X:0.0}, {p[i].Y:0.0})");
-    }
-});
+            p.X += s.Value;
+            Console.WriteLine($"{e}: ({p.X:0.0}, {p.Y:0.0})");
+    });
+
+    return 0;
+}
 
 public struct Attack { public double Value { get; set; } }
 public struct Defense { public double Value { get; set; } }
