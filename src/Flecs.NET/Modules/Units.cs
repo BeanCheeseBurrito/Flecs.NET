@@ -10,7 +10,7 @@ namespace Flecs.NET.Core
         ///     Units module.
         /// </summary>
         [SuppressMessage("Usage", "CA1815")]
-        private struct Units : IEquatable<Units>, IFlecsModule
+        public struct Units : IEquatable<Units>, IFlecsModule
         {
             /// <summary>
             ///     Initializes units module.
