@@ -3610,17 +3610,15 @@ namespace Flecs.NET.Bindings
         {
             public ecs_header_t hdr;
 
-            public ecs_term_t* terms;
+            public byte term_count;
 
-            public int term_count;
-
-            public int field_count;
-
-            public byte owned;
-
-            public byte terms_owned;
+            public byte field_count;
 
             public uint flags;
+
+            public ulong data_fields;
+
+            public ecs_term_t* terms;
 
             public variable_names_FixedBuffer variable_names;
 
@@ -6653,8 +6651,6 @@ namespace Flecs.NET.Bindings
             public uint source_set;
 
             public ecs_rule_op_profile_t* profile;
-
-            public byte redo;
 
             public short op;
 
@@ -11837,13 +11833,19 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsFilterHasScopes = 8192;
 
+        public const uint EcsFilterHasWildcards = 65536;
+
         public const uint EcsFilterIsInstanced = 256;
+
+        public const uint EcsFilterIsTrivial = 16384;
 
         public const uint EcsFilterMatchAnything = 64;
 
         public const uint EcsFilterMatchDisabled = 16;
 
         public const uint EcsFilterMatchEmptyTables = 32;
+
+        public const uint EcsFilterMatchOnlySelf = 32768;
 
         public const uint EcsFilterMatchOnlyThis = 4;
 
@@ -11852,6 +11854,10 @@ namespace Flecs.NET.Bindings
         public const uint EcsFilterMatchThis = 2;
 
         public const uint EcsFilterNoData = 128;
+
+        public const uint EcsFilterOwnsStorage = 131072;
+
+        public const uint EcsFilterOwnsTermsStorage = 262144;
 
         public const uint EcsFilterPopulate = 512;
 
@@ -11943,6 +11949,14 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsIterTableOnly = 16;
 
+        public const uint EcsIterTrivialSearch = 4096;
+
+        public const uint EcsIterTrivialSearchNoData = 8192;
+
+        public const uint EcsIterTrivialSearchWildcard = 32768;
+
+        public const uint EcsIterTrivialTest = 16384;
+
         public const int EcsIterYield = -1;
 
         public const uint EcsOsApiHighResolutionTimer = 1;
@@ -12033,6 +12047,8 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsTermIdInherited = 64;
 
+        public const uint EcsTermIsTrivial = 128;
+
         public const uint EcsTermMatchAny = 1;
 
         public const uint EcsTermMatchAnySrc = 2;
@@ -12040,6 +12056,8 @@ namespace Flecs.NET.Bindings
         public const uint EcsTermMatchDisabled = 128;
 
         public const uint EcsTermMatchPrefab = 256;
+
+        public const uint EcsTermNoData = 256;
 
         public const uint EcsTermReflexive = 32;
 
