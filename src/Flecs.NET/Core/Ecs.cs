@@ -18,13 +18,28 @@ namespace Flecs.NET.Core
     // Debug
     public static partial class Ecs
     {
+        /// <summary>
+        ///     Debug assert.
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="message"></param>
+        /// <exception cref="InvalidOperationException"></exception>
         [Conditional("DEBUG")]
-        internal static void Assert(bool condition, string message = "")
+        public static void Assert(bool condition, string message = "")
         {
-            Debug.Assert(condition, $"[Flecs.NET Assertion]: {message}");
+            if (condition)
+                return;
+
+            string formatted = $"[Flecs.NET Assertion]: {message}";
+            Debug.Assert(condition, formatted);
+            throw new InvalidOperationException(formatted); // TODO: Figure out better way to handle unity.
         }
 
-        internal static void Error(string message)
+        /// <summary>
+        ///     Debug fail.
+        /// </summary>
+        /// <param name="message"></param>
+        public static void Error(string message)
         {
             Debug.Fail($"[Flecs.NET Error]: {message}");
         }
