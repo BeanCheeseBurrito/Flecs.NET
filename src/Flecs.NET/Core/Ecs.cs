@@ -724,6 +724,104 @@ namespace Flecs.NET.Core
         ///     Reference to <see cref="EcsPostFrame"/>.
         /// </summary>
         public static ref ulong PostFrame => ref EcsPostFrame;
+
+        // Built-in reflection types
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_bool_tID_"/>.
+        /// </summary>
+        public static ref ulong Bool => ref FLECS_IDecs_bool_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_char_tID_"/>.
+        /// </summary>
+        public static ref ulong Char => ref FLECS_IDecs_char_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_byte_tID_"/>.
+        /// </summary>
+        public static ref ulong Byte => ref FLECS_IDecs_byte_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_u8_tID_"/>.
+        /// </summary>
+        public static ref ulong U8 => ref FLECS_IDecs_u8_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_u16_tID_"/>.
+        /// </summary>
+        public static ref ulong U16 => ref FLECS_IDecs_u16_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_u32_tID_"/>.
+        /// </summary>
+        public static ref ulong U32 => ref FLECS_IDecs_u32_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_u64_tID_"/>.
+        /// </summary>
+        public static ref ulong U64 => ref FLECS_IDecs_u64_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_uptr_tID_"/>.
+        /// </summary>
+        public static ref ulong Uptr => ref FLECS_IDecs_uptr_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_i8_tID_"/>.
+        /// </summary>
+        public static ref ulong I8 => ref FLECS_IDecs_i8_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_i16_tID_"/>.
+        /// </summary>
+        public static ref ulong I16 => ref FLECS_IDecs_i16_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_i32_tID_"/>.
+        /// </summary>
+        public static ref ulong I32 => ref FLECS_IDecs_i32_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_i64_tID_"/>.
+        /// </summary>
+        public static ref ulong I64 => ref FLECS_IDecs_i64_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_iptr_tID_"/>.
+        /// </summary>
+        public static ref ulong Iptr => ref FLECS_IDecs_iptr_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_f32_tID_"/>.
+        /// </summary>
+        public static ref ulong F32 => ref FLECS_IDecs_f32_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_f64_tID_"/>.
+        /// </summary>
+        public static ref ulong F64 => ref FLECS_IDecs_f64_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_string_tID_"/>.
+        /// </summary>
+        public static ref ulong String => ref FLECS_IDecs_string_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="FLECS_IDecs_entity_tID_"/>.
+        /// </summary>
+        public static ref ulong Entity => ref FLECS_IDecs_entity_tID_;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsConstant"/>.
+        /// </summary>
+        public static ref ulong Constant => ref EcsConstant;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsQuantity"/>.
+        /// </summary>
+        public static ref ulong Quantity => ref EcsQuantity;
+
     }
 
     // Static classes
