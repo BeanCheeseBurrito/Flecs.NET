@@ -204,6 +204,18 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Add constant.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public ref Component<TComponent> Constant<TEnum>(string name, TEnum value) where TEnum : Enum
+        {
+            UntypedComponent.Constant(name, value);
+            return ref this;
+        }
+
+        /// <summary>
         ///     Add bitmask constant.
         /// </summary>
         /// <param name="name"></param>

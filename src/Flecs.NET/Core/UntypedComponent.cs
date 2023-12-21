@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -170,6 +171,19 @@ namespace Flecs.NET.Core
 
             ecs_set_id(World, id, Macros.Pair(EcsConstant, FLECS_IDecs_i32_tID_), (IntPtr)sizeof(int), &value);
             return ref this;
+        }
+
+        /// <summary>
+        ///     Add constant.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        /// TODO: Handle all integer types instead of only int.
+        public ref UntypedComponent Constant<TEnum>(string name, TEnum value) where TEnum : Enum
+        {
+            return ref Constant(name, Convert.ToInt32(value, CultureInfo.InvariantCulture));
         }
 
         /// <summary>
