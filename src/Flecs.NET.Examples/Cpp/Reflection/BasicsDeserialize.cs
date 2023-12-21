@@ -2,7 +2,6 @@
 
 using Flecs.NET.Core;
 
-void test(ReadOnlySpan<char> ok) {}
 {
     using World world = World.Create();
 
