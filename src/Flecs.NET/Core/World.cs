@@ -1984,7 +1984,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Convert value to string
+        ///     Convert value to string.
         /// </summary>
         /// <param name="value"></param>
         /// <typeparam name="T"></typeparam>
@@ -1992,6 +1992,20 @@ namespace Flecs.NET.Core
         public string ToExpr<T>(T* value) where T : unmanaged
         {
             return ToExpr(Type<T>.Id(Handle), value);
+        }
+
+        /// <summary>
+        ///     Covert value to string.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public string ToExpr<T>(ref T value) where T : unmanaged
+        {
+            fixed (T* ptr = &value)
+            {
+                return ToExpr(ptr);
+            }
         }
 
         /// <summary>
@@ -2011,9 +2025,24 @@ namespace Flecs.NET.Core
         /// <param name="data"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Cursor Cursor<T>(void* data)
+        public Cursor Cursor<T>(T* data)
         {
             return Cursor(Type<T>.Id(Handle), data);
+        }
+
+        /// <summary>
+        ///     Return meta cursor to value.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        // TODO: Figure out better api that doesn't cause GC hole
+        public Cursor Cursor<T>(ref T data) where T : unmanaged
+        {
+            fixed (T* ptr = &data)
+            {
+                return Cursor(ptr);
+            }
         }
 
         /// <summary>
@@ -2086,6 +2115,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Creates a new <see cref="Flecs.NET.Core.EntityToJsonDesc"/>.
+        /// </summary>
+        /// <returns></returns>
+        public EntityToJsonDesc EntityToJsonDesc()
+        {
+            return new EntityToJsonDesc();
+        }
+
+        /// <summary>
         ///     Serialize untyped value to JSON.
         /// </summary>
         /// <param name="id"></param>
@@ -2105,6 +2143,20 @@ namespace Flecs.NET.Core
         public string ToJson<T>(T* value) where T : unmanaged
         {
             return ToJson(Type<T>.Id(Handle), value);
+        }
+
+        /// <summary>
+        ///     Serialize value to JSON.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public string ToJson<T>(ref T value) where T : unmanaged
+        {
+            fixed (T* ptr = &value)
+            {
+                return ToJson(ptr);
+            }
         }
 
         /// <summary>

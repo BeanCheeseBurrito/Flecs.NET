@@ -977,6 +977,29 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Serialize entity to JSON.
+        /// </summary>
+        /// <param name="desc"></param>
+        /// <returns></returns>
+        public string ToJson(ref EntityToJsonDesc desc)
+        {
+            fixed (ecs_entity_to_json_desc_t* ptr = &desc.Desc)
+            {
+                return ToJson(ptr);
+            }
+        }
+
+        /// <summary>
+        ///     Serialize entity to JSON.
+        /// </summary>
+        /// <param name="desc"></param>
+        /// <returns></returns>
+        public string ToJson(EntityToJsonDesc desc)
+        {
+            return ToJson(ref desc);
+        }
+
+        /// <summary>
         ///     Returns the entity's doc name.
         /// </summary>
         /// <returns></returns>
