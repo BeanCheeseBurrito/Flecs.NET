@@ -6,10 +6,6 @@ void test(ReadOnlySpan<char> ok) {}
 {
     using World world = World.Create();
 
-    ReadOnlySpan<char> a = "aaa";
-
-    test("aaa");
-
     // Register component with reflection data.
     world.Component<Position>()
         .Member<float>("X")
