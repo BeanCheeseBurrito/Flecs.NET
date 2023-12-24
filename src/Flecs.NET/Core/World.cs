@@ -1536,6 +1536,35 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Create an entity.
+        /// </summary>
+        /// <returns></returns>
+        public UntypedComponent Component()
+        {
+            return new UntypedComponent(Handle);
+        }
+
+        /// <summary>
+        ///     Create an entity from id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public UntypedComponent Component(ulong id)
+        {
+            return new UntypedComponent(Handle, id);
+        }
+
+        /// <summary>
+        ///     Create an entity from name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public UntypedComponent Component(string name)
+        {
+            return new UntypedComponent(Handle, name);
+        }
+
+        /// <summary>
         ///     Find or register component.
         /// </summary>
         /// <typeparam name="T"></typeparam>

@@ -330,6 +330,26 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts an <see cref="UntypedComponent"/> instance to its flecs id.
+        /// </summary>
+        /// <param name="untypedComponent"></param>
+        /// <returns></returns>
+        public static implicit operator ulong(UntypedComponent untypedComponent)
+        {
+            return ToUInt64(untypedComponent);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="UntypedComponent"/> instance to its flecs id.
+        /// </summary>
+        /// <param name="untypedComponent"></param>
+        /// <returns></returns>
+        public static ulong ToUInt64(UntypedComponent untypedComponent)
+        {
+            return untypedComponent.Id;
+        }
+
+        /// <summary>
         ///     Checks if two <see cref="UntypedComponent"/> instances are equal.
         /// </summary>
         /// <param name="other"></param>
