@@ -971,9 +971,18 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public string ToJson(ecs_entity_to_json_desc_t* desc = null)
+        public string ToJson(ecs_entity_to_json_desc_t* desc)
         {
             return NativeString.GetStringAndFree(ecs_entity_to_json(World, Id, desc));
+        }
+
+        /// <summary>
+        ///     Serialize entity to JSON.
+        /// </summary>
+        /// <returns></returns>
+        public string ToJson()
+        {
+            return ToJson(null);
         }
 
         /// <summary>

@@ -72,12 +72,21 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public string ToJson(ecs_iter_to_json_desc_t* desc = null)
+        public string ToJson(ecs_iter_to_json_desc_t* desc)
         {
             fixed (ecs_iter_t* it = &_iter)
             {
                 return NativeString.GetStringAndFree(ecs_iter_to_json(it->real_world, it, desc));
             }
+        }
+
+        /// <summary>
+        ///     Serialize iterator to JSON.
+        /// </summary>
+        /// <returns></returns>
+        public string ToJson()
+        {
+            return ToJson(null);
         }
 
         /// <summary>
