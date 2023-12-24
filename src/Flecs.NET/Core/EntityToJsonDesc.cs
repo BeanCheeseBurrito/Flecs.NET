@@ -219,13 +219,13 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public readonly override bool Equals(object? obj)
+        public override bool Equals(object? obj)
         {
-            return obj is EventBuilder other && Equals(other);
+            return obj is EntityToJsonDesc other && Equals(other);
         }
 
         /// <summary>
-        ///     Returns the hash code for the <see cref="EventBuilder"/>.
+        ///     Returns the hash code for the <see cref="EntityToJsonDesc"/>.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()

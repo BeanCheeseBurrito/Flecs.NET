@@ -1536,7 +1536,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create an entity.
+        ///     Create an <see cref="UntypedComponent"/>.
         /// </summary>
         /// <returns></returns>
         public UntypedComponent Component()
@@ -1545,7 +1545,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create an entity from id.
+        ///     Create an <see cref="UntypedComponent"/> from id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -1555,7 +1555,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create an entity from name.
+        ///     Create an <see cref="UntypedComponent"/> from name.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -2162,6 +2162,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Creates a new <see cref="Flecs.NET.Core.WorldToJsonDesc"/>.
+        /// </summary>
+        /// <returns></returns>
+        public WorldToJsonDesc WorldToJsonDesc()
+        {
+            return Core.WorldToJsonDesc.Default;
+        }
+
+        /// <summary>
         ///     Serialize untyped value to JSON.
         /// </summary>
         /// <param name="id"></param>
@@ -2178,6 +2187,7 @@ namespace Flecs.NET.Core
         /// <param name="value"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        // TODO: Support managed types with ToJson and FromJson.
         public string ToJson<T>(T* value) where T : unmanaged
         {
             return ToJson(Type<T>.Id(Handle), value);
@@ -2214,10 +2224,10 @@ namespace Flecs.NET.Core
         /// <param name="json"></param>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public void* FromJson(ulong id, void* value, string json, ecs_from_json_desc_t* desc = null)
+        public bool FromJson(ulong id, void* value, string json, ecs_from_json_desc_t* desc = null)
         {
             using NativeString nativeJson = (NativeString)json;
-            return ecs_ptr_from_json(Handle, id, value, nativeJson, desc);
+            return ecs_ptr_from_json(Handle, id, value, nativeJson, desc) != null;
         }
 
         /// <summary>
@@ -2228,7 +2238,7 @@ namespace Flecs.NET.Core
         /// <param name="desc"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public void* FromJson<T>(T* value, string json, ecs_from_json_desc_t* desc = null) where T : unmanaged
+        public bool FromJson<T>(T* value, string json, ecs_from_json_desc_t* desc = null) where T : unmanaged
         {
             return FromJson(Type<T>.Id(Handle), value, json, desc);
         }
@@ -2239,10 +2249,21 @@ namespace Flecs.NET.Core
         /// <param name="json"></param>
         /// <param name="desc"></param>
         /// <returns></returns>
-        public void* FromJson(string json, ecs_from_json_desc_t* desc = null)
+        public bool FromJson(string json, ecs_from_json_desc_t* desc)
         {
             using NativeString nativeJson = (NativeString)json;
-            return ecs_world_from_json(Handle, nativeJson, desc);
+            return ecs_world_from_json(Handle, nativeJson, desc) != null;
+        }
+
+        /// <summary>
+        ///     Deserialize value from JSON.
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public bool FromJson(string json)
+        {
+            using NativeString nativeJson = (NativeString)json;
+            return FromJson(json, null);
         }
 
         /// <summary>
