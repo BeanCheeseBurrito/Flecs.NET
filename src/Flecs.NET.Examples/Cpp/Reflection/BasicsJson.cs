@@ -1,6 +1,5 @@
 #if Cpp_Reflection_BasicsJson
 
-using Flecs.NET.Bindings;
 using Flecs.NET.Core;
 
 {
