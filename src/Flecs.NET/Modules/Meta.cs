@@ -16,19 +16,23 @@ namespace Flecs.NET.Core
             /// <param name="world"></param>
             public readonly void InitModule(ref World world)
             {
-                world.Component<bool>().Entity.Set(new EcsPrimitive { kind = ecs_primitive_kind_t.EcsBool });
-                world.Component<byte>().Entity.Set(new EcsPrimitive { kind = ecs_primitive_kind_t.EcsU8 });
-                world.Component<ushort>().Entity.Set(new EcsPrimitive { kind = ecs_primitive_kind_t.EcsU16 });
-                world.Component<uint>().Entity.Set(new EcsPrimitive { kind = ecs_primitive_kind_t.EcsU32 });
-                world.Component<ulong>().Entity.Set(new EcsPrimitive { kind = ecs_primitive_kind_t.EcsU64 });
-                world.Component<sbyte>().Entity.Set(new EcsPrimitive { kind = ecs_primitive_kind_t.EcsI8 });
-                world.Component<short>().Entity.Set(new EcsPrimitive { kind = ecs_primitive_kind_t.EcsI16 });
-                world.Component<int>().Entity.Set(new EcsPrimitive { kind = ecs_primitive_kind_t.EcsI32 });
-                world.Component<long>().Entity.Set(new EcsPrimitive { kind = ecs_primitive_kind_t.EcsI64 });
-                world.Component<float>().Entity.Set(new EcsPrimitive { kind = ecs_primitive_kind_t.EcsF32 });
-                world.Component<double>().Entity.Set(new EcsPrimitive { kind = ecs_primitive_kind_t.EcsF64 });
+                world.Component<bool>().Entity.Set(new EcsPrimitive { kind = EcsBool });
+                world.Component<char>().Entity.Set(new EcsPrimitive { kind = EcsChar });
+                world.Component<byte>().Entity.Set(new EcsPrimitive { kind = EcsU8 });
+                world.Component<ushort>().Entity.Set(new EcsPrimitive { kind = EcsU16 });
+                world.Component<uint>().Entity.Set(new EcsPrimitive { kind = EcsU32 });
+                world.Component<ulong>().Entity.Set(new EcsPrimitive { kind = EcsU64 });
+                world.Component<sbyte>().Entity.Set(new EcsPrimitive { kind = EcsI8 });
+                world.Component<short>().Entity.Set(new EcsPrimitive { kind = EcsI16 });
+                world.Component<int>().Entity.Set(new EcsPrimitive { kind = EcsI32 });
+                world.Component<long>().Entity.Set(new EcsPrimitive { kind = EcsI64 });
+                world.Component<float>().Entity.Set(new EcsPrimitive { kind = EcsF32 });
+                world.Component<double>().Entity.Set(new EcsPrimitive { kind = EcsF64 });
 
-                // TODO: Add support for string, char and native sized integers
+                world.Component<UIntPtr>().Entity.Set(new EcsPrimitive { kind = EcsUPtr });
+                world.Component<IntPtr>().Entity.Set(new EcsPrimitive { kind = EcsIPtr });
+
+                // TODO: Add support for string.
             }
 
             /// <summary>
