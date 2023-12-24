@@ -81,6 +81,29 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Serialize iterator to JSON.
+        /// </summary>
+        /// <param name="desc"></param>
+        /// <returns></returns>
+        public string ToJson(ref IterToJsonDesc desc)
+        {
+            fixed (ecs_iter_to_json_desc_t* ptr = &desc.Desc)
+            {
+                return ToJson(ptr);
+            }
+        }
+
+        /// <summary>
+        ///     Serialize iterator to JSON.
+        /// </summary>
+        /// <param name="desc"></param>
+        /// <returns></returns>
+        public string ToJson(IterToJsonDesc desc)
+        {
+            return ToJson(ref desc);
+        }
+
+        /// <summary>
         ///     Returns total number of entities in result.
         /// </summary>
         /// <returns></returns>

@@ -2120,7 +2120,16 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public EntityToJsonDesc EntityToJsonDesc()
         {
-            return new EntityToJsonDesc();
+            return Core.EntityToJsonDesc.Default;
+        }
+
+        /// <summary>
+        ///     Creates a new <see cref="Flecs.NET.Core.IterToJsonDesc"/>.
+        /// </summary>
+        /// <returns></returns>
+        public IterToJsonDesc IterToJsonDesc()
+        {
+            return Core.IterToJsonDesc.Default;
         }
 
         /// <summary>
