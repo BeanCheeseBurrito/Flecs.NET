@@ -304,6 +304,68 @@ namespace Flecs.NET.Core
     // Built-in global entities, tags, and flags.
     public static partial class Ecs
     {
+        // Enums
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsInOutDefault"/>
+        /// </summary>
+        public const ecs_inout_kind_t InOutDefault = EcsInOutDefault;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsInOutNone"/>
+        /// </summary>
+        public const ecs_inout_kind_t InOutNone = EcsInOutNone;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsOut"/>
+        /// </summary>
+        public const ecs_inout_kind_t InOut = EcsOut;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsIn"/>
+        /// </summary>
+        public const ecs_inout_kind_t In = EcsIn;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsOut"/>
+        /// </summary>
+        public const ecs_inout_kind_t Out = EcsOut;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsAnd"/>
+        /// </summary>
+        public const ecs_oper_kind_t And = EcsAnd;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsOr"/>
+        /// </summary>
+        public const ecs_oper_kind_t Or = EcsOr;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsNot"/>
+        /// </summary>
+        public const ecs_oper_kind_t Not = EcsNot;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsOptional"/>
+        /// </summary>
+        public const ecs_oper_kind_t Optional = EcsOptional;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsAndFrom"/>
+        /// </summary>
+        public const ecs_oper_kind_t AndFrom = EcsAndFrom;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsOrFrom"/>
+        /// </summary>
+        public const ecs_oper_kind_t OrFrom = EcsOrFrom;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsNotFrom"/>
+        /// </summary>
+        public const ecs_oper_kind_t NotFrom = EcsNotFrom;
+
         // Built-in term flags
 
         /// <summary>
@@ -821,7 +883,6 @@ namespace Flecs.NET.Core
         ///     Reference to <see cref="EcsQuantity"/>.
         /// </summary>
         public static ref ulong Quantity => ref EcsQuantity;
-
     }
 
     // Static classes
