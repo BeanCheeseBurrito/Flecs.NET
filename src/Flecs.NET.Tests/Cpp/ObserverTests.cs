@@ -466,10 +466,7 @@ namespace Flecs.NET.Tests.Cpp
 
             observer = world.Observer<TagA>()
                 .Event(Ecs.OnAdd)
-                .Each((Entity e) =>
-                {
-                    count++;
-                });
+                .Each((Entity e) => { count++; });
 
             Assert.True(observer != 0);
 
@@ -502,10 +499,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<Position>()
                 .Event(Ecs.OnAdd)
-                .Each((Entity e, ref Position p) =>
-                {
-                    invoked++;
-                });
+                .Each((Entity e, ref Position p) => { invoked++; });
 
             world.Entity()
                 .Add<Position>();
@@ -522,10 +516,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<Position>()
                 .Event(Ecs.OnRemove)
-                .Each((Entity e, ref Position p) =>
-                {
-                    invoked++;
-                });
+                .Each((Entity e, ref Position p) => { invoked++; });
 
             Entity e = world.Entity()
                 .Add<Position>();
@@ -546,10 +537,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<MyTag>()
                 .Event(Ecs.OnAdd)
-                .Iter((Iter it) =>
-                {
-                    invoked++;
-                });
+                .Iter((Iter it) => { invoked++; });
 
             world.Entity()
                 .Add<MyTag>();
@@ -566,10 +554,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<MyTag>()
                 .Event(Ecs.OnAdd)
-                .Iter((Iter it) =>
-                {
-                    invoked++;
-                });
+                .Iter((Iter it) => { invoked++; });
 
             world.Entity()
                 .Add<MyTag>();
@@ -586,10 +571,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<MyTag>()
                 .Event(Ecs.OnAdd)
-                .Each((Entity e) =>
-                {
-                    invoked++;
-                });
+                .Each((Entity e) => { invoked++; });
 
             world.Entity()
                 .Add<MyTag>();
@@ -609,10 +591,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Observer()
                 .Expr("Tag")
                 .Event(Ecs.OnAdd)
-                .Each((Entity e) =>
-                {
-                    invoked++;
-                });
+                .Each((Entity e) => { invoked++; });
 
             Entity e = world.Entity().Add<Tag>();
 
@@ -637,10 +616,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Term(tagA)
                 .Term(tagB).Filter()
                 .Event(Ecs.OnAdd)
-                .Each((Entity e) =>
-                {
-                    invoked++;
-                });
+                .Each((Entity e) => { invoked++; });
 
             Entity e = world.Entity();
             Assert.Equal(0, invoked);
@@ -685,7 +661,7 @@ namespace Flecs.NET.Tests.Cpp
                     }
                 })
                 .Each((ref Position p) => { count++; }
-            );
+                );
 
             Entity e = world.Entity();
             Assert.Equal(0, count);
@@ -868,10 +844,7 @@ namespace Flecs.NET.Tests.Cpp
             Observer observer = world.Observer<Position>()
                 .Event(Ecs.OnAdd)
                 .YieldExisting()
-                .Each((Entity e) =>
-                {
-                    e.Add<Velocity>();
-                });
+                .Each((Entity e) => { e.Add<Velocity>(); });
 
             Assert.True(e1.Has<Position>());
             Assert.True(e1.Has<Velocity>());
@@ -895,10 +868,7 @@ namespace Flecs.NET.Tests.Cpp
             Observer observer = world.Observer<Position, Mass>()
                 .Event(Ecs.OnAdd)
                 .YieldExisting()
-                .Each((Entity e) =>
-                {
-                    e.Add<Velocity>();
-                });
+                .Each((Entity e) => { e.Add<Velocity>(); });
 
             Assert.True(e1.Has<Position>());
             Assert.True(e1.Has<Mass>());

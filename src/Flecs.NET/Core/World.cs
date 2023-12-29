@@ -2380,7 +2380,7 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates a pipeline builder associated with the provided type.
         /// </summary>
-        /// /// <param name="entity"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
         public PipelineBuilder Pipeline(ulong entity)
         {

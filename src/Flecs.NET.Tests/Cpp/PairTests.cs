@@ -237,7 +237,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity instance = world.Entity()
                 .Add(EcsIsA, @base);
 
-            Assert.True((instance.Has<Pair, Position>()));
+            Assert.True(instance.Has<Pair, Position>());
             Pair* t = instance.GetFirstPtr<Pair, Position>();
             Assert.Equal(10, t->Value);
 
@@ -268,7 +268,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity instance = world.Entity()
                 .Add(EcsIsA, @base);
 
-            Assert.True((instance.HasSecond<Position>(pair)));
+            Assert.True(instance.HasSecond<Position>(pair));
             Position* t = instance.GetSecondPtr<Position>(pair);
             Assert.Equal(10, t->X);
             Assert.Equal(20, t->Y);
@@ -600,7 +600,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity().SetFirst<Position, Tag>(new Position { X = 10, Y = 20 });
 
-            Assert.True((e.Has<Position, Tag>()));
+            Assert.True(e.Has<Position, Tag>());
 
             Position* ptr = e.GetFirstPtr<Position, Tag>();
             Assert.True(ptr != null);
@@ -616,7 +616,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity().SetSecond<Tag, Position>(new Position { X = 10, Y = 20 });
 
-            Assert.True((e.Has<Tag, Position>()));
+            Assert.True(e.Has<Tag, Position>());
 
             Position* ptr = e.GetSecondPtr<Tag, Position>();
             Assert.True(ptr != null);

@@ -60,7 +60,7 @@ string GetMacOsHeaders()
             Arguments = "--sdk macosx --show-sdk-path",
             RedirectStandardOutput = true,
             UseShellExecute = false,
-            CreateNoWindow = true,
+            CreateNoWindow = true
         }
     };
 

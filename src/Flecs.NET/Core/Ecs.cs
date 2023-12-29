@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Flecs.NET.Bindings;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 

@@ -65,7 +65,7 @@ public struct FilterWrapper
     {
         Filter = filter;
     }
-};
+}
 
 public struct Parent
 {
@@ -110,7 +110,7 @@ public struct Pod
             OnRemove = (Iter it, Column<Pod> pod) => { }
         };
     }
-};
+}
 
 public struct EvtData
 {

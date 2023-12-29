@@ -38,23 +38,26 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
             q.Each((Entity e) =>
             {
-                count ++;
+                count++;
 
-                if (e == e1) {
+                if (e == e1)
+                {
                     Assert.False(e1Found);
                     Assert.True(e2Found);
                     Assert.True(e3Found);
                     e1Found = true;
                 }
 
-                if (e == e2) {
+                if (e == e2)
+                {
                     Assert.False(e1Found);
                     Assert.False(e2Found);
                     Assert.True(e3Found);
                     e2Found = true;
                 }
 
-                if (e == e3) {
+                if (e == e3)
+                {
                     Assert.False(e1Found);
                     Assert.False(e2Found);
                     Assert.False(e3Found);

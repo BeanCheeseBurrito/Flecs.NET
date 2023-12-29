@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
@@ -7,7 +8,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_entity_to_json_desc_t.
     /// </summary>
-    public unsafe struct EntityToJsonDesc : System.IEquatable<EntityToJsonDesc>
+    public unsafe struct EntityToJsonDesc : IEquatable<EntityToJsonDesc>
     {
         private ecs_entity_to_json_desc_t _desc;
 

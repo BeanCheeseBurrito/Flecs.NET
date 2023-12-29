@@ -2808,7 +2808,8 @@ namespace Flecs.NET.Core
             }
         }
 
-        private ref Entity ObserveInternal<T>(ulong eventId, T callback, IntPtr bindingContextCallback) where T : Delegate
+        private ref Entity ObserveInternal<T>(ulong eventId, T callback, IntPtr bindingContextCallback)
+            where T : Delegate
         {
             BindingContext.ObserverContext* observerContext = Memory.AllocZeroed<BindingContext.ObserverContext>(1);
             BindingContext.SetCallback(ref observerContext->Iterator, callback, false);

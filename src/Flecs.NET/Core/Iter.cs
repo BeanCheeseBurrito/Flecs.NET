@@ -424,9 +424,7 @@ namespace Flecs.NET.Core
             if (typeof(T) == typeof(ulong) &&
                 (ecs_id_is_tag(iter->world, termId) == Macros.True ||
                  ecs_id_is_union(iter->world, termId) == Macros.True))
-            {
                 return;
-            }
 
             Entity expected = new Entity(iter->world, termId);
             Entity actual = new Entity(iter->world, typeId);

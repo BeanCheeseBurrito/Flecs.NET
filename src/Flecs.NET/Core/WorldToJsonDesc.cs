@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
@@ -7,7 +8,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_world_to_json_desc_t.
     /// </summary>
-    public unsafe struct WorldToJsonDesc : System.IEquatable<WorldToJsonDesc>
+    public unsafe struct WorldToJsonDesc : IEquatable<WorldToJsonDesc>
     {
         private ecs_world_to_json_desc_t _desc;
 

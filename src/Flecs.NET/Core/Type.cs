@@ -309,7 +309,7 @@ namespace Flecs.NET.Core
             if (FlecsInternal.StripFileLocalTypeNameGuid)
             {
                 int start = 0;
-                bool skip = false; // If a tilde is encountered, skip over next characters until a '<' or '.' is encountered
+                bool skip = false;
 
                 StringBuilder stringBuilder = new StringBuilder();
 
@@ -346,7 +346,7 @@ namespace Flecs.NET.Core
 
                 int start = 0;
                 int current = 0;
-                bool skip = false; // If a tilde is encountered, skip over next characters until a '<' or '.' is encountered
+                bool skip = false;
 
                 StringBuilder stringBuilder = new StringBuilder();
 

@@ -67,7 +67,7 @@ namespace Flecs.NET.Core
             _exprCount = default;
             _termIndex = default;
 
-            if (String.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
                 return;
 
             using NativeString nativeName = (NativeString)name;

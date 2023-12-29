@@ -236,8 +236,8 @@ namespace Flecs.NET.Tests.Cpp
             ecs.Set(new Other { Value = 10 });
 
             Filter q = ecs.FilterBuilder<Self>()
-                    .With<Other>().Singleton()
-                    .Build();
+                .With<Other>().Singleton()
+                .Build();
 
             Entity
                 e = ecs.Entity();
