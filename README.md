@@ -24,9 +24,7 @@ Entity entity = ecs.Entity()
     .Set<Position>(new(10, 20))
     .Set<Velocity>(new(1, 2));
 
-Query query = ecs.Query<Position, Velocity>();
-
-query.Each((ref Position p, ref Velocity v) =>
+ecs.Each((ref Position p, ref Velocity v) =>
 {
     p.X += v.X;
     p.Y += v.Y;
