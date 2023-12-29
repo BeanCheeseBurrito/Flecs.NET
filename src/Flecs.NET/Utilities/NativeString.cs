@@ -133,6 +133,9 @@ namespace Flecs.NET.Utilities
 
         public void Dispose()
         {
+            if (Data == IntPtr.Zero)
+                return;
+
             if (IsFlecs)
             {
 #if NET5_0_OR_GREATER

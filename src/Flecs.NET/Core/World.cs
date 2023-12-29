@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -264,7 +265,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create asynchronous stage.
+        ///     Creates asynchronous stage.
         /// </summary>
         /// <returns></returns>
         public World AsyncStage()
@@ -902,7 +903,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create alias for component.
+        ///     Creates alias for component.
         /// </summary>
         /// <param name="alias"></param>
         /// <typeparam name="T"></typeparam>
@@ -921,7 +922,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create alias for component.
+        ///     Creates alias for component.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="alias"></param>
@@ -942,7 +943,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create alias for component.
+        ///     Creates alias for component.
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="alias"></param>
@@ -1536,7 +1537,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create an <see cref="UntypedComponent"/>.
+        ///     Creates an <see cref="UntypedComponent"/>.
         /// </summary>
         /// <returns></returns>
         public UntypedComponent Component()
@@ -1545,7 +1546,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create an <see cref="UntypedComponent"/> from id.
+        ///     Creates an <see cref="UntypedComponent"/> from id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -1555,7 +1556,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create an <see cref="UntypedComponent"/> from name.
+        ///     Creates an <see cref="UntypedComponent"/> from name.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -1585,7 +1586,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create an entity.
+        ///     Creates an entity.
         /// </summary>
         /// <returns></returns>
         public Entity Entity()
@@ -1594,7 +1595,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create an entity from id.
+        ///     Creates an entity from id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -1604,7 +1605,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create an entity from name.
+        ///     Creates an entity from name.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -1614,7 +1615,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create an entity from type.
+        ///     Creates an entity from type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -1624,7 +1625,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create an entity that's associated with a type.
+        ///     Creates an entity that's associated with a type.
         /// </summary>
         /// <param name="name"></param>
         /// <typeparam name="T"></typeparam>
@@ -1646,7 +1647,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create a prefab.
+        ///     Creates a prefab.
         /// </summary>
         /// <returns></returns>
         public Entity Prefab()
@@ -1655,7 +1656,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create a prefab with the provided name.
+        ///     Creates a prefab with the provided name.
         /// </summary>
         /// <returns></returns>
         public Entity Prefab(string name)
@@ -1664,7 +1665,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create a prefab that's associated with a type.
+        ///     Creates a prefab that's associated with a type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -1674,7 +1675,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create a prefab that's associated with a type.
+        ///     Creates a prefab that's associated with a type.
         /// </summary>
         /// <param name="name"></param>
         /// <typeparam name="T"></typeparam>
@@ -1685,7 +1686,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create a new event.
+        ///     Creates a new event.
         /// </summary>
         /// <param name="eventId"></param>
         /// <returns></returns>
@@ -1695,7 +1696,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create a new event.
+        ///     Creates a new event.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -1931,7 +1932,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create a snapshot.
+        ///     Creates a snapshot.
         /// </summary>
         /// <returns></returns>
         public Snapshot Snapshot()
@@ -1940,7 +1941,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create a timer.
+        ///     Creates a timer.
         /// </summary>
         /// <returns></returns>
         public Timer Timer()
@@ -1949,7 +1950,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create a timer.
+        ///     Creates a timer.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -1959,7 +1960,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create a timer.
+        ///     Creates a timer.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -2091,7 +2092,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create array type.
+        ///     Creates array type.
         /// </summary>
         /// <param name="elemId"></param>
         /// <param name="arrayCount"></param>
@@ -2109,7 +2110,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create array type.
+        ///     Creates array type.
         /// </summary>
         /// <param name="arrayCount"></param>
         /// <typeparam name="T"></typeparam>
@@ -2147,6 +2148,7 @@ namespace Flecs.NET.Core
         ///     Creates a new <see cref="Flecs.NET.Core.EntityToJsonDesc"/>.
         /// </summary>
         /// <returns></returns>
+        [SuppressMessage("Usage", "CA1822")]
         public EntityToJsonDesc EntityToJsonDesc()
         {
             return Core.EntityToJsonDesc.Default;
@@ -2156,6 +2158,7 @@ namespace Flecs.NET.Core
         ///     Creates a new <see cref="Flecs.NET.Core.IterToJsonDesc"/>.
         /// </summary>
         /// <returns></returns>
+        [SuppressMessage("Usage", "CA1822")]
         public IterToJsonDesc IterToJsonDesc()
         {
             return Core.IterToJsonDesc.Default;
@@ -2165,6 +2168,7 @@ namespace Flecs.NET.Core
         ///     Creates a new <see cref="Flecs.NET.Core.WorldToJsonDesc"/>.
         /// </summary>
         /// <returns></returns>
+        [SuppressMessage("Usage", "CA1822")]
         public WorldToJsonDesc WorldToJsonDesc()
         {
             return Core.WorldToJsonDesc.Default;
@@ -2267,7 +2271,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create app builder.
+        ///     Creates an app builder.
         /// </summary>
         /// <returns></returns>
         public AppBuilder App()
@@ -2286,174 +2290,124 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create filter builder.
+        ///     Creates a filter builder.
         /// </summary>
         /// <returns></returns>
-        public FilterBuilder FilterBuilder()
+        public FilterBuilder FilterBuilder(string? name = null)
         {
-            return new FilterBuilder(Handle);
+            return new FilterBuilder(Handle, name);
         }
 
         /// <summary>
-        ///     Create query builder.
+        ///     Creates a filter.
         /// </summary>
-        /// <returns></returns>
-        public QueryBuilder QueryBuilder()
-        {
-            return new QueryBuilder(Handle);
-        }
-
-        /// <summary>
-        ///     Create observer builder.
-        /// </summary>
-        /// <returns></returns>
-        public ObserverBuilder ObserverBuilder()
-        {
-            return new ObserverBuilder(Handle);
-        }
-
-        /// <summary>
-        ///     Create routine builder.
-        /// </summary>
-        /// <returns></returns>
-        public RoutineBuilder RoutineBuilder()
-        {
-            return new RoutineBuilder(Handle);
-        }
-
-        /// <summary>
-        ///     Create filter.
-        /// </summary>
-        /// <param name="filter"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Filter Filter(FilterBuilder filter = default, string name = "")
+        public Filter Filter(string? name = null)
         {
-            return new Filter(Handle, filter, name);
+            return FilterBuilder(name).Build();
         }
 
         /// <summary>
-        ///     Create rule.
+        ///     Creates a rule builder.
         /// </summary>
-        /// <param name="filter"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Rule Rule(FilterBuilder filter = default, string name = "")
+        public RuleBuilder RuleBuilder(string? name = null)
         {
-            return new Rule(Handle, filter, name);
+            return new RuleBuilder(Handle, name);
         }
 
         /// <summary>
-        ///     Create query.
+        ///     Creates a rule builder.
         /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="query"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Query Query(FilterBuilder filter = default, QueryBuilder query = default, string name = "")
+        public Rule Rule(string? name = null)
         {
-            return new Query(Handle, filter, query, name);
+            return RuleBuilder(name).Build();
         }
 
         /// <summary>
-        ///     Creates a pipeline.
+        ///     Creates an alert builder.
         /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="query"></param>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public Pipeline Pipeline(
-            FilterBuilder filter = default,
-            QueryBuilder query = default,
-            ulong entity = 0)
-        {
-            return new Pipeline(Handle, filter, query, entity);
-        }
-
-        /// <summary>
-        ///     Creates a pipeline.
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="query"></param>
-        /// <typeparam name="TPipeline"></typeparam>
-        /// <returns></returns>
-        public Pipeline Pipeline<TPipeline>(
-            FilterBuilder filter = default,
-            QueryBuilder query = default)
-        {
-            return new Pipeline(Handle, filter, query, Type<TPipeline>.Id(Handle));
-        }
-
-        /// <summary>
-        ///     Create an observer.
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="observer"></param>
-        /// <param name="callback"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Observer Observer(
-            FilterBuilder filter = default,
-            ObserverBuilder observer = default,
-            Action? callback = null,
-            string name = "")
+        public AlertBuilder AlertBuilder(string? name = null)
         {
-            return new Observer(Handle, filter, observer, callback, name);
+            return new AlertBuilder(Handle, name);
         }
 
         /// <summary>
-        ///     Create an observer.
+        ///     Creates an alert.
         /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="observer"></param>
-        /// <param name="callback"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Observer Observer(
-            FilterBuilder filter = default,
-            ObserverBuilder observer = default,
-            Ecs.IterCallback? callback = null,
-            string name = "")
+        public Alert Alert(string? name = null)
         {
-            return new Observer(Handle, filter, observer, callback, name);
+            return AlertBuilder(name).Build();
         }
 
         /// <summary>
-        ///     Create an observer.
+        ///     Creates a query builder.
         /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="observer"></param>
-        /// <param name="callback"></param>
+        /// <returns></returns>
+        public QueryBuilder QueryBuilder(string? name = null)
+        {
+            return new QueryBuilder(Handle, name);
+        }
+
+        /// <summary>
+        ///     Creates a query.
+        /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Observer Observer(
-            FilterBuilder filter = default,
-            ObserverBuilder observer = default,
-            Ecs.EachEntityCallback? callback = null,
-            string name = "")
+        public Query Query(string? name = null)
         {
-            return new Observer(Handle, filter, observer, callback, name);
+            return QueryBuilder(name).Build();
         }
 
         /// <summary>
-        ///     Create an observer.
+        ///     Creates a pipeline builder.
         /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="observer"></param>
-        /// <param name="callback"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Observer Observer(
-            FilterBuilder filter = default,
-            ObserverBuilder observer = default,
-            Ecs.EachIndexCallback? callback = null,
-            string name = "")
+        public PipelineBuilder Pipeline(string? name = null)
         {
-            return new Observer(Handle, filter, observer, callback, name);
+            return new PipelineBuilder(Handle, name);
         }
 
         /// <summary>
-        ///     Create an observer.
+        ///     Creates a pipeline builder associated with the provided type.
+        /// </summary>
+        /// /// <param name="entity"></param>
+        /// <returns></returns>
+        public PipelineBuilder Pipeline(ulong entity)
+        {
+            return new PipelineBuilder(Handle, entity);
+        }
+
+        /// <summary>
+        ///     Creates a pipeline builder associated with the provided type.
+        /// </summary>
+        /// <returns></returns>
+        public PipelineBuilder Pipeline<T>()
+        {
+            return Pipeline(Type<T>.Id(Handle));
+        }
+
+        /// <summary>
+        ///     Creates an observer builder.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ObserverBuilder Observer(string? name = null)
+        {
+            return new ObserverBuilder(Handle, name);
+        }
+
+        /// <summary>
+        ///     Creates an observer.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -2463,79 +2417,13 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create routine.
+        ///     Creates an observer builder.
         /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="query"></param>
-        /// <param name="routine"></param>
-        /// <param name="callback"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Routine Routine(
-            FilterBuilder filter = default,
-            QueryBuilder query = default,
-            RoutineBuilder routine = default,
-            Action? callback = null,
-            string name = "")
+        public RoutineBuilder Routine(string? name = null)
         {
-            return new Routine(Handle, filter, query, routine, callback, name);
-        }
-
-        /// <summary>
-        ///     Create routine.
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="query"></param>
-        /// <param name="routine"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Routine Routine(
-            FilterBuilder filter = default,
-            QueryBuilder query = default,
-            RoutineBuilder routine = default,
-            Ecs.IterCallback? callback = null,
-            string name = "")
-        {
-            return new Routine(Handle, filter, query, routine, callback, name);
-        }
-
-        /// <summary>
-        ///     Create routine.
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="query"></param>
-        /// <param name="routine"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Routine Routine(
-            FilterBuilder filter = default,
-            QueryBuilder query = default,
-            RoutineBuilder routine = default,
-            Ecs.EachEntityCallback? callback = null,
-            string name = "")
-        {
-            return new Routine(Handle, filter, query, routine, callback, name);
-        }
-
-        /// <summary>
-        ///     Create routine.
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="query"></param>
-        /// <param name="routine"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Routine Routine(
-            FilterBuilder filter = default,
-            QueryBuilder query = default,
-            RoutineBuilder routine = default,
-            Ecs.EachIndexCallback? callback = null,
-            string name = "")
-        {
-            return new Routine(Handle, filter, query, routine, callback, name);
+            return new RoutineBuilder(Handle, name);
         }
 
         /// <summary>

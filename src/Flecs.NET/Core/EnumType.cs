@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using Flecs.NET.Utilities;
@@ -32,7 +33,10 @@ namespace Flecs.NET.Core
 
                 for (int i = 0; i < values.Length; i++)
                 {
+                    // TODO: Fix CS8600 warning.
+#pragma warning disable CS8600
                     object obj = values.GetValue(i);
+#pragma warning restore CS8600
 
                     T member = (T)obj!;
                     int value = Convert.ToInt32(obj, CultureInfo.InvariantCulture);

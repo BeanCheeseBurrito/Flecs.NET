@@ -1,5 +1,4 @@
 using System;
-using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -27,37 +26,22 @@ namespace Flecs.NET.Core
         public ref ecs_world_t* World => ref _entity.World;
 
         /// <summary>
-        ///     Creates a pipeline.
+        ///     Creates a pipeline from the provided world and entity id.
         /// </summary>
         /// <param name="world"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="queryBuilder"></param>
         /// <param name="entity"></param>
-        public Pipeline(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            QueryBuilder queryBuilder = default,
-            ulong entity = 0)
+        public Pipeline(ecs_world_t* world, ulong entity = 0)
         {
-            BindingContext.QueryContext* queryContext = Memory.Alloc<BindingContext.QueryContext>(1);
-            queryContext[0] = queryBuilder.QueryContext;
+            _entity = new Entity(world, entity);
+        }
 
-            ecs_pipeline_desc_t pipelineDesc = default;
-            pipelineDesc.query = queryBuilder.Desc;
-            pipelineDesc.entity = entity;
-            pipelineDesc.query.filter = filterBuilder.Desc;
-            pipelineDesc.query.filter.terms_buffer = filterBuilder.Terms.Data;
-            pipelineDesc.query.filter.terms_buffer_count = filterBuilder.Terms.Count;
-            pipelineDesc.query.binding_ctx = queryContext;
-            pipelineDesc.query.binding_ctx_free = BindingContext.QueryContextFreePointer;
-            pipelineDesc.entity = entity;
-
-            _entity = new Entity(world, ecs_pipeline_init(world, &pipelineDesc));
-
-            if (_entity == 0)
-                throw new InvalidOperationException("Pipeline failed to init.");
-
-            filterBuilder.Dispose();
+        /// <summary>
+        ///     Creates a pipeline from the provided entity.
+        /// </summary>
+        /// <param name="entity"></param>
+        public Pipeline(Entity entity)
+        {
+            _entity = entity;
         }
 
         /// <summary>
@@ -93,7 +77,6 @@ namespace Flecs.NET.Core
         ///     Returns the hash code of the <see cref="Pipeline"/>.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override int GetHashCode()
         {
             return Entity.GetHashCode();

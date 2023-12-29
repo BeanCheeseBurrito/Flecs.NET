@@ -160,7 +160,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void PairInstances1()
+        private void System1PairInstances()
         {
             using World world = World.Create();
 
@@ -171,9 +171,9 @@ namespace Flecs.NET.Tests.Cpp
             int entityCount = 0;
             int traitValue = 0;
 
-            world.Routine(
-                filter: world.FilterBuilder().Expr("(Pair, *)"),
-                callback: it =>
+            world.Routine()
+                .Expr("(Pair, *)")
+                .Iter((Iter it) =>
                 {
                     Column<Pair> tr = it.Field<Pair>(1);
                     invokeCount++;
@@ -183,8 +183,7 @@ namespace Flecs.NET.Tests.Cpp
                         entityCount++;
                         traitValue += (int)tr[i].Value;
                     }
-                }
-            );
+                });
 
             world.Progress();
 
@@ -194,7 +193,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void PairInstances2()
+        private void System2PairInstances()
         {
             using World world = World.Create();
 
@@ -206,9 +205,9 @@ namespace Flecs.NET.Tests.Cpp
             int entityCount = 0;
             int traitValue = 0;
 
-            world.Routine(
-                filter: world.FilterBuilder().Expr("(Pair, *)"),
-                callback: it =>
+            world.Routine()
+                .Expr("(Pair, *)")
+                .Iter((Iter it) =>
                 {
                     Column<Pair> tr = it.Field<Pair>(1);
                     invokeCount++;
@@ -218,8 +217,7 @@ namespace Flecs.NET.Tests.Cpp
                         entityCount++;
                         traitValue += (int)tr[i].Value;
                     }
-                }
-            );
+                });
 
             world.Progress();
 

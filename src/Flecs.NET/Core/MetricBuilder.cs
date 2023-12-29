@@ -237,7 +237,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Equals(MetricBuilder other)
         {
-            return Equals(Desc, other.Desc);
+            return Desc == other.Desc;
         }
 
         /// <summary>
@@ -245,7 +245,6 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override bool Equals(object? obj)
         {
             return obj is MetricBuilder other && Equals(other);
@@ -255,7 +254,6 @@ namespace Flecs.NET.Core
         ///     Returns the hash code of the <see cref="MetricBuilder"/>.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override int GetHashCode()
         {
             return Desc.GetHashCode();

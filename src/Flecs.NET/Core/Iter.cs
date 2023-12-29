@@ -462,7 +462,6 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public bool Equals(Iter other)
         {
             return Handle == other.Handle;
@@ -473,7 +472,6 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override bool Equals(object? obj)
         {
             return obj is Iter other && Equals(other);
@@ -483,7 +481,6 @@ namespace Flecs.NET.Core
         ///     Returns the hash code of te <see cref="Iter"/>.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override int GetHashCode()
         {
             return Handle->GetHashCode();

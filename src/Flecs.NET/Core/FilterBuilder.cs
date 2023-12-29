@@ -55,7 +55,8 @@ namespace Flecs.NET.Core
         ///     Creates a filter builder for the provided world.
         /// </summary>
         /// <param name="world"></param>
-        public FilterBuilder(ecs_world_t* world)
+        /// <param name="name"></param>
+        public FilterBuilder(ecs_world_t* world, string? name = null)
         {
             FilterDesc = default;
             Terms = default;
@@ -65,6 +66,17 @@ namespace Flecs.NET.Core
             _termIdType = TermIdType.Src;
             _exprCount = default;
             _termIndex = default;
+
+            if (String.IsNullOrEmpty(name))
+                return;
+
+            using NativeString nativeName = (NativeString)name;
+
+            ecs_entity_desc_t desc = default;
+            desc.name = nativeName;
+            desc.sep = BindingContext.DefaultSeparator;
+            desc.root_sep = BindingContext.DefaultRootSeparator;
+            FilterDesc.entity = ecs_entity_init(World, &desc);
         }
 
         /// <summary>
@@ -79,16 +91,26 @@ namespace Flecs.NET.Core
             Strings.Dispose();
         }
 
-        [Conditional("DEBUG")]
-        private readonly void AssertTermId()
+        /// <summary>
+        ///     Builds a new filter.
+        /// </summary>
+        /// <returns></returns>
+        public Filter Build()
         {
-            Ecs.Assert(!Unsafe.IsNullRef(ref CurrentTermId), "No active term (call .Term() first)");
-        }
+            ecs_filter_t storage = ECS_FILTER_INIT;
 
-        [Conditional("DEBUG")]
-        private readonly void AssertTerm()
-        {
-            Ecs.Assert(!Unsafe.IsNullRef(ref CurrentTermId), "No active term (call .term() first)");
+            FilterDesc.storage = &storage;
+            FilterDesc.terms_buffer = Terms.Data;
+            FilterDesc.terms_buffer_count = Terms.Count;
+
+            fixed (ecs_filter_desc_t* descPtr = &FilterDesc)
+            {
+                if (ecs_filter_init(World, descPtr) == null)
+                    Ecs.Error("Failed to init filter");
+
+                Dispose();
+                return new Filter(World, storage);
+            }
         }
 
         /// <summary>
@@ -164,7 +186,8 @@ namespace Flecs.NET.Core
         ///     Use with cascade to iterate results in descending (bottom -> top) order
         /// </summary>
         /// <returns></returns>
-        public ref FilterBuilder Descend() {
+        public ref FilterBuilder Descend()
+        {
             AssertTermId();
             CurrentTermId.flags |= EcsDesc;
             return ref this;
@@ -1466,6 +1489,18 @@ namespace Flecs.NET.Core
             return ref Term(first, Type<TSecond>.Id(World));
         }
 
+        [Conditional("DEBUG")]
+        private readonly void AssertTermId()
+        {
+            Ecs.Assert(!Unsafe.IsNullRef(ref CurrentTermId), "No active term (call .Term() first)");
+        }
+
+        [Conditional("DEBUG")]
+        private readonly void AssertTerm()
+        {
+            Ecs.Assert(!Unsafe.IsNullRef(ref CurrentTermId), "No active term (call .term() first)");
+        }
+
         private void SetTermId()
         {
             CurrentTerm = default;
@@ -1499,10 +1534,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public bool Equals(FilterBuilder other)
         {
-            return Equals(Desc, other);
+            return Desc == other.Desc;
         }
 
         /// <summary>
@@ -1510,17 +1544,15 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override bool Equals(object? obj)
         {
-            return obj is EventBuilder other && Equals(other);
+            return obj is FilterBuilder other && Equals(other);
         }
 
         /// <summary>
         ///     Returns the hash code for the <see cref="EventBuilder"/>.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override int GetHashCode()
         {
             return Desc.GetHashCode();

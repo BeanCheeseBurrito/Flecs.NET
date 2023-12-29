@@ -193,7 +193,6 @@ namespace Flecs.NET.Collections
         ///     Returns the hash code for this instance.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override int GetHashCode()
         {
             return Data->GetHashCode();

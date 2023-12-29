@@ -167,7 +167,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Equals(AppBuilder other)
         {
-            return Equals(Desc, other.Desc);
+            return Desc == other.Desc;
         }
 
         /// <summary>

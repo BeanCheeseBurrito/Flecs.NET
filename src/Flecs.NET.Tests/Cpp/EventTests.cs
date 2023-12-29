@@ -22,15 +22,14 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term(id),
-                world.ObserverBuilder().Event(evt),
-                (Entity e) =>
+            world.Observer()
+                .Event(evt)
+                .Term(id)
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.Event(evt)
                 .Id(id)
@@ -52,25 +51,23 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term(idA),
-                world.ObserverBuilder().Event(evt),
-                (Entity e) =>
+            world.Observer()
+                .Event(evt)
+                .Term(idA)
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
-            world.Observer(
-                world.FilterBuilder().Term(idB),
-                world.ObserverBuilder().Event(evt),
-                (Entity e) =>
+            world.Observer()
+                .Event(evt)
+                .Term(idB)
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.Event(evt)
                 .Id(idA)
@@ -94,15 +91,14 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term(id),
-                world.ObserverBuilder().Event(evt),
-                (Entity e) =>
+            world.Observer()
+                .Event(evt)
+                .Term(id)
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.Event(evt)
                 .Id(id)
@@ -125,25 +121,23 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term(idA),
-                world.ObserverBuilder().Event(evt),
-                (Entity e) =>
+            world.Observer()
+                .Event(evt)
+                .Term(idA)
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
-            world.Observer(
-                world.FilterBuilder().Term(idB),
-                world.ObserverBuilder().Event(evt),
-                (Entity e) =>
+            world.Observer()
+                .Event(evt)
+                .Term(idB)
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.Event(evt)
                 .Id(idA)
@@ -164,15 +158,14 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term(id),
-                world.ObserverBuilder().Event<Evt>(),
-                (Entity e) =>
+            world.Observer()
+                .Event<Evt>()
+                .Term(id)
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.Event<Evt>()
                 .Id(id)
@@ -191,15 +184,14 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term<IdA>(),
-                world.ObserverBuilder().Event<Evt>(),
-                (Entity e) =>
+            world.Observer()
+                .Event<Evt>()
+                .Term<IdA>()
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.Event<Evt>()
                 .Id<IdA>()
@@ -218,25 +210,23 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term<IdA>(),
-                world.ObserverBuilder().Event<Evt>(),
-                (Entity e) =>
+            world.Observer()
+                .Event<Evt>()
+                .Term<IdA>()
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
-            world.Observer(
-                world.FilterBuilder().Term<IdB>(),
-                world.ObserverBuilder().Event<Evt>(),
-                (Entity e) =>
+            world.Observer()
+                .Event<Evt>()
+                .Term<IdB>()
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.Event<Evt>()
                 .Id<IdA>()
@@ -258,16 +248,15 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term(id),
-                world.ObserverBuilder().Event(evt),
-                (Iter it) =>
+            world.Observer()
+                .Event(evt)
+                .Term(id)
+                .Iter((Iter it) =>
                 {
                     Assert.True(it.Entity(0) == e1);
                     Assert.Equal(10, it.Param<EvtData>().Value);
                     count++;
-                }
-            );
+                });
 
             EvtData data = new EvtData { Value = 10 };
 
@@ -290,16 +279,15 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term(id),
-                world.ObserverBuilder().Event<EvtData>(),
-                (Iter it) =>
+            world.Observer()
+                .Event<EvtData>()
+                .Term(id)
+                .Iter((Iter it) =>
                 {
                     Assert.True(it.Entity(0) == e1);
                     Assert.Equal(10, it.Param<EvtData>().Value);
                     count++;
-                }
-            );
+                });
 
             EvtData evtData = new EvtData { Value = 10 };
 
@@ -324,15 +312,14 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term(rel, obj),
-                world.ObserverBuilder().Event(evt),
-                (Entity e) =>
+            world.Observer()
+                .Event(evt)
+                .Term(rel, obj)
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.Event(evt)
                 .Id(rel, obj)
@@ -353,15 +340,14 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term<IdA>(obj),
-                world.ObserverBuilder().Event(evt),
-                (Entity e) =>
+            world.Observer()
+                .Event(evt)
+                .Term<IdA>(obj)
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.Event(evt)
                 .Id<IdA>(obj)
@@ -381,15 +367,14 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term<IdA, IdB>(),
-                world.ObserverBuilder().Event(evt),
-                (Entity e) =>
+            world.Observer()
+                .Event(evt)
+                .Term<IdA, IdB>()
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.Event(evt)
                 .Id<IdA, IdB>()
@@ -409,15 +394,14 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term<Tag>(),
-                world.ObserverBuilder().Event(evt),
-                (Entity e) =>
+            world.Observer()
+                .Event(evt)
+                .Term<Tag>()
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.ReadonlyBegin();
 
@@ -441,15 +425,14 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                world.FilterBuilder().Term<Tag>(),
-                world.ObserverBuilder().Event(evt),
-                (Entity e) =>
+            world.Observer()
+                .Event(evt)
+                .Term<Tag>()
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.ReadonlyBegin();
 
@@ -474,25 +457,23 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Add<Tag>();
             Entity e2 = world.Entity().Add<Tag>();
 
-            world.Observer(
-                world.FilterBuilder().With(EcsAny).Src(e1),
-                world.ObserverBuilder().Event<Evt>(),
-                (Entity e) =>
+            world.Observer()
+                .Event<Evt>()
+                .Term(Ecs.Any).Src(e1)
+                .Each((Entity e) =>
                 {
                     Assert.True(e == 0);
                     countA++;
-                }
-            );
+                });
 
-            world.Observer(
-                world.FilterBuilder().With(EcsAny).Src(e2),
-                world.ObserverBuilder().Event<Evt>(),
-                (Entity e) =>
+            world.Observer()
+                .Event<Evt>()
+                .Term(Ecs.Any).Src(e2)
+                .Each((Entity e) =>
                 {
                     Assert.True(e == 0);
                     countB++;
-                }
-            );
+                });
 
             world.Event<Evt>()
                 .Id(EcsAny)
@@ -700,15 +681,14 @@ namespace Flecs.NET.Tests.Cpp
             Entity idA = world.Entity();
             Entity e1 = world.Entity().Add(idA);
 
-            world.Observer(
-                world.FilterBuilder().Term(idA),
-                world.ObserverBuilder().Event(evt),
-                (Entity e) =>
+            world.Observer()
+                .Event(evt)
+                .Term(idA)
+                .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
                     count++;
-                }
-            );
+                });
 
             world.DeferBegin();
 
@@ -758,17 +738,16 @@ namespace Flecs.NET.Tests.Cpp
             Entity idA = world.Entity();
             Entity e1 = world.Entity().Add(idA);
 
-            world.Observer(
-                world.FilterBuilder().Term(idA),
-                world.ObserverBuilder().Event<Position>(),
-                (Iter it, int i) =>
+            world.Observer()
+                .Event<Position>()
+                .Term(idA)
+                .Each((Iter it, int i) =>
                 {
                     Assert.True(it.Entity(i) == e1);
                     Assert.Equal(10, it.Param<Position>().X);
                     Assert.Equal(20, it.Param<Position>().Y);
                     count++;
-                }
-            );
+                });
 
             world.DeferBegin();
 

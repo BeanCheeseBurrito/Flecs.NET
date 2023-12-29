@@ -22,7 +22,7 @@ namespace Flecs.NET.Core
         public static WorldToJsonDesc Default => default;
 
         /// <summary>
-        ///     Exclude flecs modules & contents.
+        ///     Exclude flecs modules and contents.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -34,7 +34,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Exclude modules & contents.
+        ///     Exclude modules and contents.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>

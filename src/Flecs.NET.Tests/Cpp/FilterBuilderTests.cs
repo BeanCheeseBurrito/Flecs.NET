@@ -19,10 +19,14 @@ namespace Flecs.NET.Tests.Cpp
         {
             World ecs = World.Create();
 
-            Filter q = ecs.Filter(ecs.FilterBuilder<Position, Velocity>());
+            Filter q = ecs.Filter<Position, Velocity>();
 
-            Entity e1 = ecs.Entity().Add<Position>().Add<Velocity>();
-            ecs.Entity().Add<Position>();
+            Entity e1 = ecs.Entity()
+                .Add<Position>()
+                .Add<Velocity>();
+
+            ecs.Entity()
+                .Add<Position>();
 
             int count = 0;
             q.Each((Entity e) =>
@@ -35,18 +39,21 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        public void BuilderAssignTerms()
+        public void BuilderAssignFromEmpty()
         {
             World ecs = World.Create();
 
-            Filter q = ecs.Filter(
-                ecs.FilterBuilder()
-                    .With<Position>()
-                    .With<Velocity>()
-            );
+            Filter q = ecs.FilterBuilder()
+                .Term<Position>()
+                .Term<Velocity>()
+                .Build();
 
-            Entity e1 = ecs.Entity().Add<Position>().Add<Velocity>();
-            ecs.Entity().Add<Position>();
+            Entity e1 = ecs.Entity()
+                .Add<Position>()
+                .Add<Velocity>();
+
+            ecs.Entity()
+                .Add<Position>();
 
             int count = 0;
             q.Each((Entity e) =>
@@ -67,9 +74,9 @@ namespace Flecs.NET.Tests.Cpp
             Entity bob = ecs.Entity();
             Entity alice = ecs.Entity();
 
-            Filter q = ecs.Filter(
-                ecs.FilterBuilder().With(likes, bob)
-            );
+            Filter q = ecs.FilterBuilder()
+                .Term(likes, bob)
+                .Build();
 
             Entity e1 = ecs.Entity().Add(likes, bob);
             ecs.Entity().Add(likes, alice);
@@ -89,13 +96,15 @@ namespace Flecs.NET.Tests.Cpp
         {
             World ecs = World.Create();
 
-            Filter q = ecs.Filter(
-                ecs.FilterBuilder<Position>()
-                    .With<Velocity>().Not()
-            );
+            Filter q = ecs.FilterBuilder<Position>()
+                .Term<Velocity>().Not()
+                .Build();
 
             Entity e1 = ecs.Entity().Add<Position>();
-            ecs.Entity().Add<Position>().Add<Velocity>();
+
+            ecs.Entity()
+                .Add<Position>()
+                .Add<Velocity>();
 
             int count = 0;
             q.Each((Entity e) =>
@@ -112,11 +121,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             World ecs = World.Create();
 
-            Filter q = ecs.Filter(
-                ecs.FilterBuilder()
-                    .With<Position>().Or()
-                    .With<Velocity>()
-            );
+            Filter q = ecs.FilterBuilder()
+                .Term<Position>().Or()
+                .Term<Velocity>()
+                .Build();
 
             Entity e1 = ecs.Entity().Add<Position>();
             Entity e2 = ecs.Entity().Add<Velocity>();
@@ -137,11 +145,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             World ecs = World.Create();
 
-            Filter q = ecs.Filter(
-                ecs.FilterBuilder()
-                    .With<Position>()
-                    .With<Velocity>().Optional()
-            );
+            Filter q = ecs.FilterBuilder()
+                .Term<Position>()
+                .Term<Velocity>().Optional()
+                .Build();
 
             Entity e1 = ecs.Entity().Add<Position>();
             Entity e2 = ecs.Entity().Add<Position>().Add<Velocity>();
@@ -204,9 +211,9 @@ namespace Flecs.NET.Tests.Cpp
 
             ecs.Component<Position>();
 
-            Filter q = ecs.Filter(
-                ecs.FilterBuilder().Expr("Position")
-            );
+            Filter q = ecs.FilterBuilder()
+                .Expr("Position")
+                .Build();
 
             Entity e1 = ecs.Entity().Add<Position>();
             ecs.Entity().Add<Velocity>();
@@ -228,10 +235,9 @@ namespace Flecs.NET.Tests.Cpp
 
             ecs.Set(new Other { Value = 10 });
 
-            Filter q = ecs.Filter(
-                ecs.FilterBuilder<Self>()
+            Filter q = ecs.FilterBuilder<Self>()
                     .With<Other>().Singleton()
-            );
+                    .Build();
 
             Entity
                 e = ecs.Entity();

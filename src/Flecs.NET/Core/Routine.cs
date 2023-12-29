@@ -1,6 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
-using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -28,135 +26,7 @@ namespace Flecs.NET.Core
         public ref ecs_world_t* World => ref _entity.World;
 
         /// <summary>
-        ///     Creates a routine for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="queryBuilder"></param>
-        /// <param name="routineBuilder"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Routine(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            QueryBuilder queryBuilder = default,
-            RoutineBuilder routineBuilder = default,
-            Action? callback = null,
-            string name = "")
-        {
-            _entity = default;
-
-            InitRoutine(
-                true,
-                BindingContext.RoutineActionPointer,
-                ref callback,
-                ref world,
-                ref filterBuilder,
-                ref queryBuilder,
-                ref routineBuilder,
-                ref name
-            );
-        }
-
-        /// <summary>
-        ///     Creates a routine for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="queryBuilder"></param>
-        /// <param name="routineBuilder"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Routine(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            QueryBuilder queryBuilder = default,
-            RoutineBuilder routineBuilder = default,
-            Ecs.IterCallback? callback = null,
-            string name = "")
-        {
-            _entity = default;
-
-            InitRoutine(
-                true,
-                BindingContext.RoutineIterPointer,
-                ref callback,
-                ref world,
-                ref filterBuilder,
-                ref queryBuilder,
-                ref routineBuilder,
-                ref name
-            );
-        }
-
-        /// <summary>
-        ///     Creates a routine for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="queryBuilder"></param>
-        /// <param name="routineBuilder"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Routine(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            QueryBuilder queryBuilder = default,
-            RoutineBuilder routineBuilder = default,
-            Ecs.EachEntityCallback? callback = null,
-            string name = "")
-        {
-            _entity = default;
-
-            InitRoutine(
-                true,
-                BindingContext.RoutineEachEntityPointer,
-                ref callback,
-                ref world,
-                ref filterBuilder,
-                ref queryBuilder,
-                ref routineBuilder,
-                ref name
-            );
-        }
-
-        /// <summary>
-        ///     Creates a routine for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="queryBuilder"></param>
-        /// <param name="routineBuilder"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Routine(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            QueryBuilder queryBuilder = default,
-            RoutineBuilder routineBuilder = default,
-            Ecs.EachIndexCallback? callback = null,
-            string name = "")
-        {
-            _entity = default;
-
-            InitRoutine(
-                true,
-                BindingContext.RoutineEachIndexPointer,
-                ref callback,
-                ref world,
-                ref filterBuilder,
-                ref queryBuilder,
-                ref routineBuilder,
-                ref name
-            );
-        }
-
-        /// <summary>
-        ///     Creates a routine for the provided world.
+        ///     Creates a routine from world and id.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="entity"></param>
@@ -165,66 +35,13 @@ namespace Flecs.NET.Core
             _entity = new Entity(world, entity);
         }
 
-        internal ref Routine InitRoutine<T>(
-            bool storeFunctionPointer,
-            IntPtr internalCallback,
-            ref T? userCallback,
-            ref ecs_world_t* world,
-            ref FilterBuilder filterBuilder,
-            ref QueryBuilder queryBuilder,
-            ref RoutineBuilder routineBuilder,
-            ref string name) where T : Delegate
+        /// <summary>
+        ///     Creates a routine from an entity.
+        /// </summary>
+        /// <param name="entity"></param>
+        public Routine(Entity entity)
         {
-            if (userCallback == null)
-                throw new ArgumentNullException(nameof(userCallback), "User provided routine callback is null");
-
-            using NativeString nativeName = (NativeString)name;
-
-            ecs_entity_desc_t entityDesc = default;
-            entityDesc.name = nativeName;
-            entityDesc.sep = BindingContext.DefaultSeparator;
-            entityDesc.root_sep = BindingContext.DefaultRootSeparator;
-
-            ulong entity = ecs_entity_init(world, &entityDesc);
-            ulong currentPhase = ecs_get_target(world, entity, EcsDependsOn, 0);
-
-            if (currentPhase == 0 && routineBuilder.CurrentPhase != 0)
-            {
-                ecs_add_id(world, entity, Macros.DependsOn(routineBuilder.CurrentPhase));
-                ecs_add_id(world, entity, routineBuilder.CurrentPhase);
-            }
-            else if (currentPhase == 0)
-            {
-                ecs_add_id(world, entity, Macros.DependsOn(EcsOnUpdate));
-                ecs_add_id(world, entity, EcsOnUpdate);
-            }
-
-            BindingContext.QueryContext* queryContext = Memory.Alloc<BindingContext.QueryContext>(1);
-            queryContext[0] = queryBuilder.QueryContext;
-
-            BindingContext.RoutineContext* routineContext = Memory.Alloc<BindingContext.RoutineContext>(1);
-            routineContext[0] = routineBuilder.RoutineContext;
-            routineContext->QueryContext = queryBuilder.QueryContext;
-            BindingContext.SetCallback(ref routineContext->Iterator, userCallback, storeFunctionPointer);
-
-            ecs_system_desc_t* routineDesc =
-                (ecs_system_desc_t*)Unsafe.AsPointer(ref routineBuilder.RoutineDesc);
-
-            routineDesc->entity = entity;
-            routineDesc->query = queryBuilder.QueryDesc;
-            routineDesc->query.filter = filterBuilder.Desc;
-            routineDesc->query.filter.terms_buffer = filterBuilder.Terms.Data;
-            routineDesc->query.filter.terms_buffer_count = filterBuilder.Terms.Count;
-            routineDesc->query.binding_ctx = queryContext;
-            routineDesc->query.binding_ctx_free = BindingContext.QueryContextFreePointer;
-            routineDesc->binding_ctx_free = BindingContext.RoutineContextFreePointer;
-            routineDesc->binding_ctx = routineContext;
-            routineDesc->callback = internalCallback;
-
-            _entity = new Entity(world, ecs_system_init(world, routineDesc));
-            filterBuilder.Dispose();
-
-            return ref this;
+            _entity = entity;
         }
 
         /// <summary>
@@ -448,7 +265,6 @@ namespace Flecs.NET.Core
         ///     Return the hash code of the <see cref="Routine"/>.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override int GetHashCode()
         {
             return Entity.GetHashCode();
