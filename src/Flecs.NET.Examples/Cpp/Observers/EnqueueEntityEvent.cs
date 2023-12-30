@@ -1,3 +1,8 @@
+// This is the same example as EntityEvent, but instead of Emit() the example
+// uses the Enqueue() method. Whereas Emit() invokes observers synchronously,
+// Enqueue() adds the event to the command queue, which delays invoking
+// observers until the next time the command queue is flushed.
+
 using Flecs.NET.Core;
 
 // An event without payload.

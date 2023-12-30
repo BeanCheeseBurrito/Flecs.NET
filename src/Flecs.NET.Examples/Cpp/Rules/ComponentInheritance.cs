@@ -1,59 +1,59 @@
 // This example shows how rules can be used to match simple inheritance trees.
 
-#if Cpp_Rules_ComponentInheritance
-
 using Flecs.NET.Core;
 
-using World world = World.Create();
+// Tags
+file struct Unit;
+file struct CombatUnit;
+file struct MeleeUnit;
+file struct RangedUnit;
+file struct Warrior;
+file struct Wizard;
+file struct Marksman;
+file struct Builder;
 
-// Make the ECS aware of the inheritance relationships. Note that IsA
-// relationship used here is the same as in the prefab example.
-world.Component<CombatUnit>().Entity.IsA<Unit>();
-world.Component<MeleeUnit>().Entity.IsA<CombatUnit>();
-world.Component<RangedUnit>().Entity.IsA<CombatUnit>();
+public static class Cpp_Rules_ComponentInheritance
+{
+    public static void Main()
+    {
+        using World world = World.Create();
 
-world.Component<Warrior>().Entity.IsA<MeleeUnit>();
-world.Component<Wizard>().Entity.IsA<RangedUnit>();
-world.Component<Marksman>().Entity.IsA<RangedUnit>();
-world.Component<Builder>().Entity.IsA<Unit>();
+        // Make the ECS aware of the inheritance relationships. Note that IsA
+        // relationship used here is the same as in the prefab example.
+        world.Component<CombatUnit>().Entity.IsA<Unit>();
+        world.Component<MeleeUnit>().Entity.IsA<CombatUnit>();
+        world.Component<RangedUnit>().Entity.IsA<CombatUnit>();
 
-// Create a few units
-world.Entity("warrior_1").Add<Warrior>();
-world.Entity("warrior_2").Add<Warrior>();
+        world.Component<Warrior>().Entity.IsA<MeleeUnit>();
+        world.Component<Wizard>().Entity.IsA<RangedUnit>();
+        world.Component<Marksman>().Entity.IsA<RangedUnit>();
+        world.Component<Builder>().Entity.IsA<Unit>();
 
-world.Entity("marksman_1").Add<Marksman>();
-world.Entity("marksman_2").Add<Marksman>();
+        // Create a few units
+        world.Entity("Warrior1").Add<Warrior>();
+        world.Entity("Warrior2").Add<Warrior>();
 
-world.Entity("wizard_1").Add<Wizard>();
-world.Entity("wizard_2").Add<Wizard>();
+        world.Entity("Marksman1").Add<Marksman>();
+        world.Entity("Marksman2").Add<Marksman>();
 
-world.Entity("builder_1").Add<Builder>();
-world.Entity("builder_2").Add<Builder>();
+        world.Entity("Wizard1").Add<Wizard>();
+        world.Entity("Wizard2").Add<Wizard>();
 
-// Create a rule to find all ranged units
-Rule r = world.Rule(
-    filter: world.FilterBuilder().Term<RangedUnit>()
-);
+        world.Entity("Builder1").Add<Builder>();
+        world.Entity("Builder2").Add<Builder>();
 
-// Iterate the rule
-r.Each((Entity entity) => Console.WriteLine($"Unit {entity.Name()} found"));
+        // Create a rule to find all ranged units
+        Rule r = world.Rule<RangedUnit>();
 
-r.Destruct();
+        // Iterate the rule
+        r.Each((Entity entity) => Console.WriteLine($"Unit {entity} found"));
 
-public struct Unit { }
-public struct CombatUnit { }
-public struct MeleeUnit { }
-public struct RangedUnit { }
-
-public struct Warrior  { }
-public struct Wizard { }
-public struct Marksman { }
-public struct Builder { }
-
-#endif
+        r.Destruct();
+    }
+}
 
 // Output:
-// Unit wizard_1 found
-// Unit wizard_2 found
-// Unit marksman_1 found
-// Unit marksman_2 found
+// Unit Wizard1 found
+// Unit Wizard2 found
+// Unit Marksman1 found
+// Unit Marksman2 found

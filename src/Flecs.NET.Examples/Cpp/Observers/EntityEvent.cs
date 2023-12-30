@@ -1,3 +1,12 @@
+// Entity events are events that are emitted and observed for a specific entity.
+// They are a thin wrapper around regular observers, which match against queries
+// instead of single entities. While they work similarly under the hood, entity
+// events provide a much simpler API.
+//
+// An entity event only needs two pieces of data:
+// - The entity on which to emit the event
+// - The event to emit
+
 using Flecs.NET.Core;
 
 // An event without payload.

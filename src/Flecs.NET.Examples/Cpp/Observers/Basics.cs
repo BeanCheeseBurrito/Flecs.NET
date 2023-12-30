@@ -1,3 +1,25 @@
+// Observers provide a mechanism for responding to builtin and user defined
+// events. They are similar to systems, in that they have the same callback
+// signature and use the same query interface to match with entities, but
+// instead of a phase they have an event kind.
+//
+// The most commonly used builtin events are:
+//  - Ecs.OnAdd: a component was added
+//  - Ecs.OnRemove: a component was removed
+//  - Ecs.OnSet: a component's value was changed
+//
+// The OnAdd and OnRemove events are only thrown when a component is
+// actually added or removed. If an application invokes add and the entity
+// already has the component, no event is emitted. Similarly, if an application
+// invokes remove for a component the entity doesn't have, no event is
+// emitted. That is in contrast to OnSet, which is invoked each time set
+// or modified is invoked.
+//
+// Observers are different from component hooks in a number of ways:
+//  - A component can only have one hook, whereas it can match many observers
+//  - A hook matches one component, whereas observers can match complex queries
+//  - Hooks are for add/set/remove events, observers can match custom events.
+
 using Flecs.NET.Core;
 
 file record struct Position(float X, float Y);

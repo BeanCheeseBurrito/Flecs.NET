@@ -1,3 +1,7 @@
+// Prefabs are entities that can be used as templates for other entities. They
+// are created with a builtin Prefab tag, which by default excludes them from
+// queries and systems.
+
 using Flecs.NET.Core;
 
 // Components

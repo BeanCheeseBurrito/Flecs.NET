@@ -1,3 +1,12 @@
+// A monitor observer triggers when an entity starts/stop matching the observer
+// filter. The observer communicates whether an entity is "entering/leaving" the
+// monitor by setting ecs_iter_t::event to EcsOnAdd (for entering) or
+// EcsOnRemove (for leaving).
+//
+// To specify that an observer is a monitor observer, the EcsMonitor tag must be
+// provided as event. No additional event kinds should be provided for a monitor
+// observer.
+
 using Flecs.NET.Core;
 
 // Components

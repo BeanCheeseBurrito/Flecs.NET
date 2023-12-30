@@ -1,3 +1,4 @@
+// Observers can be used to match custom events. Custom events can be emitted
 // using the ecs_emit function. This function is also used by builtin events,
 // so builtin and custom events use the same rules for matching with observers.
 //

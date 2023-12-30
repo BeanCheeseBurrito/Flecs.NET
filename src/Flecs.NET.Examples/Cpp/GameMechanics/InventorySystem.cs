@@ -1,3 +1,6 @@
+// This example shows one possible way to implement an inventory system using
+// ECS relationships.
+
 using System.Runtime.CompilerServices;
 using Flecs.NET.Core;
 
