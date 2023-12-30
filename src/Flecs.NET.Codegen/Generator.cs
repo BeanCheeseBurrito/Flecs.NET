@@ -498,8 +498,12 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                string typeAssertions = ConcatString(i + 1, "\n",
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachCallback<{typeParams}> callback)
@@ -528,8 +532,12 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                string typeAssertions = ConcatString(i + 1, "\n",
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachEntityCallback<{typeParams}> callback)
@@ -560,8 +568,12 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                string typeAssertions = ConcatString(i + 1, "\n",
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachIndexCallback<{typeParams}> callback)
@@ -592,8 +604,12 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                string typeAssertions = ConcatString(i + 1, "\n",
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
 
                 str.AppendLine($@"
                     public static Entity Find<{typeParams}>(ecs_iter_t* iter, Ecs.FindCallback<{typeParams}> callback)
@@ -632,8 +648,12 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                string typeAssertions = ConcatString(i + 1, "\n",
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
 
                 str.AppendLine($@"
                     public static Entity Find<{typeParams}>(ecs_iter_t* iter, Ecs.FindEntityCallback<{typeParams}> callback)
@@ -673,8 +693,12 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                string typeAssertions = ConcatString(i + 1, "\n",
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
 
                 str.AppendLine($@"
                     public static Entity Find<{typeParams}>(ecs_iter_t* iter, Ecs.FindIndexCallback<{typeParams}> callback)
@@ -723,7 +747,8 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateBindingContextCallbacks(string typeName, string callbackName, string delegateName, string invokerName)
+        public static string GenerateBindingContextCallbacks(string typeName, string callbackName, string delegateName,
+            string invokerName)
         {
             StringBuilder str = new StringBuilder();
 
@@ -744,7 +769,8 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateCallbackFunctions(string functionName, string delegateName, string iterName, string nextName)
+        public static string GenerateCallbackFunctions(string functionName, string delegateName, string iterName,
+            string nextName)
         {
             StringBuilder str = new StringBuilder();
 
