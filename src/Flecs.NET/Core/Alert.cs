@@ -40,6 +40,26 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts an <see cref="Alert"/> instance to its entity id.
+        /// </summary>
+        /// <param name="alert"></param>
+        /// <returns></returns>
+        public static implicit operator ulong(Alert alert)
+        {
+            return ToUInt64(alert);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Alert"/> instance to its entity id.
+        /// </summary>
+        /// <param name="alert"></param>
+        /// <returns></returns>
+        public static ulong ToUInt64(Alert alert)
+        {
+            return alert.Entity;
+        }
+
+        /// <summary>
         ///     Returns the entity's name if it has one, otherwise return its id.
         /// </summary>
         /// <returns></returns>

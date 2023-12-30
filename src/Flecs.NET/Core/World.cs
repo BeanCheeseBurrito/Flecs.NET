@@ -1828,7 +1828,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void SetPipeline<T>()
         {
-            ecs_set_pipeline(Handle, Type<T>.Id(Handle));
+            SetPipeline(Type<T>.Id(Handle));
         }
 
         /// <summary>

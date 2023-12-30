@@ -45,6 +45,26 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts an <see cref="Pipeline"/> instance to its entity id.
+        /// </summary>
+        /// <param name="pipeline"></param>
+        /// <returns></returns>
+        public static implicit operator ulong(Pipeline pipeline)
+        {
+            return ToUInt64(pipeline);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Pipeline"/> instance to its entity id.
+        /// </summary>
+        /// <param name="pipeline"></param>
+        /// <returns></returns>
+        public static ulong ToUInt64(Pipeline pipeline)
+        {
+            return pipeline.Entity;
+        }
+
+        /// <summary>
         ///     Returns the entity's name if it has one, otherwise return its id.
         /// </summary>
         /// <returns></returns>

@@ -233,6 +233,26 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts an <see cref="Routine"/> instance to its entity id.
+        /// </summary>
+        /// <param name="routine"></param>
+        /// <returns></returns>
+        public static implicit operator ulong(Routine routine)
+        {
+            return ToUInt64(routine);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Routine"/> instance to its entity id.
+        /// </summary>
+        /// <param name="routine"></param>
+        /// <returns></returns>
+        public static ulong ToUInt64(Routine routine)
+        {
+            return routine.Entity;
+        }
+
+        /// <summary>
         ///     Returns the entity's name if it has one, otherwise return its id.
         /// </summary>
         /// <returns></returns>

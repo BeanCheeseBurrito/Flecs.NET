@@ -103,19 +103,21 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts a <see cref="Observer"/> to a <see cref="ulong"/>.
-        /// </summary>
-        /// <returns></returns>
-        public ulong ToUInt64()
-        {
-            return Entity;
-        }
-
-        /// <summary>
+        ///     Converts an <see cref="Observer"/> instance to its entity id.
         /// </summary>
         /// <param name="observer"></param>
         /// <returns></returns>
         public static implicit operator ulong(Observer observer)
+        {
+            return ToUInt64(observer);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Observer"/> instance to its entity id.
+        /// </summary>
+        /// <param name="observer"></param>
+        /// <returns></returns>
+        public static ulong ToUInt64(Observer observer)
         {
             return observer.Entity;
         }
