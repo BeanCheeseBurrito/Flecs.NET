@@ -13,11 +13,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <UnityArtifacts Include="FlecsInitialization.cs" />
+        <UnityArtifacts Include="FlecsInitialization.cs"/>
     </ItemGroup>
 
     <Target Name="ExportUnityArtifacts" AfterTargets="Build" Condition="'$(FlecsExportUnityArtifacts)' == 'True' And '$(TargetFramework)' == 'netstandard2.1'">
-        <Copy SourceFiles="@(UnityArtifacts)" DestinationFolder="$(UnityPackageRoot)\$(AssemblyName)" />
+        <Copy SourceFiles="@(UnityArtifacts)" DestinationFolder="$(UnityPackageRoot)\$(AssemblyName)"/>
     </Target>
 
 </Project>

@@ -6,17 +6,19 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RootNamespace>""</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup>
-        <Example>Example</Example>
+        <Example>Playground</Example>
+        <StartupObject>$(Example)</StartupObject>
         <DefineConstants>$(DefineConstants);$(Example)</DefineConstants>
     </PropertyGroup>
 
-    <Import Project="../Flecs.NET.Native/Flecs.NET.Native.targets" />
+    <Import Project="../Flecs.NET.Native/Flecs.NET.Native.targets"/>
 
     <ItemGroup>
-        <ProjectReference Include="../Flecs.NET/Flecs.NET.csproj" />
+        <ProjectReference Include="../Flecs.NET/Flecs.NET.csproj"/>
     </ItemGroup>
 
 </Project>
