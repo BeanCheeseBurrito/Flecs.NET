@@ -13,66 +13,16 @@
 // This code uses enumeration relationships. See the EnumRelations example for
 // more details.
 
-#if Cpp_Relationships_Union
-
 using Flecs.NET.Core;
 
-using World world = World.Create(args);
-
-world.Component<Movement>().Entity.Add(Ecs.Union);
-world.Component<Direction>().Entity.Add(Ecs.Union);
-
-// Create a query that subscribes for all entities that have a Direction
-// and that are walking
-Query q = world.Query(
-    filter: world.FilterBuilder()
-        .With(Movement.Walking)
-        .With<Direction>(Ecs.Wildcard)
-);
-
-// Create a few entities with various state combinations
-world.Entity("e1")
-    .Add(Movement.Walking)
-    .Add(Direction.Front);
-
-world.Entity("e2")
-    .Add(Movement.Running)
-    .Add(Direction.Left);
-
-Entity e3 = world.Entity("e3")
-    .Add(Movement.Running)
-    .Add(Direction.Back);
-
-// Add Walking to e3. This will remove the Running case
-e3.Add(Movement.Walking);
-
-// Iterate the query
-q.Iter((Iter it) =>
-{
-    // Get the column with direction states. This is stored as an array
-    // with identifiers to the individual states
-    Column<ulong> movement = it.Field<ulong>(1);
-    Column<ulong> direction = it.Field<ulong>(2);
-
-    foreach (int i in it)
-    {
-        // Movement will always be Walking, Direction can be any state
-        Console.Write(it.Entity(i).Name());
-        Console.Write(": Movement: ");
-        Console.Write(it.World().GetAlive(movement[i]).Name());
-        Console.Write(", Direction: ");
-        Console.Write(it.World().GetAlive(direction[i]).Name());
-        Console.WriteLine();
-    }
-});
-
-public enum Movement
+// Enums
+file enum Movement
 {
     Walking,
     Running
 }
 
-public enum Direction
+file enum Direction
 {
     Front,
     Back,
@@ -80,7 +30,59 @@ public enum Direction
     Right
 }
 
-#endif
+public static class Cpp_Relationships_Union
+{
+    public static void Main()
+    {
+        using World world = World.Create();
+
+        world.Component<Movement>().Entity.Add(Ecs.Union);
+        world.Component<Direction>().Entity.Add(Ecs.Union);
+
+        // Create a query that subscribes for all entities that have a Direction
+        // and that are walking
+        Query q = world.QueryBuilder()
+            .With(Movement.Walking)
+            .With<Direction>(Ecs.Wildcard)
+            .Build();
+
+        // Create a few entities with various state combinations
+        world.Entity("e1")
+            .Add(Movement.Walking)
+            .Add(Direction.Front);
+
+        world.Entity("e2")
+            .Add(Movement.Running)
+            .Add(Direction.Left);
+
+        Entity e3 = world.Entity("e3")
+            .Add(Movement.Running)
+            .Add(Direction.Back);
+
+        // Add Walking to e3. This will remove the Running case
+        e3.Add(Movement.Walking);
+
+        // Iterate the query
+        q.Iter((Iter it) =>
+        {
+            // Get the column with direction states. This is stored as an array
+            // with identifiers to the individual states
+            Column<ulong> movement = it.Field<ulong>(1);
+            Column<ulong> direction = it.Field<ulong>(2);
+
+            foreach (int i in it)
+            {
+                // Movement will always be Walking, Direction can be any state
+                Console.Write(it.Entity(i).Name());
+                Console.Write(": Movement: ");
+                Console.Write(it.World().GetAlive(movement[i]).Name());
+                Console.Write(", Direction: ");
+                Console.Write(it.World().GetAlive(direction[i]).Name());
+                Console.WriteLine();
+            }
+        });
+    }
+}
 
 // Output:
 // e3: Movement: Walking, Direction: Back
