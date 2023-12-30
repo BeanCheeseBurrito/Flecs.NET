@@ -43,7 +43,7 @@ namespace Flecs.NET.Core
         {
             _world = world;
             _pipelineDesc = default;
-            QueryBuilder = default;
+            QueryBuilder = new QueryBuilder(world);
 
             if (string.IsNullOrEmpty(name))
                 return;
