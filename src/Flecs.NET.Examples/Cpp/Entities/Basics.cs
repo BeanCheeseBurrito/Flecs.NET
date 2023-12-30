@@ -1,62 +1,50 @@
-#if Cpp_Entities_Basics
-
 using Flecs.NET.Core;
 
+// Components
+file record struct Position(float X, float Y);
+
+// Tags
+file struct Walking;
+
+public static class Cpp_Entities_Basics
 {
-    using World world = World.Create();
-
-    // Create an entity with name Bob
-    Entity bob = world.Entity("Bob")
-        // The set operation finds or creates a component, and sets it.
-        // Components are automatically registered with the world.
-        .Set(new Position { X = 10, Y = 20 })
-        // The add operation adds a component without setting a value. This is
-        // useful for tags, or when adding a component with its default value.
-        .Add<Walking>();
-
-    // Get the value for the Position component
-    ref readonly Position ptr = ref bob.Get<Position>();
-    Console.WriteLine($"({ptr.X}, {ptr.Y})");
-
-    // Overwrite the value of the Position component
-    bob.Set(new Position { X = 20, Y = 30 });
-
-    // Create another named entity
-    Entity alice = world.Entity("Alice")
-        .Set(new Position { X = 10, Y = 20 });
-
-    // Add a tag after entity is created
-    alice.Add<Walking>();
-
-    // Print all of the components the entity has. This will output:
-    //    Position, Walking, (Identifier,Name)
-    Console.WriteLine($"[{alice.Type().Str()}]");
-
-    // Remove tag
-    alice.Remove<Walking>();
-
-    // Iterate all entities with Position
-    using Filter filter = world.Filter(
-        filter: world.FilterBuilder().Term<Position>()
-    );
-
-    filter.Each((Entity e, ref Position p) =>
+    public static void Main()
     {
-        Console.WriteLine($"{e}: ({p.X}, {p.Y})");
-    });
+        using World world = World.Create();
 
-    return 0;
+        // Create an entity with name Bob
+        Entity bob = world.Entity("Bob")
+            // The set operation finds or creates a component, and sets it.
+            // Components are automatically registered with the world.
+            .Set<Position>(new(10, 20))
+            // The add operation adds a component without setting a value. This is
+            // useful for tags, or when adding a component with its default value.
+            .Add<Walking>();
+
+        // Get the value for the Position component
+        ref Position ptr = ref bob.GetMut<Position>();
+        Console.WriteLine($"({ptr.X}, {ptr.Y})");
+
+        // Overwrite the value of the Position component
+        bob.Set<Position>(new(20, 30));
+
+        // Create another named entity
+        Entity alice = world.Entity("Alice")
+            .Set<Position>(new(10, 20));
+
+        // Add a tag after entity is created
+        alice.Add<Walking>();
+
+        // Print all of the components the entity has. This will output:
+        //    [Cpp_Entities_Basics.Position, Cpp_Entities_Basics.Walking, (Identifier,Name)]
+        Console.WriteLine($"[{alice.Type().Str()}]");
+
+        // Remove tag
+        alice.Remove<Walking>();
+
+        world.Each((Entity e, ref Position p) => { Console.WriteLine($"{e}: ({p.X}, {p.Y})"); });
+    }
 }
-
-public struct Position
-{
-    public double X { get; set; }
-    public double Y { get; set; }
-}
-
-public struct Walking { }
-
-#endif
 
 // Output:
 // (10, 20)

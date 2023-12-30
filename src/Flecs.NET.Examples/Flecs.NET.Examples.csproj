@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Example>Playground</Example>
+        <Example>Example</Example>
         <StartupObject>$(Example)</StartupObject>
         <DefineConstants>$(DefineConstants);$(Example)</DefineConstants>
     </PropertyGroup>

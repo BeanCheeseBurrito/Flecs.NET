@@ -1,74 +1,71 @@
-#if Cpp_Entities_Hierarchy
-
 using Flecs.NET.Core;
 
+// Components
+file record struct Position(double X, double Y);
+
+// Tags
+file struct Star;
+file struct Planet;
+file struct Moon;
+
+file static class Cpp_Entities_Hierarchy
 {
-    using World world = World.Create();
+    public static void Main()
+    {
+        using World world = World.Create();
 
-    // Create a simple hierarchy.
-    // Hierarchies use ECS relationships and the builtin EcsChildOf relationship to
-    // create entities as children of other entities.
+        // Create a simple hierarchy.
+        // Hierarchies use ECS relationships and the builtin EcsChildOf relationship to
+        // create entities as children of other entities.
 
-    Entity sun = world.Entity("Sun")
-        .Add<Star>()
-        .Set(new Position { X = 1, Y = 1 });
+        Entity sun = world.Entity("Sun")
+            .Add<Star>()
+            .Set<Position>(new(1, 1));
 
-    world.Entity("Mercury")
-        .ChildOf(sun) // Shortcut for Add(Ecs.ChildOf, sun)
-        .Add<Planet>()
-        .Set(new Position { X = 1, Y = 1 });
+        world.Entity("Mercury")
+            .ChildOf(sun) // Shortcut for Add(Ecs.ChildOf, sun)
+            .Add<Planet>()
+            .Set<Position>(new(1, 1));
 
-    world.Entity("Venus")
-        .ChildOf(sun)
-        .Add<Planet>()
-        .Set(new Position { X = 2, Y = 2 });
+        world.Entity("Venus")
+            .ChildOf(sun)
+            .Add<Planet>()
+            .Set<Position>(new(2, 2));
 
-    Entity earth = world.Entity("Earth")
-        .ChildOf(sun)
-        .Add<Planet>()
-        .Set(new Position { X = 3, Y = 3 });
+        Entity earth = world.Entity("Earth")
+            .ChildOf(sun)
+            .Add<Planet>()
+            .Set<Position>(new(3, 3));
 
         Entity moon = world.Entity("Moon")
             .ChildOf(earth)
             .Add<Moon>()
-            .Set(new Position { X = 0.1, Y = 0.1 });
+            .Set<Position>(new(0.1, 0.1));
 
-    // Is the Moon a child of Earth?
-    Console.WriteLine($"Child of Earth? {moon.IsChildOf(earth)}\n");
+        // Is the Moon a child of Earth?
+        Console.WriteLine($"Child of Earth? {moon.IsChildOf(earth)}\n");
 
-    // Do a depth-first walk of the tree
-    IterateTree(sun);
+        // Do a depth-first walk of the tree
+        IterateTree(sun);
+    }
 
-    return 0;
+    private static void IterateTree(Entity e, Position pParent = default)
+    {
+        // Print hierarchical name of entity & the entity type
+        Console.WriteLine($"{e.Path()} [{e.Type().Str()}]");
+
+        // Get entity position
+        ref readonly Position p = ref e.Get<Position>();
+
+        // Calculate actual position
+        Position pActual = new(p.X + pParent.X, p.Y + pParent.Y);
+        Console.WriteLine($"({pActual.X}, {pActual.Y})");
+        Console.WriteLine();
+
+        // Iterate children recursively
+        e.Children((Entity child) => IterateTree(child, pActual));
+    }
 }
-
-void IterateTree(Entity e, Position pParent = default)
-{
-    // Print hierarchical name of entity & the entity type
-    Console.WriteLine($"{e.Path()} [{e.Type().Str()}]");
-
-    // Get entity position
-    ref readonly Position p = ref e.Get<Position>();
-
-    // Calculate actual position
-    Position pActual = new() { X = p.X + pParent.X, Y = p.Y + pParent.Y };
-    Console.WriteLine($"({pActual.X}, {pActual.Y})\n");
-
-    // Iterate children recursively
-    e.Children((Entity child) => IterateTree(child, pActual));
-}
-
-public struct Position
-{
-    public double X { get; set; }
-    public double Y { get; set; }
-}
-
-public struct Star { }
-public struct Planet { }
-public struct Moon { }
-
-#endif
 
 // Output:
 // Child of Earth? True
