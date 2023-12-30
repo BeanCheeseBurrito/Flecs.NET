@@ -1,45 +1,32 @@
-// Observers can enable a "YieldExisting" feature that upon creation of the
-// observer produces events for all entities that match the observer query. The
-// feature is only implemented for the builtin EcsOnAdd and EcsOnSet events.
-//
-// Custom events can also implement behavior for YieldExisting by adding the
-// Iterable component to the event (see EcsIterable for more details).
-
-#if Cpp_Observers_YieldExisting
-
 using Flecs.NET.Core;
 
-using World world = World.Create(args);
+// Components
+file record struct Position(float X, float Y);
 
-// Create existing entities with Position component
-world.Entity("e1").Set(new Position { X = 10, Y = 20 });
-world.Entity("e2").Set(new Position { X = 20, Y = 30 });
-
-// Create observer for Position
-world.Observer(
-    filter: world.FilterBuilder().Term<Position>(),
-    observer: world.ObserverBuilder()
-        .Event(Ecs.OnSet)
-        .YieldExisting(),
-    callback: (Iter it, int i) =>
-    {
-        Column<Position> p = it.Field<Position>(1);
-
-        Console.Write($" - {it.Event().Name()}: ");
-        Console.Write($"{it.EventId().Str()}: ");
-        Console.Write($"{it.Entity(i).Name()}: ");
-        Console.Write($"({p[i].X}, {p[i].Y})");
-        Console.WriteLine();
-    }
-);
-
-public struct Position
+public static class Cpp_Observers_YieldExisting
 {
-    public double X { get; set; }
-    public double Y { get; set; }
-}
+    public static void Main()
+    {
+        using World world = World.Create();
 
-#endif
+        // Create existing entities with Position component
+        world.Entity("e1").Set<Position>(new(10, 20));
+        world.Entity("e2").Set<Position>(new(20, 30));
+
+        // Create observer for Position
+        world.Observer<Position>()
+            .Event(Ecs.OnSet)
+            .YieldExisting()
+            .Each((Iter it, int i, ref Position p) =>
+            {
+                Console.Write($" - {it.Event()}: ");
+                Console.Write($"{it.EventId()}: ");
+                Console.Write($"{it.Entity(i)}: ");
+                Console.Write($"({p.X}, {p.Y})");
+                Console.WriteLine();
+            });
+    }
+}
 
 // Output:
 //  - OnSet: Position: e1: (10, 20)
