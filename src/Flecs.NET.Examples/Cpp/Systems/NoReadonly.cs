@@ -33,8 +33,8 @@ public static class Cpp_Systems_NoReadonly
         // plate assignments are assigned directly (not deferred) to waiters, which
         // ensures that we won't assign plates to the same waiter more than once.
         world.Routine()
-            .With<Waiter>()
-            .Without<Plate>(Ecs.Wildcard)
+            .With<Plate>()
+            .Without<Waiter>(Ecs.Wildcard)
             .NoReadonly()
             .Iter((Iter it) =>
             {
@@ -93,5 +93,5 @@ public static class Cpp_Systems_NoReadonly
 }
 
 // Output:
-// Assigned Waiter_3 to Plate_1!
-// Assigned Waiter_2 to Plate_3!
+// Assigned Waiter3 to Plate1!
+// Assigned Waiter2 to Plate3!
