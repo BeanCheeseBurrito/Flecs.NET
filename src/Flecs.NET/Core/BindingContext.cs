@@ -674,19 +674,7 @@ namespace Flecs.NET.Core
             GCHandle* handles = (GCHandle*)data;
 
             for (int i = 0; i < count; i++)
-            {
-                BindingContext.Box<T0> box = new BindingContext.Box<T0>();
-
-                try
-                {
-                    box.Value = Activator.CreateInstance<T0>();
-                }
-                catch (MissingMethodException)
-                {
-                }
-
-                handles[i] = GCHandle.Alloc(box);
-            }
+                handles[i] = GCHandle.Alloc(new BindingContext.Box<T0>());
         }
 
         private static void DefaultManagedDtor(void* data, int count, ecs_type_info_t* typeInfoHandle)
