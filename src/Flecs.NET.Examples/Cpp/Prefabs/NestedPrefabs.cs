@@ -16,48 +16,48 @@
 // used to give instantiated children from a nested prefab a private copy of an
 // inherited component.
 
-#if Cpp_Prefabs_NestedPrefabs
-
 using Flecs.NET.Core;
 
-using World world = World.Create();
+// Components
+file record struct TirePressure(float Value);
 
-// Create a Wheel prefab, make sure each instantiated wheel has a private
-// copy of the TirePressure component.
-Entity wheel = world.Prefab("Wheel")
-    .SetOverride(new TirePressure { Value = 32 });
-
-// Create a Car prefab with four wheels. Note how we're using the scope
-// method, which has the same effect as adding the (ChildOf, Car) pair.
-Entity car = world.Prefab("Car").Scope(() =>
+public static class Cpp_Prefabs_NestedPrefabs
 {
-    world.Prefab("FrontLeft").IsA(wheel);
-    world.Prefab("FrontRight").IsA(wheel);
-    world.Prefab("BackLeft").IsA(wheel);
-    world.Prefab("BackRight").IsA(wheel);
-});
+    public static void Main()
+    {
+        using World world = World.Create();
 
-// Create a prefab instance.
-Entity inst = world.Entity("my_car").IsA(car);
+        // Create a Wheel prefab, make sure each instantiated wheel has a private
+        // copy of the TirePressure component.
+        Entity wheel = world.Prefab("Wheel")
+            .SetOverride<TirePressure>(new(32));
 
-// Lookup one of the wheels
-Entity instFrontLeft = inst.Lookup("FrontLeft");
+        // Create a Car prefab with four wheels. Note how we're using the scope
+        // method, which has the same effect as adding the (ChildOf, Car) pair.
+        Entity car = world.Prefab("Car").Scope(() =>
+        {
+            world.Prefab("FrontLeft").IsA(wheel);
+            world.Prefab("FrontRight").IsA(wheel);
+            world.Prefab("BackLeft").IsA(wheel);
+            world.Prefab("BackRight").IsA(wheel);
+        });
 
-// The type shows that the child has a private copy of the TirePressure
-// component, and an IsA relationship to the Wheel prefab.
-Console.WriteLine($"Type: [{instFrontLeft.Type().Str()}]");
+        // Create a prefab instance.
+        Entity inst = world.Entity("MyCar").IsA(car);
 
-// Get the TirePressure component & print its value
-ref readonly TirePressure p = ref instFrontLeft.Get<TirePressure>();
-Console.WriteLine($"Pressure: " + p.Value);
+        // Lookup one of the wheels
+        Entity instFrontLeft = inst.Lookup("FrontLeft");
 
-public struct TirePressure
-{
-    public double Value { get; set; }
+        // The type shows that the child has a private copy of the TirePressure
+        // component, and an IsA relationship to the Wheel prefab.
+        Console.WriteLine($"Type: [{instFrontLeft.Type()}]");
+
+        // Get the TirePressure component & print its value
+        ref readonly TirePressure p = ref instFrontLeft.Get<TirePressure>();
+        Console.WriteLine($"Pressure: " + p.Value);
+    }
 }
 
-#endif
-
 // Output:
-// Type: [TirePressure, (Identifier,Name), (ChildOf,my_car), (IsA,Wheel)]
+// Type: [TirePressure, (Identifier,Name), (ChildOf,MyCar), (IsA,Wheel)]
 // Pressure: 32

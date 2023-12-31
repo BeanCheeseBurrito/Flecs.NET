@@ -9,12 +9,24 @@ public struct Position
 {
     public float X { get; set; }
     public float Y { get; set; }
+
+    public Position(float x, float y)
+    {
+        X = x;
+        Y = y;
+    }
 }
 
 public struct Velocity
 {
     public float X { get; set; }
     public float Y { get; set; }
+
+    public Velocity(float x, float y)
+    {
+        X = x;
+        Y = y;
+    }
 }
 
 public enum StandardEnum
@@ -53,7 +65,7 @@ public struct FilterWrapper
     {
         Filter = filter;
     }
-};
+}
 
 public struct Parent
 {
@@ -98,7 +110,7 @@ public struct Pod
             OnRemove = (Iter it, Column<Pod> pod) => { }
         };
     }
-};
+}
 
 public struct EvtData
 {

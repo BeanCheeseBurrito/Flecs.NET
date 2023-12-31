@@ -37,6 +37,8 @@ namespace Flecs.NET.Codegen
                     {GenerateFilterExtensions()}
                     {GenerateQueryExtensions()}
                     {GenerateRuleExtensions()}
+                    {GenerateObserverExtensions()}
+                    {GenerateRoutineExtensions()}
                 }}
                 
                 #pragma warning restore 1591
@@ -46,22 +48,11 @@ namespace Flecs.NET.Codegen
         public static string GenerateWorldExtensions()
         {
             return $@"
-                public unsafe partial struct World : IDisposable, IEquatable<World>
+                public unsafe partial struct World
                 {{
-                    {GenerateFilterBuilderFactoryExtensions()}
-
+                    {GenerateIterableFactoryExtensions()}
                     {GenerateWorldEachCallbackFunctions()}
                     {GenerateWorldEachEntityCallbackFunction()}
-
-                    {GenerateRoutineFactoryExtensions("IterCallback", "RoutineIter")}
-                    {GenerateRoutineFactoryExtensions("EachCallback", "RoutineEach")}
-                    {GenerateRoutineFactoryExtensions("EachEntityCallback", "RoutineEachEntity")}
-                    {GenerateRoutineFactoryExtensions("EachIndexCallback", "RoutineEachIndex")}
-
-                    {GenerateObserverFactoryExtensions("IterCallback", "ObserverIter")}
-                    {GenerateObserverFactoryExtensions("EachCallback", "ObserverEach")}
-                    {GenerateObserverFactoryExtensions("EachEntityCallback", "ObserverEachEntity")}
-                    {GenerateObserverFactoryExtensions("EachIndexCallback", "ObserverEachIndex")}
                 }}
             ";
         }
@@ -101,7 +92,7 @@ namespace Flecs.NET.Codegen
         public static string GenerateFilterExtensions()
         {
             return $@"
-                public unsafe partial struct Filter : IDisposable
+                public unsafe partial struct Filter
                 {{
                     {GenerateCallbackFunctions("Iter", "IterCallback", "ecs_filter_iter", "ecs_filter_next")}
                     {GenerateCallbackFunctions("Each", "EachCallback", "ecs_filter_iter", "ecs_filter_next_instanced")} 
@@ -117,7 +108,7 @@ namespace Flecs.NET.Codegen
         public static string GenerateQueryExtensions()
         {
             return $@"
-                public unsafe partial struct Query : IDisposable
+                public unsafe partial struct Query
                 {{
                     {GenerateCallbackFunctions("Iter", "IterCallback", "ecs_query_iter", "ecs_query_next")}
                     {GenerateCallbackFunctions("Each", "EachCallback", "ecs_query_iter", "ecs_query_next_instanced")} 
@@ -133,7 +124,7 @@ namespace Flecs.NET.Codegen
         public static string GenerateRuleExtensions()
         {
             return $@"
-                public unsafe partial struct Rule : IDisposable
+                public unsafe partial struct Rule
                 {{
                     {GenerateCallbackFunctions("Iter", "IterCallback", "ecs_rule_iter", "ecs_rule_next")}
                     {GenerateCallbackFunctions("Each", "EachCallback", "ecs_rule_iter", "ecs_rule_next_instanced")} 
@@ -142,6 +133,84 @@ namespace Flecs.NET.Codegen
                     {GenerateFindCallbackFunctions("FindCallback", "ecs_rule_iter", "ecs_rule_next_instanced")}
                     {GenerateFindCallbackFunctions("FindEntityCallback", "ecs_rule_iter", "ecs_rule_next_instanced")}
                     {GenerateFindCallbackFunctions("FindIndexCallback", "ecs_rule_iter", "ecs_rule_next_instanced")}
+                }}
+            ";
+        }
+
+        public static string GenerateObserverExtensions()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                str.AppendLine($@"
+                    public Observer Iter<{typeParams}>(Ecs.IterCallback<{typeParams}> callback) 
+                    {{
+                        return Build(ref callback, BindingContext<{typeParams}>.ObserverIterPointer, false);
+                    }}
+
+                    public Observer Each<{typeParams}>(Ecs.EachCallback<{typeParams}> callback) 
+                    {{
+                        return Build(ref callback, BindingContext<{typeParams}>.ObserverEachPointer, false);
+                    }}
+
+                    public Observer Each<{typeParams}>(Ecs.EachEntityCallback<{typeParams}> callback) 
+                    {{
+                        return Build(ref callback, BindingContext<{typeParams}>.ObserverEachEntityPointer, false);
+                    }}
+
+                    public Observer Each<{typeParams}>(Ecs.EachIndexCallback<{typeParams}> callback) 
+                    {{
+                        return Build(ref callback, BindingContext<{typeParams}>.ObserverEachIndexPointer, false);
+                    }}
+                ");
+            }
+
+            return $@"
+                public partial struct ObserverBuilder
+                {{
+                    {str}
+                }}
+            ";
+        }
+
+        public static string GenerateRoutineExtensions()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                str.AppendLine($@"
+                    public Routine Iter<{typeParams}>(Ecs.IterCallback<{typeParams}> callback) 
+                    {{
+                        return Build(ref callback, BindingContext<{typeParams}>.RoutineIterPointer, false);
+                    }}
+
+                    public Routine Each<{typeParams}>(Ecs.EachCallback<{typeParams}> callback) 
+                    {{
+                        return Build(ref callback, BindingContext<{typeParams}>.RoutineEachPointer, false);
+                    }}
+
+                    public Routine Each<{typeParams}>(Ecs.EachEntityCallback<{typeParams}> callback) 
+                    {{
+                        return Build(ref callback, BindingContext<{typeParams}>.RoutineEachEntityPointer, false);
+                    }}
+
+                    public Routine Each<{typeParams}>(Ecs.EachIndexCallback<{typeParams}> callback) 
+                    {{
+                        return Build(ref callback, BindingContext<{typeParams}>.RoutineEachIndexPointer, false);
+                    }}
+                ");
+            }
+
+            return $@"
+                public partial struct RoutineBuilder
+                {{
+                    {str}
                 }}
             ";
         }
@@ -197,7 +266,7 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateFilterBuilderFactoryExtensions()
+        public static string GenerateIterableFactoryExtensions()
         {
             StringBuilder str = new StringBuilder();
 
@@ -206,9 +275,54 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
                 string termBuilders = ConcatString(i + 1, "\n", index => $".Term<T{index}>()");
                 str.AppendLine($@"
-                    public FilterBuilder FilterBuilder<{typeParams}>()
+                    public FilterBuilder FilterBuilder<{typeParams}>(string? name = null)
                     {{
-                        return new FilterBuilder(Handle){termBuilders};
+                        return new FilterBuilder(Handle, name){termBuilders};
+                    }}
+
+                    public Filter Filter<{typeParams}>(string? name = null)
+                    {{
+                        return FilterBuilder<{typeParams}>(name).Build();
+                    }}
+
+                    public RuleBuilder RuleBuilder<{typeParams}>(string? name = null)
+                    {{
+                        return new RuleBuilder(Handle, name){termBuilders};
+                    }}
+
+                    public Rule Rule<{typeParams}>(string? name = null)
+                    {{
+                        return RuleBuilder<{typeParams}>(name).Build();
+                    }}
+
+                    public AlertBuilder AlertBuilder<{typeParams}>(string? name = null)
+                    {{
+                        return new AlertBuilder(Handle, name){termBuilders};
+                    }}
+
+                    public Alert Alert<{typeParams}>(string? name = null)
+                    {{
+                        return AlertBuilder<{typeParams}>(name).Build();
+                    }}
+
+                    public QueryBuilder QueryBuilder<{typeParams}>(string? name = null)
+                    {{
+                        return new QueryBuilder(Handle, name){termBuilders};
+                    }}
+
+                    public Query Query<{typeParams}>(string? name = null)
+                    {{
+                        return QueryBuilder<{typeParams}>(name).Build();
+                    }}
+
+                    public RoutineBuilder Routine<{typeParams}>(string? name = null)
+                    {{
+                        return new RoutineBuilder(Handle, name){termBuilders};
+                    }}
+
+                    public ObserverBuilder Observer<{typeParams}>(string? name = null)
+                    {{
+                        return new ObserverBuilder(Handle, name){termBuilders};
                     }}
                 ");
             }
@@ -227,7 +341,7 @@ namespace Flecs.NET.Codegen
                 str.AppendLine($@"
                     public void Each<{typeParams}>(Ecs.EachCallback<{typeParams}> callback) 
                     {{
-                        using Filter filter = Filter(FilterBuilder<{typeParams}>());
+                        using Filter filter = Filter<{typeParams}>();
                         filter.Each(callback);   
                     }}
                 ");
@@ -247,72 +361,8 @@ namespace Flecs.NET.Codegen
                 str.AppendLine($@"
                     public void Each<{typeParams}>(Ecs.EachEntityCallback<{typeParams}> callback) 
                     {{
-                        using Filter filter = Filter(FilterBuilder<{typeParams}>());
+                        using Filter filter = Filter<{typeParams}>();
                         filter.Each(callback);
-                    }}
-                ");
-            }
-
-            return str.ToString();
-        }
-
-        public static string GenerateObserverFactoryExtensions(string delegateName, string callbackName)
-        {
-            StringBuilder str = new StringBuilder();
-
-            for (int i = 0; i < GenericCount; i++)
-            {
-                string typeParams = GenerateTypeParams(i + 1);
-
-                str.AppendLine($@"
-                    public Observer Observer<{typeParams}>(
-                        FilterBuilder filter = default,
-                        ObserverBuilder observer = default,
-                        Ecs.{delegateName}<{typeParams}>? callback = null,
-                        string name = """")
-                    {{
-                        return new Observer().InitObserver(
-                            false,
-                            BindingContext<{typeParams}>.{callbackName}Pointer,
-                            ref callback,
-                            ref Handle,
-                            ref filter,
-                            ref observer,
-                            ref name
-                        );
-                    }}
-                ");
-            }
-
-            return str.ToString();
-        }
-
-        public static string GenerateRoutineFactoryExtensions(string delegateName, string callbackName)
-        {
-            StringBuilder str = new StringBuilder();
-
-            for (int i = 0; i < GenericCount; i++)
-            {
-                string typeParams = GenerateTypeParams(i + 1);
-
-                str.AppendLine($@"
-                    public Routine Routine<{typeParams}>(
-                        FilterBuilder filter = default,
-                        QueryBuilder query = default,
-                        RoutineBuilder routine = default,
-                        Ecs.{delegateName}<{typeParams}>? callback = null,
-                        string name = """")
-                    {{
-                        return new Routine().InitRoutine(
-                            false,
-                            BindingContext<{typeParams}>.{callbackName}Pointer,
-                            ref callback,
-                            ref Handle,
-                            ref filter,
-                            ref query,
-                            ref routine,
-                            ref name
-                        );
                     }}
                 ");
             }
@@ -448,8 +498,15 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                string typeAssertions = ConcatString(i + 1, "\n",
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+
+                string isSelfBools = ConcatString(i + 1, "\n",
+                    index => $"bool t{index}IsSelf = iter->sources == null || iter->sources[{index}] == 0;");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], t{index}IsSelf ? i : 0)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachCallback<{typeParams}> callback)
@@ -459,6 +516,7 @@ namespace Flecs.NET.Codegen
                         int count = iter->count == 0 ? 1 : iter->count;
                         
                         {typeAssertions}
+                        {isSelfBools}
 
                         for (int i = 0; i < count; i++)
                             callback({callbackArgs});
@@ -478,8 +536,15 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                string typeAssertions = ConcatString(i + 1, "\n",
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+
+                string isSelfBools = ConcatString(i + 1, "\n",
+                    index => $"bool t{index}IsSelf = iter->sources == null || iter->sources[{index}] == 0;");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], t{index}IsSelf ? i : 0)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachEntityCallback<{typeParams}> callback)
@@ -489,6 +554,7 @@ namespace Flecs.NET.Codegen
 
                         Ecs.Assert(count > 0, ""No entities returned, use Each() without the entity argument instead."");
                         {typeAssertions}
+                        {isSelfBools}
 
                         Macros.TableLock(iter->world, iter->table);
 
@@ -510,8 +576,15 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                string typeAssertions = ConcatString(i + 1, "\n",
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+
+                string isSelfBools = ConcatString(i + 1, "\n",
+                    index => $"bool t{index}IsSelf = iter->sources == null || iter->sources[{index}] == 0;");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], t{index}IsSelf ? i : 0)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachIndexCallback<{typeParams}> callback)
@@ -521,6 +594,7 @@ namespace Flecs.NET.Codegen
                         Iter it = new Iter(iter);
 
                         {typeAssertions}
+                        {isSelfBools}
 
                         Macros.TableLock(iter->world, iter->table);
 
@@ -542,8 +616,12 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                string typeAssertions = ConcatString(i + 1, "\n",
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
 
                 str.AppendLine($@"
                     public static Entity Find<{typeParams}>(ecs_iter_t* iter, Ecs.FindCallback<{typeParams}> callback)
@@ -582,8 +660,12 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                string typeAssertions = ConcatString(i + 1, "\n",
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
 
                 str.AppendLine($@"
                     public static Entity Find<{typeParams}>(ecs_iter_t* iter, Ecs.FindEntityCallback<{typeParams}> callback)
@@ -623,8 +705,12 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string typeAssertions = ConcatString(i + 1, "\n", index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
+
+                string typeAssertions = ConcatString(i + 1, "\n",
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
 
                 str.AppendLine($@"
                     public static Entity Find<{typeParams}>(ecs_iter_t* iter, Ecs.FindIndexCallback<{typeParams}> callback)
@@ -673,7 +759,8 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateBindingContextCallbacks(string typeName, string callbackName, string delegateName, string invokerName)
+        public static string GenerateBindingContextCallbacks(string typeName, string callbackName, string delegateName,
+            string invokerName)
         {
             StringBuilder str = new StringBuilder();
 
@@ -694,7 +781,8 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateCallbackFunctions(string functionName, string delegateName, string iterName, string nextName)
+        public static string GenerateCallbackFunctions(string functionName, string delegateName, string iterName,
+            string nextName)
         {
             StringBuilder str = new StringBuilder();
 

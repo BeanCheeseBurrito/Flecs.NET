@@ -1,5 +1,4 @@
 using System;
-using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -22,35 +21,42 @@ namespace Flecs.NET.Core
         public ref ecs_world_t* World => ref _entity.World;
 
         /// <summary>
-        ///     Creates an alert.
+        ///     Creates an alert with the provided world and entity id.
         /// </summary>
         /// <param name="world"></param>
-        /// <param name="name"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="alertBuilder"></param>
-        public Alert(ecs_world_t* world, string name = "", FilterBuilder filterBuilder = default,
-            AlertBuilder alertBuilder = default)
+        /// <param name="id"></param>
+        public Alert(ecs_world_t* world, ulong id)
         {
-            ecs_alert_desc_t* alertDesc = &alertBuilder.AlertDesc;
-            alertDesc->filter = filterBuilder.Desc;
-            alertDesc->filter.terms_buffer = filterBuilder.Terms.Data;
-            alertDesc->filter.terms_buffer_count = filterBuilder.Terms.Count;
+            _entity = new Entity(world, id);
+        }
 
-            if (!string.IsNullOrEmpty(name))
-            {
-                using NativeString nativeName = (NativeString)name;
+        /// <summary>
+        ///     Creates an alert with the provided entity.
+        /// </summary>
+        /// <param name="entity"></param>
+        public Alert(Entity entity)
+        {
+            _entity = entity;
+        }
 
-                ecs_entity_desc_t entityDesc = default;
-                entityDesc.name = nativeName;
-                entityDesc.sep = BindingContext.DefaultSeparator;
-                entityDesc.root_sep = BindingContext.DefaultRootSeparator;
-                alertDesc->entity = ecs_entity_init(world, &entityDesc);
-            }
+        /// <summary>
+        ///     Converts an <see cref="Alert"/> instance to its entity id.
+        /// </summary>
+        /// <param name="alert"></param>
+        /// <returns></returns>
+        public static implicit operator ulong(Alert alert)
+        {
+            return ToUInt64(alert);
+        }
 
-            _entity = new Entity(world, ecs_alert_init(world, alertDesc));
-
-            filterBuilder.Dispose();
-            alertBuilder.Dispose();
+        /// <summary>
+        ///     Converts an <see cref="Alert"/> instance to its entity id.
+        /// </summary>
+        /// <param name="alert"></param>
+        /// <returns></returns>
+        public static ulong ToUInt64(Alert alert)
+        {
+            return alert.Entity;
         }
 
         /// <summary>

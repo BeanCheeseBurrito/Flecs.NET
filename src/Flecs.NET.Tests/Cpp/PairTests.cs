@@ -160,7 +160,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void PairInstances1()
+        private void System1PairInstances()
         {
             using World world = World.Create();
 
@@ -171,9 +171,9 @@ namespace Flecs.NET.Tests.Cpp
             int entityCount = 0;
             int traitValue = 0;
 
-            world.Routine(
-                filter: world.FilterBuilder().Expr("(Pair, *)"),
-                callback: it =>
+            world.Routine()
+                .Expr("(Pair, *)")
+                .Iter((Iter it) =>
                 {
                     Column<Pair> tr = it.Field<Pair>(1);
                     invokeCount++;
@@ -183,8 +183,7 @@ namespace Flecs.NET.Tests.Cpp
                         entityCount++;
                         traitValue += (int)tr[i].Value;
                     }
-                }
-            );
+                });
 
             world.Progress();
 
@@ -194,7 +193,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void PairInstances2()
+        private void System2PairInstances()
         {
             using World world = World.Create();
 
@@ -206,9 +205,9 @@ namespace Flecs.NET.Tests.Cpp
             int entityCount = 0;
             int traitValue = 0;
 
-            world.Routine(
-                filter: world.FilterBuilder().Expr("(Pair, *)"),
-                callback: it =>
+            world.Routine()
+                .Expr("(Pair, *)")
+                .Iter((Iter it) =>
                 {
                     Column<Pair> tr = it.Field<Pair>(1);
                     invokeCount++;
@@ -218,8 +217,7 @@ namespace Flecs.NET.Tests.Cpp
                         entityCount++;
                         traitValue += (int)tr[i].Value;
                     }
-                }
-            );
+                });
 
             world.Progress();
 
@@ -239,7 +237,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity instance = world.Entity()
                 .Add(EcsIsA, @base);
 
-            Assert.True((instance.Has<Pair, Position>()));
+            Assert.True(instance.Has<Pair, Position>());
             Pair* t = instance.GetFirstPtr<Pair, Position>();
             Assert.Equal(10, t->Value);
 
@@ -270,7 +268,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity instance = world.Entity()
                 .Add(EcsIsA, @base);
 
-            Assert.True((instance.HasSecond<Position>(pair)));
+            Assert.True(instance.HasSecond<Position>(pair));
             Position* t = instance.GetSecondPtr<Position>(pair);
             Assert.Equal(10, t->X);
             Assert.Equal(20, t->Y);
@@ -602,7 +600,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity().SetFirst<Position, Tag>(new Position { X = 10, Y = 20 });
 
-            Assert.True((e.Has<Position, Tag>()));
+            Assert.True(e.Has<Position, Tag>());
 
             Position* ptr = e.GetFirstPtr<Position, Tag>();
             Assert.True(ptr != null);
@@ -618,7 +616,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity().SetSecond<Tag, Position>(new Position { X = 10, Y = 20 });
 
-            Assert.True((e.Has<Tag, Position>()));
+            Assert.True(e.Has<Tag, Position>());
 
             Position* ptr = e.GetSecondPtr<Tag, Position>();
             Assert.True(ptr != null);

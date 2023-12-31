@@ -7,44 +7,40 @@
 //  - One or more event ids (Position, Velocity, ...)
 //  - A source (either an entity or a table)
 
-#if Cpp_Observers_CustomEvent
-
 using Flecs.NET.Core;
 
-using World world = World.Create(args);
-
-// Create observer for custom event
-world.Observer(
-    filter: world.FilterBuilder().Term<Position>(),
-    observer: world.ObserverBuilder().Event<MyEvent>(),
-    callback: (Iter it, int i) =>
-    {
-        Console.WriteLine($" - {it.Event().Name()}: {it.EventId().Str()}: {it.Entity(i).Name()}");
-    }
-);
-
-// The observer filter can be matched against the entity, so make sure it
-// has the Position component before emitting the event. This does not
-// trigger the observer yet.
-Entity e = world.Entity("e")
-    .Set(new Position { X = 10, Y = 20 });
-
-// Emit the custom event
-world.Event<MyEvent>()
-    .Id<Position>()
-    .Entity(e)
-    .Emit();
-
-public struct Position
-{
-    public double X { get; set; }
-    public double Y { get; set; }
-}
+file record struct Position(float X, float Y);
 
 // Create tag type to use as event (could also use entity)
-public struct MyEvent { }
+file struct MyEvent;
 
-#endif
+public static class Cpp_Observers_CustomEvent
+{
+    public static void Main()
+    {
+        using World world = World.Create();
+
+        // Create observer for custom event
+        world.Observer<Position>()
+            .Event<MyEvent>()
+            .Each((Iter it, int i) =>
+            {
+                Console.WriteLine($" - {it.Event()}: {it.EventId()}: {it.Entity(i)}");
+            });
+
+        // The observer filter can be matched against the entity, so make sure it
+        // has the Position component before emitting the event. This does not
+        // trigger the observer yet.
+        Entity e = world.Entity("e")
+            .Set(new Position(10, 20));
+
+        // Emit the custom event
+        world.Event<MyEvent>()
+            .Id<Position>()
+            .Entity(e)
+            .Emit();
+    }
+}
 
 // Output:
 //  - MyEvent: Position: e

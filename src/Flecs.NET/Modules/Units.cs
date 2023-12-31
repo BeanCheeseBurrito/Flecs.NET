@@ -10,6 +10,7 @@ namespace Flecs.NET.Core
         ///     Units module.
         /// </summary>
         [SuppressMessage("Usage", "CA1815")]
+        [SuppressMessage("Usage", "CA1724")]
         public struct Units : IEquatable<Units>, IFlecsModule
         {
             /// <summary>

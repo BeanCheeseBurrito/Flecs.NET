@@ -24,37 +24,14 @@ namespace Flecs.NET.Core
         public ref ecs_rule_t* Handle => ref _handle;
 
         /// <summary>
-        ///     Creates a rule for the provided world.
+        ///     Creates a rule from the provided world and handle.
         /// </summary>
         /// <param name="world"></param>
-        /// <param name="name"></param>
-        /// <param name="filterBuilder"></param>
-        /// <exception cref="InvalidOperationException"></exception>
-        public Rule(ecs_world_t* world, FilterBuilder filterBuilder = default, string name = "")
+        /// <param name="rule"></param>
+        public Rule(ecs_world_t* world, ecs_rule_t* rule)
         {
             _world = world;
-
-            ecs_filter_desc_t* filterDesc = &filterBuilder.FilterDesc;
-            filterDesc->terms_buffer = filterBuilder.Terms.Data;
-            filterDesc->terms_buffer_count = filterBuilder.Terms.Count;
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                using NativeString nativeName = (NativeString)name;
-
-                ecs_entity_desc_t entityDesc = default;
-                entityDesc.name = nativeName;
-                entityDesc.sep = BindingContext.DefaultSeparator;
-                entityDesc.root_sep = BindingContext.DefaultRootSeparator;
-                filterDesc->entity = ecs_entity_init(world, &entityDesc);
-            }
-
-            _handle = ecs_rule_init(world, filterDesc);
-
-            if (Handle == null)
-                throw new InvalidOperationException("Rule failed to init");
-
-            filterBuilder.Dispose();
+            _handle = rule;
         }
 
         /// <summary>

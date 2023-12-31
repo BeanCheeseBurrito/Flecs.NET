@@ -1,6 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
-using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -8,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around observer.
     /// </summary>
-    public unsafe struct Observer : IEquatable<Observer>
+    public unsafe struct Observer : IEquatable<Observer>, IDisposable
     {
         private Entity _entity;
 
@@ -28,122 +26,6 @@ namespace Flecs.NET.Core
         public ref ecs_world_t* World => ref _entity.World;
 
         /// <summary>
-        ///     Creates an observer for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="observerBuilder"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Observer(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            ObserverBuilder observerBuilder = default,
-            Action? callback = null,
-            string name = "")
-        {
-            _entity = default;
-
-            InitObserver(
-                true,
-                BindingContext.ObserverActionPointer,
-                ref callback,
-                ref world,
-                ref filterBuilder,
-                ref observerBuilder,
-                ref name
-            );
-        }
-
-        /// <summary>
-        ///     Creates an observer for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="observerBuilder"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Observer(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            ObserverBuilder observerBuilder = default,
-            Ecs.IterCallback? callback = null,
-            string name = "")
-        {
-            _entity = default;
-
-            InitObserver(
-                true,
-                BindingContext.ObserverIterPointer,
-                ref callback,
-                ref world,
-                ref filterBuilder,
-                ref observerBuilder,
-                ref name
-            );
-        }
-
-        /// <summary>
-        ///     Creates an observer for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="observerBuilder"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Observer(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            ObserverBuilder observerBuilder = default,
-            Ecs.EachEntityCallback? callback = null,
-            string name = "")
-        {
-            _entity = default;
-
-            InitObserver(
-                true,
-                BindingContext.ObserverEachEntityPointer,
-                ref callback,
-                ref world,
-                ref filterBuilder,
-                ref observerBuilder,
-                ref name
-            );
-        }
-
-        /// <summary>
-        ///     Creates an observer for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="observerBuilder"></param>
-        /// <param name="callback"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Observer(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            ObserverBuilder observerBuilder = default,
-            Ecs.EachIndexCallback? callback = null,
-            string name = "")
-        {
-            _entity = default;
-
-            InitObserver(
-                true,
-                BindingContext.ObserverEachIndexPointer,
-                ref callback,
-                ref world,
-                ref filterBuilder,
-                ref observerBuilder,
-                ref name
-            );
-        }
-
-        /// <summary>
         ///     Gets an observer from the provided world an entity.
         /// </summary>
         /// <param name="world"></param>
@@ -153,47 +35,21 @@ namespace Flecs.NET.Core
             _entity = new Entity(world, entity);
         }
 
-        internal ref Observer InitObserver<T>(
-            bool storeFuncPtr,
-            IntPtr internalCallback,
-            ref T? userCallback,
-            ref ecs_world_t* world,
-            ref FilterBuilder filterBuilder,
-            ref ObserverBuilder observerBuilder,
-            ref string name) where T : Delegate
+        /// <summary>
+        ///     Creates an observer from an entity.
+        /// </summary>
+        /// <param name="entity"></param>
+        public Observer(Entity entity)
         {
-            if (userCallback == null)
-                throw new ArgumentNullException(nameof(userCallback), "User provided observer callback is null");
+            _entity = entity;
+        }
 
-            using NativeString nativeName = (NativeString)name;
-
-            ecs_entity_desc_t entityDesc = default;
-            entityDesc.name = nativeName;
-            entityDesc.sep = BindingContext.DefaultSeparator;
-            entityDesc.root_sep = BindingContext.DefaultRootSeparator;
-
-            BindingContext.ObserverContext* observerContext = Memory.Alloc<BindingContext.ObserverContext>(1);
-            observerContext[0] = observerBuilder.ObserverContext;
-            BindingContext.SetCallback(ref observerContext->Iterator, userCallback, storeFuncPtr);
-
-            ecs_observer_desc_t* observerDesc =
-                (ecs_observer_desc_t*)Unsafe.AsPointer(ref observerBuilder.ObserverDesc);
-
-            Ecs.Assert(observerBuilder.EventCount != 0,
-                "Observer cannot have zero events. Use ObserverBuilder.Event() to add events.");
-
-            observerDesc->entity = ecs_entity_init(world, &entityDesc);
-            observerDesc->filter = filterBuilder.Desc;
-            observerDesc->filter.terms_buffer = filterBuilder.Terms.Data;
-            observerDesc->filter.terms_buffer_count = filterBuilder.Terms.Count;
-            observerDesc->binding_ctx_free = BindingContext.ObserverContextFreePointer;
-            observerDesc->binding_ctx = observerContext;
-            observerDesc->callback = internalCallback;
-
-            _entity = new Entity(world, ecs_observer_init(world, observerDesc));
-            filterBuilder.Dispose();
-
-            return ref this;
+        /// <summary>
+        ///     Disposes this observer.
+        /// </summary>
+        public void Dispose()
+        {
+            Destruct();
         }
 
         /// <summary>
@@ -247,19 +103,21 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts a <see cref="Observer"/> to a <see cref="ulong"/>.
-        /// </summary>
-        /// <returns></returns>
-        public ulong ToUInt64()
-        {
-            return Entity;
-        }
-
-        /// <summary>
+        ///     Converts an <see cref="Observer"/> instance to its entity id.
         /// </summary>
         /// <param name="observer"></param>
         /// <returns></returns>
         public static implicit operator ulong(Observer observer)
+        {
+            return ToUInt64(observer);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Observer"/> instance to its entity id.
+        /// </summary>
+        /// <param name="observer"></param>
+        /// <returns></returns>
+        public static ulong ToUInt64(Observer observer)
         {
             return observer.Entity;
         }
@@ -269,7 +127,6 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public bool Equals(Observer other)
         {
             return Entity == other.Entity;
@@ -280,7 +137,6 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override bool Equals(object? obj)
         {
             return obj is Observer other && Equals(other);
@@ -290,7 +146,6 @@ namespace Flecs.NET.Core
         ///     Returns the hash code of the <see cref="Observer"/>.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override int GetHashCode()
         {
             return Entity.GetHashCode();

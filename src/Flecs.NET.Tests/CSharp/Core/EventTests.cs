@@ -1,10 +1,9 @@
 using Flecs.NET.Core;
 using Xunit;
-using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Tests.CSharp.Core
 {
-    public unsafe class EventTests
+    public class EventTests
     {
         public EventTests()
         {

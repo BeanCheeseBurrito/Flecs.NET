@@ -15,17 +15,15 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void OnAdd2Terms()
+        private void _2TermsOnAdd()
         {
             using World world = World.Create();
 
             int count = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<Position>().Term<Velocity>(),
-                observer: world.ObserverBuilder().Event(EcsOnAdd),
-                callback: it => { count += it.Count(); }
-            );
+            world.Observer<Position, Velocity>()
+                .Event(Ecs.OnAdd)
+                .Each((ref Position p, ref Velocity v) => { count++; });
 
             Entity e = world.Entity();
             Assert.Equal(0, count);
@@ -38,30 +36,22 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void OnRemove2Terms()
+        private void _2TermsOnRemove()
         {
             using World world = World.Create();
 
             int count = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<Position>().Term<Velocity>(),
-                observer: world.ObserverBuilder().Event(EcsOnRemove),
-                callback: it =>
+            world.Observer<Position, Velocity>()
+                .Event(Ecs.OnRemove)
+                .Each((ref Position p, ref Velocity v) =>
                 {
-                    Column<Position> p = it.Field<Position>(1);
-                    Column<Velocity> v = it.Field<Velocity>(2);
-
-                    foreach (int i in it)
-                    {
-                        count++;
-                        Assert.Equal(10, p[i].X);
-                        Assert.Equal(20, p[i].Y);
-                        Assert.Equal(1, v[i].X);
-                        Assert.Equal(2, v[i].Y);
-                    }
-                }
-            );
+                    count++;
+                    Assert.Equal(10, p.X);
+                    Assert.Equal(20, p.Y);
+                    Assert.Equal(1, v.X);
+                    Assert.Equal(2, v.Y);
+                });
 
             Entity e = world.Entity();
             Assert.Equal(0, count);
@@ -80,30 +70,22 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void OnSet2Terms()
+        private void _2TermsOnSet()
         {
             using World world = World.Create();
 
             int count = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<Position>().Term<Velocity>(),
-                observer: world.ObserverBuilder().Event(EcsOnSet),
-                callback: it =>
+            world.Observer<Position, Velocity>()
+                .Event(Ecs.OnSet)
+                .Each((ref Position p, ref Velocity v) =>
                 {
-                    Column<Position> p = it.Field<Position>(1);
-                    Column<Velocity> v = it.Field<Velocity>(2);
-
-                    foreach (int i in it)
-                    {
-                        count++;
-                        Assert.Equal(10, p[i].X);
-                        Assert.Equal(20, p[i].Y);
-                        Assert.Equal(1, v[i].X);
-                        Assert.Equal(2, v[i].Y);
-                    }
-                }
-            );
+                    count++;
+                    Assert.Equal(10, p.X);
+                    Assert.Equal(20, p.Y);
+                    Assert.Equal(1, v.X);
+                    Assert.Equal(2, v.Y);
+                });
 
             Entity e = world.Entity();
             Assert.Equal(0, count);
@@ -116,30 +98,22 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void OnUnset2Terms()
+        private void _2TermsUnSet()
         {
             using World world = World.Create();
 
             int count = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<Position>().Term<Velocity>(),
-                observer: world.ObserverBuilder().Event(EcsUnSet),
-                callback: it =>
+            world.Observer<Position, Velocity>()
+                .Event(Ecs.UnSet)
+                .Each((ref Position p, ref Velocity v) =>
                 {
-                    Column<Position> p = it.Field<Position>(1);
-                    Column<Velocity> v = it.Field<Velocity>(2);
-
-                    foreach (int i in it)
-                    {
-                        count++;
-                        Assert.Equal(10, p[i].X);
-                        Assert.Equal(20, p[i].Y);
-                        Assert.Equal(1, v[i].X);
-                        Assert.Equal(2, v[i].Y);
-                    }
-                }
-            );
+                    count++;
+                    Assert.Equal(10, p.X);
+                    Assert.Equal(20, p.Y);
+                    Assert.Equal(1, v.X);
+                    Assert.Equal(2, v.Y);
+                });
 
             Entity e = world.Entity();
             Assert.Equal(0, count);
@@ -158,7 +132,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void OnAdd10Terms()
+        private void _10Terms()
         {
             using World world = World.Create();
 
@@ -166,27 +140,25 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity();
 
-            world.Observer(
-                filter: world.FilterBuilder()
-                    .Term<TagA>()
-                    .Term<TagB>()
-                    .Term<TagC>()
-                    .Term<TagD>()
-                    .Term<TagE>()
-                    .Term<TagF>()
-                    .Term<TagG>()
-                    .Term<TagH>()
-                    .Term<TagI>()
-                    .Term<TagJ>(),
-                observer: world.ObserverBuilder().Event(EcsOnAdd),
-                callback: it =>
+            world.Observer()
+                .Event(Ecs.OnAdd)
+                .Term<TagA>()
+                .Term<TagB>()
+                .Term<TagC>()
+                .Term<TagD>()
+                .Term<TagE>()
+                .Term<TagF>()
+                .Term<TagG>()
+                .Term<TagH>()
+                .Term<TagI>()
+                .Term<TagJ>()
+                .Iter((Iter it) =>
                 {
                     Assert.Equal(1, it.Count());
                     Assert.Equal(e, it.Entity(0));
                     Assert.Equal(10, it.FieldCount());
                     count++;
-                }
-            );
+                });
 
             e.Add<TagA>()
                 .Add<TagB>()
@@ -203,7 +175,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void OnAdd20Terms()
+        private void _20Terms()
         {
             using World world = World.Create();
 
@@ -211,37 +183,35 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity();
 
-            world.Observer(
-                filter: world.FilterBuilder()
-                    .Term<TagA>()
-                    .Term<TagB>()
-                    .Term<TagC>()
-                    .Term<TagD>()
-                    .Term<TagE>()
-                    .Term<TagF>()
-                    .Term<TagG>()
-                    .Term<TagH>()
-                    .Term<TagI>()
-                    .Term<TagJ>()
-                    .Term<TagK>()
-                    .Term<TagL>()
-                    .Term<TagM>()
-                    .Term<TagN>()
-                    .Term<TagO>()
-                    .Term<TagP>()
-                    .Term<TagQ>()
-                    .Term<TagR>()
-                    .Term<TagS>()
-                    .Term<TagT>(),
-                observer: world.ObserverBuilder().Event(EcsOnAdd),
-                callback: it =>
+            world.Observer()
+                .Event(Ecs.OnAdd)
+                .Term<TagA>()
+                .Term<TagB>()
+                .Term<TagC>()
+                .Term<TagD>()
+                .Term<TagE>()
+                .Term<TagF>()
+                .Term<TagG>()
+                .Term<TagH>()
+                .Term<TagI>()
+                .Term<TagJ>()
+                .Term<TagK>()
+                .Term<TagL>()
+                .Term<TagM>()
+                .Term<TagN>()
+                .Term<TagO>()
+                .Term<TagP>()
+                .Term<TagQ>()
+                .Term<TagR>()
+                .Term<TagS>()
+                .Term<TagT>()
+                .Iter((Iter it) =>
                 {
                     Assert.Equal(1, it.Count());
                     Assert.Equal(e, it.Entity(0));
                     Assert.Equal(20, it.FieldCount());
                     count++;
-                }
-            );
+                });
 
             e.Add<TagA>()
                 .Add<TagB>()
@@ -268,7 +238,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void Iter2Entities()
+        private void _2EntitiesIter()
         {
             using World world = World.Create();
 
@@ -278,13 +248,10 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
             Entity last = default;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<Position>(),
-                observer: world.ObserverBuilder().Event(EcsOnSet),
-                callback: it =>
+            world.Observer<Position>()
+                .Event(Ecs.OnSet)
+                .Iter((Iter it, Column<Position> p) =>
                 {
-                    Column<Position> p = it.Field<Position>(1);
-
                     foreach (int i in it)
                     {
                         count++;
@@ -305,8 +272,7 @@ namespace Flecs.NET.Tests.Cpp
 
                         last = it.Entity(i);
                     }
-                }
-            );
+                });
 
             e1.Set(new Position { X = 10, Y = 20 });
             Assert.Equal(1, count);
@@ -318,7 +284,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void TableColumn2Entities()
+        private void _2EntitiesTableColumn()
         {
             using World world = World.Create();
 
@@ -328,10 +294,9 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
             Entity last = default;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<Position>(),
-                observer: world.ObserverBuilder().Event(EcsOnSet),
-                callback: it =>
+            world.Observer<Position>()
+                .Event(Ecs.OnSet)
+                .Iter((Iter it) =>
                 {
                     Column<Position> p = it.Range().Get<Position>();
 
@@ -356,8 +321,7 @@ namespace Flecs.NET.Tests.Cpp
 
                         last = it.Entity(i);
                     }
-                }
-            );
+                });
 
             e1.Set(new Position { X = 10, Y = 20 });
             Assert.Equal(1, count);
@@ -366,6 +330,72 @@ namespace Flecs.NET.Tests.Cpp
             e2.Set(new Position { X = 30, Y = 40 });
             Assert.Equal(2, count);
             Assert.True(last == e2);
+        }
+
+        [Fact]
+        private void _2EntitiesEach()
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity();
+            Entity e2 = world.Entity();
+
+            int count = 0;
+            Entity last = default;
+
+            world.Observer<Position>()
+                .Event(Ecs.OnSet)
+                .Each((Entity e, ref Position p) =>
+                {
+                    count++;
+
+                    if (e == e1)
+                    {
+                        Assert.Equal(10, p.X);
+                        Assert.Equal(20, p.Y);
+                    }
+                    else if (e == e2)
+                    {
+                        Assert.Equal(30, p.X);
+                        Assert.Equal(40, p.Y);
+                    }
+                    else
+                    {
+                        Assert.True(false);
+                    }
+
+                    last = e;
+                });
+
+            e1.Set(new Position { X = 10, Y = 20 });
+            Assert.Equal(1, count);
+            Assert.True(last == e1);
+
+            e2.Set(new Position { X = 30, Y = 40 });
+            Assert.Equal(2, count);
+            Assert.True(last == e2);
+        }
+
+        [Fact]
+        private void CreateWithNoTemplateArgs()
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity();
+
+            int count = 0;
+
+            world.Observer()
+                .Term<Position>()
+                .Event(Ecs.OnAdd)
+                .Each((Entity e) =>
+                {
+                    Assert.True(e == e1);
+                    count++;
+                });
+
+            e1.Set(new Position { X = 10, Y = 20 });
+            Assert.Equal(1, count);
         }
 
         [Fact]
@@ -379,26 +409,18 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<TagA>(),
-                observer: world.ObserverBuilder()
-                    .Event(EcsOnAdd)
-                    .YieldExisting(),
-                callback: it =>
+            world.Observer<TagA>()
+                .Event(Ecs.OnAdd)
+                .YieldExisting()
+                .Each((Entity e) =>
                 {
-                    foreach (int i in it)
-                    {
-                        Entity e = it.Entity(i);
-
-                        if (e == e1)
-                            count++;
-                        if (e == e2)
-                            count += 2;
-                        if (e == e3)
-                            count += 3;
-                    }
-                }
-            );
+                    if (e == e1)
+                        count++;
+                    if (e == e2)
+                        count += 2;
+                    if (e == e3)
+                        count += 3;
+                });
 
             Assert.Equal(6, count);
         }
@@ -416,28 +438,18 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder()
-                    .Term<TagA>()
-                    .Term<TagB>(),
-                observer: world.ObserverBuilder()
-                    .Event(EcsOnAdd)
-                    .YieldExisting(),
-                callback: it =>
+            world.Observer<TagA, TagB>()
+                .Event(Ecs.OnAdd)
+                .YieldExisting()
+                .Each((Entity e) =>
                 {
-                    foreach (int i in it)
-                    {
-                        Entity e = it.Entity(i);
-
-                        if (e == e1)
-                            count++;
-                        if (e == e2)
-                            count += 2;
-                        if (e == e3)
-                            count += 3;
-                    }
-                }
-            );
+                    if (e == e1)
+                        count++;
+                    if (e == e2)
+                        count += 2;
+                    if (e == e3)
+                        count += 3;
+                });
 
             Assert.Equal(6, count);
         }
@@ -452,11 +464,9 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            observer = world.Observer(
-                filter: world.FilterBuilder().Term<TagA>(),
-                observer: world.ObserverBuilder().Event(EcsOnAdd),
-                callback: it => { count += it.Count(); }
-            );
+            observer = world.Observer<TagA>()
+                .Event(Ecs.OnAdd)
+                .Each((Entity e) => { count++; });
 
             Assert.True(observer != 0);
 
@@ -470,11 +480,9 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Observer observer = world.Observer(
-                filter: world.FilterBuilder().Term<TagA>(),
-                observer: world.ObserverBuilder().Event(EcsOnAdd),
-                callback: (Iter it) => { }
-            );
+            Observer observer = world.Observer<TagA>()
+                .Event(Ecs.OnAdd)
+                .Each((Entity e) => { });
 
             ulong entity = observer;
 
@@ -489,11 +497,9 @@ namespace Flecs.NET.Tests.Cpp
 
             int invoked = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<Position>(),
-                observer: world.ObserverBuilder().Event(EcsOnAdd),
-                callback: it => { invoked += it.Count(); }
-            );
+            world.Observer<Position>()
+                .Event(Ecs.OnAdd)
+                .Each((Entity e, ref Position p) => { invoked++; });
 
             world.Entity()
                 .Add<Position>();
@@ -508,11 +514,9 @@ namespace Flecs.NET.Tests.Cpp
 
             int invoked = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<Position>(),
-                observer: world.ObserverBuilder().Event(EcsOnRemove),
-                callback: it => { invoked += it.Count(); }
-            );
+            world.Observer<Position>()
+                .Event(Ecs.OnRemove)
+                .Each((Entity e, ref Position p) => { invoked++; });
 
             Entity e = world.Entity()
                 .Add<Position>();
@@ -531,11 +535,9 @@ namespace Flecs.NET.Tests.Cpp
 
             int invoked = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<MyTag>(),
-                observer: world.ObserverBuilder().Event(EcsOnAdd),
-                callback: it => { invoked += it.Count(); }
-            );
+            world.Observer<MyTag>()
+                .Event(Ecs.OnAdd)
+                .Iter((Iter it) => { invoked++; });
 
             world.Entity()
                 .Add<MyTag>();
@@ -550,11 +552,26 @@ namespace Flecs.NET.Tests.Cpp
 
             int invoked = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<MyTag>(),
-                observer: world.ObserverBuilder().Event(EcsOnAdd),
-                callback: it => { invoked += it.Count(); }
-            );
+            world.Observer<MyTag>()
+                .Event(Ecs.OnAdd)
+                .Iter((Iter it) => { invoked++; });
+
+            world.Entity()
+                .Add<MyTag>();
+
+            Assert.Equal(1, invoked);
+        }
+
+        [Fact]
+        private void OnAddTagEach()
+        {
+            using World world = World.Create();
+
+            int invoked = 0;
+
+            world.Observer<MyTag>()
+                .Event(Ecs.OnAdd)
+                .Each((Entity e) => { invoked++; });
 
             world.Entity()
                 .Add<MyTag>();
@@ -571,11 +588,10 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Tag>();
 
-            world.Observer(
-                filter: world.FilterBuilder().Expr("Tag"),
-                observer: world.ObserverBuilder().Event(EcsOnAdd),
-                callback: it => { invoked += it.Count(); }
-            );
+            world.Observer()
+                .Expr("Tag")
+                .Event(Ecs.OnAdd)
+                .Each((Entity e) => { invoked++; });
 
             Entity e = world.Entity().Add<Tag>();
 
@@ -596,13 +612,11 @@ namespace Flecs.NET.Tests.Cpp
 
             int invoked = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder()
-                    .Term(tagA)
-                    .Term(tagB).Filter(),
-                observer: world.ObserverBuilder().Event(EcsOnAdd),
-                callback: it => { invoked += it.Count(); }
-            );
+            world.Observer()
+                .Term(tagA)
+                .Term(tagB).Filter()
+                .Event(Ecs.OnAdd)
+                .Each((Entity e) => { invoked++; });
 
             Entity e = world.Entity();
             Assert.Equal(0, invoked);
@@ -633,23 +647,21 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<Position>(),
-                observer: world.ObserverBuilder()
-                    .Event(EcsOnAdd)
-                    .Run(it =>
+            world.Observer<Position>()
+                .Event(EcsOnAdd)
+                .Run(it =>
+                {
+                    while (ecs_iter_next(it) == 1)
                     {
-                        while (ecs_iter_next(it) == 1)
-                        {
 #if NET5_0_OR_GREATER
-                            ((delegate* unmanaged<ecs_iter_t*, void>)it->callback)(it);
+                        ((delegate* unmanaged<ecs_iter_t*, void>)it->callback)(it);
 #else
-                            Marshal.GetDelegateForFunctionPointer<Ecs.IterAction>(it->callback)(it);
+                        Marshal.GetDelegateForFunctionPointer<Ecs.IterAction>(it->callback)(it);
 #endif
-                        }
-                    }),
-                callback: it => { count += it.Count(); }
-            );
+                    }
+                })
+                .Each((ref Position p) => { count++; }
+                );
 
             Entity e = world.Entity();
             Assert.Equal(0, count);
@@ -669,11 +681,9 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            Observer observer = world.Observer(
-                filter: world.FilterBuilder().Term<Position>(),
-                observer: world.ObserverBuilder().Event(EcsOnSet),
-                callback: (Iter it) => { }
-            );
+            Observer observer = world.Observer<Position>()
+                .Event(Ecs.OnSet)
+                .Each((Entity e, ref Position p) => { });
 
             using Filter filter = observer.Filter();
 
@@ -697,11 +707,9 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<Position>(),
-                observer: world.ObserverBuilder().Event(EcsOnSet),
-                callback: it => { count += it.Count(); }
-            );
+            Observer observer = world.Observer<Position>()
+                .Event(Ecs.OnSet)
+                .Each((Entity e, ref Position p) => { count++; });
 
             Entity e = world.Entity();
             Assert.Equal(0, count);
@@ -717,11 +725,9 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder().Term<Position>(),
-                observer: world.ObserverBuilder().Event(EcsOnSet),
-                callback: it => { count += it.Count(); }
-            );
+            Observer observer = world.Observer<Position>()
+                .Event(Ecs.OnSet)
+                .Each((Entity e, ref Position p) => { count++; });
 
             Entity e = world.Entity();
             Assert.Equal(0, count);
@@ -742,23 +748,15 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer(
-                filter: world.FilterBuilder()
-                    .Term<Position>().Singleton(),
-                observer: world.ObserverBuilder()
-                    .Event(EcsOnSet),
-                callback: it =>
+            Observer observer = world.Observer<Position>()
+                .TermAt(1).Singleton()
+                .Event(Ecs.OnSet)
+                .Each((ref Position p) =>
                 {
-                    Column<Position> p = it.Field<Position>(1);
-
-                    foreach (int i in it)
-                    {
-                        Assert.Equal(10, p[i].X);
-                        Assert.Equal(20, p[i].Y);
-                        count++;
-                    }
-                }
-            );
+                    Assert.Equal(10, p.X);
+                    Assert.Equal(20, p.Y);
+                    count++;
+                });
 
             world.Set(new Position { X = 10, Y = 20 });
 
@@ -774,23 +772,15 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity tgt = world.Entity();
 
-            world.Observer(
-                filter: world.FilterBuilder()
-                    .Term<Position>(tgt).Singleton(),
-                observer: world.ObserverBuilder()
-                    .Event(EcsOnSet),
-                callback: it =>
+            Observer observer = world.Observer<Position>()
+                .TermAt(1).Second(tgt).Singleton()
+                .Event(Ecs.OnSet)
+                .Each((ref Position p) =>
                 {
-                    Column<Position> p = it.Field<Position>(1);
-
-                    foreach (int i in it)
-                    {
-                        Assert.Equal(10, p[i].X);
-                        Assert.Equal(20, p[i].Y);
-                        count++;
-                    }
-                }
-            );
+                    Assert.Equal(10, p.X);
+                    Assert.Equal(20, p.Y);
+                    count++;
+                });
 
             world.Set(tgt, new Position { X = 10, Y = 20 });
 
@@ -807,23 +797,15 @@ namespace Flecs.NET.Tests.Cpp
             Entity tgt1 = world.Entity();
             Entity tgt2 = world.Entity();
 
-            world.Observer(
-                filter: world.FilterBuilder()
-                    .Term<Position>(EcsWildcard).Singleton(),
-                observer: world.ObserverBuilder()
-                    .Event(EcsOnSet),
-                callback: it =>
+            Observer observer = world.Observer<Position>()
+                .TermAt(1).Second(Ecs.Wildcard).Singleton()
+                .Event(Ecs.OnSet)
+                .Each((ref Position p) =>
                 {
-                    Column<Position> p = it.Field<Position>(1);
-
-                    foreach (int i in it)
-                    {
-                        Assert.Equal(10, p[i].X);
-                        Assert.Equal(20, p[i].Y);
-                        count++;
-                    }
-                }
-            );
+                    Assert.Equal(10, p.X);
+                    Assert.Equal(20, p.Y);
+                    count++;
+                });
 
             world.Set(tgt1, new Position { X = 10, Y = 20 });
             Assert.Equal(1, count);
@@ -841,13 +823,10 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity tgt = world.Entity();
 
-            world.Observer(
-                filter: world.FilterBuilder()
-                    .With<Position>(tgt).Singleton(),
-                observer: world.ObserverBuilder()
-                    .Event(EcsOnSet),
-                callback: it => { count += it.Count(); }
-            );
+            Observer observer = world.Observer()
+                .Term<Position>(tgt).Singleton()
+                .Event(Ecs.OnSet)
+                .Each((Entity entity) => { count++; });
 
             world.Set(tgt, new Position { X = 10, Y = 20 });
             Assert.Equal(1, count);
@@ -862,14 +841,10 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set<Position>(default);
             Entity e3 = world.Entity().Set<Position>(default);
 
-            world.Observer(
-                filter: world.FilterBuilder()
-                    .With<Position>(),
-                observer: world.ObserverBuilder()
-                    .Event(EcsOnAdd)
-                    .YieldExisting(),
-                callback: e => { e.Add<Velocity>(); }
-            );
+            Observer observer = world.Observer<Position>()
+                .Event(Ecs.OnAdd)
+                .YieldExisting()
+                .Each((Entity e) => { e.Add<Velocity>(); });
 
             Assert.True(e1.Has<Position>());
             Assert.True(e1.Has<Velocity>());
@@ -890,15 +865,10 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set<Position>(default).Set<Mass>(default);
             Entity e3 = world.Entity().Set<Position>(default).Set<Mass>(default);
 
-            world.Observer(
-                filter: world.FilterBuilder()
-                    .With<Position>()
-                    .With<Mass>(),
-                observer: world.ObserverBuilder()
-                    .Event(EcsOnAdd)
-                    .YieldExisting(),
-                callback: e => { e.Add<Velocity>(); }
-            );
+            Observer observer = world.Observer<Position, Mass>()
+                .Event(Ecs.OnAdd)
+                .YieldExisting()
+                .Each((Entity e) => { e.Add<Velocity>(); });
 
             Assert.True(e1.Has<Position>());
             Assert.True(e1.Has<Mass>());

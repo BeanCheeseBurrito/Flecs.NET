@@ -24,51 +24,6 @@ namespace Flecs.NET.Core
         public ref ecs_query_t* Handle => ref _handle;
 
         /// <summary>
-        ///     Creates a query for the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="name"></param>
-        /// <param name="filterBuilder"></param>
-        /// <param name="queryBuilder"></param>
-        /// <exception cref="InvalidOperationException"></exception>
-        public Query(
-            ecs_world_t* world,
-            FilterBuilder filterBuilder = default,
-            QueryBuilder queryBuilder = default,
-            string name = "")
-        {
-            _world = world;
-
-            BindingContext.QueryContext* queryContext = Memory.Alloc<BindingContext.QueryContext>(1);
-            queryContext[0] = queryBuilder.QueryContext;
-
-            ecs_query_desc_t* queryDesc = &queryBuilder.QueryDesc;
-            queryDesc->filter = filterBuilder.Desc;
-            queryDesc->filter.terms_buffer = filterBuilder.Terms.Data;
-            queryDesc->filter.terms_buffer_count = filterBuilder.Terms.Count;
-            queryDesc->binding_ctx = queryContext;
-            queryDesc->binding_ctx_free = BindingContext.QueryContextFreePointer;
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                using NativeString nativeName = (NativeString)name;
-
-                ecs_entity_desc_t entityDesc = default;
-                entityDesc.name = nativeName;
-                entityDesc.sep = BindingContext.DefaultSeparator;
-                entityDesc.root_sep = BindingContext.DefaultRootSeparator;
-                queryDesc->filter.entity = ecs_entity_init(world, &entityDesc);
-            }
-
-            _handle = ecs_query_init(world, queryDesc);
-
-            if (_handle == null)
-                throw new InvalidOperationException("Query failed to init");
-
-            filterBuilder.Dispose();
-        }
-
-        /// <summary>
         ///     Creates a query from a world and handle.
         /// </summary>
         /// <param name="world"></param>

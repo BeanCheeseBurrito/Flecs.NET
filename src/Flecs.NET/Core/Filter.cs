@@ -24,47 +24,21 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     A pointer to the filter.
         /// </summary>
+        // TODO: Fix GC hole.
         public ecs_filter_t* Handle => _isOwned ? (ecs_filter_t*)Unsafe.AsPointer(ref _filter) : _filterPtr;
 
         /// <summary>
         ///     Creates a filter.
         /// </summary>
         /// <param name="world"></param>
-        /// <param name="name"></param>
-        /// <param name="filterBuilder"></param>
+        /// <param name="filter"></param>
         /// <exception cref="InvalidOperationException"></exception>
-        public Filter(ecs_world_t* world, FilterBuilder filterBuilder = default, string name = "")
+        public Filter(ecs_world_t* world, ecs_filter_t filter)
         {
-            Ecs.Assert(world == filterBuilder.World, "Worlds are different");
-
-            _filter = ECS_FILTER_INIT;
-            _filterPtr = default;
             _world = world;
+            _filter = filter;
             _isOwned = true;
-
-            ecs_filter_desc_t* filterDesc = &filterBuilder.FilterDesc;
-            filterDesc->terms_buffer = filterBuilder.Terms.Data;
-            filterDesc->terms_buffer_count = filterBuilder.Terms.Count;
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                using NativeString nativeName = (NativeString)name;
-
-                ecs_entity_desc_t entityDesc = default;
-                entityDesc.name = nativeName;
-                entityDesc.sep = BindingContext.DefaultSeparator;
-                entityDesc.root_sep = BindingContext.DefaultRootSeparator;
-                filterDesc->entity = ecs_entity_init(world, &entityDesc);
-            }
-
-            fixed (ecs_filter_t* filter = &_filter)
-            {
-                filterDesc->storage = filter;
-                if (ecs_filter_init(world, filterDesc) == null)
-                    throw new InvalidOperationException("Failed to init filter");
-            }
-
-            filterBuilder.Dispose();
+            _filterPtr = default;
         }
 
         /// <summary>

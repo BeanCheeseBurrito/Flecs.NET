@@ -17,43 +17,43 @@
 // If a prefab has children, adding the IsA relationship instantiates the prefab
 // children for the instance (see hierarchy example).
 
-#if Cpp_Prefabs_Basics
-
 using Flecs.NET.Core;
 
-using World world = World.Create();
+// Components
+file record struct Defense(float Value);
 
-// Create a SpaceShip prefab with a Defense component.
-Entity spaceShip = world.Prefab("SpaceShip")
-    .Set(new Defense { Value = 50 });
-
-// Create a prefab instance
-Entity inst = world.Entity("my_spaceship").IsA(spaceShip);
-
-// Because of the IsA relationship, the instance now shares the Defense
-// component with the prefab, and can be retrieved as a regular component:
-ref readonly Defense dInstance = ref inst.Get<Defense>();
-Console.WriteLine($"Defense: {dInstance.Value}");
-
-// Because the component is shared, changing the value on the prefab will
-// also change the value for the instance:
-spaceShip.Set(new Defense { Value = 100 });
-Console.WriteLine($"Defense after set: {dInstance.Value}");
-
-// Prefab components can be iterated like regular components:
-world.Each((Entity e, ref Defense d) =>
+public static class Cpp_Prefabs_Basics
 {
-    Console.WriteLine($"{e.Path()}: {d.Value}");
-});
+    public static void Main()
+    {
+        using World world = World.Create();
 
-public struct Defense
-{
-    public double Value { get; set; }
+        // Create a SpaceShip prefab with a Defense component.
+        Entity spaceShip = world.Prefab("SpaceShip")
+            .Set<Defense>(new(50));
+
+        // Create a prefab instance
+        Entity inst = world.Entity("MySpaceship").IsA(spaceShip);
+
+        // Because of the IsA relationship, the instance now shares the Defense
+        // component with the prefab, and can be retrieved as a regular component:
+        ref readonly Defense dInstance = ref inst.Get<Defense>();
+        Console.WriteLine($"Defense: {dInstance.Value}");
+
+        // Because the component is shared, changing the value on the prefab will
+        // also change the value for the instance:
+        spaceShip.Set<Defense>(new(100));
+        Console.WriteLine($"Defense after set: {dInstance.Value}");
+
+        // Prefab components can be iterated like regular components:
+        world.Each((Entity e, ref Defense d) =>
+        {
+            Console.WriteLine($"{e.Path()}: {d.Value}");
+        });
+    }
 }
-
-#endif
 
 // Output:
 // Defense: 50
 // Defense after set: 100
-// my_spaceship: 100
+// MySpaceship: 100

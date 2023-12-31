@@ -14,37 +14,24 @@
 
 ## Show me the code!
 ```csharp
+// Copy, paste, and run in a .NET project!
+
 using Flecs.NET.Core;
 
-// Main Function
-using World world = World.Create();
+using World ecs = World.Create();
 
-Entity entity = world.Entity()
+Entity entity = ecs.Entity()
     .Set<Position>(new(10, 20))
     .Set<Velocity>(new(1, 2));
 
-Query query = world.Query(filter: world.FilterBuilder<Position, Velocity>());
-
-query.Each((ref Position p, ref Velocity v) =>
+ecs.Each((ref Position p, ref Velocity v) =>
 {
     p.X += v.X;
     p.Y += v.Y;
 });
 
-return 0;
-
-// Components
-public struct Position(float x, float y)
-{
-    public float X { get; set; } = x;
-    public float Y { get; set; } = y;
-}
-
-public struct Velocity(float x, float y)
-{
-    public float X { get; set; } = x;
-    public float Y { get; set; } = y;
-}
+public record struct Position(float X, float Y);
+public record struct Velocity(float X, float Y);
 ```
 
 ## Overview

@@ -16,84 +16,86 @@
 // the query. A rule that checks a fact does not return entities, but will
 // instead return the reasons why a fact is true (if it is true).
 
-#if Cpp_Rules_Facts
-
 using Flecs.NET.Core;
 
-using World world = World.Create();
+// Tags
+file struct Likes;
 
-Entity bob = world.Entity("Bob");
-Entity alice = world.Entity("Alice");
-Entity jane = world.Entity("Jane");
-Entity john = world.Entity("John");
+public static class Cpp_Rules_Facts
+{
+    public static void Main()
+    {
+        using World world = World.Create();
 
-bob.Add<Likes>(alice);
-alice.Add<Likes>(bob);
-jane.Add<Likes>(john);
-john.Add<Likes>(jane);
+        Entity bob = world.Entity("Bob");
+        Entity alice = world.Entity("Alice");
+        Entity jane = world.Entity("Jane");
+        Entity john = world.Entity("John");
 
-bob.Add<Likes>(john); // bit of drama
+        bob.Add<Likes>(alice);
+        alice.Add<Likes>(bob);
+        jane.Add<Likes>(john);
+        john.Add<Likes>(jane);
 
-// Create a rule that checks if two entities like each other. By itself this
-// rule is not a fact, but we can use it to check facts by populating both
-// of its variables.
-//
-// The equivalent query in the DSL is:
-//  Likes($X, $Y), Likes($Y, $X)
-//
-// Instead of using variables we could have created a rule that referred the
-// entities directly, but then we would have to create a rule for each
-// fact, vs reusing a single rule for multiple facts.
-Rule friends = world.Rule(
-    filter: world.FilterBuilder()
-        .With<Likes>("$Y").Src("$X")
-        .With<Likes>("$X").Src("$Y")
-);
+        bob.Add<Likes>(john); // bit of drama
 
-int xVar = friends.FindVar("X");
-int yVar = friends.FindVar("Y");
+        // Create a rule that checks if two entities like each other. By itself this
+        // rule is not a fact, but we can use it to check facts by populating both
+        // of its variables.
+        //
+        // The equivalent query in the DSL is:
+        //  Likes($X, $Y), Likes($Y, $X)
+        //
+        // Instead of using variables we could have created a rule that referred the
+        // entities directly, but then we would have to create a rule for each
+        // fact, vs reusing a single rule for multiple facts.
+        Rule friends = world.RuleBuilder()
+                .With<Likes>("$Y").Src("$X")
+                .With<Likes>("$X").Src("$Y")
+                .Build();
 
-// Check a few facts
+        int xVar = friends.FindVar("X");
+        int yVar = friends.FindVar("Y");
 
-Console.Write("Are Bob and Alice friends? ");
-Console.WriteLine(
-    friends.Iter()
-        .SetVar(xVar, bob)
-        .SetVar(yVar, alice)
-        .IsTrue()
-);
+        // Check a few facts
 
-Console.Write("Are Bob and John friends? ");
-Console.WriteLine(
-    friends.Iter()
-        .SetVar(xVar, bob)
-        .SetVar(yVar, john)
-        .IsTrue()
-);
+        Console.Write("Are Bob and Alice friends? ");
+        Console.WriteLine(
+            friends.Iter()
+                .SetVar(xVar, bob)
+                .SetVar(yVar, alice)
+                .IsTrue()
+        );
 
-Console.Write("Are Jane and John friends? ");
-Console.WriteLine(
-    friends.Iter()
-        .SetVar(xVar, jane)
-        .SetVar(yVar, john)
-        .IsTrue()
-);
+        Console.Write("Are Bob and John friends? ");
+        Console.WriteLine(
+            friends.Iter()
+                .SetVar(xVar, bob)
+                .SetVar(yVar, john)
+                .IsTrue()
+        );
 
-// It doesn't matter who we assign to X or Y. After the variables are
-// substituted, either yields a fact that is true.
-Console.Write("Are John and Jane friends? ");
-Console.WriteLine(
-    friends.Iter()
-        .SetVar(xVar, john)
-        .SetVar(yVar, jane)
-        .IsTrue()
-);
+        Console.Write("Are Jane and John friends? ");
+        Console.WriteLine(
+            friends.Iter()
+                .SetVar(xVar, jane)
+                .SetVar(yVar, john)
+                .IsTrue()
+        );
 
-friends.Destruct();
+        // It doesn't matter who we assign to X or Y. After the variables are
+        // substituted, either yields a fact that is true.
+        Console.Write("Are John and Jane friends? ");
+        Console.WriteLine(
+            friends.Iter()
+                .SetVar(xVar, john)
+                .SetVar(yVar, jane)
+                .IsTrue()
+        );
 
-public struct Likes { }
-
-#endif
+        friends.Destruct();
+    }
+}
 
 // Output:
 // Are Bob and Alice friends? True

@@ -1,51 +1,42 @@
 // This example shows how to use singleton components in queries.
 
-#if Cpp_Queries_Singleton
-
 using Flecs.NET.Core;
 
-using World world = World.Create();
-
-// Set singleton
-world.Set(new Gravity { Value = 9.81 });
-
-// Set Velocity
-world.Entity("e1").Set(new Velocity { X = 0, Y = 0 });
-world.Entity("e2").Set(new Velocity { X = 0, Y = 1 });
-world.Entity("e3").Set(new Velocity { X = 0, Y = 2 });
-
-// Create query that matches Gravity as singleton
-Query q = world.Query(
-    filter: world.FilterBuilder()
-        .With<Velocity>()
-        .With<Gravity>().Singleton()
-);
-
-// In a query string expression you can use the $ shortcut for singletons:
-//   Velocity, Gravity($)
-q.Each((Iter it, int i) =>
-{
-    Column<Velocity> v = it.Field<Velocity>(1);
-    ref Gravity g = ref it.Single<Gravity>(2);
-
-    v[i].Y += g.Value;
-    Console.WriteLine($"{it.Entity(i)} velocity is ({v[i].X}, {v[i].Y})");
-});
-
 // Singleton component
-public struct Gravity
-{
-    public double Value { get; set; }
-}
+file record struct Gravity(float Value);
 
 // Entity component
-public struct Velocity
-{
-    public double X { get; set; }
-    public double Y { get; set; }
-}
+file record struct Velocity(float X, float Y);
 
-#endif
+public static class Cpp_Queries_Singleton
+{
+    public static void Main()
+    {
+        using World world = World.Create();
+
+        // Set singleton
+        world.Set<Gravity>(new(9.81f));
+
+        // Set Velocity
+        world.Entity("e1").Set<Velocity>(new(0, 0));
+        world.Entity("e2").Set<Velocity>(new(0, 1));
+        world.Entity("e3").Set<Velocity>(new(0, 2));
+
+        // Create query that matches Gravity as singleton
+        Query q = world.QueryBuilder<Velocity, Gravity>()
+            .TermAt(2).Singleton()
+            .Build();
+
+        // In a query string expression you can use the $ shortcut for singletons:
+        //   Velocity, Gravity($)
+        q.Each((Entity e, ref Velocity v, ref Gravity g) =>
+        {
+            Console.WriteLine(v);
+            v.Y += g.Value;
+            Console.WriteLine($"{e} velocity is ({v.X}, {v.Y})");
+        });
+    }
+}
 
 // Output:
 // e1 velocity is (0, 9.81)

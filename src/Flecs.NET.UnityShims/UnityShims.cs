@@ -10,7 +10,9 @@ namespace UnityEditor
 {
     public class EditorApplication
     {
-        public static void ExitPlaymode() { }
+        public static void ExitPlaymode()
+        {
+        }
     }
 }
 
@@ -19,7 +21,9 @@ namespace UnityEngine
     [AttributeUsage(AttributeTargets.Method)]
     public class RuntimeInitializeOnLoadMethodAttribute : Attribute
     {
-        public RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType _) {}
+        public RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType _)
+        {
+        }
     }
 
     public enum RuntimeInitializeLoadType
@@ -34,13 +38,20 @@ namespace UnityEngine
 
     public static class Debug
     {
-        public static void Log(string _) {}
-        public static void LogError(string _) {}
+        public static void Log(string _)
+        {
+        }
+
+        public static void LogError(string _)
+        {
+        }
     }
 }
 
 namespace UnityEngine.Scripting
 {
     [AttributeUsage(AttributeTargets.Assembly)]
-    public class AlwaysLinkAssemblyAttribute : Attribute {}
+    public class AlwaysLinkAssemblyAttribute : Attribute
+    {
+    }
 }

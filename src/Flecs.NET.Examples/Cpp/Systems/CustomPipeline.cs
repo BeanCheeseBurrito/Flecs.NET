@@ -6,35 +6,40 @@
 // phases see the CustomPhases and CustomPhasesNoBuiltIn examples, as this
 // does not require using a custom pipeline.
 
-#if Cpp_Systems_CustomPipeline
-
 using Flecs.NET.Core;
 
-using World world = World.Create();
+// Pipeline tag
+struct Physics;
 
-// Create a pipeline that matches systems with Physics. Note that this
-// pipeline does not require the use of phases (see CustomPhases) or of the
-// DependsOn relationship.
-Pipeline pipeline = world.Pipeline(
-    filter: world.FilterBuilder()
-        .With(Ecs.System) // Mandatory, must always match systems
-        .With<Physics>()
-);
-// Configure the world to use the custom pipeline
-world.SetPipeline(pipeline.Entity);
+public static class Cpp_Systems_CustomPipeline
+{
+    public static void Main()
+    {
+        using World world = World.Create();
 
-// Create system with Physics tag
-world.Routine(
-    routine: world.RoutineBuilder().Kind<Physics>(),
-    callback: (Iter _) => { Console.WriteLine("System ran!"); }
-);
+        // Create a pipeline that matches systems with Physics. Note that this
+        // pipeline does not require the use of phases (see CustomPhases) or of the
+        // DependsOn relationship.
+        Pipeline pipeline = world.Pipeline()
+            .With(Ecs.System) // Mandatory, must always match systems
+            .With<Physics>()
+            .Build();
 
-// Runs the pipeline & system
-world.Progress();
+        // Configure the world to use the custom pipeline
+        world.SetPipeline(pipeline);
 
-public struct Physics { }
+        // Create system with Physics tag
+        world.Routine()
+            .Kind<Physics>()
+            .Iter(() =>
+            {
+                Console.WriteLine("System ran!");
+            });
 
-#endif
+        // Runs the pipeline & system
+        world.Progress();
+    }
+}
 
 // Output:
 //   System ran!

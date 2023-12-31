@@ -1,33 +1,49 @@
-// This example shows how the on_group_create and on_group_delete callbacks can
+// This example shows how the OnGroupCreate and OnGroupDelete callbacks can
 // be used to get notified when a new group is registered for a query. These
 // callbacks make it possible to associate and manage user data attached to
 // groups.
 
-#if Cpp_Queries_GroupByCallbacks
-
 using System.Runtime.InteropServices;
+using Flecs.NET.Bindings;
 using Flecs.NET.Core;
-using static Flecs.NET.Bindings.Native;
 
-unsafe
+// Components
+file record struct Position(float X, float Y);
+
+// Custom type to associate with group
+file record struct GroupCtx(int Counter);
+
+// Dummy tag to put entities in different tables
+file struct Tag;
+
+// Create a relationship to use for the group_by function. Tables will
+// be assigned the relationship target as group id
+file struct Group;
+
+// Targets for the relationship, which will be used as group ids.
+file struct First;
+file struct Second;
+file struct Third;
+
+public static unsafe class Cpp_Queries_GroupByCallbacks
 {
-    using World world = World.Create();
+    public static void Main()
+    {
+        using World world = World.Create();
 
-    // Register components in order so that id for First is lower than Third
-    world.Component<First>();
-    world.Component<Second>();
-    world.Component<Third>();
+        // Register components in order so that id for First is lower than Third
+        world.Component<First>();
+        world.Component<Second>();
+        world.Component<Third>();
 
-    int groupCounter = 0;
+        int groupCounter = 0;
 
-    // Grouped query
-    Query q = world.Query(
-        filter: world.FilterBuilder().Term<Position>(),
-        query: world.QueryBuilder()
+        // Grouped query
+        Query q = world.QueryBuilder<Position>()
             .GroupBy<Group>()
             // Callback invoked when a new group is created
             .OnGroupCreate((
-                ecs_world_t* world,
+                Native.ecs_world_t* world,
                 ulong id,            // id of the group that was created
                 void* groupByArg) => // group_by_ctx parameter in ecs_query_desc_t struct
             {
@@ -41,9 +57,9 @@ unsafe
             })
             // Callback invoked when a group is deleted
             .OnGroupDelete((
-                ecs_world_t* world,
-                ulong id,            // id of the group that was deleted
-                void* ctx,           // group context
+                Native.ecs_world_t* world,
+                ulong id, // id of the group that was deleted
+                void* ctx, // group context
                 void* groupByArg) => // group_by_ctx parameter in ecs_query_desc_t struct
             {
                 World w = new(world);
@@ -52,85 +68,58 @@ unsafe
                 // Free data associated with group
                 NativeMemory.Free(ctx);
             })
-    );
+            .Build();
 
-    // Create entities in 6 different tables with 3 group ids
-    world.Entity().Add<Group, Third>()
-        .Set(new Position { X = 1, Y = 1 });
-    world.Entity().Add<Group, Second>()
-        .Set(new Position { X = 2, Y = 2 });
-    world.Entity().Add<Group, First>()
-        .Set(new Position { X = 3, Y = 3 });
+        // Create entities in 6 different tables with 3 group ids
+        world.Entity().Add<Group, Third>()
+            .Set<Position>(new(1, 1));
+        world.Entity().Add<Group, Second>()
+            .Set<Position>(new(2, 2));
+        world.Entity().Add<Group, First>()
+            .Set<Position>(new(3, 3));
 
-    world.Entity().Add<Group, Third>()
-        .Set(new Position { X = 4, Y = 4 })
-        .Add<Tag>();
-    world.Entity().Add<Group, Second>()
-        .Set(new Position { X = 5, Y = 5 })
-        .Add<Tag>();
-    world.Entity().Add<Group, First>()
-        .Set(new Position { X = 6, Y = 6 })
-        .Add<Tag>();
+        world.Entity().Add<Group, Third>()
+            .Set<Position>(new(4, 4))
+            .Add<Tag>();
+        world.Entity().Add<Group, Second>()
+            .Set<Position>(new(5, 5))
+            .Add<Tag>();
+        world.Entity().Add<Group, First>()
+            .Set<Position>(new(6, 6))
+            .Add<Tag>();
 
-    // The query cache now looks like this:
-    //  - group First:
-    //     - table [Position, (Group, First)]
-    //     - table [Position, Tag, (Group, First)]
-    //
-    //  - group Second:
-    //     - table [Position, (Group, Second)]
-    //     - table [Position, Tag, (Group, Second)]
-    //
-    //  - group Third:
-    //     - table [Position, (Group, Third)]
-    //     - table [Position, Tag, (Group, Third)]
-    //
+        // The query cache now looks like this:
+        //  - group First:
+        //     - table [Position, (Group, First)]
+        //     - table [Position, Tag, (Group, First)]
+        //
+        //  - group Second:
+        //     - table [Position, (Group, Second)]
+        //     - table [Position, Tag, (Group, Second)]
+        //
+        //  - group Third:
+        //     - table [Position, (Group, Third)]
+        //     - table [Position, Tag, (Group, Third)]
+        //
 
-    q.Iter((Iter it) =>
-    {
-        Column<Position> p = it.Field<Position>(1);
+        q.Iter((Iter it, Column<Position> p) =>
+        {
+            Entity group = it.World().Entity(it.GroupId());
+            GroupCtx* ctx = (GroupCtx*)q.GroupCtx(group);
 
-        Entity group = world.Entity(it.GroupId());
-        GroupCtx* ctx = (GroupCtx*)q.GroupCtx(group);
+            Console.WriteLine($" - Group {group.Path()}: table [{it.Table().Str()}]");
+            Console.WriteLine($"    Counter: {ctx->Counter}");
 
-        Console.WriteLine($" - Group {group.Path()}: table [{it.Table().Str()}]");
-        Console.WriteLine($"    Counter: {ctx->Counter}");
+            foreach (int i in it)
+                Console.WriteLine($"    ({p[i].X}, {p[i].Y})");
 
-        foreach (int i in it)
-            Console.WriteLine($"    ({p[i].X}, {p[i].Y})");
+            Console.WriteLine();
+        });
 
-        Console.WriteLine();
-    });
-
-    // Deleting the query will call the on_group_deleted callback
-    q.Destruct();
+        // Deleting the query will call the OnGroupDeleted callback
+        q.Destruct();
+    }
 }
-
-public struct Position
-{
-    public double X { get; set; }
-    public double Y { get; set; }
-}
-
-// Custom type to associate with group
-public struct GroupCtx
-{
-    public int Counter { get; set; }
-}
-
-// Dummy tag to put entities in different tables
-public struct Tag { }
-
-// Create a relationship to use for the GroupBy function. Tables will
-// be assigned the relationship target as group id
-public struct Group { }
-
-// Targets for the relationship, which will be used as group ids.
-public struct First { }
-public struct Second { }
-public struct Third { }
-
-#endif
 
 // Output:
 // Group Third created

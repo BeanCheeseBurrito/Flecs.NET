@@ -10,47 +10,49 @@
 // used to distribute component handles), prefabs are a good fit, especially
 // when combined with prefab slots (see slots example and code below).
 
-#if Cpp_Prefabs_TypedPrefabs
-
 using Flecs.NET.Core;
 
-using World world = World.Create();
-
-// Associate types with prefabs
-world.Prefab<Turret>();
-world.Prefab<Turret.Base>().SlotOf<Turret>();
-world.Prefab<Turret.Head>().SlotOf<Turret>();
-
-world.Prefab<Railgun>().IsA<Turret>();
-world.Prefab<Railgun.Beam>().SlotOf<Railgun>();
-
-// Create prefab instance.
-Entity inst = world.Entity("my_railgun").IsA<Railgun>();
-
-// Get entities for slots
-Entity instBase = inst.Target<Turret.Base>();
-Entity instHead = inst.Target<Turret.Head>();
-Entity instBeam = inst.Target<Railgun.Beam>();
-
-Console.WriteLine("Instance Base: " + instBase.Path());
-Console.WriteLine("Instance Head: " + instHead.Path());
-Console.WriteLine("Instance Beam: " + instBeam.Path());
-
 // Create types that mirror the prefab hierarchy.
-public struct Turret
+file struct Turret
 {
-    public struct Base { }
-    public struct Head { }
+    public struct Base;
+    public struct Head;
 }
 
-public struct Railgun
+file struct Railgun
 {
-    public struct Beam { }
+    public struct Beam;
 }
 
-#endif
+public static class Cpp_Prefabs_TypedPrefabs
+{
+    public static void Main()
+    {
+        using World world = World.Create();
+
+        // Associate types with prefabs
+        world.Prefab<Turret>();
+        world.Prefab<Turret.Base>().SlotOf<Turret>();
+        world.Prefab<Turret.Head>().SlotOf<Turret>();
+
+        world.Prefab<Railgun>().IsA<Turret>();
+        world.Prefab<Railgun.Beam>().SlotOf<Railgun>();
+
+        // Create prefab instance.
+        Entity inst = world.Entity("MyRailgun").IsA<Railgun>();
+
+        // Get entities for slots
+        Entity instBase = inst.Target<Turret.Base>();
+        Entity instHead = inst.Target<Turret.Head>();
+        Entity instBeam = inst.Target<Railgun.Beam>();
+
+        Console.WriteLine("Instance Base: " + instBase.Path());
+        Console.WriteLine("Instance Head: " + instHead.Path());
+        Console.WriteLine("Instance Beam: " + instBeam.Path());
+    }
+}
 
 // Output:
-// Instance Base: my_railgun.Base
-// Instance Head: my_railgun.Head
-// Instance Beam: my_railgun.Beam
+// Instance Base: MyRailgun.Base
+// Instance Head: MyRailgun.Head
+// Instance Beam: MyRailgun.Beam

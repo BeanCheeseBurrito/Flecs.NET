@@ -24,9 +24,9 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().IsA(e1);
             Entity e3 = world.Entity().IsA(e2);
 
-            Query q = world.Query(
-                filter: world.FilterBuilder().With(tag).Cascade().Descend()
-            );
+            Query q = world.QueryBuilder()
+                .Term(tag).Cascade().Descend()
+                .Build();
 
             e1.Add(bar);
             e2.Add(foo);
@@ -38,23 +38,26 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
             q.Each((Entity e) =>
             {
-                count ++;
+                count++;
 
-                if (e == e1) {
+                if (e == e1)
+                {
                     Assert.False(e1Found);
                     Assert.True(e2Found);
                     Assert.True(e3Found);
                     e1Found = true;
                 }
 
-                if (e == e2) {
+                if (e == e2)
+                {
                     Assert.False(e1Found);
                     Assert.False(e2Found);
                     Assert.True(e3Found);
                     e2Found = true;
                 }
 
-                if (e == e3) {
+                if (e == e3)
+                {
                     Assert.False(e1Found);
                     Assert.False(e2Found);
                     Assert.False(e3Found);

@@ -27,9 +27,7 @@ namespace Flecs.NET.Unity
             Native.BindgenInternal.ResolveLibrary();
 
             if (Native.BindgenInternal._libraryHandle == IntPtr.Zero) // TODO add BindgenInternal#IsLibraryResolved?
-            {
                 Debug.LogError("Failed to initialize Flecs.NET: unable to find valid flecs library for platform.");
-            }
         }
 
         private static string[] EditorPackagePaths()
@@ -40,9 +38,9 @@ namespace Flecs.NET.Unity
 #else
             const string config = "Debug";
 #endif
-            return new []
+            return new[]
             {
-                Path.GetFullPath($"Packages/{PackageName}/Flecs.NET.Native/{config}/{import}"),
+                Path.GetFullPath($"Packages/{PackageName}/Flecs.NET.Native/{config}/{import}")
             };
         }
 
@@ -50,10 +48,10 @@ namespace Flecs.NET.Unity
         {
             const string import = Native.BindgenInternal.DllImportPath;
 
-            return new []
+            return new[]
             {
                 $"{Application.dataPath}/Plugins/x86_64/{import}",
-                $"{Application.dataPath}/Plugins/{import}",
+                $"{Application.dataPath}/Plugins/{import}"
             };
         }
     }

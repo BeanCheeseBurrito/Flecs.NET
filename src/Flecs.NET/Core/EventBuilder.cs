@@ -181,7 +181,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Equals(EventBuilder other)
         {
-            return Equals(Desc, other.Desc);
+            return Desc == other.Desc;
         }
 
         /// <summary>

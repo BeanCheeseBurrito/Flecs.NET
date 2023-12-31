@@ -424,9 +424,7 @@ namespace Flecs.NET.Core
             if (typeof(T) == typeof(ulong) &&
                 (ecs_id_is_tag(iter->world, termId) == Macros.True ||
                  ecs_id_is_union(iter->world, termId) == Macros.True))
-            {
                 return;
-            }
 
             Entity expected = new Entity(iter->world, termId);
             Entity actual = new Entity(iter->world, typeId);
@@ -462,7 +460,6 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public bool Equals(Iter other)
         {
             return Handle == other.Handle;
@@ -473,7 +470,6 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override bool Equals(object? obj)
         {
             return obj is Iter other && Equals(other);
@@ -483,7 +479,6 @@ namespace Flecs.NET.Core
         ///     Returns the hash code of te <see cref="Iter"/>.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public override int GetHashCode()
         {
             return Handle->GetHashCode();

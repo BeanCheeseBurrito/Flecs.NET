@@ -2,52 +2,39 @@
 // entire observer filter will be forwarded to the callback. For example, an
 // observer for Position,Velocity won't match an entity that only has Position.
 
-#if Cpp_Observers_TwoComponents
-
 using Flecs.NET.Core;
 
-using World world = World.Create(args);
+// Components
+file record struct Position(float X, float Y);
+file record struct Velocity(float X, float Y);
 
-// Create observer for custom event
-world.Observer(
-    filter: world.FilterBuilder()
-        .Term<Position>()
-        .Term<Velocity>(),
-    observer: world.ObserverBuilder().Event(Ecs.OnSet),
-    callback: (Iter it, int i) =>
+public static class Cpp_Observers_TwoComponents
+{
+    public static void Main()
     {
-        Column<Position> p = it.Field<Position>(1);
-        Column<Velocity> v = it.Field<Velocity>(2);
+        using World world = World.Create();
 
-        Console.Write($" - {it.Event().Name()}: ");
-        Console.Write($"{it.EventId().Str()}: ");
-        Console.Write($"{it.Entity(i).Name()}: ");
-        Console.Write($"p: ({p[i].X}, {p[i].Y}) ");
-        Console.Write($"v: ({v[i].X}, {v[i].Y})");
-        Console.WriteLine();
+        // Create observer for custom event
+        world.Observer<Position, Velocity>()
+            .Event(Ecs.OnSet)
+            .Each((Iter it, int i, ref Position p, ref Velocity v) =>
+            {
+                Console.Write($" - {it.Event()}: ");
+                Console.Write($"{it.EventId()}: ");
+                Console.Write($"{it.Entity(i)}: ");
+                Console.Write($"P: ({p.X}, {p.Y}) ");
+                Console.Write($"V: ({v.X}, {v.Y})");
+                Console.WriteLine();
+            });
+
+        // Create entity, set Position (emits EcsOnSet, does not yet match observer)
+        Entity e = world.Entity("e")
+            .Set<Position>(new(10, 20));
+
+        // Set Velocity (emits EcsOnSet, matches observer)
+        e.Set<Velocity>(new(1, 2));
     }
-);
-
-// Create entity, set Position (emits EcsOnSet, does not yet match observer)
-Entity e = world.Entity("e")
-    .Set(new Position { X = 10, Y = 20 });
-
-// Set Velocity (emits EcsOnSet, matches observer)
-e.Set(new Velocity { X = 1, Y = 2 });
-
-public struct Position
-{
-    public double X { get; set; }
-    public double Y { get; set; }
 }
-
-public struct Velocity
-{
-    public double X { get; set; }
-    public double Y { get; set; }
-}
-
-#endif
 
 // Output:
-//  - OnSet: Velocity: e: p: (10, 20) v: (1, 2)
+//  - OnSet: Velocity: e: P: (10, 20) V: (1, 2)

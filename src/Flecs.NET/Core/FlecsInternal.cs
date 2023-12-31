@@ -13,6 +13,13 @@ namespace Flecs.NET.Core
         internal static IntPtr OsAbortNative;
 
         /// <summary>
+        ///     Determines whether or not to strip the GUID prefix the from beginning of file-local type names when
+        ///     registering components. This is will cause name clashing if file-local types in different files
+        ///     have the same name. This is primarily used in Flecs.NET.Examples to reduce output noise.
+        /// </summary>
+        public static bool StripFileLocalTypeNameGuid { get; set; }
+
+        /// <summary>
         ///     Tests whether or not the os api is initialized.
         /// </summary>
         public static bool IsOsApiOverridden { get; private set; }

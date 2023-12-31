@@ -16,85 +16,82 @@
 // Groups can also be used as an efficient filtering mechanism. See the
 // SetGroup example for more details.
 
-#if Cpp_Queries_GroupBy
-
 using Flecs.NET.Core;
 
-using World world = World.Create();
-
-// Register components in order so that id for First is lower than Third
-world.Component<First>();
-world.Component<Second>();
-world.Component<Third>();
-
-// Grouped query
-Query q = world.Query(
-    filter: world.FilterBuilder().With<Position>(),
-    query: world.QueryBuilder().GroupBy<Group>()
-);
-
-// Create entities in 6 different tables with 3 group ids
-world.Entity().Add<Group, Third>()
-    .Set(new Position { X = 1, Y = 1 });
-world.Entity().Add<Group, Second>()
-    .Set(new Position { X = 2, Y = 2 });
-world.Entity().Add<Group, First>()
-    .Set(new Position { X = 3, Y = 3 });
-
-world.Entity().Add<Group, Third>()
-    .Set(new Position { X = 4, Y = 4 })
-    .Add<Tag>();
-world.Entity().Add<Group, Second>()
-    .Set(new Position { X = 5, Y = 5 })
-    .Add<Tag>();
-world.Entity().Add<Group, First>()
-    .Set(new Position { X = 6, Y = 6 })
-    .Add<Tag>();
-
-// The query cache now looks like this:
-//  - group First:
-//     - table [Position, (Group, First)]
-//     - table [Postion, Tag, (Group, First)]
-//
-//  - group Second:
-//     - table [Position, (Group, Second)]
-//     - table [Postion, Tag, (Group, Second)]
-//
-//  - group Third:
-//     - table [Position, (Group, Third)]
-//     - table [Postion, Tag, (Group, Third)]
-//
-
-q.Iter((Iter it) =>
-{
-    Column<Position> p = it.Field<Position>(1);
-    Entity group = world.Entity(it.GroupId());
-
-    Console.WriteLine($" - Group {group.Path()}: table [{it.Table()}]");
-
-    foreach (int i in it)
-        Console.WriteLine($"     ({p[i].X}, {p[i].Y})\n");
-});
-
-public struct Position
-{
-    public double X { get; set; }
-    public double Y { get; set; }
-}
+// Components
+file record struct Position(float X, float Y);
 
 // Dummy tag to put entities in different tables
-public struct Tag { }
+file struct Tag;
 
 // Create a relationship to use for the GroupBy function. Tables will
 // be assigned the relationship target as group id
-public struct Group { }
+file struct Group;
 
 // Targets for the relationship, which will be used as group ids.
-public struct First { }
-public struct Second { }
-public struct Third { }
+file struct First;
+file struct Second;
+file struct Third ;
 
-#endif
+public static class Cpp_Queries_GroupBy
+{
+    public static void Main()
+    {
+        using World world = World.Create();
+
+        // Register components in order so that id for First is lower than Third
+        world.Component<First>();
+        world.Component<Second>();
+        world.Component<Third>();
+
+        // Grouped query
+        Query q = world.QueryBuilder<Position>()
+            .GroupBy<Group>()
+            .Build();
+
+        // Create entities in 6 different tables with 3 group ids
+        world.Entity().Add<Group, Third>()
+            .Set<Position>(new(1, 1));
+        world.Entity().Add<Group, Second>()
+            .Set<Position>(new(2, 2));
+        world.Entity().Add<Group, First>()
+            .Set<Position>(new(3, 3));
+
+        world.Entity().Add<Group, Third>()
+            .Set<Position>(new(4, 4))
+            .Add<Tag>();
+        world.Entity().Add<Group, Second>()
+            .Set<Position>(new(5, 5))
+            .Add<Tag>();
+        world.Entity().Add<Group, First>()
+            .Set<Position>(new(6, 6))
+            .Add<Tag>();
+
+        // The query cache now looks like this:
+        //  - group First:
+        //     - table [Position, (Group, First)]
+        //     - table [Postion, Tag, (Group, First)]
+        //
+        //  - group Second:
+        //     - table [Position, (Group, Second)]
+        //     - table [Postion, Tag, (Group, Second)]
+        //
+        //  - group Third:
+        //     - table [Position, (Group, Third)]
+        //     - table [Postion, Tag, (Group, Third)]
+        //
+
+        q.Iter((Iter it, Column<Position> p) =>
+        {
+            Entity group = it.World().Entity(it.GroupId());
+
+            Console.WriteLine($" - Group {group.Path()}: table [{it.Table()}]");
+
+            foreach (int i in it)
+                Console.WriteLine($"     ({p[i].X}, {p[i].Y})\n");
+        });
+    }
+}
 
 // Output:
 //  - Group First: table [Position, (Group,First)]

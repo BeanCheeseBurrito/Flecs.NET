@@ -305,37 +305,71 @@ namespace Flecs.NET.Core
             if (csName.StartsWith(nativeClass, StringComparison.Ordinal))
                 IsAlias = true;
 
-            csName = csName
-                .Replace(nativeClass, string.Empty, StringComparison.Ordinal) // Strip namespace from binding types
-                .Replace('+', '.')
-                .Replace('[', '<')
-                .Replace(']', '>');
-
-            int start = 0;
-            int current = 0;
-            bool skip = false; // If a tilde is encountered, skip over next characters until a '<' or '.' is encountered
-
-            StringBuilder stringBuilder = new StringBuilder();
-
-            foreach (char c in csName)
+            // File-local types are prefixed with a file name + GUID.
+            if (FlecsInternal.StripFileLocalTypeNameGuid)
             {
-                if (skip && (c == '<' || c == '.'))
+                int start = 0;
+                bool skip = false;
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for (int current = 0; current < csName.Length;)
                 {
-                    start = current;
-                    skip = false;
-                }
-                else if (!skip && c == '`')
-                {
-                    stringBuilder.Append(csName.AsSpan(start, current - start));
-                    skip = true;
+                    char c = csName[current];
+
+                    if (skip && c == '_')
+                    {
+                        skip = false;
+                        start = current + 2;
+                    }
+                    else if (!skip && c == '<')
+                    {
+                        skip = true;
+                        stringBuilder.Append(csName.AsSpan(start, current - start));
+                        current = csName.IndexOf('>', current) + 1;
+                        continue;
+                    }
+
+                    current++;
                 }
 
-                current++;
+                stringBuilder.Append(csName.AsSpan(start));
+                csName = stringBuilder.ToString();
             }
 
-            stringBuilder.Append(csName.AsSpan(start));
-            SymbolName = stringBuilder.ToString();
-            return SymbolName;
+            {
+                csName = csName
+                    .Replace(nativeClass, string.Empty, StringComparison.Ordinal) // Strip namespace from binding types
+                    .Replace('+', '.')
+                    .Replace('[', '<')
+                    .Replace(']', '>');
+
+                int start = 0;
+                int current = 0;
+                bool skip = false;
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                foreach (char c in csName)
+                {
+                    if (skip && (c == '<' || c == '.'))
+                    {
+                        start = current;
+                        skip = false;
+                    }
+                    else if (!skip && c == '`')
+                    {
+                        stringBuilder.Append(csName.AsSpan(start, current - start));
+                        skip = true;
+                    }
+
+                    current++;
+                }
+
+                stringBuilder.Append(csName.AsSpan(start));
+                SymbolName = stringBuilder.ToString();
+                return SymbolName;
+            }
         }
 
         /// <summary>

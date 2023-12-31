@@ -140,7 +140,7 @@ namespace Flecs.NET.Tests.CSharp.Collections
             Assert.Equal(2, list.Capacity);
             Assert.Equal(2, list.Count);
 
-            IEnumerable<int> enumerable = new []{ 3, 4, 5, 6, 7 };
+            IEnumerable<int> enumerable = new[] { 3, 4, 5, 6, 7 };
             list.AddRange(enumerable);
 
             Assert.Equal(8, list.Capacity);

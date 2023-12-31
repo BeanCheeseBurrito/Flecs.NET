@@ -1,44 +1,34 @@
-#if Cpp_Reflection_NestedStruct
-
 using Flecs.NET.Core;
 
+// Components
+file record struct Point(float X, float Y);
+file record struct Line(Point Start, Point Stop);
+
+public static class Cpp_Reflection_NestedStruct
 {
-    using World world = World.Create();
+    public static void Main()
+    {
+        using World world = World.Create();
 
-    // Register components with reflection data
-    world.Component<Point>()
-        .Member<float>("X")
-        .Member<float>("Y");
+        // Register components with reflection data
+        world.Component<Point>()
+            .Member<float>("X")
+            .Member<float>("Y");
 
-    world.Component<Line>()
-        .Member<Point>("Start")
-        .Member<Point>("Stop");
+        world.Component<Line>()
+            .Member<Point>("Start")
+            .Member<Point>("Stop");
 
-    // Create entity with Line component as usual.
-    Entity e = world.Entity()
-        .Set<Line>(new(new(10, 20), new(30, 40)));
+        // Create entity with Line component as usual.
+        Entity e = world.Entity()
+            .Set<Line>(new(new(10, 20), new(30, 40)));
 
-    // Convert Line component to flecs expression string.
-    ref Line reference = ref e.GetMut<Line>();
-    Console.WriteLine(world.ToExpr(ref reference));
-    // {Start: {X: 10, Y: 20}, Stop: {X: 30, Y: 40}}
-
-    return 0;
+        // Convert Line component to flecs expression string.
+        ref Line reference = ref e.GetMut<Line>();
+        Console.WriteLine(world.ToExpr(ref reference));
+        // {Start: {X: 10, Y: 20}, Stop: {X: 30, Y: 40}}
+    }
 }
-
-public struct Point(float x, float y)
-{
-    public float X { get; set; } = x;
-    public float Y { get; set; } = y;
-}
-
-public struct Line(Point start, Point stop)
-{
-    public Point Start { get; set; } = start;
-    public Point Stop { get; set; } = stop;
-}
-
-#endif
 
 // Output:
 // {Start: {X: 10, Y: 20}, Stop: {X: 30, Y: 40}}

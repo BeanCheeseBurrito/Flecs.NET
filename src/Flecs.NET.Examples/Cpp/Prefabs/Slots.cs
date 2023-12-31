@@ -21,47 +21,48 @@
 // entities by name to get access to the instantiated children, like what the
 // hierarchy example does.
 
-
-#if Cpp_Prefabs_Slots
-
 using Flecs.NET.Core;
 
-using World world = World.Create();
+public static class Cpp_Prefabs_Slots
+{
+    public static void Main()
+    {
+        using World world = World.Create();
 
-// Create the same prefab hierarchy as from the hierarchy example, but now
-// with the SlotOf relationship.
-Entity spaceShip = world.Prefab("SpaceShip");
-    Entity engine = world.Prefab("Engine")
-        .ChildOf(spaceShip)
-        .SlotOf(spaceShip);
+        // Create the same prefab hierarchy as from the hierarchy example, but now
+        // with the SlotOf relationship.
+        Entity spaceShip = world.Prefab("SpaceShip");
+        Entity engine = world.Prefab("Engine")
+            .ChildOf(spaceShip)
+            .SlotOf(spaceShip);
 
-    Entity cockpit = world.Prefab("Cockpit")
-        .ChildOf(spaceShip)
-        .SlotOf(spaceShip);
+        Entity cockpit = world.Prefab("Cockpit")
+            .ChildOf(spaceShip)
+            .SlotOf(spaceShip);
 
-// Add an additional child to the Cockpit prefab to demonstrate how
-// slots can be different from the parent. This slot could have been
-// added to the Cockpit prefab, but instead we register it on the top
-// level SpaceShip prefab.
-Entity pilotSeat = world.Prefab("PilotSeat")
-    .ChildOf(cockpit)
-    .SlotOf(spaceShip);
+        // Add an additional child to the Cockpit prefab to demonstrate how
+        // slots can be different from the parent. This slot could have been
+        // added to the Cockpit prefab, but instead we register it on the top
+        // level SpaceShip prefab.
+        Entity pilotSeat = world.Prefab("PilotSeat")
+            .ChildOf(cockpit)
+            .SlotOf(spaceShip);
 
-// Create a prefab instance.
-Entity inst = world.Entity("my_spaceship").IsA(spaceShip);
+        // Create a prefab instance.
+        Entity inst = world.Entity("MySpaceship").IsA(spaceShip);
 
-// Get the instantiated entities for the prefab slots
-Entity instEngine = inst.Target(engine);
-Entity instCockpit = inst.Target(cockpit);
-Entity instSeat = inst.Target(pilotSeat);
+        // Get the instantiated entities for the prefab slots
+        Entity instEngine = inst.Target(engine);
+        Entity instCockpit = inst.Target(cockpit);
+        Entity instSeat = inst.Target(pilotSeat);
 
-Console.WriteLine("Instance Engine:  " + instEngine.Path());
-Console.WriteLine("Instance Cockpit: " + instCockpit.Path());
-Console.WriteLine("Instance Seat:    " + instSeat.Path());
-
-#endif
+        Console.WriteLine("Instance Engine:  " + instEngine.Path());
+        Console.WriteLine("Instance Cockpit: " + instCockpit.Path());
+        Console.WriteLine("Instance Seat:    " + instSeat.Path());
+    }
+}
 
 // Output:
-// Instance Engine:  my_spaceship.Engine
-// Instance Cockpit: my_spaceship.Cockpit
-// Instance Seat:    my_spaceship.Cockpit.PilotSeat
+// Instance Engine:  MySpaceship.Engine
+// Instance Cockpit: MySpaceship.Cockpit
+// Instance Seat:    MySpaceship.Cockpit.PilotSeat

@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Flecs.NET.Tests.CSharp
 {
-    public unsafe class EntityTests
+    public class EntityTests
     {
         [Fact]
         public void AddManaged()

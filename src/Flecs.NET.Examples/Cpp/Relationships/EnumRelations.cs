@@ -12,88 +12,90 @@
 //
 //  will replace Color.Red with Color.Green
 
-#if Cpp_Relationships_EnumRelations
-
 using Flecs.NET.Core;
 
-using World world = World.Create(args);
-
-// Create an entity with (Tile, Stone) and (TileStatus, Free) relationships
-Entity tile = world.Entity()
-    .Add(Tile.Stone)
-    .Add(TileStatus.Free);
-
-// (Tile, Tile.Stone), (TileStatus, TileStatus.Free)
-Console.WriteLine(tile.Type().Str());
-
-// Replace (TileStatus, Free) with (TileStatus, Occupied)
-tile.Add(TileStatus.Occupied);
-
-// (Tile, Tile.Stone), (TileStatus, TileStatus.Occupied)
-Console.WriteLine(tile.Type().Str());
-
-// Check if the entity has the Tile relationship and the Tile.Stone pair
-Console.WriteLine(tile.Has<Tile>()); // True
-Console.WriteLine(tile.Has(Tile.Stone)); // True
-
-// Get the current value of the enum
-ref readonly Tile v = ref tile.GetEnum<Tile>();
-Console.WriteLine(v == Tile.Stone); // True
-
-// Create a few more entities that we can query
-world.Entity().Add(Tile.Grass).Add(TileStatus.Free);
-world.Entity().Add(Tile.Sand).Add(TileStatus.Occupied);
-
-// Iterate all entities with a Tile relationship
-using Filter filter1 = world.Filter(
-    filter: world.FilterBuilder().With<Tile>(Ecs.Wildcard)
-);
-
-filter1.Each((Iter it, int i) =>
-{
-    Entity tileConstant = it.Pair(1).Second();
-    Console.WriteLine(tileConstant.Path());
-});
-
-// Outputs:
-//  Tile.Stone
-//  Tile.Grass
-//  Tile.Sand
-
-// Iterate only occupied tiles
-using Filter filter2 = world.Filter(
-    filter: world.FilterBuilder()
-        .With<Tile>(Ecs.Wildcard)
-        .With(TileStatus.Occupied)
-);
-
-filter2.Each((Iter it, int i) =>
-{
-    Entity tileConstant = it.Pair(1).Second();
-    Console.WriteLine(tileConstant.Path());
-});
-
-// Outputs:
-//  Tile.Stone
-//  Tile.Sand
-
-// Remove any instance of the TileStatus relationship
-tile.Remove<TileStatus>();
-
-public enum Tile
+// Enums
+file enum Tile
 {
     Grass,
     Sand,
     Stone
 }
 
-public enum TileStatus
+file enum TileStatus
 {
     Free,
     Occupied,
 }
 
-#endif
+public static class Cpp_Relationships_EnumRelations
+{
+    public static void Main()
+    {
+        using World world = World.Create();
+
+        // Create an entity with (Tile, Stone) and (TileStatus, Free) relationships
+        Entity tile = world.Entity()
+            .Add(Tile.Stone)
+            .Add(TileStatus.Free);
+
+        // (Tile, Tile.Stone), (TileStatus, TileStatus.Free)
+        Console.WriteLine(tile.Type().Str());
+
+        // Replace (TileStatus, Free) with (TileStatus, Occupied)
+        tile.Add(TileStatus.Occupied);
+
+        // (Tile, Tile.Stone), (TileStatus, TileStatus.Occupied)
+        Console.WriteLine(tile.Type().Str());
+
+        // Check if the entity has the Tile relationship and the Tile.Stone pair
+        Console.WriteLine(tile.Has<Tile>()); // True
+        Console.WriteLine(tile.Has(Tile.Stone)); // True
+
+        // Get the current value of the enum
+        ref readonly Tile v = ref tile.GetEnum<Tile>();
+        Console.WriteLine(v == Tile.Stone); // True
+
+        // Create a few more entities that we can query
+        world.Entity().Add(Tile.Grass).Add(TileStatus.Free);
+        world.Entity().Add(Tile.Sand).Add(TileStatus.Occupied);
+
+        // Iterate all entities with a Tile relationship
+        using Filter filter1 = world.FilterBuilder()
+            .With<Tile>(Ecs.Wildcard)
+            .Build();
+
+        filter1.Each((Iter it, int i) =>
+        {
+            Entity tileConstant = it.Pair(1).Second();
+            Console.WriteLine(tileConstant.Path());
+        });
+
+        // Outputs:
+        //  Tile.Stone
+        //  Tile.Grass
+        //  Tile.Sand
+
+        // Iterate only occupied tiles
+        using Filter filter2 = world.FilterBuilder()
+            .With<Tile>(Ecs.Wildcard)
+            .With(TileStatus.Occupied)
+            .Build();
+
+        filter2.Each((Iter it, int i) =>
+        {
+            Entity tileConstant = it.Pair(1).Second();
+            Console.WriteLine(tileConstant.Path());
+        });
+
+        // Outputs:
+        //  Tile.Stone
+        //  Tile.Sand
+
+        // Remove any instance of the TileStatus relationship
+        tile.Remove<TileStatus>();
+    }
+}
 
 // Output:
 // (Tile,Tile.Stone), (TileStatus,TileStatus.Free)

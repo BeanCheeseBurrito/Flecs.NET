@@ -1,118 +1,110 @@
-// Component hooks are callbacks that can be registered for a type that are
-// invoked during different parts of the component lifecycle.
-
-#if Cpp_Entities_Hooks
-
 using System.Runtime.InteropServices;
 using Flecs.NET.Core;
 
+file struct NativeString(string str)
 {
-    World world = World.Create(args);
+    public IntPtr Value { get; set; } = Marshal.StringToHGlobalAnsi(str);
+}
 
-    world.Component<NativeString>().SetHooks(new TypeHooks<NativeString>
+file static class Cpp_Entities_Hooks
+{
+    public static void Main(string[] args)
     {
-        // Resource management hooks. These hooks should primarily be used for
-        // managing memory used by the component.
-        Ctor = Ctor,
-        Move = Move,
-        Copy = Copy,
-        Dtor = Dtor,
+        World world = World.Create(args);
 
-        // Lifecycle hooks. These hooks should be used for application logic.
-        OnAdd = HookCallback,
-        OnRemove = HookCallback,
-        OnSet = HookCallback
-    });
+        world.Component<NativeString>().SetHooks(new TypeHooks<NativeString>
+        {
+            // Resource management hooks. These hooks should primarily be used for
+            // managing memory used by the component.
+            Ctor = Ctor,
+            Move = Move,
+            Copy = Copy,
+            Dtor = Dtor,
 
-    Ecs.Log.SetLevel(0);
+            // Lifecycle hooks. These hooks should be used for application logic.
+            OnAdd = HookCallback,
+            OnRemove = HookCallback,
+            OnSet = HookCallback
+        });
 
-    Entity e = world.Entity("Entity");
-    Entity tag = world.Entity();
+        Ecs.Log.SetLevel(0);
 
-    Ecs.Log.Trace("e.Add<NativeString>()");
-    Ecs.Log.Push();
+        Entity e = world.Entity("Entity");
+        Entity tag = world.Entity();
+
+        Ecs.Log.Trace("e.Add<NativeString>()");
+        Ecs.Log.Push();
         e.Add<NativeString>();
-    Ecs.Log.Pop();
+        Ecs.Log.Pop();
 
-    Ecs.Log.Trace("e.Set(new NativeString(\"Hello World\"))");
-    Ecs.Log.Push();
-        e.Set(new NativeString("Hello World"));
-    Ecs.Log.Pop();
+        Ecs.Log.Trace("e.Set<NativeString>(new(\"Hello World\"))");
+        Ecs.Log.Push();
+        e.Set<NativeString>(new("Hello World"));
+        Ecs.Log.Pop();
 
-    // This operation changes the entity's archetype, which invokes a move
-    Ecs.Log.Trace("e.Add(tag)");
-    Ecs.Log.Push();
+        // This operation changes the entity's archetype, which invokes a move
+        Ecs.Log.Trace("e.Add(tag)");
+        Ecs.Log.Push();
         e.Add(tag);
-    Ecs.Log.Pop();
+        Ecs.Log.Pop();
 
-    Ecs.Log.Trace("e.Destruct()");
-    Ecs.Log.Push();
+        Ecs.Log.Trace("e.Destruct()");
+        Ecs.Log.Push();
         e.Destruct();
-    Ecs.Log.Pop();
+        Ecs.Log.Pop();
 
-    Ecs.Log.SetLevel(-1);
-}
+        Ecs.Log.SetLevel(-1);
+    }
 
-// Resource management hooks.
-// The constructor should initialize the component value.
-void Ctor(ref NativeString data, TypeInfo typeInfo)
-{
-    Ecs.Log.Trace("Ctor");
-    data.Value = IntPtr.Zero;
-}
-
-// The destructor should free resources.
-void Dtor(ref NativeString data, TypeInfo typeInfo)
-{
-    Ecs.Log.Trace("Dtor");
-    Marshal.FreeHGlobal(data.Value);
-}
-
-// The move hook should move resources from one location to another.
-void Move(ref NativeString dst, ref NativeString src, TypeInfo typeInfo)
-{
-    Ecs.Log.Trace("Move");
-    Marshal.FreeHGlobal(dst.Value);
-    dst.Value = src.Value;
-    src.Value = IntPtr.Zero; // This makes sure the value doesn't get deleted twice
-    // as the destructor is still invoked after a move.
-}
-
-// The copy hook should copy resources from one location to another.
-void Copy(ref NativeString dst, ref NativeString src, TypeInfo typeInfo)
-{
-    Ecs.Log.Trace("Copy");
-    Marshal.FreeHGlobal(dst.Value);
-    dst.Value = src.Value;
-}
-
-// This callback is used for the add, remove and set hooks. Note that the
-// signature is the same as systems, triggers, observers.
-void HookCallback(Iter it, Column<NativeString> str)
-{
-    Entity eventEntity = it.Event();
-
-    foreach (int i in it)
-        Ecs.Log.Trace($"{eventEntity}: {it.Entity(i)}");
-}
-
-public struct NativeString
-{
-    public IntPtr Value { get; set; }
-
-    public NativeString(string str)
+    // Resource management hooks.
+    // The constructor should initialize the component value.
+    private static void Ctor(ref NativeString data, TypeInfo typeInfo)
     {
-        Value = Marshal.StringToHGlobalAnsi(str);
+        Ecs.Log.Trace("Ctor");
+        data.Value = IntPtr.Zero;
+    }
+
+    // The destructor should free resources.
+    private static void Dtor(ref NativeString data, TypeInfo typeInfo)
+    {
+        Ecs.Log.Trace("Dtor");
+        Marshal.FreeHGlobal(data.Value);
+    }
+
+    // The move hook should move resources from one location to another.
+    private static void Move(ref NativeString dst, ref NativeString src, TypeInfo typeInfo)
+    {
+        Ecs.Log.Trace("Move");
+        Marshal.FreeHGlobal(dst.Value);
+        dst.Value = src.Value;
+        src.Value = IntPtr.Zero; // This makes sure the value doesn't get deleted twice
+        // as the destructor is still invoked after a move.
+    }
+
+    // The copy hook should copy resources from one location to another.
+    private static void Copy(ref NativeString dst, ref NativeString src, TypeInfo typeInfo)
+    {
+        Ecs.Log.Trace("Copy");
+        Marshal.FreeHGlobal(dst.Value);
+        dst.Value = src.Value;
+    }
+
+    // This callback is used for the add, remove and set hooks. Note that the
+    // signature is the same as systems, triggers, observers.
+    private static void HookCallback(Iter it, Column<NativeString> str)
+    {
+        Entity eventEntity = it.Event();
+
+        foreach (int i in it)
+            Ecs.Log.Trace($"{eventEntity}: {it.Entity(i)}");
     }
 }
-
-#endif
 
 // Output:
 // info: e.Add<NativeString>()
 // info: | Ctor
 // info: | OnAdd: Entity
-// info: e.Set(new NativeString("Hello World"))
+// info: e.Set<NativeString>(new("Hello World"))
 // info: | Copy
 // info: | OnSet: Entity
 // info: e.Add(tag)
