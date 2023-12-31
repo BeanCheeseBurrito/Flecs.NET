@@ -11,87 +11,87 @@
 // Because they mutate the world directly, NoReadonly systems are never ran on
 // more than one thread, and no other systems are ran at the same time.
 
-#if Cpp_Systems_NoReadonly
-
 using Flecs.NET.Core;
 
-using World world = World.Create();
+// Tags
+file struct Waiter;
+file struct Plate;
 
-// Create query to find all waiters without a plate
-Query qWaiter = world.Query(
-    filter: world.FilterBuilder()
-        .With<Waiter>()
-        .Without<Plate>(Ecs.Wildcard)
-);
-
-// System that assigns plates to waiter. By making this system NoReadonly
-// plate assignments are assigned directly (not deferred) to waiters, which
-// ensures that we won't assign plates to the same waiter more than once.
-world.Routine(
-    filter: world.FilterBuilder()
-        .With<Plate>()
-        .Without<Waiter>(Ecs.Wildcard),
-    routine: world.RoutineBuilder().NoReadonly(),
-    callback: (Iter it) =>
+public static class Cpp_Systems_NoReadonly
+{
+    public static void Main()
     {
-        foreach (int i in it)
-        {
-            Entity plate = it.Entity(i);
+        using World world = World.Create();
 
-            // Find an available waiter
-            Entity waiter = qWaiter.Iter().First();
+        // Create query to find all waiters without a plate
+        Query qWaiter = world.QueryBuilder()
+            .With<Waiter>()
+            .Without<Plate>(Ecs.Wildcard)
+            .Build();
 
-            if (waiter != 0)
+        // System that assigns plates to waiter. By making this system NoReadonly
+        // plate assignments are assigned directly (not deferred) to waiters, which
+        // ensures that we won't assign plates to the same waiter more than once.
+        world.Routine()
+            .With<Waiter>()
+            .Without<Plate>(Ecs.Wildcard)
+            .NoReadonly()
+            .Iter((Iter it) =>
             {
-                // An available waiter was found, assign a plate to it so
-                // that the next plate will no longer find it.
-                // The DeferSuspend function temporarily suspends deferring
-                // operations, which ensures that our plate is assigned
-                // immediately. Even though this is a NoReadonly system,
-                // deferring is still enabled by default, as adding/removing
-                // components to the entities being iterated would interfere
-                // with the system iterator.
-                it.World().DeferSuspend();
-                waiter.Add<Plate>(plate);
-                it.World().DeferResume();
+                foreach (int i in it)
+                {
+                    Entity plate = it.Entity(i);
 
-                // Now that deferring is resumed, we can safely also add the
-                // waiter to the plate. We can't do this while deferring is
-                // suspended, because the plate is the entity we're
-                // currently iterating, and we don't want to move it to a
-                // different table while we're iterating it.
-                plate.Add<Waiter>(waiter);
+                    // Find an available waiter
+                    Entity waiter = qWaiter.Iter().First();
 
-                Console.WriteLine($"Assigned {waiter.Name()} to {plate}!");
-            }
-            else
-            {
-                // No available waiters, can't assign the plate
-            }
-        }
+                    if (waiter != 0)
+                    {
+                        // An available waiter was found, assign a plate to it so
+                        // that the next plate will no longer find it.
+                        // The DeferSuspend function temporarily suspends deferring
+                        // operations, which ensures that our plate is assigned
+                        // immediately. Even though this is a NoReadonly system,
+                        // deferring is still enabled by default, as adding/removing
+                        // components to the entities being iterated would interfere
+                        // with the system iterator.
+                        it.World().DeferSuspend();
+                        waiter.Add<Plate>(plate);
+                        it.World().DeferResume();
+
+                        // Now that deferring is resumed, we can safely also add the
+                        // waiter to the plate. We can't do this while deferring is
+                        // suspended, because the plate is the entity we're
+                        // currently iterating, and we don't want to move it to a
+                        // different table while we're iterating it.
+                        plate.Add<Waiter>(waiter);
+
+                        Console.WriteLine($"Assigned {waiter.Name()} to {plate}!");
+                    }
+                    else
+                    {
+                        // No available waiters, can't assign the plate
+                    }
+                }
+            });
+
+        // Create a few plates and waiters
+        Entity waiter1 = world.Entity("Waiter1").Add<Waiter>();
+        world.Entity("Waiter2").Add<Waiter>();
+        world.Entity("Waiter3").Add<Waiter>();
+
+        world.Entity("Plate1").Add<Plate>();
+        Entity plate2 = world.Entity("Plate2").Add<Plate>();
+        world.Entity("Plate3").Add<Plate>();
+
+        waiter1.Add<Plate>(plate2);
+        plate2.Add<Waiter>(waiter1);
+
+        // run systems
+        world.Progress();
     }
-);
-
-// Create a few plates and waiters
-Entity waiter1 = world.Entity("waiter_1").Add<Waiter>();
-world.Entity("waiter_2").Add<Waiter>();
-world.Entity("waiter_3").Add<Waiter>();
-
-world.Entity("plate_1").Add<Plate>();
-Entity plate2 = world.Entity("plate_2").Add<Plate>();
-world.Entity("plate_3").Add<Plate>();
-
-waiter1.Add<Plate>(plate2);
-plate2.Add<Waiter>(waiter1);
-
-// run systems
-world.Progress();
-
-public struct Waiter { }
-public struct Plate { }
-
-#endif
+}
 
 // Output:
-// Assigned waiter_3 to plate_1!
-// Assigned waiter_2 to plate_3!
+// Assigned Waiter_3 to Plate_1!
+// Assigned Waiter_2 to Plate_3!

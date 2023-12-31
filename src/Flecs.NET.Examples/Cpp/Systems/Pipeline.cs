@@ -1,63 +1,44 @@
-#if Cpp_Systems_Pipeline
-
 using Flecs.NET.Core;
 
-using World world = World.Create();
+// Components
+file record struct Position(float X, float Y);
+file record struct Velocity(float X, float Y);
 
-// Create a system for moving an entity
-world.Routine(
-    filter: world.FilterBuilder()
-        .With<Position>()
-        .With<Velocity>(),
-    routine: world.RoutineBuilder().Kind(Ecs.OnUpdate), // A phase orders a system in a pipeline
-    callback: (Iter it, int i) =>
-    {
-        Column<Position> p = it.Field<Position>(1);
-        Column<Velocity> v = it.Field<Velocity>(2);
-
-        p[i].X += v[i].X;
-        p[i].Y += v[i].Y;
-    }
-);
-
-// Create a system for printing the entity position
-world.Routine(
-    filter: world.FilterBuilder().With<Position>(),
-    routine: world.RoutineBuilder().Kind(Ecs.PostUpdate),
-    callback: (Iter it, int i) =>
-    {
-        Column<Position> p = it.Field<Position>(1);
-        Console.WriteLine($"{it.Entity(i).Name()}: ({p[i].X}, {p[i].Y})");
-    }
-);
-
-// Create a few test entities for a Position, Velocity query
-world.Entity("e1")
-    .Set(new Position { X = 10, Y = 20 })
-    .Set(new Velocity { X = 1,  Y = 2 });
-
-world.Entity("e2")
-    .Set(new Position { X = 10, Y = 20 })
-    .Set(new Velocity { X = 3, Y = 4 });
-
-// Run the default pipeline. This will run all systems ordered by their
-// phase. Systems within the same phase are ran in declaration order. This
-// function is usually called in a loop.
-world.Progress();
-
-public struct Position
+public static class Cpp_Systems_Pipeline
 {
-    public double X { get; set; }
-    public double Y { get; set; }
-}
+    public static void Main()
+    {
+        using World world = World.Create();
 
-public struct Velocity
-{
-    public double X { get; set; }
-    public double Y { get; set; }
-}
+        // Create a system for moving an entity
+        world.Routine<Position, Velocity>()
+            .Kind(Ecs.OnUpdate) // A phase orders a system in a pipeline
+            .Each((ref Position p, ref Velocity v) =>
+            {
+                p.X += v.X;
+                p.Y += v.Y;
+            });
 
-#endif
+        // Create a system for printing the entity position
+        world.Routine<Position>()
+            .Kind(Ecs.PostUpdate) // A phase orders a system in a pipeline
+            .Each((Entity e, ref Position p) => { Console.WriteLine($"{e}: ({p.X}, {p.Y})"); });
+
+        // Create a few test entities for a Position, Velocity query
+        world.Entity("e1")
+            .Set<Position>(new(10, 20))
+            .Set<Velocity>(new(1, 2));
+
+        world.Entity("e2")
+            .Set<Position>(new(10, 20))
+            .Set<Velocity>(new(3, 4));
+
+        // Run the default pipeline. This will run all systems ordered by their
+        // phase. Systems within the same phase are ran in declaration order. This
+        // function is usually called in a loop.
+        world.Progress();
+    }
+}
 
 // Output:
 // e1: (11, 22)

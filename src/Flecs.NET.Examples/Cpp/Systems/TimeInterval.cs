@@ -1,32 +1,32 @@
-#if Cpp_Systems_TimeInterval
+// This example shows how to run a system at a specified time interval.
 
 using Flecs.NET.Core;
 
-void Tick(Iter it)
+public static class Cpp_Systems_TimeInterval
 {
-    Console.WriteLine(it.System().ToString());
+    public static void Main()
+    {
+        using World world = World.Create();
+
+        world.Routine("Tick")
+            .Interval(1.0f)
+            .Iter(Tick);
+
+        world.Routine("FastTick")
+            .Interval(0.5f)
+            .Iter(Tick);
+
+        // Run the main loop at 60 FPS
+        world.SetTargetFps(60);
+
+        while (world.Progress()) { }
+    }
+
+    private static void Tick(Iter it)
+    {
+        Console.WriteLine(it.System().ToString());
+    }
 }
-
-using World world = World.Create();
-
-world.Routine(
-    name: "Tick",
-    routine: world.RoutineBuilder().Interval(1.0f),
-    callback: Tick
-);
-
-world.Routine(
-    name: "FastTick",
-    routine: world.RoutineBuilder().Interval(0.5f),
-    callback: Tick
-);
-
-// Run the main loop at 60 FPS
-world.SetTargetFps(60);
-
-while (world.Progress()) { }
-
-#endif
 
 // Output:
 // FastTick
