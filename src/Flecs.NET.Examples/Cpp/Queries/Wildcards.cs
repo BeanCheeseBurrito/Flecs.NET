@@ -1,46 +1,45 @@
 // Queries can have wildcard terms that can match multiple instances of a
 // relationship or relationship target.
 
-#if Cpp_Queries_Wildcards
-
 using Flecs.NET.Core;
 
-using World world = World.Create();
+// Components
+file record struct Eats(int Amount);
 
-// Create a query that matches edible components
-Query q = world.Query(
-    filter: world.FilterBuilder().With<Eats>(Ecs.Wildcard) // Change first argument to (Eats, *)
-);
+// Tags
+file struct Apples;
+file struct Pears;
 
-// Create a few entities that match the query
-world.Entity("Bob")
-    .SetFirst<Eats, Apples>(new Eats { Amount = 10 })
-    .SetFirst<Eats, Pears>(new Eats { Amount = 5 });
-
-world.Entity("Alice")
-    .SetFirst<Eats, Apples>(new Eats { Amount = 4 });
-
-// Iterate the query with a Iter. This makes it possible to inspect
-// the pair that we are currently matched with.
-q.Each((Iter it, int i) =>
+public static class Cpp_Queries_Wildcards
 {
-    Column<Eats> eats = it.Field<Eats>(1);
+    public static void Main()
+    {
+        using World world = World.Create();
 
-    Entity e = it.Entity(i);
-    Entity food = it.Pair(1).Second();
+        // Create a query that matches edible components
+        Query q = world.QueryBuilder<Eats>()
+            .TermAt(1).Second(Ecs.Wildcard) // Change first argument to (Eats, *)
+            .Build();
 
-    Console.WriteLine($"{e} eats {eats[i].Amount} {food}");
-});
+        // Create a few entities that match the query
+        world.Entity("Bob")
+            .SetFirst<Eats, Apples>(new(10))
+            .SetFirst<Eats, Pears>(new(5));
 
-public struct Eats
-{
-    public int Amount { get; set; }
+        world.Entity("Alice")
+            .SetFirst<Eats, Apples>(new(4));
+
+        // Iterate the query with a Iter. This makes it possible to inspect
+        // the pair that we are currently matched with.
+        q.Each((Iter it, int i, ref Eats eats) =>
+        {
+            Entity e = it.Entity(i);
+            Entity food = it.Pair(1).Second();
+
+            Console.WriteLine($"{e} eats {eats.Amount} {food}");
+        });
+    }
 }
-
-public struct Apples { }
-public struct Pears { }
-
-#endif
 
 // Output:
 // Alice eats 4 Apples

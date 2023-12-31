@@ -25,7 +25,10 @@ public static class Cpp_Systems_StartupSystem
 
         // Regular system
         world.Routine("Update")
-            .Iter((Iter it) => { Console.WriteLine(it.System().ToString()); });
+            .Iter((Iter it) =>
+            {
+                Console.WriteLine(it.System().ToString());
+            });
 
         // First frame. This runs both the Startup and Update systems
         world.Progress();

@@ -22,93 +22,81 @@
 // The Each() iterator function always uses an instanced iterator under the
 // hood. This is transparent to the application, but improves performance. For
 // this reason using Each() can be faster than using uninstanced Iter().
-//
-
-#if Cpp_Queries_Instancing
 
 using Flecs.NET.Core;
 
-using World world = World.Create();
+// Components
+file record struct Position(float X, float Y);
+file record struct Velocity(float X, float Y);
 
-// Create a query for Position, Velocity. We'll create a few entities that
-// have Velocity as owned and shared component.
-Query q = world.Query(
-    filter: world.FilterBuilder()
-        .With<Position>().Self() // Position must always be owned by the entity
-        .With<Velocity>()
-        .Instanced()             // Create instanced query
-);
-
-// Create a prefab with Velocity. Prefabs are not matched with queries.
-Entity prefab = world.Prefab("p")
-    .Set(new Velocity { X = 1, Y = 2 });
-
-// Create a few entities that own Position & share Velocity from the prefab.
-world.Entity("e1").IsA(prefab)
-    .Set(new Position { X = 10, Y = 20 });
-
-world.Entity("e2").IsA(prefab)
-    .Set(new Position { X = 10, Y = 20 });
-
-// Create a few entities that own all components
-world.Entity("e3")
-    .Set(new Position { X = 10, Y = 20 })
-    .Set(new Velocity { X = 3, Y = 4 });
-
-world.Entity("e4")
-    .Set(new Position { X = 10, Y = 20 })
-    .Set(new Velocity { X = 4, Y = 5 });
-
-
-// Iterate the instanced query. Note how when a query is instanced, it needs
-// to check whether a field is owned or not in order to know how to access
-// it. In the case of an owned field it is iterated as an array, whereas
-// in the case of a shared field, it is accessed as a pointer.
-q.Iter((Iter it) =>
+public static class Cpp_Queries_Instancing
 {
-    Column<Position> p = it.Field<Position>(1);
-    Column<Velocity> v = it.Field<Velocity>(2);
-
-    // Check if Velocity is owned, in which case it's accessed as array.
-    // Position will always be owned, since we set the term to Self.
-    if (it.IsSelf(2)) // Velocity is term 2
+    public static void Main()
     {
-        Console.WriteLine("Velocity is owned");
+        using World world = World.Create();
 
-        foreach (int i in it)
+        // Create a query for Position, Velocity. We'll create a few entities that
+        // have Velocity as owned and shared component.
+        Query q = world.QueryBuilder<Position, Velocity>()
+            .TermAt(1).Self() // Position must always be owned by the entity
+            .Instanced()      // Create instanced query
+            .Build();
+
+        // Create a prefab with Velocity. Prefabs are not matched with queries.
+        Entity prefab = world.Prefab("p")
+            .Set<Velocity>(new(1, 2));
+
+        // Create a few entities that own Position & share Velocity from the prefab.
+        world.Entity("e1").IsA(prefab)
+            .Set<Position>(new(10, 20));
+
+        world.Entity("e2").IsA(prefab)
+            .Set<Position>(new(10, 20));
+
+        // Create a few entities that own all components
+        world.Entity("e3")
+            .Set<Position>(new(10, 20))
+            .Set<Velocity>(new(3, 4 ));
+
+        world.Entity("e4")
+            .Set<Position>(new(10, 20))
+            .Set<Velocity>(new(4, 5));
+
+
+        // Iterate the instanced query. Note how when a query is instanced, it needs
+        // to check whether a field is owned or not in order to know how to access
+        // it. In the case of an owned field it is iterated as an array, whereas
+        // in the case of a shared field, it is accessed as a pointer.
+        q.Iter((Iter it, Column<Position> p , Column<Velocity> v) =>
         {
-            p[i].X += v[i].X;
-            p[i].Y += v[i].Y;
-            Console.WriteLine($"{it.Entity(i)}: ({p[i].X}, {p[i].Y})");
-        }
+            // Check if Velocity is owned, in which case it's accessed as array.
+            // Position will always be owned, since we set the term to Self.
+            if (it.IsSelf(2)) // Velocity is term 2
+            {
+                Console.WriteLine("Velocity is owned");
+
+                foreach (int i in it)
+                {
+                    p[i].X += v[i].X;
+                    p[i].Y += v[i].Y;
+                    Console.WriteLine($"{it.Entity(i)}: ({p[i].X}, {p[i].Y})");
+                }
+            }
+            // If Velocity is shared, access the field from the index 0.
+            else
+            {
+                Console.WriteLine("Velocity is shared");
+
+                foreach (int i in it)
+                {
+                    p[i].X += v[0].X;
+                    p[i].Y += v[0].Y;
+                    Console.WriteLine($"{it.Entity(i)}: ({p[i].X}, {p[i].Y})");
+                }
+            }
+        });
     }
-    // If Velocity is shared, access the field from the index 0.
-    else
-    {
-        Console.WriteLine("Velocity is shared");
-
-        foreach (int i in it)
-        {
-            p[i].X += v[0].X;
-            p[i].Y += v[0].Y;
-            Console.WriteLine($"{it.Entity(i)}: ({p[i].X}, {p[i].Y})");
-        }
-    }
-});
-
-public struct Position
-{
-    public double X { get; set; }
-    public double Y { get; set; }
 }
-
-public struct Velocity
-{
-    public double X { get; set; }
-    public double Y { get; set; }
-}
-
-#endif
 
 // Output:
 // Velocity is shared
