@@ -22,7 +22,10 @@ public static class Cpp_Systems_Pipeline
         // Create a system for printing the entity position
         world.Routine<Position>()
             .Kind(Ecs.PostUpdate) // A phase orders a system in a pipeline
-            .Each((Entity e, ref Position p) => { Console.WriteLine($"{e}: ({p.X}, {p.Y})"); });
+            .Each((Entity e, ref Position p) =>
+            {
+                Console.WriteLine($"{e}: ({p.X}, {p.Y})");
+            });
 
         // Create a few test entities for a Position, Velocity query
         world.Entity("e1")

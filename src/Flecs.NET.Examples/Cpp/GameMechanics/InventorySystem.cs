@@ -244,7 +244,10 @@ public static class Cpp_GameMechanics_InventorySystem
             dst = GetContainer(dst); // Make sure to replace players with container
             src = GetContainer(src);
 
-            ForEachItem(src, (Entity item) => { TransferItem(dst, item); });
+            ForEachItem(src, (Entity item) =>
+            {
+                TransferItem(dst, item);
+            });
         });
     }
 

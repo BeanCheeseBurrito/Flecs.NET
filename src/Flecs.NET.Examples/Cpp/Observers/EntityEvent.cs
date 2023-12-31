@@ -25,15 +25,24 @@ public static class Cpp_Observers_EntityEvent
         Entity widget = world.Entity("MyWidget");
 
         // Observe the Click event on the widget entity.
-        widget.Observe<Click>(() => { Console.WriteLine($"Clicked!"); });
+        widget.Observe<Click>(() =>
+        {
+            Console.WriteLine($"Clicked!");
+        });
 
         // Observers can have an entity argument that holds the event source.
         // This allows the same function to be reused for different entities.
-        widget.Observe<Click>((Entity src) => { Console.WriteLine($"Clicked on {src.Path()}!"); });
+        widget.Observe<Click>((Entity src) =>
+        {
+            Console.WriteLine($"Clicked on {src.Path()}!");
+        });
 
         // Observe the Resize event. Events with payload are passed as arguments
         // to the observer callback.
-        widget.Observe((ref Resize p) => { Console.WriteLine($"Resized to ({p.Width}, {p.Height})!"); });
+        widget.Observe((ref Resize p) =>
+        {
+            Console.WriteLine($"Resized to ({p.Width}, {p.Height})!");
+        });
 
         // Emit the Click event.
         widget.Emit<Click>();

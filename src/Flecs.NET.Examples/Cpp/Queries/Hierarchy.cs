@@ -65,7 +65,10 @@ public static class Cpp_Queries_Hierarchy
         });
 
         // Print world positions for all entities that have (Position, Global)
-        world.EachFirst<Position, Global>((Entity e, ref Position p) => { Console.WriteLine($"{e}: ({p.X}, {p.Y})"); });
+        world.EachFirst<Position, Global>((Entity e, ref Position p) =>
+        {
+            Console.WriteLine($"{e}: ({p.X}, {p.Y})");
+        });
     }
 }
 

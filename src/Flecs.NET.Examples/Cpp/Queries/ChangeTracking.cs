@@ -103,7 +103,10 @@ public static class Cpp_Queries_ChangeTracking
         Console.WriteLine($"qRead.Changed()): {qRead.Changed()}");
 
         // When we iterate the read query, we'll see that one table has changed.
-        qRead.Iter((Iter it) => { Console.WriteLine($"it.Changed() for table [{it.Type()}]: {it.Changed()}"); });
+        qRead.Iter((Iter it) =>
+        {
+            Console.WriteLine($"it.Changed() for table [{it.Type()}]: {it.Changed()}");
+        });
     }
 }
 

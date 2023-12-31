@@ -36,10 +36,16 @@ public static class Cpp_Relationships_Basics
         Console.WriteLine($"Bob's type: [{bob.Type()}]");
 
         // Relationships can be iterated for an entity. This iterates (Eats, *):
-        bob.Each<Eats>((Entity second) => { Console.WriteLine($"Bob eats {second}"); });
+        bob.Each<Eats>((Entity second) =>
+        {
+            Console.WriteLine($"Bob eats {second}");
+        });
 
         // Iterate by explicitly providing the pair. This iterates (*, Pears):
-        bob.Each(Ecs.Wildcard, pears, (Id id) => { Console.WriteLine($"Bob {id.First()} pears"); });
+        bob.Each(Ecs.Wildcard, pears, (Id id) =>
+        {
+            Console.WriteLine($"Bob {id.First()} pears");
+        });
 
         // Get first target of relationship
         Console.WriteLine($"Bob eats {bob.Target<Eats>()}");

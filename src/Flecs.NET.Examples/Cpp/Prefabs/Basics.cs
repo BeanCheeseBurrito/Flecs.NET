@@ -46,7 +46,10 @@ public static class Cpp_Prefabs_Basics
         Console.WriteLine($"Defense after set: {dInstance.Value}");
 
         // Prefab components can be iterated like regular components:
-        world.Each((Entity e, ref Defense d) => { Console.WriteLine($"{e.Path()}: {d.Value}"); });
+        world.Each((Entity e, ref Defense d) =>
+        {
+            Console.WriteLine($"{e.Path()}: {d.Value}");
+        });
     }
 }
 

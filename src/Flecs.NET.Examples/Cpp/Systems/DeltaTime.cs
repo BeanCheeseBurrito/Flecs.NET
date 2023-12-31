@@ -10,7 +10,10 @@ public static class Cpp_Systems_DeltaTime
         // components which means it won't match any entities, but will still be ran
         // once for each call to ecs_progress.
         world.Routine()
-            .Iter((Iter it) => { Console.WriteLine($"Delta time: {it.DeltaTime()}"); });
+            .Iter((Iter it) =>
+            {
+                Console.WriteLine($"Delta time: {it.DeltaTime()}");
+            });
 
         // Call progress with 0.0f for the delta time parameter. This will cause
         // ecs_progress to measure the time passed since the last frame. The

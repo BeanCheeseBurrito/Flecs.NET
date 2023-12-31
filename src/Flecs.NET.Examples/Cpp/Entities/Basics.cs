@@ -42,7 +42,10 @@ public static class Cpp_Entities_Basics
         // Remove tag
         alice.Remove<Walking>();
 
-        world.Each((Entity e, ref Position p) => { Console.WriteLine($"{e}: ({p.X}, {p.Y})"); });
+        world.Each((Entity e, ref Position p) =>
+        {
+            Console.WriteLine($"{e}: ({p.X}, {p.Y})");
+        });
     }
 }
 
