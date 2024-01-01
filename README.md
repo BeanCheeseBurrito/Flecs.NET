@@ -95,7 +95,7 @@ For more up-to-date packages, development builds are available on the [GitLab pa
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net7.0</TargetFramework>
-        <RestoreSources>$(RestoreSources);https://gitlab.com/api/v4/projects/51698729/packages/nuget/index.json</RestoreSources>
+        <RestoreAdditionalProjectSources>https://gitlab.com/api/v4/projects/51698729/packages/nuget/index.json</RestoreAdditionalProjectSources>
     </PropertyGroup>
 
     <ItemGroup>
