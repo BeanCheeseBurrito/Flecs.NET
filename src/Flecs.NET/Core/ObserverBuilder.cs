@@ -162,6 +162,7 @@ namespace Flecs.NET.Core
             observerContext[0] = ObserverContext;
             BindingContext.SetCallback(ref observerContext->Iterator, userCallback, storeFunctionPointer);
 
+            Ecs.Assert(FilterBuilder.Terms.Count > 0, "Observers require at least 1 term.");
             Ecs.Assert(EventCount != 0,
                 "Observer cannot have zero events. Use ObserverBuilder.Event() to add events.");
 
