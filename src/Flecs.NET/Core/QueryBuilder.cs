@@ -46,7 +46,7 @@ namespace Flecs.NET.Core
             entityDesc.name = nativeName;
             entityDesc.sep = BindingContext.DefaultSeparator;
             entityDesc.root_sep = BindingContext.DefaultRootSeparator;
-            Desc.filter.entity = ecs_entity_init(world, &entityDesc);
+            FilterBuilder.Desc.entity = ecs_entity_init(world, &entityDesc);
         }
 
         /// <summary>

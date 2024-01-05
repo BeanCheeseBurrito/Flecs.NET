@@ -410,26 +410,21 @@ namespace Flecs.NET.Core
         [Conditional("DEBUG")]
         internal static void AssertFieldId<T>(ecs_iter_t* iter, int index)
         {
-            ulong termId = ecs_field_id(iter, index);
+            Ecs.Assert(index > 0, nameof(ECS_INVALID_PARAMETER));
+
+            ulong termId = iter->ids[index - 1];
             ulong typeId = Type<T>.Id(iter->world);
 
-            if (termId == typeId)
-                return;
-
-            ulong termTypeid = ecs_get_typeid(iter->world, termId);
-
-            if (termTypeid == typeId)
-                return;
-
-            if (typeof(T) == typeof(ulong) &&
-                (ecs_id_is_tag(iter->world, termId) == Macros.True ||
-                 ecs_id_is_union(iter->world, termId) == Macros.True))
+            if (Macros.TypeMatchesId<T>(iter->world, termId))
                 return;
 
             Entity expected = new Entity(iter->world, termId);
             Entity actual = new Entity(iter->world, typeId);
+
+            string iteratedName = iter->system == 0 ? "" : $"Query: {new Entity(iter->world, iter->system)}";
+
             Ecs.Error(
-                $"Type argument mismatch at term index {index}.\nExpected Term: {expected}\nActual Term: {actual}");
+                $"Type argument mismatch at term index {index}.\nExpected Term: {expected}\nProvided Term: {actual}\n{iteratedName}");
         }
 
         /// <summary>

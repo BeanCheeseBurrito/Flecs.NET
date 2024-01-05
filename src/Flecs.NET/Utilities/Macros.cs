@@ -288,6 +288,28 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
+        ///     Test if a type id matches the type of another id.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="id"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool TypeMatchesId<T>(ecs_world_t* world, ulong id)
+        {
+            ulong typeId = Type<T>.Id(world);
+
+            if (typeId == id)
+                return true;
+
+            if (IsPair(id) && typeId == ecs_get_typeid(world, id))
+                return true;
+
+            return typeof(T) == typeof(ulong) &&
+                   (ecs_id_is_tag(world, id) == True ||
+                    ecs_id_is_union(world, id) == True);
+        }
+
+        /// <summary>
         ///     Locks a table.
         /// </summary>
         /// <param name="world"></param>
