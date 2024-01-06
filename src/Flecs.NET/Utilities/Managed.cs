@@ -74,6 +74,9 @@ namespace Flecs.NET.Utilities
 
         internal static ref T GetTypeRef<T>(void* data, int index = 0)
         {
+            if (data == null)
+                return ref Unsafe.NullRef<T>();
+
             if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
                 return ref ((T*)data)[index];
 
@@ -84,12 +87,7 @@ namespace Flecs.NET.Utilities
 
         internal static ref T GetTypeRef<T>(IntPtr data, int index = 0)
         {
-            if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
-                return ref ((T*)data)[index];
-
-            GCHandle handle = GCHandle.FromIntPtr(((IntPtr*)data)[index]);
-            BindingContext.Box<T> box = (BindingContext.Box<T>)handle.Target!;
-            return ref box.Value!;
+            return ref GetTypeRef<T>((void*)data, index);
         }
 
         internal static ref T GetTypeRef<T>(GCHandle handle)
