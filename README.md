@@ -120,7 +120,7 @@ https://github.com/BeanCheeseBurrito/Flecs.NET.Unity.git
 > Only Windows, MacOS, and Linux builds on x64 Mono are supported. IL2CPP, web, and mobile support are planned for the future.
 
 ## Running examples
-> **Note**
+> [!NOTE]
 > Flecs native libraries need to be built before running any of the examples. See step [Compile flecs](https://github.com/BeanCheeseBurrito/Flecs.NET#compile-flecs) on how to compile them.
 
 To run any of the example programs, use ``dotnet run``and set the "Example" property to the example's path relative to the ``Flecs.NET.Examples`` project. Each level of the path must be separated by an underscore.
@@ -144,7 +144,7 @@ dotnet restore
 ```
 ### Generate bindings
 Generate the binding code. Bindings are generated with [Bindgen.NET](https://github.com/BeanCheeseBurrito/Bindgen.NET).
-> **Note**
+> [!NOTE]
 > The binding generator needs access to system headers on MacOS. Ensure that XCode is installed.
 ```console
 dotnet run --project src/Flecs.NET.Bindgen
