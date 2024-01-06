@@ -25,26 +25,23 @@ namespace Flecs.NET.Core
 
             Type type = typeof(T);
 
-            if (RuntimeFeature.IsDynamicCodeSupported)
-            {
-                Array values = type.GetEnumValues();
-                _data = new EnumPair[values.Length];
+            Array values = type.GetEnumValues();
+            _data = new EnumPair[values.Length];
 
-                for (int i = 0; i < values.Length; i++)
-                {
-                    // TODO: Fix CS8600 warning.
+            for (int i = 0; i < values.Length; i++)
+            {
+                // TODO: Fix CS8600 warning.
 #pragma warning disable CS8600
-                    object obj = values.GetValue(i);
+                object obj = values.GetValue(i);
 #pragma warning restore CS8600
 
-                    T member = (T)obj!;
-                    int value = Convert.ToInt32(obj, CultureInfo.InvariantCulture);
+                T member = (T)obj!;
+                int value = Convert.ToInt32(obj, CultureInfo.InvariantCulture);
 
-                    using NativeString nativeName = (NativeString)member.ToString();
-                    ulong enumEntity = ecs_cpp_enum_constant_register(world, id, 0, nativeName, value);
+                using NativeString nativeName = (NativeString)member.ToString();
+                ulong enumEntity = ecs_cpp_enum_constant_register(world, id, 0, nativeName, value);
 
-                    _data[i] = new EnumPair(value, enumEntity);
-                }
+                _data[i] = new EnumPair(value, enumEntity);
             }
             // TODO: Reimplement NativeAOT support after move to .NET Standard 2.1
         }
