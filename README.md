@@ -149,10 +149,10 @@ Generate the binding code. Bindings are generated with [Bindgen.NET](https://git
 ```console
 dotnet run --project src/Flecs.NET.Bindgen
 ```
-### Compile flecs
-Compile the native libraries. The [zig](https://ziglang.org/learn/overview/#cross-compiling-is-a-first-class-use-case) compiler will automatically be downloaded and cached in your local nuget package folder. Native libraries will be cross-compiled for linux, macos, and windows.
+### Build Flecs.NET
+Compile the wrapper and native libraries. The [zig](https://ziglang.org/learn/overview/#cross-compiling-is-a-first-class-use-case) compiler will automatically be downloaded and cached in your local nuget package folder. Native libraries will be cross-compiled for linux, macos, and windows.
 ```console
-dotnet build src/Flecs.NET.Native
+dotnet build
 ```
 
 ### Reference the project
