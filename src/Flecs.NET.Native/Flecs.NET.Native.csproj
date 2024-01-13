@@ -156,19 +156,19 @@
     </Target>
 
     <ItemGroup>
-        <!-- Unity exports are limited to linux-x64 and win-x64 to ensure that lib files without matching meta files do not create conflicts. -->
-        <!-- TODO add meta files for linux-arm64 using Unity Embedded Linux target -->
-        <!-- TODO add meta files for osx-arm64 and osx-x64 -->
-        <!-- TODO add meta files for win-x64 in Unity 2023 -->
+        <!--X64-->
+        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-x64/libflecs.so" PackagePath="x64/libflecs-debug.so"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-x64/libflecs.dylib" PackagePath="x64/libflecs-debug.dylib"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/flecs.dll" PackagePath="x64/flecs-debug.dll"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/flecs.pdb" PackagePath="x64/flecs-debug.pdb"/>
 
-        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-x64/libflecs.so" PackagePath="libflecs-debug.so"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-x64/libflecs.dylib" PackagePath="libflecs-debug.dylib"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/flecs.dll" PackagePath="flecs-debug.dll"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/flecs.pdb" PackagePath="flecs-debug.pdb"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/linux-x64/libflecs.so" PackagePath="x64/libflecs.so"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/osx-x64/libflecs.dylib" PackagePath="x64/libflecs.dylib"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/win-x64/flecs.dll" PackagePath="x64/flecs.dll"/>
 
-        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/linux-x64/libflecs.so" PackagePath="libflecs.so"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/osx-x64/libflecs.dylib" PackagePath="libflecs.dylib"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/win-x64/flecs.dll" PackagePath="flecs.dll"/>
+        <!--Arm64-->
+        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-arm64/libflecs.dylib" PackagePath="arm64/libflecs-debug.dylib"/>
+        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/osx-arm64/libflecs.dylib" PackagePath="arm64/libflecs.dylib"/>
     </ItemGroup>
 
     <Target Name="ExportUnityArtifacts" AfterTargets="Build" DependsOnTargets="Compile Flecs" Condition="'$(FlecsExportUnityArtifacts)' == 'True' And '$(TargetFramework)' == 'netstandard2.1'">

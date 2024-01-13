@@ -40,7 +40,8 @@ namespace Flecs.NET.Unity
 #endif
             return new[]
             {
-                Path.GetFullPath($"Packages/{PackageName}/Flecs.NET.Native/{config}/{import}")
+                Path.GetFullPath($"Packages/{PackageName}/Flecs.NET.Native/{config}/arm64/{import}"),
+                Path.GetFullPath($"Packages/{PackageName}/Flecs.NET.Native/{config}/x64/{import}")
             };
         }
 
