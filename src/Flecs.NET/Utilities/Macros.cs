@@ -306,6 +306,7 @@ namespace Flecs.NET.Utilities
 
             return typeof(T) == typeof(ulong) &&
                    (ecs_id_is_tag(world, id) == True ||
+                    ecs_id_is_wildcard(id) == True ||
                     ecs_id_is_union(world, id) == True);
         }
 
