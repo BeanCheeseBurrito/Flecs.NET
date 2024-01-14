@@ -12,7 +12,7 @@ using UnityEngine.Scripting;
 
 namespace Flecs.NET.Unity
 {
-    internal static class FlecsInitialization
+    public static class FlecsInitialization
     {
         private const string PackageName = "dev.flecs.net";
 
