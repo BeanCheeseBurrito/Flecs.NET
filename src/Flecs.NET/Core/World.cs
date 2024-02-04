@@ -1328,6 +1328,18 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Defer all operations called in function. If the world is already in
+        ///     deferred mode, do nothing.
+        /// </summary>
+        /// <param name="callback"></param>
+        public void Defer(Ecs.WorldCallback callback)
+        {
+            ecs_defer_begin(Handle);
+            callback(ref this);
+            ecs_defer_end(Handle);
+        }
+
+        /// <summary>
         ///     Suspend deferring operations.
         /// </summary>
         public void DeferSuspend()
@@ -1944,9 +1956,9 @@ namespace Flecs.NET.Core
         ///     Creates a timer.
         /// </summary>
         /// <returns></returns>
-        public Timer Timer()
+        public TimerEntity Timer()
         {
-            return new Timer(Handle);
+            return new TimerEntity(Handle);
         }
 
         /// <summary>
@@ -1954,9 +1966,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Timer Timer(ulong id)
+        public TimerEntity Timer(ulong id)
         {
-            return new Timer(Handle, id);
+            return new TimerEntity(Handle, id);
         }
 
         /// <summary>
@@ -1964,9 +1976,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Timer Timer(string name)
+        public TimerEntity Timer(string name)
         {
-            return new Timer(Handle, name);
+            return new TimerEntity(Handle, name);
         }
 
         /// <summary>

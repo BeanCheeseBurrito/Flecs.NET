@@ -298,6 +298,11 @@ namespace Flecs.NET.Core
         ///     OrderBy action.
         /// </summary>
         public delegate int OrderByAction(ulong e1, void* ptr1, ulong e2, void* ptr2);
+
+        /// <summary>
+        ///     A callback that takes a reference to a world.
+        /// </summary>
+        public delegate void WorldCallback(ref World world);
     }
 
     // Built-in global entities, tags, and flags.

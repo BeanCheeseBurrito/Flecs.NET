@@ -226,10 +226,10 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Sets the external tick source.
         /// </summary>
-        /// <param name="timer"></param>
-        public void SetTickSource(Timer timer)
+        /// <param name="timerEntity"></param>
+        public void SetTickSource(TimerEntity timerEntity)
         {
-            ecs_set_tick_source(World, Entity, timer.Entity);
+            ecs_set_tick_source(World, Entity, timerEntity.Entity);
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     Timer struct.
     /// </summary>
-    public unsafe struct Timer : IEquatable<Timer>
+    public unsafe struct TimerEntity : IEquatable<TimerEntity>
     {
         private Entity _entity;
 
@@ -19,7 +19,7 @@ namespace Flecs.NET.Core
         ///     Creates a timer from the entity id.
         /// </summary>
         /// <param name="id"></param>
-        public Timer(ulong id)
+        public TimerEntity(ulong id)
         {
             _entity = new Entity(id);
         }
@@ -28,7 +28,7 @@ namespace Flecs.NET.Core
         ///     Creates a timer for the provided world.
         /// </summary>
         /// <param name="world"></param>
-        public Timer(ecs_world_t* world)
+        public TimerEntity(ecs_world_t* world)
         {
             _entity = new Entity(world);
         }
@@ -38,7 +38,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="world"></param>
         /// <param name="id"></param>
-        public Timer(ecs_world_t* world, ulong id)
+        public TimerEntity(ecs_world_t* world, ulong id)
         {
             _entity = new Entity(world, id);
         }
@@ -48,7 +48,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
-        public Timer(ecs_world_t* world, string name)
+        public TimerEntity(ecs_world_t* world, string name)
         {
             _entity = new Entity(world, name);
         }
@@ -58,7 +58,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="interval"></param>
         /// <returns></returns>
-        public ref Timer Interval(float interval)
+        public ref TimerEntity Interval(float interval)
         {
             ecs_set_interval(Entity.World, Entity, interval);
             return ref this;
@@ -78,7 +78,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public ref Timer Timeout(float timeout)
+        public ref TimerEntity Timeout(float timeout)
         {
             ecs_set_timeout(Entity.World, Entity, timeout);
             return ref this;
@@ -99,7 +99,7 @@ namespace Flecs.NET.Core
         /// <param name="rate"></param>
         /// <param name="tickSource"></param>
         /// <returns></returns>
-        public ref Timer Rate(int rate, ulong tickSource = 0)
+        public ref TimerEntity Rate(int rate, ulong tickSource = 0)
         {
             ecs_set_rate(Entity.World, Entity, rate, tickSource);
             return ref this;
@@ -122,6 +122,26 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts a <see cref="TimerEntity"/> instance to its entity id.
+        /// </summary>
+        /// <param name="timerEntity"></param>
+        /// <returns></returns>
+        public static implicit operator ulong(TimerEntity timerEntity)
+        {
+            return ToUInt64(timerEntity);
+        }
+
+        /// <summary>
+        ///     Converts an<see cref="TimerEntity"/> instance to its entity id.
+        /// </summary>
+        /// <param name="timerEntity"></param>
+        /// <returns></returns>
+        public static ulong ToUInt64(TimerEntity timerEntity)
+        {
+            return timerEntity.Entity;
+        }
+
+        /// <summary>
         ///     Returns the entity's name if it has one, otherwise return its id.
         /// </summary>
         /// <returns></returns>
@@ -131,27 +151,27 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Checks if two <see cref="Timer"/> instances are equal.
+        ///     Checks if two <see cref="TimerEntity"/> instances are equal.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(Timer other)
+        public bool Equals(TimerEntity other)
         {
             return Entity == other.Entity;
         }
 
         /// <summary>
-        ///     Checks if two <see cref="Timer"/> instances are equal.
+        ///     Checks if two <see cref="TimerEntity"/> instances are equal.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object? obj)
         {
-            return obj is Timer other && Equals(other);
+            return obj is TimerEntity other && Equals(other);
         }
 
         /// <summary>
-        ///     Returns the hash code of the <see cref="Timer"/>.
+        ///     Returns the hash code of the <see cref="TimerEntity"/>.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -160,23 +180,23 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Checks if two <see cref="Timer"/> instances are equal.
+        ///     Checks if two <see cref="TimerEntity"/> instances are equal.
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator ==(Timer left, Timer right)
+        public static bool operator ==(TimerEntity left, TimerEntity right)
         {
             return left.Equals(right);
         }
 
         /// <summary>
-        ///     Checks if two <see cref="Timer"/> instances are not equal.
+        ///     Checks if two <see cref="TimerEntity"/> instances are not equal.
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator !=(Timer left, Timer right)
+        public static bool operator !=(TimerEntity left, TimerEntity right)
         {
             return !(left == right);
         }
