@@ -1982,6 +1982,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Creates a timer.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public TimerEntity Timer<T>()
+        {
+            return new TimerEntity(Handle, Type<T>.Id(Handle));
+        }
+
+        /// <summary>
         ///     Enable randomization of initial time values for timers.
         /// </summary>
         public void RandomizeTimers()

@@ -916,7 +916,7 @@ namespace Flecs.NET.Bindings
         public static extern byte* ecs_parse_identifier(byte* name, byte* expr, byte* ptr, byte* token_out);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_parse_term", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_parse_term(ecs_world_t* world, byte* name, byte* expr, byte* ptr, ecs_term_t* term_out, ecs_term_id_t* extra_args);
+        public static extern byte* ecs_parse_term(ecs_world_t* world, byte* name, byte* expr, byte* ptr, ecs_term_t* term_out, ecs_oper_kind_t* extra_oper, ecs_term_id_t* extra_args, byte allow_newline);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_parse_token", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_parse_token(byte* name, byte* expr, byte* ptr, byte* token_out, byte delim);
@@ -1348,37 +1348,25 @@ namespace Flecs.NET.Bindings
         public static extern void ecs_stop_timer(ecs_world_t* world, ulong tick_source);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_append", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_append(ecs_strbuf_t* buffer, byte* fmt);
+        public static extern void ecs_strbuf_append(ecs_strbuf_t* buffer, byte* fmt);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_appendbool", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_appendbool(ecs_strbuf_t* buffer, byte v);
+        public static extern void ecs_strbuf_appendbool(ecs_strbuf_t* buffer, byte v);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_appendch", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_appendch(ecs_strbuf_t* buffer, byte ch);
+        public static extern void ecs_strbuf_appendch(ecs_strbuf_t* buffer, byte ch);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_appendflt", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_appendflt(ecs_strbuf_t* buffer, double v, byte nan_delim);
+        public static extern void ecs_strbuf_appendflt(ecs_strbuf_t* buffer, double v, byte nan_delim);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_appendint", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_appendint(ecs_strbuf_t* buffer, long v);
+        public static extern void ecs_strbuf_appendint(ecs_strbuf_t* buffer, long v);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_appendstr", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_appendstr(ecs_strbuf_t* buffer, byte* str);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_appendstr_zerocpy", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_appendstr_zerocpy(ecs_strbuf_t* buffer, byte* str);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_appendstr_zerocpy_const", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_appendstr_zerocpy_const(ecs_strbuf_t* buffer, byte* str);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_appendstr_zerocpyn", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_appendstr_zerocpyn(ecs_strbuf_t* buffer, byte* str, int n);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_appendstr_zerocpyn_const", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_appendstr_zerocpyn_const(ecs_strbuf_t* buffer, byte* str, int n);
+        public static extern void ecs_strbuf_appendstr(ecs_strbuf_t* buffer, byte* str);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_appendstrn", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_appendstrn(ecs_strbuf_t* buffer, byte* str, int n);
+        public static extern void ecs_strbuf_appendstrn(ecs_strbuf_t* buffer, byte* str, int n);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_get", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_strbuf_get(ecs_strbuf_t* buffer);
@@ -1387,16 +1375,16 @@ namespace Flecs.NET.Bindings
         public static extern byte* ecs_strbuf_get_small(ecs_strbuf_t* buffer);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_list_append", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_list_append(ecs_strbuf_t* buffer, byte* fmt);
+        public static extern void ecs_strbuf_list_append(ecs_strbuf_t* buffer, byte* fmt);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_list_appendch", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_list_appendch(ecs_strbuf_t* buffer, byte ch);
+        public static extern void ecs_strbuf_list_appendch(ecs_strbuf_t* buffer, byte ch);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_list_appendstr", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_list_appendstr(ecs_strbuf_t* buffer, byte* str);
+        public static extern void ecs_strbuf_list_appendstr(ecs_strbuf_t* buffer, byte* str);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_list_appendstrn", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_list_appendstrn(ecs_strbuf_t* buffer, byte* str, int n);
+        public static extern void ecs_strbuf_list_appendstrn(ecs_strbuf_t* buffer, byte* str, int n);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_list_next", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_strbuf_list_next(ecs_strbuf_t* buffer);
@@ -1408,13 +1396,13 @@ namespace Flecs.NET.Bindings
         public static extern void ecs_strbuf_list_push(ecs_strbuf_t* buffer, byte* list_open, byte* separator);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_mergebuff", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_mergebuff(ecs_strbuf_t* dst_buffer, ecs_strbuf_t* src_buffer);
+        public static extern void ecs_strbuf_mergebuff(ecs_strbuf_t* dst_buffer, ecs_strbuf_t* src_buffer);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_reset", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_strbuf_reset(ecs_strbuf_t* buffer);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_vappend", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_strbuf_vappend(ecs_strbuf_t* buffer, byte* fmt, void* args);
+        public static extern void ecs_strbuf_vappend(ecs_strbuf_t* buffer, byte* fmt, void* args);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strbuf_written", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_strbuf_written(ecs_strbuf_t* buffer);
@@ -1653,6 +1641,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_vec_copy", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ecs_vec_t ecs_vec_copy(ecs_allocator_t* allocator, ecs_vec_t* vec, int size);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_vec_copy_shrink", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern ecs_vec_t ecs_vec_copy_shrink(ecs_allocator_t* allocator, ecs_vec_t* vec, int size);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_vec_count", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_vec_count(ecs_vec_t* vec);
 
@@ -1858,7 +1849,7 @@ namespace Flecs.NET.Bindings
         public static extern ulong* flecs_sparse_ids(ecs_sparse_t* sparse);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_sparse_init", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void flecs_sparse_init(ecs_sparse_t* sparse, ecs_allocator_t* allocator, ecs_block_allocator_t* page_allocator, int elem_size);
+        public static extern void flecs_sparse_init(ecs_sparse_t* result, ecs_allocator_t* allocator, ecs_block_allocator_t* page_allocator, int size);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_sparse_is_alive", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte flecs_sparse_is_alive(ecs_sparse_t* sparse, ulong id);
@@ -3624,6 +3615,8 @@ namespace Flecs.NET.Bindings
 
             public int* sizes;
 
+            public ulong* ids;
+
             public ulong entity;
 
             public ecs_iterable_t iterable;
@@ -4436,6 +4429,10 @@ namespace Flecs.NET.Bindings
 
             public int send_queue_wait_ms;
 
+            public float cache_timeout;
+
+            public float cache_purge_timeout;
+
             public bool Equals(ecs_http_server_desc_t other)
             {
                 fixed (ecs_http_server_desc_t* __self = &this)
@@ -4748,6 +4745,10 @@ namespace Flecs.NET.Bindings
 
             public ulong event_id;
 
+            public int event_cur;
+
+            public ecs_filter_t* query;
+
             public ecs_term_t* terms;
 
             public int table_count;
@@ -4869,6 +4870,12 @@ namespace Flecs.NET.Bindings
             public byte serialize_type_info;
 
             public byte serialize_table;
+
+            public byte serialize_rows;
+
+            public byte serialize_field_info;
+
+            public byte dont_serialize_results;
 
             public bool Equals(ecs_iter_to_json_desc_t other)
             {
@@ -5954,6 +5961,8 @@ namespace Flecs.NET.Bindings
 
             public uint flags_;
 
+            public void* log_out_;
+
             public bool Equals(ecs_os_api_t other)
             {
                 fixed (ecs_os_api_t* __self = &this)
@@ -6591,6 +6600,8 @@ namespace Flecs.NET.Bindings
             public ulong entity;
 
             public ulong id;
+
+            public ulong table_id;
 
             public ecs_table_record_t* tr;
 
@@ -7356,142 +7367,6 @@ namespace Flecs.NET.Bindings
             }
         }
 
-        public partial struct ecs_strbuf_element : System.IEquatable<ecs_strbuf_element>
-        {
-            public byte buffer_embedded;
-
-            public int pos;
-
-            public byte* buf;
-
-            public ecs_strbuf_element* next;
-
-            public bool Equals(ecs_strbuf_element other)
-            {
-                fixed (ecs_strbuf_element* __self = &this)
-                {
-                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_element)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_strbuf_element)));
-                }
-            }
-
-            public override bool Equals(object? obj)
-            {
-                return obj is ecs_strbuf_element other && Equals(other);
-            }
-
-            public static bool operator ==(ecs_strbuf_element left, ecs_strbuf_element right)
-            {
-                return left.Equals(right);
-            }
-
-            public static bool operator !=(ecs_strbuf_element left, ecs_strbuf_element right)
-            {
-                return !(left == right);
-            }
-
-            public override int GetHashCode()
-            {
-                fixed (ecs_strbuf_element* __self = &this)
-                {
-#if NET6_0_OR_GREATER
-                    System.HashCode hash = new System.HashCode();
-                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_element)));
-                    return hash.ToHashCode();
-#else
-                    return base.GetHashCode();
-#endif
-                }
-            }
-        }
-
-        public partial struct ecs_strbuf_element_embedded : System.IEquatable<ecs_strbuf_element_embedded>
-        {
-            public ecs_strbuf_element super;
-
-            public fixed byte buf[512];
-
-            public bool Equals(ecs_strbuf_element_embedded other)
-            {
-                fixed (ecs_strbuf_element_embedded* __self = &this)
-                {
-                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_element_embedded)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_strbuf_element_embedded)));
-                }
-            }
-
-            public override bool Equals(object? obj)
-            {
-                return obj is ecs_strbuf_element_embedded other && Equals(other);
-            }
-
-            public static bool operator ==(ecs_strbuf_element_embedded left, ecs_strbuf_element_embedded right)
-            {
-                return left.Equals(right);
-            }
-
-            public static bool operator !=(ecs_strbuf_element_embedded left, ecs_strbuf_element_embedded right)
-            {
-                return !(left == right);
-            }
-
-            public override int GetHashCode()
-            {
-                fixed (ecs_strbuf_element_embedded* __self = &this)
-                {
-#if NET6_0_OR_GREATER
-                    System.HashCode hash = new System.HashCode();
-                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_element_embedded)));
-                    return hash.ToHashCode();
-#else
-                    return base.GetHashCode();
-#endif
-                }
-            }
-        }
-
-        public partial struct ecs_strbuf_element_str : System.IEquatable<ecs_strbuf_element_str>
-        {
-            public ecs_strbuf_element super;
-
-            public byte* alloc_str;
-
-            public bool Equals(ecs_strbuf_element_str other)
-            {
-                fixed (ecs_strbuf_element_str* __self = &this)
-                {
-                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_element_str)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_strbuf_element_str)));
-                }
-            }
-
-            public override bool Equals(object? obj)
-            {
-                return obj is ecs_strbuf_element_str other && Equals(other);
-            }
-
-            public static bool operator ==(ecs_strbuf_element_str left, ecs_strbuf_element_str right)
-            {
-                return left.Equals(right);
-            }
-
-            public static bool operator !=(ecs_strbuf_element_str left, ecs_strbuf_element_str right)
-            {
-                return !(left == right);
-            }
-
-            public override int GetHashCode()
-            {
-                fixed (ecs_strbuf_element_str* __self = &this)
-                {
-#if NET6_0_OR_GREATER
-                    System.HashCode hash = new System.HashCode();
-                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_strbuf_element_str)));
-                    return hash.ToHashCode();
-#else
-                    return base.GetHashCode();
-#endif
-                }
-            }
-        }
-
         public partial struct ecs_strbuf_list_elem : System.IEquatable<ecs_strbuf_list_elem>
         {
             public int count;
@@ -7538,25 +7413,17 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_strbuf_t : System.IEquatable<ecs_strbuf_t>
         {
-            public byte* buf;
+            public byte* content;
 
-            public int max;
+            public int length;
 
             public int size;
-
-            public int elementCount;
-
-            public ecs_strbuf_element_embedded firstElement;
-
-            public ecs_strbuf_element* current;
 
             public list_stack_FixedBuffer list_stack;
 
             public int list_sp;
 
-            public byte* content;
-
-            public int length;
+            public fixed byte small_string[512];
 
             public partial struct list_stack_FixedBuffer : System.IEquatable<list_stack_FixedBuffer>
             {
@@ -11787,9 +11654,9 @@ namespace Flecs.NET.Bindings
 
         public const int ECS_STAT_WINDOW = 60;
 
-        public const int ECS_STRBUF_ELEMENT_SIZE = 511;
-
         public const int ECS_STRBUF_MAX_LIST_DEPTH = 32;
+
+        public const int ECS_STRBUF_SMALL_STRING_SIZE = 512;
 
         public const int ecs_table_t_magic = 1701016436;
 

@@ -163,6 +163,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set tick source.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref RoutineBuilder TickSource<T>()
+        {
+            RoutineDesc.tick_source = Type<T>.Id(World);
+            return ref this;
+        }
+
+        /// <summary>
         ///     Set system context.
         /// </summary>
         /// <param name="ctx"></param>

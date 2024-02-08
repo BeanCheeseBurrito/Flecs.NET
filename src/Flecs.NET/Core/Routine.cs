@@ -233,6 +233,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Sets the external tick source.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void SetTickSource<T>()
+        {
+            ecs_set_tick_source(World, Entity, Type<T>.Id(World));
+        }
+
+        /// <summary>
         ///     Converts an <see cref="Routine"/> instance to its entity id.
         /// </summary>
         /// <param name="routine"></param>

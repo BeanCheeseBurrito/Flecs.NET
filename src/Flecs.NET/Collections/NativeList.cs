@@ -129,6 +129,39 @@ namespace Flecs.NET.Collections
         }
 
         /// <summary>
+        ///    Adds a span of items starting at the provided managed reference to the end of the <see cref="NativeList{T}"/>.
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        public void AddRange(ref T start, int count)
+        {
+            AddRange(MemoryMarshal.CreateSpan(ref start, count));
+        }
+
+        /// <summary>
+        ///    Adds a span of items starting at the pointer to the end of the <see cref="NativeList{T}"/>.
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        public void AddRange(T* start, int count)
+        {
+            AddRange(new Span<T>(start, count));
+        }
+
+        /// <summary>
+        ///     Adds the provided item a repeated number of times to the end of the <see cref="NativeList{T}"/>.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="count"></param>
+        public void AddRepeated(T item, int count)
+        {
+            EnsureCapacity(Capacity + count);
+
+            for (int i = 0; i < count; i++)
+                Data[Count++] = item;
+        }
+
+        /// <summary>
         ///     Sets the count of the list to 0.
         /// </summary>
         public void Clear()

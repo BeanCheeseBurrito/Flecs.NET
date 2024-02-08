@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Bindgen.NET" Version="0.1.8"/>
+        <PackageReference Include="Bindgen.NET" Version="0.1.10"/>
     </ItemGroup>
 
 </Project>
