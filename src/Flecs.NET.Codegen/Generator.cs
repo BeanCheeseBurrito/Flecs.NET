@@ -24,6 +24,7 @@ namespace Flecs.NET.Codegen
                 #nullable enable              
 
                 using System;
+                using System.Runtime.CompilerServices;
                 using System.Runtime.InteropServices;
                 using Flecs.NET.Utilities; 
                 using static Flecs.NET.Bindings.Native;
@@ -503,10 +504,13 @@ namespace Flecs.NET.Codegen
                     index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
 
                 string isSelfBools = ConcatString(i + 1, "\n",
-                    index => $"bool t{index}IsSelf = iter->sources == null || iter->sources[{index}] == 0;");
+                    index => $"int t{index}IsSelf = (iter->sources == null || iter->sources[{index}] == 0) ? 1 : 0;");
+
+                string pointers = ConcatString(i + 1, "\n",
+                    index => $"void* t{index}Pointer = iter->ptrs[{index}];");
 
                 string callbackArgs = ConcatString(i + 1, ", ",
-                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], t{index}IsSelf ? i : 0)");
+                    index => $"ref t{index}Pointer == null ? ref Unsafe.NullRef<T{index}>() : ref Managed.GetTypeRef<T{index}>(t{index}Pointer, i * t{index}IsSelf)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachCallback<{typeParams}> callback)
@@ -517,6 +521,7 @@ namespace Flecs.NET.Codegen
                         
                         {typeAssertions}
                         {isSelfBools}
+                        {pointers}
 
                         for (int i = 0; i < count; i++)
                             callback({callbackArgs});
@@ -541,10 +546,13 @@ namespace Flecs.NET.Codegen
                     index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
 
                 string isSelfBools = ConcatString(i + 1, "\n",
-                    index => $"bool t{index}IsSelf = iter->sources == null || iter->sources[{index}] == 0;");
+                    index => $"int t{index}IsSelf = (iter->sources == null || iter->sources[{index}] == 0) ? 1 : 0;");
+
+                string pointers = ConcatString(i + 1, "\n",
+                    index => $"void* t{index}Pointer = iter->ptrs[{index}];");
 
                 string callbackArgs = ConcatString(i + 1, ", ",
-                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], t{index}IsSelf ? i : 0)");
+                    index => $"ref t{index}Pointer == null ? ref Unsafe.NullRef<T{index}>() : ref Managed.GetTypeRef<T{index}>(t{index}Pointer, i * t{index}IsSelf)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachEntityCallback<{typeParams}> callback)
@@ -555,6 +563,7 @@ namespace Flecs.NET.Codegen
                         Ecs.Assert(count > 0, ""No entities returned, use Each() without the entity argument instead."");
                         {typeAssertions}
                         {isSelfBools}
+                        {pointers}
 
                         Macros.TableLock(iter->world, iter->table);
 
@@ -581,10 +590,13 @@ namespace Flecs.NET.Codegen
                     index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
 
                 string isSelfBools = ConcatString(i + 1, "\n",
-                    index => $"bool t{index}IsSelf = iter->sources == null || iter->sources[{index}] == 0;");
+                    index => $"int t{index}IsSelf = (iter->sources == null || iter->sources[{index}] == 0) ? 1 : 0;");
+
+                string pointers = ConcatString(i + 1, "\n",
+                    index => $"void* t{index}Pointer = iter->ptrs[{index}];");
 
                 string callbackArgs = ConcatString(i + 1, ", ",
-                    index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], t{index}IsSelf ? i : 0)");
+                    index => $"ref t{index}Pointer == null ? ref Unsafe.NullRef<T{index}>() : ref Managed.GetTypeRef<T{index}>(t{index}Pointer, i * t{index}IsSelf)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachIndexCallback<{typeParams}> callback)
@@ -595,6 +607,7 @@ namespace Flecs.NET.Codegen
 
                         {typeAssertions}
                         {isSelfBools}
+                        {pointers}
 
                         Macros.TableLock(iter->world, iter->table);
 
