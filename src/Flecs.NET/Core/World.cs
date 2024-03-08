@@ -67,7 +67,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="args">Command line arguments.</param>
         /// <returns></returns>
-        public static World Create(string[] args)
+        public static World Create(params string[] args)
         {
             NativeString* nativeStrings = Memory.AllocZeroed<NativeString>(args.Length);
 
