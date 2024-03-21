@@ -249,9 +249,9 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            q.Iter((Iter it, Column<Self> s) =>
+            q.Iter((Iter it, Field<Self> s) =>
             {
-                Column<Other> o = it.Field<Other>(2);
+                Field<Other> o = it.Field<Other>(2);
                 Assert.True(!it.IsSelf(2));
                 Assert.Equal(10, o[0].Value);
 
@@ -286,7 +286,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     int count = 0;
         //
-        //     q.Iter((Iter it, Column<Self> s) => {
+        //     q.Iter((Iter it, Field<Self> s) => {
         //         var o = it.Field<const Other>(2);
         //         Assert.True(!it.IsSelf(2));
         //         Assert.Equal(o->value, 10);
@@ -321,7 +321,7 @@ namespace Flecs.NET.Tests.Cpp
         //     int count = 0;
         //     int owned_count = 0;
         //
-        //     q.Iter((Iter it, Column<Self> s) => {
+        //     q.Iter((Iter it, Field<Self> s) => {
         //         var o = it.Field<const Other>(2);
         //
         //         if (!it.IsSelf(2)) {
@@ -361,7 +361,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     int count = 0;
         //
-        //     q.Iter((Iter it, Column<Self> s) => {
+        //     q.Iter((Iter it, Field<Self> s) => {
         //         var o = it.Field<const Other>(2);
         //         Assert.True(!it.IsSelf(2));
         //         Assert.Equal(o->value, 10);
@@ -396,7 +396,7 @@ namespace Flecs.NET.Tests.Cpp
         //     int count = 0;
         //     int owned_count = 0;
         //
-        //     q.Iter((Iter it, Column<Self> s) => {
+        //     q.Iter((Iter it, Field<Self> s) => {
         //         var o = it.Field<const Other>(2);
         //
         //         if (!it.IsSelf(2)) {

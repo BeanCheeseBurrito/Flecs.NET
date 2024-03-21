@@ -6,38 +6,38 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Core
 {
     /// <summary>
-    ///     A wrapper around table columns.
+    ///     A wrapper around table fields.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public readonly unsafe struct Column<T> : IEquatable<Column<T>>
+    public readonly unsafe struct Field<T> : IEquatable<Field<T>>
     {
         /// <summary>
-        ///     Pointer to column.
+        ///     Pointer to field.
         /// </summary>
         public void* Data { get; }
 
         /// <summary>
-        ///     Length of the column.
+        ///     Length of the field.
         /// </summary>
         public int Length { get; }
 
         /// <summary>
-        ///     Specifies if the column is shared.
+        ///     Specifies if the field is shared.
         /// </summary>
         public bool IsShared { get; }
 
         /// <summary>
-        ///     Specifies if the column pointer is null.
+        ///     Specifies if the field pointer is null.
         /// </summary>
         public bool IsNull => Data == null;
 
         /// <summary>
-        ///     Creates column.
+        ///     Creates field.
         /// </summary>
         /// <param name="data"></param>
         /// <param name="length"></param>
         /// <param name="isShared"></param>
-        public Column(void* data, int length, bool isShared = false)
+        public Field(void* data, int length, bool isShared = false)
         {
             Data = data;
             Length = length;
@@ -61,23 +61,23 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Checks if two <see cref="Column{T}"/> instances are equal.
+        ///     Checks if two <see cref="Field{T}"/> instances are equal.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(Column<T> other)
+        public bool Equals(Field<T> other)
         {
             return Data == other.Data;
         }
 
         /// <summary>
-        ///     Checks if two <see cref="Column{T}"/> instances are equal.
+        ///     Checks if two <see cref="Field{T}"/> instances are equal.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object? obj)
         {
-            return obj is Column<T> column && Equals(column);
+            return obj is Field<T> field && Equals(field);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Flecs.NET.Core
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator ==(Column<T> left, Column<T> right)
+        public static bool operator ==(Field<T> left, Field<T> right)
         {
             return left.Equals(right);
         }
@@ -106,7 +106,7 @@ namespace Flecs.NET.Core
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator !=(Column<T> left, Column<T> right)
+        public static bool operator !=(Field<T> left, Field<T> right)
         {
             return !(left == right);
         }

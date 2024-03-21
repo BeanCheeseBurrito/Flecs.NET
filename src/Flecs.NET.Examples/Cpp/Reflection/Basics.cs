@@ -19,7 +19,7 @@ public static class Cpp_Reflection_Basics
             .Set<Position>(new(10, 20));
 
         // Convert position component to flecs expression string.
-        ref Position reference = ref e.GetMut<Position>();
+        ref Position reference = ref e.Ensure<Position>();
         Console.WriteLine(world.ToExpr(ref reference)); // {X: 10, Y: 20}
     }
 }

@@ -250,7 +250,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<Position>()
                 .Event(Ecs.OnSet)
-                .Iter((Iter it, Column<Position> p) =>
+                .Iter((Iter it, Field<Position> p) =>
                 {
                     foreach (int i in it)
                     {
@@ -298,7 +298,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Event(Ecs.OnSet)
                 .Iter((Iter it) =>
                 {
-                    Column<Position> p = it.Range().Get<Position>();
+                    Field<Position> p = it.Range().Get<Position>();
 
                     foreach (int i in it)
                     {
@@ -689,7 +689,7 @@ namespace Flecs.NET.Tests.Cpp
 
             filter.Iter(it =>
             {
-                Column<Position> pos = it.Field<Position>(1);
+                Field<Position> pos = it.Field<Position>(1);
                 foreach (int i in it)
                 {
                     Assert.Equal(i, pos[i].X);

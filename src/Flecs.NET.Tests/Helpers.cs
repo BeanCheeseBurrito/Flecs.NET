@@ -105,9 +105,9 @@ public struct Pod
             Move = (ref Pod dst, ref Pod src, TypeInfo typeInfo) => { },
             Copy = (ref Pod dst, ref Pod src, TypeInfo typeInfo) => { },
 
-            OnAdd = (Iter it, Column<Pod> pod) => { },
-            OnSet = (Iter it, Column<Pod> pod) => { },
-            OnRemove = (Iter it, Column<Pod> pod) => { }
+            OnAdd = (Iter it, Field<Pod> pod) => { },
+            OnSet = (Iter it, Field<Pod> pod) => { },
+            OnRemove = (Iter it, Field<Pod> pod) => { }
         };
     }
 }

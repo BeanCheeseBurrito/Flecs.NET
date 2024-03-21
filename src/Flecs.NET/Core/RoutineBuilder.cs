@@ -95,6 +95,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Specify in which phase the system should run.
+        /// </summary>
+        /// <param name="enumMember"></param>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        public ref RoutineBuilder Kind<TEnum>(TEnum enumMember) where TEnum : Enum
+        {
+            return ref Kind(EnumType<TEnum>.Id(enumMember, World));
+        }
+
+        /// <summary>
         ///     Specify whether system can run on multiple threads.
         /// </summary>
         /// <param name="value"></param>

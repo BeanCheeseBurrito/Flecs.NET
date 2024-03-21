@@ -17,7 +17,7 @@ public static unsafe class Cpp_Reflection_RuntimeNestedComponent
 
         // Create entity, set value of line using reflection API.
         Entity e = world.Entity();
-        void* ptr = e.GetMutPtr(line);
+        void* ptr = e.EnsurePtr(line);
 
         Cursor cur = world.Cursor(line, ptr);
         cur.Push();       // {

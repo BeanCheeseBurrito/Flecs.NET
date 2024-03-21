@@ -30,7 +30,7 @@ public static class Cpp_Reflection_BasicsEnum
             .Set<TypeWithEnum>(new(Color.Green));
 
         // Convert TypeWithEnum component to flecs expression string.
-        ref TypeWithEnum reference = ref e.GetMut<TypeWithEnum>();
+        ref TypeWithEnum reference = ref e.Ensure<TypeWithEnum>();
         Console.WriteLine(world.ToExpr(ref reference)); // {Color: Green}
     }
 }

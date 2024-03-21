@@ -29,6 +29,8 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Each(ecs_iter_t* iter, Ecs.EachEntityCallback callback)
         {
+            iter->flags |= EcsIterCppEach;
+
             ecs_world_t* world = iter->world;
             int count = iter->count;
 
@@ -49,6 +51,8 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Each(ecs_iter_t* iter, Ecs.EachIndexCallback callback)
         {
+            iter->flags |= EcsIterCppEach;
+
             int count = iter->count == 0 ? 1 : iter->count;
 
             Iter it = new Iter(iter);
@@ -127,6 +131,8 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Each(ecs_iter_t* iter, delegate* managed<Entity, void> callback)
         {
+            iter->flags |= EcsIterCppEach;
+
             Macros.TableLock(iter->world, iter->table);
 
             ecs_world_t* world = iter->world;
@@ -147,6 +153,8 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Each(ecs_iter_t* iter, delegate* unmanaged<Entity, void> callback)
         {
+            iter->flags |= EcsIterCppEach;
+
             Macros.TableLock(iter->world, iter->table);
 
             ecs_world_t* world = iter->world;
@@ -167,6 +175,8 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Each(ecs_iter_t* iter, delegate* managed<Iter, int, void> callback)
         {
+            iter->flags |= EcsIterCppEach;
+
             int count = iter->count;
 
             if (count == 0)
@@ -189,6 +199,8 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Each(ecs_iter_t* iter, delegate* unmanaged<Iter, int, void> callback)
         {
+            iter->flags |= EcsIterCppEach;
+
             int count = iter->count;
 
             if (count == 0)

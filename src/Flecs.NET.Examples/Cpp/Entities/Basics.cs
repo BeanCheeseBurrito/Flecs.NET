@@ -22,7 +22,7 @@ public static class Cpp_Entities_Basics
             .Add<Walking>();
 
         // Get the value for the Position component
-        ref Position ptr = ref bob.GetMut<Position>();
+        ref Position ptr = ref bob.Ensure<Position>();
         Console.WriteLine($"({ptr.X}, {ptr.Y})");
 
         // Overwrite the value of the Position component

@@ -16,7 +16,7 @@ public static class Cpp_Reflection_BasicsDeserialize
 
         // Create entity, set value of position using reflection API.
         Entity e = world.Entity();
-        ref Position reference = ref e.GetMut<Position>();
+        ref Position reference = ref e.Ensure<Position>();
 
         Cursor cur = world.Cursor(ref reference);
         cur.Push();       // {

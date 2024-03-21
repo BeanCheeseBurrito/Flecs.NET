@@ -378,7 +378,7 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string funcParams = ConcatString(i + 1, ", ", index => $"Column<T{index}> comp{index}");
+                string funcParams = ConcatString(i + 1, ", ", index => $"Field<T{index}> field{index}");
                 str.AppendLine($"public delegate void IterCallback<{typeParams}>(Iter it, {funcParams});");
             }
 
@@ -515,6 +515,8 @@ namespace Flecs.NET.Codegen
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachCallback<{typeParams}> callback)
                     {{
+                        iter->flags |= EcsIterCppEach;
+
                         Macros.TableLock(iter->world, iter->table);
 
                         int count = iter->count == 0 ? 1 : iter->count;
@@ -557,6 +559,8 @@ namespace Flecs.NET.Codegen
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachEntityCallback<{typeParams}> callback)
                     {{
+                        iter->flags |= EcsIterCppEach;
+
                         ecs_world_t* world = iter->world;
                         int count = iter->count;
 
@@ -601,6 +605,8 @@ namespace Flecs.NET.Codegen
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachIndexCallback<{typeParams}> callback)
                     {{
+                        iter->flags |= EcsIterCppEach;
+
                         int count = iter->count == 0 ? 1 : iter->count;
 
                         Iter it = new Iter(iter);

@@ -224,7 +224,7 @@ namespace Flecs.NET.Core
 
             World w = new World(World);
             Entity me = w.Entity(m->member);
-            ref EcsMemberRanges mr = ref me.GetMut<EcsMemberRanges>();
+            ref EcsMemberRanges mr = ref me.Ensure<EcsMemberRanges>();
             mr.value.min = min;
             mr.value.max = max;
             me.Modified<EcsMemberRanges>();
@@ -246,7 +246,7 @@ namespace Flecs.NET.Core
 
             World w = new World(World);
             Entity me = w.Entity(m->member);
-            ref EcsMemberRanges mr = ref me.GetMut<EcsMemberRanges>();
+            ref EcsMemberRanges mr = ref me.Ensure<EcsMemberRanges>();
             mr.warning.min = min;
             mr.warning.max = max;
             me.Modified<EcsMemberRanges>();
@@ -268,7 +268,7 @@ namespace Flecs.NET.Core
 
             World w = new World(World);
             Entity me = w.Entity(m->member);
-            ref EcsMemberRanges mr = ref me.GetMut<EcsMemberRanges>();
+            ref EcsMemberRanges mr = ref me.Ensure<EcsMemberRanges>();
             mr.error.min = min;
             mr.error.max = max;
             me.Modified<EcsMemberRanges>();

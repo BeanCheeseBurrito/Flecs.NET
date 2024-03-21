@@ -68,7 +68,7 @@ public static unsafe class Cpp_Queries_GroupByCustom
         //     - table [Postion, Tag, (Group, Third)]
         //
 
-        q.Iter((Iter it, Column<Position> p) =>
+        q.Iter((Iter it, Field<Position> p) =>
         {
             Entity group = world.Entity(it.GroupId());
             Console.WriteLine($" - Group {group.Path()}: Table [{it.Table()}]");

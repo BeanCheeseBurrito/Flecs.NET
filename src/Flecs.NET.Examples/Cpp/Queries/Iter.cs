@@ -32,7 +32,7 @@ public static class Cpp_Queries_Iter
         // of information on the entities currently being iterated.
         // The function passed to iter is by default called for each table the query
         // is matched with.
-        q.Iter((Iter it, Column<Position> p, Column<Velocity> v) =>
+        q.Iter((Iter it, Field<Position> p, Field<Velocity> v) =>
         {
             // Print the table & number of entities matched in current callback
             Console.WriteLine($"Table [{it.Type()}]");

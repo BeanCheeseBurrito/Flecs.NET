@@ -632,6 +632,190 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Get mutable component value (untyped).
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public void* GetMutPtr(ulong id)
+        {
+            return ecs_get_mut_id(World, Id, id);
+        }
+
+        /// <summary>
+        ///     Get mutable pointer for a pair (untyped).
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public void* GetMutPtr(ulong first, ulong second)
+        {
+            return GetMutPtr(Macros.Pair(first, second));
+        }
+
+        /// <summary>
+        ///     Get mutable component value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T* GetMutPtr<T>() where T : unmanaged
+        {
+            ulong componentId = Type<T>.Id(World);
+            Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (T*)ecs_get_mut_id(World, Id, componentId);
+        }
+
+        /// <summary>
+        ///     Get a mutable enum value.
+        /// </summary>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        public TEnum* GetMutEnumPtr<TEnum>() where TEnum : unmanaged, Enum
+        {
+            ulong enumTypeId = Type<TEnum>.Id(World);
+            ulong target = ecs_get_target(World, Id, enumTypeId, 0);
+
+            if (target == 0)
+                return (TEnum*)ecs_get_id(World, Id, enumTypeId);
+
+            void* ptr = ecs_get_mut_id(World, enumTypeId, target);
+            Ecs.Assert(ptr != null, "Missing enum constant value");
+            return (TEnum*)ptr;
+        }
+
+        /// <summary>
+        ///     Get mutable pointer for the first element of a pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetMutPtr<TFirst>(ulong second) where TFirst : unmanaged
+        {
+            ulong pair = Macros.Pair<TFirst>(second, World);
+            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TFirst*)ecs_get_mut_id(World, Id, pair);
+        }
+
+        /// <summary>
+        ///     Get mutable pointer for a pair.
+        /// </summary>
+        /// <param name="secondEnum"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetMutPtr<TFirst, TSecondEnum>(TSecondEnum secondEnum)
+            where TFirst : unmanaged
+            where TSecondEnum : Enum
+        {
+            ulong enumId = EnumType<TSecondEnum>.Id(secondEnum, World);
+            ulong pair = Macros.Pair<TFirst>(enumId, World);
+            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TFirst*)ecs_get_mut_id(World, Id, pair);
+        }
+
+        /// <summary>
+        ///     Get mutable pointer for a pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetMutFirstPtr<TFirst, TSecond>() where TFirst : unmanaged
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TFirst*)ecs_get_mut_id(World, Id, pair);
+        }
+
+        /// <summary>
+        ///     Get mutable pointer for a pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetMutSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TSecond*)ecs_get_mut_id(World, Id, pair);
+        }
+
+        /// <summary>
+        ///     Get mutable pointer for a pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetMutSecondPtr<TSecond>(ulong first) where TSecond : unmanaged
+        {
+            ulong pair = Macros.PairSecond<TSecond>(first, World);
+            Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TSecond*)ecs_get_mut_id(World, Id, pair);
+        }
+
+        /// <summary>
+        ///     Get mutable managed reference for component.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref T GetMut<T>()
+        {
+            ulong compId = Type<T>.Id(World);
+            Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return ref Managed.GetTypeRef<T>(ecs_get_mut_id(World, Id, compId));
+        }
+
+        /// <summary>
+        ///     Get mutable managed reference for the first element of a pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref TFirst GetMut<TFirst>(ulong second)
+        {
+            ulong pair = Macros.Pair<TFirst>(second, World);
+            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return ref Managed.GetTypeRef<TFirst>(ecs_get_mut_id(World, Id, pair));
+        }
+
+        /// <summary>
+        ///     Get mutable managed reference for pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TFirst GetMutFirst<TFirst, TSecond>()
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return ref Managed.GetTypeRef<TFirst>(ecs_get_mut_id(World, Id, pair));
+        }
+
+        /// <summary>
+        ///     Get mutable managed reference for pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TSecond GetMutSecond<TFirst, TSecond>()
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return ref Managed.GetTypeRef<TSecond>(ecs_get_mut_id(World, Id, pair));
+        }
+
+        /// <summary>
+        ///     Get mutable managed reference for pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TSecond GetMutSecond<TSecond>(ulong first)
+        {
+            ulong pair = Macros.PairSecond<TSecond>(first, World);
+            Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return ref Managed.GetTypeRef<TSecond>(ecs_get_mut_id(World, Id, pair));
+        }
+
+        /// <summary>
         ///     Get target for a given pair.
         /// </summary>
         /// <param name="relation"></param>
@@ -1482,7 +1666,18 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity DependsOn<T>()
         {
-            return ref Add(EcsDependsOn, Type<T>.Id(World));
+            return ref DependsOn(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Shortcut for Add(EcDependsOn, entity).
+        /// </summary>
+        /// <param name="enumMember"></param>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        public ref Entity DependsOn<TEnum>(TEnum enumMember) where TEnum : Enum
+        {
+            return ref DependsOn(EnumType<TEnum>.Id(enumMember, World));
         }
 
         /// <summary>
@@ -2318,7 +2513,7 @@ namespace Flecs.NET.Core
                 return ref this;
             }
 
-            void* ptr = ecs_get_mut_id(World, Id, e);
+            void* ptr = ecs_ensure_id(World, Id, e);
             Ecs.Assert(ptr != null, nameof(ECS_INTERNAL_ERROR));
 
             using NativeString nativeJson = (NativeString)json;
@@ -2464,9 +2659,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public void* GetMutPtr(ulong id)
+        public void* EnsurePtr(ulong id)
         {
-            return ecs_get_mut_id(World, Id, id);
+            return ecs_ensure_id(World, Id, id);
         }
 
         /// <summary>
@@ -2475,9 +2670,9 @@ namespace Flecs.NET.Core
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public void* GetMutPtr(ulong first, ulong second)
+        public void* EnsurePtr(ulong first, ulong second)
         {
-            return GetMutPtr(Macros.Pair(first, second));
+            return EnsurePtr(Macros.Pair(first, second));
         }
 
         /// <summary>
@@ -2485,11 +2680,11 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T* GetMutPtr<T>() where T : unmanaged
+        public T* EnsurePtr<T>() where T : unmanaged
         {
             ulong componentId = Type<T>.Id(World);
             Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return (T*)ecs_get_mut_id(World, Id, componentId);
+            return (T*)ecs_ensure_id(World, Id, componentId);
         }
 
         /// <summary>
@@ -2497,7 +2692,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <typeparam name="TEnum"></typeparam>
         /// <returns></returns>
-        public TEnum* GetMutEnumPtr<TEnum>() where TEnum : unmanaged, Enum
+        public TEnum* EnsureEnumPtr<TEnum>() where TEnum : unmanaged, Enum
         {
             ulong enumTypeId = Type<TEnum>.Id(World);
             ulong target = ecs_get_target(World, Id, enumTypeId, 0);
@@ -2505,7 +2700,7 @@ namespace Flecs.NET.Core
             if (target == 0)
                 return (TEnum*)ecs_get_id(World, Id, enumTypeId);
 
-            void* ptr = ecs_get_mut_id(World, enumTypeId, target);
+            void* ptr = ecs_ensure_id(World, enumTypeId, target);
             Ecs.Assert(ptr != null, "Missing enum constant value");
             return (TEnum*)ptr;
         }
@@ -2516,11 +2711,11 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <returns></returns>
-        public TFirst* GetMutPtr<TFirst>(ulong second) where TFirst : unmanaged
+        public TFirst* EnsurePtr<TFirst>(ulong second) where TFirst : unmanaged
         {
             ulong pair = Macros.Pair<TFirst>(second, World);
             Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return (TFirst*)ecs_get_mut_id(World, Id, pair);
+            return (TFirst*)ecs_ensure_id(World, Id, pair);
         }
 
         /// <summary>
@@ -2530,14 +2725,14 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecondEnum"></typeparam>
         /// <returns></returns>
-        public TFirst* GetMutPtr<TFirst, TSecondEnum>(TSecondEnum secondEnum)
+        public TFirst* EnsurePtr<TFirst, TSecondEnum>(TSecondEnum secondEnum)
             where TFirst : unmanaged
             where TSecondEnum : Enum
         {
             ulong enumId = EnumType<TSecondEnum>.Id(secondEnum, World);
             ulong pair = Macros.Pair<TFirst>(enumId, World);
             Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return (TFirst*)ecs_get_mut_id(World, Id, pair);
+            return (TFirst*)ecs_ensure_id(World, Id, pair);
         }
 
         /// <summary>
@@ -2546,11 +2741,11 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public TFirst* GetMutFirstPtr<TFirst, TSecond>() where TFirst : unmanaged
+        public TFirst* EnsureFirstPtr<TFirst, TSecond>() where TFirst : unmanaged
         {
             ulong pair = Macros.Pair<TFirst, TSecond>(World);
             Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return (TFirst*)ecs_get_mut_id(World, Id, pair);
+            return (TFirst*)ecs_ensure_id(World, Id, pair);
         }
 
         /// <summary>
@@ -2559,11 +2754,11 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public TSecond* GetMutSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
+        public TSecond* EnsureSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
         {
             ulong pair = Macros.Pair<TFirst, TSecond>(World);
             Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return (TSecond*)ecs_get_mut_id(World, Id, pair);
+            return (TSecond*)ecs_ensure_id(World, Id, pair);
         }
 
         /// <summary>
@@ -2572,11 +2767,11 @@ namespace Flecs.NET.Core
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public TSecond* GetMutSecondPtr<TSecond>(ulong first) where TSecond : unmanaged
+        public TSecond* EnsureSecondPtr<TSecond>(ulong first) where TSecond : unmanaged
         {
             ulong pair = Macros.PairSecond<TSecond>(first, World);
             Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return (TSecond*)ecs_get_mut_id(World, Id, pair);
+            return (TSecond*)ecs_ensure_id(World, Id, pair);
         }
 
         /// <summary>
@@ -2584,11 +2779,11 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref T GetMut<T>()
+        public ref T Ensure<T>()
         {
             ulong compId = Type<T>.Id(World);
             Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return ref Managed.GetTypeRef<T>(ecs_get_mut_id(World, Id, compId));
+            return ref Managed.GetTypeRef<T>(ecs_ensure_id(World, Id, compId));
         }
 
         /// <summary>
@@ -2597,11 +2792,11 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <returns></returns>
-        public ref TFirst GetMut<TFirst>(ulong second)
+        public ref TFirst Ensure<TFirst>(ulong second)
         {
             ulong pair = Macros.Pair<TFirst>(second, World);
             Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return ref Managed.GetTypeRef<TFirst>(ecs_get_mut_id(World, Id, pair));
+            return ref Managed.GetTypeRef<TFirst>(ecs_ensure_id(World, Id, pair));
         }
 
         /// <summary>
@@ -2610,11 +2805,11 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref TFirst GetMutFirst<TFirst, TSecond>()
+        public ref TFirst EnsureFirst<TFirst, TSecond>()
         {
             ulong pair = Macros.Pair<TFirst, TSecond>(World);
             Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return ref Managed.GetTypeRef<TFirst>(ecs_get_mut_id(World, Id, pair));
+            return ref Managed.GetTypeRef<TFirst>(ecs_ensure_id(World, Id, pair));
         }
 
         /// <summary>
@@ -2623,11 +2818,11 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref TSecond GetMutSecond<TFirst, TSecond>()
+        public ref TSecond EnsureSecond<TFirst, TSecond>()
         {
             ulong pair = Macros.Pair<TFirst, TSecond>(World);
             Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return ref Managed.GetTypeRef<TSecond>(ecs_get_mut_id(World, Id, pair));
+            return ref Managed.GetTypeRef<TSecond>(ecs_ensure_id(World, Id, pair));
         }
 
         /// <summary>
@@ -2636,11 +2831,11 @@ namespace Flecs.NET.Core
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref TSecond GetMutSecond<TSecond>(ulong first)
+        public ref TSecond EnsureSecond<TSecond>(ulong first)
         {
             ulong pair = Macros.PairSecond<TSecond>(first, World);
             Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return ref Managed.GetTypeRef<TSecond>(ecs_get_mut_id(World, Id, pair));
+            return ref Managed.GetTypeRef<TSecond>(ecs_ensure_id(World, Id, pair));
         }
 
         /// <summary>

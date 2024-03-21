@@ -29,7 +29,7 @@ public static class Cpp_Reflection_BasicsBitmask
             .Set<Sandwich>(new(Toppings.Bacon | Toppings.Lettuce));
 
         // Convert Sandwich component to flecs expression string.
-        ref Sandwich sandwich = ref e.GetMut<Sandwich>();
+        ref Sandwich sandwich = ref e.Ensure<Sandwich>();
         Console.WriteLine(world.ToExpr(ref sandwich));
     }
 }

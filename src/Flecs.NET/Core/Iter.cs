@@ -303,9 +303,23 @@ namespace Flecs.NET.Core
         /// <param name="index"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Column<T> Field<T>(int index)
+        public Field<T> Field<T>(int index)
         {
+            Ecs.Assert((Handle->flags & EcsIterCppEach) == 0,
+                "Cannot use .Field<T>(field) from .Each(), use .FieldAt<T>(field, index) instead.");
             return GetField<T>(index);
+        }
+
+        /// <summary>
+        ///     Get reference to field at row.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="row"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref T FieldAt<T>(int index, int row)
+        {
+            return ref GetField<T>(index)[row];
         }
 
         /// <summary>
@@ -324,9 +338,9 @@ namespace Flecs.NET.Core
         ///     Get access to entity ids.
         /// </summary>
         /// <returns></returns>
-        public Column<ulong> Entities()
+        public Field<ulong> Entities()
         {
-            return new Column<ulong>(Handle->entities, Handle->count);
+            return new Field<ulong>(Handle->entities, Handle->count);
         }
 
         /// <summary>
@@ -396,7 +410,7 @@ namespace Flecs.NET.Core
             return new Entity(Handle->world, ecs_iter_get_var(Handle, varId));
         }
 
-        private Column<T> GetField<T>(int index)
+        private Field<T> GetField<T>(int index)
         {
             AssertFieldId<T>(Handle, index);
 
@@ -404,7 +418,7 @@ namespace Flecs.NET.Core
             int count = isShared ? 1 : Handle->count;
 
             void* ptr = ecs_field_w_size(Handle, (IntPtr)Managed.ManagedSize<T>(), index);
-            return new Column<T>(ptr, count, isShared);
+            return new Field<T>(ptr, count, isShared);
         }
 
         [Conditional("DEBUG")]

@@ -220,7 +220,7 @@ public static class Cpp_GameMechanics_InventorySystem
             if (dstItem != 0)
             {
                 // If a matching item was found, increase its amount
-                ref Amount dstAmt = ref dstItem.GetMut<Amount>();
+                ref Amount dstAmt = ref dstItem.Ensure<Amount>();
                 dstAmt.Value += amt.Value;
                 item.Destruct(); // Remove the src item
                 return;
@@ -274,7 +274,7 @@ public static class Cpp_GameMechanics_InventorySystem
 
         if (armor != 0)
         {
-            ref Health armorHealth = ref armor.GetMut<Health>();
+            ref Health armorHealth = ref armor.Ensure<Health>();
 
             if (Unsafe.IsNullRef(ref armorHealth))
             {
@@ -310,7 +310,7 @@ public static class Cpp_GameMechanics_InventorySystem
         }
 
         // For each usage of the weapon, subtract one from its health
-        ref Health weaponHealth = ref weapon.GetMut<Health>();
+        ref Health weaponHealth = ref weapon.Ensure<Health>();
 
         if (--weaponHealth.Value == 0)
         {
@@ -325,7 +325,7 @@ public static class Cpp_GameMechanics_InventorySystem
         // If armor didn't counter the whole attack, subtract from the player health
         if (attValue != 0)
         {
-            ref Health playerHealth = ref player.GetMut<Health>();
+            ref Health playerHealth = ref player.Ensure<Health>();
 
             if ((playerHealth.Value -= attValue) == 0)
             {

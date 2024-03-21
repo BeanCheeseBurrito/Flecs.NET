@@ -102,7 +102,7 @@ public static unsafe class Cpp_Queries_GroupByCallbacks
         //     - table [Position, Tag, (Group, Third)]
         //
 
-        q.Iter((Iter it, Column<Position> p) =>
+        q.Iter((Iter it, Field<Position> p) =>
         {
             Entity group = it.World().Entity(it.GroupId());
             GroupCtx* ctx = (GroupCtx*)q.GroupCtx(group);

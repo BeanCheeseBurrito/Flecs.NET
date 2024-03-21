@@ -267,7 +267,7 @@ namespace Flecs.NET.Core
             else
             {
                 if (ecs_is_alive(world, id) == Macros.False)
-                    ecs_ensure(world, id);
+                    ecs_make_alive(world, id);
 
                 ecs_add_path_w_sep(world, id, 0, name,
                     BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator);

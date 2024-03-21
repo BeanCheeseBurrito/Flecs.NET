@@ -67,7 +67,7 @@ public static class Cpp_Queries_Instancing
         // to check whether a field is owned or not in order to know how to access
         // it. In the case of an owned field it is iterated as an array, whereas
         // in the case of a shared field, it is accessed as a pointer.
-        q.Iter((Iter it, Column<Position> p , Column<Velocity> v) =>
+        q.Iter((Iter it, Field<Position> p , Field<Velocity> v) =>
         {
             // Check if Velocity is owned, in which case it's accessed as array.
             // Position will always be owned, since we set the term to Self.

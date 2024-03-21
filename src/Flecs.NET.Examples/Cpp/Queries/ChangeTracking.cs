@@ -75,7 +75,7 @@ public static class Cpp_Queries_ChangeTracking
 
         // Iterate the write query. Because the Position term is InOut (default)
         // iterating the query will write to the dirty state of iterated tables.
-        qWrite.Iter((Iter it, Column<Dirty> dirty, Column<Position> p) =>
+        qWrite.Iter((Iter it, Field<Dirty> dirty, Field<Position> p) =>
         {
             Console.WriteLine($"Iterate table [{it.Type()}]");
 

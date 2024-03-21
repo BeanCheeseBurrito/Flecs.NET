@@ -204,11 +204,11 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_enqueue", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_enqueue(ecs_world_t* world, ecs_event_desc_t* desc);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_ensure", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void ecs_ensure(ecs_world_t* world, ulong entity);
-
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_ensure_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void ecs_ensure_id(ecs_world_t* world, ulong id);
+        public static extern void* ecs_ensure_id(ecs_world_t* world, ulong entity, ulong id);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_ensure_modified_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void* ecs_ensure_modified_id(ecs_world_t* world, ulong entity, ulong id);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_entity_from_json", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_entity_from_json(ecs_world_t* world, ulong entity, byte* json, ecs_from_json_desc_t* desc);
@@ -318,6 +318,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_get_binding_ctx", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* ecs_get_binding_ctx(ecs_world_t* world);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_get_build_info", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern ecs_build_info_t* ecs_get_build_info();
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_get_ctx", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* ecs_get_ctx(ecs_world_t* world);
 
@@ -344,9 +347,6 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_get_mut_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* ecs_get_mut_id(ecs_world_t* world, ulong entity, ulong id);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_get_mut_modified_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void* ecs_get_mut_modified_id(ecs_world_t* world, ulong entity, ulong id);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_get_name", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_get_name(ecs_world_t* world, ulong entity);
@@ -592,7 +592,7 @@ namespace Flecs.NET.Bindings
         public static extern void ecs_logv_(int level, byte* file, int line, byte* fmt, void* args);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_lookup", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern ulong ecs_lookup(ecs_world_t* world, byte* name);
+        public static extern ulong ecs_lookup(ecs_world_t* world, byte* path);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_lookup_child", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_lookup_child(ecs_world_t* world, ulong parent, byte* name);
@@ -602,6 +602,12 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_lookup_symbol", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_lookup_symbol(ecs_world_t* world, byte* symbol, byte lookup_as_path, byte recursive);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_make_alive", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ecs_make_alive(ecs_world_t* world, ulong entity);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_make_alive_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ecs_make_alive_id(ecs_world_t* world, ulong id);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_make_pair", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_make_pair(ulong first, ulong second);
@@ -824,6 +830,9 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_observer_get_ctx", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* ecs_observer_get_ctx(ecs_world_t* world, ulong observer);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_observer_get_filter", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern ecs_filter_t* ecs_observer_get_filter(ecs_world_t* world, ulong observer);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_observer_init", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_observer_init(ecs_world_t* world, ecs_observer_desc_t* desc);
@@ -1090,10 +1099,13 @@ namespace Flecs.NET.Bindings
         public static extern void ecs_read_end(ecs_record_t* record);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_readonly_begin", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_readonly_begin(ecs_world_t* world);
+        public static extern byte ecs_readonly_begin(ecs_world_t* world, byte multi_threaded);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_readonly_end", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_readonly_end(ecs_world_t* world);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_record_ensure_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void* ecs_record_ensure_id(ecs_world_t* world, ecs_record_t* record, ulong id);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_record_find", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ecs_record_t* ecs_record_find(ecs_world_t* world, ulong entity);
@@ -1106,9 +1118,6 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_record_get_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* ecs_record_get_id(ecs_world_t* world, ecs_record_t* record, ulong id);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_record_get_mut_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void* ecs_record_get_mut_id(ecs_world_t* world, ecs_record_t* record, ulong id);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_record_has_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte ecs_record_has_id(ecs_world_t* world, ecs_record_t* record, ulong id);
@@ -1710,6 +1719,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_from_json", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_world_from_json(ecs_world_t* world, byte* json, ecs_from_json_desc_t* desc);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_from_json_file", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* ecs_world_from_json_file(ecs_world_t* world, byte* filename, ecs_from_json_desc_t* desc);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_stats_copy_last", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_world_stats_copy_last(ecs_world_stats_t* dst, ecs_world_stats_t* src);
 
@@ -1863,9 +1875,6 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_sparse_remove", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void flecs_sparse_remove(ecs_sparse_t* sparse, int elem_size, ulong id);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_sparse_set_generation", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void flecs_sparse_set_generation(ecs_sparse_t* sparse, ulong id);
-
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_sparse_try", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* flecs_sparse_try(ecs_sparse_t* sparse, int elem_size, ulong id);
 
@@ -1883,9 +1892,6 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FlecsAlertsImport", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void FlecsAlertsImport(ecs_world_t* world);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FlecsCoreDocImport", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void FlecsCoreDocImport(ecs_world_t* world);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FlecsDocImport", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void FlecsDocImport(ecs_world_t* world);
@@ -2651,6 +2657,64 @@ namespace Flecs.NET.Bindings
 #if NET6_0_OR_GREATER
                     System.HashCode hash = new System.HashCode();
                     hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_bucket_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
+        }
+
+        public partial struct ecs_build_info_t : System.IEquatable<ecs_build_info_t>
+        {
+            public byte* compiler;
+
+            public byte** addons;
+
+            public byte* version;
+
+            public short version_major;
+
+            public short version_minor;
+
+            public short version_patch;
+
+            public byte debug;
+
+            public byte sanitize;
+
+            public byte perf_trace;
+
+            public bool Equals(ecs_build_info_t other)
+            {
+                fixed (ecs_build_info_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_build_info_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_build_info_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_build_info_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_build_info_t left, ecs_build_info_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_build_info_t left, ecs_build_info_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_build_info_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_build_info_t)));
                     return hash.ToHashCode();
 #else
                     return base.GetHashCode();
@@ -3617,6 +3681,8 @@ namespace Flecs.NET.Bindings
 
             public ulong* ids;
 
+            public int eval_count;
+
             public ulong entity;
 
             public ecs_iterable_t iterable;
@@ -3770,6 +3836,8 @@ namespace Flecs.NET.Bindings
             public System.IntPtr lookup_action; // delegate* unmanaged<ecs_world_t*, byte*, void*, ulong>
 
             public void* lookup_ctx;
+
+            public byte strict;
 
             public bool Equals(ecs_from_json_desc_t other)
             {
@@ -4429,9 +4497,9 @@ namespace Flecs.NET.Bindings
 
             public int send_queue_wait_ms;
 
-            public float cache_timeout;
+            public double cache_timeout;
 
-            public float cache_purge_timeout;
+            public double cache_purge_timeout;
 
             public bool Equals(ecs_http_server_desc_t other)
             {
@@ -4875,7 +4943,15 @@ namespace Flecs.NET.Bindings
 
             public byte serialize_field_info;
 
+            public byte serialize_query_info;
+
+            public byte serialize_query_plan;
+
+            public byte serialize_query_profile;
+
             public byte dont_serialize_results;
+
+            public void* query;
 
             public bool Equals(ecs_iter_to_json_desc_t other)
             {
@@ -5791,9 +5867,7 @@ namespace Flecs.NET.Bindings
 
             public int term_index;
 
-            public byte is_monitor;
-
-            public byte is_multi;
+            public uint flags;
 
             public System.IntPtr dtor; // delegate* unmanaged<void*, void>
 
@@ -6424,6 +6498,8 @@ namespace Flecs.NET.Bindings
             public ecs_metric_t matched_empty_table_count;
 
             public ecs_metric_t matched_entity_count;
+
+            public ecs_metric_t eval_count;
 
             public long last_;
 
@@ -7893,8 +7969,6 @@ namespace Flecs.NET.Bindings
 
             public ecs_metric_t time_spent;
 
-            public ecs_metric_t invoke_count;
-
             public long last_;
 
             public byte task;
@@ -9033,13 +9107,15 @@ namespace Flecs.NET.Bindings
 
                 public long set_count;
 
-                public long get_mut_count;
+                public long ensure_count;
 
                 public long modified_count;
 
-                public long other_count;
-
                 public long discard_count;
+
+                public long event_count;
+
+                public long other_count;
 
                 public long batched_entity_count;
 
@@ -9349,7 +9425,7 @@ namespace Flecs.NET.Bindings
 
                 public ecs_metric_t set_count;
 
-                public ecs_metric_t get_mut_count;
+                public ecs_metric_t ensure_count;
 
                 public ecs_metric_t modified_count;
 
@@ -11135,6 +11211,12 @@ namespace Flecs.NET.Bindings
 
             public double merge_time_last;
 
+            public long frame_count;
+
+            public long command_count;
+
+            public ecs_build_info_t build_info;
+
             public bool Equals(EcsWorldSummary other)
             {
                 fixed (EcsWorldSummary* __self = &this)
@@ -11790,6 +11872,8 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsIsVariable = 256;
 
+        public const uint EcsIterCppEach = 65536;
+
         public const uint EcsIterEntityOptional = 32;
 
         public const uint EcsIterHasCondSet = 1024;
@@ -11825,6 +11909,14 @@ namespace Flecs.NET.Bindings
         public const uint EcsIterTrivialTest = 16384;
 
         public const int EcsIterYield = -1;
+
+        public const uint EcsObserverIsDisabled = 8;
+
+        public const uint EcsObserverIsMonitor = 4;
+
+        public const uint EcsObserverIsMulti = 2;
+
+        public const uint EcsObserverIsParentDisabled = 16;
 
         public const uint EcsOsApiHighResolutionTimer = 1;
 
@@ -11991,6 +12083,14 @@ namespace Flecs.NET.Bindings
         public const int FLECS_TERM_DESC_MAX = 16;
 
         public const int FLECS_VARIABLE_COUNT_MAX = 64;
+
+        public const string FLECS_VERSION = "3.2.12";
+
+        public const int FLECS_VERSION_MAJOR = 3;
+
+        public const int FLECS_VERSION_MINOR = 2;
+
+        public const int FLECS_VERSION_PATCH = 12;
 
         private static void* ECS_AND_Ptr;
 

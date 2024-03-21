@@ -81,7 +81,7 @@ public static class Cpp_Queries_GroupBy
         //     - table [Postion, Tag, (Group, Third)]
         //
 
-        q.Iter((Iter it, Column<Position> p) =>
+        q.Iter((Iter it, Field<Position> p) =>
         {
             Entity group = it.World().Entity(it.GroupId());
 

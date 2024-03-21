@@ -91,7 +91,7 @@ file static class Cpp_Entities_Hooks
 
     // This callback is used for the add, remove and set hooks. Note that the
     // signature is the same as systems, triggers, observers.
-    private static void HookCallback(Iter it, Column<NativeString> str)
+    private static void HookCallback(Iter it, Field<NativeString> str)
     {
         Entity eventEntity = it.Event();
 

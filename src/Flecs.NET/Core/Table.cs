@@ -311,10 +311,10 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Column<T> Get<T>()
+        public Field<T> Get<T>()
         {
             Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return new Column<T>(GetPtr(Type<T>.Id(World)), ColumnSize(ColumnIndex<T>()));
+            return new Field<T>(GetPtr(Type<T>.Id(World)), ColumnSize(ColumnIndex<T>()));
         }
 
         /// <summary>
@@ -323,11 +323,11 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public Column<TFirst> GetFirst<TFirst, TSecond>()
+        public Field<TFirst> GetFirst<TFirst, TSecond>()
         {
             Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return new Column<TFirst>(GetPtr(pair), ColumnSize(ColumnIndex<TFirst, TSecond>()));
+            return new Field<TFirst>(GetPtr(pair), ColumnSize(ColumnIndex<TFirst, TSecond>()));
         }
 
         /// <summary>
@@ -336,11 +336,11 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public Column<TSecond> GetSecond<TFirst, TSecond>()
+        public Field<TSecond> GetSecond<TFirst, TSecond>()
         {
             Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             ulong pair = Macros.Pair<TFirst, TSecond>(World);
-            return new Column<TSecond>(GetPtr(pair), ColumnSize(ColumnIndex<TFirst, TSecond>()));
+            return new Field<TSecond>(GetPtr(pair), ColumnSize(ColumnIndex<TFirst, TSecond>()));
         }
 
         /// <summary>
@@ -349,11 +349,11 @@ namespace Flecs.NET.Core
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public Column<TSecond> GetSecond<TSecond>(ulong first)
+        public Field<TSecond> GetSecond<TSecond>(ulong first)
         {
             Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             ulong pair = Macros.PairSecond<TSecond>(first, World);
-            return new Column<TSecond>(GetPtr(pair), ColumnSize(ColumnIndexSecond<TSecond>(first)));
+            return new Field<TSecond>(GetPtr(pair), ColumnSize(ColumnIndexSecond<TSecond>(first)));
         }
 
         /// <summary>

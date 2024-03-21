@@ -49,7 +49,7 @@ public static class Cpp_Queries_Hierarchy
             .Build();
 
         // Do the transform
-        q.Iter((Iter it, Column<Position> selfLocal, Column<Position> selfGlobal, Column<Position> parentGlobal) =>
+        q.Iter((Iter it, Field<Position> selfLocal, Field<Position> selfGlobal, Field<Position> parentGlobal) =>
         {
             foreach (int i in it)
             {

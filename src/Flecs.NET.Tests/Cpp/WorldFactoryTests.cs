@@ -151,13 +151,10 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position { X = 10, Y = 20 })
                 .Set(new Velocity { X = 1, Y = 2 });
 
-            q.Each((it, i) =>
+            q.Each((ref Position p, ref Velocity v) =>
             {
-                Column<Position> p = it.Field<Position>(1);
-                Column<Velocity> v = it.Field<Velocity>(2);
-
-                p[i].X += v[i].X;
-                p[i].Y += v[i].Y;
+                p.X += v.X;
+                p.Y += v.Y;
             });
 
             Position* p = e.GetPtr<Position>();
@@ -179,13 +176,10 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position { X = 10, Y = 20 })
                 .Set(new Velocity { X = 1, Y = 2 });
 
-            q.Each((it, i) =>
+            q.Each((ref Position p, ref Velocity v) =>
             {
-                Column<Position> p = it.Field<Position>(1);
-                Column<Velocity> v = it.Field<Velocity>(2);
-
-                p[i].X += v[i].X;
-                p[i].Y += v[i].Y;
+                p.X += v.X;
+                p.Y += v.Y;
             });
 
             Position* p = e.GetPtr<Position>();

@@ -20,7 +20,7 @@ public static class Cpp_Reflection_NestedSetMember
 
         // Create entity, set value of Line using reflection API
         Entity e = world.Entity();
-        ref Line reference = ref e.GetMut<Line>();
+        ref Line reference = ref e.Ensure<Line>();
 
         Cursor cur = world.Cursor<Line>(ref reference);
         cur.Push();          // {

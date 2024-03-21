@@ -126,6 +126,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Register action to be executed when world is destroyed.
+        /// </summary>
+        /// <param name="action"></param>
+        public void AtFini(Ecs.FiniAction action)
+        {
+            AtFini(action, null);
+        }
+
+        /// <summary>
         ///     Test if Quit() has been called.
         /// </summary>
         /// <returns></returns>
@@ -156,9 +165,9 @@ namespace Flecs.NET.Core
         ///     Begin staging.
         /// </summary>
         /// <returns></returns>
-        public bool ReadonlyBegin()
+        public bool ReadonlyBegin(bool multiThreaded = false)
         {
-            return ecs_readonly_begin(Handle) == 1;
+            return ecs_readonly_begin(Handle, Macros.Bool(multiThreaded)) == 1;
         }
 
         /// <summary>
@@ -488,9 +497,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T* GetMutPtr<T>() where T : unmanaged
+        public T* EnsurePtr<T>() where T : unmanaged
         {
-            return Entity<T>().GetMutPtr<T>();
+            return Entity<T>().EnsurePtr<T>();
         }
 
         /// <summary>
@@ -499,9 +508,9 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <returns></returns>
-        public TFirst* GetMutPtr<TFirst>(ulong second) where TFirst : unmanaged
+        public TFirst* EnsurePtr<TFirst>(ulong second) where TFirst : unmanaged
         {
-            return Entity<TFirst>().GetMutPtr<TFirst>(second);
+            return Entity<TFirst>().EnsurePtr<TFirst>(second);
         }
 
         /// <summary>
@@ -510,9 +519,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public TFirst* GetMutFirstPtr<TFirst, TSecond>() where TFirst : unmanaged
+        public TFirst* EnsureFirstPtr<TFirst, TSecond>() where TFirst : unmanaged
         {
-            return Entity<TFirst>().GetMutFirstPtr<TFirst, TSecond>();
+            return Entity<TFirst>().EnsureFirstPtr<TFirst, TSecond>();
         }
 
         /// <summary>
@@ -521,9 +530,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public TSecond* GetMutSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
+        public TSecond* EnsureSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
         {
-            return Entity<TFirst>().GetMutSecondPtr<TFirst, TSecond>();
+            return Entity<TFirst>().EnsureSecondPtr<TFirst, TSecond>();
         }
 
         /// <summary>
@@ -531,9 +540,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref T GetMut<T>()
+        public ref T Ensure<T>()
         {
-            return ref Entity<T>().GetMut<T>();
+            return ref Entity<T>().Ensure<T>();
         }
 
         /// <summary>
@@ -542,9 +551,9 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <returns></returns>
-        public ref TFirst GetMut<TFirst>(ulong second)
+        public ref TFirst Ensure<TFirst>(ulong second)
         {
-            return ref Entity<TFirst>().GetMut<TFirst>(second);
+            return ref Entity<TFirst>().Ensure<TFirst>(second);
         }
 
         /// <summary>
@@ -553,9 +562,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref TFirst GetMutFirst<TFirst, TSecond>()
+        public ref TFirst EnsureFirst<TFirst, TSecond>()
         {
-            return ref Entity<TFirst>().GetMutFirst<TFirst, TSecond>();
+            return ref Entity<TFirst>().EnsureFirst<TFirst, TSecond>();
         }
 
         /// <summary>
@@ -564,9 +573,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref TSecond GetMutSecond<TFirst, TSecond>()
+        public ref TSecond EnsureSecond<TFirst, TSecond>()
         {
-            return ref Entity<TFirst>().GetMutSecond<TFirst, TSecond>();
+            return ref Entity<TFirst>().EnsureSecond<TFirst, TSecond>();
         }
 
         /// <summary>
@@ -1400,9 +1409,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public Entity Ensure(ulong entity)
+        public Entity MakeAlive(ulong entity)
         {
-            ecs_ensure(Handle, entity);
+            ecs_make_alive(Handle, entity);
             return Entity(entity);
         }
 
@@ -2290,6 +2299,28 @@ namespace Flecs.NET.Core
         {
             using NativeString nativeJson = (NativeString)json;
             return FromJson(json, null);
+        }
+
+        /// <summary>
+        ///     Deserialize JSON file into world.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="desc"></param>
+        /// <returns></returns>
+        public bool FromJsonFile(string file, ecs_from_json_desc_t *desc)
+        {
+            using NativeString nativeFile = (NativeString)file;
+            return ecs_world_from_json_file(Handle, nativeFile, desc) != null;
+        }
+
+        /// <summary>
+        ///     Deserialize JSON file into world.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public bool FromJsonFile(string file)
+        {
+            return FromJsonFile(file, null);
         }
 
         /// <summary>

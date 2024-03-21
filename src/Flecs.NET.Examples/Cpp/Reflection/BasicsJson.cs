@@ -19,7 +19,7 @@ public static class Cpp_Reflection_BasicsJson
             .Set<Position>(new(10, 20));
 
         // Convert position component to JSON string
-        ref Position reference = ref e.GetMut<Position>();
+        ref Position reference = ref e.Ensure<Position>();
         Console.WriteLine(world.ToJson(ref reference)); // {X: 10, Y: 20}
 
         // Convert entity to JSON

@@ -24,7 +24,7 @@ public static class Cpp_Reflection_NestedStruct
             .Set<Line>(new(new(10, 20), new(30, 40)));
 
         // Convert Line component to flecs expression string.
-        ref Line reference = ref e.GetMut<Line>();
+        ref Line reference = ref e.Ensure<Line>();
         Console.WriteLine(world.ToExpr(ref reference));
         // {Start: {X: 10, Y: 20}, Stop: {X: 30, Y: 40}}
     }

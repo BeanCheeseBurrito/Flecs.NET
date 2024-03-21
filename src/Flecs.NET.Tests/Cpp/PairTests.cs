@@ -175,7 +175,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Expr("(Pair, *)")
                 .Iter((Iter it) =>
                 {
-                    Column<Pair> tr = it.Field<Pair>(1);
+                    Field<Pair> tr = it.Field<Pair>(1);
                     invokeCount++;
 
                     foreach (int i in it)
@@ -209,7 +209,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Expr("(Pair, *)")
                 .Iter((Iter it) =>
                 {
-                    Column<Pair> tr = it.Field<Pair>(1);
+                    Field<Pair> tr = it.Field<Pair>(1);
                     invokeCount++;
 
                     foreach (int i in it)
@@ -296,7 +296,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity();
 
-            Pair* t = e.GetMutFirstPtr<Pair, Position>();
+            Pair* t = e.EnsureFirstPtr<Pair, Position>();
             Assert.True(t != null);
             t->Value = 10;
 
@@ -313,7 +313,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity()
                 .SetFirst<Pair, Position>(new Pair { Value = 20 });
 
-            Pair* t = e.GetMutFirstPtr<Pair, Position>();
+            Pair* t = e.EnsureFirstPtr<Pair, Position>();
             Assert.True(t != null);
             Assert.Equal(20, t->Value);
             t->Value = 10;
@@ -332,7 +332,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity();
 
-            Position* p = e.GetMutSecondPtr<Position>(pair);
+            Position* p = e.EnsureSecondPtr<Position>(pair);
             Assert.True(p != null);
             p->X = 10;
             p->Y = 20;
@@ -353,7 +353,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity()
                 .SetSecond(pair, new Position { X = 10, Y = 20 });
 
-            Position* p = e.GetMutSecondPtr<Position>(pair);
+            Position* p = e.EnsureSecondPtr<Position>(pair);
             Assert.True(p != null);
             Assert.Equal(10, p->X);
             Assert.Equal(20, p->Y);
@@ -372,7 +372,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity()
                 .SetSecond<Tag, Position>(new Position { X = 10, Y = 20 });
 
-            Position* t = e.GetMutSecondPtr<Tag, Position>();
+            Position* t = e.EnsureSecondPtr<Tag, Position>();
             Assert.True(t != null);
             Assert.Equal(10, t->X);
             Assert.Equal(20, t->Y);

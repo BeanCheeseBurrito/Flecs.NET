@@ -19,7 +19,7 @@ public static class Cpp_Reflection_EntityType
             .Set<TypeWithEntity>(new(foo));
 
         // Convert TypeWithEntity component to flecs expression string.
-        ref TypeWithEntity reference = ref e.GetMut<TypeWithEntity>();
+        ref TypeWithEntity reference = ref e.Ensure<TypeWithEntity>();
         Console.WriteLine(world.ToExpr(ref reference)); // {Entity: Foo}
     }
 }

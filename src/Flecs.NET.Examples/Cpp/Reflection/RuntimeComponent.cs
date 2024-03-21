@@ -13,7 +13,7 @@ public static unsafe class Cpp_Reflection_RuntimeComponent
 
         // Create entity, set value of position using reflection API.
         Entity e = world.Entity();
-        void* ptr = e.GetMutPtr(position);
+        void* ptr = e.EnsurePtr(position);
 
         Cursor cur = world.Cursor(position, ptr);
         cur.Push();

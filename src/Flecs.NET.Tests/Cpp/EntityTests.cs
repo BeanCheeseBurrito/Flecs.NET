@@ -401,7 +401,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Event(Ecs.OnSet)
                 .Each((Entity e, ref Position p) => { invoked = true; });
 
-            void* voidPointer = entity.GetMutPtr(position);
+            void* voidPointer = entity.EnsurePtr(position);
             Assert.True(voidPointer != null);
 
             Position* p = (Position*)voidPointer;
@@ -508,7 +508,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Event(Ecs.OnSet)
                 .Each((Entity e, ref Position p) => { invoked = true; });
 
-            void* voidPointer = entity.GetMutPtr(id);
+            void* voidPointer = entity.EnsurePtr(id);
             Assert.True(voidPointer != null);
 
             Position* p = (Position*)voidPointer;
