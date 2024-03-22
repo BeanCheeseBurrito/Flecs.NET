@@ -8,7 +8,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper for working with entities.
     /// </summary>
-    public unsafe struct Entity : IEquatable<Entity>
+    public unsafe partial struct Entity : IEquatable<Entity>
     {
         private Id _id;
 

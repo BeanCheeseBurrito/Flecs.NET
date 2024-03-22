@@ -837,9 +837,9 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create(false);
 
-            Entity e1 = world.Entity().Set<Position>(default);
-            Entity e2 = world.Entity().Set<Position>(default);
-            Entity e3 = world.Entity().Set<Position>(default);
+            Entity e1 = world.Entity().Set<Position>(default(Position));
+            Entity e2 = world.Entity().Set<Position>(default(Position));
+            Entity e3 = world.Entity().Set<Position>(default(Position));
 
             Observer observer = world.Observer<Position>()
                 .Event(Ecs.OnAdd)
@@ -861,9 +861,9 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity e1 = world.Entity().Set<Position>(default).Set<Mass>(default);
-            Entity e2 = world.Entity().Set<Position>(default).Set<Mass>(default);
-            Entity e3 = world.Entity().Set<Position>(default).Set<Mass>(default);
+            Entity e1 = world.Entity().Set<Position>(default(Position)).Set<Mass>(default(Mass));
+            Entity e2 = world.Entity().Set<Position>(default(Position)).Set<Mass>(default(Mass));
+            Entity e3 = world.Entity().Set<Position>(default(Position)).Set<Mass>(default(Mass));
 
             Observer observer = world.Observer<Position, Mass>()
                 .Event(Ecs.OnAdd)

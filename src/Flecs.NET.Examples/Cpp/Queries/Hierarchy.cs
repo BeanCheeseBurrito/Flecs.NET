@@ -16,27 +16,27 @@ public static class Cpp_Queries_Hierarchy
         // Create a hierarchy. For an explanation see the entities/hierarchy example
         Entity sun = world.Entity("Sun")
             .Add<Position, Global>()
-            .SetFirst<Position, Local>(new(1, 1));
+            .SetFirst<Position, Local>(new Position(1, 1));
 
         world.Entity("Mercury")
             .ChildOf(sun)
             .Add<Position, Global>()
-            .SetFirst<Position, Local>(new(1, 1));
+            .SetFirst<Position, Local>(new Position(1, 1));
 
         world.Entity("Venus")
             .ChildOf(sun)
             .Add<Position, Global>()
-            .SetFirst<Position, Local>(new(2, 2));
+            .SetFirst<Position, Local>(new Position(2, 2));
 
         Entity earth = world.Entity("Earth")
             .ChildOf(sun)
             .Add<Position, Global>()
-            .SetFirst<Position, Local>(new(3, 3));
+            .SetFirst<Position, Local>(new Position(3, 3));
 
         world.Entity("Moon")
             .ChildOf(earth)
             .Add<Position, Global>()
-            .SetFirst<Position, Local>(new(0.1f, 0.1f));
+            .SetFirst<Position, Local>(new Position(0.1f, 0.1f));
 
         // Create a hierarchical query to compute the global position from the
         // local position and the parent position.

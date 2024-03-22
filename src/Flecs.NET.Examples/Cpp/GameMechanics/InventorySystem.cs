@@ -44,35 +44,35 @@ public static class Cpp_GameMechanics_InventorySystem
 
         // Register item prefabs
         ecs.Prefab<WoodenSword>().Add<Sword>()
-            .Set<Attack>(new(1))
-            .SetOverride<Health>(new(5)); // copy to instance, don't share
+            .Set<Attack>(new Attack(1))
+            .SetOverride<Health>(new Health(5)); // copy to instance, don't share
 
         ecs.Prefab<IronSword>().Add<Sword>()
-            .Set<Attack>(new(2))
-            .SetOverride<Health>(new(10));
+            .Set<Attack>(new Attack(2))
+            .SetOverride<Health>(new Health(10));
 
         ecs.Prefab<WoodenArmor>().Add<Armor>()
-            .SetOverride<Health>(new(10));
+            .SetOverride<Health>(new Health(10));
 
         ecs.Prefab<IronArmor>().Add<Armor>()
-            .SetOverride<Health>(new(20));
+            .SetOverride<Health>(new Health(20));
 
         // Create a loot box with items
         Entity lootBox = ecs.Entity("Chest").Add<Container>().With<ContainedBy>(() =>
         {
             ecs.Entity().IsA<IronSword>();
             ecs.Entity().IsA<WoodenArmor>();
-            ecs.Entity().Add<Coin>().Set<Amount>(new(30));
+            ecs.Entity().Add<Coin>().Set<Amount>(new Amount(30));
         });
 
         // Create a player entity with an inventory
         Entity inventory = ecs.Entity().Add<Container>().With<ContainedBy>(() =>
         {
-            ecs.Entity().Add<Coin>().Set<Amount>(new(20));
+            ecs.Entity().Add<Coin>().Set<Amount>(new Amount(20));
         });
 
         Entity player = ecs.Entity("Player")
-            .Set<Health>(new(10))
+            .Set<Health>(new Health(10))
             .Add<Inventory>(inventory);
 
         // Print items in loot box

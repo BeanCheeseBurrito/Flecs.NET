@@ -34,10 +34,10 @@ public static class Cpp_Observers_Monitor
         Entity e = world.Entity("e");
 
         // This does not yet trigger the monitor, as the entity does not yet match.
-        e.Set<Position>(new(10, 20));
+        e.Set<Position>(new Position(10, 20));
 
         // This triggers the monitor with EcsOnAdd, as the entity now matches.
-        e.Set<Velocity>(new(1, 2));
+        e.Set<Velocity>(new Velocity(1, 2));
 
         // This triggers the monitor with EcsOnRemove, as the entity no longer matches.
         e.Remove<Position>();

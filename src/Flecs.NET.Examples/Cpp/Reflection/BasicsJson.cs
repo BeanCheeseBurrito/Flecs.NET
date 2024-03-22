@@ -16,7 +16,7 @@ public static class Cpp_Reflection_BasicsJson
 
         // Create entity with Position as usual.
         Entity e = world.Entity("Entity")
-            .Set<Position>(new(10, 20));
+            .Set<Position>(new Position(10, 20));
 
         // Convert position component to JSON string
         ref Position reference = ref e.Ensure<Position>();

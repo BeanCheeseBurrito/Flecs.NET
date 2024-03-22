@@ -16,7 +16,7 @@ public static class Cpp_Reflection_EntityType
 
         // Create entity with TypeWithEntity component.
         Entity e = world.Entity()
-            .Set<TypeWithEntity>(new(foo));
+            .Set<TypeWithEntity>(new TypeWithEntity(foo));
 
         // Convert TypeWithEntity component to flecs expression string.
         ref TypeWithEntity reference = ref e.Ensure<TypeWithEntity>();

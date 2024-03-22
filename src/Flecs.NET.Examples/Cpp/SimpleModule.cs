@@ -1,4 +1,5 @@
 using Flecs.NET.Core;
+using Simple;
 
 public static class Cpp_SimpleModule
 {
@@ -17,8 +18,8 @@ public static class Cpp_SimpleModule
 
         // Create entity with imported components
         Entity e = world.Entity()
-            .Set<Simple.Position>(new(10, 20))
-            .Set<Simple.Velocity>(new(1, 1));
+            .Set<Simple.Position>(new Position(10, 20))
+            .Set<Simple.Velocity>(new Velocity(1, 1));
 
         // Call progress which runs imported Move system
         world.Progress();

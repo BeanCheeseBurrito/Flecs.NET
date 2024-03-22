@@ -16,7 +16,7 @@ public static class Cpp_Entities_Basics
         Entity bob = world.Entity("Bob")
             // The set operation finds or creates a component, and sets it.
             // Components are automatically registered with the world.
-            .Set<Position>(new(10, 20))
+            .Set<Position>(new Position(10, 20))
             // The add operation adds a component without setting a value. This is
             // useful for tags, or when adding a component with its default value.
             .Add<Walking>();
@@ -26,11 +26,11 @@ public static class Cpp_Entities_Basics
         Console.WriteLine($"({ptr.X}, {ptr.Y})");
 
         // Overwrite the value of the Position component
-        bob.Set<Position>(new(20, 30));
+        bob.Set<Position>(new Position(20, 30));
 
         // Create another named entity
         Entity alice = world.Entity("Alice")
-            .Set<Position>(new(10, 20));
+            .Set<Position>(new Position(10, 20));
 
         // Add a tag after entity is created
         alice.Add<Walking>();

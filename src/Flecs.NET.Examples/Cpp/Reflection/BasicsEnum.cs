@@ -27,7 +27,7 @@ public static class Cpp_Reflection_BasicsEnum
 
         // Create entity with TypeWithEnum component.
         Entity e = world.Entity()
-            .Set<TypeWithEnum>(new(Color.Green));
+            .Set<TypeWithEnum>(new TypeWithEnum(Color.Green));
 
         // Convert TypeWithEnum component to flecs expression string.
         ref TypeWithEnum reference = ref e.Ensure<TypeWithEnum>();

@@ -20,12 +20,12 @@ public static class Cpp_Relationships_RelationComponent
 
         // When one element of a pair is a component and the other element is a tag,
         // the pair assumes the type of the component.
-        Entity e1 = world.Entity().SetFirst<Requires, Gigawatts>(new(1.21f));
+        Entity e1 = world.Entity().SetFirst<Requires, Gigawatts>(new Requires(1.21f));
         ref readonly Requires r = ref e1.GetFirst<Requires, Gigawatts>();
         Console.WriteLine($"Requires: {r.Amount}");
 
         // The component can be either the first or second part of a pair:
-        Entity e2 = world.Entity().SetSecond<Gigawatts, Requires>(new(1.21f));
+        Entity e2 = world.Entity().SetSecond<Gigawatts, Requires>(new Requires(1.21f));
         r = ref e2.GetSecond<Gigawatts, Requires>();
         Console.WriteLine($"Requires: {r.Amount}");
 
@@ -34,7 +34,7 @@ public static class Cpp_Relationships_RelationComponent
 
         // If both parts of a pair are components, the pair assumes the type of
         // the first element:
-        Entity e3 = world.Entity().SetFirst<Expires, Position>(new(0.5f));
+        Entity e3 = world.Entity().SetFirst<Expires, Position>(new Expires(0.5f));
         ref readonly Expires e = ref e3.GetFirst<Expires, Position>();
         Console.WriteLine($"Expires: {e.Timeout}");
 

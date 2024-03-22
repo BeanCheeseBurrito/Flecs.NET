@@ -26,7 +26,7 @@ public static class Cpp_Reflection_BasicsBitmask
 
         // Create entity with Sandwich component.
         Entity e = world.Entity()
-            .Set<Sandwich>(new(Toppings.Bacon | Toppings.Lettuce));
+            .Set<Sandwich>(new Sandwich(Toppings.Bacon | Toppings.Lettuce));
 
         // Convert Sandwich component to flecs expression string.
         ref Sandwich sandwich = ref e.Ensure<Sandwich>();

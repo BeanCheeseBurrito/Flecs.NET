@@ -54,12 +54,12 @@ public static class Cpp_Systems_SyncPointDelete
 
         // Create a few test entities for a Position, Velocity query
         world.Entity("e1")
-            .Set<Position>(new(0, 0))
-            .Set<Velocity>(new(1, 2));
+            .Set<Position>(new Position(0, 0))
+            .Set<Velocity>(new Velocity(1, 2));
 
         world.Entity("e2")
-            .Set<Position>(new(1, 2))
-            .Set<Velocity>(new(1, 2));
+            .Set<Position>(new Position(1, 2))
+            .Set<Velocity>(new Velocity(1, 2));
 
         // Run systems. Debug logging enables us to see the generated schedule
         Ecs.Log.SetLevel(1);

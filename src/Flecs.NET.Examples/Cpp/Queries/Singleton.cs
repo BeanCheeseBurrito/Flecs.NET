@@ -15,12 +15,12 @@ public static class Cpp_Queries_Singleton
         using World world = World.Create();
 
         // Set singleton
-        world.Set<Gravity>(new(9.81f));
+        world.Set<Gravity>(new Gravity(9.81f));
 
         // Set Velocity
-        world.Entity("e1").Set<Velocity>(new(0, 0));
-        world.Entity("e2").Set<Velocity>(new(0, 1));
-        world.Entity("e3").Set<Velocity>(new(0, 2));
+        world.Entity("e1").Set<Velocity>(new Velocity(0, 0));
+        world.Entity("e2").Set<Velocity>(new Velocity(0, 1));
+        world.Entity("e3").Set<Velocity>(new Velocity(0, 2));
 
         // Create query that matches Gravity as singleton
         Query q = world.QueryBuilder<Velocity, Gravity>()

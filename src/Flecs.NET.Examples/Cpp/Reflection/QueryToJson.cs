@@ -23,10 +23,10 @@ public static class Cpp_Reflection_QueryToJson
         world.Component<Mass>()
             .Member<float>("Value");
 
-        world.Entity("A").Set<Position>(new(10, 20)).Set<Velocity>(new(1, 2));
-        world.Entity("B").Set<Position>(new(20, 30)).Set<Velocity>(new(2, 3));
-        world.Entity("C").Set<Position>(new(30, 40)).Set<Velocity>(new(3, 4)).Set<Mass>(new(10));
-        world.Entity("D").Set<Position>(new(30, 40)).Set<Velocity>(new(4, 5)).Set<Mass>(new(20));
+        world.Entity("A").Set<Position>(new Position(10, 20)).Set<Velocity>(new Velocity(1, 2));
+        world.Entity("B").Set<Position>(new Position(20, 30)).Set<Velocity>(new Velocity(2, 3));
+        world.Entity("C").Set<Position>(new Position(30, 40)).Set<Velocity>(new Velocity(3, 4)).Set<Mass>(new Mass(10));
+        world.Entity("D").Set<Position>(new Position(30, 40)).Set<Velocity>(new Velocity(4, 5)).Set<Mass>(new Mass(20));
 
         // Query for components.
         Query query = world.Query<Position, Velocity>();

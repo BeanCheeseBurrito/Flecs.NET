@@ -49,7 +49,7 @@ public static class Cpp_Systems_MutateEntity
             });
 
         Entity e = world.Entity("MyEntity")
-            .Set<Timeout>(new(3));
+            .Set<Timeout>(new Timeout(3));
 
         world.SetTargetFps(1);
 

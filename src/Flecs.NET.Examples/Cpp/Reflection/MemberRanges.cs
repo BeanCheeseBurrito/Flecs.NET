@@ -15,9 +15,9 @@ public static class Cpp_Reflection_MemberRanges
             .WarningRange(0.0, 60.0) // Values outside this range are considered a warning.
             .ErrorRange(0.0, 80.0); // Values outside this range are considered an error.
 
-        world.Entity("MachineA").Set<CpuUtilization>(new(50.0));
-        world.Entity("MachineB").Set<CpuUtilization>(new(75.0));
-        world.Entity("MachineC").Set<CpuUtilization>(new(90.0));
+        world.Entity("MachineA").Set<CpuUtilization>(new CpuUtilization(50.0));
+        world.Entity("MachineB").Set<CpuUtilization>(new CpuUtilization(75.0));
+        world.Entity("MachineC").Set<CpuUtilization>(new CpuUtilization(90.0));
 
         // Open https://www.flecs.dev/explorer?show=query&query=CpuUtilization to
         // see how ranges affect visualization.

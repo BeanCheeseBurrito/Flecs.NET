@@ -20,27 +20,27 @@ file static class Cpp_Entities_Hierarchy
 
         Entity sun = world.Entity("Sun")
             .Add<Star>()
-            .Set<Position>(new(1, 1));
+            .Set<Position>(new Position(1, 1));
 
         world.Entity("Mercury")
             .ChildOf(sun) // Shortcut for Add(Ecs.ChildOf, sun)
             .Add<Planet>()
-            .Set<Position>(new(1, 1));
+            .Set<Position>(new Position(1, 1));
 
         world.Entity("Venus")
             .ChildOf(sun)
             .Add<Planet>()
-            .Set<Position>(new(2, 2));
+            .Set<Position>(new Position(2, 2));
 
         Entity earth = world.Entity("Earth")
             .ChildOf(sun)
             .Add<Planet>()
-            .Set<Position>(new(3, 3));
+            .Set<Position>(new Position(3, 3));
 
         Entity moon = world.Entity("Moon")
             .ChildOf(earth)
             .Add<Moon>()
-            .Set<Position>(new(0.1, 0.1));
+            .Set<Position>(new Position(0.1, 0.1));
 
         // Is the Moon a child of Earth?
         Console.WriteLine($"Child of Earth? {moon.IsChildOf(earth)}\n");

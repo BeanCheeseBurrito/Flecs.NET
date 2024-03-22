@@ -32,6 +32,7 @@ namespace Flecs.NET.Codegen
                 namespace Flecs.NET.Core 
                 {{
                     {GenerateWorldExtensions()}
+                    {GenerateEntityExtensions()}
                     {GenerateEcsExtensions()}
                     {GenerateInvokerExtensions()}
                     {GenerateBindingContextExtensions()}
@@ -58,6 +59,17 @@ namespace Flecs.NET.Codegen
             ";
         }
 
+        public static string GenerateEntityExtensions()
+        {
+            return $@"
+                public unsafe partial struct Entity
+                {{
+                    {GenerateEntityGetCallbacks()}
+                    {GenerateEntitySetCallbacks()}
+                }}
+            ";
+        }
+
         public static string GenerateEcsExtensions()
         {
             return $@"
@@ -70,6 +82,8 @@ namespace Flecs.NET.Codegen
                     {GenerateFindCallbackDelegates()}
                     {GenerateFindEntityCallbackDelegates()}
                     {GenerateFindIndexCallbackDelegates()}
+                    {GenerateInvokeWriteCallbackDelegates()}
+                    {GenerateInvokeEnsureCallbackDelegates()}
                 }}
             ";
         }
@@ -86,6 +100,10 @@ namespace Flecs.NET.Codegen
                     {GenerateFindInvokers()}
                     {GenerateFindEntityInvokers()}
                     {GenerateFindIndexInvokers()}
+                    {GenerateGetPointers()}
+                    {GenerateEnsurePointers()}
+                    {GenerateWriteInvokers()}
+                    {GenerateEnsureInvokers()}
                 }}
             ";
         }
@@ -371,6 +389,45 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
+        public static string GenerateEntityGetCallbacks()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                str.AppendLine($@"
+                    public bool Get<{typeParams}>(Ecs.InvokeWriteCallback<{typeParams}> callback)
+                    {{
+                        return Invoker.InvokeWrite(World, Id, callback);
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateEntitySetCallbacks()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                str.AppendLine($@"
+                    public ref Entity Set<{typeParams}>(Ecs.InvokeEnsureCallback<{typeParams}> callback)
+                    {{
+                        Invoker.InvokeEnsure(World, Id, callback);
+                        return ref this;
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
         public static string GenerateIterCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
@@ -464,6 +521,34 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
                 string funcParams = ConcatString(i + 1, ", ", index => $"ref T{index} comp{index}");
                 str.AppendLine($"public delegate bool FindIndexCallback<{typeParams}>(Iter it, int i, {funcParams});");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateInvokeWriteCallbackDelegates()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+                string funcParams = ConcatString(i + 1, ", ", index => $"ref T{index} comp{index}");
+                str.AppendLine($"public delegate void InvokeWriteCallback<{typeParams}>({funcParams});");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateInvokeEnsureCallbackDelegates()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+                string funcParams = ConcatString(i + 1, ", ", index => $"ref T{index} comp{index}");
+                str.AppendLine($"public delegate void InvokeEnsureCallback<{typeParams}>({funcParams});");
             }
 
             return str.ToString();
@@ -754,6 +839,188 @@ namespace Flecs.NET.Codegen
                         Macros.TableUnlock(iter->world, iter->table);
 
                         return result;
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateGetPointers()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                string columnIndexes = ConcatString(i + 1, "\n",
+                    index => $"int t{index} = ecs_table_get_column_index(realWorld, table, Type<T{index}>.Id(world));");
+
+                string condition = ConcatString(i + 1, " || ",
+                    index => $"t{index} == -1");
+
+                string typeIds = ConcatString(i + 1, "\n",
+                    index => $"ptrs[{index}] = ecs_record_get_column(r, t{index}, default);");
+
+                str.AppendLine($@"
+                    internal static bool GetPointers<{typeParams}>(ecs_world_t* world, ecs_record_t* r, ecs_table_t* table, void** ptrs)
+                    {{
+                        Ecs.Assert(table != null, nameof(ECS_INTERNAL_ERROR));
+
+                        if (ecs_table_column_count(table) == 0)
+                            return false;
+
+                        ecs_world_t* realWorld = ecs_get_world(world);
+
+                        {columnIndexes}
+
+                        if ({condition})
+                            return false;
+
+                        {typeIds}
+
+                        return true;
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateEnsurePointers()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                string typeIds = ConcatString(i + 1, "\n",
+                    index => $"ptrs[{index}] = ecs_ensure_id(world, e, Type<T{index}>.Id(world));");
+
+                str.AppendLine($@"
+                    internal static bool EnsurePointers<{typeParams}>(ecs_world_t* world, ulong e, void** ptrs)
+                    {{
+                        {typeIds}
+                        return true;
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateWriteInvokers()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(ptrs[{index}])");
+
+                str.AppendLine($@"
+                    internal static bool InvokeWrite<{typeParams}>(ecs_world_t* world, ulong e, Ecs.InvokeWriteCallback<{typeParams}> callback)
+                    {{
+                        ecs_record_t* r = ecs_write_begin(world, e);
+
+                        if (r == null)
+                            return false;
+
+                        ecs_table_t *table = r->table;
+
+                        if (table == null)
+                            return false;
+
+                        void** ptrs = stackalloc void*[{i + 1}];
+                        bool hasComponents = GetPointers<{typeParams}>(world, r, table, ptrs);
+
+                        if (hasComponents)
+                            callback({callbackArgs});
+
+                        ecs_write_end(r);
+
+                        return hasComponents;
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateEnsureInvokers()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                string addedIds = ConcatString(i + 1, "\n", index => $@"
+                    next = ecs_table_add_id(world, prev, Type<T{index}>.Id(world));
+                    if (prev != next) added[elem++] = Type<T{index}>.Id(world);
+                    prev = next;
+                ");
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"ref Managed.GetTypeRef<T{index}>(ptrs[{index}])");
+
+                string modified = ConcatString(i + 1, "\n",
+                    index => $"ecs_modified_id(world, id, Type<T{index}>.Id(world));");
+
+                str.AppendLine($@"
+                    internal static bool InvokeEnsure<{typeParams}>(ecs_world_t* world, ulong id, Ecs.InvokeEnsureCallback<{typeParams}> callback)
+                    {{
+                        World w = new World(world);
+
+                        void** ptrs = stackalloc void*[{i + 1}];
+                        ecs_table_t* table = null;
+
+                        if (!w.IsDeferred())
+                        {{
+                            Ecs.Assert(!w.IsStage(), nameof(ECS_INVALID_PARAMETER));
+
+                            ecs_record_t* r = ecs_record_find(world, id);
+                            if (r != null)
+                                table = r->table;
+
+                            ecs_table_t* prev = table;
+                            ecs_table_t* next;
+                            int elem = 0;
+                            ulong* added = stackalloc ulong[{i + 1}];
+
+                            {addedIds}
+
+                            if (table != next)
+                            {{
+                                ecs_type_t ids = default;
+                                ids.array = added;
+                                ids.count = elem;
+                                ecs_commit(world, id, r, next, &ids, null);
+                                table = next;
+                            }}
+
+                            if (!GetPointers<{typeParams}>(w, r, table, ptrs))
+                                Ecs.Error(nameof(ECS_INTERNAL_ERROR));
+
+                            Macros.TableLock(world, table);
+                        }}
+                        else
+                        {{
+                            EnsurePointers<{typeParams}>(world, id, ptrs);
+                        }}
+
+                        callback({callbackArgs});
+
+                        if (!w.IsDeferred())
+                            Macros.TableUnlock(world, table);
+
+                        {modified}
+
+                        return true;
                     }}
                 ");
             }

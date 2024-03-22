@@ -36,22 +36,22 @@ public static class Cpp_Queries_ChangeTracking
 
         // Create two prefabs with a Dirty component. We can use this to share a
         // single Dirty value for all entities in a table.
-        Entity p1 = world.Prefab("p1").Set<Dirty>(new(false));
-        Entity p2 = world.Prefab("p2").Set<Dirty>(new(true));
+        Entity p1 = world.Prefab("p1").Set<Dirty>(new Dirty(false));
+        Entity p2 = world.Prefab("p2").Set<Dirty>(new Dirty(true));
 
         // Create instances of p1 and p2. Because the entities have different
         // prefabs, they end up in different tables.
         world.Entity("e1").IsA(p1)
-            .Set<Position>(new(10, 20));
+            .Set<Position>(new Position(10, 20));
 
         world.Entity("e2").IsA(p1)
-            .Set<Position>(new(30, 40));
+            .Set<Position>(new Position(30, 40));
 
         world.Entity("e3").IsA(p2)
-            .Set<Position>(new(40, 50));
+            .Set<Position>(new Position(40, 50));
 
         world.Entity("e4").IsA(p2)
-            .Set<Position>(new(60, 70));
+            .Set<Position>(new Position(60, 70));
 
         // We can use the Changed() function on the query to check if any of the
         // tables it is matched with has changed. Since this is the first time that

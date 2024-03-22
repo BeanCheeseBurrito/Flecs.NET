@@ -39,7 +39,7 @@ file static class Cpp_Entities_Hooks
 
         Ecs.Log.Trace("e.Set<NativeString>(new(\"Hello World\"))");
         Ecs.Log.Push();
-        e.Set<NativeString>(new("Hello World"));
+        e.Set<NativeString>(new NativeString("Hello World"));
         Ecs.Log.Pop();
 
         // This operation changes the entity's archetype, which invokes a move

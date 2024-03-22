@@ -28,7 +28,7 @@ public static class Cpp_Systems_SyncPoint
             .Write<Velocity>() // Velocity is written, but shouldn't be matched
             .Each((Entity e) =>
             {
-                e.Set<Velocity>(new(1, 2));
+                e.Set<Velocity>(new Velocity(1, 2));
             });
 
         // This system reads Velocity, which causes the insertion of a sync point.
@@ -48,12 +48,12 @@ public static class Cpp_Systems_SyncPoint
 
         // Create a few test entities for a Position, Velocity query
         world.Entity("e1")
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(1, 2));
+            .Set<Position>(new Position(10, 20))
+            .Set<Velocity>(new Velocity(1, 2));
 
         world.Entity("e2")
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(3, 4));
+            .Set<Position>(new Position(10, 20))
+            .Set<Velocity>(new Velocity(3, 4));
 
         // Run systems. Debug logging enables us to see the generated schedule
         Ecs.Log.SetLevel(1);
