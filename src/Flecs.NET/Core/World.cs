@@ -239,7 +239,7 @@ namespace Flecs.NET.Core
         public bool IsStage()
         {
             Ecs.Assert(
-                ecs_poly_is_(Handle, ecs_world_t_magic) == 1 &&
+                ecs_poly_is_(Handle, ecs_world_t_magic) == 1 ||
                 ecs_poly_is_(Handle, ecs_stage_t_magic) == 1,
                 nameof(ECS_INVALID_PARAMETER)
             );
