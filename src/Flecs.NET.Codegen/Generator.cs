@@ -510,7 +510,7 @@ namespace Flecs.NET.Codegen
                     index => $"void* t{index}Pointer = iter->ptrs[{index}];");
 
                 string callbackArgs = ConcatString(i + 1, ", ",
-                    index => $"ref t{index}Pointer == null ? ref Unsafe.NullRef<T{index}>() : ref Managed.GetTypeRef<T{index}>(t{index}Pointer, i * t{index}IsSelf)");
+                    index => $"ref Managed.GetTypeRef<T{index}>(t{index}Pointer, i * t{index}IsSelf)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachCallback<{typeParams}> callback)
@@ -554,7 +554,7 @@ namespace Flecs.NET.Codegen
                     index => $"void* t{index}Pointer = iter->ptrs[{index}];");
 
                 string callbackArgs = ConcatString(i + 1, ", ",
-                    index => $"ref t{index}Pointer == null ? ref Unsafe.NullRef<T{index}>() : ref Managed.GetTypeRef<T{index}>(t{index}Pointer, i * t{index}IsSelf)");
+                    index => $"ref Managed.GetTypeRef<T{index}>(t{index}Pointer, i * t{index}IsSelf)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachEntityCallback<{typeParams}> callback)
@@ -600,7 +600,7 @@ namespace Flecs.NET.Codegen
                     index => $"void* t{index}Pointer = iter->ptrs[{index}];");
 
                 string callbackArgs = ConcatString(i + 1, ", ",
-                    index => $"ref t{index}Pointer == null ? ref Unsafe.NullRef<T{index}>() : ref Managed.GetTypeRef<T{index}>(t{index}Pointer, i * t{index}IsSelf)");
+                    index => $"ref Managed.GetTypeRef<T{index}>(t{index}Pointer, i * t{index}IsSelf)");
 
                 str.AppendLine($@"
                     public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachIndexCallback<{typeParams}> callback)

@@ -74,7 +74,8 @@ namespace Flecs.NET.Utilities
 
         internal static ref T GetTypeRef<T>(void* data, int index = 0)
         {
-            Ecs.Assert(data != null, "Provided pointer is null.");
+            if (data == null)
+                return ref Unsafe.NullRef<T>();
 
             if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
                 return ref ((T*)data)[index];
