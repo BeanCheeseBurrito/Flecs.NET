@@ -60,6 +60,11 @@ public struct Template<T>
 public struct Self
 {
     public Entity Value { get; set; }
+
+    public Self(Entity value)
+    {
+        Value = value;
+    }
 }
 
 public struct FilterWrapper
@@ -117,12 +122,60 @@ public struct Pod
     }
 }
 
+public struct PositionInitialized
+{
+    public float X;
+    public float Y;
+
+    public PositionInitialized(float x, float y)
+    {
+        X = x;
+        Y = y;
+    }
+}
+
+public struct Turret
+{
+    public struct Base { }
+}
+
+public struct Railgun
+{
+    public struct Base { }
+    public struct Head { }
+    public struct Beam { }
+}
+
 public struct EvtData
 {
     public int Value;
 }
 
+public struct First
+{
+}
+
+public struct Base
+{
+}
+
+public struct Foo
+{
+}
+
+public struct Bar
+{
+}
+
 public struct Evt
+{
+}
+
+public struct Prefab
+{
+}
+
+public struct EntityType
 {
 }
 
@@ -146,11 +199,27 @@ public struct Rel
 {
 }
 
+public struct Obj
+{
+}
+
 public struct Likes
 {
 }
 
 public struct Bob
+{
+}
+
+public struct R
+{
+}
+
+public struct O1
+{
+}
+
+public struct O2
 {
 }
 

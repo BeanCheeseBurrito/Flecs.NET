@@ -230,7 +230,7 @@ namespace Flecs.NET.Core
         /// <param name="sep"></param>
         /// <param name="initSep"></param>
         /// <returns></returns>
-        public string Path(string sep = ".", string initSep = "")
+        public string Path(string sep = Ecs.DefaultSeparator, string initSep = Ecs.DefaultRootSeparator)
         {
             return PathFrom(0, sep, initSep);
         }
@@ -242,7 +242,7 @@ namespace Flecs.NET.Core
         /// <param name="sep"></param>
         /// <param name="initSep"></param>
         /// <returns></returns>
-        public string PathFrom(ulong parent, string sep = ".", string initSep = "")
+        public string PathFrom(ulong parent, string sep = Ecs.DefaultSeparator, string initSep = Ecs.DefaultRootSeparator)
         {
             using NativeString nativeSep = (NativeString)sep;
             using NativeString nativeInitSep = (NativeString)initSep;
@@ -257,7 +257,7 @@ namespace Flecs.NET.Core
         /// <param name="initSep"></param>
         /// <typeparam name="TParent"></typeparam>
         /// <returns></returns>
-        public string PathFrom<TParent>(string sep = ".", string initSep = "")
+        public string PathFrom<TParent>(string sep = Ecs.DefaultSeparator, string initSep = Ecs.DefaultRootSeparator)
         {
             return PathFrom(Type<TParent>.Id(World), sep, initSep);
         }

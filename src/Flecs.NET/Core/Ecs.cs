@@ -11,6 +11,15 @@ namespace Flecs.NET.Core
     /// </summary>
     public static partial class Ecs
     {
+        /// <summary>
+        ///     Default path separator.
+        /// </summary>
+        public const string DefaultSeparator = ".";
+
+        /// <summary>
+        ///     Default path root.
+        /// </summary>
+        public const string DefaultRootSeparator = "::";
     }
 
     // TODO: Add proper logging

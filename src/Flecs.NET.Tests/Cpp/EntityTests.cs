@@ -47,7 +47,27 @@ namespace Flecs.NET.Tests.Cpp
             world.SetScope(prev);
 
             Assert.Equal("Bar", child.Name());
-            Assert.Equal("Foo.Bar", child.Path());
+            Assert.Equal("::Foo.Bar", child.Path());
+        }
+
+        [Fact]
+        private void NewNestedNamedFromFromScope()
+        {
+            using World world = World.Create();
+
+            Entity entity = new Entity(world, "Foo");
+            Assert.True(entity != 0);
+            Assert.Equal("Foo", entity.Name());
+
+            Entity prev = world.SetScope(entity);
+
+            Entity child = world.Entity("Bar.Hello");
+            Assert.True(child != 0);
+
+            world.SetScope(prev);
+
+            Assert.Equal("Hello", child.Name());
+            Assert.Equal("::Foo.Bar.Hello", child.Path());
         }
 
         [Fact]
@@ -58,7 +78,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity entity = new Entity(world, "Foo.Bar");
             Assert.True(entity != 0);
             Assert.Equal("Bar", entity.Name());
-            Assert.Equal("Foo.Bar", entity.Path());
+            Assert.Equal("::Foo.Bar", entity.Path());
 
             Entity prev = world.SetScope(entity);
 
@@ -68,7 +88,7 @@ namespace Flecs.NET.Tests.Cpp
             world.SetScope(prev);
 
             Assert.Equal("World", child.Name());
-            Assert.Equal("Foo.Bar.Hello.World", child.Path());
+            Assert.Equal("::Foo.Bar.Hello.World", child.Path());
         }
 
         [Fact]
@@ -1007,8 +1027,6 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.IsAlive());
 
             Entity e2 = world.Entity();
-
-            // Entity ids should be equal without the generation
             Assert.True((uint)e2 == (uint)e);
             Assert.True(e2 != e);
         }
@@ -1642,7 +1660,7 @@ namespace Flecs.NET.Tests.Cpp
 
             using ScopedWorld scope = world.Scope(parent);
             Entity child = world.Entity("child");
-            Assert.Equal("parent.child", child.Path());
+            Assert.Equal("::parent.child", child.Path());
         }
 
         [Fact]
@@ -1658,7 +1676,7 @@ namespace Flecs.NET.Tests.Cpp
             using ScopedWorld childScope = world.Scope(child);
             Entity grandchild = world.Entity("grandchild");
 
-            Assert.Equal("parent.child.grandchild", grandchild.Path());
+            Assert.Equal("::parent.child.grandchild", grandchild.Path());
             Assert.Equal("child.grandchild", grandchild.PathFrom(parent));
         }
 
@@ -1674,7 +1692,7 @@ namespace Flecs.NET.Tests.Cpp
             using ScopedWorld childScope = world.Scope(child);
             Entity grandchild = world.Entity("grandchild");
 
-            Assert.Equal("Parent.child.grandchild", grandchild.Path());
+            Assert.Equal("::Parent.child.grandchild", grandchild.Path());
             Assert.Equal("child.grandchild", grandchild.PathFrom<Parent>());
         }
 
@@ -1702,7 +1720,7 @@ namespace Flecs.NET.Tests.Cpp
             using ScopedWorld childScope = world.Scope(child);
             Entity grandchild = world.Entity("grandchild");
 
-            Assert.Equal("parent.child.grandchild", grandchild.Path());
+            Assert.Equal("::parent.child.grandchild", grandchild.Path());
             Assert.Equal("child_grandchild", grandchild.PathFrom(parent, "_"));
         }
 
@@ -1718,7 +1736,7 @@ namespace Flecs.NET.Tests.Cpp
             using ScopedWorld childScope = world.Scope(child);
             Entity grandchild = world.Entity("grandchild");
 
-            Assert.Equal("Parent.child.grandchild", grandchild.Path());
+            Assert.Equal("::Parent.child.grandchild", grandchild.Path());
             Assert.Equal("child_grandchild", grandchild.PathFrom<Parent>("_"));
         }
 
@@ -1731,7 +1749,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity != 0);
             Assert.Equal("Bar", entity.Name());
 
-            Assert.Equal("Foo.Bar", entity.Path());
+            Assert.Equal("::Foo.Bar", entity.Path());
         }
 
         [Fact]
@@ -2339,9 +2357,12 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity tag = world.Entity().With(() =>
             {
-                Entity e1 = world.Entity(); e1.Set(new Self { Value = e1 });
-                Entity e2 = world.Entity(); e2.Set(new Self { Value = e2 });
-                Entity e3 = world.Entity(); e3.Set(new Self { Value = e3 });
+                Entity e1 = world.Entity();
+                e1.Set(new Self { Value = e1 });
+                Entity e2 = world.Entity();
+                e2.Set(new Self { Value = e2 });
+                Entity e3 = world.Entity();
+                e3.Set(new Self { Value = e3 });
             });
 
             Component<Self> self = world.Component<Self>();
@@ -2354,15 +2375,234 @@ namespace Flecs.NET.Tests.Cpp
             {
                 Assert.True(e.Has(tag));
 
-                Assert.True(e.Read((in Self s) =>
-                {
-                    Assert.True(s.Value == e);
-                }));
+                Assert.True(e.Read((in Self s) => { Assert.True(s.Value == e); }));
 
                 count++;
             });
 
             Assert.Equal(3, count);
+        }
+
+        [Fact]
+        private void WithRelationTypeSelf()
+        {
+            using World world = World.Create();
+
+            Entity bob = world.Entity().With<Likes>(() =>
+            {
+                Entity e1 = world.Entity();
+                e1.Set(new Self(e1));
+                Entity e2 = world.Entity();
+                e2.Set(new Self(e2));
+                Entity e3 = world.Entity();
+                e3.Set(new Self(e3));
+            });
+
+            Component<Self> self = world.Component<Self>();
+            Assert.True(!self.Entity.Has<Likes>(bob));
+
+            int count = 0;
+            Query q = world.QueryBuilder().Term<Likes>(bob).Build();
+
+            q.Each((Entity e) =>
+            {
+                Assert.True(e.Has<Likes>(bob));
+
+                Assert.True(e.Read((in Self s) => { Assert.True(s.Value == e); }));
+
+                count++;
+            });
+
+            Assert.Equal(3, count);
+        }
+
+        [Fact]
+        private void WithRelationSelf()
+        {
+            using World world = World.Create();
+
+            Entity likes = world.Entity();
+
+            Entity bob = world.Entity().With(likes, () =>
+            {
+                Entity e1 = world.Entity();
+                e1.Set(new Self(e1));
+                Entity e2 = world.Entity();
+                e2.Set(new Self(e2));
+                Entity e3 = world.Entity();
+                e3.Set(new Self(e3));
+            });
+
+            Component<Self> self = world.Component<Self>();
+            Assert.True(!self.Entity.Has(likes, bob));
+
+            int count = 0;
+            Query q = world.QueryBuilder().Term(likes, bob).Build();
+
+            q.Each((Entity e) =>
+            {
+                Assert.True(e.Has(likes, bob));
+
+                Assert.True(e.Read((in Self s) => { Assert.True(s.Value == e); }));
+
+                count++;
+            });
+
+            Assert.Equal(3, count);
+        }
+
+        [Fact]
+        private void WithSelfWithName()
+        {
+            using World world = World.Create();
+
+            Entity tier1 = world.Entity("Tier1").With(() =>
+            {
+                Entity tier2 = world.Entity("Tier2");
+                tier2.Set(new Self(tier2));
+            });
+
+            Entity tier2 = world.Lookup("Tier2");
+            Assert.True(tier2 != 0);
+
+            Assert.True(tier2.Has(tier1));
+        }
+
+        [Fact]
+        private void WithSelfNested()
+        {
+            using World world = World.Create();
+
+            Entity tier1 = world.Entity("Tier1").With(() =>
+            {
+                world.Entity("Tier2").With(() => { world.Entity("Tier3"); });
+            });
+
+            Entity tier2 = world.Lookup("Tier2");
+            Assert.True(tier2 != 0);
+
+            Entity tier3 = world.Lookup("Tier3");
+            Assert.True(tier3 != 0);
+
+            Assert.True(tier2.Has(tier1));
+            Assert.True(tier3.Has(tier2));
+        }
+
+        [Fact]
+        private void WithScope()
+        {
+            using World world = World.Create();
+
+            Entity parent = world.Entity("P").Scope(() =>
+            {
+                Entity e1 = world.Entity("C1");
+                e1.Set(new Self(e1));
+                Entity e2 = world.Entity("C2");
+                e2.Set(new Self(e2));
+                Entity e3 = world.Entity("C3");
+                e3.Set(new Self(e3));
+
+                Assert.True(world.Lookup("C1") == e1);
+                Assert.True(world.Lookup("C2") == e2);
+                Assert.True(world.Lookup("C3") == e3);
+
+                Assert.True(world.Lookup("::P.C1") == e1);
+                Assert.True(world.Lookup("::P.C2") == e2);
+                Assert.True(world.Lookup("::P.C3") == e3);
+            });
+
+            Assert.True(world.Lookup("C1") == 0);
+            Assert.True(world.Lookup("C2") == 0);
+            Assert.True(world.Lookup("C3") == 0);
+
+            Assert.True(parent.Lookup("C1") != 0);
+            Assert.True(parent.Lookup("C2") != 0);
+            Assert.True(parent.Lookup("C3") != 0);
+
+            Assert.True(world.Lookup("P.C1") == parent.Lookup("C1"));
+            Assert.True(world.Lookup("P.C2") == parent.Lookup("C2"));
+            Assert.True(world.Lookup("P.C3") == parent.Lookup("C3"));
+
+            Component<Self> self = world.Component<Self>();
+            Assert.True(!self.Entity.Has(Ecs.ChildOf, parent));
+
+            int count = 0;
+            Query q = world.QueryBuilder().Term(Ecs.ChildOf, parent).Build();
+
+            q.Each((Entity e) =>
+            {
+                Assert.True(e.Has(Ecs.ChildOf, parent));
+
+                Assert.True(e.Read((in Self s) => { Assert.True(s.Value == e); }));
+
+                count++;
+            });
+
+            Assert.Equal(3, count);
+        }
+
+        [Fact]
+        private void WithScopeNested()
+        {
+            using World world = World.Create();
+
+            Entity parent = world.Entity("P").Scope(() =>
+            {
+                Entity child = world.Entity("C").Scope(() =>
+                {
+                    Entity gchild = world.Entity("GC");
+                    Assert.True(gchild == world.Lookup("GC"));
+                    Assert.True(gchild == world.Lookup("::P.C.GC"));
+                });
+
+                Assert.True(world.Lookup("C") == child);
+                Assert.True(world.Lookup("::P.C") == child);
+                Assert.True(world.Lookup("::P.C.GC") != 0);
+            });
+
+            Assert.True(0 == world.Lookup("C"));
+            Assert.True(0 == world.Lookup("GC"));
+            Assert.True(0 == world.Lookup("C.GC"));
+
+            Entity child = world.Lookup("P.C");
+            Assert.True(0 != child);
+            Assert.True(child.Has(Ecs.ChildOf, parent));
+
+            Entity gchild = world.Lookup("P.C.GC");
+            Assert.True(0 != gchild);
+            Assert.True(gchild.Has(Ecs.ChildOf, child));
+        }
+
+        [Fact]
+        private void WithScopeNestedSameNameAsParent()
+        {
+            using World world = World.Create();
+
+            Entity parent = world.Entity("P").Scope(() =>
+            {
+                Entity child = world.Entity("C").Scope(() =>
+                {
+                    Entity gchild = world.Entity("C");
+                    Assert.True(gchild == world.Lookup("C"));
+                    Assert.True(gchild == world.Lookup("::P.C.C"));
+                });
+
+                Assert.True(world.Lookup("C") == child);
+                Assert.True(world.Lookup("::P.C") == child);
+                Assert.True(world.Lookup("::P.C.C") != 0);
+            });
+
+            Assert.True(0 == world.Lookup("C"));
+            Assert.True(0 == world.Lookup("C"));
+            Assert.True(0 == world.Lookup("C.C"));
+
+            Entity child = world.Lookup("P.C");
+            Assert.True(0 != child);
+            Assert.True(child.Has(Ecs.ChildOf, parent));
+
+            Entity gchild = world.Lookup("P.C.C");
+            Assert.True(0 != gchild);
+            Assert.True(gchild.Has(Ecs.ChildOf, child));
         }
 
         [Fact]
@@ -2411,7 +2651,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Bar", e.Name());
-            Assert.Equal("Foo.Bar", e.Path());
+            Assert.Equal("::Foo.Bar", e.Path());
         }
 
 
@@ -2434,7 +2674,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Foo", e.Name());
-            Assert.Equal("Parent.Foo", e.Path());
+            Assert.Equal("::Parent.Foo", e.Path());
         }
 
         [Fact]
@@ -2456,11 +2696,11 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Bar", e.Name());
-            Assert.Equal("Parent.Foo.Bar", e.Path());
+            Assert.Equal("::Parent.Foo.Bar", e.Path());
         }
 
         [Fact]
-        private void DeferNewWithDeferredScopeNestedName ()
+        private void DeferNewWithDeferredScopeNestedName()
         {
             using World world = World.Create();
 
@@ -2478,11 +2718,11 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(parent.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Parent", parent.Name());
-            Assert.Equal("Parent", parent.Path());
+            Assert.Equal("::Parent", parent.Path());
 
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Bar", e.Name());
-            Assert.Equal("Parent.Foo.Bar", e.Path());
+            Assert.Equal("::Parent.Foo.Bar", e.Path());
         }
 
         [Fact]
@@ -2553,7 +2793,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(tag));
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Foo", e.Name());
-            Assert.Equal("Parent.Foo", e.Path());
+            Assert.Equal("::Parent.Foo", e.Path());
         }
 
         [Fact]
@@ -2583,1603 +2823,1446 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(tag));
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Bar", e.Name());
-            Assert.Equal("Parent.Foo.Bar", e.Path());
+            Assert.Equal("::Parent.Foo.Bar", e.Path());
         }
-        //
-        // [Fact]
-        // void defer_w_with_implicit_component() {
-        //     using World world = World.Create();
-        //
-        //     struct Tag { };
-        //
-        //     Entity e;
-        //
-        //     world.Defer(() =>
-        //  {
-        //         world.with<Tag>(() => {
-        //             e = world.Entity();
-        //             Assert.True(!e.Has<Tag>());
-        //         });
-        //         Assert.True(!e.Has<Tag>());
-        //     });
-        //
-        //     Assert.True(e.Has<Tag>());
-        // }
-        //
-        // [Fact]
-        // void defer_suspend_resume() {
-        //     using World world = World.Create();
-        //
-        //     struct TagA { };
-        //     struct TagB { };
-        //
-        //     Entity e = world.Entity();
-        //
-        //     world.Defer(() =>
-        //  {
-        //         e.Add<TagA>();
-        //         Assert.True(!e.Has<TagA>());
-        //
-        //         world.defer_suspend();
-        //         e.Add<TagB>();
-        //         Assert.True(!e.Has<TagA>());
-        //         Assert.True(e.Has<TagB>());
-        //         world.defer_resume();
-        //
-        //         Assert.True(!e.Has<TagA>());
-        //         Assert.True(e.Has<TagB>());
-        //     });
-        //
-        //     Assert.True(e.Has<TagA>());
-        //     Assert.True(e.Has<TagB>());
-        // }
-        //
-        // [Fact]
-        // void with_after_builder_method() {
-        //     using World world = World.Create();
-        //
-        //     struct Likes { };
-        //
-        //     var A = world.Entity()
-        //         .Set(new Position() { X = 10, Y = 20 })
-        //         .With(() => {
-        //             world.Entity("X");
-        //         });
-        //
-        //     var B = world.Entity().Set<Position>({30, 40})
-        //         .with<Likes>(() => {
-        //             world.Entity("Y");
-        //         });
-        //
-        //     var C = world.Entity().Set<Position>({50, 60})
-        //         .With(EcsIsA, () => {
-        //             world.Entity("Z");
-        //         });
-        //
-        //     Assert.True(A.Get((const Position& p) {
-        //         Assert.Equal(10, p->X);
-        //         Assert.Equal(20, p->Y);
-        //     }));
-        //
-        //     Assert.True(B.Get((const Position& p) {
-        //         Assert.Equal(p.x, 30);
-        //         Assert.Equal(p.y, 40);
-        //     }));
-        //
-        //     Assert.True(C.Get((const Position& p) {
-        //         Assert.Equal(p.x, 50);
-        //         Assert.Equal(p.y, 60);
-        //     }));
-        //
-        //     var X = world.Lookup("X");
-        //     Assert.True(X != 0);
-        //     Assert.True(X.Has(A));
-        //
-        //     var Y = world.Lookup("Y");
-        //     Assert.True(Y != 0);
-        //     Assert.True(Y.Has<Likes>(B));
-        //
-        //     var Z = world.Lookup("Z");
-        //     Assert.True(Z != 0);
-        //     Assert.True(Z.Has(EcsIsA, C));
-        // }
-        //
-        // [Fact]
-        // void with_before_builder_method() {
-        //     using World world = World.Create();
-        //
-        //     struct Likes { };
-        //
-        //     var A = world.Entity()
-        //         .With(() => {
-        //             world.Entity("X");
-        //         })
-        //         .Set(new Position() { X = 10, Y = 20 });
-        //
-        //     var B = world.Entity().with<Likes>(() => {
-        //             world.Entity("Y");
-        //         })
-        //         .Set<Position>({30, 40});
-        //
-        //     var C = world.Entity().With(EcsIsA, () => {
-        //             world.Entity("Z");
-        //         })
-        //         .Set<Position>({50, 60});
-        //
-        //     Assert.True(A.Get((const Position& p) {
-        //         Assert.Equal(10, p->X);
-        //         Assert.Equal(20, p->Y);
-        //     }));
-        //
-        //     Assert.True(B.Get((const Position& p) {
-        //         Assert.Equal(p.x, 30);
-        //         Assert.Equal(p.y, 40);
-        //     }));
-        //
-        //     Assert.True(C.Get((const Position& p) {
-        //         Assert.Equal(p.x, 50);
-        //         Assert.Equal(p.y, 60);
-        //     }));
-        //
-        //     var X = world.Lookup("X");
-        //     Assert.True(X != 0);
-        //     Assert.True(X.Has(A));
-        //
-        //     var Y = world.Lookup("Y");
-        //     Assert.True(Y != 0);
-        //     Assert.True(Y.Has<Likes>(B));
-        //
-        //     var Z = world.Lookup("Z");
-        //     Assert.True(Z != 0);
-        //     Assert.True(Z.Has(EcsIsA, C));
-        // }
-        //
-        // [Fact]
-        // void scope_after_builder_method() {
-        //     using World world = World.Create();
-        //
-        //     world.Entity("P")
-        //         .Set(new Position() { X = 10, Y = 20 })
-        //         .Scope(() => {
-        //             world.Entity("C");
-        //         });
-        //
-        //     var C = world.Lookup("P.C");
-        //     Assert.True(C != 0);
-        // }
-        //
-        // [Fact]
-        // void scope_before_builder_method() {
-        //     using World world = World.Create();
-        //
-        //     world.Entity("P")
-        //         .Scope(() => {
-        //             world.Entity("C");
-        //         })
-        //         .Set(new Position() { X = 10, Y = 20 });
-        //
-        //     var C = world.Lookup("P.C");
-        //     Assert.True(C != 0);
-        // }
-        //
-        // [Fact]
-        // void emplace() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity()
-        //         .emplace<Position>(10.0f, 20.0f);
-        //
-        //     Assert.True(e.Has<Position>());
-        //
-        //     const Position *p = e.GetPtr<Position>();
-        //     Assert.True(p != NULL);
-        //     Assert.Equal(10, p->X);
-        //     Assert.Equal(20, p->Y);
-        // }
-        //
-        // [Fact]
-        // void entity_id_str() {
-        //     using World world = World.Create();
-        //
-        //     Id id = world.Entity("Foo");
-        //
-        //     Assert.Equal("Foo", id.str());
-        // }
-        //
-        // [Fact]
-        // void pair_id_str() {
-        //     using World world = World.Create();
-        //
-        //     Id id = world.pair( world.Entity("Rel"), world.Entity("Obj") );
-        //
-        //     Assert.Equal("(Rel,Obj)", id.str());
-        // }
-        //
-        // [Fact]
-        // void role_id_str() {
-        //     using World world = World.Create();
-        //
-        //     Id id = flecs.id(ecs, ECS_OVERRIDE | world.Entity("Foo"));
-        //
-        //     Assert.Equal("OVERRIDE|Foo", id.str());
-        // }
-        //
-        // [Fact]
-        // void id_str_from_entity_view() {
-        //     using World world = World.Create();
-        //
-        //     flecs.entity_view id = world.Entity("Foo");
-        //
-        //     Assert.Equal("Foo", id.str());
-        // }
-        //
-        // [Fact]
-        // void id_str_from_entity() {
-        //     using World world = World.Create();
-        //
-        //     Entity id = world.Entity("Foo");
-        //
-        //     Assert.Equal("Foo", id.str());
-        // }
-        //
-        // [Fact]
-        // void null_entity() {
-        //     Entity e = flecs.entity.null();
-        //     Assert.True(e.id() == 0);
-        // }
-        //
-        // [Fact]
-        // void null_entity_w_world() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = flecs.entity.null(ecs);
-        //     Assert.True(e.id() == 0);
-        //     Assert.True(e.world().c_ptr() == world.c_ptr());
-        // }
-        //
-        // [Fact]
-        // void null_entity_w_0() {
-        //     Entity e = flecs.entity(static_cast<ulong>(0));
-        //     Assert.True(e.id() == 0);
-        //     Assert.True(e.world().c_ptr() == null);
-        // }
-        //
-        // [Fact]
-        // void null_entity_w_world_w_0() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = flecs.entity.null(ecs);
-        //     Assert.True(e.id() == 0);
-        //     Assert.True(e.world().c_ptr() == world.c_ptr());
-        // }
-        //
-        // [Fact]
-        // void entity_view_null_entity() {
-        //     flecs.entity_view e = flecs.entity.null();
-        //     Assert.True(e.id() == 0);
-        // }
-        //
-        // [Fact]
-        // void entity_view_null_entity_w_world() {
-        //     using World world = World.Create();
-        //
-        //     flecs.entity_view e = flecs.entity.null(ecs);
-        //     Assert.True(e.id() == 0);
-        //     Assert.True(e.world().c_ptr() == world.c_ptr());
-        // }
-        //
-        // [Fact]
-        // void entity_view_null_entity_w_0() {
-        //     flecs.entity_view e = flecs.entity(static_cast<ulong>(0));
-        //     Assert.True(e.id() == 0);
-        //     Assert.True(e.world().c_ptr() == null);
-        // }
-        //
-        // [Fact]
-        // void entity_view_null_entity_w_world_w_0() {
-        //     using World world = World.Create();
-        //
-        //     flecs.entity_view e = flecs.entity.null(ecs);
-        //     Assert.True(e.id() == 0);
-        //     Assert.True(e.world().c_ptr() == world.c_ptr());
-        // }
-        //
-        // [Fact]
-        // void is_wildcard() {
-        //     using World world = World.Create();
-        //
-        //     var e1 = world.Entity();
-        //     var e2 = world.Entity();
-        //
-        //     var p0 = e1;
-        //     var p1 = world.pair(e1, e2);
-        //     var p2 = world.pair(e1, flecs.Wildcard);
-        //     var p3 = world.pair(flecs.Wildcard, e2);
-        //     var p4 = world.pair(flecs.Wildcard, flecs.Wildcard);
-        //
-        //     test_bool(e1.is_wildcard(), false);
-        //     test_bool(e2.is_wildcard(), false);
-        //     test_bool(p0.is_wildcard(), false);
-        //     test_bool(p1.is_wildcard(), false);
-        //     test_bool(p2.is_wildcard(), true);
-        //     test_bool(p3.is_wildcard(), true);
-        //     test_bool(p4.is_wildcard(), true);
-        // }
-        //
-        // [Fact]
-        // void has_id_t() {
-        //     using World world = World.Create();
-        //
-        //     ulong id_1 = world.Entity();
-        //     Assert.True(id_1 != 0);
-        //
-        //     ulong id_2 = world.Entity();
-        //     Assert.True(id_2 != 0);
-        //
-        //     Entity e = world.Entity()
-        //         .Add(id_1);
-        //
-        //     Assert.True(e != 0);
-        //     test_bool(e.Has(id_1), true);
-        //     test_bool(e.Has(id_2), false);
-        // }
-        //
-        // [Fact]
-        // void has_pair_id_t() {
-        //     using World world = World.Create();
-        //
-        //     ulong id_1 = world.Entity();
-        //     Assert.True(id_1 != 0);
-        //
-        //     ulong id_2 = world.Entity();
-        //     Assert.True(id_2 != 0);
-        //
-        //     ulong id_3 = world.Entity();
-        //     Assert.True(id_3 != 0);
-        //
-        //     Entity e = world.Entity()
-        //         .Add(id_1, id_2);
-        //
-        //     Assert.True(e != 0);
-        //     test_bool(e.Has(id_1, id_2), true);
-        //     test_bool(e.Has(id_1, id_3), false);
-        // }
-        //
-        // [Fact]
-        // void has_pair_id_t_w_type() {
-        //     using World world = World.Create();
-        //
-        //     struct Rel { };
-        //
-        //     ulong id_2 = world.Entity();
-        //     Assert.True(id_2 != 0);
-        //
-        //     ulong id_3 = world.Entity();
-        //     Assert.True(id_3 != 0);
-        //
-        //     Entity e = world.Entity()
-        //         .Add<Rel>(id_2);
-        //
-        //     Assert.True(e != 0);
-        //     test_bool(e.Has<Rel>(id_2), true);
-        //     test_bool(e.Has<Rel>(id_3), false);
-        // }
-        //
-        // [Fact]
-        // void has_id() {
-        //     using World world = World.Create();
-        //
-        //     flecs.id id_1 = world.Entity();
-        //     Assert.True(id_1 != 0);
-        //
-        //     flecs.id id_2 = world.Entity();
-        //     Assert.True(id_2 != 0);
-        //
-        //     Entity e = world.Entity()
-        //         .Add(id_1);
-        //
-        //     Assert.True(e != 0);
-        //     test_bool(e.Has(id_1), true);
-        //     test_bool(e.Has(id_2), false);
-        // }
-        //
-        // [Fact]
-        // void has_pair_id() {
-        //     using World world = World.Create();
-        //
-        //     flecs.id id_1 = world.Entity();
-        //     Assert.True(id_1 != 0);
-        //
-        //     flecs.id id_2 = world.Entity();
-        //     Assert.True(id_2 != 0);
-        //
-        //     flecs.id id_3 = world.Entity();
-        //     Assert.True(id_3 != 0);
-        //
-        //     Entity e = world.Entity()
-        //         .Add(id_1, id_2);
-        //
-        //     Assert.True(e != 0);
-        //     test_bool(e.Has(id_1, id_2), true);
-        //     test_bool(e.Has(id_1, id_3), false);
-        // }
-        //
-        // [Fact]
-        // void has_pair_id_w_type() {
-        //     using World world = World.Create();
-        //
-        //     struct Rel { };
-        //
-        //     flecs.id id_2 = world.Entity();
-        //     Assert.True(id_2 != 0);
-        //
-        //     flecs.id id_3 = world.Entity();
-        //     Assert.True(id_3 != 0);
-        //
-        //     Entity e = world.Entity()
-        //         .Add<Rel>(id_2);
-        //
-        //     Assert.True(e != 0);
-        //     test_bool(e.Has<Rel>(id_2), true);
-        //     test_bool(e.Has<Rel>(id_3), false);
-        // }
-        //
-        // [Fact]
-        // void has_wildcard_id() {
-        //     using World world = World.Create();
-        //
-        //     Id id = world.Entity();
-        //     Assert.True(id != 0);
-        //
-        //     var e1 = world.Entity().Add(id);
-        //     var e2 = world.Entity();
-        //
-        //     Assert.True(e1 != 0);
-        //     Assert.True(e2 != 0);
-        //
-        //     test_bool(e1.Has(flecs.Wildcard), true);
-        //     test_bool(e2.Has(flecs.Wildcard), false);
-        // }
-        //
-        // [Fact]
-        // void has_wildcard_pair_id() {
-        //     using World world = World.Create();
-        //
-        //     flecs.id rel = world.Entity();
-        //     Assert.True(rel != 0);
-        //
-        //     flecs.id obj = world.Entity();
-        //     Assert.True(obj != 0);
-        //
-        //     flecs.id obj_2 = world.Entity();
-        //     Assert.True(obj_2 != 0);
-        //
-        //     flecs.id w1 = world.id(rel, flecs.Wildcard);
-        //     flecs.id w2 = world.id(flecs.Wildcard, obj);
-        //
-        //     var e1 = world.Entity().Add(rel, obj);
-        //     var e2 = world.Entity().Add(rel, obj_2);
-        //
-        //     Assert.True(e1 != 0);
-        //     Assert.True(e2 != 0);
-        //
-        //     test_bool(e1.Has(w1), true);
-        //     test_bool(e1.Has(w2), true);
-        //
-        //     test_bool(e2.Has(w1), true);
-        //     test_bool(e2.Has(w2), false);
-        // }
-        //
-        // [Fact]
-        // void owns_id_t() {
-        //     using World world = World.Create();
-        //
-        //     ulong id_1 = world.Entity();
-        //     Assert.True(id_1 != 0);
-        //
-        //     ulong id_2 = world.Entity();
-        //     Assert.True(id_2 != 0);
-        //
-        //     Entity e = world.Entity()
-        //         .Add(id_1);
-        //
-        //     Assert.True(e != 0);
-        //     test_bool(e.Owns(id_1), true);
-        //     test_bool(e.Owns(id_2), false);
-        // }
-        //
-        // [Fact]
-        // void owns_pair_id_t() {
-        //     using World world = World.Create();
-        //
-        //     ulong id_1 = world.Entity();
-        //     Assert.True(id_1 != 0);
-        //
-        //     ulong id_2 = world.Entity();
-        //     Assert.True(id_2 != 0);
-        //
-        //     ulong id_3 = world.Entity();
-        //     Assert.True(id_3 != 0);
-        //
-        //     Entity e = world.Entity()
-        //         .Add(id_1, id_2);
-        //
-        //     Assert.True(e != 0);
-        //     test_bool(e.Owns(id_1, id_2), true);
-        //     test_bool(e.Owns(id_1, id_3), false);
-        // }
-        //
-        // [Fact]
-        // void owns_pair_id_t_w_type() {
-        //     using World world = World.Create();
-        //
-        //     struct Rel { };
-        //
-        //     ulong id_2 = world.Entity();
-        //     Assert.True(id_2 != 0);
-        //
-        //     ulong id_3 = world.Entity();
-        //     Assert.True(id_3 != 0);
-        //
-        //     Entity e = world.Entity()
-        //         .Add<Rel>(id_2);
-        //
-        //     Assert.True(e != 0);
-        //     test_bool(e.Owns<Rel>(id_2), true);
-        //     test_bool(e.Owns<Rel>(id_3), false);
-        // }
-        //
-        // [Fact]
-        // void owns_id() {
-        //     using World world = World.Create();
-        //
-        //     flecs.id id_1 = world.Entity();
-        //     Assert.True(id_1 != 0);
-        //
-        //     flecs.id id_2 = world.Entity();
-        //     Assert.True(id_2 != 0);
-        //
-        //     Entity e = world.Entity()
-        //         .Add(id_1);
-        //
-        //     Assert.True(e != 0);
-        //     test_bool(e.Owns(id_1), true);
-        //     test_bool(e.Owns(id_2), false);
-        // }
-        //
-        // [Fact]
-        // void owns_pair_id() {
-        //     using World world = World.Create();
-        //
-        //     flecs.id id_1 = world.Entity();
-        //     Assert.True(id_1 != 0);
-        //
-        //     flecs.id id_2 = world.Entity();
-        //     Assert.True(id_2 != 0);
-        //
-        //     flecs.id id_3 = world.Entity();
-        //     Assert.True(id_3 != 0);
-        //
-        //     Entity e = world.Entity()
-        //         .Add(id_1, id_2);
-        //
-        //     Assert.True(e != 0);
-        //     test_bool(e.Owns(id_1, id_2), true);
-        //     test_bool(e.Owns(id_1, id_3), false);
-        // }
-        //
-        // [Fact]
-        // void owns_wildcard_id() {
-        //     using World world = World.Create();
-        //
-        //     Id id = world.Entity();
-        //     Assert.True(id != 0);
-        //
-        //     var e1 = world.Entity().Add(id);
-        //     var e2 = world.Entity();
-        //
-        //     Assert.True(e1 != 0);
-        //     Assert.True(e2 != 0);
-        //
-        //     test_bool(e1.Owns(flecs.Wildcard), true);
-        //     test_bool(e2.Owns(flecs.Wildcard), false);
-        // }
-        //
-        // [Fact]
-        // void owns_wildcard_pair() {
-        //     using World world = World.Create();
-        //
-        //     flecs.id rel = world.Entity();
-        //     Assert.True(rel != 0);
-        //
-        //     flecs.id obj = world.Entity();
-        //     Assert.True(obj != 0);
-        //
-        //     flecs.id obj_2 = world.Entity();
-        //     Assert.True(obj_2 != 0);
-        //
-        //     flecs.id w1 = world.id(rel, flecs.Wildcard);
-        //     flecs.id w2 = world.id(flecs.Wildcard, obj);
-        //
-        //     var e1 = world.Entity().Add(rel, obj);
-        //     var e2 = world.Entity().Add(rel, obj_2);
-        //
-        //     Assert.True(e1 != 0);
-        //     Assert.True(e2 != 0);
-        //
-        //     test_bool(e1.Owns(w1), true);
-        //     test_bool(e1.Owns(w2), true);
-        //
-        //     test_bool(e2.Owns(w1), true);
-        //     test_bool(e2.Owns(w2), false);
-        // }
-        //
-        // [Fact]
-        // void owns_pair_id_w_type() {
-        //     using World world = World.Create();
-        //
-        //     struct Rel { };
-        //
-        //     flecs.id id_2 = world.Entity();
-        //     Assert.True(id_2 != 0);
-        //
-        //     flecs.id id_3 = world.Entity();
-        //     Assert.True(id_3 != 0);
-        //
-        //     Entity e = world.Entity()
-        //         .Add<Rel>(id_2);
-        //
-        //     Assert.True(e != 0);
-        //     test_bool(e.Owns<Rel>(id_2), true);
-        //     test_bool(e.Owns<Rel>(id_3), false);
-        // }
-        //
-        // [Fact]
-        // void id_from_world() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity();
-        //     Assert.True(e != 0);
-        //
-        //     flecs.id id_1 = world.id(e);
-        //     Assert.True(id_1 != 0);
-        //     Assert.True(id_1 == e);
-        //     Assert.True(id_1.world() == ecs);
-        //     test_bool(id_1.is_pair(), false);
-        //     test_bool(id_1.is_wildcard(), false);
-        //
-        //     flecs.id id_2 = world.id(flecs.Wildcard);
-        //     Assert.True(id_2 != 0);
-        //     Assert.True(id_2 == flecs.Wildcard);
-        //     Assert.True(id_2.world() == ecs);
-        //     test_bool(id_2.is_pair(), false);
-        //     test_bool(id_2.is_wildcard(), true);
-        // }
-        //
-        // [Fact]
-        // void id_pair_from_world() {
-        //     using World world = World.Create();
-        //
-        //     var rel = world.Entity();
-        //     Assert.True(rel != 0);
-        //
-        //     var obj = world.Entity();
-        //     Assert.True(obj != 0);
-        //
-        //     flecs.id id_1 = world.id(rel, obj);
-        //     Assert.True(id_1 != 0);
-        //     Assert.True(id_1.first() == rel);
-        //     Assert.True(id_1.second() == obj);
-        //     Assert.True(id_1.world() == ecs);
-        //     test_bool(id_1.is_pair(), true);
-        //     test_bool(id_1.is_wildcard(), false);
-        //
-        //     flecs.id id_2 = world.id(rel, flecs.Wildcard);
-        //     Assert.True(id_2 != 0);
-        //     Assert.True(id_2.first() == rel);
-        //     Assert.True(id_2.second() == flecs.Wildcard);
-        //     Assert.True(id_2.world() == ecs);
-        //     test_bool(id_2.is_pair(), true);
-        //     test_bool(id_2.is_wildcard(), true);
-        // }
-        //
-        // [Fact]
-        // void id_default_from_world() {
-        //     using World world = World.Create();
-        //
-        //     flecs.id id_default = world.id();
-        //     Assert.True(id_default == 0);
-        // }
-        //
-        // [Fact]
-        // void is_a() {
-        //     using World world = World.Create();
-        //
-        //     Entity @base = world.Entity();
-        //
-        //     Entity e = world.Entity().is_a(@base);
-        //
-        //     Assert.True(e.Has(EcsIsA, @base));
-        // }
-        //
-        // [Fact]
-        // void is_a_w_type() {
-        //     using World world = World.Create();
-        //
-        //     struct Prefab { };
-        //
-        //     var @base = world.Entity<Prefab>();
-        //
-        //     Entity e = world.Entity().is_a<Prefab>();
-        //
-        //     Assert.True(e.Has(EcsIsA, @base));
-        //     Assert.True(e.has_second<Prefab>(EcsIsA));
-        // }
-        //
-        // [Fact]
-        // void child_of() {
-        //     using World world = World.Create();
-        //
-        //     Entity @base = world.Entity();
-        //
-        //     Entity e = world.Entity().ChildOf(@base);
-        //
-        //     Assert.True(e.Has(EcsChildOf, @base));
-        // }
-        //
-        // [Fact]
-        // void child_of_w_type() {
-        //     using World world = World.Create();
-        //
-        //     struct Parent { };
-        //
-        //     var @base = world.Entity<Parent>();
-        //
-        //     Entity e = world.Entity().child_of<Parent>();
-        //
-        //     Assert.True(e.Has(EcsChildOf, @base));
-        //     Assert.True(e.has_second<Parent>(EcsChildOf));
-        // }
-        //
-        // [Fact]
-        // void slot_of() {
-        //     using World world = World.Create();
-        //
-        //     var @base = world.Prefab();
-        //     var base_child = world.Prefab()
-        //         .ChildOf(@base)
-        //         .slot_of(@base);
-        //
-        //     Assert.True(base_child.Has(flecs.SlotOf, @base));
-        //
-        //     var inst = world.Entity().is_a(@base);
-        //     Assert.True(inst.Has(base_child, flecs.Wildcard));
-        // }
-        //
-        // [Fact]
-        // void slot_of_w_type() {
-        //     using World world = World.Create();
-        //
-        //     struct Parent { };
-        //
-        //     var @base = world.prefab<Parent>();
-        //     var base_child = world.Prefab()
-        //         .ChildOf(@base)
-        //         .slot_of<Parent>();
-        //
-        //     Assert.True(base_child.Has(flecs.SlotOf, @base));
-        //
-        //     var inst = world.Entity().is_a(@base);
-        //     Assert.True(inst.Has(base_child, flecs.Wildcard));
-        // }
-        //
-        // [Fact]
-        // void slot() {
-        //     using World world = World.Create();
-        //
-        //     var @base = world.Prefab();
-        //     var base_child = world.Prefab()
-        //         .ChildOf(@base).slot();
-        //
-        //     Assert.True(base_child.Has(flecs.SlotOf, @base));
-        //
-        //     var inst = world.Entity().is_a(@base);
-        //     Assert.True(inst.Has(base_child, flecs.Wildcard));
-        // }
-        //
-        // [Fact]
-        // void id_get_entity() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity();
-        //
-        //     var id = world.id(e);
-        //
-        //     Assert.True(id.Entity() == e);
-        // }
-        //
-        // [Fact]
-        // void id_get_invalid_entity() {
-        //     install_test_abort();
-        //
-        //     using World world = World.Create();
-        //
-        //     var r = world.Entity();
-        //     var o = world.Entity();
-        //
-        //     var id = world.id(r, o);
-        //
-        //     test_expect_abort();
-        //
-        //     id.Entity();
-        // }
-        //
-        // [Fact]
-        // void each_in_stage() {
-        //     using World world = World.Create();
-        //
-        //     struct Rel { };
-        //     struct Obj { };
-        //
-        //     Entity e = world.Entity().Add<Rel, Obj>();
-        //     Assert.True((e.Has<Rel, Obj>()));
-        //
-        //     world.readonly_begin();
-        //
-        //     var s = world.get_stage(0);
-        //     var em = e.mut(s);
-        //     Assert.True((em.Has<Rel, Obj>()));
-        //
-        //     int count = 0;
-        //
-        //     em.each<Rel>([&](Entity obj) {
-        //         count ++;
-        //         Assert.True(obj == world.Id<Obj>());
-        //     });
-        //
-        //     Assert.Equal(count, 1);
-        //
-        //     world.readonly_end();
-        // }
-        //
-        // [Fact]
-        // void iter_recycled_parent() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity();
-        //     e.Destruct();
-        //
-        //     var e2 = world.Entity();
-        //     Assert.True(e != e2);
-        //     Assert.True((uint)e.id() == (uint)e2.id());
-        //
-        //     var e_child = world.Entity().ChildOf(e2);
-        //     int32_t count = 0;
-        //
-        //     e2.children([&](Entity child){
-        //         count ++;
-        //         Assert.True(child == e_child);
-        //     });
-        //
-        //     Assert.Equal(count, 1);
-        // }
-        //
-        // [Fact]
-        // void get_lambda_from_stage() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity().Set(new Position() { X = 10, Y = 20 });
-        //
-        //     world.readonly_begin();
-        //
-        //     flecs.world stage = world.get_stage(0);
-        //
-        //     bool invoked = false;
-        //     e.mut(stage).Get([&](const Position& p) {
-        //         invoked = true;
-        //         Assert.Equal(10, p->X);
-        //         Assert.Equal(20, p->Y);
-        //     });
-        //     test_bool(invoked, true);
-        //
-        //     world.readonly_end();
-        // }
-        //
-        // [Fact]
-        // void default_ctor() {
-        //     using World world = World.Create();
-        //
-        //     Entity e1;
-        //     Entity e2 = {};
-        //
-        //     flecs.entity_view e3;
-        //     flecs.entity_view e4 = {};
-        //
-        //     flecs.id id1;
-        //     flecs.id id2 = {};
-        //
-        //     e1 = world.Entity();
-        //     e2 = world.Entity();
-        //     e3 = world.Entity();
-        //     e4 = world.Entity();
-        //
-        //     Assert.True(e1 != 0);
-        //     Assert.True(e2 != 0);
-        //     Assert.True(e3 != 0);
-        //     Assert.True(e4 != 0);
-        //
-        //     Assert.True(id2 == 0);
-        // }
-        //
-        // [Fact]
-        // void get_obj_by_template() {
-        //     using World world = World.Create();
-        //
-        //     struct Rel {};
-        //
-        //     Entity e1 = world.Entity();
-        //     Entity o1 = world.Entity();
-        //     Entity o2 = world.Entity();
-        //
-        //     e1.Add<Rel>(o1);
-        //     e1.Add<Rel>(o2);
-        //
-        //     Assert.True(o1 == e1.target<Rel>());
-        //     Assert.True(o1 == e1.target<Rel>(0));
-        //     Assert.True(o2 == e1.target<Rel>(1));
-        // }
-        //
-        // [Fact]
-        // void create_named_twice_deferred() {
-        //     using World world = World.Create();
-        //
-        //     world.defer_begin();
-        //
-        //     var e1 = world.Entity("e");
-        //     var e2 = world.Entity("e");
-        //
-        //     var f1 = world.Entity("p.f");
-        //     var f2 = world.Entity("p.f");
-        //
-        //     var g1 = world.Scope(world.Entity("q")).Entity("g");
-        //     var g2 = world.Scope(world.Entity("q")).Entity("g");
-        //
-        //     world.defer_end();
-        //
-        //     Assert.Equal(e1.Path(), "e");
-        //     Assert.Equal(f1.Path(), "p.f");
-        //     Assert.Equal(g1.Path(), "q.g");
-        //
-        //     Assert.True(e1 == e2);
-        //     Assert.True(f1 == f2);
-        //     Assert.True(g1 == g2);
-        // }
-        //
-        // struct PositionInitialized {
-        //     PositionInitialized() { }
-        //     PositionInitialized(float x_, float y_) : x(x_), y(y_) { }
-        //     float x = -1.0;
-        //     float y = -1.0;
-        // };
-        //
-        // [Fact]
-        // void clone() {
-        //     using World world = World.Create();
-        //
-        //     PositionInitialized v(10, 20);
-        //
-        //     var src = world.Entity().Add<Tag>().Set<PositionInitialized>(v);
-        //     var dst = src.clone(false);
-        //     Assert.True(dst.Has<Tag>());
-        //     Assert.True(dst.Has<PositionInitialized>());
-        //
-        //     const PositionInitialized *ptr = dst.GetPtr<PositionInitialized>();
-        //     Assert.True(ptr != NULL);
-        //     Assert.Equal(ptr->x, -1);
-        //     Assert.Equal(ptr->y, -1);
-        // }
-        //
-        // [Fact]
-        // void clone_w_value() {
-        //     using World world = World.Create();
-        //
-        //     PositionInitialized v = {10, 20};
-        //
-        //     var src = world.Entity().Add<Tag>().Set<PositionInitialized>(v);
-        //     var dst = src.clone();
-        //     Assert.True(dst.Has<Tag>());
-        //     Assert.True(dst.Has<PositionInitialized>());
-        //
-        //     const PositionInitialized *ptr = dst.GetPtr<PositionInitialized>();
-        //     Assert.True(ptr != NULL);
-        //     Assert.Equal(10, ptr->X);
-        //     Assert.Equal(20, ptr->Y);
-        // }
-        //
-        // [Fact]
-        // void clone_to_existing() {
-        //     using World world = World.Create();
-        //
-        //     PositionInitialized v = {10, 20};
-        //
-        //     var src = world.Entity().Add<Tag>().Set<PositionInitialized>(v);
-        //     var dst = world.Entity();
-        //     var result = src.clone(true, dst);
-        //     Assert.True(result == dst);
-        //
-        //     Assert.True(dst.Has<Tag>());
-        //     Assert.True(dst.Has<PositionInitialized>());
-        //
-        //     const PositionInitialized *ptr = dst.GetPtr<PositionInitialized>();
-        //     Assert.True(ptr != NULL);
-        //     Assert.Equal(10, ptr->X);
-        //     Assert.Equal(20, ptr->Y);
-        // }
-        //
-        // [Fact]
-        // void clone_to_existing_overlap() {
-        //     install_test_abort();
-        //     using World world = World.Create();
-        //
-        //     PositionInitialized v = {10, 20};
-        //
-        //     var src = world.Entity().Add<Tag>().Set<PositionInitialized>(v);
-        //     var dst = world.Entity().Add<PositionInitialized>();
-        //
-        //     test_expect_abort();
-        //     src.clone(true, dst);
-        // }
-        //
-        // [Fact]
-        // void set_doc_name() {
-        //     using World world = World.Create();
-        //
-        //     var e = world.Entity("foo_bar")
-        //         .set_doc_name("Foo Bar");
-        //
-        //     Assert.Equal(e.Name(), "foo_bar");
-        //     Assert.Equal(e.doc_name(), "Foo Bar");
-        // }
-        //
-        // [Fact]
-        // void set_doc_brief() {
-        //     using World world = World.Create();
-        //
-        //     var e = world.Entity("foo_bar")
-        //         .set_doc_brief("Foo Bar");
-        //
-        //     Assert.Equal(e.Name(), "foo_bar");
-        //     Assert.Equal(e.doc_brief(), "Foo Bar");
-        // }
-        //
-        // [Fact]
-        // void set_doc_detail() {
-        //     using World world = World.Create();
-        //
-        //     var e = world.Entity("foo_bar")
-        //         .set_doc_detail("Foo Bar");
-        //
-        //     Assert.Equal(e.Name(), "foo_bar");
-        //     Assert.Equal(e.doc_detail(), "Foo Bar");
-        // }
-        //
-        // [Fact]
-        // void set_doc_link() {
-        //     using World world = World.Create();
-        //
-        //     var e = world.Entity("foo_bar")
-        //         .set_doc_link("Foo Bar");
-        //
-        //     Assert.Equal(e.Name(), "foo_bar");
-        //     Assert.Equal(e.doc_link(), "Foo Bar");
-        // }
-        //
-        // [Fact]
-        // void entity_w_root_name() {
-        //     using World world = World.Create();
-        //
-        //     var e = world.Entity("foo");
-        //     Assert.Equal("Foo", e.Name());
-        //     Assert.Equal(e.Path(), "foo");
-        // }
-        //
-        // [Fact]
-        // void entity_w_root_name_from_scope() {
-        //     using World world = World.Create();
-        //
-        //     var p = world.Entity("parent");
-        //     world.set_scope(p);
-        //     var e = world.Entity("foo");
-        //     world.set_scope(0);
-        //
-        //     Assert.Equal("Foo", e.Name());
-        //     Assert.Equal(e.Path(), "foo");
-        // }
-        //
-        // struct EntityType { };
-        //
-        // [Fact]
-        // void entity_w_type() {
-        //     using World world = World.Create();
-        //
-        //     var e = world.Entity<EntityType>();
-        //
-        //     Assert.Equal(e.Name(), "EntityType");
-        //     Assert.Equal(e.Path(), "EntityType");
-        //     Assert.True(!e.Has<flecs.Component>());
-        //
-        //     var e_2 = world.Entity<EntityType>();
-        //     Assert.True(e == e_2);
-        // }
-        //
-        // struct Turret {
-        //     struct Base { };
-        // };
-        //
-        // struct Railgun {
-        //     struct Base { };
-        //     struct Head { };
-        //     struct Beam { };
-        // };
-        //
-        // [Fact]
-        // void prefab_hierarchy_w_types() {
-        //     using World world = World.Create();
-        //
-        //     var turret = world.prefab<Turret>();
-        //         var turret_base = world.prefab<Turret.Base>();
-        //
-        //     Assert.True(turret != 0);
-        //     Assert.True(turret_base != 0);
-        //     Assert.True(turret_base.Has(EcsChildOf, turret));
-        //
-        //     Assert.Equal(turret.Path(), "Turret");
-        //     Assert.Equal(turret_base.Path(), "Turret.Base");
-        //
-        //     Assert.Equal(turret.symbol(), "Turret");
-        //     Assert.Equal(turret_base.symbol(), "Turret.Base");
-        //
-        //     var railgun = world.prefab<Railgun>().is_a<Turret>();
-        //         var railgun_base = railgun.Lookup("Base");
-        //         var railgun_head = world.prefab<Railgun.Head>();
-        //         var railgun_beam = world.prefab<Railgun.Beam>();
-        //
-        //     Assert.True(railgun != 0);
-        //     Assert.True(railgun_base != 0);
-        //     Assert.True(railgun_head != 0);
-        //     Assert.True(railgun_beam != 0);
-        //     Assert.True(railgun_base.Has(EcsChildOf, railgun));
-        //     Assert.True(railgun_head.Has(EcsChildOf, railgun));
-        //     Assert.True(railgun_beam.Has(EcsChildOf, railgun));
-        //
-        //     Assert.Equal(railgun.Path(), "Railgun");
-        //     Assert.Equal(railgun_base.Path(), "Railgun.Base");
-        //     Assert.Equal(railgun_head.Path(), "Railgun.Head");
-        //     Assert.Equal(railgun_beam.Path(), "Railgun.Beam");
-        //
-        //     Assert.Equal(railgun.symbol(), "Railgun");
-        //     Assert.Equal(railgun_head.symbol(), "Railgun.Head");
-        //     Assert.Equal(railgun_beam.symbol(), "Railgun.Beam");
-        // }
-        //
-        // struct Base { };
-        //
-        // [Fact]
-        // void prefab_hierarchy_w_root_types() {
-        //     using World world = World.Create();
-        //
-        //     var turret = world.prefab<Turret>();
-        //     var turret_base = world.prefab<Base>().child_of<Turret>();
-        //
-        //     Assert.True(turret != 0);
-        //     Assert.True(turret_base != 0);
-        //     Assert.True(turret_base.Has(EcsChildOf, turret));
-        //
-        //     Assert.Equal(turret.Path(), "Turret");
-        //     Assert.Equal(turret_base.Path(), "Turret.Base");
-        //
-        //     Assert.Equal(turret.symbol(), "Turret");
-        //     Assert.Equal(turret_base.symbol(), "Base");
-        //
-        //     var inst = world.Entity().is_a<Turret>();
-        //     Assert.True(inst != 0);
-        //
-        //     var inst_base = inst.Lookup("Base");
-        //     Assert.True(inst_base != 0);
-        // }
-        //
-        // [Fact]
-        // void prefab_hierarchy_w_child_override() {
-        //     using World world = World.Create();
-        //
-        //     struct Foo {};
-        //     struct Bar {};
-        //
-        //     var t = world.prefab<Turret>();
-        //     var tb = world.prefab<Turret.Base>().Add<Foo>();
+
+        [Fact]
+        private void DeferWithWithImplicitComponent()
+        {
+            using World world = World.Create();
+
+            Entity e = default;
+
+            world.Defer(() =>
+            {
+                world.With<Tag>(() =>
+                {
+                    e = world.Entity();
+                    Assert.True(!e.Has<Tag>());
+                });
+                Assert.True(!e.Has<Tag>());
+            });
+
+            Assert.True(e.Has<Tag>());
+        }
+
+        [Fact]
+        private void DeferSuspendResume()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+
+            world.Defer(() =>
+            {
+                e.Add<TagA>();
+                Assert.True(!e.Has<TagA>());
+
+                world.DeferSuspend();
+                e.Add<TagB>();
+                Assert.True(!e.Has<TagA>());
+                Assert.True(e.Has<TagB>());
+                world.DeferResume();
+
+                Assert.True(!e.Has<TagA>());
+                Assert.True(e.Has<TagB>());
+            });
+
+            Assert.True(e.Has<TagA>());
+            Assert.True(e.Has<TagB>());
+        }
+
+        [Fact]
+        private void WithAfterBuilderMethod()
+        {
+            using World world = World.Create();
+
+            Entity a = world.Entity()
+                .Set(new Position(10, 20))
+                .With(() => { world.Entity("X"); });
+
+            Entity b = world.Entity().Set(new Position(30, 40))
+                .With<Likes>(() => { world.Entity("Y"); });
+
+            Entity c = world.Entity().Set(new Position(50, 60))
+                .With(EcsIsA, () => { world.Entity("Z"); });
+
+            Assert.True(a.Read((in Position p) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+            }));
+
+            Assert.True(b.Read((in Position p) =>
+            {
+                Assert.Equal(30, p.X);
+                Assert.Equal(40, p.Y);
+            }));
+
+            Assert.True(c.Read((in Position p) =>
+            {
+                Assert.Equal(50, p.X);
+                Assert.Equal(60, p.Y);
+            }));
+
+            Entity x = world.Lookup("X");
+            Assert.True(x != 0);
+            Assert.True(x.Has(a));
+
+            Entity y = world.Lookup("Y");
+            Assert.True(y != 0);
+            Assert.True(y.Has<Likes>(b));
+
+            Entity z = world.Lookup("Z");
+            Assert.True(z != 0);
+            Assert.True(z.Has(EcsIsA, c));
+        }
+
+        [Fact]
+        private void WithBeforeBuilderMethod()
+        {
+            using World world = World.Create();
+
+            Entity a = world.Entity()
+                .With(() => { world.Entity("X"); })
+                .Set(new Position(10, 20));
+
+            Entity b = world.Entity()
+                .With<Likes>(() => { world.Entity("Y"); })
+                .Set(new Position(30, 40));
+
+            Entity c = world.Entity()
+                .With(EcsIsA, () => { world.Entity("Z"); })
+                .Set(new Position(50, 60));
+
+            Assert.True(a.Read((in Position p) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+            }));
+
+            Assert.True(b.Read((in Position p) =>
+            {
+                Assert.Equal(30, p.X);
+                Assert.Equal(40, p.Y);
+            }));
+
+            Assert.True(c.Read((in Position p) =>
+            {
+                Assert.Equal(50, p.X);
+                Assert.Equal(60, p.Y);
+            }));
+
+            Entity x = world.Lookup("X");
+            Assert.True(x != 0);
+            Assert.True(x.Has(a));
+
+            Entity y = world.Lookup("Y");
+            Assert.True(y != 0);
+            Assert.True(y.Has<Likes>(b));
+
+            Entity z = world.Lookup("Z");
+            Assert.True(z != 0);
+            Assert.True(z.Has(EcsIsA, c));
+        }
+
+        [Fact]
+        private void ScopeAfterBuilderMethod()
+        {
+            using World world = World.Create();
+
+            world.Entity("P")
+                .Set(new Position(10, 20))
+                .Scope(() => { world.Entity("C"); });
+
+            Entity c = world.Lookup("P.C");
+            Assert.True(c != 0);
+        }
+
+        [Fact]
+        private void ScopeBeforeBuilderMethod()
+        {
+            using World world = World.Create();
+
+            world.Entity("P")
+                .Scope(() => { world.Entity("C"); })
+                .Set(new Position(10, 20));
+
+            Entity c = world.Lookup("P.C");
+            Assert.True(c != 0);
+        }
+
+
+        [Fact]
+        private void EntityIdStr()
+        {
+            using World world = World.Create();
+
+            Id id = world.Entity("Foo");
+
+            Assert.Equal("Foo", id.Str());
+        }
+
+        [Fact]
+        private void PairIdStr()
+        {
+            using World world = World.Create();
+
+            Id id = world.Pair(world.Entity("Rel"), world.Entity("Obj"));
+
+            Assert.Equal("(Rel,Obj)", id.Str());
+        }
+
+        [Fact]
+        private void RoleIdStr()
+        {
+            using World world = World.Create();
+
+            Id id = new Id(world, ECS_OVERRIDE | world.Entity("Foo"));
+
+            Assert.Equal("OVERRIDE|Foo", id.Str());
+        }
+
+        [Fact]
+        private void IdStrFromEntity()
+        {
+            using World world = World.Create();
+
+            Entity id = world.Entity("Foo");
+
+            Assert.Equal("Foo", id.Str());
+        }
+
+        [Fact]
+        private void NullEntity()
+        {
+            Entity e = Entity.Null();
+            Assert.True(e.Id == 0);
+        }
+
+        [Fact]
+        private void NullEntityWithWorld()
+        {
+            using World world = World.Create();
+
+            Entity e = Entity.Null(world);
+            Assert.True(e.Id == 0);
+            Assert.True(e.World == world);
+        }
+
+        [Fact]
+        private void NullEntityWith0()
+        {
+            Entity e = new Entity(0);
+            Assert.True(e.Id == 0);
+            Assert.True(e.World == null);
+        }
+
+        [Fact]
+        private void NullENtityWithWorldWith0()
+        {
+            using World world = World.Create();
+
+            Entity e = Entity.Null(world);
+            Assert.True(e.Id == 0);
+            Assert.True(e.World == world);
+        }
+
+        [Fact]
+        private void IsWildcard()
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity();
+            Entity e2 = world.Entity();
+
+            Entity p0 = e1;
+            Id p1 = world.Pair(e1, e2);
+            Id p2 = world.Pair(e1, Ecs.Wildcard);
+            Id p3 = world.Pair(Ecs.Wildcard, e2);
+            Id p4 = world.Pair(Ecs.Wildcard, Ecs.Wildcard);
+
+            Assert.False(e1.IsWildCard());
+            Assert.False(e2.IsWildCard());
+            Assert.False(p0.IsWildCard());
+            Assert.False(p1.IsWildCard());
+            Assert.True(p2.IsWildCard());
+            Assert.True(p3.IsWildCard());
+            Assert.True(p4.IsWildCard());
+        }
+
+        [Fact]
+        private void HasUlong()
+        {
+            using World world = World.Create();
+
+            ulong id1 = world.Entity();
+            Assert.True(id1 != 0);
+
+            ulong id2 = world.Entity();
+            Assert.True(id2 != 0);
+
+            Entity e = world.Entity()
+                .Add(id1);
+
+            Assert.True(e != 0);
+            Assert.True(e.Has(id1));
+            Assert.False(e.Has(id2));
+        }
+
+        [Fact]
+        private void HasPairUlong()
+        {
+            using World world = World.Create();
+
+            ulong id1 = world.Entity();
+            Assert.True(id1 != 0);
+
+            ulong id2 = world.Entity();
+            Assert.True(id2 != 0);
+
+            ulong id3 = world.Entity();
+            Assert.True(id3 != 0);
+
+            Entity e = world.Entity()
+                .Add(id1, id2);
+
+            Assert.True(e != 0);
+            Assert.True(e.Has(id1, id2));
+            Assert.False(e.Has(id1, id3));
+        }
+
+        [Fact]
+        private void HasPairUlongWithType()
+        {
+            using World world = World.Create();
+
+            ulong id2 = world.Entity();
+            Assert.True(id2 != 0);
+
+            ulong id3 = world.Entity();
+            Assert.True(id3 != 0);
+
+            Entity e = world.Entity()
+                .Add<Rel>(id2);
+
+            Assert.True(e != 0);
+            Assert.True(e.Has<Rel>(id2));
+            Assert.False(e.Has<Rel>(id3));
+        }
+
+        [Fact]
+        private void HasId()
+        {
+            using World world = World.Create();
+
+            Id id1 = world.Entity();
+            Assert.True(id1 != 0);
+
+            Id id2 = world.Entity();
+            Assert.True(id2 != 0);
+
+            Entity e = world.Entity()
+                .Add(id1);
+
+            Assert.True(e != 0);
+            Assert.True(e.Has(id1));
+            Assert.False(e.Has(id2));
+        }
+
+        [Fact]
+        private void HasPairId()
+        {
+            using World world = World.Create();
+
+            Id id1 = world.Entity();
+            Assert.True(id1 != 0);
+
+            Id id2 = world.Entity();
+            Assert.True(id2 != 0);
+
+            Id id3 = world.Entity();
+            Assert.True(id3 != 0);
+
+            Entity e = world.Entity()
+                .Add(id1, id2);
+
+            Assert.True(e != 0);
+            Assert.True(e.Has(id1, id2));
+            Assert.False(e.Has(id1, id3));
+        }
+
+        [Fact]
+        private void HasPairIdWithType()
+        {
+            using World world = World.Create();
+
+            Id id2 = world.Entity();
+            Assert.True(id2 != 0);
+
+            Id id3 = world.Entity();
+            Assert.True(id3 != 0);
+
+            Entity e = world.Entity()
+                .Add<Rel>(id2);
+
+            Assert.True(e != 0);
+            Assert.True(e.Has<Rel>(id2));
+            Assert.False(e.Has<Rel>(id3));
+        }
+
+        [Fact]
+        private void HasWildCardId()
+        {
+            using World world = World.Create();
+
+            Id id = world.Entity();
+            Assert.True(id != 0);
+
+            Entity e1 = world.Entity().Add(id);
+            Entity e2 = world.Entity();
+
+            Assert.True(e1 != 0);
+            Assert.True(e2 != 0);
+
+            Assert.True(e1.Has(Ecs.Wildcard));
+            Assert.False(e2.Has(Ecs.Wildcard));
+        }
+
+        [Fact]
+        private void HasWildCardPairId()
+        {
+            using World world = World.Create();
+
+            Id rel = world.Entity();
+            Assert.True(rel != 0);
+
+            Id obj = world.Entity();
+            Assert.True(obj != 0);
+
+            Id obj2 = world.Entity();
+            Assert.True(obj2 != 0);
+
+            Id w1 = world.Id(rel, Ecs.Wildcard);
+            Id w2 = world.Id(Ecs.Wildcard, obj);
+
+            Entity e1 = world.Entity().Add(rel, obj);
+            Entity e2 = world.Entity().Add(rel, obj2);
+
+            Assert.True(e1 != 0);
+            Assert.True(e2 != 0);
+
+            Assert.True(e1.Has(w1));
+            Assert.True(e1.Has(w2));
+
+            Assert.True(e2.Has(w1));
+            Assert.False(e2.Has(w2));
+        }
+
+        [Fact]
+        private void OwnsUlong()
+        {
+            using World world = World.Create();
+
+            ulong id1 = world.Entity();
+            Assert.True(id1 != 0);
+
+            ulong id2 = world.Entity();
+            Assert.True(id2 != 0);
+
+            Entity e = world.Entity()
+                .Add(id1);
+
+            Assert.True(e != 0);
+            Assert.True(e.Owns(id1));
+            Assert.False(e.Owns(id2));
+        }
+
+        [Fact]
+        private void OwnsPairUlong()
+        {
+            using World world = World.Create();
+
+            ulong id1 = world.Entity();
+            Assert.True(id1 != 0);
+
+            ulong id2 = world.Entity();
+            Assert.True(id2 != 0);
+
+            ulong id3 = world.Entity();
+            Assert.True(id3 != 0);
+
+            Entity e = world.Entity()
+                .Add(id1, id2);
+
+            Assert.True(e != 0);
+            Assert.True(e.Owns(id1, id2));
+            Assert.False(e.Owns(id1, id3));
+        }
+
+        [Fact]
+        private void OwnsPairUlongWithType()
+        {
+            using World world = World.Create();
+
+            ulong id2 = world.Entity();
+            Assert.True(id2 != 0);
+
+            ulong id3 = world.Entity();
+            Assert.True(id3 != 0);
+
+            Entity e = world.Entity()
+                .Add<Rel>(id2);
+
+            Assert.True(e != 0);
+            Assert.True(e.Owns<Rel>(id2));
+            Assert.False(e.Owns<Rel>(id3));
+        }
+
+        [Fact]
+        private void OwnsId()
+        {
+            using World world = World.Create();
+
+            Id id1 = world.Entity();
+            Assert.True(id1 != 0);
+
+            Id id2 = world.Entity();
+            Assert.True(id2 != 0);
+
+            Entity e = world.Entity()
+                .Add(id1);
+
+            Assert.True(e != 0);
+            Assert.True(e.Owns(id1));
+            Assert.False(e.Owns(id2));
+        }
+
+        [Fact]
+        private void OwnsPairId()
+        {
+            using World world = World.Create();
+
+            Id id1 = world.Entity();
+            Assert.True(id1 != 0);
+
+            Id id2 = world.Entity();
+            Assert.True(id2 != 0);
+
+            Id id3 = world.Entity();
+            Assert.True(id3 != 0);
+
+            Entity e = world.Entity()
+                .Add(id1, id2);
+
+            Assert.True(e != 0);
+            Assert.True(e.Owns(id1, id2));
+            Assert.False(e.Owns(id1, id3));
+        }
+
+        [Fact]
+        private void OwnsWildCardId()
+        {
+            using World world = World.Create();
+
+            Id id = world.Entity();
+            Assert.True(id != 0);
+
+            Entity e1 = world.Entity().Add(id);
+            Entity e2 = world.Entity();
+
+            Assert.True(e1 != 0);
+            Assert.True(e2 != 0);
+
+            Assert.True(e1.Owns(Ecs.Wildcard));
+            Assert.False(e2.Owns(Ecs.Wildcard));
+        }
+
+        [Fact]
+        private void OwnsWildcardPair()
+        {
+            using World world = World.Create();
+
+            Id rel = world.Entity();
+            Assert.True(rel != 0);
+
+            Id obj = world.Entity();
+            Assert.True(obj != 0);
+
+            Id obj2 = world.Entity();
+            Assert.True(obj2 != 0);
+
+            Id w1 = world.Id(rel, Ecs.Wildcard);
+            Id w2 = world.Id(Ecs.Wildcard, obj);
+
+            Entity e1 = world.Entity().Add(rel, obj);
+            Entity e2 = world.Entity().Add(rel, obj2);
+
+            Assert.True(e1 != 0);
+            Assert.True(e2 != 0);
+
+            Assert.True(e1.Owns(w1));
+            Assert.True(e1.Owns(w2));
+
+            Assert.True(e2.Owns(w1));
+            Assert.False(e2.Owns(w2));
+        }
+
+        [Fact]
+        private void OwnsPairIdWithType()
+        {
+            using World world = World.Create();
+
+            Id id2 = world.Entity();
+            Assert.True(id2 != 0);
+
+            Id id3 = world.Entity();
+            Assert.True(id3 != 0);
+
+            Entity e = world.Entity()
+                .Add<Rel>(id2);
+
+            Assert.True(e != 0);
+            Assert.True(e.Owns<Rel>(id2));
+            Assert.False(e.Owns<Rel>(id3));
+        }
+
+        [Fact]
+        private void IdFromWorld()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+            Assert.True(e != 0);
+
+            Id id1 = world.Id(e);
+            Assert.True(id1 != 0);
+            Assert.True(id1 == e);
+            Assert.True(id1.World == world);
+            Assert.False(id1.IsPair());
+            Assert.False(id1.IsWildCard());
+
+            Id id2 = world.Id(Ecs.Wildcard);
+            Assert.True(id2 != 0);
+            Assert.True(id2 == Ecs.Wildcard);
+            Assert.True(id2.World == world);
+            Assert.False(id2.IsPair());
+            Assert.True(id2.IsWildCard());
+        }
+
+        [Fact]
+        private void IdPairFromWorld()
+        {
+            using World world = World.Create();
+
+            Entity rel = world.Entity();
+            Assert.True(rel != 0);
+
+            Entity obj = world.Entity();
+            Assert.True(obj != 0);
+
+            Id id1 = world.Id(rel, obj);
+            Assert.True(id1 != 0);
+            Assert.True(id1.First() == rel);
+            Assert.True(id1.Second() == obj);
+            Assert.True(id1.World == world);
+            Assert.True(id1.IsPair());
+            Assert.False(id1.IsWildCard());
+
+            Id id2 = world.Id(rel, Ecs.Wildcard);
+            Assert.True(id2 != 0);
+            Assert.True(id2.First() == rel);
+            Assert.True(id2.Second() == Ecs.Wildcard);
+            Assert.True(id2.World == world);
+            Assert.True(id2.IsPair());
+            Assert.True(id2.IsWildCard());
+        }
+
+        [Fact]
+        private void IdDefaultFromWorld()
+        {
+            using World world = World.Create();
+
+            Id idDefault = world.Id();
+            Assert.True(idDefault == 0);
+        }
+
+        [Fact]
+        private void IsA()
+        {
+            using World world = World.Create();
+
+            Entity @base = world.Entity();
+
+            Entity e = world.Entity().IsA(@base);
+
+            Assert.True(e.Has(EcsIsA, @base));
+        }
+
+        [Fact]
+        private void IsAWithType()
+        {
+            using World world = World.Create();
+
+            Entity @base = world.Entity<Prefab>();
+
+            Entity e = world.Entity().IsA<Prefab>();
+
+            Assert.True(e.Has(Ecs.IsA, @base));
+            Assert.True(e.HasSecond<Prefab>(Ecs.IsA));
+        }
+
+        [Fact]
+        private void ChildOf()
+        {
+            using World world = World.Create();
+
+            Entity @base = world.Entity();
+
+            Entity e = world.Entity().ChildOf(@base);
+
+            Assert.True(e.Has(Ecs.ChildOf, @base));
+        }
+
+        [Fact]
+        private void ChildOfWithType()
+        {
+            using World world = World.Create();
+
+            Entity @base = world.Entity<Parent>();
+
+            Entity e = world.Entity().ChildOf<Parent>();
+
+            Assert.True(e.Has(EcsChildOf, @base));
+            Assert.True(e.HasSecond<Parent>(EcsChildOf));
+        }
+
+        [Fact]
+        private void SlotOf()
+        {
+            using World world = World.Create();
+
+            Entity @base = world.Prefab();
+            Entity baseChild = world.Prefab()
+                .ChildOf(@base)
+                .SlotOf(@base);
+
+            Assert.True(baseChild.Has(Ecs.SlotOf, @base));
+
+            Entity inst = world.Entity().IsA(@base);
+            Assert.True(inst.Has(baseChild, Ecs.Wildcard));
+        }
+
+        [Fact]
+        private void SlotOfWithType()
+        {
+            using World world = World.Create();
+
+            Entity @base = world.Prefab<Parent>();
+            Entity baseChild = world.Prefab()
+                .ChildOf(@base)
+                .SlotOf<Parent>();
+
+            Assert.True(baseChild.Has(Ecs.SlotOf, @base));
+
+            Entity inst = world.Entity().IsA(@base);
+            Assert.True(inst.Has(baseChild, Ecs.Wildcard));
+        }
+
+        [Fact]
+        private void Slot()
+        {
+            using World world = World.Create();
+
+            Entity @base = world.Prefab();
+            Entity baseChild = world.Prefab()
+                .ChildOf(@base).Slot();
+
+            Assert.True(baseChild.Has(Ecs.SlotOf, @base));
+
+            Entity inst = world.Entity().IsA(@base);
+            Assert.True(inst.Has(baseChild, Ecs.Wildcard));
+        }
+
+        [Fact]
+        private void IdGetEntity()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+
+            Id id = world.Id(e);
+
+            Assert.True(id.Entity() == e);
+        }
+
+        [Fact]
+        private void EachInStage()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity().Add<Rel, Obj>();
+            Assert.True(e.Has<Rel, Obj>());
+
+            world.ReadonlyBegin();
+
+            World s = world.GetStage(0);
+            Entity em = e.Mut(s);
+            Assert.True(em.Has<Rel, Obj>());
+
+            int count = 0;
+
+            em.Each<Rel>((Entity obj) =>
+            {
+                count++;
+                Assert.True(obj == world.Id<Obj>());
+            });
+
+            Assert.Equal(1, count);
+
+            world.ReadonlyEnd();
+        }
+
+        [Fact]
+        private void IterRecycledParent()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+            e.Destruct();
+
+            Entity e2 = world.Entity();
+            Assert.True(e != e2);
+            Assert.True((uint)e.Id == (uint)e2.Id);
+
+            Entity eChild = world.Entity().ChildOf(e2);
+            int count = 0;
+
+            e2.Children((Entity child) =>
+            {
+                count++;
+                Assert.True(child == eChild);
+            });
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void GetLambdaFromStage()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity().Set(new Position(10, 20));
+
+            world.ReadonlyBegin();
+
+            World stage = world.GetStage(0);
+
+            bool invoked = false;
+            e.Mut(stage).Read((in Position p) =>
+            {
+                invoked = true;
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+            });
+            Assert.True(invoked);
+
+            world.ReadonlyEnd();
+        }
+
+
+        [Fact]
+        private void GetObjByTemplate()
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity();
+            Entity o1 = world.Entity();
+            Entity o2 = world.Entity();
+
+            e1.Add<Rel>(o1);
+            e1.Add<Rel>(o2);
+
+            Assert.True(o1 == e1.Target<Rel>());
+            Assert.True(o1 == e1.Target<Rel>(0));
+            Assert.True(o2 == e1.Target<Rel>(1));
+        }
+
+        [Fact]
+        private void CreateNamedTwiceDeferred()
+        {
+            using World world = World.Create();
+
+            world.DeferBegin();
+
+            Entity e1 = world.Entity("e");
+            Entity e2 = world.Entity("e");
+
+            Entity f1 = world.Entity("p.f");
+            Entity f2 = world.Entity("p.f");
+
+            Entity g1 = default;
+            Entity g2 = default;
+
+            world.Scope(world.Entity("q"), () => { g1 = world.Entity("g"); });
+
+            world.Scope(world.Entity("q"), () => { g2 = world.Entity("g"); });
+
+            world.DeferEnd();
+
+            Assert.Equal("::e", e1.Path());
+            Assert.Equal("::p.f", f1.Path());
+            Assert.Equal("::q.g", g1.Path());
+
+            Assert.True(e1 == e2);
+            Assert.True(f1 == f2);
+            Assert.True(g1 == g2);
+        }
+
+        [Fact]
+        private void CloneWithValue()
+        {
+            using World world = World.Create();
+
+            PositionInitialized v = new PositionInitialized(10, 20);
+
+            Entity src = world.Entity().Add<Tag>().Set(v);
+            Entity dst = src.Clone();
+            Assert.True(dst.Has<Tag>());
+            Assert.True(dst.Has<PositionInitialized>());
+
+            PositionInitialized* ptr = dst.GetPtr<PositionInitialized>();
+            Assert.True(ptr != null);
+            Assert.Equal(10, ptr->X);
+            Assert.Equal(20, ptr->Y);
+        }
+
+        [Fact]
+        private void CloneToExisting()
+        {
+            using World world = World.Create();
+
+            PositionInitialized v = new PositionInitialized(10, 20);
+
+            Entity src = world.Entity().Add<Tag>().Set(v);
+            Entity dst = world.Entity();
+            Entity result = src.Clone(true, dst);
+            Assert.True(result == dst);
+
+            Assert.True(dst.Has<Tag>());
+            Assert.True(dst.Has<PositionInitialized>());
+
+            PositionInitialized* ptr = dst.GetPtr<PositionInitialized>();
+            Assert.True(ptr != null);
+            Assert.Equal(10, ptr->X);
+            Assert.Equal(20, ptr->Y);
+        }
+
+
+        [Fact]
+        private void SetDocName()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity("foo_bar")
+                .SetDocName("Foo Bar");
+
+            Assert.Equal("foo_bar", e.Name());
+            Assert.Equal("Foo Bar", e.DocName());
+        }
+
+        [Fact]
+        private void SetDocBrief()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity("foo_bar")
+                .SetDocBrief("Foo Bar");
+
+            Assert.Equal("foo_bar", e.Name());
+            Assert.Equal("Foo Bar", e.DocBrief());
+        }
+
+        [Fact]
+        private void SetDocDetail()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity("foo_bar")
+                .SetDocDetail("Foo Bar");
+
+            Assert.Equal("foo_bar", e.Name());
+            Assert.Equal("Foo Bar", e.DocDetail());
+        }
+
+        [Fact]
+        private void SetDocLink()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity("foo_bar")
+                .SetDocLink("Foo Bar");
+
+            Assert.Equal("foo_bar", e.Name());
+            Assert.Equal("Foo Bar", e.DocLink());
+        }
+
+        [Fact]
+        private void EntityWithRootName()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity("::foo");
+            Assert.Equal("foo", e.Name());
+            Assert.Equal("::foo", e.Path());
+        }
+
+        [Fact]
+        private void EntityWithRootNameFromScope()
+        {
+            using World world = World.Create();
+
+            Entity p = world.Entity("parent");
+            world.SetScope(p);
+            Entity e = world.Entity("::foo");
+            world.SetScope(0);
+
+            Assert.Equal("foo", e.Name());
+            Assert.Equal("::foo", e.Path());
+        }
+
+        [Fact]
+        private void EntityWithType()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity<EntityType>();
+
+            Assert.Equal("EntityType", e.Name());
+            Assert.Equal("::EntityType", e.Path());
+
+            Entity e2 = world.Entity<EntityType>();
+            Assert.True(e == e2);
+        }
+
+        [Fact]
+        private void PrefabHierarchyWithTypes()
+        {
+            using World world = World.Create();
+
+            Entity turret = world.Prefab<Turret>();
+            Entity turretBase = world.Prefab<Turret.Base>();
+
+            Assert.True(turret != 0);
+            Assert.True(turretBase != 0);
+            Assert.True(turretBase.Has(EcsChildOf, turret));
+
+            Assert.Equal("::Turret", turret.Path());
+            Assert.Equal("::Turret.Base", turretBase.Path());
+
+            Assert.Equal("Turret", turret.Symbol());
+            Assert.Equal("Turret.Base", turretBase.Symbol());
+
+            Entity railgun = world.Prefab<Railgun>().IsA<Turret>();
+            Entity railgunBase = railgun.Lookup("Base");
+            Entity railgunHead = world.Prefab<Railgun.Head>();
+            Entity railgunBeam = world.Prefab<Railgun.Beam>();
+
+            Assert.True(railgun != 0);
+            Assert.True(railgunBase != 0);
+            Assert.True(railgunHead != 0);
+            Assert.True(railgunBeam != 0);
+            Assert.True(railgunBase.Has(EcsChildOf, railgun));
+            Assert.True(railgunHead.Has(EcsChildOf, railgun));
+            Assert.True(railgunBeam.Has(EcsChildOf, railgun));
+
+            Assert.Equal("::Railgun", railgun.Path());
+            Assert.Equal("::Railgun.Base", railgunBase.Path());
+            Assert.Equal("::Railgun.Head", railgunHead.Path());
+            Assert.Equal("::Railgun.Beam", railgunBeam.Path());
+
+            Assert.Equal("Railgun", railgun.Symbol());
+            Assert.Equal("Railgun.Head", railgunHead.Symbol());
+            Assert.Equal("Railgun.Beam", railgunBeam.Symbol());
+        }
+
+        [Fact]
+        private void PrefabHierarchyWithRootTypes()
+        {
+            using World world = World.Create();
+
+            Entity turret = world.Prefab<Turret>();
+            Entity turretBase = world.Prefab<Base>().ChildOf<Turret>();
+
+            Assert.True(turret != 0);
+            Assert.True(turretBase != 0);
+            Assert.True(turretBase.Has(EcsChildOf, turret));
+
+            Assert.Equal("::Turret", turret.Path());
+            Assert.Equal("::Turret.Base", turretBase.Path());
+
+            Assert.Equal("Turret", turret.Symbol());
+            Assert.Equal("Base", turretBase.Symbol());
+
+            Entity inst = world.Entity().IsA<Turret>();
+            Assert.True(inst != 0);
+
+            Entity instBase = inst.Lookup("Base");
+            Assert.True(instBase != 0);
+        }
+
+        // TODO: Fix type registration code.
+        // [Fact]
+        // void PrefabHierarchyWithChildOverride() {
+        //     using World world = World.Create();
+        //
+        //     var t = world.Prefab<Turret>();
+        //     var tb = world.Prefab<Turret.Base>().Add<Foo>();
         //     Assert.True(t != 0);
         //     Assert.True(tb != 0);
         //
-        //     var r = world.prefab<Railgun>().is_a<Turret>();
-        //     var rb = world.prefab<Railgun.Base>().Add<Bar>();
+        //     var r = world.Prefab<Railgun>().IsA<Turret>();
+        //     var rb = world.Prefab<Railgun.Base>().Add<Bar>();
         //     Assert.True(r != 0);
         //     Assert.True(rb != 0);
         //
-        //     var i = world.Entity().is_a<Railgun>();
+        //     var i = world.Entity().IsA<Railgun>();
         //     Assert.True(i != 0);
         //     var ib = i.Lookup("Base");
         //     Assert.True(ib != 0);
         //     Assert.True(ib.Has<Foo>());
         //     Assert.True(ib.Has<Bar>());
         // }
-        //
+
+        [Fact]
+        private void EntityWithNestedType()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity<Parent.EntityType>();
+            Entity p = world.Entity<Parent>();
+
+            Assert.Equal("EntityType", e.Name());
+            Assert.Equal("::Parent.EntityType", e.Path());
+            Assert.True(e.Has(EcsChildOf, p));
+
+            Entity e2 = world.Entity<Parent.EntityType>();
+            Assert.True(e == e2);
+        }
+
+        [Fact]
+        private void EntityWithTypeDefer()
+        {
+            using World world = World.Create();
+
+            world.DeferBegin();
+            Entity e = world.Entity<Tag>();
+            world.DeferEnd();
+
+            Assert.Equal("Tag", e.Name());
+            Assert.Equal("Tag", e.Symbol());
+            Assert.True(world.Id<Tag>() == e);
+        }
+
+        [Fact]
+        private void AddIfTrueT()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+
+            e.AddIf<Tag>(true);
+            Assert.True(e.Has<Tag>());
+        }
+
+        [Fact]
+        private void AddIfFalseT()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+
+            e.AddIf<Tag>(false);
+            Assert.True(!e.Has<Tag>());
+
+            e.Add<Tag>();
+            Assert.True(e.Has<Tag>());
+            e.AddIf<Tag>(false);
+            Assert.True(!e.Has<Tag>());
+        }
+
+        [Fact]
+        private void AddIfTrueId()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+            Entity t = world.Entity();
+
+            e.AddIf(true, t);
+            Assert.True(e.Has(t));
+        }
+
+        [Fact]
+        private void AddIfFalseId()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+            Entity t = world.Entity();
+
+            e.AddIf(false, t);
+            Assert.True(!e.Has(t));
+            e.Add(t);
+            Assert.True(e.Has(t));
+            e.AddIf(false, t);
+            Assert.True(!e.Has(t));
+        }
+
+        [Fact]
+        private void AddIfTrueRO()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+
+            e.AddIf<Rel, Obj>(true);
+            Assert.True(e.Has<Rel, Obj>());
+        }
+
+        [Fact]
+        private void AddIfFalseRO()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+
+            e.AddIf<Rel, Obj>(false);
+            Assert.True(!e.Has<Rel, Obj>());
+            e.Add<Rel, Obj>();
+            Assert.True(e.Has<Rel, Obj>());
+            e.AddIf<Rel, Obj>(false);
+            Assert.True(!e.Has<Rel, Obj>());
+        }
+
+        [Fact]
+        private void AddIfTrueRo()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+            Entity o = world.Entity();
+
+            e.AddIf<Rel>(true, o);
+            Assert.True(e.Has<Rel>(o));
+        }
+
+        [Fact]
+        private void AddIfFalseRo()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+            Entity o = world.Entity();
+
+            e.AddIf<Rel>(false, o);
+            Assert.True(!e.Has<Rel>(o));
+            e.Add<Rel>(o);
+            Assert.True(e.Has<Rel>(o));
+            e.AddIf<Rel>(false, o);
+            Assert.True(!e.Has<Rel>(o));
+        }
+
+        [Fact]
+        private void AddIfTruero()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+            Entity r = world.Entity();
+            Entity o = world.Entity();
+
+            e.AddIf(true, r, o);
+            Assert.True(e.Has(r, o));
+        }
+
+        [Fact]
+        private void AddIfFalsero()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+            Entity r = world.Entity();
+            Entity o = world.Entity();
+
+            e.AddIf(false, r, o);
+            Assert.True(!e.Has(r, o));
+            e.Add(r, o);
+            Assert.True(e.Has(r, o));
+            e.AddIf(false, r, o);
+            Assert.True(!e.Has(r, o));
+        }
+
+        [Fact]
+        private void AddIfExclusivero()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+            Entity r = world.Entity().Add(Ecs.Exclusive);
+            Entity o1 = world.Entity();
+            Entity o2 = world.Entity();
+
+            e.Add(r, o1);
+            Assert.True(e.Has(r, o1));
+
+            e.AddIf(true, r, o2);
+            Assert.True(!e.Has(r, o1));
+            Assert.True(e.Has(r, o2));
+
+            e.AddIf(false, r, o1);
+            Assert.True(!e.Has(r, o1));
+            Assert.True(!e.Has(r, o2));
+        }
+
+        [Fact]
+        private void AddIfExclusiveRo()
+        {
+            using World world = World.Create();
+
+            world.Component<First>().Entity.Add(Ecs.Exclusive);
+
+            Entity e = world.Entity();
+            Entity o1 = world.Entity();
+            Entity o2 = world.Entity();
+
+            e.Add<First>(o1);
+            Assert.True(e.Has<First>(o1));
+
+            e.AddIf<First>(true, o2);
+            Assert.True(!e.Has<First>(o1));
+            Assert.True(e.Has<First>(o2));
+
+            e.AddIf<First>(false, o1);
+            Assert.True(!e.Has<First>(o1));
+            Assert.True(!e.Has<First>(o2));
+        }
+
+        // TODO: Fix later
         // [Fact]
-        // void entity_w_nested_type() {
+        // void AddIfExclusiveRO() {
         //     using World world = World.Create();
         //
-        //     var e = world.Entity<Parent.EntityType>();
-        //     var p = world.Entity<Parent>();
-        //
-        //     Assert.Equal(e.Name(), "EntityType");
-        //     Assert.Equal(e.Path(), "Parent.EntityType");
-        //     Assert.True(e.Has(EcsChildOf, p));
-        //     Assert.True(!e.Has<flecs.Component>());
-        //
-        //     var e_2 = world.Entity<Parent.EntityType>();
-        //     Assert.True(e == e_2);
-        // }
-        //
-        // [Fact]
-        // void entity_array() {
-        //     struct TagA {};
-        //     struct TagB {};
-        //
-        //     using World world = World.Create();
-        //
-        //     flecs.to_array({
-        //         world.Entity(),
-        //         world.Entity(),
-        //         world.Entity()
-        //     }).each((Entity e) { e.Add<TagA>().Add<TagB>(); });
-        //
-        //     Assert.Equal( world.count<TagA>(), 3 );
-        //     Assert.Equal( world.count<TagB>(), 3 );
-        // }
-        //
-        // [Fact]
-        // void entity_w_type_defer() {
-        //     using World world = World.Create();
-        //
-        //     world.defer_begin();
-        //     var e = world.Entity<Tag>();
-        //     world.defer_end();
-        //
-        //     Assert.Equal(e.Name(), "Tag");
-        //     Assert.Equal(e.symbol(), "Tag");
-        //     Assert.True(world.Id<Tag>() == e);
-        // }
-        //
-        // [Fact]
-        // void add_if_true_T() {
-        //     using World world = World.Create();
+        //     world.Component<R>().Entity.Add(Ecs.Exclusive);
         //
         //     Entity e = world.Entity();
         //
-        //     e.add_if<Tag>(true);
-        //     Assert.True( e.Has<Tag>());
-        // }
+        //     e.Add<R, O1>();
+        //     Assert.True((e.Has<R, O1>()));
         //
+        //     e.AddIf<R, O2>(true);
+        //     Assert.True((!e.Has<R, O1>()));
+        //     Assert.True((e.Has<R, O2>()));
+        //
+        //     e.AddIf<R, O1>(false);
+        //     Assert.True((!e.Has<R, O1>()));
+        //     Assert.True((!e.Has<R, O2>()));
+        // }
+
+        [Fact]
+        private void ChildrenWithCustomRelation()
+        {
+            using World world = World.Create();
+
+            Entity rel = world.Entity();
+
+            Entity parent = world.Entity();
+            Entity child1 = world.Entity().Add(rel, parent);
+            Entity child2 = world.Entity().Add(rel, parent);
+            world.Entity().ChildOf(parent);
+
+            bool child1Found = false;
+            bool child2Found = false;
+            int count = 0;
+
+            parent.Children(rel, (Entity child) =>
+            {
+                if (child == child1)
+                    child1Found = true;
+                else if (child == child2) child2Found = true;
+                count++;
+            });
+
+            Assert.Equal(2, count);
+            Assert.True(child1Found);
+            Assert.True(child2Found);
+        }
+
+        [Fact]
+        private void ChildrenWithCustomRelationType()
+        {
+            using World world = World.Create();
+
+            Entity parent = world.Entity();
+            Entity child1 = world.Entity().Add<Rel>(parent);
+            Entity child2 = world.Entity().Add<Rel>(parent);
+            world.Entity().ChildOf(parent);
+
+            bool child1Found = false;
+            bool child2Found = false;
+            int count = 0;
+
+            parent.Children<Rel>((Entity child) =>
+            {
+                if (child == child1)
+                    child1Found = true;
+                else if (child == child2) child2Found = true;
+                count++;
+            });
+
+            Assert.Equal(2, count);
+            Assert.True(child1Found);
+            Assert.True(child2Found);
+        }
+
+        [Fact]
+        private void ChildrenWithThis()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+            world.Entity(Ecs.This).Children((Entity e) => { count++; });
+            Assert.True(count == 0);
+        }
+
+        [Fact]
+        private void ChildrenWithWildcard()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+            world.Entity(Ecs.Wildcard).Children((Entity e) => { count++; });
+            Assert.True(count == 0);
+        }
+
+        [Fact]
+        private void ChildrenWithAny()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+            world.Entity(Ecs.Any).Children((Entity e) => { count++; });
+            Assert.True(count == 0);
+        }
+
+        // TODO: Fix this test later. Root entity is not being found?
         // [Fact]
-        // void add_if_false_T() {
+        // void ChildrenFromRoot() {
         //     using World world = World.Create();
         //
-        //     Entity e = world.Entity();
-        //
-        //     e.add_if<Tag>(false);
-        //     Assert.True( !e.Has<Tag>());
-        //
-        //     e.Add<Tag>();
-        //     Assert.True( e.Has<Tag>());
-        //     e.add_if<Tag>(false);
-        //     Assert.True( !e.Has<Tag>());
-        // }
-        //
-        // [Fact]
-        // void add_if_true_id() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity();
-        //     var t = world.Entity();
-        //
-        //     e.add_if(true, t);
-        //     Assert.True( e.Has(t));
-        // }
-        //
-        // [Fact]
-        // void add_if_false_id() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity();
-        //     var t = world.Entity();
-        //
-        //     e.add_if(false, t);
-        //     Assert.True( !e.Has(t));
-        //     e.Add(t);
-        //     Assert.True( e.Has(t));
-        //     e.add_if(false, t);
-        //     Assert.True( !e.Has(t));
-        // }
-        //
-        // [Fact]
-        // void add_if_true_R_O() {
-        //     using World world = World.Create();
-        //
-        //     struct Rel { };
-        //     struct Obj { };
-        //
-        //     Entity e = world.Entity();
-        //
-        //     e.add_if<Rel, Obj>(true);
-        //     Assert.True( (e.Has<Rel, Obj>()) );
-        // }
-        //
-        // [Fact]
-        // void add_if_false_R_O() {
-        //     using World world = World.Create();
-        //
-        //     struct Rel { };
-        //     struct Obj { };
-        //
-        //     Entity e = world.Entity();
-        //
-        //     e.add_if<Rel, Obj>(false);
-        //     Assert.True( (!e.Has<Rel, Obj>()));
-        //     e.Add<Rel, Obj>();
-        //     Assert.True( (e.Has<Rel, Obj>()));
-        //     e.add_if<Rel, Obj>(false);
-        //     Assert.True( (!e.Has<Rel, Obj>()));
-        // }
-        //
-        // [Fact]
-        // void add_if_true_R_o() {
-        //     using World world = World.Create();
-        //
-        //     struct Rel { };
-        //
-        //     Entity e = world.Entity();
-        //     var o = world.Entity();
-        //
-        //     e.add_if<Rel>(true, o);
-        //     Assert.True( e.Has<Rel>(o));
-        // }
-        //
-        // [Fact]
-        // void add_if_false_R_o() {
-        //     using World world = World.Create();
-        //
-        //     struct Rel { };
-        //
-        //     Entity e = world.Entity();
-        //     var o = world.Entity();
-        //
-        //     e.add_if<Rel>(false, o);
-        //     Assert.True( !e.Has<Rel>(o));
-        //     e.Add<Rel>(o);
-        //     Assert.True( e.Has<Rel>(o));
-        //     e.add_if<Rel>(false, o);
-        //     Assert.True( !e.Has<Rel>(o));
-        // }
-        //
-        // [Fact]
-        // void add_if_true_r_o() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity();
-        //     var r = world.Entity();
-        //     var o = world.Entity();
-        //
-        //     e.add_if(true, r, o);
-        //     Assert.True( e.Has(r, o));
-        // }
-        //
-        // [Fact]
-        // void add_if_false_r_o() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity();
-        //     var r = world.Entity();
-        //     var o = world.Entity();
-        //
-        //     e.add_if(false, r, o);
-        //     Assert.True( !e.Has(r, o));
-        //     e.Add(r, o);
-        //     Assert.True( e.Has(r, o));
-        //     e.add_if(false, r, o);
-        //     Assert.True( !e.Has(r, o));
-        // }
-        //
-        // [Fact]
-        // void add_if_exclusive_r_o() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity();
-        //     var r = world.Entity().Add(flecs.Exclusive);
-        //     var o_1 = world.Entity();
-        //     var o_2 = world.Entity();
-        //
-        //     e.Add(r, o_1);
-        //     Assert.True(e.Has(r, o_1));
-        //
-        //     e.add_if(true, r, o_2);
-        //     Assert.True(!e.Has(r, o_1));
-        //     Assert.True(e.Has(r, o_2));
-        //
-        //     e.add_if(false, r, o_1);
-        //     Assert.True(!e.Has(r, o_1));
-        //     Assert.True(!e.Has(r, o_2));
-        // }
-        //
-        // [Fact]
-        // void add_if_exclusive_R_o() {
-        //     using World world = World.Create();
-        //
-        //     struct First { };
-        //
-        //     world.Component<First>().Add(flecs.Exclusive);
-        //
-        //     Entity e = world.Entity();
-        //     var o_1 = world.Entity();
-        //     var o_2 = world.Entity();
-        //
-        //     e.Add<First>(o_1);
-        //     Assert.True(e.Has<First>(o_1));
-        //
-        //     e.add_if<First>(true, o_2);
-        //     Assert.True(!e.Has<First>(o_1));
-        //     Assert.True(e.Has<First>(o_2));
-        //
-        //     e.add_if<First>(false, o_1);
-        //     Assert.True(!e.Has<First>(o_1));
-        //     Assert.True(!e.Has<First>(o_2));
-        // }
-        //
-        // [Fact]
-        // void add_if_exclusive_R_O() {
-        //     using World world = World.Create();
-        //
-        //     struct R { };
-        //     struct O_1 { };
-        //     struct O_2 { };
-        //
-        //     world.Component<R>().Add(flecs.Exclusive);
-        //
-        //     Entity e = world.Entity();
-        //
-        //     e.Add<R, O_1>();
-        //     Assert.True((e.Has<R, O_1>()));
-        //
-        //     e.add_if<R, O_2>(true);
-        //     Assert.True((!e.Has<R, O_1>()));
-        //     Assert.True((e.Has<R, O_2>()));
-        //
-        //     e.add_if<R, O_1>(false);
-        //     Assert.True((!e.Has<R, O_1>()));
-        //     Assert.True((!e.Has<R, O_2>()));
-        // }
-        //
-        // [Fact]
-        // void add_if_pair_w_0_object() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity();
-        //     var r = world.Entity();
-        //     var o_1 = world.Entity();
-        //
-        //     e.Add(r, o_1);
-        //     Assert.True(e.Has(r, o_1));
-        //
-        //     e.add_if(0, r, 0);
-        //     Assert.True(!e.Has(r, o_1));
-        //     Assert.True(!e.Has(r, flecs.Wildcard));
-        // }
-        //
-        // [Fact]
-        // void children_w_custom_relation() {
-        //     using World world = World.Create();
-        //
-        //     Entity rel = world.Entity();
-        //
-        //     Entity parent = world.Entity();
-        //     Entity child_1 = world.Entity().Add(rel, parent);
-        //     Entity child_2 = world.Entity().Add(rel, parent);
-        //     world.Entity().ChildOf(parent);
-        //
-        //     bool child_1_found = false;
-        //     bool child_2_found = false;
-        //     int32_t count = 0;
-        //
-        //     parent.children(rel, [&](Entity child) {
-        //         if (child == child_1) {
-        //             child_1_found = true;
-        //         } else if (child == child_2) {
-        //             child_2_found = true;
-        //         }
-        //         count ++;
-        //     });
-        //
-        //     Assert.Equal(count, 2);
-        //     Assert.True(child_1_found == true);
-        //     Assert.True(child_2_found == true);
-        // }
-        //
-        // [Fact]
-        // void children_w_custom_relation_type() {
-        //     using World world = World.Create();
-        //
-        //     struct Rel { };
-        //
-        //     Entity parent = world.Entity();
-        //     Entity child_1 = world.Entity().Add<Rel>(parent);
-        //     Entity child_2 = world.Entity().Add<Rel>(parent);
-        //     world.Entity().ChildOf(parent);
-        //
-        //     bool child_1_found = false;
-        //     bool child_2_found = false;
-        //     int32_t count = 0;
-        //
-        //     parent.children<Rel>([&](Entity child) {
-        //         if (child == child_1) {
-        //             child_1_found = true;
-        //         } else if (child == child_2) {
-        //             child_2_found = true;
-        //         }
-        //         count ++;
-        //     });
-        //
-        //     Assert.Equal(count, 2);
-        //     Assert.True(child_1_found == true);
-        //     Assert.True(child_2_found == true);
-        // }
-        //
-        // [Fact]
-        // void children_w_this() {
-        //     using World world = World.Create();
-        //
-        //     int32_t count = 0;
-        //     world.Entity(flecs.This).children([&](flecs.entity) {
-        //         count ++;
-        //     });
-        //     Assert.True(count == 0);
-        // }
-        //
-        // [Fact]
-        // void children_w_wildcard() {
-        //     using World world = World.Create();
-        //
-        //     int32_t count = 0;
-        //     world.Entity(flecs.Wildcard).children([&](flecs.entity) {
-        //         count ++;
-        //     });
-        //     Assert.True(count == 0);
-        // }
-        //
-        // [Fact]
-        // void children_w_any() {
-        //     using World world = World.Create();
-        //
-        //     int32_t count = 0;
-        //     world.Entity(flecs.Any).children([&](flecs.entity) {
-        //         count ++;
-        //     });
-        //     Assert.True(count == 0);
-        // }
-        //
-        // [Fact]
-        // void children_from_root() {
-        //     using World world = World.Create();
-        //
-        //     int32_t count = 0;
-        //     world.Entity(0).children([&](Entity e) {
+        //     int count = 0;
+        //     world.Entity(0).Children((Entity e) =>
+        //     {
         //         Assert.True(e == world.Entity("flecs"));
         //         count ++;
         //     });
@@ -4196,7 +4279,7 @@ namespace Flecs.NET.Tests.Cpp
         //     world.Children((Entity e) =>
         //     {
         //         Assert.True(e == world.Entity("Flecs"));
-        //         count ++;
+        //         count++;
         //     });
         //     Assert.True(count == 1);
         // }

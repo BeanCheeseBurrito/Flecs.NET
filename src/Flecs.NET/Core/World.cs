@@ -1445,6 +1445,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Get default id.
+        /// </summary>
+        /// <returns></returns>
+        public Id Id()
+        {
+            return default;
+        }
+
+        /// <summary>
         ///     Get id from id value.
         /// </summary>
         /// <param name="id"></param>
