@@ -793,5 +793,60 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal(1, count);
         }
+
+        [Fact]
+        private void EnqueueEntityFromReaOnlyWorld()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            Entity evt = world.Entity();
+            Entity idA = world.Entity();
+            Entity e1 = world.Entity().Add(idA);
+
+            e1.Observe(evt, () =>
+            {
+                count ++;
+            });
+
+            world.ReadonlyBegin();
+
+            e1.Enqueue(evt);
+
+            Assert.Equal(0, count);
+
+            world.ReadonlyEnd();
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void EnqueueEntityWithPayloadFromReadOnlyWorld()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            Entity idA = world.Entity();
+            Entity e1 = world.Entity().Add(idA);
+
+            e1.Observe((ref Position p) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+                count++;
+            });
+
+            world.ReadonlyBegin();
+
+            e1.Enqueue(new Position(10, 20));
+
+            Assert.Equal(0, count);
+
+            world.ReadonlyEnd();
+
+            Assert.Equal(1, count);
+        }
     }
 }
