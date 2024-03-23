@@ -105,6 +105,16 @@ public struct Other
     public int Value { get; set; }
 }
 
+public struct Singleton
+{
+    public int Value { get; set; }
+
+    public Singleton(int value)
+    {
+        Value = value;
+    }
+}
+
 public struct MyModule : IFlecsModule
 {
     public void InitModule(ref World world)
