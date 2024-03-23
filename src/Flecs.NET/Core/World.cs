@@ -493,6 +493,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Ensure singleton component inside a callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public void Ensure<T>(Ecs.InvokeEnsureCallback<T> callback)
+        {
+            Invoker.InvokeEnsure(Handle, Type<T>.Id(Handle), callback);
+        }
+
+        /// <summary>
         ///     Get mut pointer to singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -735,6 +746,26 @@ namespace Flecs.NET.Core
         public ref readonly TSecond GetSecond<TFirst, TSecond>()
         {
             return ref Entity<TFirst>().GetSecond<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Get a readonly singleton component inside a callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Read<T>(Ecs.InvokeReadCallback<T> callback)
+        {
+            Invoker.InvokeRead(Handle, Type<T>.Id(Handle), callback);
+        }
+
+        /// <summary>
+        ///     Get a mutable singleton component inside a callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Write<T>(Ecs.InvokeWriteCallback<T> callback)
+        {
+            Invoker.InvokeWrite(Handle, Type<T>.Id(Handle), callback);
         }
 
         /// <summary>

@@ -232,7 +232,7 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine<Position>()
-                .Term<Velocity>().Oper(Ecs.Not)
+                .Term<Velocity>().Not()
                 .Each((Entity e, ref Position p) =>
                 {
                     count++;
@@ -256,7 +256,7 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine()
-                .Term<Position>().Oper(Ecs.Or)
+                .Term<Position>().Or()
                 .Term<Velocity>()
                 .Each((Entity e) =>
                 {
@@ -282,7 +282,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Routine s = world.Routine()
                 .Term<Position>()
-                .Term<Velocity>().Oper(Ecs.Optional)
+                .Term<Velocity>().Optional()
                 .Each((Entity e) =>
                 {
                     count++;
