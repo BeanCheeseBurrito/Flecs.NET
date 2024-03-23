@@ -39,6 +39,11 @@ public enum StandardEnum
 public struct Mass
 {
     public float Value { get; set; }
+
+    public Mass(float value)
+    {
+        Value = value;
+    }
 }
 
 public struct Pair

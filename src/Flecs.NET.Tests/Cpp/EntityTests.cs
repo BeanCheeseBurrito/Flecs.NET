@@ -15,8 +15,8 @@ namespace Flecs.NET.Tests.Cpp
         public void New()
         {
             using World world = World.Create();
-            Entity entity = world.Entity();
 
+            Entity entity = world.Entity();
             Assert.True(entity != 0);
         }
 
@@ -602,7 +602,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void set_generic_no_size_w_id()
+        private void SetGenericNoSizWithId()
         {
             using World world = World.Create();
 
@@ -623,7 +623,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void set_generic_no_size_w_id_t()
+        private void SetGenericNoSizeWithUlong()
         {
             using World world = World.Create();
 
@@ -644,7 +644,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void add_role()
+        private void AddRole()
         {
             using World world = World.Create();
 
@@ -656,7 +656,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void remove_role()
+        private void RemoveRole()
         {
             using World world = World.Create();
 
@@ -674,7 +674,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void has_role()
+        private void HasRole()
         {
             using World world = World.Create();
 
@@ -690,7 +690,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void pair_role()
+        private void PairRole()
         {
             using World world = World.Create();
 
@@ -735,7 +735,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void compare_0()
+        private void Compare0()
         {
             using World world = World.Create();
 
@@ -755,7 +755,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void compare_id_t()
+        private void CompareUlong()
         {
             using World world = World.Create();
 
@@ -798,7 +798,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void compare_id()
+        private void CompareId()
         {
             using World world = World.Create();
 
@@ -841,7 +841,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void compare_literal()
+        private void CompareLiteral()
         {
             using World world = World.Create();
 
@@ -881,7 +881,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void greater_than()
+        private void GreaterThan()
         {
             using World world = World.Create();
 
@@ -893,7 +893,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void less_than()
+        private void LessThan()
         {
             using World world = World.Create();
 
@@ -905,7 +905,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void not_0_or_1()
+        private void Not0Or1()
         {
             using World world = World.Create();
 
@@ -918,7 +918,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void has_childof()
+        private void HasChildOf()
         {
             using World world = World.Create();
 
@@ -931,7 +931,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void has_instanceof()
+        private void HasInstanceOf()
         {
             using World world = World.Create();
 
@@ -944,7 +944,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void has_instanceof_indirect()
+        private void HasInstanceOfIndirect()
         {
             using World world = World.Create();
 
@@ -960,7 +960,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void null_string()
+        private void NullString()
         {
             using World world = World.Create();
 
@@ -970,7 +970,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void set_name()
+        private void SetName()
         {
             using World world = World.Create();
 
@@ -982,7 +982,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void change_name()
+        private void ChangeName()
         {
             using World world = World.Create();
 
@@ -1207,7 +1207,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void is_enabled_pair_enabled()
+        private void IsEnabledPairEnabled()
         {
             using World world = World.Create();
 
@@ -1219,7 +1219,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void is_disabled_pair_enabled()
+        private void IsDisabledPairEnabled()
         {
             using World world = World.Create();
 
@@ -1231,7 +1231,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void is_pair_enabled_w_ids()
+        private void IsPairEnabledWithIds()
         {
             using World world = World.Create();
 
@@ -1247,7 +1247,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void is_enabled_pair_enabled_w_ids()
+        private void IsEnabledPairEnabledWithIds()
         {
             using World world = World.Create();
 
@@ -1262,7 +1262,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void is_disabled_pair_enabled_w_ids()
+        private void IsDisabledPairEnabledWithIds()
         {
             using World world = World.Create();
 
@@ -1277,7 +1277,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void is_pair_enabled_w_tgt_id()
+        private void IsPairEnabledWithTargetId()
         {
             using World world = World.Create();
 
@@ -1292,7 +1292,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void is_enabled_pair_enabled_w_tgt_id()
+        private void IsEnabledPairEnabledWithTargetId()
         {
             using World world = World.Create();
 
@@ -1306,7 +1306,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void is_disabled_pair_enabled_w_tgt_id()
+        private void IsDisabledPairEnabledWithTargetId()
         {
             using World world = World.Create();
 
@@ -1320,7 +1320,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void get_types()
+        private void GetTypes()
         {
             using World world = World.Create();
 
@@ -1335,7 +1335,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void get_nonempty_type()
+        private void GetNonEmptyType()
         {
             using World world = World.Create();
 
@@ -1457,7 +1457,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void override_pair_w_ids()
+        private void OverridePairWithIds()
         {
             using World world = World.Create();
 
@@ -1480,7 +1480,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void override_pair()
+        private void OverridePair()
         {
             using World world = World.Create();
 
@@ -1499,7 +1499,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void set_override()
+        private void SetOverride()
         {
             using World world = World.Create();
 
@@ -1523,7 +1523,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void set_override_lvalue()
+        private void SetOverrideLValue()
         {
             using World world = World.Create();
 
@@ -1549,7 +1549,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void set_override_pair()
+        private void SetOverridePair()
         {
             using World world = World.Create();
 
@@ -1573,7 +1573,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void set_override_pair_w_tgt_id()
+        private void SetOverridePairWithTargetId()
         {
             using World world = World.Create();
 
@@ -1599,7 +1599,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void set_override_pair_w_rel_tag()
+        private void SetOverridePairWithRelTag()
         {
             using World world = World.Create();
 
@@ -1623,7 +1623,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void implicit_name_to_char()
+        private void ImplicitNameToChar()
         {
             using World world = World.Create();
 
@@ -1723,7 +1723,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void implicit_path_to_char()
+        private void ImplicitPathToChar()
         {
             using World world = World.Create();
 
@@ -1735,7 +1735,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void implicit_type_str_to_char()
+        private void ImplicitTypeStringToChar()
         {
             using World world = World.Create();
 
@@ -1745,7 +1745,6 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("(Identifier,Name)", entity.Type().Str());
         }
 
-        [Fact] // TODO: Continue porting there
         private void SetTemplate()
         {
             using World world = World.Create();
@@ -1758,50 +1757,613 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        // [Fact]
-        // private void WithSelf()
-        // {
-        //     using World world = World.Create();
-        //
-        //     Entity tag = world.Entity().With(() =>
-        //     {
-        //         Entity e1 = world.Entity(); e1.Set(new Self { Value = e1 });
-        //         Entity e2 = world.Entity(); e2.Set(new Self { Value = e2 });
-        //         Entity e3 = world.Entity(); e3.Set(new Self { Value = e3 });
-        //     });
-        //
-        //     Component<Self> self = world.Component<Self>();
-        //     Assert.True(!self.Entity.Has(tag));
-        //
-        //     int count = 0;
-        //     Query query = world.Query(
-        //         filter: world.FilterBuilder().Term(tag)
-        //     );
-        //
-        //     query.Iter(it =>
-        //     {
-        //         foreach (int i in it)
-        //         {
-        //             Entity e = it.Entity(i);
-        //
-        //             Assert.True(e.Has(tag));
-        //         }
-        //     });
-        //
-        //         auto q = world.query_builder<>().term(Tag).build();
-        //
-        //     q.each([&](flecs.entity e) {
-        //         test_assert(e.has(Tag));
-        //
-        //         test_bool(e.get([&](const Self& s){
-        //             test_assert(s.value == e);
-        //         }), true);
-        //
-        //         count ++;
-        //     });
-        //
-        //     test_int(count, 3);
-        // }
+        [Fact]
+        private void Get1ComponentWithCallback()
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Entity e2 = world.Entity()
+                .Set(new Position(11, 22));
+
+            Entity e3 = world.Entity()
+                .Set(new Velocity(1, 2));
+
+            Assert.True(e1.Read((in Position p) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+            }));
+
+            Assert.True(e2.Read((in Position p) =>
+            {
+                Assert.Equal(11, p.X);
+                Assert.Equal(22, p.Y);
+            }));
+
+            Assert.False(e3.Read((in Position p) => { }));
+        }
+
+        [Fact]
+        private void Get2ComponentWithCallback()
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Entity e2 = world.Entity()
+                .Set(new Position(11, 22));
+
+            Entity e3 = world.Entity()
+                .Set(new Velocity(1, 2));
+
+            Assert.True(e1.Read((in Position p, in Velocity v) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+            }));
+
+            Assert.False(e2.Read((in Position p, in Velocity v) => { }));
+
+            Assert.False(e3.Read((in Position p, in Velocity v) => { }));
+        }
+
+        [Fact]
+        private void Ensure1ComponentWithCallback()
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Entity e2 = world.Entity()
+                .Set(new Position(11, 22));
+
+            Entity e3 = world.Entity()
+                .Set(new Velocity(1, 2));
+
+            Assert.True(e1.Write((ref Position p) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+                p.X++;
+                p.Y += 2;
+            }));
+
+            Assert.True(e2.Write((ref Position p) =>
+            {
+                Assert.Equal(11, p.X);
+                Assert.Equal(22, p.Y);
+                p.X++;
+                p.Y += 2;
+            }));
+
+            Position* p = e1.GetPtr<Position>();
+            Assert.Equal(11, p->X);
+            Assert.Equal(22, p->Y);
+
+            p = e2.GetPtr<Position>();
+            Assert.Equal(12, p->X);
+            Assert.Equal(24, p->Y);
+
+            Assert.False(e3.Read((in Position p) => { }));
+        }
+
+        [Fact]
+        private void Ensure2ComponentWithCallback()
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Entity e2 = world.Entity()
+                .Set(new Position(11, 22));
+
+            Entity e3 = world.Entity()
+                .Set(new Velocity(1, 2));
+
+            Assert.True(e1.Write((ref Position p, ref Velocity v) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+
+                p.X++;
+                p.Y += 2;
+                v.X += 3;
+                v.Y += 4;
+            }));
+
+            Assert.False(e2.Read((in Position p, in Velocity v) => { }));
+
+            Assert.False(e3.Read((in Position p, in Velocity v) => { }));
+
+            Position* p = e1.GetPtr<Position>();
+            Assert.Equal(11, p->X);
+            Assert.Equal(22, p->Y);
+
+            Velocity* v = e1.GetPtr<Velocity>();
+            Assert.Equal(4, v->X);
+            Assert.Equal(6, v->Y);
+        }
+
+        [Fact]
+        private void GetComponentWithCallbackNested()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Assert.True(e.Read((in Position p) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+
+                Assert.True(e.Read((in Velocity v) =>
+                {
+                    Assert.Equal(1, v.X);
+                    Assert.Equal(2, v.Y);
+                }));
+            }));
+        }
+
+        [Fact]
+        private void Set1ComponentWithCallback()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity()
+                .Ensure((ref Position p) =>
+                {
+                    p.X = 10;
+                    p.Y = 20;
+                });
+
+            Assert.True(e.Has<Position>());
+
+            Position* p = e.GetPtr<Position>();
+            Assert.True(p != null);
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
+        }
+
+        [Fact]
+        private void Set2ComponentsWithCallback()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity()
+                .Ensure((ref Position p, ref Velocity v) =>
+                {
+                    p = new Position(10, 20);
+                    v = new Velocity(1, 2);
+                });
+
+            Assert.True(e.Has<Position>());
+
+            Position* p = e.GetPtr<Position>();
+            Assert.True(p != null);
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
+
+            Velocity* v = e.GetPtr<Velocity>();
+            Assert.True(v != null);
+            Assert.Equal(1, v->X);
+            Assert.Equal(2, v->Y);
+        }
+
+        [Fact]
+        private void Set3ComponentsWithCallback()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity()
+                .Ensure((ref Position p, ref Velocity v, ref Mass m) =>
+                {
+                    p = new Position(10, 20);
+                    v = new Velocity(1, 2);
+                    m = new Mass(50);
+                });
+
+            Assert.True(e.Has<Position>());
+
+            Position* p = e.GetPtr<Position>();
+            Assert.True(p != null);
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
+
+            Velocity* v = e.GetPtr<Velocity>();
+            Assert.True(v != null);
+            Assert.Equal(1, v->X);
+            Assert.Equal(2, v->Y);
+
+            Mass* m = e.GetPtr<Mass>();
+            Assert.True(m != null);
+            Assert.Equal(50, m->Value);
+        }
+
+        [Fact]
+        private void DeferSet1Component()
+        {
+            using World world = World.Create();
+
+            world.DeferBegin();
+
+            Entity e = world.Entity()
+                .Ensure((ref Position p) =>
+                {
+                    p.X = 10;
+                    p.Y = 20;
+                });
+
+            Assert.True(!e.Has<Position>());
+
+            world.DeferEnd();
+
+            Assert.True(e.Has<Position>());
+
+            e.Read((in Position p) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+            });
+        }
+
+        [Fact]
+        private void DeferSet2Components()
+        {
+            using World world = World.Create();
+
+            world.DeferBegin();
+
+            Entity e = world.Entity()
+                .Ensure((ref Position p, ref Velocity v) =>
+                {
+                    p = new Position(10, 20);
+                    v = new Velocity(1, 2);
+                });
+
+            Assert.True(!e.Has<Position>());
+            Assert.True(!e.Has<Velocity>());
+
+            world.DeferEnd();
+
+            Assert.True(e.Has<Position>());
+            Assert.True(e.Has<Velocity>());
+
+            e.Read((in Position p, in Velocity v) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+            });
+        }
+
+        [Fact]
+        private void DeferSet3Components()
+        {
+            using World world = World.Create();
+
+            world.DeferBegin();
+
+            Entity e = world.Entity()
+                .Ensure((ref Position p, ref Velocity v, ref Mass m) =>
+                {
+                    p = new Position(10, 20);
+                    v = new Velocity(1, 2);
+                    m = new Mass(50);
+                });
+
+            Assert.True(!e.Has<Position>());
+            Assert.True(!e.Has<Velocity>());
+            Assert.True(!e.Has<Mass>());
+
+            world.DeferEnd();
+
+            Assert.True(e.Has<Position>());
+            Assert.True(e.Has<Velocity>());
+            Assert.True(e.Has<Mass>());
+
+            e.Read((in Position p, in Velocity v, in Mass m) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+
+                Assert.Equal(50, m.Value);
+            });
+        }
+
+        [Fact]
+        private void Set2WithOnSet()
+        {
+            using World world = World.Create();
+
+            int positionSet = 0;
+            int velocitySet = 0;
+
+            world.Observer<Position>()
+                .Event(Ecs.OnSet)
+                .Each((Entity e, ref Position p) =>
+                {
+                    positionSet++;
+                    Assert.Equal(10, p.X);
+                    Assert.Equal(20, p.Y);
+                });
+
+            world.Observer<Velocity>()
+                .Event(Ecs.OnSet)
+                .Each((Entity e, ref Velocity v) =>
+                {
+                    velocitySet++;
+                    Assert.Equal(1, v.X);
+                    Assert.Equal(2, v.Y);
+                });
+
+            Entity e = world.Entity()
+                .Ensure((ref Position p, ref Velocity v) =>
+                {
+                    p = new Position(10, 20);
+                    v = new Velocity(1, 2);
+                });
+
+            Assert.Equal(1, positionSet);
+            Assert.Equal(1, velocitySet);
+
+            Assert.True(e.Read((in Position p, in Velocity v) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+            }));
+        }
+
+        [Fact]
+        private void DeferSet2WithOnSet()
+        {
+            using World world = World.Create();
+
+            int positionSet = 0;
+            int velocitySet = 0;
+
+            world.Observer<Position>()
+                .Event(Ecs.OnSet)
+                .Each((Entity e, ref Position p) =>
+                {
+                    positionSet++;
+                    Assert.Equal(10, p.X);
+                    Assert.Equal(20, p.Y);
+                });
+
+            world.Observer<Velocity>()
+                .Event(Ecs.OnSet)
+                .Each((Entity e, ref Velocity v) =>
+                {
+                    velocitySet++;
+                    Assert.Equal(1, v.X);
+                    Assert.Equal(2, v.Y);
+                });
+
+            world.DeferBegin();
+
+            Entity e = world.Entity()
+                .Ensure((ref Position p, ref Velocity v) =>
+                {
+                    p = new Position(10, 20);
+                    v = new Velocity(1, 2);
+                });
+
+            Assert.Equal(0, positionSet);
+            Assert.Equal(0, velocitySet);
+
+            world.DeferEnd();
+
+            Assert.Equal(1, positionSet);
+            Assert.Equal(1, velocitySet);
+
+            Assert.True(e.Read((in Position p, in Velocity v) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+            }));
+        }
+
+        [Fact]
+        private void Set2AfterFluent()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity()
+                .Set(new Mass(50))
+                .Ensure((ref Position p, ref Velocity v) =>
+                {
+                    p = new Position(10, 20);
+                    v = new Velocity(1, 2);
+                });
+
+            Assert.True(e.Has<Position>());
+            Assert.True(e.Has<Velocity>());
+            Assert.True(e.Has<Mass>());
+
+            Assert.True(e.Read((in Position p, in Velocity v, in Mass m) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+
+                Assert.Equal(50, m.Value);
+            }));
+        }
+
+        [Fact]
+        private void Set2BeforeFluent()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity()
+                .Ensure((ref Position p, ref Velocity v) =>
+                {
+                    p = new Position(10, 20);
+                    v = new Velocity(1, 2);
+                })
+                .Set(new Mass(50));
+
+            Assert.True(e.Has<Position>());
+            Assert.True(e.Has<Velocity>());
+            Assert.True(e.Has<Mass>());
+
+            Assert.True(e.Read((in Position p, in Velocity v, in Mass m) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+
+                Assert.Equal(50, m.Value);
+            }));
+        }
+
+        [Fact]
+        private void Set2AfterSet1()
+        {
+            using World world = World.Create();
+
+            int called = 0;
+
+            Entity e = world.Entity().Set(new Position(5, 10));
+            Assert.True(e.Has<Position>());
+
+            Assert.True(e.Read((in Position p) =>
+            {
+                Assert.Equal(5, p.X);
+                Assert.Equal(10, p.Y);
+            }));
+
+            e.Ensure((ref Position p, ref Velocity v) =>
+            {
+                p = new Position(10, 20);
+                v = new Velocity(1, 2);
+            });
+
+            Assert.True(e.Read((in Position p, in Velocity v) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+
+                called++;
+            }));
+
+            Assert.Equal(1, called);
+        }
+
+        [Fact]
+        private void Set2AfterSet2()
+        {
+            using World world = World.Create();
+
+            int called = 0;
+
+            Entity e = world.Entity()
+                .Set(new Position(5, 10))
+                .Set(new Velocity(1, 2));
+            Assert.True(e.Has<Position>());
+            Assert.True(e.Has<Velocity>());
+
+            Assert.True(e.Read((in Position p, in Velocity v) =>
+            {
+                Assert.Equal(5, p.X);
+                Assert.Equal(10, p.Y);
+
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+
+                called++;
+            }));
+
+            Assert.Equal(1, called);
+
+            e.Ensure((ref Position p, ref Velocity v) =>
+            {
+                p = new Position(10, 20);
+                v = new Velocity(3, 4);
+            });
+
+            Assert.True(e.Read((in Position p, in Velocity v) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+
+                Assert.Equal(3, v.X);
+                Assert.Equal(4, v.Y);
+
+                called++;
+            }));
+
+            Assert.Equal(2, called);
+        }
+
+        [Fact]
+        private void WithSelf()
+        {
+            using World world = World.Create();
+
+            Entity tag = world.Entity().With(() =>
+            {
+                Entity e1 = world.Entity(); e1.Set(new Self { Value = e1 });
+                Entity e2 = world.Entity(); e2.Set(new Self { Value = e2 });
+                Entity e3 = world.Entity(); e3.Set(new Self { Value = e3 });
+            });
+
+            Component<Self> self = world.Component<Self>();
+            Assert.True(!self.Entity.Has(tag));
+
+            int count = 0;
+            Query query = world.QueryBuilder().Term(tag).Build();
+
+            query.Each((Entity e) =>
+            {
+                Assert.True(e.Has(tag));
+
+                Assert.True(e.Read((in Self s) =>
+                {
+                    Assert.True(s.Value == e);
+                }));
+
+                count++;
+            });
+
+            Assert.Equal(3, count);
+        }
 
         [Fact]
         private void NoRecursiveLookup()
@@ -1818,7 +2380,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void defer_new_w_name()
+        private void DeferNewWithName()
         {
             using World world = World.Create();
 
@@ -1835,7 +2397,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void defer_new_w_nested_name()
+        private void DeferNewWithNestedName()
         {
             using World world = World.Create();
 
@@ -1854,7 +2416,7 @@ namespace Flecs.NET.Tests.Cpp
 
 
         [Fact]
-        private void defer_new_w_scope_name()
+        private void DeferNewWithScopeName()
         {
             using World world = World.Create();
 
@@ -1876,7 +2438,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void defer_new_w_scope_nested_name()
+        private void DeferNewWithScopeNestedName()
         {
             using World world = World.Create();
 
@@ -1898,7 +2460,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void defer_new_w_deferred_scope_nested_name()
+        private void DeferNewWithDeferredScopeNestedName ()
         {
             using World world = World.Create();
 
@@ -1924,7 +2486,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void defer_new_w_scope()
+        private void DeferNewWithScope()
         {
             using World world = World.Create();
 
@@ -1944,7 +2506,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void defer_new_w_with()
+        private void DeferNewWithWith()
         {
             using World world = World.Create();
 
@@ -1965,7 +2527,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void defer_new_w_name_scope_with()
+        private void DeferNewWithNameScopeWith()
         {
             using World world = World.Create();
 
@@ -1995,7 +2557,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void defer_new_w_nested_name_scope_with()
+        private void DeferNewWithNestedNameScopeWith()
         {
             using World world = World.Create();
 
@@ -2094,17 +2656,17 @@ namespace Flecs.NET.Tests.Cpp
         //             world.Entity("Z");
         //         });
         //
-        //     Assert.True(A.Get([](const Position& p) {
+        //     Assert.True(A.Get((const Position& p) {
         //         Assert.Equal(10, p->X);
         //         Assert.Equal(20, p->Y);
         //     }));
         //
-        //     Assert.True(B.Get([](const Position& p) {
+        //     Assert.True(B.Get((const Position& p) {
         //         Assert.Equal(p.x, 30);
         //         Assert.Equal(p.y, 40);
         //     }));
         //
-        //     Assert.True(C.Get([](const Position& p) {
+        //     Assert.True(C.Get((const Position& p) {
         //         Assert.Equal(p.x, 50);
         //         Assert.Equal(p.y, 60);
         //     }));
@@ -2144,17 +2706,17 @@ namespace Flecs.NET.Tests.Cpp
         //         })
         //         .Set<Position>({50, 60});
         //
-        //     Assert.True(A.Get([](const Position& p) {
+        //     Assert.True(A.Get((const Position& p) {
         //         Assert.Equal(10, p->X);
         //         Assert.Equal(20, p->Y);
         //     }));
         //
-        //     Assert.True(B.Get([](const Position& p) {
+        //     Assert.True(B.Get((const Position& p) {
         //         Assert.Equal(p.x, 30);
         //         Assert.Equal(p.y, 40);
         //     }));
         //
-        //     Assert.True(C.Get([](const Position& p) {
+        //     Assert.True(C.Get((const Position& p) {
         //         Assert.Equal(p.x, 50);
         //         Assert.Equal(p.y, 60);
         //     }));
@@ -3278,7 +3840,7 @@ namespace Flecs.NET.Tests.Cpp
         //         world.Entity(),
         //         world.Entity(),
         //         world.Entity()
-        //     }).each([](Entity e) { e.Add<TagA>().Add<TagB>(); });
+        //     }).each((Entity e) { e.Add<TagA>().Add<TagB>(); });
         //
         //     Assert.Equal( world.count<TagA>(), 3 );
         //     Assert.Equal( world.count<TagB>(), 3 );
@@ -3714,7 +4276,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     world.observer<Position>()
         //         .event(flecs.OnAdd)
-        //         .each([](Entity e, Position&) {
+        //         .each((Entity e, Position&) {
         //             e.emplace<Velocity>(1.0f, 2.0f);
         //         });
         //
