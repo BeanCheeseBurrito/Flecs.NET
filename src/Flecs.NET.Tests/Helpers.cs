@@ -5,6 +5,15 @@ using Xunit;
 [assembly: SuppressMessage("Usage", "CA1050")]
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 
+namespace Test
+{
+    public struct Foo
+    {
+        public float X;
+        public float Y;
+    }
+}
+
 public struct Position
 {
     public float X { get; set; }
