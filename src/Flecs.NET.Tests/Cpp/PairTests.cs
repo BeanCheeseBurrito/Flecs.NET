@@ -290,7 +290,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void GetMutPair()
+        private void EnsurePair()
         {
             using World world = World.Create();
 
@@ -306,7 +306,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void GetMutPairExisting()
+        private void EnsurePairExisting()
         {
             using World world = World.Create();
 
@@ -324,7 +324,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void GetMutPairTag()
+        private void EnsurePairTag()
         {
             using World world = World.Create();
 
@@ -344,7 +344,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void GetMutPairTagExisting()
+        private void EnsurePairTagExisting()
         {
             using World world = World.Create();
 
@@ -365,7 +365,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void GetMutRTagO()
+        private void EnsureRTagO()
         {
             using World world = World.Create();
 
