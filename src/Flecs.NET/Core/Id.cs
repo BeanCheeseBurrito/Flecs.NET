@@ -263,7 +263,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public World CsWorld()
         {
-            return new World(World);
+            return new World(World, false);
         }
 
         /// <summary>

@@ -86,13 +86,106 @@ namespace Flecs.NET.Core
             _id = new Id(world, ecs_entity_init(world, &desc));
         }
 
-        /// <summary>
-        ///     Returns the C# world for this entity.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc cref="Id.IsPair()"/>
+        public bool IsPair()
+        {
+            return Id.IsPair();
+        }
+
+        /// <inheritdoc cref="Id.IsWildCard()"/>
+        public bool IsWildCard()
+        {
+            return Id.IsWildCard();
+        }
+
+        /// <inheritdoc cref="Id.IsEntity()"/>
+        public bool IsEntity()
+        {
+            return Id.IsEntity();
+        }
+
+        /// <inheritdoc cref="Id.AddFlags(ulong)"/>
+        public Entity AddFlags(ulong flags)
+        {
+            return Id.AddFlags(flags);
+        }
+
+        /// <inheritdoc cref="Id.RemoveFlags(ulong)"/>
+        public Entity RemoveFlags(ulong flags)
+        {
+            return Id.RemoveFlags(flags);
+        }
+
+        /// <inheritdoc cref="Id.RemoveFlags()"/>
+        public Entity RemoveFlags()
+        {
+            return Id.RemoveFlags();
+        }
+
+        /// <inheritdoc cref="Id.RemoveGeneration()"/>
+        public Entity RemoveGeneration()
+        {
+            return Id.RemoveGeneration();
+        }
+
+        /// <inheritdoc cref="Id.TypeId()"/>
+        public Entity TypeId()
+        {
+            return Id.TypeId();
+        }
+
+        /// <inheritdoc cref="Id.HasFlags(ulong)"/>
+        public bool HasFlags(ulong flags)
+        {
+            return Id.HasFlags(flags);
+        }
+
+        /// <inheritdoc cref="Id.HasFlags()"/>
+        public bool HasFlags()
+        {
+            return Id.HasFlags();
+        }
+
+        /// <inheritdoc cref="Id.Flags()"/>
+        public Entity Flags()
+        {
+            return Id.Flags();
+        }
+
+        /// <inheritdoc cref="Id.HasRelation()"/>
+        public bool HasRelation(ulong first)
+        {
+            return Id.HasRelation(first);
+        }
+
+        /// <inheritdoc cref="Id.First()"/>
+        public Entity First()
+        {
+            return Id.First();
+        }
+
+        /// <inheritdoc cref="Id.Second()"/>
+        public Entity Second()
+        {
+            return Id.Second();
+        }
+
+        /// <inheritdoc cref="Id.Str()"/>
+        public string Str()
+        {
+            return Id.Str();
+        }
+
+        /// <inheritdoc cref="Id.FlagsStr()"/>
+        public string FlagsStr()
+        {
+            return Id.FlagsStr();
+        }
+
+        /// <inheritdoc cref="Id.CsWorld()"/>
         public World CsWorld()
         {
-            return new World(World, false);
+            return Id.CsWorld();
         }
 
         /// <summary>
@@ -3036,9 +3129,27 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
+        public static implicit operator Id(Entity entity)
+        {
+            return ToId(entity);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public static ulong ToUInt64(Entity entity)
         {
             return entity.Id.Value;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static ulong ToId(Entity entity)
+        {
+            return entity.Id;
         }
 
         /// <summary>
