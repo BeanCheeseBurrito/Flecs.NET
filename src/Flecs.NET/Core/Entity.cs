@@ -152,7 +152,7 @@ namespace Flecs.NET.Core
             return Id.Flags();
         }
 
-        /// <inheritdoc cref="Id.HasRelation()"/>
+        /// <inheritdoc cref="Id.HasRelation(ulong)"/>
         public bool HasRelation(ulong first)
         {
             return Id.HasRelation(first);
@@ -1832,6 +1832,9 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity Remove<T>()
         {
+            if (typeof(T).IsEnum)
+                return ref Remove<T>(EcsWildcard);
+
             return ref Remove(Type<T>.Id(World));
         }
 

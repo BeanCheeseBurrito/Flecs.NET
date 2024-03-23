@@ -36,6 +36,13 @@ public enum StandardEnum
     Blue
 }
 
+public enum Color
+{
+    Red,
+    Green,
+    Blue
+}
+
 public struct Mass
 {
     public float Value { get; set; }
@@ -220,6 +227,18 @@ public struct O1
 }
 
 public struct O2
+{
+}
+
+public struct Movement
+{
+}
+
+public struct Standing
+{
+}
+
+public struct Walking
 {
 }
 
