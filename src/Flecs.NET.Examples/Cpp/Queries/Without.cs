@@ -26,14 +26,14 @@ public static class Cpp_Queries_Without
 
         // Create a few test entities for the Position query
         world.Entity("e1")
-            .Set<Position>(new Position(10, 20));
+            .Set<Position>(new(10, 20));
 
         world.Entity("e2")
-            .Set<Position>(new Position(10, 20));
+            .Set<Position>(new(10, 20));
 
         // This entity will not match as it has Npc
         world.Entity("e3")
-            .Set<Position>(new Position(10, 20))
+            .Set<Position>(new(10, 20))
             .Add<Npc>();
 
         // Note how the Npc tag is not part of the each signature

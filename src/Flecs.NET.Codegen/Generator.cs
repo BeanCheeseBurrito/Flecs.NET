@@ -64,8 +64,9 @@ namespace Flecs.NET.Codegen
             return $@"
                 public unsafe partial struct Entity
                 {{
-                    {GenerateEntityGetCallbacks()}
-                    {GenerateEntitySetCallbacks()}
+                    {GenerateEntityReadCallbacks()}
+                    {GenerateEntityWriteCallbacks()} 
+                    {GenerateEntityEnsureCallbacks()}
                 }}
             ";
         }
@@ -82,6 +83,7 @@ namespace Flecs.NET.Codegen
                     {GenerateFindCallbackDelegates()}
                     {GenerateFindEntityCallbackDelegates()}
                     {GenerateFindIndexCallbackDelegates()}
+                    {GenerateInvokeReadCallbackDelegates()}
                     {GenerateInvokeWriteCallbackDelegates()}
                     {GenerateInvokeEnsureCallbackDelegates()}
                 }}
@@ -102,6 +104,7 @@ namespace Flecs.NET.Codegen
                     {GenerateFindIndexInvokers()}
                     {GenerateGetPointers()}
                     {GenerateEnsurePointers()}
+                    {GenerateReadInvokers()}
                     {GenerateWriteInvokers()}
                     {GenerateEnsureInvokers()}
                 }}
@@ -389,7 +392,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEntityGetCallbacks()
+        public static string GenerateEntityReadCallbacks()
         {
             StringBuilder str = new StringBuilder();
 
@@ -398,7 +401,26 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
 
                 str.AppendLine($@"
-                    public bool Get<{typeParams}>(Ecs.InvokeWriteCallback<{typeParams}> callback)
+                    public bool Read<{typeParams}>(Ecs.InvokeReadCallback<{typeParams}> callback)
+                    {{
+                        return Invoker.InvokeRead(World, Id, callback);
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateEntityWriteCallbacks()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                str.AppendLine($@"
+                    public bool Write<{typeParams}>(Ecs.InvokeWriteCallback<{typeParams}> callback)
                     {{
                         return Invoker.InvokeWrite(World, Id, callback);
                     }}
@@ -408,7 +430,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEntitySetCallbacks()
+        public static string GenerateEntityEnsureCallbacks()
         {
             StringBuilder str = new StringBuilder();
 
@@ -417,7 +439,7 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
 
                 str.AppendLine($@"
-                    public ref Entity Set<{typeParams}>(Ecs.InvokeEnsureCallback<{typeParams}> callback)
+                    public ref Entity Ensure<{typeParams}>(Ecs.InvokeEnsureCallback<{typeParams}> callback)
                     {{
                         Invoker.InvokeEnsure(World, Id, callback);
                         return ref this;
@@ -521,6 +543,20 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
                 string funcParams = ConcatString(i + 1, ", ", index => $"ref T{index} comp{index}");
                 str.AppendLine($"public delegate bool FindIndexCallback<{typeParams}>(Iter it, int i, {funcParams});");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateInvokeReadCallbackDelegates()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+                string funcParams = ConcatString(i + 1, ", ", index => $"in T{index} comp{index}");
+                str.AppendLine($"public delegate void InvokeReadCallback<{typeParams}>({funcParams});");
             }
 
             return str.ToString();
@@ -904,6 +940,46 @@ namespace Flecs.NET.Codegen
                     {{
                         {typeIds}
                         return true;
+                    }}
+                ");
+            }
+
+            return str.ToString();
+        }
+
+        public static string GenerateReadInvokers()
+        {
+            StringBuilder str = new StringBuilder();
+
+            for (int i = 0; i < GenericCount; i++)
+            {
+                string typeParams = GenerateTypeParams(i + 1);
+
+                string callbackArgs = ConcatString(i + 1, ", ",
+                    index => $"in Managed.GetTypeRef<T{index}>(ptrs[{index}])");
+
+                str.AppendLine($@"
+                    internal static bool InvokeRead<{typeParams}>(ecs_world_t* world, ulong e, Ecs.InvokeReadCallback<{typeParams}> callback)
+                    {{
+                        ecs_record_t* r = ecs_read_begin(world, e);
+
+                        if (r == null)
+                            return false;
+
+                        ecs_table_t *table = r->table;
+
+                        if (table == null)
+                            return false;
+
+                        void** ptrs = stackalloc void*[{i + 1}];
+                        bool hasComponents = GetPointers<{typeParams}>(world, r, table, ptrs);
+
+                        if (hasComponents)
+                            callback({callbackArgs});
+
+                        ecs_read_end(r);
+
+                        return hasComponents;
                     }}
                 ");
             }

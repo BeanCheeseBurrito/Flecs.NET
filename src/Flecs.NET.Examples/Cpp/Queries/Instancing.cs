@@ -44,23 +44,23 @@ public static class Cpp_Queries_Instancing
 
         // Create a prefab with Velocity. Prefabs are not matched with queries.
         Entity prefab = world.Prefab("p")
-            .Set<Velocity>(new Velocity(1, 2));
+            .Set<Velocity>(new(1, 2));
 
         // Create a few entities that own Position & share Velocity from the prefab.
         world.Entity("e1").IsA(prefab)
-            .Set<Position>(new Position(10, 20));
+            .Set<Position>(new(10, 20));
 
         world.Entity("e2").IsA(prefab)
-            .Set<Position>(new Position(10, 20));
+            .Set<Position>(new(10, 20));
 
         // Create a few entities that own all components
         world.Entity("e3")
-            .Set<Position>(new Position(10, 20))
-            .Set<Velocity>(new Velocity(3, 4 ));
+            .Set<Position>(new(10, 20))
+            .Set<Velocity>(new(3, 4 ));
 
         world.Entity("e4")
-            .Set<Position>(new Position(10, 20))
-            .Set<Velocity>(new Velocity(4, 5));
+            .Set<Position>(new(10, 20))
+            .Set<Velocity>(new(4, 5));
 
 
         // Iterate the instanced query. Note how when a query is instanced, it needs

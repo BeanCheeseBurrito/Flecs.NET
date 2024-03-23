@@ -30,7 +30,7 @@ public static class Cpp_Prefabs_NestedPrefabs
         // Create a Wheel prefab, make sure each instantiated wheel has a private
         // copy of the TirePressure component.
         Entity wheel = world.Prefab("Wheel")
-            .SetOverride<TirePressure>(new TirePressure(32));
+            .SetOverride<TirePressure>(new(32));
 
         // Create a Car prefab with four wheels. Note how we're using the scope
         // method, which has the same effect as adding the (ChildOf, Car) pair.

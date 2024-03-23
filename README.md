@@ -21,8 +21,8 @@ using Flecs.NET.Core;
 using World ecs = World.Create();
 
 Entity entity = ecs.Entity()
-    .Set(new Position(10, 20))
-    .Set(new Velocity(1, 2));
+    .Set<Position>(new(10, 20))
+    .Set<Velocity>(new(1, 2));
 
 ecs.Each((ref Position p, ref Velocity v) =>
 {

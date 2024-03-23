@@ -63,8 +63,8 @@ file static class Cpp_GameMechanics_SceneManagement
         // Creates a start menu button
         // when we enter the menu scene.
         world.Entity("Start Button")
-            .Set<Button>(new Button("Play the Game!"))
-            .Set<Position>(new Position(50, 50))
+            .Set<Button>(new("Play the Game!"))
+            .Set<Position>(new(50, 50))
             .ChildOf(scene);
 
         world.SetPipeline(world.Get<MenuScene>().Pipeline);
@@ -84,7 +84,7 @@ file static class Cpp_GameMechanics_SceneManagement
         world.Entity("Player")
             .Set<Character>(default(Character))
             .Set<Position>(default(Position))
-            .Set<Health>(new Health(2))
+            .Set<Health>(new(2))
             .ChildOf(scene);
 
         world.SetPipeline(world.Get<GameScene>().Pipeline);
@@ -114,8 +114,8 @@ file static class Cpp_GameMechanics_SceneManagement
 
         // Set pipeline entities on the scenes
         // to easily find them later with Get().
-        world.Set<MenuScene>(new MenuScene(menu));
-        world.Set<GameScene>(new GameScene(game));
+        world.Set<MenuScene>(new(menu));
+        world.Set<GameScene>(new(game));
 
         // Observer to call scene change logic for
         // MenuScene when added to the ActiveScene.

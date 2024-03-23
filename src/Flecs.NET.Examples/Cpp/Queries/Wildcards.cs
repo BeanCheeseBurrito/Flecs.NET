@@ -23,11 +23,11 @@ public static class Cpp_Queries_Wildcards
 
         // Create a few entities that match the query
         world.Entity("Bob")
-            .SetFirst<Eats, Apples>(new Eats(10))
-            .SetFirst<Eats, Pears>(new Eats(5));
+            .SetFirst<Eats, Apples>(new(10))
+            .SetFirst<Eats, Pears>(new(5));
 
         world.Entity("Alice")
-            .SetFirst<Eats, Apples>(new Eats(4));
+            .SetFirst<Eats, Apples>(new(4));
 
         // Iterate the query with a Iter. This makes it possible to inspect
         // the pair that we are currently matched with.

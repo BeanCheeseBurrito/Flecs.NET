@@ -47,7 +47,7 @@ public static class Cpp_Observers_EnqueueEntityEvent
         widget.Enqueue<Click>();
 
         // Emit the Resize event.
-        widget.Enqueue<Resize>(new Resize(100, 200));
+        widget.Enqueue<Resize>(new(100, 200));
 
         Console.WriteLine("Events enqueued!");
 

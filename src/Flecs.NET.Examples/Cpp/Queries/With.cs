@@ -21,16 +21,16 @@ public static class Cpp_Queries_With
 
         // Create a few test entities for the Position, Npc query
         world.Entity("e1")
-            .Set<Position>(new Position(10, 20))
+            .Set<Position>(new(10, 20))
             .Add<Npc>();
 
         world.Entity("e2")
-            .Set<Position>(new Position(10, 20))
+            .Set<Position>(new(10, 20))
             .Add<Npc>();
 
         // This entity will not match as it does not have Position, Npc
         world.Entity("e3")
-            .Set<Position>(new Position(10, 20));
+            .Set<Position>(new(10, 20));
 
 
         // Note how the Npc tag is not part of the each signature

@@ -45,16 +45,16 @@ public static unsafe class Cpp_Systems_CustomRunner
 
         // Create a few test entities for a Position, Velocity query
         world.Entity("e1")
-            .Set<Position>(new Position(10, 20))
-            .Set<Velocity>(new Velocity(1, 2));
+            .Set<Position>(new(10, 20))
+            .Set<Velocity>(new(1, 2));
 
         world.Entity("e2")
-            .Set<Position>(new Position(10, 20))
-            .Set<Velocity>(new Velocity(3, 4));
+            .Set<Position>(new(10, 20))
+            .Set<Velocity>(new(3, 4));
 
         // This entity will not match as it does not have Position, Velocity
         world.Entity("e3")
-            .Set<Position>(new Position(10, 20));
+            .Set<Position>(new(10, 20));
 
         // Run the system
         routine.Run();

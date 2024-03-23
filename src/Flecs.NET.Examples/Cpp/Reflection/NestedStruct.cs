@@ -21,7 +21,7 @@ public static class Cpp_Reflection_NestedStruct
 
         // Create entity with Line component as usual.
         Entity e = world.Entity()
-            .Set<Line>(new Line(new Point(10, 20), new Point(30, 40)));
+            .Set<Line>(new(new(10, 20), new(30, 40)));
 
         // Convert Line component to flecs expression string.
         ref Line reference = ref e.Ensure<Line>();

@@ -17,8 +17,8 @@ public static class Cpp_Observers_YieldExisting
         using World world = World.Create();
 
         // Create existing entities with Position component
-        world.Entity("e1").Set<Position>(new Position(10, 20));
-        world.Entity("e2").Set<Position>(new Position(20, 30));
+        world.Entity("e1").Set<Position>(new(10, 20));
+        world.Entity("e2").Set<Position>(new(20, 30));
 
         // Create observer for Position
         world.Observer<Position>()

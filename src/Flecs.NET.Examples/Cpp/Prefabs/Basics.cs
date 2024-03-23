@@ -30,7 +30,7 @@ public static class Cpp_Prefabs_Basics
 
         // Create a SpaceShip prefab with a Defense component.
         Entity spaceShip = world.Prefab("SpaceShip")
-            .Set<Defense>(new Defense(50));
+            .Set<Defense>(new(50));
 
         // Create a prefab instance
         Entity inst = world.Entity("MySpaceship").IsA(spaceShip);
@@ -42,7 +42,7 @@ public static class Cpp_Prefabs_Basics
 
         // Because the component is shared, changing the value on the prefab will
         // also change the value for the instance:
-        spaceShip.Set<Defense>(new Defense(100));
+        spaceShip.Set<Defense>(new(100));
         Console.WriteLine($"Defense after set: {dInstance.Value}");
 
         // Prefab components can be iterated like regular components:

@@ -29,7 +29,7 @@ public static class Cpp_Observers_EnqueueEvent
         // has the Position component before emitting the event. This does not
         // trigger the observer yet.
         Entity e = world.Entity("e")
-            .Set<Position>(new Position(10, 20));
+            .Set<Position>(new(10, 20));
 
         // We can only call enqueue events while the world is deferred mode.
         world.DeferBegin();

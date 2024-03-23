@@ -51,8 +51,8 @@ file static unsafe class Cpp_Systems_SystemCtx
         for (int i = 0; i < 10; i++)
         {
             world.Entity()
-                .Set<Position>(new Position(Rand(100), Rand(100)))
-                .Set<Radius>(new Radius(Rand(10) + 1));
+                .Set<Position>(new(Rand(100), Rand(100)))
+                .Set<Radius>(new(Rand(10) + 1));
         }
 
         // Run the system
