@@ -38,7 +38,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public static Entity Null(ecs_world_t* world)
         {
-            return new Entity(world);
+            return new Entity(world, 0);
         }
 
         /// <summary>
@@ -3147,7 +3147,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static ulong ToId(Entity entity)
+        public static Id ToId(Entity entity)
         {
             return entity.Id;
         }
