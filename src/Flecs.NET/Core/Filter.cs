@@ -118,15 +118,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Create an iterator object that can be modified before iterating.
-        /// </summary>
-        /// <returns></returns>
-        public IterIterable Iter()
-        {
-            return new IterIterable(ecs_filter_iter(World, Handle), _next, _nextInstanced);
-        }
-
-        /// <summary>
         ///     Iterates the filter using the provided callback.
         /// </summary>
         /// <param name="func"></param>
@@ -157,6 +148,42 @@ namespace Flecs.NET.Core
             ecs_iter_t iter = ecs_filter_iter(World, Handle);
             while (ecs_filter_next_instanced(&iter) == 1)
                 Invoker.Each(&iter, func);
+        }
+
+        /// <summary>
+        ///     Create an iterator object that can be modified before iterating.
+        /// </summary>
+        /// <returns></returns>
+        public IterIterable Iter()
+        {
+            return new IterIterable(ecs_filter_iter(World, Handle), _next, _nextInstanced);
+        }
+
+        /// <summary>
+        ///     Return number of entities matched by iterable.
+        /// </summary>
+        /// <returns></returns>
+        public int Count()
+        {
+            return Iter().Count();
+        }
+
+        /// <summary>
+        ///     Return whether iterable has any matches.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsTrue()
+        {
+            return Iter().IsTrue();
+        }
+
+        /// <summary>
+        ///     Return first entity matched by iterable.
+        /// </summary>
+        /// <returns></returns>
+        public Entity First()
+        {
+            return Iter().First();
         }
 
         /// <summary>

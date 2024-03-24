@@ -43,7 +43,7 @@ public static class Cpp_Systems_NoReadonly
                     Entity plate = it.Entity(i);
 
                     // Find an available waiter
-                    Entity waiter = qWaiter.Iter().First();
+                    Entity waiter = qWaiter.First();
 
                     if (waiter != 0)
                     {
