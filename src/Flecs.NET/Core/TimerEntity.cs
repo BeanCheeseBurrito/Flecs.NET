@@ -16,6 +16,16 @@ namespace Flecs.NET.Core
         public ref Entity Entity => ref _entity;
 
         /// <summary>
+        ///     A reference to the id.
+        /// </summary>
+        public ref Id Id => ref _entity.Id;
+
+        /// <summary>
+        ///     A reference to the world.
+        /// </summary>
+        public ref ecs_world_t* World => ref _entity.World;
+
+        /// <summary>
         ///     Creates a timer from the entity id.
         /// </summary>
         /// <param name="id"></param>
@@ -122,7 +132,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts a <see cref="TimerEntity"/> instance to its entity id.
+        ///     Converts a <see cref="TimerEntity"/> instance to its integer id.
         /// </summary>
         /// <param name="timerEntity"></param>
         /// <returns></returns>
@@ -132,11 +142,51 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts an<see cref="TimerEntity"/> instance to its entity id.
+        ///     Converts a <see cref="TimerEntity"/> instance to its id.
+        /// </summary>
+        /// <param name="timerEntity"></param>
+        /// <returns></returns>
+        public static implicit operator Id(TimerEntity timerEntity)
+        {
+            return ToId(timerEntity);
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="TimerEntity"/> instance to its entity.
+        /// </summary>
+        /// <param name="timerEntity"></param>
+        /// <returns></returns>
+        public static implicit operator Entity(TimerEntity timerEntity)
+        {
+            return ToEntity(timerEntity);
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="TimerEntity"/> instance to its integer id.
         /// </summary>
         /// <param name="timerEntity"></param>
         /// <returns></returns>
         public static ulong ToUInt64(TimerEntity timerEntity)
+        {
+            return timerEntity.Entity;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="TimerEntity"/> instance to its id.
+        /// </summary>
+        /// <param name="timerEntity"></param>
+        /// <returns></returns>
+        public static Id ToId(TimerEntity timerEntity)
+        {
+            return timerEntity.Id;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="TimerEntity"/> instance to its entity.
+        /// </summary>
+        /// <param name="timerEntity"></param>
+        /// <returns></returns>
+        public static Entity ToEntity(TimerEntity timerEntity)
         {
             return timerEntity.Entity;
         }

@@ -45,7 +45,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts an <see cref="Pipeline"/> instance to its entity id.
+        ///     Converts a <see cref="Pipeline"/> instance to its integer id.
         /// </summary>
         /// <param name="pipeline"></param>
         /// <returns></returns>
@@ -55,11 +55,51 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts an <see cref="Pipeline"/> instance to its entity id.
+        ///     Converts a <see cref="Pipeline"/> instance to its id.
+        /// </summary>
+        /// <param name="pipeline"></param>
+        /// <returns></returns>
+        public static implicit operator Id(Pipeline pipeline)
+        {
+            return ToId(pipeline);
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Pipeline"/> instance to its entity.
+        /// </summary>
+        /// <param name="pipeline"></param>
+        /// <returns></returns>
+        public static implicit operator Entity(Pipeline pipeline)
+        {
+            return ToEntity(pipeline);
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Pipeline"/> instance to its integer id.
         /// </summary>
         /// <param name="pipeline"></param>
         /// <returns></returns>
         public static ulong ToUInt64(Pipeline pipeline)
+        {
+            return pipeline.Entity;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Pipeline"/> instance to its id.
+        /// </summary>
+        /// <param name="pipeline"></param>
+        /// <returns></returns>
+        public static Id ToId(Pipeline pipeline)
+        {
+            return pipeline.Id;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Pipeline"/> instance to its entity.
+        /// </summary>
+        /// <param name="pipeline"></param>
+        /// <returns></returns>
+        public static Entity ToEntity(Pipeline pipeline)
         {
             return pipeline.Entity;
         }

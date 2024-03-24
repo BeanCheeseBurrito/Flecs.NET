@@ -3120,6 +3120,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts an <see cref="Entity"/> instance to its integer id.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -3129,6 +3130,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts an <see cref="Entity"/> instance to its id.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -3138,6 +3140,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts an <see cref="Entity"/> instance to its integer id.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -3147,6 +3150,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts an <see cref="Entity"/> instance to its id.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>

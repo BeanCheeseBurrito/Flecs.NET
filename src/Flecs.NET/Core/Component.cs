@@ -276,6 +276,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts a <see cref="Component{TComponent}"/> instance to its integer id.
         /// </summary>
         /// <param name="component"></param>
         /// <returns></returns>
@@ -285,12 +286,53 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts a <see cref="Component{TComponent}"/> instance to its id.
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public static implicit operator Id(Component<TComponent> component)
+        {
+            return ToId(component);
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Component{TComponent}"/> instance to its entity.
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public static implicit operator Entity(Component<TComponent> component)
+        {
+            return ToEntity(component);
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Component{TComponent}"/> instance to its integer id.
         /// </summary>
         /// <param name="component"></param>
         /// <returns></returns>
         public static ulong ToUInt64(Component<TComponent> component)
         {
             return component.Entity.Id.Value;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Component{TComponent}"/> instance to its id.
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public static Id ToId(Component<TComponent> component)
+        {
+            return component.Id;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Component{TComponent}"/> instance to its entity.
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public static Entity ToEntity(Component<TComponent> component)
+        {
+            return component.Entity;
         }
 
         /// <summary>

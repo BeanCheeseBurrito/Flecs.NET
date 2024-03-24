@@ -539,7 +539,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity sys = world.Routine("::ns.MySystem")
-                .Each((Entity e) => { }).Entity;
+                .Each((Entity e) => { });
 
             Assert.Equal("MySystem", sys.Name());
 

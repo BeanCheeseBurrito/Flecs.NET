@@ -16,6 +16,11 @@ namespace Flecs.NET.Core
         public ref Entity Entity => ref _entity;
 
         /// <summary>
+        ///     Reference to entity.
+        /// </summary>
+        public ref Id Id => ref _entity.Id;
+
+        /// <summary>
         ///     Reference to world.
         /// </summary>
         public ref ecs_world_t* World => ref _entity.World;
@@ -40,7 +45,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts an <see cref="Alert"/> instance to its entity id.
+        ///     Converts an <see cref="Alert"/> instance to its integer id.
         /// </summary>
         /// <param name="alert"></param>
         /// <returns></returns>
@@ -50,11 +55,51 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts an <see cref="Alert"/> instance to its entity id.
+        ///     Converts an <see cref="Alert"/> instance to its id.
+        /// </summary>
+        /// <param name="alert"></param>
+        /// <returns></returns>
+        public static implicit operator Id(Alert alert)
+        {
+            return ToId(alert);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Alert"/> instance to its entity.
+        /// </summary>
+        /// <param name="alert"></param>
+        /// <returns></returns>
+        public static implicit operator Entity(Alert alert)
+        {
+            return ToEntity(alert);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Alert"/> instance to its integer id.
         /// </summary>
         /// <param name="alert"></param>
         /// <returns></returns>
         public static ulong ToUInt64(Alert alert)
+        {
+            return alert.Entity;
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Alert"/> instance to its id.
+        /// </summary>
+        /// <param name="alert"></param>
+        /// <returns></returns>
+        public static Id ToId(Alert alert)
+        {
+            return alert.Id;
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Alert"/> instance to its entity.
+        /// </summary>
+        /// <param name="alert"></param>
+        /// <returns></returns>
+        public static Entity ToEntity(Alert alert)
         {
             return alert.Entity;
         }

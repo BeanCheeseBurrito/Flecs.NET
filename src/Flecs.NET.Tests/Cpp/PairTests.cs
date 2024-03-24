@@ -729,9 +729,9 @@ namespace Flecs.NET.Tests.Cpp
             e.Each(pair, obj =>
             {
                 if (count == 0)
-                    Assert.True(obj == pos);
+                    Assert.True(obj == (Entity)pos);
                 else if (count == 1)
-                    Assert.True(obj == vel);
+                    Assert.True(obj == (Entity)vel);
                 else
                     Assert.True(false);
 
@@ -758,9 +758,9 @@ namespace Flecs.NET.Tests.Cpp
             e.Each<Pair>(obj =>
             {
                 if (count == 0)
-                    Assert.True(obj == pos);
+                    Assert.True(obj == (Entity)pos);
                 else if (count == 1)
-                    Assert.True(obj == vel);
+                    Assert.True(obj == (Entity)vel);
                 else
                     Assert.True(false);
 

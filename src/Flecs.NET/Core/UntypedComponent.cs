@@ -330,7 +330,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts an <see cref="UntypedComponent"/> instance to its flecs id.
+        ///     Converts an <see cref="UntypedComponent"/> instance to its integer id.
         /// </summary>
         /// <param name="untypedComponent"></param>
         /// <returns></returns>
@@ -340,13 +340,53 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts an <see cref="UntypedComponent"/> instance to its flecs id.
+        ///     Converts an <see cref="UntypedComponent"/> instance to its id.
+        /// </summary>
+        /// <param name="untypedComponent"></param>
+        /// <returns></returns>
+        public static implicit operator Id(UntypedComponent untypedComponent)
+        {
+            return ToId(untypedComponent);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="UntypedComponent"/> instance to its entity.
+        /// </summary>
+        /// <param name="untypedComponent"></param>
+        /// <returns></returns>
+        public static implicit operator Entity(UntypedComponent untypedComponent)
+        {
+            return ToEntity(untypedComponent);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="UntypedComponent"/> instance to its integer id.
         /// </summary>
         /// <param name="untypedComponent"></param>
         /// <returns></returns>
         public static ulong ToUInt64(UntypedComponent untypedComponent)
         {
             return untypedComponent.Id;
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="UntypedComponent"/> instance to its id.
+        /// </summary>
+        /// <param name="untypedComponent"></param>
+        /// <returns></returns>
+        public static Id ToId(UntypedComponent untypedComponent)
+        {
+            return untypedComponent.Id;
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="UntypedComponent"/> instance to its entity.
+        /// </summary>
+        /// <param name="untypedComponent"></param>
+        /// <returns></returns>
+        public static Entity ToEntity(UntypedComponent untypedComponent)
+        {
+            return untypedComponent.Entity;
         }
 
         /// <summary>

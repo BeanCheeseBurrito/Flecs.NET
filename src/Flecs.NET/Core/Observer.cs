@@ -103,7 +103,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts an <see cref="Observer"/> instance to its entity id.
+        ///     Converts an <see cref="Observer"/> instance to its integer id.
         /// </summary>
         /// <param name="observer"></param>
         /// <returns></returns>
@@ -113,11 +113,51 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts an <see cref="Observer"/> instance to its entity id.
+        ///     Converts an <see cref="Observer"/> instance to its id.
+        /// </summary>
+        /// <param name="observer"></param>
+        /// <returns></returns>
+        public static implicit operator Id(Observer observer)
+        {
+            return ToId(observer);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Observer"/> instance to its entity.
+        /// </summary>
+        /// <param name="observer"></param>
+        /// <returns></returns>
+        public static implicit operator Entity(Observer observer)
+        {
+            return ToEntity(observer);
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Observer"/> instance to its integer id.
         /// </summary>
         /// <param name="observer"></param>
         /// <returns></returns>
         public static ulong ToUInt64(Observer observer)
+        {
+            return observer.Entity;
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Observer"/> instance to its id.
+        /// </summary>
+        /// <param name="observer"></param>
+        /// <returns></returns>
+        public static Id ToId(Observer observer)
+        {
+            return observer.Id;
+        }
+
+        /// <summary>
+        ///     Converts an <see cref="Observer"/> instance to its entity.
+        /// </summary>
+        /// <param name="observer"></param>
+        /// <returns></returns>
+        public static Entity ToEntity(Observer observer)
         {
             return observer.Entity;
         }

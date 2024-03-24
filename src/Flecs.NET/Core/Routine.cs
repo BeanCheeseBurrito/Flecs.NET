@@ -242,7 +242,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts an <see cref="Routine"/> instance to its entity id.
+        ///     Converts a <see cref="Routine"/> instance to its integer id.
         /// </summary>
         /// <param name="routine"></param>
         /// <returns></returns>
@@ -252,11 +252,51 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Converts an <see cref="Routine"/> instance to its entity id.
+        ///     Converts a <see cref="Routine"/> instance to its id.
+        /// </summary>
+        /// <param name="routine"></param>
+        /// <returns></returns>
+        public static implicit operator Id(Routine routine)
+        {
+            return ToId(routine);
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Routine"/> instance to its entity.
+        /// </summary>
+        /// <param name="routine"></param>
+        /// <returns></returns>
+        public static implicit operator Entity(Routine routine)
+        {
+            return ToEntity(routine);
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Routine"/> instance to its integer id.
         /// </summary>
         /// <param name="routine"></param>
         /// <returns></returns>
         public static ulong ToUInt64(Routine routine)
+        {
+            return routine.Entity;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Routine"/> instance to its id.
+        /// </summary>
+        /// <param name="routine"></param>
+        /// <returns></returns>
+        public static Id ToId(Routine routine)
+        {
+            return routine.Id;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Routine"/> instance to its entity.
+        /// </summary>
+        /// <param name="routine"></param>
+        /// <returns></returns>
+        public static Entity ToEntity(Routine routine)
         {
             return routine.Entity;
         }

@@ -1869,7 +1869,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ulong Import<T>() where T : IFlecsModule, new()
+        public Entity Import<T>() where T : IFlecsModule, new()
         {
             return Core.Module.Import<T>(this);
         }
