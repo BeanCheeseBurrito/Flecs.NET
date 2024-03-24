@@ -4318,29 +4318,6 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, e4.Depth<Rel>());
         }
 
-        //
-        // [Fact]
-        // void to_view() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity();
-        //     flecs.entity_view ev = e.view();
-        //     Assert.True(e == ev);
-        // }
-        //
-        // [Fact]
-        // void to_view_from_stage() {
-        //     using World world = World.Create();
-        //
-        //     var stage = world.get_stage(0);
-        //
-        //     Entity e = stage.Entity();
-        //     flecs.entity_view ev = e.view();
-        //     Assert.True(e == ev);
-        //     Assert.True(e.world() == stage);
-        //     Assert.True(ev.world() == world);
-        // }
-        //
         [Fact]
         private void SetAlias()
         {
@@ -4352,27 +4329,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == world.Lookup("parent.child"));
             Assert.True(e == world.Lookup("parent_child"));
         }
-        //
-        // [Fact]
-        // void emplace_w_observer() {
-        //     using World world = World.Create();
-        //
-        //     world.observer<Position>()
-        //         .event(flecs.OnAdd)
-        //         .each((Entity e, Position&) {
-        //             e.emplace<Velocity>(1.0f, 2.0f);
-        //         });
-        //
-        //     Entity e = world.Entity()
-        //         .emplace<Position>(10.0f, 20.0f);
-        //
-        //     Assert.True(e.Has<Position>());
-        //     Assert.True(e.Has<Velocity>());
-        //     Assert.Equal(e.GetPtr<Velocity>()->x, 1);
-        //     Assert.Equal(e.GetPtr<Velocity>()->y, 2);
-        //     Assert.Equal(e.GetPtr<Position>()->x, 10);
-        //     Assert.Equal(e.GetPtr<Position>()->y, 20);
-        // }
+
         //
         // [Fact]
         // void scoped_world() {

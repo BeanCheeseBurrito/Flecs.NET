@@ -1479,6 +1479,7 @@ namespace Flecs.NET.Core
         ///     Get default id.
         /// </summary>
         /// <returns></returns>
+        [SuppressMessage("Usage", "CA1822")]
         public Id Id()
         {
             return default;

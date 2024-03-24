@@ -301,6 +301,14 @@ public struct EntityType
 {
 }
 
+public struct A
+{
+}
+
+public struct B
+{
+}
+
 public struct IdA
 {
 }
