@@ -76,6 +76,30 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Iterates terms with the provided callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        public void EachTerm(Ecs.TermCallback callback)
+        {
+            for (int i = 0; i < Handle->term_count; i++)
+            {
+                Term term = new Term(World, Handle->terms[i]);
+                callback(ref term);
+            }
+        }
+
+        /// <summary>
+        ///     Gets term at provided index.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Term Term(int index)
+        {
+            Ecs.Assert(index < Handle->term_count, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
+            return new Term(World, Handle->terms[index]);
+        }
+
+        /// <summary>
         ///     Returns the field count of the filter.
         /// </summary>
         /// <returns></returns>

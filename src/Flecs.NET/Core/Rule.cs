@@ -74,6 +74,25 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Iterates terms with the provided callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        public void EachTerm(Ecs.TermCallback callback)
+        {
+            Filter().EachTerm(callback);
+        }
+
+        /// <summary>
+        ///     Gets term at provided index.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Term Term(int index)
+        {
+            return Filter().Term(index);
+        }
+
+        /// <summary>
         ///     Returns the filter for the rule.
         /// </summary>
         /// <returns></returns>

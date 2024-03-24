@@ -312,6 +312,11 @@ namespace Flecs.NET.Core
         ///     A callback that takes a reference to a world.
         /// </summary>
         public delegate void WorldCallback(ref World world);
+
+        /// <summary>
+        ///     A callback that takes a reference to a term.
+        /// </summary>
+        public delegate void TermCallback(ref Term term);
     }
 
     // Built-in global entities, tags, and flags.
