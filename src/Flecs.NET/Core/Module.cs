@@ -59,7 +59,7 @@ namespace Flecs.NET.Core
             ecs_set_scope(world, scope);
 
             using NativeString nativeSymbol = (NativeString)symbol;
-            ulong moduleEntity = ecs_lookup_symbol(world, nativeSymbol, Macros.True, Macros.False);
+            ulong moduleEntity = ecs_lookup_symbol(world, nativeSymbol, Macros.False, Macros.False);
             Ecs.Assert(moduleEntity != 0, $"{nameof(ECS_MODULE_UNDEFINED)} {symbol}");
             Ecs.Assert(moduleEntity == moduleComponent, nameof(ECS_INTERNAL_ERROR));
 

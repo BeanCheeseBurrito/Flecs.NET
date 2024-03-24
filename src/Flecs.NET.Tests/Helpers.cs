@@ -148,6 +148,102 @@ public struct Pod
     }
 }
 
+namespace Namespace
+{
+    public struct NestedNameSpaceType { }
+
+    public struct NestedModule : IFlecsModule
+    {
+        public void InitModule(ref World world)
+        {
+            world.Module<NestedModule>();
+            world.Component<Velocity>("Velocity");
+        }
+    }
+
+    public struct SimpleModule : IFlecsModule
+    {
+        public void InitModule(ref World world)
+        {
+            world.Module<SimpleModule>();
+            world.Import<NestedModule>();
+            world.Component<Position>("Position");
+        }
+    }
+
+    public struct NestedTypeModule : IFlecsModule
+    {
+        public struct NestedType { }
+
+        public void InitModule(ref World world)
+        {
+            world.Module<NestedTypeModule>();
+            world.Component<NestedType>();
+            world.Component<NestedNameSpaceType>();
+        }
+    }
+
+    public struct NamedModule : IFlecsModule
+    {
+        public void InitModule(ref World world)
+        {
+            world.Module<NamedModule>("::my_scope.NamedModule");
+            world.Component<Position>("Position");
+        }
+    }
+
+    public struct ImplicitModule : IFlecsModule
+    {
+        public void InitModule(ref World world)
+        {
+            world.Component<Position>();
+        }
+    }
+
+    public struct NamedModuleInRoot : IFlecsModule
+    {
+        public void InitModule(ref World world)
+        {
+            world.Module<NamedModuleInRoot>("::NamedModuleInRoot");
+            world.Component<Position>();
+        }
+    }
+
+    public struct ReparentModule : IFlecsModule
+    {
+        public void InitModule(ref World world)
+        {
+            Entity m = world.Module<ReparentModule>();
+            m.ChildOf(world.Entity("::parent"));
+
+            Entity other = world.Entity("::Namespace.ReparentModule");
+            Assert.True(other != 0);
+            Assert.True(other != m);
+        }
+    }
+}
+
+public struct Module : IFlecsModule
+{
+    public void InitModule(ref World world)
+    {
+        world.Module<Module>();
+        world.Component<Position>();
+    }
+}
+
+namespace NamespaceLvl1
+{
+    namespace NamespaceLvl2
+    {
+        public struct StructLvl1
+        {
+            public struct StructLvl21 { }
+            public struct StructLvl22 { }
+        }
+    }
+}
+
 public struct PositionInitialized
 {
     public float X;
