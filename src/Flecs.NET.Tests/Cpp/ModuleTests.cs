@@ -228,31 +228,30 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(u1 == u2);
         }
 
-        // TODO: Finish this after implementing .Count() for iterables
-        // [Fact]
-        // private void LookupModuleAfterReparent()
-        // {
-        //     using World world = World.Create();
-        //
-        //     Entity m = world.Import<NestedModule>();
-        //     Assert.Equal("::Namespace.NestedModule", m.Path());
-        //     Assert.True(world.Lookup("::Namespace.NestedModule") == m);
-        //
-        //     Entity p = world.Entity("p");
-        //     m.ChildOf(p);
-        //     Assert.Equal("::p.NestedModule", m.Path());
-        //     Assert.True(world.Lookup("::p.NestedModule") == m);
-        //
-        //     Assert.True(world.Lookup("::Namespace.NestedModule") == 0);
-        //
-        //     Entity e = world.Entity("::Namespace.NestedModule");
-        //     Assert.True(e != m);
-        //
-        //     Assert.Equal(world.FilterBuilder()
-        //         .Expr("(ChildOf, p.NestedModule)").Build().Count(), 1);
-        //     Assert.Equal(world.FilterBuilder()
-        //         .Expr("(ChildOf, ns.NestedModule)").Build().Count(), 0);
-        // }
+        [Fact]
+        private void LookupModuleAfterReparent()
+        {
+            using World world = World.Create();
+
+            Entity m = world.Import<NestedModule>();
+            Assert.Equal("::Namespace.NestedModule", m.Path());
+            Assert.True(world.Lookup("::Namespace.NestedModule") == m);
+
+            Entity p = world.Entity("p");
+            m.ChildOf(p);
+            Assert.Equal("::p.NestedModule", m.Path());
+            Assert.True(world.Lookup("::p.NestedModule") == m);
+
+            Assert.True(world.Lookup("::Namespace.NestedModule") == 0);
+
+            Entity e = world.Entity("::Namespace.NestedModule");
+            Assert.True(e != m);
+
+            Assert.Equal(world.FilterBuilder()
+                .Expr("(ChildOf, p.NestedModule)").Build().Count(), 1);
+            Assert.Equal(world.FilterBuilder()
+                .Expr("(ChildOf, Namespace.NestedModule)").Build().Count(), 0);
+        }
 
         [Fact]
         private void ReparentModuleInCtor()
