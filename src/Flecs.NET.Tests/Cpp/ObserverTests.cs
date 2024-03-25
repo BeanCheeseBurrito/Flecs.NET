@@ -882,5 +882,20 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e3.Has<Mass>());
             Assert.True(e3.Has<Velocity>());
         }
+
+        [Fact]
+        private void NameFromRoot()
+        {
+            using World world = World.Create();
+
+            Entity sys = world.Observer<Position>("::ns.MySystem")
+                .Event(Ecs.OnSet)
+                .Each((ref Position _) =>{ });
+
+            Assert.Equal("MySystem", sys.Name());
+
+            Entity ns = world.Entity("::ns");
+            Assert.True(ns == sys.Parent());
+        }
     }
 }
