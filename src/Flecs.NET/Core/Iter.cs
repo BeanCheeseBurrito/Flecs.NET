@@ -435,10 +435,10 @@ namespace Flecs.NET.Core
             Entity expected = new Entity(iter->world, termId);
             Entity actual = new Entity(iter->world, typeId);
 
-            string iteratedName = iter->system == 0 ? "" : $"Query: {new Entity(iter->world, iter->system)}";
+            string iteratedName = iter->system == 0 ? "" : $"[Query Name]: {new Entity(iter->world, iter->system)}";
 
             Ecs.Error(
-                $"Type argument mismatch at term index {index}.\nExpected Term: {expected}\nProvided Term: {actual}\n{iteratedName}");
+                $"Type argument mismatch at term index {index}.\n[Expected Term]: {expected}\n[Provided Term]: {actual}\n{iteratedName}");
         }
 
         /// <summary>

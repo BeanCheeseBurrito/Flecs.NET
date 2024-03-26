@@ -26,30 +26,179 @@ namespace Flecs.NET.Core
     // Debug
     public static partial class Ecs
     {
+#if NETCOREAPP3_0_OR_GREATER
         /// <summary>
         ///     Debug assert.
         /// </summary>
         /// <param name="condition"></param>
         /// <param name="message"></param>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <param name="line"></param>
+        /// <param name="member"></param>
+        /// <param name="file"></param>
+        /// <param name="conditionStr"></param>
         [Conditional("DEBUG")]
-        public static void Assert(bool condition, string message = "")
+        public static void Assert(
+            bool condition,
+            string message = "",
+            [CallerLineNumber] int line = default,
+            [CallerMemberName] string member = "",
+            [CallerFilePath] string file = "",
+            [CallerArgumentExpression("condition")] string conditionStr = "")
         {
             if (condition)
                 return;
 
-            string formatted = $"[Flecs.NET Assertion]: {message}";
-            Debug.Assert(condition, formatted);
-            throw new InvalidOperationException(formatted); // TODO: Figure out better way to handle unity.
+            throw new AssertionException($"\n[Flecs.NET Assertion Failed]: {member}, Line {line}, {file}\n[Condition]: {conditionStr}\n[Assertion Message]: {message}");
         }
 
         /// <summary>
-        ///     Debug fail.
+        ///     Debug assert.
         /// </summary>
         /// <param name="message"></param>
-        public static void Error(string message)
+        /// <param name="line"></param>
+        /// <param name="member"></param>
+        /// <param name="file"></param>
+        [Conditional("DEBUG")]
+        public static void Error(
+            string message = "",
+            [CallerLineNumber] int line = default,
+            [CallerMemberName] string member = "",
+            [CallerFilePath] string file = "")
         {
-            Debug.Fail($"[Flecs.NET Error]: {message}");
+            throw new ErrorException($"\n[Flecs.NET Error]: {member}, Line {line}, {file}\n[Error Message]: {message}");
+        }
+#else
+        /// <summary>
+        ///     Debug assert.
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="message"></param>
+        /// <param name="line"></param>
+        /// <param name="member"></param>
+        /// <param name="file"></param>
+        [Conditional("DEBUG")]
+        public static void Assert(
+            bool condition,
+            string message = "",
+            [CallerLineNumber] int line = default,
+            [CallerMemberName] string member = "",
+            [CallerFilePath] string file = "")
+        {
+            if (condition)
+                return;
+
+            throw new AssertionException($"\n[Flecs.NET Assertion Failed]: {member}, Line {line}, {file}\n[Assertion Message]: {message}");
+        }
+
+        /// <summary>
+        ///     Debug assert.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="line"></param>
+        /// <param name="member"></param>
+        /// <param name="file"></param>
+        [Conditional("DEBUG")]
+        public static void Error(
+            string message = "",
+            [CallerLineNumber] int line = default,
+            [CallerMemberName] string member = "",
+            [CallerFilePath] string file = "")
+        {
+            throw new ErrorException($"\n[Flecs.NET Error]: {member}, Line {line}, {file}\n[Error Message]: {message}");
+        }
+#endif
+
+        /// <summary>
+        ///     Flecs.NET assertion exception.
+        /// </summary>
+        [Serializable]
+        public class AssertionException : Exception
+        {
+            /// <summary>
+            ///
+            /// </summary>
+            public AssertionException()
+            {
+            }
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <param name="message"></param>
+            public AssertionException(string message) : base(message)
+            {
+            }
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <param name="message"></param>
+            /// <param name="innerException"></param>
+            public AssertionException(string message, Exception innerException) : base(message, innerException)
+            {
+            }
+        }
+
+        /// <summary>
+        ///     Flecs.NET error exception.
+        /// </summary>
+        [Serializable]
+        public class ErrorException : Exception
+        {
+            /// <summary>
+            ///
+            /// </summary>
+            public ErrorException()
+            {
+            }
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <param name="message"></param>
+            public ErrorException(string message) : base(message)
+            {
+            }
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <param name="message"></param>
+            /// <param name="innerException"></param>
+            public ErrorException(string message, Exception innerException) : base(message, innerException)
+            {
+            }
+        }
+
+        /// <summary>
+        ///     Flecs native exception.
+        /// </summary>
+        [Serializable]
+        public class NativeException : Exception
+        {
+            /// <summary>
+            ///
+            /// </summary>
+            public NativeException()
+            {
+            }
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <param name="message"></param>
+            public NativeException(string message) : base(message)
+            {
+            }
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <param name="message"></param>
+            /// <param name="innerException"></param>
+            public NativeException(string message, Exception innerException) : base(message, innerException)
+            {
+            }
         }
     }
 

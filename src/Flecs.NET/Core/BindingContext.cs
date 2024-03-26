@@ -230,8 +230,7 @@ namespace Flecs.NET.Core
 
         private static void OsApiAbort()
         {
-            Console.WriteLine(Environment.StackTrace);
-            Marshal.GetDelegateForFunctionPointer<Action>(FlecsInternal.OsAbortNative)();
+            throw new Ecs.NativeException("Application aborted from native code.");
         }
 
         private static void FreeCallback(ref Callback dest)
