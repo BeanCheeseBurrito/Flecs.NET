@@ -70,7 +70,7 @@ namespace Flecs.NET.Core
         ///     Get table type.
         /// </summary>
         /// <returns></returns>
-        public Types Types()
+        public Types Type()
         {
             return new Types(World, ecs_table_get_type(Handle));
         }

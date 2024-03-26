@@ -52,6 +52,13 @@ public enum Color
     Blue
 }
 
+public enum Number
+{
+    One,
+    Two,
+    Three
+}
+
 public struct Mass
 {
     public float Value { get; set; }
@@ -350,6 +357,18 @@ public struct O1
 }
 
 public struct O2
+{
+}
+
+public struct T1
+{
+}
+
+public struct T2
+{
+}
+
+public struct T3
 {
 }
 

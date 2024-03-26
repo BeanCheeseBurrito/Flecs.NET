@@ -385,6 +385,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Lookup(string name, bool searchPath = true)
         {
+
             using NativeString nativeName = (NativeString)name;
 
             return new Entity(
