@@ -2,8 +2,8 @@
     <PropertyGroup>
         <IsPackable>false</IsPackable>
         <NoWarn>$(NoWarn);NETSDK1138</NoWarn>
-        <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
-        <Deterministic Condition="'$(GITHUB_ACTIONS)' == 'true'">true</Deterministic>
+        <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true' And '$(ContinuousIntegrationBuild)' == ''">true</ContinuousIntegrationBuild>
+        <Deterministic Condition="'$(GITHUB_ACTIONS)' == 'true' And '$(Deterministic)' == ''">true</Deterministic>
     </PropertyGroup>
 
     <PropertyGroup>
