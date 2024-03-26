@@ -307,6 +307,69 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Get pointer to component array by component.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T* GetPtr<T>()
+        {
+            Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (T*)GetPtr(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Get pointer to component array by pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetPtr<TFirst>(ulong second)
+        {
+            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            ulong pair = Macros.Pair<TFirst>(second, World);
+            return (TFirst*)GetPtr(pair);
+        }
+
+        /// <summary>
+        ///     Get pointer to component array by pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetFirstPtr<TFirst, TSecond>()
+        {
+            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            return (TFirst*)GetPtr(pair);
+        }
+
+        /// <summary>
+        ///     Get pointer to component array by pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetSecondPtr<TFirst, TSecond>()
+        {
+            Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            return (TSecond*)GetPtr(pair);
+        }
+
+        /// <summary>
+        ///     Get pointer to component array by pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetSecondPtr<TSecond>(ulong first)
+        {
+            Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            ulong pair = Macros.PairSecond<TSecond>(first, World);
+            return (TSecond*)GetPtr(pair);
+        }
+
+        /// <summary>
         ///     Get managed column to component array by component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -315,6 +378,19 @@ namespace Flecs.NET.Core
         {
             Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             return new Field<T>(GetPtr(Type<T>.Id(World)), ColumnSize(ColumnIndex<T>()));
+        }
+
+        /// <summary>
+        ///     Get managed column to component array by pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public Field<TFirst> Get<TFirst>(ulong second)
+        {
+            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            ulong pair = Macros.Pair<TFirst>(second, World);
+            return new Field<TFirst>(GetPtr(pair), ColumnSize(ColumnIndex<TFirst>()));
         }
 
         /// <summary>
