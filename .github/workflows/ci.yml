@@ -8,13 +8,13 @@ on:
       push-packages:
         description: 'Push nuget packages'
         required: true
-        default: 'false'
+        default: false
         type: boolean
 
       use-auto-generated-version:
         description: 'Use auto-generated version'
         required: true
-        default: 'true'
+        default: true
         type: boolean
 
       nuget-registry:
@@ -80,11 +80,11 @@ jobs:
       shell: bash
       run: |
         if [ '${{ matrix.os }}' == 'macos-latest' ]; then
-          dotnet build --property:Deterministic=true -c Debug   --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
-          dotnet build --property:Deterministic=true -c Release --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
+          dotnet build -c Debug   --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
+          dotnet build -c Release --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
         else
-          dotnet build --property:Deterministic=true -c Debug
-          dotnet build --property:Deterministic=true -c Release
+          dotnet build -c Debug
+          dotnet build -c Release
         fi
 
     - name: Run Tests

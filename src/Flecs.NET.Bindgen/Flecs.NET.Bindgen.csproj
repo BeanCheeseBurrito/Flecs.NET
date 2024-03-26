@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <ContinuousIntegrationBuild>false</ContinuousIntegrationBuild>
+        <Deterministic>false</Deterministic>
         <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">$(NETCoreSdkRuntimeIdentifier)</RuntimeIdentifier>
         <NoWarn>$(NoWarn);NETSDK1201</NoWarn>
     </PropertyGroup>
