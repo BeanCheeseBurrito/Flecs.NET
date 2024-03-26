@@ -530,26 +530,21 @@ namespace Flecs.NET.Core
         public T* GetPtr<T>() where T : unmanaged
         {
             ulong componentId = Type<T>.Id(World);
-            Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return (T*)ecs_get_id(World, Id, componentId);
-        }
 
-        /// <summary>
-        ///     Get pointer to component value.
-        /// </summary>
-        /// <typeparam name="TEnum"></typeparam>
-        /// <returns></returns>
-        public TEnum* GetEnumPtr<TEnum>() where TEnum : unmanaged, Enum
-        {
-            ulong enumTypeId = Type<TEnum>.Id(World);
-            ulong target = ecs_get_target(World, Id, enumTypeId, 0);
+            if (!typeof(T).IsEnum)
+            {
+                Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+                return (T*)ecs_get_id(World, Id, componentId);
+            }
+
+            ulong target = ecs_get_target(World, Id, componentId, 0);
 
             if (target == 0)
-                return (TEnum*)ecs_get_id(World, Id, enumTypeId);
+                return (T*)ecs_get_id(World, Id, componentId);
 
-            void* ptr = ecs_get_id(World, enumTypeId, target);
+            void* ptr = ecs_get_id(World, target, componentId);
             Ecs.Assert(ptr != null, "Missing enum constant value");
-            return (TEnum*)ptr;
+            return (T*)ptr;
         }
 
         /// <summary>
@@ -628,28 +623,22 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref readonly T Get<T>()
         {
-            ulong id = Type<T>.Id(World);
-            Ecs.Assert(!typeof(T).IsEnum, "Cannot use .Get<T>() on an enum type. Use .GetEnum<T>() instead.");
-            Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return ref Managed.GetTypeRef<T>(ecs_get_id(World, Id, id));
-        }
+            ulong componentId = Type<T>.Id(World);
 
-        /// <summary>
-        ///     Get managed reference to component value.
-        /// </summary>
-        /// <typeparam name="TEnum"></typeparam>
-        /// <returns></returns>
-        public ref readonly TEnum GetEnum<TEnum>() where TEnum : Enum
-        {
-            ulong r = Type<TEnum>.Id(World);
-            ulong c = ecs_get_target(World, Id, r, 0);
+            if (!typeof(T).IsEnum)
+            {
+                Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+                return ref Managed.GetTypeRef<T>(ecs_get_id(World, Id, componentId));
+            }
 
-            if (c == 0)
-                return ref Managed.GetTypeRef<TEnum>(ecs_get_id(World, Id, r));
+            ulong target = ecs_get_target(World, Id, componentId, 0);
 
-            void* ptr = ecs_get_id(World, c, r);
+            if (target == 0)
+                return ref Managed.GetTypeRef<T>(ecs_get_id(World, Id, componentId));
+
+            void* ptr = ecs_get_id(World, target, componentId);
             Ecs.Assert(ptr != null, "Missing enum constant value");
-            return ref Managed.GetTypeRef<TEnum>(ptr);
+            return ref Managed.GetTypeRef<T>(ptr);
         }
 
         /// <summary>
@@ -753,26 +742,21 @@ namespace Flecs.NET.Core
         public T* GetMutPtr<T>() where T : unmanaged
         {
             ulong componentId = Type<T>.Id(World);
-            Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return (T*)ecs_get_mut_id(World, Id, componentId);
-        }
 
-        /// <summary>
-        ///     Get a mutable enum value.
-        /// </summary>
-        /// <typeparam name="TEnum"></typeparam>
-        /// <returns></returns>
-        public TEnum* GetMutEnumPtr<TEnum>() where TEnum : unmanaged, Enum
-        {
-            ulong enumTypeId = Type<TEnum>.Id(World);
-            ulong target = ecs_get_target(World, Id, enumTypeId, 0);
+            if (!typeof(T).IsEnum)
+            {
+                Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+                return (T*)ecs_get_mut_id(World, Id, componentId);
+            }
+
+            ulong target = ecs_get_target(World, Id, componentId, 0);
 
             if (target == 0)
-                return (TEnum*)ecs_get_id(World, Id, enumTypeId);
+                return (T*)ecs_get_mut_id(World, Id, componentId);
 
-            void* ptr = ecs_get_mut_id(World, enumTypeId, target);
+            void* ptr = ecs_get_mut_id(World, target, componentId);
             Ecs.Assert(ptr != null, "Missing enum constant value");
-            return (TEnum*)ptr;
+            return (T*)ptr;
         }
 
         /// <summary>
@@ -851,9 +835,22 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref T GetMut<T>()
         {
-            ulong compId = Type<T>.Id(World);
-            Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return ref Managed.GetTypeRef<T>(ecs_get_mut_id(World, Id, compId));
+            ulong componentId = Type<T>.Id(World);
+
+            if (!typeof(T).IsEnum)
+            {
+                Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+                return ref Managed.GetTypeRef<T>(ecs_get_mut_id(World, Id, componentId));
+            }
+
+            ulong target = ecs_get_target(World, Id, componentId, 0);
+
+            if (target == 0)
+                return ref Managed.GetTypeRef<T>(ecs_get_mut_id(World, Id, componentId));
+
+            void* ptr = ecs_get_mut_id(World, target, componentId);
+            Ecs.Assert(ptr != null, "Missing enum constant value");
+            return ref Managed.GetTypeRef<T>(ptr);
         }
 
         /// <summary>
@@ -1347,7 +1344,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public TEnum ToConstant<TEnum>() where TEnum : unmanaged, Enum
         {
-            TEnum* ptr = GetEnumPtr<TEnum>();
+            TEnum* ptr = GetPtr<TEnum>();
             Ecs.Assert(ptr != null, "Entity is not a constant");
             return *ptr;
         }
@@ -1826,7 +1823,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Remove a component from entity.
+        ///     Remove a component from entity. If the provided type argument is an enum,
+        ///     this operation will remove any (Enum, *) pair from the entity.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -1839,17 +1837,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Remove pair for enum.
-        ///     This operation will remove any (Enum, *) pair from the entity.
-        /// </summary>
-        /// <typeparam name="TEnum"></typeparam>
-        /// <returns></returns>
-        public ref Entity RemoveEnum<TEnum>() where TEnum : Enum
-        {
-            return ref Remove(Type<TEnum>.Id(World), EcsWildcard);
-        }
-
-        /// <summary>
         ///     Remove an enum from entity.
         /// </summary>
         /// <param name="enumMember"></param>
@@ -1857,7 +1844,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity Remove<TEnum>(TEnum enumMember) where TEnum : Enum
         {
-            return ref Remove<TEnum>(EcsWildcard);
+            return ref Remove<TEnum>(EnumType<TEnum>.Id(enumMember, World));
         }
 
         /// <summary>
@@ -2779,26 +2766,21 @@ namespace Flecs.NET.Core
         public T* EnsurePtr<T>() where T : unmanaged
         {
             ulong componentId = Type<T>.Id(World);
-            Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return (T*)ecs_ensure_id(World, Id, componentId);
-        }
 
-        /// <summary>
-        ///     Get a mutable enum value.
-        /// </summary>
-        /// <typeparam name="TEnum"></typeparam>
-        /// <returns></returns>
-        public TEnum* EnsureEnumPtr<TEnum>() where TEnum : unmanaged, Enum
-        {
-            ulong enumTypeId = Type<TEnum>.Id(World);
-            ulong target = ecs_get_target(World, Id, enumTypeId, 0);
+            if (!typeof(T).IsEnum)
+            {
+                Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+                return (T*)ecs_ensure_id(World, Id, componentId);
+            }
+
+            ulong target = ecs_get_target(World, Id, componentId, 0);
 
             if (target == 0)
-                return (TEnum*)ecs_get_id(World, Id, enumTypeId);
+                return  (T*)ecs_ensure_id(World, Id, componentId);
 
-            void* ptr = ecs_ensure_id(World, enumTypeId, target);
+            T* ptr = (T*)ecs_ensure_id(World, target, componentId);
             Ecs.Assert(ptr != null, "Missing enum constant value");
-            return (TEnum*)ptr;
+            return ptr;
         }
 
         /// <summary>
@@ -2877,9 +2859,22 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref T Ensure<T>()
         {
-            ulong compId = Type<T>.Id(World);
-            Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return ref Managed.GetTypeRef<T>(ecs_ensure_id(World, Id, compId));
+            ulong componentId = Type<T>.Id(World);
+
+            if (!typeof(T).IsEnum)
+            {
+                Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+                return ref Managed.GetTypeRef<T>(ecs_ensure_id(World, Id, componentId));
+            }
+
+            ulong target = ecs_get_target(World, Id, componentId, 0);
+
+            if (target == 0)
+                return ref Managed.GetTypeRef<T>(ecs_ensure_id(World, Id, componentId));
+
+            void* ptr = ecs_ensure_id(World, target, componentId);
+            Ecs.Assert(ptr != null, "Missing enum constant value");
+            return ref Managed.GetTypeRef<T>(ptr);
         }
 
         /// <summary>
