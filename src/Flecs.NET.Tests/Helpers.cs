@@ -388,6 +388,18 @@ public struct Tag
 {
 }
 
+public struct Eats
+{
+}
+
+public struct Apples
+{
+}
+
+public struct Pears
+{
+}
+
 public struct TgtA
 {
 }
