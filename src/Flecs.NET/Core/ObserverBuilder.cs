@@ -970,6 +970,13 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
+        /// <inheritdoc cref="Core.FilterBuilder.Term()"/>
+        public ref ObserverBuilder Term()
+        {
+            FilterBuilder.Term();
+            return ref this;
+        }
+
         /// <inheritdoc cref="Core.FilterBuilder.Term(ulong)"/>
         public ref ObserverBuilder Term(ulong id)
         {

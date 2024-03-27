@@ -61,9 +61,6 @@ namespace Flecs.NET.Core
 
                 ecs_rule_t* handle = ecs_rule_init(World, filterDesc);
 
-                if (handle == null)
-                    Ecs.Error("Query failed to init");
-
                 FilterBuilder.Dispose();
 
                 return new Rule(World, handle);
@@ -856,6 +853,13 @@ namespace Flecs.NET.Core
         public ref RuleBuilder Arg(int termIndex)
         {
             FilterBuilder.Arg(termIndex);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Term()"/>
+        public ref RuleBuilder Term()
+        {
+            FilterBuilder.Term();
             return ref this;
         }
 

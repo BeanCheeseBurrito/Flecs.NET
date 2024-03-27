@@ -1313,6 +1313,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Increments to the next term.
+        /// </summary>
+        /// <returns></returns>
+        public ref FilterBuilder Term()
+        {
+            IncrementTerm();
+            return ref this;
+        }
+
+        /// <summary>
         ///     Increments to the next term with the provided id.
         /// </summary>
         /// <param name="id"></param>
