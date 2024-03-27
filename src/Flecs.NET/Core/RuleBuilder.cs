@@ -863,6 +863,13 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
+        /// <inheritdoc cref="Core.FilterBuilder.Term(Core.Term)"/>
+        public ref RuleBuilder Term(Term term)
+        {
+            FilterBuilder.Term(term);
+            return ref this;
+        }
+
         /// <inheritdoc cref="Core.FilterBuilder.Term(ulong)"/>
         public ref RuleBuilder Term(ulong id)
         {

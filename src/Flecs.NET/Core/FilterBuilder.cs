@@ -1323,6 +1323,18 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Increments to the next term with the provided value.
+        /// </summary>
+        /// <param name="term"></param>
+        /// <returns></returns>
+        public ref FilterBuilder Term(Term term)
+        {
+            IncrementTerm();
+            CurrentTerm = term.Value;
+            return ref this;
+        }
+
+        /// <summary>
         ///     Increments to the next term with the provided id.
         /// </summary>
         /// <param name="id"></param>

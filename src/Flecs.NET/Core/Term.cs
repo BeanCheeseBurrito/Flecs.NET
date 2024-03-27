@@ -1,4 +1,5 @@
 using System;
+using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
@@ -22,6 +23,16 @@ namespace Flecs.NET.Core
         public ref ecs_term_t Value => ref _value;
 
         /// <summary>
+        ///     Creates a term with the provided world and default value.
+        /// </summary>
+        /// <param name="world"></param>
+        public Term(ecs_world_t* world)
+        {
+            _world = world;
+            _value = default;
+        }
+
+        /// <summary>
         ///     Creates a term with the provided world and value.
         /// </summary>
         /// <param name="world"></param>
@@ -30,6 +41,52 @@ namespace Flecs.NET.Core
         {
             _world = world;
             _value = value;
+        }
+
+        /// <summary>
+        ///     Creates a term with the provided world and id.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="id"></param>
+        public Term(ecs_world_t* world, ulong id)
+        {
+            _world = world;
+            _value = default;
+
+            if ((id & ECS_ID_FLAGS_MASK) == 0)
+                Value.first.id = id;
+            else
+                Value.id = id;
+        }
+
+        /// <summary>
+        ///     Creates a term with the provided world and pair.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        public Term(ecs_world_t* world, ulong first, ulong second)
+        {
+            _world = world;
+            _value = default;
+            Value.id = Macros.Pair(first, second);
+        }
+
+        /// <summary>
+        ///     Creates a term with the provided id.
+        /// </summary>
+        /// <param name="id"></param>
+        public Term(ulong id) : this(null, id)
+        {
+        }
+
+        /// <summary>
+        ///     Creates a term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        public Term(ulong first, ulong second) : this(null, first, second)
+        {
         }
 
         /// <summary>

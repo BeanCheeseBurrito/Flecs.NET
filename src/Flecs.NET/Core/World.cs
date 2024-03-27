@@ -1769,6 +1769,79 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Creates a new term.
+        /// </summary>
+        /// <returns></returns>
+        public Term Term()
+        {
+            return new Term(Handle);
+        }
+
+        /// <summary>
+        ///     Creates a new term.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Term Term(ecs_term_t value)
+        {
+            return new Term(Handle, value);
+        }
+
+        /// <summary>
+        ///     Creates a new term.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Term Term(ulong id)
+        {
+            return new Term(Handle, id);
+        }
+
+        /// <summary>
+        ///     Creates a new term.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public Term Term(ulong first, ulong second)
+        {
+            return new Term(Handle, first, second);
+        }
+
+        /// <summary>
+        ///     Creates a new term.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public Term Term<TFirst>(ulong second)
+        {
+            return new Term(Handle, Macros.Pair<TFirst>(second, Handle));
+        }
+
+        /// <summary>
+        ///     Creates a new term.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Term Term<TFirst, TSecond>()
+        {
+            return new Term(Handle, Macros.Pair<TFirst, TSecond>(Handle));
+        }
+
+        /// <summary>
+        ///     Creates a new term.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Term TermSecond<TSecond>(ulong first)
+        {
+            return new Term(Handle, Macros.PairSecond<TSecond>(first, Handle));
+        }
+
+        /// <summary>
         ///     Iterate over all entities with the provided (component) id.
         /// </summary>
         /// <param name="id"></param>
