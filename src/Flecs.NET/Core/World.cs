@@ -2724,4 +2724,13 @@ namespace Flecs.NET.Core
             return !(left == right);
         }
     }
+
+    // Flecs.NET Extensions
+    public unsafe partial struct World
+    {
+        public Table Table()
+        {
+            return new Table(Handle);
+        }
+    }
 }

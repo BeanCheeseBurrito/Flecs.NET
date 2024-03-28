@@ -185,6 +185,20 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
+        ///     Creates a pair out of a type and an enum.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="world"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong PairSecond<TFirst, TSecond>(TFirst first, ecs_world_t* world) where TFirst : Enum
+        {
+            return PairSecond<TSecond>(EnumType<TFirst>.Id(first, world), world);
+        }
+
+        /// <summary>
         ///     Returns the first part of a pair.
         /// </summary>
         /// <param name="pair"></param>

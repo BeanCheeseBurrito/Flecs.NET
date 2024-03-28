@@ -33,6 +33,18 @@ namespace Flecs.NET.Core
         ///     Creates a table from the provided world and handle.
         /// </summary>
         /// <param name="world"></param>
+        public Table(ecs_world_t* world)
+        {
+            World = world;
+            Handle = null;
+            Offset = 0;
+            Count = 0;
+        }
+
+        /// <summary>
+        ///     Creates a table from the provided world and handle.
+        /// </summary>
+        /// <param name="world"></param>
         /// <param name="table"></param>
         public Table(ecs_world_t* world, ecs_table_t* table)
         {
@@ -463,6 +475,26 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts a <see cref="Table"/> instance to a <see cref="ecs_table_t"/>*.
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static implicit operator ecs_table_t*(Table table)
+        {
+            return To(table);
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Table"/> instance to a <see cref="ecs_table_t"/>*.
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static ecs_table_t* To(Table table)
+        {
+            return table.Handle;
+        }
+
+        /// <summary>
         ///     Returns a string representation of the table.
         /// </summary>
         /// <returns></returns>
@@ -593,12 +625,13 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get table that has all components of current table plus the specified pair.
         /// </summary>
-        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public Table AddSecond<TSecond>(ulong first)
+        public Table Add<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Add(first, Type<TSecond>.Id(World));
+            return Add<TFirst>(EnumType<TSecond>.Id(second, World));
         }
 
         /// <summary>
@@ -608,9 +641,20 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public Table AddSecond<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        public Table Add<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
             return AddSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table plus the specified pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Table AddSecond<TSecond>(ulong first)
+        {
+            return Add(first, Type<TSecond>.Id(World));
         }
 
         /// <summary>
@@ -680,12 +724,13 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get table that has all components of current table minus the specified pair.
         /// </summary>
-        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public Table RemoveSecond<TSecond>(ulong first)
+        public Table Remove<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Remove(first, Type<TSecond>.Id(World));
+            return Remove<TFirst>(EnumType<TSecond>.Id(second, World));
         }
 
         /// <summary>
@@ -695,9 +740,20 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public Table RemoveSecond<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        public Table Remove<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
             return RemoveSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table minus the specified pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Table RemoveSecond<TSecond>(ulong first)
+        {
+            return Remove(first, Type<TSecond>.Id(World));
         }
 
         /// <summary>
@@ -767,12 +823,13 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Search for pair index in table.
         /// </summary>
-        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public int SearchSecond<TSecond>(ulong first)
+        public int Search<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Search(Macros.PairSecond<TSecond>(first, World));
+            return Search<TFirst>(EnumType<TSecond>.Id(second, World));
         }
 
         /// <summary>
@@ -782,9 +839,20 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public int SearchSecond<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        public int Search<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
             return SearchSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int SearchSecond<TSecond>(ulong first)
+        {
+            return Search(Macros.PairSecond<TSecond>(first, World));
         }
 
         /// <summary>
@@ -863,13 +931,27 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Search for pair index in table.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="idOut"></param>
+        /// <param name="second"></param>
+        /// <param name="inOut"></param>
+        /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public int SearchSecond<TSecond>(ulong first, out ulong idOut)
+        public int Search<TFirst, TSecond>(TSecond second, out ulong inOut) where TSecond : Enum
         {
-            return Search(first, Type<TSecond>.Id(World), out idOut);
+            return Search<TFirst>(EnumType<TSecond>.Id(second, World), out inOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="inOut"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int Search<TFirst, TSecond>(TFirst first, out ulong inOut) where TFirst : Enum
+        {
+            return SearchSecond<TSecond>(EnumType<TFirst>.Id(first, World), out inOut);
         }
 
         /// <summary>
@@ -877,12 +959,11 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="first"></param>
         /// <param name="idOut"></param>
-        /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public int SearchSecond<TFirst, TSecond>(TFirst first, out ulong idOut) where TFirst : Enum
+        public int SearchSecond<TSecond>(ulong first, out ulong idOut)
         {
-            return SearchSecond<TSecond>(EnumType<TFirst>.Id(first, World), out idOut);
+            return Search(first, Type<TSecond>.Id(World), out idOut);
         }
 
         /// <summary>
@@ -959,13 +1040,27 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Search for pair index in table.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="idOut"></param>
+        /// <param name="second"></param>
+        /// <param name="inOut"></param>
+        /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public int SearchSecond<TSecond>(ulong first, out Id idOut)
+        public int Search<TFirst, TSecond>(TSecond second, out Id inOut) where TSecond : Enum
         {
-            return Search(first, Type<TSecond>.Id(World), out idOut);
+            return Search<TFirst>(EnumType<TSecond>.Id(second, World), out inOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="inOut"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int Search<TFirst, TSecond>(TFirst first, out Id inOut) where TFirst : Enum
+        {
+            return SearchSecond<TSecond>(EnumType<TFirst>.Id(first, World), out inOut);
         }
 
         /// <summary>
@@ -973,12 +1068,11 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="first"></param>
         /// <param name="idOut"></param>
-        /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public int SearchSecond<TFirst, TSecond>(TFirst first, out Id idOut) where TFirst : Enum
+        public int SearchSecond<TSecond>(ulong first, out Id idOut)
         {
-            return SearchSecond<TSecond>(EnumType<TFirst>.Id(first, World), out idOut);
+            return Search(first, Type<TSecond>.Id(World), out idOut);
         }
     }
 }
