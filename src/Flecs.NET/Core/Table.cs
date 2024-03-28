@@ -311,7 +311,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T* GetPtr<T>()
+        public T* GetPtr<T>() where T : unmanaged
         {
             Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             return (T*)GetPtr(Type<T>.Id(World));
@@ -323,7 +323,7 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <returns></returns>
-        public TFirst* GetPtr<TFirst>(ulong second)
+        public TFirst* GetPtr<TFirst>(ulong second) where TFirst : unmanaged
         {
             Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             ulong pair = Macros.Pair<TFirst>(second, World);
@@ -336,7 +336,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public TFirst* GetFirstPtr<TFirst, TSecond>()
+        public TFirst* GetFirstPtr<TFirst, TSecond>() where TFirst : unmanaged
         {
             Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             ulong pair = Macros.Pair<TFirst, TSecond>(World);
@@ -349,7 +349,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public TSecond* GetSecondPtr<TFirst, TSecond>()
+        public TSecond* GetSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
         {
             Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             ulong pair = Macros.Pair<TFirst, TSecond>(World);
@@ -362,7 +362,7 @@ namespace Flecs.NET.Core
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public TSecond* GetSecondPtr<TSecond>(ulong first)
+        public TSecond* GetSecondPtr<TSecond>(ulong first) where TSecond : unmanaged
         {
             Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             ulong pair = Macros.PairSecond<TSecond>(first, World);

@@ -1811,6 +1811,27 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates a new term.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Term Term<T>()
+        {
+            return new Term(Handle, Type<T>.Id(Handle));
+        }
+
+        /// <summary>
+        ///     Creates a new term.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        public Term Term<TEnum>(TEnum value) where TEnum : Enum
+        {
+            return new Term(Handle, EnumType<TEnum>.Id(value, Handle));
+        }
+
+        /// <summary>
+        ///     Creates a new term.
+        /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <returns></returns>
