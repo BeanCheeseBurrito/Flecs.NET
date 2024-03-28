@@ -527,6 +527,180 @@ namespace Flecs.NET.Core
     public readonly unsafe partial struct Table
     {
         /// <summary>
+        ///     Get table that has all components of current table plus the specified id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Table Add(ulong id)
+        {
+            return new Table(World, ecs_table_add_id(World, Handle, id));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table plus the specified pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public Table Add(ulong first, ulong second)
+        {
+            return Add(Macros.Pair(first, second));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table plus the specified component.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Table Add<T>()
+        {
+            return Add(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table plus the specified pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public Table Add<TFirst>(ulong second)
+        {
+            return Add(Macros.Pair<TFirst>(second, World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table plus the specified pair.
+        /// </summary>
+        /// <param name="enumMember"></param>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        public Table Add<TEnum>(TEnum enumMember) where TEnum : Enum
+        {
+            return Add<TEnum>(EnumType<TEnum>.Id(enumMember, World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table plus the specified pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Table Add<TFirst, TSecond>()
+        {
+            return Add(Macros.Pair<TFirst, TSecond>(World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table plus the specified pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Table AddSecond<TSecond>(ulong first)
+        {
+            return Add(first, Type<TSecond>.Id(World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table plus the specified pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Table AddSecond<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return AddSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table minus the specified id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Table Remove(ulong id)
+        {
+            return new Table(World, ecs_table_remove_id(World, Handle, id));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table minus the specified pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public Table Remove(ulong first, ulong second)
+        {
+            return Remove(Macros.Pair(first, second));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table minus the specified component.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Table Remove<T>()
+        {
+            return Remove(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table minus the specified pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public Table Remove<TFirst>(ulong second)
+        {
+            return Remove(Macros.Pair<TFirst>(second, World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table minus the specified pair.
+        /// </summary>
+        /// <param name="enumMember"></param>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        public Table Remove<TEnum>(TEnum enumMember) where TEnum : Enum
+        {
+            return Remove<TEnum>(EnumType<TEnum>.Id(enumMember, World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table minus the specified pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Table Remove<TFirst, TSecond>()
+        {
+            return Remove(Macros.Pair<TFirst, TSecond>(World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table minus the specified pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Table RemoveSecond<TSecond>(ulong first)
+        {
+            return Remove(first, Type<TSecond>.Id(World));
+        }
+
+        /// <summary>
+        ///     Get table that has all components of current table minus the specified pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Table RemoveSecond<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return RemoveSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
         ///     Search for id index in table.
         /// </summary>
         /// <param name="id"></param>
@@ -548,7 +722,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Search for pair index in table.
+        ///     Search for component index in table.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -640,7 +814,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Search for pair index in table.
+        ///     Search for component index in table.
         /// </summary>
         /// <param name="idOut"></param>
         /// <typeparam name="T"></typeparam>
@@ -695,7 +869,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int SearchSecond<TSecond>(ulong first, out ulong idOut)
         {
-            return Search(Macros.PairSecond<TSecond>(first, World), out idOut);
+            return Search(first, Type<TSecond>.Id(World), out idOut);
         }
 
         /// <summary>
@@ -736,7 +910,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Search for pair index in table.
+        ///     Search for component index in table.
         /// </summary>
         /// <param name="idOut"></param>
         /// <typeparam name="T"></typeparam>
@@ -791,7 +965,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int SearchSecond<TSecond>(ulong first, out Id idOut)
         {
-            return Search(Macros.PairSecond<TSecond>(first, World), out idOut);
+            return Search(first, Type<TSecond>.Id(World), out idOut);
         }
 
         /// <summary>
