@@ -1600,6 +1600,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Get pair id.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Id PairSecond<TSecond>(ulong first)
+        {
+            return Id(Macros.PairSecond<TSecond>(first, Handle));
+        }
+
+        /// <summary>
         ///     Creates an <see cref="UntypedComponent"/>.
         /// </summary>
         /// <returns></returns>
