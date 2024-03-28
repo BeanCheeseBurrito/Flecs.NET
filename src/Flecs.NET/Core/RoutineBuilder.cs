@@ -1197,16 +1197,30 @@ namespace Flecs.NET.Core
         }
 
         /// <inheritdoc cref="Core.QueryBuilder.GroupBy{T}(Ecs.GroupByAction)"/>
-        public ref RoutineBuilder GroupBy<T>(Ecs.GroupByAction groupByAction)
+        public ref RoutineBuilder GroupBy<T>(Ecs.GroupByAction callback)
         {
-            QueryBuilder.GroupBy<T>(groupByAction);
+            QueryBuilder.GroupBy<T>(callback);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.QueryBuilder.GroupBy{T}(Ecs.GroupByCallback)"/>
+        public ref RoutineBuilder GroupBy<T>(Ecs.GroupByCallback callback)
+        {
+            QueryBuilder.GroupBy<T>(callback);
             return ref this;
         }
 
         /// <inheritdoc cref="Core.QueryBuilder.GroupBy(ulong, Ecs.GroupByAction)"/>
-        public ref RoutineBuilder GroupBy(ulong component, Ecs.GroupByAction groupByAction)
+        public ref RoutineBuilder GroupBy(ulong component, Ecs.GroupByAction callback)
         {
-            QueryBuilder.GroupBy(component, groupByAction);
+            QueryBuilder.GroupBy(component, callback);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.QueryBuilder.GroupBy(ulong, Ecs.GroupByCallback)"/>
+        public ref RoutineBuilder GroupBy(ulong component, Ecs.GroupByCallback callback)
+        {
+            QueryBuilder.GroupBy(component, callback);
             return ref this;
         }
 

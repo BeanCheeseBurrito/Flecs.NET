@@ -417,6 +417,11 @@ namespace Flecs.NET.Core
         public delegate ulong GroupByAction(ecs_world_t* world, ecs_table_t* table, ulong groupId, void* ctx);
 
         /// <summary>
+        ///     GroupBy action.
+        /// </summary>
+        public delegate ulong GroupByCallback(World world, Table table, Entity group);
+
+        /// <summary>
         ///     Group create action.
         /// </summary>
         public delegate void* GroupCreateAction(ecs_world_t* world, ulong groupId, void* groupByCtx);

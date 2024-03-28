@@ -114,25 +114,59 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Group and sort matched tables.
         /// </summary>
-        /// <param name="groupByAction"></param>
+        /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref QueryBuilder GroupBy<T>(Ecs.GroupByAction groupByAction)
+        public ref QueryBuilder GroupBy<T>(Ecs.GroupByAction callback)
         {
-            return ref GroupBy(Type<T>.Id(World), groupByAction);
+            return ref GroupBy(Type<T>.Id(World), callback);
+        }
+
+        /// <summary>
+        ///     Group and sort matched tables.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder GroupBy<T>(Ecs.GroupByCallback callback)
+        {
+            return ref GroupBy(Type<T>.Id(World), callback);
         }
 
         /// <summary>
         ///     Group and sort matched tables.
         /// </summary>
         /// <param name="component"></param>
-        /// <param name="groupByAction"></param>
+        /// <param name="callback"></param>
         /// <returns></returns>
-        public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByAction groupByAction)
+        public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByAction callback)
         {
-            BindingContext.SetCallback(ref QueryContext.GroupByAction, groupByAction);
+            BindingContext.SetCallback(ref QueryContext.GroupByAction, callback);
             QueryDesc.group_by = QueryContext.GroupByAction.Function;
             QueryDesc.group_by_id = component;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Group and sort matched tables.
+        /// </summary>
+        /// <param name="component"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByCallback callback)
+        {
+            Ecs.Assert(QueryDesc.ctx == null, "Cannot set .GroupBy callback if ctx is occupied.");
+
+            QueryContext.GroupByAction.Dispose();
+            QueryContext.ContextFree.Dispose();
+
+            BindingContext.QueryGroupByContext* context = Memory.Alloc<BindingContext.QueryGroupByContext>(1);
+            BindingContext.SetCallback(ref context->GroupBy, callback);
+            QueryDesc.group_by = BindingContext.QueryGroupByPointer;
+            QueryDesc.group_by_ctx_free = BindingContext.QueryGroupByContextFreePointer;
+            QueryDesc.group_by_ctx = context;
+            QueryDesc.group_by_id = component;
+
             return ref this;
         }
 

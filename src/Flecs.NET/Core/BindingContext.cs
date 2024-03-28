@@ -45,6 +45,9 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr EntityObserverEachEntityPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEachEntity;
 
+        internal static readonly IntPtr QueryGroupByPointer =
+            (IntPtr)(delegate* <ecs_world_t*, ecs_table_t*, ulong, void*, ulong>)&QueryGroupBy;
+
         internal static readonly IntPtr WorldContextFreePointer =
             (IntPtr)(delegate* <void*, void>)&WorldContextFree;
 
@@ -56,6 +59,9 @@ namespace Flecs.NET.Core
 
         internal static readonly IntPtr QueryContextFreePointer =
             (IntPtr)(delegate* <void*, void>)&QueryContextFree;
+
+        internal static readonly IntPtr QueryGroupByContextFreePointer =
+            (IntPtr)(delegate* <void*, void>)&QueryGroupByContextFree;
 
         internal static readonly IntPtr TypeHooksContextFreePointer =
             (IntPtr)(delegate* <void*, void>)&TypeHooksContextFree;
@@ -90,6 +96,9 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr EntityObserverEachEntityPointer =
             Marshal.GetFunctionPointerForDelegate(EntityObserverEachEntityReference = EntityObserverEachEntity);
 
+        internal static readonly IntPtr QueryGroupByPointer =
+            Marshal.GetFunctionPointerForDelegate(QueryGroupByReference = QueryGroupBy);
+
         internal static readonly IntPtr WorldContextFreePointer =
             Marshal.GetFunctionPointerForDelegate(WorldContextFreeReference = WorldContextFree);
 
@@ -101,6 +110,9 @@ namespace Flecs.NET.Core
 
         internal static readonly IntPtr QueryContextFreePointer =
             Marshal.GetFunctionPointerForDelegate(QueryContextFreeReference = QueryContextFree);
+
+        internal static readonly IntPtr QueryGroupByContextFreePointer =
+            Marshal.GetFunctionPointerForDelegate(QueryGroupByContextFreeReference = QueryGroupByContextFree);
 
         internal static readonly IntPtr TypeHooksContextFreePointer =
             Marshal.GetFunctionPointerForDelegate(TypeHooksContextFreeReference = TypeHooksContextFree);
@@ -120,11 +132,13 @@ namespace Flecs.NET.Core
 
         private static readonly Ecs.IterAction EntityObserverEachEntityReference;
 
+        private static readonly Ecs.GroupByAction QueryGroupByReference;
+
         private static readonly Ecs.ContextFree WorldContextFreeReference;
         private static readonly Ecs.ContextFree ObserverContextFreeReference;
         private static readonly Ecs.ContextFree RoutineContextFreeReference;
         private static readonly Ecs.ContextFree QueryContextFreeReference;
-
+        private static readonly Ecs.ContextFree QueryGroupByContextFreeReference;
         private static readonly Ecs.ContextFree TypeHooksContextFreeReference;
 
         private static readonly Action OsApiAbortReference;
@@ -193,6 +207,13 @@ namespace Flecs.NET.Core
             Invoker.Observe(iter, callback);
         }
 
+        private static ulong QueryGroupBy(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
+        {
+            QueryGroupByContext* context = (QueryGroupByContext*)ctx;
+            Ecs.GroupByCallback callback = (Ecs.GroupByCallback)context->GroupBy.GcHandle.Target!;
+            return callback(new World(world, false), new Table(world, table), new Entity(world, id));
+        }
+
         private static void WorldContextFree(void* context)
         {
             WorldContext* worldContext = (WorldContext*)context;
@@ -218,6 +239,13 @@ namespace Flecs.NET.Core
         {
             QueryContext* queryContext = (QueryContext*)context;
             queryContext->Dispose();
+            Memory.Free(context);
+        }
+
+        private static void QueryGroupByContextFree(void* context)
+        {
+            QueryGroupByContext* queryGroupByContext = (QueryGroupByContext*)context;
+            queryGroupByContext->Dispose();
             Memory.Free(context);
         }
 
@@ -366,6 +394,16 @@ namespace Flecs.NET.Core
                 OnSet.Dispose();
                 OnRemove.Dispose();
                 ContextFree.Dispose();
+            }
+        }
+
+        internal struct QueryGroupByContext : IDisposable
+        {
+            public Callback GroupBy;
+
+            public void Dispose()
+            {
+                GroupBy.Dispose();
             }
         }
 
