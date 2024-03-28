@@ -7,7 +7,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A table is where entities and components are stored.
     /// </summary>
-    public readonly unsafe struct Table : IEquatable<Table>
+    public readonly unsafe partial struct Table : IEquatable<Table>
     {
         /// <summary>
         ///     A reference to the world.
@@ -520,6 +520,291 @@ namespace Flecs.NET.Core
         public static bool operator !=(Table left, Table right)
         {
             return !(left == right);
+        }
+    }
+
+    // Flecs.NET Extensions
+    public readonly unsafe partial struct Table
+    {
+        /// <summary>
+        ///     Search for id index in table.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public int Search(ulong id)
+        {
+            return ecs_search(World, Handle, id, null);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public int Search(ulong first, ulong second)
+        {
+            return Search(Macros.Pair(first, second));
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public int Search<T>()
+        {
+            return Search(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public int Search<TFirst>(ulong second)
+        {
+            return Search(Macros.Pair<TFirst>(second, World));
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="enumMember"></param>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        public int Search<TEnum>(TEnum enumMember) where TEnum : Enum
+        {
+            return Search<TEnum>(EnumType<TEnum>.Id(enumMember, World));
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int Search<TFirst, TSecond>()
+        {
+            return Search(Macros.Pair<TFirst, TSecond>(World));
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int SearchSecond<TSecond>(ulong first)
+        {
+            return Search(Macros.PairSecond<TSecond>(first, World));
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int SearchSecond<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return SearchSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Search for id in table.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="idOut"></param>
+        /// <returns></returns>
+        public int Search(ulong id, out ulong idOut)
+        {
+            fixed (ulong* ptr = &idOut)
+            {
+                return ecs_search(World, Handle, id, ptr);
+            }
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <param name="idOut"></param>
+        /// <returns></returns>
+        public int Search(ulong first, ulong second, out ulong idOut)
+        {
+            return Search(Macros.Pair(first, second), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="idOut"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public int Search<T>(out ulong idOut)
+        {
+            return Search(Type<T>.Id(World), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="idOut"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public int Search<TFirst>(ulong second, out ulong idOut)
+        {
+            return Search(Macros.Pair<TFirst>(second, World), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="enumMember"></param>
+        /// <param name="idOut"></param>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        public int Search<TEnum>(TEnum enumMember, out ulong idOut) where TEnum : Enum
+        {
+            return Search<TEnum>(EnumType<TEnum>.Id(enumMember, World), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="idOut"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int Search<TFirst, TSecond>(out ulong idOut)
+        {
+            return Search(Macros.Pair<TFirst, TSecond>(World), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="idOut"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int SearchSecond<TSecond>(ulong first, out ulong idOut)
+        {
+            return Search(Macros.PairSecond<TSecond>(first, World), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="idOut"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int SearchSecond<TFirst, TSecond>(TFirst first, out ulong idOut) where TFirst : Enum
+        {
+            return SearchSecond<TSecond>(EnumType<TFirst>.Id(first, World), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for id in table.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="idOut"></param>
+        /// <returns></returns>
+        public int Search(ulong id, out Id idOut)
+        {
+            idOut = new Id(World);
+            return Search(id, out idOut.Value);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <param name="idOut"></param>
+        /// <returns></returns>
+        public int Search(ulong first, ulong second, out Id idOut)
+        {
+            return Search(Macros.Pair(first, second), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="idOut"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public int Search<T>(out Id idOut)
+        {
+            return Search(Type<T>.Id(World), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="enumMember"></param>
+        /// <param name="idOut"></param>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        public int Search<TEnum>(TEnum enumMember, out Id idOut) where TEnum : Enum
+        {
+            return Search<TEnum>(EnumType<TEnum>.Id(enumMember, World), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="idOut"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public int Search<TFirst>(ulong second, out Id idOut)
+        {
+            return Search(Macros.Pair<TFirst>(second, World), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="idOut"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int Search<TFirst, TSecond>(out Id idOut)
+        {
+            return Search(Macros.Pair<TFirst, TSecond>(World), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="idOut"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int SearchSecond<TSecond>(ulong first, out Id idOut)
+        {
+            return Search(Macros.PairSecond<TSecond>(first, World), out idOut);
+        }
+
+        /// <summary>
+        ///     Search for pair index in table.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="idOut"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int SearchSecond<TFirst, TSecond>(TFirst first, out Id idOut) where TFirst : Enum
+        {
+            return SearchSecond<TSecond>(EnumType<TFirst>.Id(first, World), out idOut);
         }
     }
 }
