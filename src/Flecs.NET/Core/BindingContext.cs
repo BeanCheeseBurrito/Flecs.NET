@@ -233,12 +233,6 @@ namespace Flecs.NET.Core
             throw new Ecs.NativeException("Application aborted from native code.");
         }
 
-        private static void FreeCallback(ref Callback dest)
-        {
-            Managed.FreeGcHandle(dest.GcHandle);
-            dest = default;
-        }
-
         internal static Callback AllocCallback<T>(T? callback, bool storePtr = true) where T : Delegate
         {
             if (callback == null)
@@ -251,12 +245,12 @@ namespace Flecs.NET.Core
         internal static void SetCallback<T>(ref Callback dest, T? callback, bool storePtr = true) where T : Delegate
         {
             if (dest.GcHandle != default)
-                FreeCallback(ref dest);
+                dest.Dispose();
 
             dest = AllocCallback(callback, storePtr);
         }
 
-        internal struct Callback
+        internal struct Callback : IDisposable
         {
             public IntPtr Function;
             public GCHandle GcHandle;
@@ -265,6 +259,13 @@ namespace Flecs.NET.Core
             {
                 Function = function;
                 GcHandle = gcHandle;
+            }
+
+            public void Dispose()
+            {
+                Managed.FreeGcHandle(GcHandle);
+                Function = default;
+                GcHandle = default;
             }
         }
 
@@ -292,9 +293,9 @@ namespace Flecs.NET.Core
 
             public void Dispose()
             {
-                FreeCallback(ref AtFini);
-                FreeCallback(ref RunPostFrame);
-                FreeCallback(ref ContextFree);
+                AtFini.Dispose();
+                RunPostFrame.Dispose();
+                ContextFree.Dispose();
             }
         }
 
@@ -305,8 +306,8 @@ namespace Flecs.NET.Core
 
             public void Dispose()
             {
-                FreeCallback(ref Iterator);
-                FreeCallback(ref Run);
+                Iterator.Dispose();
+                Run.Dispose();
             }
         }
 
@@ -319,8 +320,8 @@ namespace Flecs.NET.Core
 
             public void Dispose()
             {
-                FreeCallback(ref Iterator);
-                FreeCallback(ref Run);
+                Iterator.Dispose();
+                Run.Dispose();
 
                 QueryContext.Dispose();
             }
@@ -336,11 +337,11 @@ namespace Flecs.NET.Core
 
             public void Dispose()
             {
-                FreeCallback(ref OrderByAction);
-                FreeCallback(ref GroupByAction);
-                FreeCallback(ref ContextFree);
-                FreeCallback(ref GroupCreateAction);
-                FreeCallback(ref GroupDeleteAction);
+                OrderByAction.Dispose();
+                GroupByAction.Dispose();
+                ContextFree.Dispose();
+                GroupCreateAction.Dispose();
+                GroupDeleteAction.Dispose();
             }
         }
 
@@ -357,14 +358,14 @@ namespace Flecs.NET.Core
 
             public void Dispose()
             {
-                FreeCallback(ref Ctor);
-                FreeCallback(ref Dtor);
-                FreeCallback(ref Move);
-                FreeCallback(ref Copy);
-                FreeCallback(ref OnAdd);
-                FreeCallback(ref OnSet);
-                FreeCallback(ref OnRemove);
-                FreeCallback(ref ContextFree);
+                Ctor.Dispose();
+                Dtor.Dispose();
+                Move.Dispose();
+                Copy.Dispose();
+                OnAdd.Dispose();
+                OnSet.Dispose();
+                OnRemove.Dispose();
+                ContextFree.Dispose();
             }
         }
 
