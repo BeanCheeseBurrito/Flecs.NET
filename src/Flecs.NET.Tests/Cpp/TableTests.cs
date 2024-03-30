@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Core;
 using Xunit;
 
 namespace Flecs.NET.Tests.Cpp
 {
+    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     public unsafe class TableTests
     {
         public TableTests()
@@ -19,9 +21,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add<Velocity>();
 
             world.Filter<Position>()
-                .Each((Entity e, ref Position p) => {
-                    e2.Add<Mass>();
-                });
+                .Each((Entity e, ref Position p) => { e2.Add<Mass>(); });
 
             Assert.True(e2.Has<Mass>());
         }
@@ -35,9 +35,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add<Velocity>();
 
             world.Filter<Position>()
-                .Each((ref Position p) => {
-                    e2.Add<Mass>();
-                });
+                .Each((ref Position p) => { e2.Add<Mass>(); });
 
             Assert.True(e2.Has<Mass>());
         }
@@ -51,9 +49,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add<Velocity>();
 
             world.Filter<Position>()
-                .Iter((Iter it, Field<Position> p) => {
-                    e2.Add<Mass>();
-                });
+                .Iter((Iter it, Field<Position> p) => { e2.Add<Mass>(); });
 
             Assert.True(e2.Has<Mass>());
         }
@@ -67,9 +63,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add<Velocity>();
 
             world.Filter<Position>()
-                .Iter((Iter it) => {
-                    e2.Add<Mass>();
-                });
+                .Iter((Iter it) => { e2.Add<Mass>(); });
 
             Assert.True(e2.Has<Mass>());
         }
@@ -82,10 +76,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Add<Position>().Add<Velocity>();
             Entity e2 = world.Entity().Add<Position>();
 
-            Assert.True(e1.Read((in Position p, in Velocity v) =>
-            {
-                e2.Add<Mass>();
-            }));
+            Assert.True(e1.Read((in Position p, in Velocity v) => { e2.Add<Mass>(); }));
 
             Assert.True(e2.Has<Mass>());
         }
@@ -98,9 +89,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Add<Position>().Add<Velocity>();
             Entity e2 = world.Entity().Add<Position>();
 
-            e1.Ensure((ref Position p, ref Velocity v) => {
-                e2.Add<Mass>();
-            });
+            e1.Ensure((ref Position p, ref Velocity v) => { e2.Add<Mass>(); });
 
             Assert.True(e2.Has<Mass>());
         }
@@ -222,19 +211,19 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity e = world.Entity()
-                .Add<R,T1>()
-                .Add<R,T2>();
+                .Add<R, T1>()
+                .Add<R, T2>();
             world.Entity()
-                .Add<R,T1>()
-                .Add<R,T2>();
+                .Add<R, T1>()
+                .Add<R, T2>();
             world.Entity()
-                .Add<R,T1>()
-                .Add<R,T2>();
+                .Add<R, T1>()
+                .Add<R, T2>();
 
             Table table = e.Table();
-            Assert.True((table.Has<R, T1>()));
-            Assert.True((table.Has<R, T2>()));
-            Assert.True((!table.Has<R, T3>()));
+            Assert.True(table.Has<R, T1>());
+            Assert.True(table.Has<R, T2>());
+            Assert.True(!table.Has<R, T3>());
         }
 
         [Fact]
@@ -254,9 +243,9 @@ namespace Flecs.NET.Tests.Cpp
 
             Table table = e.Table();
             void* ptr = table.GetPtr(world.Id<Position>());
-            Position *p = (Position*)(ptr);
+            Position* p = (Position*)ptr;
             Assert.True(p != null);
-            Assert.Equal(10, p[0].X);
+            Assert.Equal(10, p![0].X);
             Assert.Equal(20, p[0].Y);
             Assert.Equal(20, p[1].X);
             Assert.Equal(30, p[1].Y);
@@ -264,10 +253,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(40, p[2].Y);
 
             ptr = table.GetPtr(world.Id<Velocity>());
-            Velocity *v = (Velocity*)(ptr);
+            Velocity* v = (Velocity*)ptr;
             Assert.True(v != null);
             Assert.True(p != null);
-            Assert.Equal(1, v[0].X);
+            Assert.Equal(1, v![0].X);
             Assert.Equal(2, v[0].Y);
             Assert.Equal(2, v[1].X);
             Assert.Equal(3, v[1].Y);
@@ -291,18 +280,18 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Velocity(3, 4));
 
             Table table = e.Table();
-            Position *p = table.GetPtr<Position>();
+            Position* p = table.GetPtr<Position>();
             Assert.True(p != null);
-            Assert.Equal(10, p[0].X);
+            Assert.Equal(10, p![0].X);
             Assert.Equal(20, p[0].Y);
             Assert.Equal(20, p[1].X);
             Assert.Equal(30, p[1].Y);
             Assert.Equal(30, p[2].X);
             Assert.Equal(40, p[2].Y);
 
-            Velocity *v = table.GetPtr<Velocity>();
+            Velocity* v = table.GetPtr<Velocity>();
             Assert.True(v != null);
-            Assert.Equal(1, v[0].X);
+            Assert.Equal(1, v![0].X);
             Assert.Equal(2, v[0].Y);
             Assert.Equal(2, v[1].X);
             Assert.Equal(3, v[1].Y);
@@ -316,20 +305,20 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity e = world.Entity()
-                .SetFirst<Position, Tgt>(new Position(10, 20))
-                .SetFirst<Velocity, Tgt>(new Velocity(1, 2));
+                .Set<Position, Tgt>(new Position(10, 20))
+                .Set<Velocity, Tgt>(new Velocity(1, 2));
             world.Entity()
-                .SetFirst<Position, Tgt>(new Position(20, 30))
-                .SetFirst<Velocity, Tgt>(new Velocity(2, 3));
+                .Set<Position, Tgt>(new Position(20, 30))
+                .Set<Velocity, Tgt>(new Velocity(2, 3));
             world.Entity()
-                .SetFirst<Position, Tgt>(new Position(30, 40))
-                .SetFirst<Velocity, Tgt>(new Velocity(3, 4));
+                .Set<Position, Tgt>(new Position(30, 40))
+                .Set<Velocity, Tgt>(new Velocity(3, 4));
 
             Table table = e.Table();
-            void *ptr = table.GetPtr(world.Id<Position>(), world.Id<Tgt>());
-            Position *p = (Position*)(ptr);
+            void* ptr = table.GetPtr(world.Id<Position>(), world.Id<Tgt>());
+            Position* p = (Position*)ptr;
             Assert.True(p != null);
-            Assert.Equal(10, p[0].X);
+            Assert.Equal(10, p![0].X);
             Assert.Equal(20, p[0].Y);
             Assert.Equal(20, p[1].X);
             Assert.Equal(30, p[1].Y);
@@ -337,9 +326,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(40, p[2].Y);
 
             ptr = table.GetPtr(world.Id<Velocity>(), world.Id<Tgt>());
-            Velocity *v = (Velocity*)(ptr);
+            Velocity* v = (Velocity*)ptr;
             Assert.True(v != null);
-            Assert.Equal(1, v[0].X);
+            Assert.Equal(1, v![0].X);
             Assert.Equal(2, v[0].Y);
             Assert.Equal(2, v[1].X);
             Assert.Equal(3, v[1].Y);
@@ -353,20 +342,20 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity e = world.Entity()
-                .SetFirst<Position, Tgt>(new Position(10, 20))
-                .SetFirst<Velocity, Tgt>(new Velocity(1, 2));
+                .Set<Position, Tgt>(new Position(10, 20))
+                .Set<Velocity, Tgt>(new Velocity(1, 2));
             world.Entity()
-                .SetFirst<Position, Tgt>(new Position(20, 30))
-                .SetFirst<Velocity, Tgt>(new Velocity(2, 3));
+                .Set<Position, Tgt>(new Position(20, 30))
+                .Set<Velocity, Tgt>(new Velocity(2, 3));
             world.Entity()
-                .SetFirst<Position, Tgt>(new Position(30, 40))
-                .SetFirst<Velocity, Tgt>(new Velocity(3, 4));
+                .Set<Position, Tgt>(new Position(30, 40))
+                .Set<Velocity, Tgt>(new Velocity(3, 4));
 
             Table table = e.Table();
-            void *ptr = table.GetPtr<Position>(world.Id<Tgt>());
-            Position *p = (Position*)(ptr);
+            void* ptr = table.GetPtr<Position>(world.Id<Tgt>());
+            Position* p = (Position*)ptr;
             Assert.True(p != null);
-            Assert.Equal(10, p[0].X);
+            Assert.Equal(10, p![0].X);
             Assert.Equal(20, p[0].Y);
             Assert.Equal(20, p[1].X);
             Assert.Equal(30, p[1].Y);
@@ -374,9 +363,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(40, p[2].Y);
 
             ptr = table.GetPtr<Velocity>(world.Id<Tgt>());
-            Velocity *v = (Velocity*)(ptr);
+            Velocity* v = (Velocity*)ptr;
             Assert.True(v != null);
-            Assert.Equal(1, v[0].X);
+            Assert.Equal(1, v![0].X);
             Assert.Equal(2, v[0].Y);
             Assert.Equal(2, v[1].X);
             Assert.Equal(3, v[1].Y);
@@ -390,20 +379,20 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity e = world.Entity()
-                .SetFirst<Position, Tgt>(new Position(10, 20))
-                .SetFirst<Velocity, Tgt>(new Velocity(1, 2));
+                .Set<Position, Tgt>(new Position(10, 20))
+                .Set<Velocity, Tgt>(new Velocity(1, 2));
             world.Entity()
-                .SetFirst<Position, Tgt>(new Position(20, 30))
-                .SetFirst<Velocity, Tgt>(new Velocity(2, 3));
+                .Set<Position, Tgt>(new Position(20, 30))
+                .Set<Velocity, Tgt>(new Velocity(2, 3));
             world.Entity()
-                .SetFirst<Position, Tgt>(new Position(30, 40))
-                .SetFirst<Velocity, Tgt>(new Velocity(3, 4));
+                .Set<Position, Tgt>(new Position(30, 40))
+                .Set<Velocity, Tgt>(new Velocity(3, 4));
 
             Table table = e.Table();
-            void *ptr = table.GetFirstPtr<Position, Tgt>();
-            Position *p = (Position*)(ptr);
+            void* ptr = table.GetFirstPtr<Position, Tgt>();
+            Position* p = (Position*)ptr;
             Assert.True(p != null);
-            Assert.Equal(10, p[0].X);
+            Assert.Equal(10, p![0].X);
             Assert.Equal(20, p[0].Y);
             Assert.Equal(20, p[1].X);
             Assert.Equal(30, p[1].Y);
@@ -411,9 +400,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(40, p[2].Y);
 
             ptr = table.GetFirstPtr<Velocity, Tgt>();
-            Velocity *v = (Velocity*)(ptr);
+            Velocity* v = (Velocity*)ptr;
             Assert.True(v != null);
-            Assert.Equal(1, v[0].X);
+            Assert.Equal(1, v![0].X);
             Assert.Equal(2, v[0].Y);
             Assert.Equal(2, v[1].X);
             Assert.Equal(3, v[1].Y);
@@ -437,16 +426,16 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Velocity(3, 4));
 
             Table table = e.Range();
-            void *ptr = table.GetPtr(world.Id<Position>());
-            Position *p = (Position*)(ptr);
+            void* ptr = table.GetPtr(world.Id<Position>());
+            Position* p = (Position*)ptr;
             Assert.True(p != null);
-            Assert.Equal(20, p[0].X);
+            Assert.Equal(20, p![0].X);
             Assert.Equal(30, p[0].Y);
 
             ptr = table.GetPtr(world.Id<Velocity>());
-            Velocity *v = (Velocity*)(ptr);
+            Velocity* v = (Velocity*)ptr;
             Assert.True(v != null);
-            Assert.Equal(2, v[0].X);
+            Assert.Equal(2, v![0].X);
             Assert.Equal(3, v[0].Y);
         }
 
@@ -466,14 +455,14 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Velocity(3, 4));
 
             Table table = e.Range();
-            Position *p = table.GetPtr<Position>();
+            Position* p = table.GetPtr<Position>();
             Assert.True(p != null);
-            Assert.Equal(20, p[0].X);
+            Assert.Equal(20, p![0].X);
             Assert.Equal(30, p[0].Y);
 
-            Velocity *v = table.GetPtr<Velocity>();
+            Velocity* v = table.GetPtr<Velocity>();
             Assert.True(v != null);
-            Assert.Equal(2, v[0].X);
+            Assert.Equal(2, v![0].X);
             Assert.Equal(3, v[0].Y);
         }
 
@@ -483,26 +472,26 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             world.Entity()
-                .SetFirst<Position, Tgt>(new Position(10, 20))
-                .SetFirst<Velocity, Tgt>(new Velocity(1, 2));
+                .Set<Position, Tgt>(new Position(10, 20))
+                .Set<Velocity, Tgt>(new Velocity(1, 2));
             Entity e = world.Entity()
-                .SetFirst<Position, Tgt>(new Position(20, 30))
-                .SetFirst<Velocity, Tgt>(new Velocity(2, 3));
+                .Set<Position, Tgt>(new Position(20, 30))
+                .Set<Velocity, Tgt>(new Velocity(2, 3));
             world.Entity()
-                .SetFirst<Position, Tgt>(new Position(30, 40))
-                .SetFirst<Velocity, Tgt>(new Velocity(3, 4));
+                .Set<Position, Tgt>(new Position(30, 40))
+                .Set<Velocity, Tgt>(new Velocity(3, 4));
 
             Table table = e.Range();
-            void *ptr = table.GetPtr(world.Id<Position>(), world.Id<Tgt>());
-            Position *p = (Position*)(ptr);
+            void* ptr = table.GetPtr(world.Id<Position>(), world.Id<Tgt>());
+            Position* p = (Position*)ptr;
             Assert.True(p != null);
-            Assert.Equal(20, p[0].X);
+            Assert.Equal(20, p![0].X);
             Assert.Equal(30, p[0].Y);
 
             ptr = table.GetPtr(world.Id<Velocity>(), world.Id<Tgt>());
-            Velocity *v = (Velocity*)(ptr);
+            Velocity* v = (Velocity*)ptr;
             Assert.True(v != null);
-            Assert.Equal(2, v[0].X);
+            Assert.Equal(2, v![0].X);
             Assert.Equal(3, v[0].Y);
         }
 
@@ -512,24 +501,24 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             world.Entity()
-                .SetFirst<Position, Tgt>(new Position(10, 20))
-                .SetFirst<Velocity, Tgt>(new Velocity(1, 2));
+                .Set<Position, Tgt>(new Position(10, 20))
+                .Set<Velocity, Tgt>(new Velocity(1, 2));
             Entity e = world.Entity()
-                .SetFirst<Position, Tgt>(new Position(20, 30))
-                .SetFirst<Velocity, Tgt>(new Velocity(2, 3));
+                .Set<Position, Tgt>(new Position(20, 30))
+                .Set<Velocity, Tgt>(new Velocity(2, 3));
             world.Entity()
-                .SetFirst<Position, Tgt>(new Position(30, 40))
-                .SetFirst<Velocity, Tgt>(new Velocity(3, 4));
+                .Set<Position, Tgt>(new Position(30, 40))
+                .Set<Velocity, Tgt>(new Velocity(3, 4));
 
             Table table = e.Range();
-            Position *p = table.GetPtr<Position>(world.Id<Tgt>());
+            Position* p = table.GetPtr<Position>(world.Id<Tgt>());
             Assert.True(p != null);
-            Assert.Equal(20, p[0].X);
+            Assert.Equal(20, p![0].X);
             Assert.Equal(30, p[0].Y);
 
-            Velocity *v = table.GetPtr<Velocity>(world.Id<Tgt>());
+            Velocity* v = table.GetPtr<Velocity>(world.Id<Tgt>());
             Assert.True(v != null);
-            Assert.Equal(2, v[0].X);
+            Assert.Equal(2, v![0].X);
             Assert.Equal(3, v[0].Y);
         }
 
@@ -539,24 +528,24 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             world.Entity()
-                .SetFirst<Position, Tgt>(new Position(10, 20))
-                .SetFirst<Velocity, Tgt>(new Velocity(1, 2));
+                .Set<Position, Tgt>(new Position(10, 20))
+                .Set<Velocity, Tgt>(new Velocity(1, 2));
             Entity e = world.Entity()
-                .SetFirst<Position, Tgt>(new Position(20, 30))
-                .SetFirst<Velocity, Tgt>(new Velocity(2, 3));
+                .Set<Position, Tgt>(new Position(20, 30))
+                .Set<Velocity, Tgt>(new Velocity(2, 3));
             world.Entity()
-                .SetFirst<Position, Tgt>(new Position(30, 40))
-                .SetFirst<Velocity, Tgt>(new Velocity(3, 4));
+                .Set<Position, Tgt>(new Position(30, 40))
+                .Set<Velocity, Tgt>(new Velocity(3, 4));
 
             Table table = e.Range();
-            Position *p = table.GetFirstPtr<Position, Tgt>();
+            Position* p = table.GetFirstPtr<Position, Tgt>();
             Assert.True(p != null);
-            Assert.Equal(20, p[0].X);
+            Assert.Equal(20, p![0].X);
             Assert.Equal(30, p[0].Y);
 
-            Velocity *v = table.GetFirstPtr<Velocity, Tgt>();
+            Velocity* v = table.GetFirstPtr<Velocity, Tgt>();
             Assert.True(v != null);
-            Assert.Equal(2, v[0].X);
+            Assert.Equal(2, v![0].X);
             Assert.Equal(3, v[0].Y);
         }
 
@@ -609,6 +598,7 @@ namespace Flecs.NET.Tests.Cpp
                 count++;
                 Assert.True(id == world.Id<Position>() || id == world.Id<Velocity>());
             }
+
             Assert.Equal(2, count);
         }
 
@@ -626,9 +616,9 @@ namespace Flecs.NET.Tests.Cpp
 
             Table table = e.Table();
 
-            Number *n = table.GetPtr<Number>();
+            Number* n = table.GetPtr<Number>();
             Assert.True(n != null);
-            Assert.Equal(Number.One, n[0]);
+            Assert.Equal(Number.One, n![0]);
             Assert.Equal(Number.Two, n[1]);
             Assert.Equal(Number.Three, n[2]);
         }

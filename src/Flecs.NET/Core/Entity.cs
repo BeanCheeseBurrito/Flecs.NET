@@ -303,6 +303,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if type is enabled.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public bool Enabled<T>(T value) where T : Enum
+        {
+            return Enabled(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
         ///     Checks if pair is enabled.
         /// </summary>
         /// <param name="second"></param>
@@ -327,12 +338,36 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Checks if pair is enabled.
         /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public bool Enabled<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return Enabled<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Checks if pair is enabled.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public bool Enabled<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return EnabledSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Checks if pair is enabled.
+        /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
         public bool EnabledSecond<TSecond>(ulong first)
         {
-            return Enabled(Macros.PairSecond<TSecond>(first, World));
+            return Enabled(first, Type<TSecond>.Id(World));
         }
 
         /// <summary>
@@ -451,6 +486,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Iterate targets for a given relationship.
+        /// </summary>
+        /// <param name="relation"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        public void Each<TFirst>(TFirst relation, Ecs.EachEntityCallback callback) where TFirst : Enum
+        {
+            Each(EnumType<TFirst>.Id(relation, World), callback);
+        }
+
+        /// <summary>
         ///     Iterate children for entity.
         /// </summary>
         /// <param name="relation"></param>
@@ -484,12 +530,24 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Iterate children for entity.
         /// </summary>
         /// <param name="callback"></param>
         /// <typeparam name="TRel"></typeparam>
         public void Children<TRel>(Ecs.EachEntityCallback callback)
         {
             Children(Type<TRel>.Id(World), callback);
+        }
+
+        /// <summary>
+        ///     Iterate children for entity.
+        /// </summary>
+        /// <param name="relation"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        public void Children<TFirst>(TFirst relation, Ecs.EachEntityCallback callback) where TFirst : Enum
+        {
+            Children(EnumType<TFirst>.Id(relation, World), callback);
         }
 
         /// <summary>
@@ -563,18 +621,33 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get pointer to component value from pair.
         /// </summary>
-        /// <param name="secondEnum"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public TFirst* GetPtr<TFirst, TSecondEnum>(TSecondEnum secondEnum)
+        public TFirst* GetPtr<TFirst, TSecond>(TSecond second)
             where TFirst : unmanaged
-            where TSecondEnum : Enum
+            where TSecond : Enum
         {
-            ulong enumId = EnumType<TSecondEnum>.Id(secondEnum, World);
-            ulong pair = Macros.Pair<TFirst>(enumId, World);
+            ulong pair = Macros.Pair<TFirst, TSecond>(second, World);
             Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             return (TFirst*)ecs_get_id(World, Id, pair);
+        }
+
+        /// <summary>
+        ///     Get pointer to component value from pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetPtr<TFirst, TSecond>(TFirst first)
+            where TFirst : Enum
+            where TSecond : unmanaged
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(first, World);
+            Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            return (TSecond*)ecs_get_id(World, Id, pair);
         }
 
         /// <summary>
@@ -658,17 +731,31 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get managed reference to component value from pair.
         /// </summary>
-        /// <param name="enumMember"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref readonly TFirst Get<TFirst, TSecondEnum>(TSecondEnum enumMember) where TSecondEnum : Enum
+        public ref readonly TFirst Get<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            ulong enumId = EnumType<TSecondEnum>.Id(enumMember, World);
-            ulong pair = Macros.Pair<TFirst>(enumId, World);
+            ulong pair = Macros.Pair<TFirst, TSecond>(second, World);
             Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             void* component = ecs_get_id(World, Id, pair);
             return ref Managed.GetTypeRef<TFirst>(component);
+        }
+
+        /// <summary>
+        ///     Get managed reference to component value from pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref readonly TSecond Get<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            ulong pair = Macros.Pair<TFirst, TSecond>(first, World);
+            Ecs.Assert(Type<TSecond>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            void* component = ecs_get_id(World, Id, pair);
+            return ref Managed.GetTypeRef<TSecond>(component);
         }
 
         /// <summary>
@@ -775,18 +862,29 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get mutable pointer for a pair.
         /// </summary>
-        /// <param name="secondEnum"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public TFirst* GetMutPtr<TFirst, TSecondEnum>(TSecondEnum secondEnum)
+        public TFirst* GetMutPtr<TFirst, TSecond>(TSecond second)
             where TFirst : unmanaged
-            where TSecondEnum : Enum
+            where TSecond : Enum
         {
-            ulong enumId = EnumType<TSecondEnum>.Id(secondEnum, World);
-            ulong pair = Macros.Pair<TFirst>(enumId, World);
-            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return (TFirst*)ecs_get_mut_id(World, Id, pair);
+            return GetMutPtr<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Get mutable pointer for a pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetMutPtr<TFirst, TSecond>(TFirst first)
+            where TFirst : Enum
+            where TSecond : unmanaged
+        {
+            return GetMutSecondPtr<TSecond>(EnumType<TFirst>.Id(first, World));
         }
 
         /// <summary>
@@ -864,6 +962,30 @@ namespace Flecs.NET.Core
             ulong pair = Macros.Pair<TFirst>(second, World);
             Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             return ref Managed.GetTypeRef<TFirst>(ecs_get_mut_id(World, Id, pair));
+        }
+
+        /// <summary>
+        ///     Get mutable managed reference for pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TFirst GetMut<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref GetMut<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Get mutable managed reference for pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TSecond GetMut<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref GetMutSecond<TSecond>(EnumType<TFirst>.Id(first, World));
         }
 
         /// <summary>
@@ -977,9 +1099,20 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public int Depth<T>() where T : unmanaged
+        public int Depth<T>()
         {
             return Depth(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Get depth for given relationship.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public int Depth<T>(T value) where T : Enum
+        {
+            return Depth(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -1046,13 +1179,13 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Check if entity has the provided enum constant.
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public bool Has<TEnum>(TEnum enumMember) where TEnum : Enum
+        public bool Has<T>(T value) where T : Enum
         {
-            ulong enumId = EnumType<TEnum>.Id(enumMember, World);
-            return Has<TEnum>(enumId);
+            ulong enumId = EnumType<T>.Id(value, World);
+            return Has<T>(enumId);
         }
 
         /// <summary>
@@ -1080,14 +1213,25 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Check if entity has the provided pair.
         /// </summary>
-        /// <param name="enumMember"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public bool Has<TFirst, TSecondEnum>(TSecondEnum enumMember) where TSecondEnum : Enum
+        public bool Has<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            ulong enumId = EnumType<TSecondEnum>.Id(enumMember, World);
-            return Has<TFirst>(enumId);
+            return Has<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Check if entity has the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public bool Has<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return HasSecond<TSecond>(EnumType<TFirst>.Id(first, World));
         }
 
         /// <summary>
@@ -1098,7 +1242,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool HasSecond<TSecond>(ulong first)
         {
-            return Has(Macros.PairSecond<TSecond>(first, World));
+            return Has(first, Type<TSecond>.Id(World));
         }
 
         /// <summary>
@@ -1133,6 +1277,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Check if entity owns the provided component.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public bool Owns<T>(T value) where T : Enum
+        {
+            return Owns(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
         ///     Check if entity owns the provided pair.
         /// </summary>
         /// <param name="second"></param>
@@ -1152,6 +1307,41 @@ namespace Flecs.NET.Core
         public bool Owns<TFirst, TSecond>()
         {
             return Owns(Macros.Pair<TFirst, TSecond>(World));
+        }
+
+        /// <summary>
+        ///     Check if entity owns the provided pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public bool Owns<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return Owns<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Check if entity owns the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public bool Owns<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return OwnsSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Check if entity owns the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public bool OwnsSecond<TSecond>(ulong first)
+        {
+            return Owns(first, Type<TSecond>.Id(World));
         }
 
         /// <summary>
@@ -1340,11 +1530,11 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Convert entity to enum constant.
         /// </summary>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public TEnum ToConstant<TEnum>() where TEnum : unmanaged, Enum
+        public T ToConstant<T>() where T : unmanaged, Enum
         {
-            TEnum* ptr = GetPtr<TEnum>();
+            T* ptr = GetPtr<T>();
             Ecs.Assert(ptr != null, "Entity is not a constant");
             return *ptr;
         }
@@ -1522,12 +1712,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Short for Has(EcsChildOf, entity).
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public bool IsChildOf<TEnum>(TEnum enumMember) where TEnum : Enum
+        public bool IsChildOf<T>(T value) where T : Enum
         {
-            ulong enumId = EnumType<TEnum>.Id(enumMember, World);
+            ulong enumId = EnumType<T>.Id(value, World);
             return IsChildOf(enumId);
         }
 
@@ -1578,13 +1768,13 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Add an enum to entity.
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref Entity Add<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref Entity Add<T>(T value) where T : Enum
         {
-            ulong enumId = EnumType<TEnum>.Id(enumMember, World);
-            return ref Add<TEnum>(enumId);
+            ulong enumId = EnumType<T>.Id(value, World);
+            return ref Add<T>(enumId);
         }
 
         /// <summary>
@@ -1601,14 +1791,25 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Add a pair to entity.
         /// </summary>
-        /// <param name="enumMember"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity Add<TFirst, TSecondEnum>(TSecondEnum enumMember) where TSecondEnum : Enum
+        public ref Entity Add<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            ulong enumId = EnumType<TSecondEnum>.Id(enumMember, World);
-            return ref Add<TFirst>(enumId);
+            return ref Add<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Add a pair to entity.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity Add<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref AddSecond<TSecond>(EnumType<TFirst>.Id(first, World));
         }
 
         /// <summary>
@@ -1619,7 +1820,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity AddSecond<TSecond>(ulong first)
         {
-            return ref Add(Macros.PairSecond<TSecond>(first, World));
+            return ref Add(first, Type<TSecond>.Id(World));
         }
 
         /// <summary>
@@ -1666,13 +1867,13 @@ namespace Flecs.NET.Core
         ///     Conditionally adds an enum to entity.
         /// </summary>
         /// <param name="cond"></param>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref Entity AddIf<TEnum>(bool cond, TEnum enumMember) where TEnum : Enum
+        public ref Entity AddIf<T>(bool cond, T value) where T : Enum
         {
-            ulong enumId = EnumType<TEnum>.Id(enumMember, World);
-            return ref AddIf<TEnum>(cond, enumId);
+            ulong enumId = EnumType<T>.Id(value, World);
+            return ref AddIf<T>(cond, enumId);
         }
 
         /// <summary>
@@ -1700,6 +1901,44 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Conditionally adds a pair to entity.
+        /// </summary>
+        /// <param name="cond"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity AddIf<TFirst, TSecond>(bool cond, TSecond second) where TSecond : Enum
+        {
+            return ref AddIf<TFirst>(cond, EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Conditionally adds a pair to entity.
+        /// </summary>
+        /// <param name="cond"></param>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity AddIf<TFirst, TSecond>(bool cond, TFirst first) where TFirst : Enum
+        {
+            return ref AddIfSecond<TSecond>(cond, EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Conditionally adds a pair to entity.
+        /// </summary>
+        /// <param name="cond"></param>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity AddIfSecond<TSecond>(bool cond, ulong first)
+        {
+            return ref AddIf(cond, first, Type<TSecond>.Id(World));
+        }
+
+        /// <summary>
         ///     Shortcut for Add(EcsIsA, entity).
         /// </summary>
         /// <param name="id"></param>
@@ -1720,6 +1959,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Shortcut for Add(EcsIsA, entity).
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Entity IsA<T>(T value) where T : Enum
+        {
+            return ref IsA(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
         ///     Shortcut for Add(EcsChildOf, entity).
         /// </summary>
         /// <param name="second"></param>
@@ -1737,6 +1987,17 @@ namespace Flecs.NET.Core
         public ref Entity ChildOf<T>()
         {
             return ref Add(EcsChildOf, Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Shortcut for Add(EcsChildOf, entity).
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Entity ChildOf<T>(T value) where T : Enum
+        {
+            return ref ChildOf(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -1762,12 +2023,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Shortcut for Add(EcDependsOn, entity).
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref Entity DependsOn<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref Entity DependsOn<T>(T value) where T : Enum
         {
-            return ref DependsOn(EnumType<TEnum>.Id(enumMember, World));
+            return ref DependsOn(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -1788,6 +2049,17 @@ namespace Flecs.NET.Core
         public ref Entity SlotOf<T>()
         {
             return ref Add(EcsSlotOf, Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Shortcut for Add(EcsSlotOf, entity).
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Entity SlotOf<T>(T value) where T : Enum
+        {
+            return ref SlotOf(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -1839,12 +2111,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Remove an enum from entity.
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref Entity Remove<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref Entity Remove<T>(T value) where T : Enum
         {
-            return ref Remove<TEnum>(EnumType<TEnum>.Id(enumMember, World));
+            return ref Remove<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -1872,14 +2144,25 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Remove a pair from entity.
         /// </summary>
-        /// <param name="enumMember"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity Remove<TFirst, TSecondEnum>(TSecondEnum enumMember) where TSecondEnum : Enum
+        public ref Entity Remove<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            ulong enumId = EnumType<TSecondEnum>.Id(enumMember, World);
-            return ref Remove<TFirst>(enumId);
+            return ref Remove<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Remove a pair from entity.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity Remove<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref RemoveSecond<TSecond>(EnumType<TFirst>.Id(first, World));
         }
 
         /// <summary>
@@ -1890,7 +2173,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity RemoveSecond<TSecond>(ulong first)
         {
-            return ref Remove(Macros.PairSecond<TSecond>(first, World));
+            return ref Remove(first, Type<TSecond>.Id(World));
         }
 
         /// <summary>
@@ -1926,6 +2209,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Mark a component or auto-overriding.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Entity Override<T>(T value) where T : Enum
+        {
+            return ref Override(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
         ///     Mark a pair for auto-overriding.
         /// </summary>
         /// <param name="second"></param>
@@ -1950,12 +2244,36 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Mark a pair for auto-overriding.
         /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity Override<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref Override<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Mark a pair for auto-overriding.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity Override<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref OverrideSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Mark a pair for auto-overriding.
+        /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
         public ref Entity OverrideSecond<TSecond>(ulong first)
         {
-            return ref Override(Macros.PairSecond<TSecond>(first, World));
+            return ref Override(first, Type<TSecond>.Id(World));
         }
 
         /// <summary>
@@ -1966,7 +2284,18 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity SetOverride<T>(T component)
         {
-            return ref Override<T>().Set(component);
+            return ref SetOverride(ref component);
+        }
+
+        /// <summary>
+        ///     Set component, mark component for auto-overriding.
+        /// </summary>
+        /// <param name="component"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetOverride<T>(ref T component)
+        {
+            return ref Override<T>().Set(ref component);
         }
 
         /// <summary>
@@ -1978,7 +2307,19 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity SetOverride<TFirst>(ulong second, TFirst component)
         {
-            return ref Override<TFirst>(second).Set(second, component);
+            return ref SetOverride(second, ref component);
+        }
+
+        /// <summary>
+        ///     Set pair, mark component for auto-overriding.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetOverride<TFirst>(ulong second, ref TFirst component)
+        {
+            return ref Override<TFirst>(second).Set(second, ref component);
         }
 
         /// <summary>
@@ -1988,9 +2329,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverrideFirst<TFirst, TSecond>(TFirst component)
+        public ref Entity SetOverride<TFirst, TSecond>(TFirst component)
         {
-            return ref Override<TFirst, TSecond>().SetFirst<TFirst, TSecond>(component);
+            return ref SetOverride<TFirst, TSecond>(ref component);
         }
 
         /// <summary>
@@ -2000,9 +2341,87 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverrideSecond<TFirst, TSecond>(TSecond component)
+        public ref Entity SetOverride<TFirst, TSecond>(ref TFirst component)
         {
-            return ref Override<TFirst, TSecond>().SetSecond<TFirst, TSecond>(component);
+            return ref Override<TFirst, TSecond>().Set<TFirst, TSecond>(ref component);
+        }
+
+        /// <summary>
+        ///     Set pair, mark component for auto-overriding.
+        /// </summary>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetOverride<TFirst, TSecond>(TSecond component)
+        {
+            return ref SetOverride<TFirst, TSecond>(ref component);
+        }
+
+        /// <summary>
+        ///     Set pair, mark component for auto-overriding.
+        /// </summary>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetOverride<TFirst, TSecond>(ref TSecond component)
+        {
+            return ref Override<TFirst, TSecond>().Set<TFirst, TSecond>(ref component);
+        }
+
+        /// <summary>
+        ///     Set pair, mark component for auto-overriding.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetOverride<TFirst, TSecond>(TSecond second, TFirst component) where TSecond : Enum
+        {
+            return ref SetOverride<TFirst, TSecond>(second, ref component);
+        }
+
+        /// <summary>
+        ///     Set pair, mark component for auto-overriding.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetOverride<TFirst, TSecond>(TSecond second, ref TFirst component) where TSecond : Enum
+        {
+            ulong secondId = EnumType<TSecond>.Id(second, World);
+            return ref Override<TFirst>(secondId).Set(secondId, ref component);
+        }
+
+        /// <summary>
+        ///     Set pair, mark component for auto-overriding.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetOverride<TFirst, TSecond>(TFirst first, TSecond component) where TFirst : Enum
+        {
+            return ref SetOverride<TFirst, TSecond>(first, ref component);
+        }
+
+        /// <summary>
+        ///     Set pair, mark component for auto-overriding.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetOverride<TFirst, TSecond>(TFirst first, ref TSecond component) where TFirst : Enum
+        {
+            ulong firstId = EnumType<TFirst>.Id(first, World);
+            return ref OverrideSecond<TSecond>(firstId).SetSecond(firstId, ref component);
         }
 
         /// <summary>
@@ -2014,7 +2433,19 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity SetOverrideSecond<TSecond>(ulong first, TSecond component)
         {
-            return ref OverrideSecond<TSecond>(first).SetSecond(first, component);
+            return ref SetOverrideSecond(first, ref component);
+        }
+
+        /// <summary>
+        ///     Set pair, mark component for auto-overriding.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetOverrideSecond<TSecond>(ulong first, ref TSecond component)
+        {
+            return ref OverrideSecond<TSecond>(first).SetSecond(first, ref component);
         }
 
         /// <summary>
@@ -2060,6 +2491,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Enable component for entity.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Entity Enable<T>(T value) where T : Enum
+        {
+            return ref Enable(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
         ///     Enable pair for entity.
         /// </summary>
         /// <param name="second"></param>
@@ -2079,6 +2521,41 @@ namespace Flecs.NET.Core
         public ref Entity Enable<TFirst, TSecond>()
         {
             return ref Enable(Macros.Pair<TFirst, TSecond>(World));
+        }
+
+        /// <summary>
+        ///     Enable pair for entity.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity Enable<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref Enable<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Enable pair for entity.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity Enable<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref EnableSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Enable pair for entity.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity EnableSecond<TSecond>(ulong first)
+        {
+            return ref Enable(first, Type<TSecond>.Id(World));
         }
 
         /// <summary>
@@ -2124,6 +2601,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Disable component for entity.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref Entity Disable<T>(T value) where T : Enum
+        {
+            return ref Disable(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
         ///     Disable pair for entity.
         /// </summary>
         /// <param name="second"></param>
@@ -2143,6 +2631,41 @@ namespace Flecs.NET.Core
         public ref Entity Disable<TFirst, TSecond>()
         {
             return ref Disable(Macros.Pair<TFirst, TSecond>(World));
+        }
+
+        /// <summary>
+        ///     Disable pair for entity.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity Disable<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref Disable<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Disable pair for entity.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity Disable<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref DisableSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Disable pair for entity.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity DisableSecond<TSecond>(ulong first)
+        {
+            return ref Disable(first, Type<TSecond>.Id(World));
         }
 
         /// <summary>
@@ -2193,7 +2716,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity Set<T>(T component)
         {
-            return ref SetInternal(Type<T>.Id(World), ref component);
+            return ref Set(ref component);
         }
 
         /// <summary>
@@ -2204,7 +2727,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity Set<T>(ref T component)
         {
-            return ref Set(component);
+            return ref SetInternal(Type<T>.Id(World), ref component);
         }
 
         /// <summary>
@@ -2234,29 +2757,13 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Sets data for pair.
         /// </summary>
-        /// <param name="enumMember"></param>
         /// <param name="component"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity Set<TFirst, TSecondEnum>(TSecondEnum enumMember, ref TFirst component)
-            where TSecondEnum : Enum
+        public ref Entity Set<TFirst, TSecond>(TSecond component)
         {
-            ulong enumId = EnumType<TSecondEnum>.Id(enumMember, World);
-            return ref Set(enumId, ref component);
-        }
-
-        /// <summary>
-        ///     Sets data for pair.
-        /// </summary>
-        /// <param name="enumMember"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
-        /// <returns></returns>
-        public ref Entity Set<TFirst, TSecondEnum>(TSecondEnum enumMember, TFirst component) where TSecondEnum : Enum
-        {
-            return ref Set(enumMember, ref component);
+            return ref Set<TFirst, TSecond>(ref component);
         }
 
         /// <summary>
@@ -2266,19 +2773,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetFirst<TFirst, TSecond>(TFirst component)
-        {
-            return ref SetFirst<TFirst, TSecond>(ref component);
-        }
-
-        /// <summary>
-        ///     Sets data for pair.
-        /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref Entity SetFirst<TFirst, TSecond>(ref TFirst component)
+        public ref Entity Set<TFirst, TSecond>(ref TSecond component)
         {
             return ref SetInternal(Macros.Pair<TFirst, TSecond>(World), ref component);
         }
@@ -2290,9 +2785,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetSecond<TFirst, TSecond>(TSecond component)
+        public ref Entity Set<TFirst, TSecond>(TFirst component)
         {
-            return ref SetSecond<TFirst, TSecond>(ref component);
+            return ref Set<TFirst, TSecond>(ref component);
         }
 
         /// <summary>
@@ -2302,9 +2797,61 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetSecond<TFirst, TSecond>(ref TSecond component)
+        public ref Entity Set<TFirst, TSecond>(ref TFirst component)
         {
             return ref SetInternal(Macros.Pair<TFirst, TSecond>(World), ref component);
+        }
+
+        /// <summary>
+        ///     Sets data for pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity Set<TFirst, TSecond>(TSecond second, TFirst component) where TSecond : Enum
+        {
+            return ref Set<TFirst, TSecond>(second, ref component);
+        }
+
+        /// <summary>
+        ///     Sets data for pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity Set<TFirst, TSecond>(TSecond second, ref TFirst component) where TSecond : Enum
+        {
+            return ref Set(EnumType<TSecond>.Id(second, World), ref component);
+        }
+
+        /// <summary>
+        ///     Sets data for pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity Set<TFirst, TSecond>(TFirst first, TSecond component) where TFirst : Enum
+        {
+            return ref Set<TFirst, TSecond>(first, ref component);
+        }
+
+        /// <summary>
+        ///     Sets data for pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity Set<TFirst, TSecond>(TFirst first, ref TSecond component) where TFirst : Enum
+        {
+            return ref SetSecond(EnumType<TFirst>.Id(first, World), ref component);
         }
 
         /// <summary>
@@ -2661,6 +3208,36 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Set pair from JSON.
         /// </summary>
+        /// <param name="second"></param>
+        /// <param name="json"></param>
+        /// <param name="desc"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetJson<TFirst, TSecond>(TSecond second, string json, ecs_from_json_desc_t* desc = null)
+            where TSecond : Enum
+        {
+            return ref SetJson<TFirst>(EnumType<TSecond>.Id(second, World), json, desc);
+        }
+
+        /// <summary>
+        ///     Set pair from JSON.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="json"></param>
+        /// <param name="desc"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetJson<TFirst, TSecond>(TFirst first, string json, ecs_from_json_desc_t* desc = null)
+            where TFirst : Enum
+        {
+            return ref SetJsonSecond<TSecond>(EnumType<TFirst>.Id(first, World), json, desc);
+        }
+
+        /// <summary>
+        ///     Set pair from JSON.
+        /// </summary>
         /// <param name="first"></param>
         /// <param name="json"></param>
         /// <param name="desc"></param>
@@ -2668,7 +3245,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity SetJsonSecond<TSecond>(ulong first, string json, ecs_from_json_desc_t* desc = null)
         {
-            return ref SetJson(Macros.PairSecond<TSecond>(first, World), json, desc);
+            return ref SetJson(first, Type<TSecond>.Id(World), json, desc);
         }
 
         /// <summary>
@@ -2799,18 +3376,29 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get mutable pointer for a pair.
         /// </summary>
-        /// <param name="secondEnum"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public TFirst* EnsurePtr<TFirst, TSecondEnum>(TSecondEnum secondEnum)
+        public TFirst* EnsurePtr<TFirst, TSecond>(TSecond second)
             where TFirst : unmanaged
-            where TSecondEnum : Enum
+            where TSecond : Enum
         {
-            ulong enumId = EnumType<TSecondEnum>.Id(secondEnum, World);
-            ulong pair = Macros.Pair<TFirst>(enumId, World);
-            Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
-            return (TFirst*)ecs_ensure_id(World, Id, pair);
+            return EnsurePtr<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Get mutable pointer for a pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* EnsurePtr<TFirst, TSecond>(TFirst first)
+            where TFirst : Enum
+            where TSecond : unmanaged
+        {
+            return EnsureSecondPtr<TSecond>(EnumType<TFirst>.Id(first, World));
         }
 
         /// <summary>
@@ -2893,6 +3481,30 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get mutable managed reference for pair.
         /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TFirst Ensure<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref Ensure<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Get mutable managed reference for pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TSecond Ensure<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref EnsureSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Get mutable managed reference for pair.
+        /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
@@ -2958,7 +3570,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Signal that first element of pair was modified.
+        ///     Signal that component was modified.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void Modified<T>(T value) where T : Enum
+        {
+            Modified(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
+        ///     Signal that a pair was modified.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -2968,7 +3589,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Signal that first element of pair was modified.
+        ///     Signal that a pair was modified.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -2978,13 +3599,35 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Signal that first element of pair was modified.
+        ///     Signal that a pair was modified.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void Modified<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            Modified<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Signal that a pair was modified.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void Modified<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            ModifiedSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Signal that a pair was modified.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
         public void ModifiedSecond<TSecond>(ulong first)
         {
-            Modified(Macros.PairSecond<TSecond>(first, World));
+            Modified(first, Type<TSecond>.Id(World));
         }
 
         /// <summary>
@@ -3006,6 +3649,30 @@ namespace Flecs.NET.Core
         public Ref<TFirst> GetRef<TFirst>(ulong second)
         {
             return new Ref<TFirst>(World, Id, Macros.Pair<TFirst>(second, World));
+        }
+
+        /// <summary>
+        ///     Get ref to pair component.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Ref<TFirst> GetRef<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return GetRef<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Get ref to pair component.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Ref<TSecond> GetRef<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return GetRefSecond<TSecond>(EnumType<TFirst>.Id(first, World));
         }
 
         /// <summary>

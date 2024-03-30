@@ -113,7 +113,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity e = world.Entity().SetFirst<Position, Tag>(new Position { X = 10, Y = 20 });
+            Entity e = world.Entity().Set<Position, Tag>(new Position { X = 10, Y = 20 });
             Ref<Position> reference = e.GetRefFirst<Position, Tag>();
             reference.GetPtr()->X++;
 

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Flecs.NET.Core;
 using Xunit;
@@ -475,7 +476,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set(new Position(3, 4));
             world.Entity().Set(new Position(5, 6));
 
-            Filter q = world.Filter<Position>("my.query");
+            Filter q = world.Filter<Position>("my.Query");
 
             int count = 0;
             q.Iter().SetVar(0, e2).Each((Entity e) =>
@@ -561,7 +562,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Entity()
                 .Add<TagA>()
-                .SetFirst<Position, Tag>(new Position(1.0f, 2.0f));
+                .Set<Position, Tag>(new Position(1.0f, 2.0f));
             world.Entity()
                 .Add<TagA>();
 

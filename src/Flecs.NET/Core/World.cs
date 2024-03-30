@@ -429,7 +429,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref World SetFirst<TFirst, TSecond>(ref TFirst component)
         {
-            Entity<TFirst>().SetFirst<TFirst, TSecond>(ref component);
+            Entity<TFirst>().Set<TFirst, TSecond>(ref component);
             return ref this;
         }
 
@@ -442,7 +442,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref World SetSecond<TFirst, TSecond>(ref TSecond component)
         {
-            Entity<TFirst>().SetSecond<TFirst, TSecond>(ref component);
+            Entity<TFirst>().Set<TFirst, TSecond>(ref component);
             return ref this;
         }
 
@@ -2684,7 +2684,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Checks if two <see cref="World"/> instances are eqaul.
+        ///     Checks if two <see cref="World"/> instances are equal.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -2728,6 +2728,10 @@ namespace Flecs.NET.Core
     // Flecs.NET Extensions
     public unsafe partial struct World
     {
+        /// <summary>
+        ///     Gets an empty table.
+        /// </summary>
+        /// <returns></returns>
         public Table Table()
         {
             return new Table(Handle);

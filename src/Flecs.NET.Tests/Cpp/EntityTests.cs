@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Flecs.NET.Core;
 using Xunit;
 using static Flecs.NET.Bindings.Native;
@@ -438,7 +441,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
-            Id id = position.Id;
+            Id id = position;
 
             Entity entity = world.Entity()
                 .Set(new Position(10, 20));
@@ -483,7 +486,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
-            Id id = position.Id;
+            Id id = position;
 
             Entity entity = world.Entity()
                 .Set(new Position(10, 20));
@@ -565,7 +568,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
-            Id id = position.Id;
+            Id id = position;
 
             Position p = new Position(10, 20);
 
@@ -627,7 +630,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
-            Id id = position.Id;
+            Id id = position;
 
             Position p = new Position(10, 20);
 
@@ -718,7 +721,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity b = world.Entity();
 
             Id pair = new Id(a, b);
-            pair = pair.AddFlags(ECS_PAIR).Id;
+            pair = pair.AddFlags(ECS_PAIR);
 
             Assert.True(pair.HasFlags(ECS_PAIR));
 
@@ -825,8 +828,8 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity();
             Entity e2 = world.Entity();
 
-            Id id1 = e1.Id;
-            Id id2 = e2.Id;
+            Id id1 = e1;
+            Id id2 = e2;
 
             Assert.True(e1 == id1);
             Assert.True(e2 == id2);
@@ -1375,13 +1378,13 @@ namespace Flecs.NET.Tests.Cpp
         //     using World world = World.Create();
         //
         //     Entity e = world.Entity()
-        //         .Set<Pod>({10});
+        //         .Set<Pod>({10));
         //     Assert.Equal(Pod.copy_invoked, 0);
         //
         //     Assert.True(e.Has<Pod>());
         //     const Pod *p = e.GetPtr<Pod>();
-        //     Assert.True(p != NULL);
-        //     Assert.Equal(p.value, 10);
+        //     Assert.True(p != null);
+        //     Assert.Equal(p.Value, 10);
         // }
         //
         // [Fact]
@@ -1396,8 +1399,8 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     Assert.True(e.Has<Pod>());
         //     const Pod *p = e.GetPtr<Pod>();
-        //     Assert.True(p != NULL);
-        //     Assert.Equal(p.value, 10);
+        //     Assert.True(p != null);
+        //     Assert.Equal(p.Value, 10);
         // }
         //
         [Fact]
@@ -1572,7 +1575,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity @base = world.Entity()
-                .SetOverrideFirst<Position, Tgt>(new Position(10, 20));
+                .SetOverride<Position, Tgt>(new Position(10, 20));
 
             Entity e = world.Entity()
                 .Add(EcsIsA, @base);
@@ -1622,7 +1625,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity @base = world.Entity()
-                .SetOverrideSecond<Tgt, Position>(new Position(10, 20));
+                .SetOverride<Tgt, Position>(new Position(10, 20));
 
             Entity e = world.Entity()
                 .Add(EcsIsA, @base);
@@ -1939,6 +1942,29 @@ namespace Flecs.NET.Tests.Cpp
                 }));
             }));
         }
+
+        // TODO: Need way to check if table is locked so a C# exception can be thrown
+        // [Fact]
+        // [Conditional("DEBUG")]
+        // private void EnsureComponentWithCallbackNested()
+        // {
+        //     using World world = World.Create();
+        //
+        //     Entity e = world.Entity()
+        //         .Set(new Position(10, 20))
+        //         .Set(new Velocity(1, 2));
+        //
+        //     Assert.True(e.Write((ref Position p) =>
+        //     {
+        //         Assert.Equal(10, p.X);
+        //         Assert.Equal(20, p.Y);
+        //
+        //         Assert.Throws<Ecs.AssertionException>(() =>
+        //         {
+        //             e.Write((ref Velocity p) => { });
+        //         });
+        //     }));
+        // }
 
         [Fact]
         private void Set1ComponentWithCallback()
@@ -3597,6 +3623,20 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
+        [Conditional("DEBUG")]
+        private void IdGetInvalidEntity()
+        {
+            using World world = World.Create();
+
+            Entity r = world.Entity();
+            Entity o = world.Entity();
+
+            Id id = world.Id(r, o);
+
+            Assert.Throws<Ecs.AssertionException>(() => id.Entity());
+        }
+
+        [Fact]
         private void EachInStage()
         {
             using World world = World.Create();
@@ -3757,7 +3797,6 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(10, ptr->X);
             Assert.Equal(20, ptr->Y);
         }
-
 
         [Fact]
         private void SetDocName()

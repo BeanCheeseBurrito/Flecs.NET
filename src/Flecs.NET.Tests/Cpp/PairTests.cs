@@ -125,7 +125,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity entity = world.Entity()
-                .SetFirst<Pair, Position>(new Pair { Value = 10 });
+                .Set<Pair, Position>(new Pair { Value = 10 });
 
             Assert.True(Type<Pair>.RawId != Type<Position>.RawId);
 
@@ -165,7 +165,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             world.Entity()
-                .SetFirst<Pair, Position>(new Pair { Value = 10 });
+                .Set<Pair, Position>(new Pair { Value = 10 });
 
             int invokeCount = 0;
             int entityCount = 0;
@@ -198,8 +198,8 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             world.Entity()
-                .SetFirst<Pair, Position>(new Pair { Value = 10 })
-                .SetFirst<Pair, Velocity>(new Pair { Value = 20 });
+                .Set<Pair, Position>(new Pair { Value = 10 })
+                .Set<Pair, Velocity>(new Pair { Value = 20 });
 
             int invokeCount = 0;
             int entityCount = 0;
@@ -232,7 +232,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity @base = world.Entity()
-                .SetFirst<Pair, Position>(new Pair { Value = 10 });
+                .Set<Pair, Position>(new Pair { Value = 10 });
 
             Entity instance = world.Entity()
                 .Add(EcsIsA, @base);
@@ -311,7 +311,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity e = world.Entity()
-                .SetFirst<Pair, Position>(new Pair { Value = 20 });
+                .Set<Pair, Position>(new Pair { Value = 20 });
 
             Pair* t = e.EnsureFirstPtr<Pair, Position>();
             Assert.True(t != null);
@@ -370,7 +370,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity e = world.Entity()
-                .SetSecond<Tag, Position>(new Position { X = 10, Y = 20 });
+                .Set<Tag, Position>(new Position { X = 10, Y = 20 });
 
             Position* t = e.EnsureSecondPtr<Tag, Position>();
             Assert.True(t != null);
@@ -499,8 +499,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Id rel = world.Component<Position>().Id;
-            Id obj = world.Entity().Id;
+            Id rel = world.Component<Position>();
+            Id obj = world.Entity();
 
             Entity e = world.Entity()
                 .Set(obj, new Position { X = 10, Y = 20 });
@@ -560,7 +560,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Id obj = world.Entity().Id;
+            Id obj = world.Entity();
 
             Entity e = world.Entity()
                 .Set(obj, new Position { X = 10, Y = 20 });
@@ -598,7 +598,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity e = world.Entity().SetFirst<Position, Tag>(new Position { X = 10, Y = 20 });
+            Entity e = world.Entity().Set<Position, Tag>(new Position { X = 10, Y = 20 });
 
             Assert.True(e.Has<Position, Tag>());
 
@@ -614,7 +614,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity e = world.Entity().SetSecond<Tag, Position>(new Position { X = 10, Y = 20 });
+            Entity e = world.Entity().Set<Tag, Position>(new Position { X = 10, Y = 20 });
 
             Assert.True(e.Has<Tag, Position>());
 
@@ -649,7 +649,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Id rel = world.Entity().Id;
+            Id rel = world.Entity();
 
             Entity e = world.Entity()
                 .SetSecond(rel, new Position { X = 10, Y = 20 });
@@ -1080,7 +1080,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Position p = new Position { X = 10, Y = 20 };
-            Entity e = world.Entity().SetFirst<Position, Tag>(p);
+            Entity e = world.Entity().Set<Position, Tag>(p);
 
             Position* ptr = e.GetFirstPtr<Position, Tag>();
             Assert.True(ptr != null);

@@ -110,6 +110,11 @@ public struct Parent
 public struct Other
 {
     public int Value { get; set; }
+
+    public Other(int value)
+    {
+        Value = value;
+    }
 }
 
 public struct Singleton
@@ -263,6 +268,36 @@ public struct PositionInitialized
     }
 }
 
+public enum Letters
+{
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H,
+    I,
+    J,
+    K,
+    L,
+    M,
+    N,
+    O,
+    P,
+    Q,
+    R,
+    S,
+    T,
+    U,
+    V,
+    W,
+    X,
+    Y,
+    Z
+}
+
 public struct Turret
 {
     public struct Base { }
@@ -336,6 +371,16 @@ public struct Rel
 {
 }
 
+public struct RelData
+{
+    public int Foo;
+
+    public RelData(int foo)
+    {
+        Foo = foo;
+    }
+}
+
 public struct Obj
 {
 }
@@ -345,6 +390,10 @@ public struct Likes
 }
 
 public struct Bob
+{
+}
+
+public struct Alice
 {
 }
 
@@ -405,6 +454,10 @@ public struct TgtA
 }
 
 public struct TgtB
+{
+}
+
+public struct TgtC
 {
 }
 
@@ -485,5 +538,33 @@ public struct TagS
 }
 
 public struct TagT
+{
+}
+
+public struct TagU
+{
+}
+
+
+public struct TagV
+{
+}
+
+public struct TagW
+{
+}
+
+
+public struct TagX
+{
+}
+
+
+public struct TagY
+{
+}
+
+
+public struct TagZ
 {
 }

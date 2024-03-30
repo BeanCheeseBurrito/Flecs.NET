@@ -124,6 +124,32 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
+        private void EntityLookupFrom0()
+        {
+            using World world = World.Create();
+
+            Entity foo = world.Entity("foo");
+            Assert.True(world.Lookup("foo") == foo);
+
+            Entity dummy = default;
+
+            Assert.Throws<Ecs.AssertionException>(() => dummy.Lookup("foo"));
+        }
+
+        [Fact]
+        private void EntityLookupFrom0WithWorld()
+        {
+            using World world = World.Create();
+
+            Entity foo = world.Entity("foo");
+            Assert.True(world.Lookup("foo") == foo);
+
+            Entity dummy = world.Entity(0);
+
+            Assert.Throws<Ecs.AssertionException>(() => dummy.Lookup("foo"));
+        }
+
+        [Fact]
         private void AliasComponent()
         {
             using World world = World.Create();
@@ -219,7 +245,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(e == 0);
 
-            world.Use(child); // alias being nullptr
+            world.Use(child);
 
             e = world.Lookup("child");
 
