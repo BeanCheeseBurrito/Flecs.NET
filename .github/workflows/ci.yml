@@ -89,7 +89,7 @@ jobs:
 
     - name: Run Tests
       shell: bash
-      run: dotnet test --no-build --verbosity minimal
+      run: dotnet test --no-build
 
     - name: Pack Nuget Packages
       shell: bash

@@ -155,12 +155,13 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByCallback callback)
         {
-            Ecs.Assert(QueryDesc.ctx == null, "Cannot set .GroupBy callback if ctx is occupied.");
+            Ecs.Assert(QueryDesc.group_by_ctx == null,
+                "Cannot set .GroupBy callback if group_by_ctx is already occupied.");
 
             QueryContext.GroupByAction.Dispose();
             QueryContext.ContextFree.Dispose();
 
-            BindingContext.QueryGroupByContext* context = Memory.Alloc<BindingContext.QueryGroupByContext>(1);
+            BindingContext.QueryGroupByContext* context = Memory.AllocZeroed<BindingContext.QueryGroupByContext>(1);
             BindingContext.SetCallback(ref context->GroupBy, callback);
             QueryDesc.group_by = BindingContext.QueryGroupByPointer;
             QueryDesc.group_by_ctx_free = BindingContext.QueryGroupByContextFreePointer;

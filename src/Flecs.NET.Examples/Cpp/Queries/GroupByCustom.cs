@@ -2,7 +2,6 @@
 // GroupBy function. A custom function makes it possible to customize how a
 // group id is calculated for a table.
 
-using Flecs.NET.Bindings;
 using Flecs.NET.Core;
 
 // Components
@@ -20,7 +19,7 @@ file struct First;
 file struct Second;
 file struct Third;
 
-public static unsafe class Cpp_Queries_GroupByCustom
+public static class Cpp_Queries_GroupByCustom
 {
     public static void Main()
     {
@@ -80,12 +79,11 @@ public static unsafe class Cpp_Queries_GroupByCustom
         });
     }
 
-    private static ulong GroupByRelation(Native.ecs_world_t* ecs, Native.ecs_table_t* table, ulong id, void* ctx)
+    private static ulong GroupByRelation(World world, Table table, Entity id)
     {
-        // Use ecs_search to find the target for the relationship in the table
-        ulong match;
-        if (Native.ecs_search(ecs, table, new Id(id, Ecs.Wildcard), &match) != -1)
-            return new Id(ecs, match).Second(); // First, Second or Third
+        if (table.Search(id, Ecs.Wildcard, out Id match) != -1)
+            return match.Second();
+
         return 0;
     }
 }
