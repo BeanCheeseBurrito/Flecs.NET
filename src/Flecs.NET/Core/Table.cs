@@ -120,6 +120,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Find type index for type.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public int TypeIndex<T>(T value) where T : Enum
+        {
+            return TypeIndex(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
         ///     Find type index for pair.
         /// </summary>
         /// <param name="second"></param>
@@ -139,6 +150,30 @@ namespace Flecs.NET.Core
         public int TypeIndex<TFirst, TSecond>()
         {
             return TypeIndex(Type<TFirst>.Id(World), Type<TSecond>.Id(World));
+        }
+
+        /// <summary>
+        ///     Find type index for pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int TypeIndex<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return TypeIndex<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Find type index for pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int TypeIndex<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return TypeIndexSecond<TSecond>(EnumType<TFirst>.Id(first, World));
         }
 
         /// <summary>
@@ -175,13 +210,24 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Find column index for type.
+        ///     Find column index for component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public int ColumnIndex<T>()
         {
             return ColumnIndex(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Find column index for component.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public int ColumnIndex<T>(T value) where T : Enum
+        {
+            return ColumnIndex(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -206,6 +252,30 @@ namespace Flecs.NET.Core
         {
             ulong pair = Macros.Pair<TFirst, TSecond>(World);
             return ColumnIndex(pair);
+        }
+
+        /// <summary>
+        ///     Find column index for pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int ColumnIndex<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ColumnIndex<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Find column index for pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int ColumnIndex<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ColumnIndexSecond<TSecond>(EnumType<TFirst>.Id(first, World));
         }
 
         /// <summary>
@@ -253,6 +323,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Test if table has the type.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public bool Has<T>(T value) where T : Enum
+        {
+            return Has(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
         ///     Test if table has the pair.
         /// </summary>
         /// <param name="second"></param>
@@ -272,6 +353,30 @@ namespace Flecs.NET.Core
         public bool Has<TFirst, TSecond>()
         {
             return TypeIndex<TFirst, TSecond>() != -1;
+        }
+
+        /// <summary>
+        ///     Test if table has the pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public bool Has<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return Has<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Test if table has the pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public bool Has<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return HasSecond<TSecond>(EnumType<TFirst>.Id(first, World));
         }
 
         /// <summary>
@@ -345,6 +450,34 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get pointer to component array by pair.
         /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetPtr<TFirst, TSecond>(TSecond second)
+            where TFirst : unmanaged
+            where TSecond : Enum
+        {
+            return GetPtr<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Get pointer to component array by pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetPtr<TFirst, TSecond>(TFirst first)
+            where TFirst : Enum
+            where TSecond : unmanaged
+        {
+            return GetSecondPtr<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Get pointer to component array by pair.
+        /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
@@ -403,6 +536,34 @@ namespace Flecs.NET.Core
             Ecs.Assert(Type<TFirst>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
             ulong pair = Macros.Pair<TFirst>(second, World);
             return new Field<TFirst>(GetPtr(pair), ColumnSize(ColumnIndex<TFirst>()));
+        }
+
+        /// <summary>
+        ///    Get managed column to component array by pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Field<TFirst> Get<TFirst, TSecond>(TSecond second)
+            where TFirst : unmanaged
+            where TSecond : Enum
+        {
+            return Get<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Get managed column to component array by pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Field<TSecond> Get<TFirst, TSecond>(TFirst first)
+            where TFirst : Enum
+            where TSecond : unmanaged
+        {
+            return GetSecond<TSecond>(EnumType<TFirst>.Id(first, World));
         }
 
         /// <summary>
@@ -472,6 +633,17 @@ namespace Flecs.NET.Core
         public int Depth<T>()
         {
             return Depth(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Get depth for given relationship.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public int Depth<T>(T value) where T : Enum
+        {
+            return Depth(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
