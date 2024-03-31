@@ -235,7 +235,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            world.SetFirst<Position, Tag>(new Position(10, 20));
+            world.Set<Position, Tag>(new Position(10, 20));
 
             Position* p = world.GetFirstPtr<Position, Tag>();
             Assert.True(p != null);

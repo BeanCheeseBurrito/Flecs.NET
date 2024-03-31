@@ -127,7 +127,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int TypeIndex<T>(T value) where T : Enum
         {
-            return TypeIndex(EnumType<T>.Id(value, World));
+            return TypeIndex<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int ColumnIndex<T>(T value) where T : Enum
         {
-            return ColumnIndex(EnumType<T>.Id(value, World));
+            return ColumnIndex<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -330,7 +330,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has<T>(T value) where T : Enum
         {
-            return Has(EnumType<T>.Id(value, World));
+            return Has<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -775,12 +775,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get table that has all components of current table plus the specified pair.
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Table Add<TEnum>(TEnum enumMember) where TEnum : Enum
+        public Table Add<T>(T value) where T : Enum
         {
-            return Add<TEnum>(EnumType<TEnum>.Id(enumMember, World));
+            return Add<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -874,12 +874,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get table that has all components of current table minus the specified pair.
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Table Remove<TEnum>(TEnum enumMember) where TEnum : Enum
+        public Table Remove<T>(T value) where T : Enum
         {
-            return Remove<TEnum>(EnumType<TEnum>.Id(enumMember, World));
+            return Remove<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -973,12 +973,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Search for pair index in table.
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public int Search<TEnum>(TEnum enumMember) where TEnum : Enum
+        public int Search<T>(T value) where T : Enum
         {
-            return Search<TEnum>(EnumType<TEnum>.Id(enumMember, World));
+            return Search<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -1079,13 +1079,13 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Search for pair index in table.
         /// </summary>
-        /// <param name="enumMember"></param>
+        /// <param name="value"></param>
         /// <param name="idOut"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public int Search<TEnum>(TEnum enumMember, out ulong idOut) where TEnum : Enum
+        public int Search<T>(T value, out ulong idOut) where T : Enum
         {
-            return Search<TEnum>(EnumType<TEnum>.Id(enumMember, World), out idOut);
+            return Search<T>(EnumType<T>.Id(value, World), out idOut);
         }
 
         /// <summary>
@@ -1176,13 +1176,13 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Search for pair index in table.
         /// </summary>
-        /// <param name="enumMember"></param>
+        /// <param name="value"></param>
         /// <param name="idOut"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public int Search<TEnum>(TEnum enumMember, out Id idOut) where TEnum : Enum
+        public int Search<T>(T value, out Id idOut) where T : Enum
         {
-            return Search<TEnum>(EnumType<TEnum>.Id(enumMember, World), out idOut);
+            return Search<T>(EnumType<T>.Id(value, World), out idOut);
         }
 
         /// <summary>

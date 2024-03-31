@@ -191,14 +191,6 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void DefaultCtorNoAssign()
-        {
-            Filter f;
-
-            Assert.True(true);
-        }
-
-        [Fact]
         private void TermGetId()
         {
             using World world = World.Create();

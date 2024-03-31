@@ -310,7 +310,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Enabled<T>(T value) where T : Enum
         {
-            return Enabled(EnumType<T>.Id(value, World));
+            return Enabled<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -1184,8 +1184,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has<T>(T value) where T : Enum
         {
-            ulong enumId = EnumType<T>.Id(value, World);
-            return Has<T>(enumId);
+            return Has<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -1284,7 +1283,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Owns<T>(T value) where T : Enum
         {
-            return Owns(EnumType<T>.Id(value, World));
+            return Owns<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -1717,8 +1716,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool IsChildOf<T>(T value) where T : Enum
         {
-            ulong enumId = EnumType<T>.Id(value, World);
-            return IsChildOf(enumId);
+            return IsChildOf(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -1773,8 +1771,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity Add<T>(T value) where T : Enum
         {
-            ulong enumId = EnumType<T>.Id(value, World);
-            return ref Add<T>(enumId);
+            return ref Add<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -1872,8 +1869,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity AddIf<T>(bool cond, T value) where T : Enum
         {
-            ulong enumId = EnumType<T>.Id(value, World);
-            return ref AddIf<T>(cond, enumId);
+            return ref AddIf<T>(cond, EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -2216,7 +2212,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity Override<T>(T value) where T : Enum
         {
-            return ref Override(EnumType<T>.Id(value, World));
+            return ref Override<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -2498,7 +2494,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity Enable<T>(T value) where T : Enum
         {
-            return ref Enable(EnumType<T>.Id(value, World));
+            return ref Enable<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -2608,7 +2604,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity Disable<T>(T value) where T : Enum
         {
-            return ref Disable(EnumType<T>.Id(value, World));
+            return ref Disable<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -3575,7 +3571,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void Modified<T>(T value) where T : Enum
         {
-            Modified(EnumType<T>.Id(value, World));
+            Modified<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>

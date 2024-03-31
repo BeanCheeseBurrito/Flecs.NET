@@ -427,7 +427,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref World SetFirst<TFirst, TSecond>(ref TFirst component)
+        public ref World Set<TFirst, TSecond>(ref TFirst component)
         {
             Entity<TFirst>().Set<TFirst, TSecond>(ref component);
             return ref this;
@@ -440,9 +440,48 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref World SetSecond<TFirst, TSecond>(ref TSecond component)
+        public ref World Set<TFirst, TSecond>(ref TSecond component)
         {
             Entity<TFirst>().Set<TFirst, TSecond>(ref component);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Set singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref World Set<TFirst, TSecond>(TSecond second, ref TFirst component) where TSecond : Enum
+        {
+            return ref Set(EnumType<TSecond>.Id(second, Handle), ref component);
+        }
+
+        /// <summary>
+        ///     Set singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref World Set<TFirst, TSecond>(TFirst first, ref TSecond component) where TFirst : Enum
+        {
+            return ref SetSecond(EnumType<TFirst>.Id(first, Handle), ref component);
+        }
+
+        /// <summary>
+        ///     Set singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref World SetSecond<TSecond>(ulong first, ref TSecond component)
+        {
+            Entity(first).SetSecond(first, ref component);
             return ref this;
         }
 
@@ -476,9 +515,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref World SetFirst<TFirst, TSecond>(TFirst component)
+        public ref World Set<TFirst, TSecond>(TFirst component)
         {
-            return ref SetFirst<TFirst, TSecond>(ref component);
+            return ref Set<TFirst, TSecond>(ref component);
         }
 
         /// <summary>
@@ -488,9 +527,47 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref World SetSecond<TFirst, TSecond>(TSecond component)
+        public ref World Set<TFirst, TSecond>(TSecond component)
         {
-            return ref SetSecond<TFirst, TSecond>(ref component);
+            return ref Set<TFirst, TSecond>(ref component);
+        }
+
+        /// <summary>
+        ///     Set singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref World Set<TFirst, TSecond>(TSecond second, TFirst component) where TSecond : Enum
+        {
+            return ref Set<TFirst, TSecond>(second, ref component);
+        }
+
+        /// <summary>
+        ///     Set singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref World Set<TFirst, TSecond>(TFirst first, TSecond component) where TFirst : Enum
+        {
+            return ref Set<TFirst, TSecond>(first, ref component);
+        }
+
+        /// <summary>
+        ///     Set singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref World SetSecond<TSecond>(ulong first, TSecond component)
+        {
+            return ref SetSecond(first, ref component);
         }
 
         /// <summary>
@@ -528,6 +605,34 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get mut pointer to singleton pair.
         /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TFirst* EnsurePtr<TFirst, TSecond>(TSecond second)
+            where TFirst : unmanaged
+            where TSecond : Enum
+        {
+            return EnsurePtr<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Get mut pointer to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* EnsurePtr<TFirst, TSecond>(TFirst first)
+            where TFirst : Enum
+            where TSecond : unmanaged
+        {
+            return EnsureSecondPtr<TSecond>(EnumType<TFirst>.Id(first, Handle));
+        }
+
+        /// <summary>
+        ///     Get mut pointer to singleton pair.
+        /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
@@ -545,6 +650,17 @@ namespace Flecs.NET.Core
         public TSecond* EnsureSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
         {
             return Entity<TFirst>().EnsureSecondPtr<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Get mut pointer to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* EnsureSecondPtr<TSecond>(ulong first) where TSecond : unmanaged
+        {
+            return Entity(first).EnsureSecondPtr<TSecond>(first);
         }
 
         /// <summary>
@@ -571,6 +687,30 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get managed mut reference to singleton pair.
         /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TFirst Ensure<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref Ensure<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Get managed mut reference to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TSecond Ensure<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref EnsureSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+        }
+
+        /// <summary>
+        ///     Get managed mut reference to singleton pair.
+        /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
@@ -588,6 +728,17 @@ namespace Flecs.NET.Core
         public ref TSecond EnsureSecond<TFirst, TSecond>()
         {
             return ref Entity<TFirst>().EnsureSecond<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Get managed mut reference to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TSecond EnsureSecond<TSecond>(ulong first)
+        {
+            return ref Entity(first).EnsureSecond<TSecond>(first);
         }
 
         /// <summary>
@@ -620,6 +771,38 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Mark singleton pair as modified.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void Modified<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            Modified<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Mark singleton pair as modified.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void Modified<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            ModifiedSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+        }
+
+        /// <summary>
+        ///     Mark singleton pair as modified.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        public void ModifiedSecond<TSecond>(ulong first)
+        {
+            Entity(first).ModifiedSecond<TSecond>(first);
+        }
+
+        /// <summary>
         ///     Gets ref to singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -643,6 +826,30 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Gets ref to singleton pair.
         /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Ref<TFirst> GetRef<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return GetRef<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Gets ref to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Ref<TSecond> GetRef<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return GetRefSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+        }
+
+        /// <summary>
+        ///     Gets ref to singleton pair.
+        /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
@@ -660,6 +867,17 @@ namespace Flecs.NET.Core
         public Ref<TSecond> GetRefSecond<TFirst, TSecond>()
         {
             return Entity<TFirst>().GetRefSecond<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Gets ref to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Ref<TSecond> GetRefSecond<TSecond>(ulong first)
+        {
+            return Entity(first).GetRefSecond<TSecond>(first);
         }
 
         /// <summary>
@@ -686,6 +904,34 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Gets pointer to singleton pair.
         /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetPtr<TFirst, TSecond>(TSecond second)
+            where TFirst : unmanaged
+            where TSecond : Enum
+        {
+            return GetPtr<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Gets pointer to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetPtr<TFirst, TSecond>(TFirst first)
+            where TFirst : Enum
+            where TSecond : unmanaged
+        {
+            return GetSecondPtr<TSecond>(EnumType<TFirst>.Id(first, Handle));
+        }
+
+        /// <summary>
+        ///     Gets pointer to singleton pair.
+        /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
@@ -704,6 +950,17 @@ namespace Flecs.NET.Core
         public TSecond* GetSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
         {
             return Entity<TFirst>().GetSecondPtr<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Gets pointer to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetSecondPtr<TSecond>(ulong first) where TSecond : unmanaged
+        {
+            return Entity(first).GetSecondPtr<TSecond>(first);
         }
 
         /// <summary>
@@ -730,6 +987,30 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Gets managed reference to singleton pair.
         /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref readonly TFirst Get<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref Get<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Gets managed reference to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref readonly TSecond Get<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref GetSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+        }
+
+        /// <summary>
+        ///     Gets managed reference to singleton pair.
+        /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
@@ -747,6 +1028,17 @@ namespace Flecs.NET.Core
         public ref readonly TSecond GetSecond<TFirst, TSecond>()
         {
             return ref Entity<TFirst>().GetSecond<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Gets managed reference to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref readonly TSecond GetSecond<TSecond>(ulong first)
+        {
+            return ref Entity(first).GetSecond<TSecond>(first);
         }
 
         /// <summary>
@@ -770,7 +1062,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Test if world has pair.
+        ///      Test if world has singleton component.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool Has(ulong id)
+        {
+            return Entity(id).Has(id);
+        }
+
+        /// <summary>
+        ///     Test if world has singleton pair.
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -788,6 +1090,17 @@ namespace Flecs.NET.Core
         public bool Has<T>()
         {
             return Entity<T>().Has<T>();
+        }
+
+        /// <summary>
+        ///     Test if world has singleton component.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public bool Has<T>(T value) where T : Enum
+        {
+            return Entity<T>().Has(value);
         }
 
         /// <summary>
@@ -813,6 +1126,50 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Test if world has singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public bool Has<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return Has<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Test if world has singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public bool Has<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return HasSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+        }
+
+        /// <summary>
+        ///     Test if world has singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public bool HasSecond<TSecond>(ulong first)
+        {
+            return Entity(first).Has(first, Type<TSecond>.Id(Handle));
+        }
+
+        /// <summary>
+        ///     Add singleton component.
+        /// </summary>
+        /// <param name="id"></param>
+        public void Add(ulong id)
+        {
+            Entity(id).Add(id);
+        }
+
+        /// <summary>
         ///     Add singleton pair.
         /// </summary>
         /// <param name="first"></param>
@@ -829,6 +1186,16 @@ namespace Flecs.NET.Core
         public void Add<T>()
         {
             Entity<T>().Add<T>();
+        }
+
+        /// <summary>
+        ///     Add singleton component.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Add<T>(T value) where T : Enum
+        {
+            Entity<T>().Add(value);
         }
 
         /// <summary>
@@ -852,6 +1219,47 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Add singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void Add<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            Add<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Add singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void Add<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            AddSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+        }
+
+        /// <summary>
+        ///     Add singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        public void AddSecond<TSecond>(ulong first)
+        {
+            Entity(first).AddSecond<TSecond>(first);
+        }
+
+        /// <summary>
+        ///     Remove singleton id.
+        /// </summary>
+        /// <param name="id"></param>
+        public void Remove(ulong id)
+        {
+            Entity(id).Remove(id);
+        }
+
+        /// <summary>
         ///     Remove singleton pair.
         /// </summary>
         /// <param name="first"></param>
@@ -868,6 +1276,16 @@ namespace Flecs.NET.Core
         public void Remove<T>()
         {
             Entity<T>().Remove<T>();
+        }
+
+        /// <summary>
+        ///     Remove singleton id.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Remove<T>(T value) where T : Enum
+        {
+            Entity<T>().Remove(value);
         }
 
         /// <summary>
@@ -888,6 +1306,38 @@ namespace Flecs.NET.Core
         public void Remove<TFirst, TSecond>()
         {
             Entity<TFirst>().Remove<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Remove singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void Remove<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            Remove<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Remove singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void Remove<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            RemoveSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+        }
+
+        /// <summary>
+        ///     Remove singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        public void RemoveSecond<TSecond>(ulong first)
+        {
+            Entity(first).Remove<TSecond>(first);
         }
 
         /// <summary>
@@ -912,35 +1362,87 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get target for a given pair from a singleton entity.
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="index"></param>
-        /// <typeparam name="TFirst"></typeparam>
         /// <returns></returns>
-        public Entity Target<TFirst>(int index = 0)
+        public Entity Target(ulong id, int index = 0)
         {
-            return Entity(ecs_get_target(Handle, Type<TFirst>.Id(Handle), Type<TFirst>.Id(Handle), index));
+            return Entity(ecs_get_target(Handle, id, id, index));
         }
 
         /// <summary>
         ///     Get target for a given pair from a singleton entity.
         /// </summary>
-        /// <param name="first"></param>
+        /// <param name="id"></param>
+        /// <param name="rel"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Entity Target(ulong id, ulong rel, int index = 0)
+        {
+            return Entity(ecs_get_target(Handle, id, rel, index));
+        }
+
+        /// <summary>
+        ///     Get target for a given pair from a singleton entity.
+        /// </summary>
         /// <param name="index"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Entity Target<T>(ulong first, int index = 0)
+        public Entity Target<T>(int index = 0)
         {
-            return Entity(ecs_get_target(Handle, Type<T>.Id(Handle), first, index));
+            return Entity(ecs_get_target(Handle, Type<T>.Id(Handle), Type<T>.Id(Handle), index));
         }
 
         /// <summary>
         ///     Get target for a given pair from a singleton entity.
         /// </summary>
-        /// <param name="first"></param>
+        /// <param name="rel"></param>
         /// <param name="index"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Entity Target(ulong first, int index = 0)
+        public Entity Target<T>(ulong rel, int index = 0)
         {
-            return Entity(ecs_get_target(Handle, first, first, index));
+            return Entity(ecs_get_target(Handle, Type<T>.Id(Handle), rel, index));
+        }
+
+        /// <summary>
+        ///     Get target for a given pair from a singleton entity.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="index"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Entity Target<T>(T value, int index = 0) where T : Enum
+        {
+            return Entity(ecs_get_target(Handle, Entity(value), Entity(value), index));
+        }
+
+        /// <summary>
+        ///     Get target for a given pair from a singleton entity.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="rel"></param>
+        /// <param name="index"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Entity Target<T>(T value, ulong rel, int index = 0) where T : Enum
+        {
+            return Entity(ecs_get_target(Handle, Entity(value), rel, index));
+        }
+
+        /// <summary>
+        ///     Creates alias for component.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="alias"></param>
+        public Entity Use(ulong entity, string alias = "")
+        {
+            if (string.IsNullOrEmpty(alias))
+                alias = NativeString.GetString(ecs_get_name(Handle, entity));
+
+            using NativeString nativeAlias = (NativeString)alias;
+            ecs_set_alias(Handle, entity, nativeAlias);
+            return Entity(entity);
         }
 
         /// <summary>
@@ -965,6 +1467,18 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates alias for component.
         /// </summary>
+        /// <param name="value"></param>
+        /// <param name="alias"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Entity Use<T>(T value, string alias = "") where T : Enum
+        {
+            return Use(EnumType<T>.Id(value, Handle), alias);
+        }
+
+        /// <summary>
+        ///     Creates alias for component.
+        /// </summary>
         /// <param name="name"></param>
         /// <param name="alias"></param>
         /// <returns></returns>
@@ -984,27 +1498,13 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates alias for component.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="alias"></param>
-        public void Use(ulong entity, string alias = "")
-        {
-            if (string.IsNullOrEmpty(alias))
-                alias = NativeString.GetString(ecs_get_name(Handle, entity));
-
-            using NativeString nativeAlias = (NativeString)alias;
-            ecs_set_alias(Handle, entity, nativeAlias);
-        }
-
-        /// <summary>
         ///     Count entities matching a component.
         /// </summary>
-        /// <param name="componentId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public int Count(ulong componentId)
+        public int Count(ulong id)
         {
-            return ecs_count_id(Handle, componentId);
+            return ecs_count_id(Handle, id);
         }
 
         /// <summary>
@@ -1026,6 +1526,17 @@ namespace Flecs.NET.Core
         public int Count<T>()
         {
             return Count(Type<T>.Id(Handle));
+        }
+
+        /// <summary>
+        ///     Count entities matching a component.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public int Count<T>(T value) where T : Enum
+        {
+            return Count<T>(EnumType<T>.Id(value, Handle));
         }
 
         /// <summary>
@@ -1051,13 +1562,48 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Count entities matching a pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int Count<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return Count<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Count entities matching a pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int Count<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return CountSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+        }
+
+        /// <summary>
+        ///     Count entities matching a pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public int CountSecond<TSecond>(ulong first)
+        {
+            return Count(first, Type<TSecond>.Id(Handle));
+        }
+
+        /// <summary>
         ///     All entities created in function are created with id.
         /// </summary>
-        /// <param name="withId">Id to be added to the created entities.</param>
+        /// <param name="id">Id to be added to the created entities.</param>
         /// <param name="func"></param>
-        public void With(ulong withId, Action func)
+        public void With(ulong id, Action func)
         {
-            ulong prev = ecs_set_with(Handle, withId);
+            ulong prev = ecs_set_with(Handle, id);
             func();
             ecs_set_with(Handle, prev);
         }
@@ -1086,13 +1632,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     All entities created in function are created with enum.
         /// </summary>
-        /// <param name="enum"></param>
+        /// <param name="value"></param>
         /// <param name="func"></param>
-        /// <typeparam name="TEnum"></typeparam>
-        public void With<TEnum>(TEnum @enum, Action func) where TEnum : Enum
+        /// <typeparam name="T"></typeparam>
+        public void With<T>(T value, Action func) where T : Enum
         {
-            ulong enumId = EnumType<TEnum>.Id(@enum, Handle);
-            With<TEnum>(enumId, func);
+            With<T>(EnumType<T>.Id(value, Handle), func);
         }
 
         /// <summary>
@@ -1109,19 +1654,6 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="secondEnum"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
-        public void With<TFirst, TSecondEnum>(TSecondEnum secondEnum, Action func) where TSecondEnum : Enum
-        {
-            ulong enumId = EnumType<TSecondEnum>.Id(secondEnum, Handle);
-            With<TFirst>(enumId, func);
-        }
-
-        /// <summary>
-        ///     All entities created in function are created with pair.
-        /// </summary>
         /// <param name="func"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -1133,12 +1665,36 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
+        /// <param name="second"></param>
+        /// <param name="func"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void With<TFirst, TSecond>(TSecond second, Action func) where TSecond : Enum
+        {
+            With<TFirst>(EnumType<TSecond>.Id(second, Handle), func);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="func"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void With<TFirst, TSecond>(TFirst first, Action func) where TFirst : Enum
+        {
+            WithSecond<TSecond>(EnumType<TFirst>.Id(first, Handle), func);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
         /// <param name="first"></param>
         /// <param name="func"></param>
         /// <typeparam name="TSecond"></typeparam>
         public void WithSecond<TSecond>(ulong first, Action func)
         {
-            With(Macros.PairSecond<TSecond>(first, Handle), func);
+            With(first, Type<TSecond>.Id(Handle), func);
         }
 
         /// <summary>
@@ -1155,13 +1711,24 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Same as scope(parent, func), but with T as parent.
+        ///     Same as Scope(parent, func), but with T as parent.
         /// </summary>
         /// <param name="func"></param>
         /// <typeparam name="T"></typeparam>
         public void Scope<T>(Action func)
         {
             Scope(Type<T>.Id(Handle), func);
+        }
+
+        /// <summary>
+        ///     Same as Scope(parent, func), but with enum as parent.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="func"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Scope<T>(T value, Action func) where T : Enum
+        {
+            Scope(EnumType<T>.Id(value, Handle), func);
         }
 
         /// <summary>
@@ -1182,6 +1749,17 @@ namespace Flecs.NET.Core
         public ScopedWorld Scope<T>()
         {
             return Scope(Type<T>.Id(Handle));
+        }
+
+        /// <summary>
+        ///     Use provided scope for operations ran on returned world.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ScopedWorld Scope<T>(T value) where T : Enum
+        {
+            return Scope(EnumType<T>.Id(value, Handle));
         }
 
         /// <summary>
@@ -1225,12 +1803,11 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Delete all entities with specified enum.
         /// </summary>
-        /// <param name="enum"></param>
-        /// <typeparam name="TEnum"></typeparam>
-        public void DeleteWith<TEnum>(TEnum @enum) where TEnum : Enum
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        public void DeleteWith<T>(T value) where T : Enum
         {
-            ulong enumId = EnumType<TEnum>.Id(@enum, Handle);
-            DeleteWith<TEnum>(enumId);
+            DeleteWith<T>(EnumType<T>.Id(value, Handle));
         }
 
         /// <summary>
@@ -1256,13 +1833,23 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Delete all entities with specified pair.
         /// </summary>
-        /// <param name="secondEnum"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
-        public void DeleteWith<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        /// <typeparam name="TSecond"></typeparam>
+        public void DeleteWith<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            ulong enumId = EnumType<TSecondEnum>.Id(secondEnum, Handle);
-            DeleteWith<TFirst>(enumId);
+            DeleteWith<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Delete all entities with specified pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void DeleteWith<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            DeleteWithSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
         }
 
         /// <summary>
@@ -1306,12 +1893,11 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Remove all instances of specified enum.
         /// </summary>
-        /// <param name="enum"></param>
-        /// <typeparam name="TEnum"></typeparam>
-        public void RemoveAll<TEnum>(TEnum @enum) where TEnum : Enum
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        public void RemoveAll<T>(T value) where T : Enum
         {
-            ulong enumId = EnumType<TEnum>.Id(@enum, Handle);
-            RemoveAll<TEnum>(enumId);
+            RemoveAll<T>(EnumType<T>.Id(value, Handle));
         }
 
         /// <summary>
@@ -1337,13 +1923,23 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Remove all instances of specified pair.
         /// </summary>
-        /// <param name="secondEnum"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
-        public void RemoveAll<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        /// <typeparam name="TSecond"></typeparam>
+        public void RemoveAll<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            ulong enumId = EnumType<TSecondEnum>.Id(secondEnum, Handle);
-            RemoveAll<TFirst>(enumId);
+            RemoveAll<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Remove all instances of specified pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void RemoveAll<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            RemoveAllSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
         }
 
         /// <summary>
@@ -1520,13 +2116,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get id from an enum.
         /// </summary>
-        /// <param name="enum"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Id Id<TEnum>(TEnum @enum) where TEnum : Enum
+        public Id Id<T>(T value) where T : Enum
         {
-            ulong enumId = EnumType<TEnum>.Id(@enum, Handle);
-            return new Id(Handle, enumId);
+            return new Id(Handle, EnumType<T>.Id(value, Handle));
         }
 
         /// <summary>
@@ -1537,7 +2132,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id<TFirst>(ulong second)
         {
-            return new Id(Handle, Macros.Pair<TFirst>(second, Handle));
+            return Id(Type<TFirst>.Id(Handle), second);
         }
 
         /// <summary>
@@ -1548,20 +2143,42 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id<TFirst, TSecond>()
         {
-            return new Id(Handle, Macros.Pair<TFirst, TSecond>(Handle));
+            return Id(Type<TFirst>.Id(Handle), Type<TSecond>.Id(Handle));
         }
 
         /// <summary>
         ///     Get pair id.
         /// </summary>
-        /// <param name="secondEnum"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public Id Id<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        public Id Id<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            ulong enumId = EnumType<TSecondEnum>.Id(secondEnum, Handle);
-            return new Id(Handle, Macros.Pair<TFirst>(enumId, Handle));
+            return Id<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Get pair id.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Id Id<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return IdSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+        }
+
+        /// <summary>
+        ///     Get pair id.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Id IdSecond<TSecond>(ulong first)
+        {
+            return Id(first, Type<TSecond>.Id(Handle));
         }
 
         /// <summary>
@@ -1572,8 +2189,18 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair(ulong first, ulong second)
         {
-            Ecs.Assert(!Macros.IsPair(first) && !Macros.IsPair(second), "Cannot create nested pairs.");
             return Id(first, second);
+        }
+
+        /// <summary>
+        ///     Get pair id.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Id Pair<T>(T value) where T : Enum
+        {
+            return Id<T>(EnumType<T>.Id(value, Handle));
         }
 
         /// <summary>
@@ -1584,7 +2211,6 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair<TFirst>(ulong second)
         {
-            Ecs.Assert(!Macros.IsPair(second), "Cannot create nested pairs.");
             return Id<TFirst>(second);
         }
 
@@ -1602,12 +2228,36 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Get pair id.
         /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Id Pair<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return Pair<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Get pair id.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Id Pair<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return PairSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+        }
+
+        /// <summary>
+        ///     Get pair id.
+        /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
         public Id PairSecond<TSecond>(ulong first)
         {
-            return Id(Macros.PairSecond<TSecond>(first, Handle));
+            return IdSecond<TSecond>(first);
         }
 
         /// <summary>
@@ -1712,12 +2362,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Convert enum constant to entity.
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Entity Entity<TEnum>(TEnum enumMember) where TEnum : Enum
+        public Entity Entity<T>(T value) where T : Enum
         {
-            return new Entity(Handle, EnumType<TEnum>.Id(enumMember, Handle));
+            return new Entity(Handle, EnumType<T>.Id(value, Handle));
         }
 
         /// <summary>
@@ -1780,6 +2430,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Creates a new event.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public EventBuilder Event<T>(T value) where T : Enum
+        {
+            return new EventBuilder(Handle, EnumType<T>.Id(value, Handle));
+        }
+
+        /// <summary>
         ///     Creates a new term.
         /// </summary>
         /// <returns></returns>
@@ -1833,11 +2494,11 @@ namespace Flecs.NET.Core
         ///     Creates a new term.
         /// </summary>
         /// <param name="value"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Term Term<TEnum>(TEnum value) where TEnum : Enum
+        public Term Term<T>(T value) where T : Enum
         {
-            return new Term(Handle, EnumType<TEnum>.Id(value, Handle));
+            return Term<T>(EnumType<T>.Id(value, Handle));
         }
 
         /// <summary>
@@ -1860,6 +2521,30 @@ namespace Flecs.NET.Core
         public Term Term<TFirst, TSecond>()
         {
             return new Term(Handle, Macros.Pair<TFirst, TSecond>(Handle));
+        }
+
+        /// <summary>
+        ///     Creates a new term.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Term Term<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return Term<TFirst>(EnumType<TSecond>.Id(second, Handle));
+        }
+
+        /// <summary>
+        ///     Creates a new term.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public Term Term<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return TermSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
         }
 
         /// <summary>
@@ -1893,9 +2578,18 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public void Each(ulong first, ulong second, Ecs.EachEntityCallback callback)
         {
-            ecs_iter_t it = Macros.TermIter(Handle, Macros.Pair(first, second));
-            while (ecs_term_next(&it) == 1)
-                Invoker.Each(&it, callback);
+            Each(Macros.Pair(first, second), callback);
+        }
+
+        /// <summary>
+        ///     Iterate over all entities with the provided pair.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Each<T>(T value, Ecs.EachEntityCallback<T> callback) where T : Enum
+        {
+            Each(EnumType<T>.Id(value, Handle), callback);
         }
 
         /// <summary>
@@ -1919,9 +2613,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Each<TFirst, TSecond>(Ecs.EachEntityCallback callback)
         {
-            ecs_iter_t it = Macros.TermIter(Handle, Macros.Pair<TFirst, TSecond>(Handle));
-            while (ecs_term_next(&it) == 1)
-                Invoker.Each(&it, callback);
+            Each(Pair<TFirst, TSecond>(), callback);
         }
 
         /// <summary>
@@ -1930,11 +2622,9 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
-        public void EachFirst<TFirst, TSecond>(Ecs.EachEntityCallback<TFirst> callback)
+        public void Each<TFirst, TSecond>(Ecs.EachEntityCallback<TFirst> callback)
         {
-            ecs_iter_t it = Macros.TermIter(Handle, Macros.Pair<TFirst, TSecond>(Handle));
-            while (ecs_term_next(&it) == 1)
-                Invoker.Each(&it, callback);
+            Each(Type<TSecond>.Id(Handle), callback);
         }
 
         /// <summary>
@@ -1943,9 +2633,44 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
-        public void EachSecond<TFirst, TSecond>(Ecs.EachEntityCallback<TSecond> callback)
+        public void Each<TFirst, TSecond>(Ecs.EachEntityCallback<TSecond> callback)
         {
-            ecs_iter_t it = Macros.TermIter(Handle, Macros.Pair<TFirst, TSecond>(Handle));
+            EachSecond(Type<TFirst>.Id(Handle), callback);
+        }
+
+        /// <summary>
+        ///     Iterate over all entities with the provided pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void Each<TFirst, TSecond>(TSecond second, Ecs.EachEntityCallback<TFirst> callback) where TSecond : Enum
+        {
+            Each(EnumType<TSecond>.Id(second, Handle), callback);
+        }
+
+        /// <summary>
+        ///     Iterate over all entities with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        public void Each<TFirst, TSecond>(TFirst first, Ecs.EachEntityCallback<TSecond> callback) where TFirst : Enum
+        {
+            EachSecond(EnumType<TFirst>.Id(first, Handle), callback);
+        }
+
+        /// <summary>
+        ///     Iterate over all entities with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        public void EachSecond<TSecond>(ulong first, Ecs.EachEntityCallback<TSecond> callback)
+        {
+            ecs_iter_t it = Macros.TermIter(Handle, Macros.PairSecond<TSecond>(first, Handle));
             while (ecs_term_next(&it) == 1)
                 Invoker.Each(&it, callback);
         }
@@ -1997,6 +2722,16 @@ namespace Flecs.NET.Core
         public void SetPipeline<T>()
         {
             SetPipeline(Type<T>.Id(Handle));
+        }
+
+        /// <summary>
+        ///     Set pipeline.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        public void SetPipeline<T>(T value) where T : Enum
+        {
+            SetPipeline(EnumType<T>.Id(value, Handle));
         }
 
         /// <summary>
@@ -2144,7 +2879,17 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public TimerEntity Timer<T>()
         {
-            return new TimerEntity(Handle, Type<T>.Id(Handle));
+            return Timer(Type<T>.Id(Handle));
+        }
+
+        /// <summary>
+        ///     Creates a timer.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        public void Timer<T>(T value) where T : Enum
+        {
+            Timer(EnumType<T>.Id(value, Handle));
         }
 
         /// <summary>

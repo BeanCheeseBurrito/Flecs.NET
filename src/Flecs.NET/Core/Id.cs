@@ -39,6 +39,7 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         public Id(ulong first, ulong second)
         {
+            Ecs.Assert(!Macros.IsPair(first) && !Macros.IsPair(second), "Cannot create nested pairs.");
             _world = null;
             _value = Macros.Pair(first, second);
         }
@@ -51,6 +52,7 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         public Id(ecs_world_t* world, ulong first, ulong second)
         {
+            Ecs.Assert(!Macros.IsPair(first) && !Macros.IsPair(second), "Cannot create nested pairs.");
             _world = world;
             _value = Macros.Pair(first, second);
         }
@@ -73,6 +75,7 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         public Id(Id first, Id second)
         {
+            Ecs.Assert(!Macros.IsPair(first) && !Macros.IsPair(second), "Cannot create nested pairs.");
             _world = first.World;
             _value = Macros.Pair(first.Value, second.Value);
         }
@@ -84,6 +87,7 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         public Id(Entity first, Entity second)
         {
+            Ecs.Assert(!Macros.IsPair(first) && !Macros.IsPair(second), "Cannot create nested pairs.");
             _world = first.World;
             _value = Macros.Pair(first, second);
         }
