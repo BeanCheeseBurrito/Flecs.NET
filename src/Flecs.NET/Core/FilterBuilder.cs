@@ -155,6 +155,19 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     The up flag indicates that the term identifier may be substituted by
+        ///     traversing a relationship upwards. For example: substitute the identifier
+        ///     with its parent by traversing the ChildOf relationship.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Up<T>(T value) where T : Enum
+        {
+            return ref Up(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
         ///     The cascade flag is like up, but returns results in breadth-first order.
         ///     Only supported for Query.
         /// </summary>
@@ -180,6 +193,18 @@ namespace Flecs.NET.Core
         public ref FilterBuilder Cascade<T>()
         {
             return ref Cascade(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     The cascade flag is like up, but returns results in breadth-first order.
+        ///     Only supported for Query.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Cascade<T>(T value) where T : Enum
+        {
+            return ref Cascade(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -216,6 +241,29 @@ namespace Flecs.NET.Core
             CurrentTermId.trav = traverse;
             CurrentTermId.flags |= flags;
             return ref this;
+        }
+
+        /// <summary>
+        ///     Specify relationship to traverse, and flags to indicate direction.
+        /// </summary>
+        /// <param name="flags"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Trav<T>(uint flags = 0)
+        {
+            return ref Trav(Type<T>.Id(World), flags);
+        }
+
+        /// <summary>
+        ///     Specify relationship to traverse, and flags to indicate direction.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="flags"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Trav<T>(T value, uint flags = 0) where T : Enum
+        {
+            return ref Trav(EnumType<T>.Id(value, World), flags);
         }
 
         /// <summary>
@@ -350,6 +398,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Select src identifier, initialize it with id associated with enum member.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Src<T>(T value) where T : Enum
+        {
+            return ref Src(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
         ///     Select src identifier, initialize it with name. If name starts with a $
         ///     the name is interpreted as a variable.
         /// </summary>
@@ -382,6 +441,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Select first identifier, initialize it with id associated with enum member.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder First<T>(T value) where T : Enum
+        {
+            return ref First(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
         ///     Select first identifier, initialize it with name. If name starts with a $
         ///     the name is interpreted as a variable.
         /// </summary>
@@ -411,6 +481,17 @@ namespace Flecs.NET.Core
         public ref FilterBuilder Second<T>()
         {
             return ref Second(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Select second identifier, initialize it with id associated with enum member.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Second<T>(T value) where T : Enum
+        {
+            return ref Second(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -753,12 +834,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Alternative form of Term().
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref FilterBuilder With<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref FilterBuilder With<T>(T value) where T : Enum
         {
-            return ref Term(enumMember);
+            return ref Term(value);
         }
 
         /// <summary>
@@ -797,13 +878,49 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Alternative form of Term().
         /// </summary>
-        /// <param name="secondEnum"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref FilterBuilder With<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        public ref FilterBuilder With<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Term<TFirst, TSecondEnum>(secondEnum);
+            return ref Term<TFirst, TSecond>(second);
+        }
+
+        /// <summary>
+        ///     Alternative form of Term().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder With<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref TermSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of Term().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder With<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            return ref Term(EnumType<TFirst>.Id(first, World), second);
+        }
+
+        /// <summary>
+        ///     Alternative form of Term().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder With<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            return ref Term(first, EnumType<TSecond>.Id(second, World));
         }
 
         /// <summary>
@@ -895,12 +1012,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Alternative form of Term().Not().
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref FilterBuilder Without<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref FilterBuilder Without<T>(T value) where T : Enum
         {
-            return ref Term(enumMember).Not();
+            return ref Term(value).Not();
         }
 
         /// <summary>
@@ -939,13 +1056,49 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Alternative form of Term().Not().
         /// </summary>
-        /// <param name="secondEnum"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref FilterBuilder Without<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        public ref FilterBuilder Without<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Term<TFirst, TSecondEnum>(secondEnum).Not();
+            return ref Without<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of Term().Not().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Without<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref WithoutSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of Term().Not().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Without<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            return ref Without(EnumType<TFirst>.Id(first, World), second);
+        }
+
+        /// <summary>
+        ///     Alternative form of Term().Not().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Without<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            return ref Without(first, EnumType<TSecond>.Id(second, World));
         }
 
         /// <summary>
@@ -1037,12 +1190,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Alternative form of Term().Write().
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref FilterBuilder Write<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref FilterBuilder Write<T>(T value) where T : Enum
         {
-            return ref Term(enumMember).Write();
+            return ref Term(value).Write();
         }
 
         /// <summary>
@@ -1081,13 +1234,49 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Alternative form of Term().Write().
         /// </summary>
-        /// <param name="secondEnum"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref FilterBuilder Write<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        public ref FilterBuilder Write<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Term<TFirst, TSecondEnum>(secondEnum).Write();
+            return ref Write<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of Term().Write().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Write<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref WriteSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of Term().Write().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Write<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            return ref Write(EnumType<TFirst>.Id(first, World), second);
+        }
+
+        /// <summary>
+        ///     Alternative form of Term().Write().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Write<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            return ref Write(first, EnumType<TSecond>.Id(second, World));
         }
 
         /// <summary>
@@ -1179,12 +1368,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Alternative form of Term().Read().
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref FilterBuilder Read<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref FilterBuilder Read<T>(T value) where T : Enum
         {
-            return ref Term(enumMember).Read();
+            return ref Term(value).Read();
         }
 
         /// <summary>
@@ -1223,13 +1412,49 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Alternative form of Term().Read().
         /// </summary>
-        /// <param name="secondEnum"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref FilterBuilder Read<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        public ref FilterBuilder Read<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Term<TFirst, TSecondEnum>(secondEnum).Read();
+            return ref Read<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of Term().Read().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Read<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref ReadSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of Term().Read().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Read<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            return ref Read(EnumType<TFirst>.Id(first, World), second);
+        }
+
+        /// <summary>
+        ///     Alternative form of Term().Read().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Read<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            return ref Read(first, EnumType<TSecond>.Id(second, World));
         }
 
         /// <summary>
@@ -1432,14 +1657,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Increments to the next term with the provided enum.
         /// </summary>
-        /// <param name="enumMember"></param>
-        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref FilterBuilder Term<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref FilterBuilder Term<T>(T value) where T : Enum
         {
-            ulong enumId = EnumType<TEnum>.Id(enumMember, World);
-            ulong pair = Macros.Pair<TEnum>(enumId, World);
-            return ref Term(pair);
+            return ref Term<T>(EnumType<T>.Id(value, World));
         }
 
         /// <summary>
@@ -1478,14 +1701,49 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Increments to the next term with the provided pair.
         /// </summary>
-        /// <param name="secondEnum"></param>
+        /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecondEnum"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref FilterBuilder Term<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        public ref FilterBuilder Term<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            ulong enumId = EnumType<TSecondEnum>.Id(secondEnum, World);
-            return ref Term<TFirst>(enumId);
+            return ref Term<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Term<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref TermSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Term<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            return ref Term(EnumType<TFirst>.Id(first, World), second);
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref FilterBuilder Term<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            return ref Term(first, EnumType<TSecond>.Id(second, World));
         }
 
         /// <summary>
