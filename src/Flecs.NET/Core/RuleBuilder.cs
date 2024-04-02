@@ -119,6 +119,7 @@ namespace Flecs.NET.Core
         }
     }
 
+    // FilterBuilder Extensions
     public unsafe partial struct RuleBuilder
     {
         /// <inheritdoc cref="Core.FilterBuilder.Self"/>
@@ -135,10 +136,17 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.FilterBuilder.Up{T}"/>
+        /// <inheritdoc cref="Core.FilterBuilder.Up{T}()"/>
         public ref RuleBuilder Up<T>()
         {
             FilterBuilder.Up<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Up{T}(T)"/>
+        public ref RuleBuilder Up<T>(T value) where T : Enum
+        {
+            FilterBuilder.Up(value);
             return ref this;
         }
 
@@ -149,10 +157,17 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.FilterBuilder.Cascade{T}"/>
+        /// <inheritdoc cref="Core.FilterBuilder.Cascade{T}()"/>
         public ref RuleBuilder Cascade<T>()
         {
             FilterBuilder.Cascade<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Cascade{T}(T)"/>
+        public ref RuleBuilder Cascade<T>(T value) where T : Enum
+        {
+            FilterBuilder.Cascade(value);
             return ref this;
         }
 
@@ -170,10 +185,24 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.FilterBuilder.Trav"/>
+        /// <inheritdoc cref="Core.FilterBuilder.Trav(ulong, uint)"/>
         public ref RuleBuilder Trav(ulong traverse, uint flags = 0)
         {
             FilterBuilder.Trav(traverse, flags);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Trav{T}(uint)"/>
+        public ref RuleBuilder Trav<T>(uint flags = 0)
+        {
+            FilterBuilder.Trav<T>(flags);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Trav{T}(T, uint)"/>
+        public ref RuleBuilder Trav<T>(T value, uint flags = 0) where T : Enum
+        {
+            FilterBuilder.Trav(value, flags);
             return ref this;
         }
 
@@ -240,10 +269,17 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.FilterBuilder.Src{T}"/>
+        /// <inheritdoc cref="Core.FilterBuilder.Src{T}()"/>
         public ref RuleBuilder Src<T>()
         {
             FilterBuilder.Src<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Src{T}(T)"/>
+        public ref RuleBuilder Src<T>(T value) where T : Enum
+        {
+            FilterBuilder.Src(value);
             return ref this;
         }
 
@@ -261,10 +297,17 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.FilterBuilder.First{T}"/>
+        /// <inheritdoc cref="Core.FilterBuilder.First{T}()"/>
         public ref RuleBuilder First<T>()
         {
             FilterBuilder.First<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.First{T}(T)"/>
+        public ref RuleBuilder First<T>(T value) where T : Enum
+        {
+            FilterBuilder.First(value);
             return ref this;
         }
 
@@ -282,10 +325,17 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.FilterBuilder.Second{T}"/>
+        /// <inheritdoc cref="Core.FilterBuilder.Second{T}()"/>
         public ref RuleBuilder Second<T>()
         {
             FilterBuilder.Second<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Second{T}(T)"/>
+        public ref RuleBuilder Second<T>(T value) where T : Enum
+        {
+            FilterBuilder.Second(value);
             return ref this;
         }
 
@@ -500,9 +550,9 @@ namespace Flecs.NET.Core
         }
 
         /// <inheritdoc cref="Core.FilterBuilder.With{T}(T)"/>
-        public ref RuleBuilder With<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref RuleBuilder With<T>(T value) where T : Enum
         {
-            FilterBuilder.With(enumMember);
+            FilterBuilder.With(value);
             return ref this;
         }
 
@@ -528,9 +578,30 @@ namespace Flecs.NET.Core
         }
 
         /// <inheritdoc cref="Core.FilterBuilder.With{T1, T2}(T2)"/>
-        public ref RuleBuilder With<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        public ref RuleBuilder With<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            FilterBuilder.With<TFirst, TSecondEnum>(secondEnum);
+            FilterBuilder.With<TFirst, TSecond>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.With{T1, T2}(T1)"/>
+        public ref RuleBuilder With<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            FilterBuilder.With<TFirst, TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.With{T1}(T1, string)"/>
+        public ref RuleBuilder With<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            FilterBuilder.With(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.With{T2}(string, T2)"/>
+        public ref RuleBuilder With<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            FilterBuilder.With(first, second);
             return ref this;
         }
 
@@ -591,9 +662,9 @@ namespace Flecs.NET.Core
         }
 
         /// <inheritdoc cref="Core.FilterBuilder.Without{T}(T)"/>
-        public ref RuleBuilder Without<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref RuleBuilder Without<T>(T value) where T : Enum
         {
-            FilterBuilder.Without(enumMember);
+            FilterBuilder.Without(value);
             return ref this;
         }
 
@@ -619,9 +690,30 @@ namespace Flecs.NET.Core
         }
 
         /// <inheritdoc cref="Core.FilterBuilder.Without{T1, T2}(T2)"/>
-        public ref RuleBuilder Without<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        public ref RuleBuilder Without<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            FilterBuilder.Without<TFirst, TSecondEnum>(secondEnum);
+            FilterBuilder.Without<TFirst, TSecond>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Without{T1, T2}(T1)"/>
+        public ref RuleBuilder Without<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            FilterBuilder.Without<TFirst, TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Without{T1}(T1, string)"/>
+        public ref RuleBuilder Without<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            FilterBuilder.Without(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Without{T2}(string, T2)"/>
+        public ref RuleBuilder Without<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            FilterBuilder.Without(first, second);
             return ref this;
         }
 
@@ -682,9 +774,9 @@ namespace Flecs.NET.Core
         }
 
         /// <inheritdoc cref="Core.FilterBuilder.Write{T}(T)"/>
-        public ref RuleBuilder Write<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref RuleBuilder Write<T>(T value) where T : Enum
         {
-            FilterBuilder.Write(enumMember);
+            FilterBuilder.Write(value);
             return ref this;
         }
 
@@ -710,9 +802,30 @@ namespace Flecs.NET.Core
         }
 
         /// <inheritdoc cref="Core.FilterBuilder.Write{T1, T2}(T2)"/>
-        public ref RuleBuilder Write<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        public ref RuleBuilder Write<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            FilterBuilder.Write<TFirst, TSecondEnum>(secondEnum);
+            FilterBuilder.Write<TFirst, TSecond>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Write{T1, T2}(T1)"/>
+        public ref RuleBuilder Write<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            FilterBuilder.Write<TFirst, TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Write{T1}(T1, string)"/>
+        public ref RuleBuilder Write<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            FilterBuilder.Write(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Write{T2}(string, T2)"/>
+        public ref RuleBuilder Write<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            FilterBuilder.Write(first, second);
             return ref this;
         }
 
@@ -773,9 +886,9 @@ namespace Flecs.NET.Core
         }
 
         /// <inheritdoc cref="Core.FilterBuilder.Read{T}(T)"/>
-        public ref RuleBuilder Read<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref RuleBuilder Read<T>(T value) where T : Enum
         {
-            FilterBuilder.Read(enumMember);
+            FilterBuilder.Read(value);
             return ref this;
         }
 
@@ -801,9 +914,30 @@ namespace Flecs.NET.Core
         }
 
         /// <inheritdoc cref="Core.FilterBuilder.Read{T1, T2}(T2)"/>
-        public ref RuleBuilder Read<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        public ref RuleBuilder Read<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            FilterBuilder.Read<TFirst, TSecondEnum>(secondEnum);
+            FilterBuilder.Read<TFirst, TSecond>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Read{T1, T2}(T1)"/>
+        public ref RuleBuilder Read<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            FilterBuilder.Read<TFirst, TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Read{T1}(T1, string)"/>
+        public ref RuleBuilder Read<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            FilterBuilder.Read(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Read{T2}(string, T2)"/>
+        public ref RuleBuilder Read<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            FilterBuilder.Read(first, second);
             return ref this;
         }
 
@@ -920,9 +1054,9 @@ namespace Flecs.NET.Core
         }
 
         /// <inheritdoc cref="Core.FilterBuilder.Term{T}(T)"/>
-        public ref RuleBuilder Term<TEnum>(TEnum enumMember) where TEnum : Enum
+        public ref RuleBuilder Term<T>(T value) where T : Enum
         {
-            FilterBuilder.Term(enumMember);
+            FilterBuilder.Term(value);
             return ref this;
         }
 
@@ -948,9 +1082,30 @@ namespace Flecs.NET.Core
         }
 
         /// <inheritdoc cref="Core.FilterBuilder.Term{T1, T2}(T2)"/>
-        public ref RuleBuilder Term<TFirst, TSecondEnum>(TSecondEnum secondEnum) where TSecondEnum : Enum
+        public ref RuleBuilder Term<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            FilterBuilder.Term<TFirst, TSecondEnum>(secondEnum);
+            FilterBuilder.Term<TFirst, TSecond>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Term{T1, T2}(T1)"/>
+        public ref RuleBuilder Term<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            FilterBuilder.Term<TFirst, TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Term{T1}(T1, string)"/>
+        public ref RuleBuilder Term<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            FilterBuilder.Term(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="Core.FilterBuilder.Term{T2}(string, T2)"/>
+        public ref RuleBuilder Term<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            FilterBuilder.Term(first, second);
             return ref this;
         }
 
