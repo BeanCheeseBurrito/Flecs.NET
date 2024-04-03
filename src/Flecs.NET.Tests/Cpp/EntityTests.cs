@@ -4187,26 +4187,26 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Has<First>(o2));
         }
 
-        // TODO: Fix later
-        // [Fact]
-        // void AddIfExclusiveRO() {
-        //     using World world = World.Create();
-        //
-        //     world.Component<R>().Entity.Add(Ecs.Exclusive);
-        //
-        //     Entity e = world.Entity();
-        //
-        //     e.Add<R, O1>();
-        //     Assert.True((e.Has<R, O1>()));
-        //
-        //     e.AddIf<R, O2>(true);
-        //     Assert.True((!e.Has<R, O1>()));
-        //     Assert.True((e.Has<R, O2>()));
-        //
-        //     e.AddIf<R, O1>(false);
-        //     Assert.True((!e.Has<R, O1>()));
-        //     Assert.True((!e.Has<R, O2>()));
-        // }
+        [Fact]
+        private void AddIfExclusiveRO()
+        {
+            using World world = World.Create();
+
+            world.Component<R>().Entity.Add(Ecs.Exclusive);
+
+            Entity e = world.Entity();
+
+            e.Add<R, O1>();
+            Assert.True(e.Has<R, O1>());
+
+            e.AddIf<R, O2>(true);
+            Assert.True(!e.Has<R, O1>());
+            Assert.True(e.Has<R, O2>());
+
+            e.AddIf<R, O1>(false);
+            Assert.True(!e.Has<R, O1>());
+            Assert.True(!e.Has<R, O2>());
+        }
 
         [Fact]
         private void ChildrenWithCustomRelation()

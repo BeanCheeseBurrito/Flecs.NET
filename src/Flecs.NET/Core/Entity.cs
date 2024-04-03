@@ -1893,7 +1893,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity AddIf<TFirst, TSecond>(bool cond)
         {
-            return ref AddIf(cond, Macros.Pair<TFirst, TSecond>(World));
+            return ref AddIf<TFirst>(cond, Type<TSecond>.Id(World));
         }
 
         /// <summary>
