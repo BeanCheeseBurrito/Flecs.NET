@@ -4294,34 +4294,33 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(count == 0);
         }
 
-        // TODO: Fix this test later. Root entity is not being found?
-        // [Fact]
-        // void ChildrenFromRoot() {
-        //     using World world = World.Create();
-        //
-        //     int count = 0;
-        //     world.Entity(0).Children((Entity e) =>
-        //     {
-        //         Assert.True(e == world.Entity("flecs"));
-        //         count ++;
-        //     });
-        //     Assert.True(count == 1);
-        // }
-        //
-        // TODO: Fix this test later. Root entity is not being found?
-        // [Fact]
-        // private void ChildrenFromRootWorld()
-        // {
-        //     using World world = World.Create();
-        //
-        //     int count = 0;
-        //     world.Children((Entity e) =>
-        //     {
-        //         Assert.True(e == world.Entity("Flecs"));
-        //         count++;
-        //     });
-        //     Assert.True(count == 1);
-        // }
+        [Fact]
+        private void ChildrenFromRoot()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+            world.Entity(0).Children((Entity e) =>
+            {
+                Assert.True(e == world.Entity("flecs") || e == world.Entity("Flecs"));
+                count++;
+            });
+            Assert.True(count == 2);
+        }
+
+        [Fact]
+        private void ChildrenFromRootWorld()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+            world.Children((Entity e) =>
+            {
+                Assert.True(e == world.Entity("flecs") || e == world.Entity("Flecs"));
+                count++;
+            });
+            Assert.True(count == 2);
+        }
 
         [Fact]
         private void GetDepth()
