@@ -1,17 +1,23 @@
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Core;
 using Xunit;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Tests.Cpp
 {
+    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
+    [SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Local")]
+    [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
     public unsafe class EntityTests
     {
         public EntityTests()
         {
             FlecsInternal.Reset();
+            Pod.CopyInvoked = 0;
+            Pod.CtorInvoked = 0;
+            Pod.DtorInvoked = 0;
+            Pod.MoveInvoked = 0;
         }
 
         [Fact]
@@ -406,7 +412,7 @@ namespace Flecs.NET.Tests.Cpp
 
 
         [Fact]
-        private void GetMutGeneric()
+        private void EnsureGeneric()
         {
             using World world = World.Create();
 
@@ -481,7 +487,7 @@ namespace Flecs.NET.Tests.Cpp
 
 
         [Fact]
-        private void GetMutGenericWithId()
+        private void EnsureGenericWithId()
         {
             using World world = World.Create();
 
@@ -512,7 +518,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void GetMutGenericWithUlong()
+        private void EnsureGenericWithUlong()
         {
             using World world = World.Create();
 
@@ -540,6 +546,123 @@ namespace Flecs.NET.Tests.Cpp
 
             entity.Modified(id);
             Assert.True(invoked);
+        }
+
+        [Fact]
+        private void GetMutWithId()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+
+            Position* p = (Position*)e.GetMutPtr(world.Id<Position>());
+            Assert.True(p == null);
+
+            e.Set(new Position(10, 20));
+
+            p = (Position*)e.GetMutPtr(world.Id<Position>());
+            Assert.True(p != null);
+
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
+        }
+
+        [Fact]
+        private void GetMutT()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+
+            Position* p = e.GetMutPtr<Position>();
+            Assert.True(p == null);
+
+            e.Set(new Position(10, 20));
+
+            p = e.GetMutPtr<Position>();
+            Assert.True(p != null);
+
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
+        }
+
+        [Fact]
+        private void GetMutrt()
+        {
+            using World world = World.Create();
+
+            Entity tgt = world.Entity();
+            Entity e = world.Entity();
+
+            Position* p = (Position*)e.GetMutPtr(world.Id<Position>(), tgt);
+            Assert.True(p == null);
+
+            e.Set(tgt, new Position(10, 20));
+
+            p = (Position*)e.GetMutPtr(world.Id<Position>(), tgt);
+            Assert.True(p != null);
+
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
+        }
+
+        [Fact]
+        private void GetMutRt()
+        {
+            using World world = World.Create();
+
+            Entity tgt = world.Entity();
+            Entity e = world.Entity();
+
+            Position* p = e.GetMutPtr<Position>(tgt);
+            Assert.True(p == null);
+
+            e.Set(tgt, new Position(10, 20));
+
+            p = e.GetMutPtr<Position>(tgt);
+            Assert.True(p != null);
+
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
+        }
+
+        [Fact]
+        private void GetMutRT()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+
+            Position* p = e.GetMutFirstPtr<Position, Tgt>();
+            Assert.True(p == null);
+
+            e.Set<Position, Tgt>(new Position(10, 20));
+
+            p = e.GetMutFirstPtr<Position, Tgt>();
+            Assert.True(p != null);
+
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
+        }
+
+        [Fact]
+        private void GetMutrT()
+        {
+            using World world = World.Create();
+
+            Entity rel = world.Entity();
+            Entity e = world.Entity();
+
+            Position* p = e.GetMutSecondPtr<Position>(rel);
+            Assert.True(p == null);
+
+            e.SetSecond(rel, new Position(10, 20));
+
+            p = e.GetMutSecondPtr<Position>(rel);
+            Assert.True(p != null);
+
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
         }
 
         [Fact]
@@ -1373,36 +1496,22 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(type2.Get(0), world.Id<Position>());
         }
 
-        // [Fact]
-        // void set_no_copy() {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity()
-        //         .Set<Pod>({10));
-        //     Assert.Equal(Pod.copy_invoked, 0);
-        //
-        //     Assert.True(e.Has<Pod>());
-        //     const Pod *p = e.GetPtr<Pod>();
-        //     Assert.True(p != null);
-        //     Assert.Equal(p.Value, 10);
-        // }
-        //
-        // [Fact]
-        // void set_copy() {
-        //     using World world = World.Create();
-        //
-        //     Pod val(10);
-        //
-        //     Entity e = world.Entity()
-        //         .Set<Pod>(val);
-        //     Assert.Equal(Pod.copy_invoked, 1);
-        //
-        //     Assert.True(e.Has<Pod>());
-        //     const Pod *p = e.GetPtr<Pod>();
-        //     Assert.True(p != null);
-        //     Assert.Equal(p.Value, 10);
-        // }
-        //
+        [Fact]
+        private void SetCopy()
+        {
+            using World world = World.Create();
+
+            Pod val = new Pod(10);
+
+            Entity e = world.Entity().Set(val);
+            Assert.Equal(1, Pod.CopyInvoked);
+
+            Assert.True(e.Has<Pod>());
+            Pod* p = e.GetPtr<Pod>();
+            Assert.True(p != null);
+            Assert.Equal(10, p->Value);
+        }
+
         [Fact]
         private void SetDeduced()
         {
@@ -1766,6 +1875,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("(Identifier,Name)", entity.Type().Str());
         }
 
+        [Fact]
         private void SetTemplate()
         {
             using World world = World.Create();
@@ -1876,7 +1986,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(12, p->X);
             Assert.Equal(24, p->Y);
 
-            Assert.False(e3.Read((in Position p) => { }));
+            Assert.False(e3.Read((in Position _) => { }));
         }
 
         [Fact]
@@ -3760,6 +3870,24 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
+        private void Clone()
+        {
+            using World world = World.Create();
+
+            PositionInitialized v = new PositionInitialized(10, 20);
+
+            Entity src = world.Entity().Add<Tag>().Set(v);
+            Entity dst = src.Clone(false);
+            Assert.True(dst.Has<Tag>());
+            Assert.True(dst.Has<PositionInitialized>());
+
+            PositionInitialized* ptr = dst.GetPtr<PositionInitialized>();
+            Assert.True(ptr != null);
+            Assert.NotEqual(10, ptr->X);
+            Assert.NotEqual(20, ptr->Y);
+        }
+
+        [Fact]
         private void CloneWithValue()
         {
             using World world = World.Create();
@@ -4209,6 +4337,23 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
+        private void AddIfPairWith0Object()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+            Entity r = world.Entity();
+            Entity o1 = world.Entity();
+
+            e.Add(r, o1);
+            Assert.True(e.Has(r, o1));
+
+            e.AddIf(false, r, 0);
+            Assert.True(!e.Has(r, o1));
+            Assert.True(!e.Has(r, Ecs.Wildcard));
+        }
+
+        [Fact]
         private void ChildrenWithCustomRelation()
         {
             using World world = World.Create();
@@ -4368,14 +4513,43 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == world.Lookup("parent_child"));
         }
 
-        //
-        // [Fact]
-        // void scoped_world() {
-        //     using World world = World.Create();
-        //
-        //     Entity parent = world.Entity();
-        //     Entity child = parent.Scope().Entity();
-        //     Assert.True(child.Parent() == parent);
-        // }
+        [Fact]
+        private void EntityLookupNotRecursive()
+        {
+            using World world = World.Create();
+
+            Entity child = default;
+            Entity foo = default;
+
+            world.Entity("parent").Scope(() =>
+            {
+                child = world.Entity("child");
+                foo = world.Entity("foo");
+            });
+
+            Assert.True(child.Lookup("foo") == 0);
+            Assert.True(child.Lookup("foo", true) == foo);
+        }
+
+        [Fact]
+        private void WorldLookupNotRecursive()
+        {
+            using World world = World.Create();
+
+            Entity child = default;
+            Entity foo = default;
+
+            world.Entity("parent").Scope(() =>
+            {
+                child = world.Entity("child");
+                foo = world.Entity("foo");
+            });
+
+            child.Scope(() =>
+            {
+                Assert.True(world.Lookup("foo") == foo);
+                Assert.True(world.Lookup("foo", false) == 0);
+            });
+        }
     }
 }

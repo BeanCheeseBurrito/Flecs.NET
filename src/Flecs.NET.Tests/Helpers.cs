@@ -139,19 +139,42 @@ public struct MyModule : IFlecsModule
 public struct Pod
 {
     public int Value { get; set; }
-    public int CtorInvoked { get; set; }
-    public int DtorInvoked { get; set; }
-    public int MoveInvoked { get; set; }
-    public int CopyInvoked { get; set; }
+
+    public static int CtorInvoked { get; set; }
+    public static int DtorInvoked { get; set; }
+    public static int MoveInvoked { get; set; }
+    public static int CopyInvoked { get; set; }
+
+    public Pod(int value)
+    {
+        Value = value;
+    }
 
     static Pod()
     {
         Type<Pod>.TypeHooks = new TypeHooks<Pod>
         {
-            Ctor = (ref Pod data, TypeInfo typeInfo) => { },
-            Dtor = (ref Pod data, TypeInfo typeInfo) => { },
-            Move = (ref Pod dst, ref Pod src, TypeInfo typeInfo) => { },
-            Copy = (ref Pod dst, ref Pod src, TypeInfo typeInfo) => { },
+            Ctor = (ref Pod data, TypeInfo typeInfo) =>
+            {
+                CtorInvoked++;
+                data = default;
+            },
+            Dtor = (ref Pod data, TypeInfo typeInfo) =>
+            {
+                DtorInvoked++;
+                data = default;
+            },
+            Move = (ref Pod dst, ref Pod src, TypeInfo typeInfo) =>
+            {
+                MoveInvoked++;
+                dst = src;
+                src = default;
+            },
+            Copy = (ref Pod dst, ref Pod src, TypeInfo typeInfo) =>
+            {
+                CopyInvoked++;
+                dst = src;
+            },
 
             OnAdd = (Iter it, Field<Pod> pod) => { },
             OnSet = (Iter it, Field<Pod> pod) => { },
