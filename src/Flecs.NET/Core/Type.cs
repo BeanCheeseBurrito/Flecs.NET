@@ -128,8 +128,8 @@ namespace Flecs.NET.Core
         {
             if (RawId == 0)
                 Ecs.Assert(world != null, $"{nameof(ECS_COMPONENT_NOT_REGISTERED)} {name}");
-
-            Ecs.Assert(id == 0 || RawId == id, nameof(ECS_INCONSISTENT_COMPONENT_ID));
+            else
+                Ecs.Assert(id == 0 || RawId == id, nameof(ECS_INCONSISTENT_COMPONENT_ID));
 
             if (IsRegistered(world))
             {

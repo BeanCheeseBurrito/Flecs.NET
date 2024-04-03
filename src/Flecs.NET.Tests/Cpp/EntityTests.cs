@@ -3950,28 +3950,28 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(instBase != 0);
         }
 
-        // TODO: Fix type registration code.
-        // [Fact]
-        // void PrefabHierarchyWithChildOverride() {
-        //     using World world = World.Create();
-        //
-        //     var t = world.Prefab<Turret>();
-        //     var tb = world.Prefab<Turret.Base>().Add<Foo>();
-        //     Assert.True(t != 0);
-        //     Assert.True(tb != 0);
-        //
-        //     var r = world.Prefab<Railgun>().IsA<Turret>();
-        //     var rb = world.Prefab<Railgun.Base>().Add<Bar>();
-        //     Assert.True(r != 0);
-        //     Assert.True(rb != 0);
-        //
-        //     var i = world.Entity().IsA<Railgun>();
-        //     Assert.True(i != 0);
-        //     var ib = i.Lookup("Base");
-        //     Assert.True(ib != 0);
-        //     Assert.True(ib.Has<Foo>());
-        //     Assert.True(ib.Has<Bar>());
-        // }
+        [Fact]
+        private void PrefabHierarchyWithChildOverride()
+        {
+            using World world = World.Create();
+
+            Entity t = world.Prefab<Turret>();
+            Entity tb = world.Prefab<Turret.Base>().Add<Foo>();
+            Assert.True(t != 0);
+            Assert.True(tb != 0);
+
+            Entity r = world.Prefab<Railgun>().IsA<Turret>();
+            Entity rb = world.Prefab<Railgun.Base>().Add<Bar>();
+            Assert.True(r != 0);
+            Assert.True(rb != 0);
+
+            Entity i = world.Entity().IsA<Railgun>();
+            Assert.True(i != 0);
+            Entity ib = i.Lookup("Base");
+            Assert.True(ib != 0);
+            Assert.True(ib.Has<Foo>());
+            Assert.True(ib.Has<Bar>());
+        }
 
         [Fact]
         private void EntityWithNestedType()
