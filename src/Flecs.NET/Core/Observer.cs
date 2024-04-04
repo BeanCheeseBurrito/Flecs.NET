@@ -95,11 +95,9 @@ namespace Flecs.NET.Core
         ///     Returns the filter for the observer.
         /// </summary>
         /// <returns></returns>
-        public Filter Filter()
+        public Query Query()
         {
-            ref readonly EcsPoly poly = ref Entity.Get<EcsPoly>(EcsObserver);
-            ecs_observer_t* observer = (ecs_observer_t*)poly.poly;
-            return new Filter(World, &observer->filter);
+            return new Query(ecs_observer_get_query(World, Id));
         }
 
         /// <summary>

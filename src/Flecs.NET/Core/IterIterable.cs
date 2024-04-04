@@ -57,8 +57,8 @@ namespace Flecs.NET.Core
             {
                 using NativeString nativeName = (NativeString)name;
 
-                ecs_rule_iter_t* rit = &it->priv.iter.rule;
-                int varId = ecs_rule_find_var(rit->rule, nativeName);
+                ecs_query_iter_t* iter = &it->priv.iter.query;
+                int varId = ecs_query_find_var(iter->query, nativeName);
 
                 Ecs.Assert(varId != -1, nameof(ECS_INVALID_PARAMETER));
                 ecs_iter_set_var(it, varId, value);
@@ -76,7 +76,7 @@ namespace Flecs.NET.Core
         {
             fixed (ecs_iter_t* it = &_iter)
             {
-                return NativeString.GetStringAndFree(ecs_iter_to_json(it->real_world, it, desc));
+                return NativeString.GetStringAndFree(ecs_iter_to_json(it, desc));
             }
         }
 
@@ -170,7 +170,7 @@ namespace Flecs.NET.Core
         {
             fixed (ecs_iter_t* it = &_iter)
             {
-                ecs_query_set_group(it, groupId);
+                ecs_iter_set_group(it, groupId);
                 return ref this;
             }
         }
@@ -184,7 +184,7 @@ namespace Flecs.NET.Core
         {
             fixed (ecs_iter_t* it = &_iter)
             {
-                ecs_query_set_group(it, Type<T>.Id(it->real_world));
+                ecs_iter_set_group(it, Type<T>.Id(it->real_world));
                 return ref this;
             }
         }

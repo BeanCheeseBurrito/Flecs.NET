@@ -270,7 +270,7 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
-        ///     Creates a dependson relationship with the provided entity.
+        ///     Creates a DependsOn relationship with the provided entity.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -345,8 +345,7 @@ namespace Flecs.NET.Utilities
 
             return typeof(T) == typeof(ulong) &&
                    (ecs_id_is_tag(world, id) == True ||
-                    ecs_id_is_wildcard(id) == True ||
-                    ecs_id_is_union(world, id) == True);
+                    ecs_id_is_wildcard(id) == True);
         }
 
         /// <summary>
@@ -371,19 +370,6 @@ namespace Flecs.NET.Utilities
         public static void TableUnlock(ecs_world_t* world, ecs_table_t* table)
         {
             ecs_table_unlock(world, table);
-        }
-
-        /// <summary>
-        ///     Get an iter for all entities with the provided id.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ecs_iter_t TermIter(ecs_world_t* world, ulong id)
-        {
-            ecs_term_t term = new ecs_term_t { id = id };
-            return ecs_term_iter(world, &term);
         }
     }
 }

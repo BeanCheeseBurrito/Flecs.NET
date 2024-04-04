@@ -35,6 +35,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Creates a query from a handle.
+        /// </summary>
+        /// <param name="query"></param>
+        public Query(ecs_query_t* query)
+        {
+            _world = query->world;
+            _handle = query;
+        }
+
+        /// <summary>
         ///     Disposes query.
         /// </summary>
         public void Dispose()
@@ -56,21 +66,21 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Returns the entity associated with the query.
+        /// </summary>
+        /// <returns></returns>
+        public Entity Entity()
+        {
+            return new Entity(World, Handle->entity);
+        }
+
+        /// <summary>
         ///     Returns whether the query data changed since the last iteration.
         /// </summary>
         /// <returns></returns>
         public bool Changed()
         {
-            return ecs_query_changed(Handle, null) == 1;
-        }
-
-        /// <summary>
-        ///     Returns whether query is orphaned.
-        /// </summary>
-        /// <returns></returns>
-        public bool Orphaned()
-        {
-            return ecs_query_orphaned(Handle) == 1;
+            return Macros.Bool(ecs_query_changed(Handle));
         }
 
         /// <summary>
@@ -100,7 +110,11 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public void EachTerm(Ecs.TermCallback callback)
         {
-            Filter().EachTerm(callback);
+            for (int i = 0; i < Handle->term_count; i++)
+            {
+                Term term = new Term(World, Handle->terms[i]);
+                callback(ref term);
+            }
         }
 
         /// <summary>
@@ -110,45 +124,55 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term(int index)
         {
-            return Filter().Term(index);
+            Ecs.Assert(index < Handle->term_count, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
+            return new Term(World, Handle->terms[index]);
         }
 
         /// <summary>
-        ///     Returns filter for query.
+        ///     Gets term count.
         /// </summary>
         /// <returns></returns>
-        public Filter Filter()
+        public int TermCount()
         {
-            return new Filter(World, ecs_query_get_filter(Handle));
+            return Handle->term_count;
         }
 
         /// <summary>
-        ///     Returns the field count of the query.
+        ///     Gets field count.
         /// </summary>
         /// <returns></returns>
         public int FieldCount()
         {
-            ecs_filter_t* filter = ecs_query_get_filter(Handle);
-            return filter->term_count;
+            return Handle->field_count;
         }
 
         /// <summary>
-        ///     Returns the filter string of the query.
+        ///     Searches for a variable by name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public int FindVar(string name)
+        {
+            using NativeString nativeName = (NativeString)name;
+            return ecs_query_find_var(Handle, nativeName);
+        }
+
+        /// <summary>
+        ///     Returns the string of the query.
         /// </summary>
         /// <returns></returns>
         public string Str()
         {
-            ecs_filter_t* filter = ecs_query_get_filter(Handle);
-            return NativeString.GetStringAndFree(ecs_filter_str(World, filter));
+            return NativeString.GetStringAndFree(ecs_query_str(Handle));
         }
 
         /// <summary>
-        ///     Returns the entity associated with the query.
+        ///     Returns a string representing the query plan.
         /// </summary>
         /// <returns></returns>
-        public Entity Entity()
+        public string Plan()
         {
-            return new Entity(World, ecs_get_entity(Handle));
+            return NativeString.GetStringAndFree(ecs_query_plan(Handle));
         }
 
         /// <summary>

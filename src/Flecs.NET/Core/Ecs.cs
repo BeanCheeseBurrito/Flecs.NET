@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Flecs.NET.Bindings;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -489,6 +490,11 @@ namespace Flecs.NET.Core
         public const ecs_inout_kind_t InOutNone = EcsInOutNone;
 
         /// <summary>
+        ///     Equivalent to <see cref="EcsInOutFilter"/>
+        /// </summary>
+        public const ecs_inout_kind_t InOutQuery = EcsInOutFilter;
+
+        /// <summary>
         ///     Equivalent to <see cref="EcsOut"/>
         /// </summary>
         public const ecs_inout_kind_t InOut = EcsOut;
@@ -538,57 +544,78 @@ namespace Flecs.NET.Core
         /// </summary>
         public const ecs_oper_kind_t NotFrom = EcsNotFrom;
 
+        /// <summary>
+        ///     Equivalent to <see cref="EcsQueryCacheDefault"/>
+        /// </summary>
+        public const ecs_query_cache_kind_t QueryCacheDefault = EcsQueryCacheDefault;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsQueryCacheAuto"/>
+        /// </summary>
+        public const ecs_query_cache_kind_t QueryCacheAuto = EcsQueryCacheAuto;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsQueryCacheAll"/>
+        /// </summary>
+        public const ecs_query_cache_kind_t QueryCacheAll = EcsQueryCacheAll;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsQueryCacheNone"/>
+        /// </summary>
+        public const ecs_query_cache_kind_t QueryCacheNone = EcsQueryCacheNone;
+
+
         // Built-in term flags
 
         /// <summary>
         ///     Equivalent to <see cref="EcsSelf"/>
         /// </summary>
-        public const uint Self = EcsSelf;
+        public const ulong Self = EcsSelf;
 
         /// <summary>
         ///     Equivalent to <see cref="EcsUp"/>
         /// </summary>
-        public const uint Up = EcsUp;
+        public const ulong Up = EcsUp;
 
         /// <summary>
-        ///     Equivalent to <see cref="EcsDown"/>
+        ///     Equivalent to <see cref="EcsTrav"/>
         /// </summary>
-        public const uint Down = EcsDown;
+        public const ulong Trav = EcsTrav;
 
         /// <summary>
         ///     Equivalent to <see cref="EcsCascade"/>
         /// </summary>
-        public const uint Cascade = EcsCascade;
+        public const ulong Cascade = EcsCascade;
 
         /// <summary>
         ///     Equivalent to <see cref="EcsDesc"/>
         /// </summary>
-        public const uint Desc = EcsDesc;
-
-        /// <summary>
-        ///     Equivalent to <see cref="EcsParent"/>
-        /// </summary>
-        public const uint Parent = EcsParent;
+        public const ulong Desc = EcsDesc;
 
         /// <summary>
         ///     Equivalent to <see cref="EcsIsVariable"/>
         /// </summary>
-        public const uint IsVariable = EcsIsVariable;
+        public const ulong IsVariable = EcsIsVariable;
 
         /// <summary>
         ///     Equivalent to <see cref="EcsIsEntity"/>
         /// </summary>
-        public const uint IsEntity = EcsIsEntity;
+        public const ulong IsEntity = EcsIsEntity;
 
         /// <summary>
-        ///     Equivalent to <see cref="EcsFilter"/>
+        ///     Equivalent to <see cref="EcsIsName"/>
         /// </summary>
-        public const uint Filter = EcsFilter;
+        public const ulong IsName = EcsIsName;
 
         /// <summary>
         ///     Equivalent to <see cref="EcsTraverseFlags"/>
         /// </summary>
-        public const uint TraverseFlags = EcsTraverseFlags;
+        public const ulong TraverseFlags = EcsTraverseFlags;
+
+        /// <summary>
+        ///     Equivalent to <see cref="EcsTermRefFlags"/>
+        /// </summary>
+        public const ulong TermRefFlags = EcsTermRefFlags;
 
         // Build-in id flags
 
@@ -766,11 +793,6 @@ namespace Flecs.NET.Core
         public static ref ulong Tag => ref EcsTag;
 
         /// <summary>
-        ///     Reference to <see cref="EcsUnion"/>.
-        /// </summary>
-        public static ref ulong Union => ref EcsUnion;
-
-        /// <summary>
         ///     Reference to <see cref="EcsExclusive"/>.
         /// </summary>
         public static ref ulong Exclusive => ref EcsExclusive;
@@ -799,6 +821,11 @@ namespace Flecs.NET.Core
         ///     Reference to <see cref="EcsOneOf"/>.
         /// </summary>
         public static ref ulong OneOf => ref EcsOneOf;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsCanToggle"/>.
+        /// </summary>
+        public static ref ulong CanToggle => ref EcsCanToggle;
 
         // Built-in relationships
 
@@ -862,11 +889,6 @@ namespace Flecs.NET.Core
         public static ref ulong Panic => ref EcsPanic;
 
         // Misc
-
-        /// <summary>
-        ///     Reference to <see cref="EcsFlatten"/>.
-        /// </summary>
-        public static ref ulong Flatten => ref EcsFlatten;
 
         /// <summary>
         ///     Reference to <see cref="EcsDefaultChildComponent"/>.

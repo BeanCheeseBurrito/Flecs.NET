@@ -344,22 +344,13 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Obtain the total number of tables the iterator will iterate over.
-        /// </summary>
-        /// <returns></returns>
-        public int TableCount()
-        {
-            return Handle->table_count;
-        }
-
-        /// <summary>
         ///     Check if the current table has changed since the last iteration.
         ///     Can only be used when iterating queries and/or systems.
         /// </summary>
         /// <returns></returns>
         public bool Changed()
         {
-            return ecs_query_changed(null, Handle) == 1;
+            return Macros.Bool(ecs_iter_changed(Handle));
         }
 
         /// <summary>
@@ -370,7 +361,7 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Skip()
         {
-            ecs_query_skip(Handle);
+            ecs_iter_skip(Handle);
         }
 
         /// <summary>
@@ -400,11 +391,11 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetVar(string name)
         {
-            ecs_rule_iter_t* ruleIter = &Handle->priv.iter.rule;
-            ecs_rule_t* rule = ruleIter->rule;
+            ecs_query_iter_t* iter = &Handle->priv.iter.query;
+            ecs_query_t* query = iter->query;
 
             using NativeString nativeName = (NativeString)name;
-            int varId = ecs_rule_find_var(rule, nativeName);
+            int varId = ecs_query_find_var(query, nativeName);
             Ecs.Assert(varId != -1, nameof(ECS_INVALID_PARAMETER));
 
             return new Entity(Handle->world, ecs_iter_get_var(Handle, varId));

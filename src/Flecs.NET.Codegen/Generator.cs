@@ -7,7 +7,7 @@ namespace Flecs.NET.Codegen
     [Generator]
     public class Generator : IIncrementalGenerator
     {
-        public const int GenericCount = 16;
+        private const int GenericCount = 16;
 
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
@@ -17,7 +17,7 @@ namespace Flecs.NET.Codegen
             });
         }
 
-        public static string Generate()
+        private static string Generate()
         {
             return $@"
                 #pragma warning disable 1591
@@ -36,9 +36,7 @@ namespace Flecs.NET.Codegen
                     {GenerateEcsExtensions()}
                     {GenerateInvokerExtensions()}
                     {GenerateBindingContextExtensions()}
-                    {GenerateFilterExtensions()}
                     {GenerateQueryExtensions()}
-                    {GenerateRuleExtensions()}
                     {GenerateObserverExtensions()}
                     {GenerateRoutineExtensions()}
                 }}
@@ -47,7 +45,7 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateWorldExtensions()
+        private static string GenerateWorldExtensions()
         {
             return $@"
                 public unsafe partial struct World
@@ -59,7 +57,7 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateEntityExtensions()
+        private static string GenerateEntityExtensions()
         {
             return $@"
                 public unsafe partial struct Entity
@@ -71,7 +69,7 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateEcsExtensions()
+        private static string GenerateEcsExtensions()
         {
             return $@"
                 public static partial class Ecs 
@@ -90,7 +88,7 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateInvokerExtensions()
+        private static string GenerateInvokerExtensions()
         {
             return $@"
                 public static unsafe partial class Invoker 
@@ -111,23 +109,7 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateFilterExtensions()
-        {
-            return $@"
-                public unsafe partial struct Filter
-                {{
-                    {GenerateCallbackFunctions("Iter", "IterCallback", "ecs_filter_iter", "ecs_filter_next")}
-                    {GenerateCallbackFunctions("Each", "EachCallback", "ecs_filter_iter", "ecs_filter_next_instanced")} 
-                    {GenerateCallbackFunctions("Each", "EachEntityCallback", "ecs_filter_iter", "ecs_filter_next_instanced")} 
-                    {GenerateCallbackFunctions("Each", "EachIndexCallback", "ecs_filter_iter", "ecs_filter_next_instanced")} 
-                    {GenerateFindCallbackFunctions("FindCallback", "ecs_filter_iter", "ecs_filter_next_instanced")}
-                    {GenerateFindCallbackFunctions("FindEntityCallback", "ecs_filter_iter", "ecs_filter_next_instanced")}
-                    {GenerateFindCallbackFunctions("FindIndexCallback", "ecs_filter_iter", "ecs_filter_next_instanced")}
-                }}
-            ";
-        }
-
-        public static string GenerateQueryExtensions()
+        private static string GenerateQueryExtensions()
         {
             return $@"
                 public unsafe partial struct Query
@@ -143,23 +125,7 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateRuleExtensions()
-        {
-            return $@"
-                public unsafe partial struct Rule
-                {{
-                    {GenerateCallbackFunctions("Iter", "IterCallback", "ecs_rule_iter", "ecs_rule_next")}
-                    {GenerateCallbackFunctions("Each", "EachCallback", "ecs_rule_iter", "ecs_rule_next_instanced")} 
-                    {GenerateCallbackFunctions("Each", "EachEntityCallback", "ecs_rule_iter", "ecs_rule_next_instanced")} 
-                    {GenerateCallbackFunctions("Each", "EachIndexCallback", "ecs_rule_iter", "ecs_rule_next_instanced")}
-                    {GenerateFindCallbackFunctions("FindCallback", "ecs_rule_iter", "ecs_rule_next_instanced")}
-                    {GenerateFindCallbackFunctions("FindEntityCallback", "ecs_rule_iter", "ecs_rule_next_instanced")}
-                    {GenerateFindCallbackFunctions("FindIndexCallback", "ecs_rule_iter", "ecs_rule_next_instanced")}
-                }}
-            ";
-        }
-
-        public static string GenerateObserverExtensions()
+        private static string GenerateObserverExtensions()
         {
             StringBuilder str = new StringBuilder();
 
@@ -198,7 +164,7 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateRoutineExtensions()
+        private static string GenerateRoutineExtensions()
         {
             StringBuilder str = new StringBuilder();
 
@@ -237,7 +203,7 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateBindingContextExtensions()
+        private static string GenerateBindingContextExtensions()
         {
             StringBuilder str = new StringBuilder();
 
@@ -288,35 +254,15 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateIterableFactoryExtensions()
+        private static string GenerateIterableFactoryExtensions()
         {
             StringBuilder str = new StringBuilder();
 
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string termBuilders = ConcatString(i + 1, "\n", index => $".Term<T{index}>()");
+                string termBuilders = ConcatString(i + 1, "\n", index => $".With<T{index}>()");
                 str.AppendLine($@"
-                    public FilterBuilder FilterBuilder<{typeParams}>(string? name = null)
-                    {{
-                        return new FilterBuilder(Handle, name){termBuilders};
-                    }}
-
-                    public Filter Filter<{typeParams}>(string? name = null)
-                    {{
-                        return FilterBuilder<{typeParams}>(name).Build();
-                    }}
-
-                    public RuleBuilder RuleBuilder<{typeParams}>(string? name = null)
-                    {{
-                        return new RuleBuilder(Handle, name){termBuilders};
-                    }}
-
-                    public Rule Rule<{typeParams}>(string? name = null)
-                    {{
-                        return RuleBuilder<{typeParams}>(name).Build();
-                    }}
-
                     public AlertBuilder AlertBuilder<{typeParams}>(string? name = null)
                     {{
                         return new AlertBuilder(Handle, name){termBuilders};
@@ -352,7 +298,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateWorldEachCallbackFunctions()
+        private static string GenerateWorldEachCallbackFunctions()
         {
             StringBuilder str = new StringBuilder();
 
@@ -363,8 +309,8 @@ namespace Flecs.NET.Codegen
                 str.AppendLine($@"
                     public void Each<{typeParams}>(Ecs.EachCallback<{typeParams}> callback) 
                     {{
-                        using Filter filter = Filter<{typeParams}>();
-                        filter.Each(callback);   
+                        using Query query = Query<{typeParams}>();
+                        query.Each(callback);   
                     }}
                 ");
             }
@@ -372,7 +318,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateWorldEachEntityCallbackFunction()
+        private static string GenerateWorldEachEntityCallbackFunction()
         {
             StringBuilder str = new StringBuilder();
 
@@ -383,8 +329,8 @@ namespace Flecs.NET.Codegen
                 str.AppendLine($@"
                     public void Each<{typeParams}>(Ecs.EachEntityCallback<{typeParams}> callback) 
                     {{
-                        using Filter filter = Filter<{typeParams}>();
-                        filter.Each(callback);
+                        using Query query = Query<{typeParams}>();
+                        query.Each(callback);
                     }}
                 ");
             }
@@ -392,7 +338,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEntityReadCallbacks()
+        private static string GenerateEntityReadCallbacks()
         {
             StringBuilder str = new StringBuilder();
 
@@ -411,7 +357,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEntityWriteCallbacks()
+        private static string GenerateEntityWriteCallbacks()
         {
             StringBuilder str = new StringBuilder();
 
@@ -430,7 +376,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEntityEnsureCallbacks()
+        private static string GenerateEntityEnsureCallbacks()
         {
             StringBuilder str = new StringBuilder();
 
@@ -450,7 +396,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateIterCallbackDelegates()
+        private static string GenerateIterCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -464,7 +410,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEachCallbackDelegates()
+        private static string GenerateEachCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -478,7 +424,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEachEntityCallbackDelegates()
+        private static string GenerateEachEntityCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -492,7 +438,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEachIndexCallbackDelegates()
+        private static string GenerateEachIndexCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -506,7 +452,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateFindCallbackDelegates()
+        private static string GenerateFindCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -520,7 +466,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateFindEntityCallbackDelegates()
+        private static string GenerateFindEntityCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -534,7 +480,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateFindIndexCallbackDelegates()
+        private static string GenerateFindIndexCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -548,7 +494,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateInvokeReadCallbackDelegates()
+        private static string GenerateInvokeReadCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -562,7 +508,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateInvokeWriteCallbackDelegates()
+        private static string GenerateInvokeWriteCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -576,7 +522,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateInvokeEnsureCallbackDelegates()
+        private static string GenerateInvokeEnsureCallbackDelegates()
         {
             StringBuilder str = new StringBuilder();
 
@@ -590,7 +536,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateIterInvokers()
+        private static string GenerateIterInvokers()
         {
             StringBuilder str = new StringBuilder();
 
@@ -613,7 +559,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEachInvokers()
+        private static string GenerateEachInvokers()
         {
             StringBuilder str = new StringBuilder();
 
@@ -657,7 +603,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEachEntityInvokers()
+        private static string GenerateEachEntityInvokers()
         {
             StringBuilder str = new StringBuilder();
 
@@ -703,7 +649,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEachIndexInvokers()
+        private static string GenerateEachIndexInvokers()
         {
             StringBuilder str = new StringBuilder();
 
@@ -749,7 +695,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateFindInvokers()
+        private static string GenerateFindInvokers()
         {
             StringBuilder str = new StringBuilder();
 
@@ -793,7 +739,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateFindEntityInvokers()
+        private static string GenerateFindEntityInvokers()
         {
             StringBuilder str = new StringBuilder();
 
@@ -838,7 +784,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateFindIndexInvokers()
+        private static string GenerateFindIndexInvokers()
         {
             StringBuilder str = new StringBuilder();
 
@@ -882,7 +828,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateGetPointers()
+        private static string GenerateGetPointers()
         {
             StringBuilder str = new StringBuilder();
 
@@ -924,7 +870,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEnsurePointers()
+        private static string GenerateEnsurePointers()
         {
             StringBuilder str = new StringBuilder();
 
@@ -947,7 +893,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateReadInvokers()
+        private static string GenerateReadInvokers()
         {
             StringBuilder str = new StringBuilder();
 
@@ -987,7 +933,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateWriteInvokers()
+        private static string GenerateWriteInvokers()
         {
             StringBuilder str = new StringBuilder();
 
@@ -1027,7 +973,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateEnsureInvokers()
+        private static string GenerateEnsureInvokers()
         {
             StringBuilder str = new StringBuilder();
 
@@ -1104,7 +1050,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateBindingContextPointers(int index, string callbackName)
+        private static string GenerateBindingContextPointers(int index, string callbackName)
         {
             return $@"
                 internal static readonly IntPtr {callbackName}Pointer =
@@ -1112,7 +1058,7 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateBindingContextDelegates(int index, string functionName)
+        private static string GenerateBindingContextDelegates(int index, string functionName)
         {
             return $@"
                 internal static readonly IntPtr {functionName}Pointer =
@@ -1121,7 +1067,7 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        public static string GenerateBindingContextCallbacks(string typeName, string callbackName, string delegateName,
+        private static string GenerateBindingContextCallbacks(string typeName, string callbackName, string delegateName,
             string invokerName)
         {
             StringBuilder str = new StringBuilder();
@@ -1143,7 +1089,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateCallbackFunctions(string functionName, string delegateName, string iterName,
+        private static string GenerateCallbackFunctions(string functionName, string delegateName, string iterName,
             string nextName)
         {
             StringBuilder str = new StringBuilder();
@@ -1165,7 +1111,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateFindCallbackFunctions(string delegateName, string iterName, string nextName)
+        private static string GenerateFindCallbackFunctions(string delegateName, string iterName, string nextName)
         {
             StringBuilder str = new StringBuilder();
 
@@ -1193,7 +1139,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string ConcatString(int count, string separator, Func<int, string> callback)
+        private static string ConcatString(int count, string separator, Func<int, string> callback)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));
@@ -1210,7 +1156,7 @@ namespace Flecs.NET.Codegen
             return str.ToString();
         }
 
-        public static string GenerateTypeParams(int num)
+        private static string GenerateTypeParams(int num)
         {
             return ConcatString(num, ", ", index => $"T{index}");
         }

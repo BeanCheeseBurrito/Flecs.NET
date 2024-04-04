@@ -15,8 +15,6 @@ namespace Flecs.NET.Core
         internal QueryBuilder QueryBuilder;
         internal BindingContext.RoutineContext RoutineContext;
 
-        internal ref FilterBuilder FilterBuilder => ref QueryBuilder.FilterBuilder;
-
         /// <summary>
         ///     A reference to the world.
         /// </summary>
@@ -251,17 +249,13 @@ namespace Flecs.NET.Core
             where T : Delegate
         {
             BindingContext.QueryContext* queryContext = Memory.Alloc<BindingContext.QueryContext>(1);
-            queryContext[0] = QueryBuilder.QueryContext;
+            queryContext[0] = QueryBuilder.Context;
 
             BindingContext.RoutineContext* routineContext = Memory.Alloc<BindingContext.RoutineContext>(1);
             routineContext[0] = RoutineContext;
-            routineContext->QueryContext = QueryBuilder.QueryContext;
             BindingContext.SetCallback(ref routineContext->Iterator, userCallback, storeFunctionPointer);
 
-            RoutineDesc.query = QueryBuilder.QueryDesc;
-            RoutineDesc.query.filter = FilterBuilder.FilterDesc;
-            RoutineDesc.query.filter.terms_buffer = FilterBuilder.Terms.Data;
-            RoutineDesc.query.filter.terms_buffer_count = FilterBuilder.Terms.Count;
+            RoutineDesc.query = QueryBuilder.Desc;
             RoutineDesc.query.binding_ctx = queryContext;
             RoutineDesc.query.binding_ctx_free = BindingContext.QueryContextFreePointer;
             RoutineDesc.binding_ctx = routineContext;
@@ -271,7 +265,8 @@ namespace Flecs.NET.Core
             fixed (ecs_system_desc_t* ptr = &RoutineDesc)
             {
                 Entity entity = new Entity(World, ecs_system_init(World, ptr));
-                FilterBuilder.Dispose();
+                QueryBuilder.Context = default;
+                QueryBuilder.Dispose();
                 return new Routine(entity);
             }
         }
@@ -328,1067 +323,986 @@ namespace Flecs.NET.Core
         }
     }
 
-    // FilterBuilder Extensions
-    public unsafe partial struct RoutineBuilder
-    {
-        /// <inheritdoc cref="Core.FilterBuilder.Self"/>
-        public ref RoutineBuilder Self()
-        {
-            FilterBuilder.Self();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Up"/>
-        public ref RoutineBuilder Up(ulong traverse = 0)
-        {
-            FilterBuilder.Up(traverse);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Up{T}()"/>
-        public ref RoutineBuilder Up<T>()
-        {
-            FilterBuilder.Up<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Up{T}(T)"/>
-        public ref RoutineBuilder Up<T>(T value) where T : Enum
-        {
-            FilterBuilder.Up(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Cascade"/>
-        public ref RoutineBuilder Cascade(ulong traverse = 0)
-        {
-            FilterBuilder.Cascade(traverse);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Cascade{T}()"/>
-        public ref RoutineBuilder Cascade<T>()
-        {
-            FilterBuilder.Cascade<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Cascade{T}(T)"/>
-        public ref RoutineBuilder Cascade<T>(T value) where T : Enum
-        {
-            FilterBuilder.Cascade(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Descend"/>
-        public ref RoutineBuilder Descend()
-        {
-            FilterBuilder.Descend();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Parent"/>
-        public ref RoutineBuilder Parent()
-        {
-            FilterBuilder.Parent();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Trav(ulong, uint)"/>
-        public ref RoutineBuilder Trav(ulong traverse, uint flags = 0)
-        {
-            FilterBuilder.Trav(traverse, flags);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Trav{T}(uint)"/>
-        public ref RoutineBuilder Trav<T>(uint flags = 0)
-        {
-            FilterBuilder.Trav<T>(flags);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Trav{T}(T, uint)"/>
-        public ref RoutineBuilder Trav<T>(T value, uint flags = 0) where T : Enum
-        {
-            FilterBuilder.Trav(value, flags);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Id"/>
-        public ref RoutineBuilder Id(ulong id)
-        {
-            FilterBuilder.Id(id);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Entity"/>
-        public ref RoutineBuilder Entity(ulong entity)
-        {
-            FilterBuilder.Entity(entity);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Name"/>
-        public ref RoutineBuilder Name(string name)
-        {
-            FilterBuilder.Name(name);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Var"/>
-        public ref RoutineBuilder Var(string name)
-        {
-            FilterBuilder.Var(name);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Flags"/>
-        public ref RoutineBuilder Flags(uint flags)
-        {
-            FilterBuilder.Flags(flags);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Src()"/>
-        public ref RoutineBuilder Src()
-        {
-            FilterBuilder.Src();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.First()"/>
-        public ref RoutineBuilder First()
-        {
-            FilterBuilder.First();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Second()"/>
-        public ref RoutineBuilder Second()
-        {
-            FilterBuilder.Second();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Src(ulong)"/>
-        public ref RoutineBuilder Src(ulong srcId)
-        {
-            FilterBuilder.Src(srcId);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Src{T}()"/>
-        public ref RoutineBuilder Src<T>()
-        {
-            FilterBuilder.Src<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Src{T}(T)"/>
-        public ref RoutineBuilder Src<T>(T value) where T : Enum
-        {
-            FilterBuilder.Src(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Src(string)"/>
-        public ref RoutineBuilder Src(string name)
-        {
-            FilterBuilder.Src(name);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.First(ulong)"/>
-        public ref RoutineBuilder First(ulong firstId)
-        {
-            FilterBuilder.First(firstId);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.First{T}()"/>
-        public ref RoutineBuilder First<T>()
-        {
-            FilterBuilder.First<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.First{T}(T)"/>
-        public ref RoutineBuilder First<T>(T value) where T : Enum
-        {
-            FilterBuilder.First(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.First(string)"/>
-        public ref RoutineBuilder First(string name)
-        {
-            FilterBuilder.First(name);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Second(ulong)"/>
-        public ref RoutineBuilder Second(ulong secondId)
-        {
-            FilterBuilder.Second(secondId);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Second{T}()"/>
-        public ref RoutineBuilder Second<T>()
-        {
-            FilterBuilder.Second<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Second{T}(T)"/>
-        public ref RoutineBuilder Second<T>(T value) where T : Enum
-        {
-            FilterBuilder.Second(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Second(string)"/>
-        public ref RoutineBuilder Second(string secondName)
-        {
-            FilterBuilder.Second(secondName);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Role"/>
-        public ref RoutineBuilder Role(ulong role)
-        {
-            FilterBuilder.Role(role);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.InOut(Flecs.NET.Bindings.Native.ecs_inout_kind_t)"/>
-        public ref RoutineBuilder InOut(ecs_inout_kind_t inOut)
-        {
-            FilterBuilder.InOut(inOut);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.InOutStage"/>
-        public ref RoutineBuilder InOutStage(ecs_inout_kind_t inOut)
-        {
-            FilterBuilder.InOutStage(inOut);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write()"/>
-        public ref RoutineBuilder Write()
-        {
-            FilterBuilder.Write();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read()"/>
-        public ref RoutineBuilder Read()
-        {
-            FilterBuilder.Read();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.ReadWrite"/>
-        public ref RoutineBuilder ReadWrite()
-        {
-            FilterBuilder.ReadWrite();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.In"/>
-        public ref RoutineBuilder In()
-        {
-            FilterBuilder.In();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Out"/>
-        public ref RoutineBuilder Out()
-        {
-            FilterBuilder.Out();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.InOut()"/>
-        public ref RoutineBuilder InOut()
-        {
-            FilterBuilder.InOut();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.InOutNone"/>
-        public ref RoutineBuilder InOutNone()
-        {
-            FilterBuilder.InOutNone();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Oper"/>
-        public ref RoutineBuilder Oper(ecs_oper_kind_t oper)
-        {
-            FilterBuilder.Oper(oper);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.And"/>
-        public ref RoutineBuilder And()
-        {
-            FilterBuilder.And();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Or"/>
-        public ref RoutineBuilder Or()
-        {
-            FilterBuilder.Or();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Not"/>
-        public ref RoutineBuilder Not()
-        {
-            FilterBuilder.Not();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Optional"/>
-        public ref RoutineBuilder Optional()
-        {
-            FilterBuilder.Optional();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.AndFrom"/>
-        public ref RoutineBuilder AndFrom()
-        {
-            FilterBuilder.AndFrom();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.OrFrom"/>
-        public ref RoutineBuilder OrFrom()
-        {
-            FilterBuilder.OrFrom();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.NotFrom"/>
-        public ref RoutineBuilder NotFrom()
-        {
-            FilterBuilder.NotFrom();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Singleton"/>
-        public ref RoutineBuilder Singleton()
-        {
-            FilterBuilder.Singleton();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Filter"/>
-        public ref RoutineBuilder Filter()
-        {
-            FilterBuilder.Filter();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Instanced"/>
-        public ref RoutineBuilder Instanced()
-        {
-            FilterBuilder.Instanced();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.FilterFlags"/>
-        public ref RoutineBuilder FilterFlags(uint flags)
-        {
-            FilterBuilder.FilterFlags(flags);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Expr"/>
-        public ref RoutineBuilder Expr(string expr)
-        {
-            FilterBuilder.Expr(expr);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With(ulong)"/>
-        public ref RoutineBuilder With(ulong id)
-        {
-            FilterBuilder.With(id);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With(ulong, ulong)"/>
-        public ref RoutineBuilder With(ulong first, ulong second)
-        {
-            FilterBuilder.With(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With(ulong, string)"/>
-        public ref RoutineBuilder With(ulong first, string second)
-        {
-            FilterBuilder.With(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With(string, ulong)"/>
-        public ref RoutineBuilder With(string first, ulong second)
-        {
-            FilterBuilder.With(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With(string, string)"/>
-        public ref RoutineBuilder With(string first, string second)
-        {
-            FilterBuilder.With(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T}()"/>
-        public ref RoutineBuilder With<T>()
-        {
-            FilterBuilder.With<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T}(T)"/>
-        public ref RoutineBuilder With<T>(T value) where T : Enum
-        {
-            FilterBuilder.With(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T}(ulong)"/>
-        public ref RoutineBuilder With<TFirst>(ulong second)
-        {
-            FilterBuilder.With<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T}(string)"/>
-        public ref RoutineBuilder With<TFirst>(string second)
-        {
-            FilterBuilder.With<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T1, T2}()"/>
-        public ref RoutineBuilder With<TFirst, TSecond>()
-        {
-            FilterBuilder.With<TFirst, TSecond>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T1, T2}(T2)"/>
-        public ref RoutineBuilder With<TFirst, TSecond>(TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.With<TFirst, TSecond>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T1, T2}(T1)"/>
-        public ref RoutineBuilder With<TFirst, TSecond>(TFirst first) where TFirst : Enum
-        {
-            FilterBuilder.With<TFirst, TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T1}(T1, string)"/>
-        public ref RoutineBuilder With<TFirst>(TFirst first, string second) where TFirst : Enum
-        {
-            FilterBuilder.With(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T2}(string, T2)"/>
-        public ref RoutineBuilder With<TSecond>(string first, TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.With(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.WithSecond{T}(ulong)"/>
-        public ref RoutineBuilder WithSecond<TSecond>(ulong first)
-        {
-            FilterBuilder.WithSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.WithSecond{T}(string)"/>
-        public ref RoutineBuilder WithSecond<TSecond>(string first)
-        {
-            FilterBuilder.WithSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without(ulong)"/>
-        public ref RoutineBuilder Without(ulong id)
-        {
-            FilterBuilder.Without(id);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without(ulong, ulong)"/>
-        public ref RoutineBuilder Without(ulong first, ulong second)
-        {
-            FilterBuilder.Without(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without(ulong, string)"/>
-        public ref RoutineBuilder Without(ulong first, string second)
-        {
-            FilterBuilder.Without(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without(string, ulong)"/>
-        public ref RoutineBuilder Without(string first, ulong second)
-        {
-            FilterBuilder.Without(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without(string, string)"/>
-        public ref RoutineBuilder Without(string first, string second)
-        {
-            FilterBuilder.Without(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T}()"/>
-        public ref RoutineBuilder Without<T>()
-        {
-            FilterBuilder.Without<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T}(T)"/>
-        public ref RoutineBuilder Without<T>(T value) where T : Enum
-        {
-            FilterBuilder.Without(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T}(ulong)"/>
-        public ref RoutineBuilder Without<TFirst>(ulong second)
-        {
-            FilterBuilder.Without<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T}(string)"/>
-        public ref RoutineBuilder Without<TFirst>(string second)
-        {
-            FilterBuilder.Without<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T1, T2}()"/>
-        public ref RoutineBuilder Without<TFirst, TSecond>()
-        {
-            FilterBuilder.Without<TFirst, TSecond>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T1, T2}(T2)"/>
-        public ref RoutineBuilder Without<TFirst, TSecond>(TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Without<TFirst, TSecond>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T1, T2}(T1)"/>
-        public ref RoutineBuilder Without<TFirst, TSecond>(TFirst first) where TFirst : Enum
-        {
-            FilterBuilder.Without<TFirst, TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T1}(T1, string)"/>
-        public ref RoutineBuilder Without<TFirst>(TFirst first, string second) where TFirst : Enum
-        {
-            FilterBuilder.Without(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T2}(string, T2)"/>
-        public ref RoutineBuilder Without<TSecond>(string first, TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Without(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.WithoutSecond{T}(ulong)"/>
-        public ref RoutineBuilder WithoutSecond<TSecond>(ulong first)
-        {
-            FilterBuilder.WithoutSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.WithoutSecond{T}(string)"/>
-        public ref RoutineBuilder WithoutSecond<TSecond>(string first)
-        {
-            FilterBuilder.WithoutSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write(ulong)"/>
-        public ref RoutineBuilder Write(ulong id)
-        {
-            FilterBuilder.Write(id);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write(ulong, ulong)"/>
-        public ref RoutineBuilder Write(ulong first, ulong second)
-        {
-            FilterBuilder.Write(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write(ulong, string)"/>
-        public ref RoutineBuilder Write(ulong first, string second)
-        {
-            FilterBuilder.Write(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write(string, ulong)"/>
-        public ref RoutineBuilder Write(string first, ulong second)
-        {
-            FilterBuilder.Write(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write(string, string)"/>
-        public ref RoutineBuilder Write(string first, string second)
-        {
-            FilterBuilder.Write(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T}()"/>
-        public ref RoutineBuilder Write<T>()
-        {
-            FilterBuilder.Write<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T}(T)"/>
-        public ref RoutineBuilder Write<T>(T value) where T : Enum
-        {
-            FilterBuilder.Write(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T}(ulong)"/>
-        public ref RoutineBuilder Write<TFirst>(ulong second)
-        {
-            FilterBuilder.Write<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T}(string)"/>
-        public ref RoutineBuilder Write<TFirst>(string second)
-        {
-            FilterBuilder.Write<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T1, T2}()"/>
-        public ref RoutineBuilder Write<TFirst, TSecond>()
-        {
-            FilterBuilder.Write<TFirst, TSecond>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T1, T2}(T2)"/>
-        public ref RoutineBuilder Write<TFirst, TSecond>(TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Write<TFirst, TSecond>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T1, T2}(T1)"/>
-        public ref RoutineBuilder Write<TFirst, TSecond>(TFirst first) where TFirst : Enum
-        {
-            FilterBuilder.Write<TFirst, TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T1}(T1, string)"/>
-        public ref RoutineBuilder Write<TFirst>(TFirst first, string second) where TFirst : Enum
-        {
-            FilterBuilder.Write(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T2}(string, T2)"/>
-        public ref RoutineBuilder Write<TSecond>(string first, TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Write(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.WriteSecond{T}(ulong)"/>
-        public ref RoutineBuilder WriteSecond<TSecond>(ulong first)
-        {
-            FilterBuilder.WriteSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.WriteSecond{T}(string)"/>
-        public ref RoutineBuilder WriteSecond<TSecond>(string first)
-        {
-            FilterBuilder.WriteSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read(ulong)"/>
-        public ref RoutineBuilder Read(ulong id)
-        {
-            FilterBuilder.Read(id);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read(ulong, ulong)"/>
-        public ref RoutineBuilder Read(ulong first, ulong second)
-        {
-            FilterBuilder.Read(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read(ulong, string)"/>
-        public ref RoutineBuilder Read(ulong first, string second)
-        {
-            FilterBuilder.Read(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read(string, ulong)"/>
-        public ref RoutineBuilder Read(string first, ulong second)
-        {
-            FilterBuilder.Read(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read(string, string)"/>
-        public ref RoutineBuilder Read(string first, string second)
-        {
-            FilterBuilder.Read(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T}()"/>
-        public ref RoutineBuilder Read<T>()
-        {
-            FilterBuilder.Read<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T}(T)"/>
-        public ref RoutineBuilder Read<T>(T value) where T : Enum
-        {
-            FilterBuilder.Read(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T}(ulong)"/>
-        public ref RoutineBuilder Read<TFirst>(ulong second)
-        {
-            FilterBuilder.Read<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T}(string)"/>
-        public ref RoutineBuilder Read<TFirst>(string second)
-        {
-            FilterBuilder.Read<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T1, T2}()"/>
-        public ref RoutineBuilder Read<TFirst, TSecond>()
-        {
-            FilterBuilder.Read<TFirst, TSecond>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T1, T2}(T2)"/>
-        public ref RoutineBuilder Read<TFirst, TSecond>(TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Read<TFirst, TSecond>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T1, T2}(T1)"/>
-        public ref RoutineBuilder Read<TFirst, TSecond>(TFirst first) where TFirst : Enum
-        {
-            FilterBuilder.Read<TFirst, TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T1}(T1, string)"/>
-        public ref RoutineBuilder Read<TFirst>(TFirst first, string second) where TFirst : Enum
-        {
-            FilterBuilder.Read(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T2}(string, T2)"/>
-        public ref RoutineBuilder Read<TSecond>(string first, TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Read(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.ReadSecond{T}(ulong)"/>
-        public ref RoutineBuilder ReadSecond<TSecond>(ulong first)
-        {
-            FilterBuilder.ReadSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.ReadSecond{T}(string)"/>
-        public ref RoutineBuilder ReadSecond<TSecond>(string first)
-        {
-            FilterBuilder.ReadSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.ScopeOpen"/>
-        public ref RoutineBuilder ScopeOpen()
-        {
-            FilterBuilder.ScopeOpen();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.ScopeClose"/>
-        public ref RoutineBuilder ScopeClose()
-        {
-            FilterBuilder.ScopeClose();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.IncrementTerm"/>
-        public ref RoutineBuilder IncrementTerm()
-        {
-            FilterBuilder.IncrementTerm();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.TermAt"/>
-        public ref RoutineBuilder TermAt(int termIndex)
-        {
-            FilterBuilder.TermAt(termIndex);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Arg"/>
-        public ref RoutineBuilder Arg(int termIndex)
-        {
-            FilterBuilder.Arg(termIndex);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term()"/>
-        public ref RoutineBuilder Term()
-        {
-            FilterBuilder.Term();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(Core.Term)"/>
-        public ref RoutineBuilder Term(Term term)
-        {
-            FilterBuilder.Term(term);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(ulong)"/>
-        public ref RoutineBuilder Term(ulong id)
-        {
-            FilterBuilder.Term(id);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(string)"/>
-        public ref RoutineBuilder Term(string name)
-        {
-            FilterBuilder.Term(name);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(ulong, ulong)"/>
-        public ref RoutineBuilder Term(ulong first, ulong second)
-        {
-            FilterBuilder.Term(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(ulong, string)"/>
-        public ref RoutineBuilder Term(ulong first, string second)
-        {
-            FilterBuilder.Term(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(string, ulong)"/>
-        public ref RoutineBuilder Term(string first, ulong second)
-        {
-            FilterBuilder.Term(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(string, string)"/>
-        public ref RoutineBuilder Term(string first, string second)
-        {
-            FilterBuilder.Term(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T}()"/>
-        public ref RoutineBuilder Term<T>()
-        {
-            FilterBuilder.Term<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T}(T)"/>
-        public ref RoutineBuilder Term<T>(T value) where T : Enum
-        {
-            FilterBuilder.Term(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T}(ulong)"/>
-        public ref RoutineBuilder Term<TFirst>(ulong second)
-        {
-            FilterBuilder.Term<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T}(string)"/>
-        public ref RoutineBuilder Term<TFirst>(string second)
-        {
-            FilterBuilder.Term<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T1, T2}()"/>
-        public ref RoutineBuilder Term<TFirst, TSecond>()
-        {
-            FilterBuilder.Term<TFirst, TSecond>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T1, T2}(T2)"/>
-        public ref RoutineBuilder Term<TFirst, TSecond>(TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Term<TFirst, TSecond>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T1, T2}(T1)"/>
-        public ref RoutineBuilder Term<TFirst, TSecond>(TFirst first) where TFirst : Enum
-        {
-            FilterBuilder.Term<TFirst, TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T1}(T1, string)"/>
-        public ref RoutineBuilder Term<TFirst>(TFirst first, string second) where TFirst : Enum
-        {
-            FilterBuilder.Term(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T2}(string, T2)"/>
-        public ref RoutineBuilder Term<TSecond>(string first, TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Term(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.TermSecond{T}(ulong)"/>
-        public ref RoutineBuilder TermSecond<TSecond>(ulong first)
-        {
-            FilterBuilder.TermSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.TermSecond{T}(string)"/>
-        public ref RoutineBuilder TermSecond<TSecond>(string first)
-        {
-            FilterBuilder.TermSecond<TSecond>(first);
-            return ref this;
-        }
-    }
-
     // QueryBuilder Extensions
     public unsafe partial struct RoutineBuilder
     {
-        /// <inheritdoc cref="Core.QueryBuilder.OrderBy{T}"/>
-        public ref RoutineBuilder OrderBy<T>(Ecs.OrderByAction compare)
+        /// <inheritdoc cref="QueryBuilder.Self()"/>
+        public ref RoutineBuilder Self()
         {
-            QueryBuilder.OrderBy<T>(compare);
+            QueryBuilder.Self();
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.QueryBuilder.OrderBy"/>
+        /// <inheritdoc cref="QueryBuilder.Id(ulong)"/>
+        public ref RoutineBuilder Id(ulong id)
+        {
+            QueryBuilder.Id(id);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Entity(ulong)"/>
+        public ref RoutineBuilder Entity(ulong entity)
+        {
+            QueryBuilder.Entity(entity);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Name(string)"/>
+        public ref RoutineBuilder Name(string name)
+        {
+            QueryBuilder.Name(name);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Var(string)"/>
+        public ref RoutineBuilder Var(string name)
+        {
+            QueryBuilder.Var(name);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Flags(uint)"/>
+        public ref RoutineBuilder Flags(uint flags)
+        {
+            QueryBuilder.Flags(flags);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Term(ulong)"/>
+        public ref RoutineBuilder Term(ulong id)
+        {
+            QueryBuilder.Term(id);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Src()"/>
+        public ref RoutineBuilder Src()
+        {
+            QueryBuilder.Src();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.First()"/>
+        public ref RoutineBuilder First()
+        {
+            QueryBuilder.First();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Second()"/>
+        public ref RoutineBuilder Second()
+        {
+            QueryBuilder.Second();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Src(ulong)"/>
+        public ref RoutineBuilder Src(ulong srcId)
+        {
+            QueryBuilder.Src(srcId);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Src{T}()"/>
+        public ref RoutineBuilder Src<T>()
+        {
+            QueryBuilder.Src<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Src{T}(T)"/>
+        public ref RoutineBuilder Src<T>(T value) where T : Enum
+        {
+            QueryBuilder.Src(value);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Src(string)"/>
+        public ref RoutineBuilder Src(string name)
+        {
+            QueryBuilder.Src(name);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.First(ulong)"/>
+        public ref RoutineBuilder First(ulong firstId)
+        {
+            QueryBuilder.First(firstId);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.First{T}()"/>
+        public ref RoutineBuilder First<T>()
+        {
+            QueryBuilder.First<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.First{T}(T)"/>
+        public ref RoutineBuilder First<T>(T value) where T : Enum
+        {
+            QueryBuilder.First(value);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.First(string)"/>
+        public ref RoutineBuilder First(string name)
+        {
+            QueryBuilder.First(name);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Second(ulong)"/>
+        public ref RoutineBuilder Second(ulong secondId)
+        {
+            QueryBuilder.Second(secondId);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Second{T}()"/>
+        public ref RoutineBuilder Second<T>()
+        {
+            QueryBuilder.Second<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Second{T}(T)"/>
+        public ref RoutineBuilder Second<T>(T value) where T : Enum
+        {
+            QueryBuilder.Second(value);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Second(string)"/>
+        public ref RoutineBuilder Second(string secondName)
+        {
+            QueryBuilder.Second(secondName);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Up(ulong)"/>
+        public ref RoutineBuilder Up(ulong traverse = 0)
+        {
+            QueryBuilder.Up(traverse);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Up{T}()"/>
+        public ref RoutineBuilder Up<T>()
+        {
+            QueryBuilder.Up<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Up{T}(T)"/>
+        public ref RoutineBuilder Up<T>(T value) where T : Enum
+        {
+            QueryBuilder.Up(value);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Cascade(ulong)"/>
+        public ref RoutineBuilder Cascade(ulong traverse = 0)
+        {
+            QueryBuilder.Cascade(traverse);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Cascade{T}()"/>
+        public ref RoutineBuilder Cascade<T>()
+        {
+            QueryBuilder.Cascade<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Cascade{T}(T)"/>
+        public ref RoutineBuilder Cascade<T>(T value) where T : Enum
+        {
+            QueryBuilder.Cascade(value);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Descend()"/>
+        public ref RoutineBuilder Descend()
+        {
+            QueryBuilder.Descend();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Parent()"/>
+        public ref RoutineBuilder Parent()
+        {
+            QueryBuilder.Parent();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Trav(ulong, uint)"/>
+        public ref RoutineBuilder Trav(ulong traverse, uint flags = 0)
+        {
+            QueryBuilder.Trav(traverse, flags);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Trav{T}(uint)"/>
+        public ref RoutineBuilder Trav<T>(uint flags = 0)
+        {
+            QueryBuilder.Trav<T>(flags);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Trav{T}(T, uint)"/>
+        public ref RoutineBuilder Trav<T>(T value, uint flags = 0) where T : Enum
+        {
+            QueryBuilder.Trav(value, flags);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.IdFlags(ulong)"/>
+        public ref RoutineBuilder IdFlags(ulong flags)
+        {
+            QueryBuilder.IdFlags(flags);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.InOut(ecs_inout_kind_t)"/>
+        public ref RoutineBuilder InOut(ecs_inout_kind_t inOut)
+        {
+            QueryBuilder.InOut(inOut);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.InOutStage(ecs_inout_kind_t)"/>
+        public ref RoutineBuilder InOutStage(ecs_inout_kind_t inOut)
+        {
+            QueryBuilder.InOutStage(inOut);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write()"/>
+        public ref RoutineBuilder Write()
+        {
+            QueryBuilder.Write();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read()"/>
+        public ref RoutineBuilder Read()
+        {
+            QueryBuilder.Read();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.ReadWrite()"/>
+        public ref RoutineBuilder ReadWrite()
+        {
+            QueryBuilder.ReadWrite();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.In()"/>
+        public ref RoutineBuilder In()
+        {
+            QueryBuilder.In();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Out()"/>
+        public ref RoutineBuilder Out()
+        {
+            QueryBuilder.Out();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.InOut()"/>
+        public ref RoutineBuilder InOut()
+        {
+            QueryBuilder.InOut();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.InOutNone()"/>
+        public ref RoutineBuilder InOutNone()
+        {
+            QueryBuilder.InOutNone();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Oper(ecs_oper_kind_t)"/>
+        public ref RoutineBuilder Oper(ecs_oper_kind_t oper)
+        {
+            QueryBuilder.Oper(oper);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.And()"/>
+        public ref RoutineBuilder And()
+        {
+            QueryBuilder.And();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Or()"/>
+        public ref RoutineBuilder Or()
+        {
+            QueryBuilder.Or();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Not()"/>
+        public ref RoutineBuilder Not()
+        {
+            QueryBuilder.Not();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Optional()"/>
+        public ref RoutineBuilder Optional()
+        {
+            QueryBuilder.Optional();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.AndFrom()"/>
+        public ref RoutineBuilder AndFrom()
+        {
+            QueryBuilder.AndFrom();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.OrFrom()"/>
+        public ref RoutineBuilder OrFrom()
+        {
+            QueryBuilder.OrFrom();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.NotFrom()"/>
+        public ref RoutineBuilder NotFrom()
+        {
+            QueryBuilder.NotFrom();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Singleton()"/>
+        public ref RoutineBuilder Singleton()
+        {
+            QueryBuilder.Singleton();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Filter()"/>
+        public ref RoutineBuilder Filter()
+        {
+            QueryBuilder.Filter();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Instanced()"/>
+        public ref RoutineBuilder Instanced()
+        {
+            QueryBuilder.Instanced();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.QueryFlags(uint)"/>
+        public ref RoutineBuilder QueryFlags(uint flags)
+        {
+            QueryBuilder.QueryFlags(flags);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.CacheKind(ecs_query_cache_kind_t)"/>
+        public ref RoutineBuilder CacheKind(ecs_query_cache_kind_t kind)
+        {
+            QueryBuilder.CacheKind(kind);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Cached()"/>
+        public ref RoutineBuilder Cached()
+        {
+            QueryBuilder.Cached();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Expr(string)"/>
+        public ref RoutineBuilder Expr(string expr)
+        {
+            QueryBuilder.Expr(expr);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With(Core.Term)"/>
+        public ref RoutineBuilder With(Term term)
+        {
+            QueryBuilder.With(term);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With(ulong)"/>
+        public ref RoutineBuilder With(ulong id)
+        {
+            QueryBuilder.With(id);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With(string)"/>
+        public ref RoutineBuilder With(string name)
+        {
+            QueryBuilder.With(name);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With(ulong, ulong)"/>
+        public ref RoutineBuilder With(ulong first, ulong second)
+        {
+            QueryBuilder.With(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With(ulong, string)"/>
+        public ref RoutineBuilder With(ulong first, string second)
+        {
+            QueryBuilder.With(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With(string, ulong)"/>
+        public ref RoutineBuilder With(string first, ulong second)
+        {
+            QueryBuilder.With(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With(string, string)"/>
+        public ref RoutineBuilder With(string first, string second)
+        {
+            QueryBuilder.With(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With{T}()"/>
+        public ref RoutineBuilder With<T>()
+        {
+            QueryBuilder.With<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With{T}(T)"/>
+        public ref RoutineBuilder With<T>(T value) where T : Enum
+        {
+            QueryBuilder.With(value);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With{T1}(ulong)"/>
+        public ref RoutineBuilder With<TFirst>(ulong second)
+        {
+            QueryBuilder.With<TFirst>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With{T1}(string)"/>
+        public ref RoutineBuilder With<TFirst>(string second)
+        {
+            QueryBuilder.With<TFirst>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With{T1, T2}()"/>
+        public ref RoutineBuilder With<TFirst, TSecond>()
+        {
+            QueryBuilder.With<TFirst, TSecond>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With{T1, T2}(T2)"/>
+        public ref RoutineBuilder With<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            QueryBuilder.With<TFirst, TSecond>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With{T1, T2}(T1)"/>
+        public ref RoutineBuilder With<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            QueryBuilder.With<TFirst, TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With{T1}(T1, string)"/>
+        public ref RoutineBuilder With<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            QueryBuilder.With(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.With{T2}(string, T2)"/>
+        public ref RoutineBuilder With<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            QueryBuilder.With(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.WithSecond{T2}(ulong)"/>
+        public ref RoutineBuilder WithSecond<TSecond>(ulong first)
+        {
+            QueryBuilder.WithSecond<TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.WithSecond{T2}(string)"/>
+        public ref RoutineBuilder WithSecond<TSecond>(string first)
+        {
+            QueryBuilder.WithSecond<TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without(Core.Term)"/>
+        public ref RoutineBuilder Without(Term term)
+        {
+            QueryBuilder.Without(term);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without(ulong)"/>
+        public ref RoutineBuilder Without(ulong id)
+        {
+            QueryBuilder.Without(id);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without(string)"/>
+        public ref RoutineBuilder Without(string name)
+        {
+            QueryBuilder.Without(name);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without(ulong, ulong)"/>
+        public ref RoutineBuilder Without(ulong first, ulong second)
+        {
+            QueryBuilder.Without(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without(ulong, string)"/>
+        public ref RoutineBuilder Without(ulong first, string second)
+        {
+            QueryBuilder.Without(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without(string, ulong)"/>
+        public ref RoutineBuilder Without(string first, ulong second)
+        {
+            QueryBuilder.Without(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without(string, string)"/>
+        public ref RoutineBuilder Without(string first, string second)
+        {
+            QueryBuilder.Without(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without{T}()"/>
+        public ref RoutineBuilder Without<T>()
+        {
+            QueryBuilder.Without<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without{T}(T)"/>
+        public ref RoutineBuilder Without<T>(T value) where T : Enum
+        {
+            QueryBuilder.Without(value);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without{T1}(ulong)"/>
+        public ref RoutineBuilder Without<TFirst>(ulong second)
+        {
+            QueryBuilder.Without<TFirst>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without{T1}(string)"/>
+        public ref RoutineBuilder Without<TFirst>(string second)
+        {
+            QueryBuilder.Without<TFirst>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without{T1, T2}()"/>
+        public ref RoutineBuilder Without<TFirst, TSecond>()
+        {
+            QueryBuilder.Without<TFirst, TSecond>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without{T1, T2}(T2)"/>
+        public ref RoutineBuilder Without<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            QueryBuilder.Without<TFirst, TSecond>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without{T1, T2}(T1)"/>
+        public ref RoutineBuilder Without<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            QueryBuilder.Without<TFirst, TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without{T1}(T1, string)"/>
+        public ref RoutineBuilder Without<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            QueryBuilder.Without(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Without{T2}(string, T2)"/>
+        public ref RoutineBuilder Without<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            QueryBuilder.Without(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.WithoutSecond{T2}(ulong)"/>
+        public ref RoutineBuilder WithoutSecond<TSecond>(ulong first)
+        {
+            QueryBuilder.WithoutSecond<TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.WithoutSecond{T2}(string)"/>
+        public ref RoutineBuilder WithoutSecond<TSecond>(string first)
+        {
+            QueryBuilder.WithoutSecond<TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write(Core.Term)"/>
+        public ref RoutineBuilder Write(Term term)
+        {
+            QueryBuilder.Write(term);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write(ulong)"/>
+        public ref RoutineBuilder Write(ulong id)
+        {
+            QueryBuilder.Write(id);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write(string)"/>
+        public ref RoutineBuilder Write(string name)
+        {
+            QueryBuilder.Write(name);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write(ulong, ulong)"/>
+        public ref RoutineBuilder Write(ulong first, ulong second)
+        {
+            QueryBuilder.Write(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write(ulong, string)"/>
+        public ref RoutineBuilder Write(ulong first, string second)
+        {
+            QueryBuilder.Write(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write(string, ulong)"/>
+        public ref RoutineBuilder Write(string first, ulong second)
+        {
+            QueryBuilder.Write(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write(string, string)"/>
+        public ref RoutineBuilder Write(string first, string second)
+        {
+            QueryBuilder.Write(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write{T}()"/>
+        public ref RoutineBuilder Write<T>()
+        {
+            QueryBuilder.Write<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write{T}(T)"/>
+        public ref RoutineBuilder Write<T>(T value) where T : Enum
+        {
+            QueryBuilder.Write(value);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write{T1}(ulong)"/>
+        public ref RoutineBuilder Write<TFirst>(ulong second)
+        {
+            QueryBuilder.Write<TFirst>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write{T1}(string)"/>
+        public ref RoutineBuilder Write<TFirst>(string second)
+        {
+            QueryBuilder.Write<TFirst>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write{T1, T2}()"/>
+        public ref RoutineBuilder Write<TFirst, TSecond>()
+        {
+            QueryBuilder.Write<TFirst, TSecond>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write{T1, T2}(T2)"/>
+        public ref RoutineBuilder Write<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            QueryBuilder.Write<TFirst, TSecond>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write{T1, T2}(T1)"/>
+        public ref RoutineBuilder Write<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            QueryBuilder.Write<TFirst, TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write{T1}(T1, string)"/>
+        public ref RoutineBuilder Write<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            QueryBuilder.Write(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Write{T2}(string, T2)"/>
+        public ref RoutineBuilder Write<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            QueryBuilder.Write(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.WriteSecond{T2}(ulong)"/>
+        public ref RoutineBuilder WriteSecond<TSecond>(ulong first)
+        {
+            QueryBuilder.WriteSecond<TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.WriteSecond{T2}(string)"/>
+        public ref RoutineBuilder WriteSecond<TSecond>(string first)
+        {
+            QueryBuilder.WriteSecond<TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read(Core.Term)"/>
+        public ref RoutineBuilder Read(Term term)
+        {
+            QueryBuilder.Read(term);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read(ulong)"/>
+        public ref RoutineBuilder Read(ulong id)
+        {
+            QueryBuilder.Read(id);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read(string)"/>
+        public ref RoutineBuilder Read(string name)
+        {
+            QueryBuilder.Read(name);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read(ulong, ulong)"/>
+        public ref RoutineBuilder Read(ulong first, ulong second)
+        {
+            QueryBuilder.Read(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read(ulong, string)"/>
+        public ref RoutineBuilder Read(ulong first, string second)
+        {
+            QueryBuilder.Read(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read(string, ulong)"/>
+        public ref RoutineBuilder Read(string first, ulong second)
+        {
+            QueryBuilder.Read(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read(string, string)"/>
+        public ref RoutineBuilder Read(string first, string second)
+        {
+            QueryBuilder.Read(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read{T}()"/>
+        public ref RoutineBuilder Read<T>()
+        {
+            QueryBuilder.Read<T>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read{T}(T)"/>
+        public ref RoutineBuilder Read<T>(T value) where T : Enum
+        {
+            QueryBuilder.Read(value);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read{T1}(ulong)"/>
+        public ref RoutineBuilder Read<TFirst>(ulong second)
+        {
+            QueryBuilder.Read<TFirst>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read{T1}(string)"/>
+        public ref RoutineBuilder Read<TFirst>(string second)
+        {
+            QueryBuilder.Read<TFirst>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read{T1, T2}()"/>
+        public ref RoutineBuilder Read<TFirst, TSecond>()
+        {
+            QueryBuilder.Read<TFirst, TSecond>();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read{T1, T2}(T2)"/>
+        public ref RoutineBuilder Read<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            QueryBuilder.Read<TFirst, TSecond>(second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read{T1, T2}(T1)"/>
+        public ref RoutineBuilder Read<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            QueryBuilder.Read<TFirst, TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read{T1}(T1, string)"/>
+        public ref RoutineBuilder Read<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            QueryBuilder.Read(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Read{T2}(string, T2)"/>
+        public ref RoutineBuilder Read<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            QueryBuilder.Read(first, second);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.ReadSecond{T2}(ulong)"/>
+        public ref RoutineBuilder ReadSecond<TSecond>(ulong first)
+        {
+            QueryBuilder.ReadSecond<TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.ReadSecond{T2}(string)"/>
+        public ref RoutineBuilder ReadSecond<TSecond>(string first)
+        {
+            QueryBuilder.ReadSecond<TSecond>(first);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.ScopeOpen()"/>
+        public ref RoutineBuilder ScopeOpen()
+        {
+            QueryBuilder.ScopeOpen();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.ScopeClose()"/>
+        public ref RoutineBuilder ScopeClose()
+        {
+            QueryBuilder.ScopeClose();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.Term()"/>
+        public ref RoutineBuilder Term()
+        {
+            QueryBuilder.Term();
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.TermAt(int)"/>
+        public ref RoutineBuilder TermAt(int termIndex)
+        {
+            QueryBuilder.TermAt(termIndex);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.OrderBy(ulong, Ecs.OrderByAction)"/>
         public ref RoutineBuilder OrderBy(ulong component, Ecs.OrderByAction compare)
         {
             QueryBuilder.OrderBy(component, compare);
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.QueryBuilder.GroupBy{T}(Ecs.GroupByAction)"/>
-        public ref RoutineBuilder GroupBy<T>(Ecs.GroupByAction callback)
+        /// <inheritdoc cref="QueryBuilder.OrderBy{T}(Ecs.OrderByAction)"/>
+        public ref RoutineBuilder OrderBy<T>(Ecs.OrderByAction compare)
         {
-            QueryBuilder.GroupBy<T>(callback);
+            QueryBuilder.OrderBy<T>(compare);
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.QueryBuilder.GroupBy{T}(Ecs.GroupByCallback)"/>
-        public ref RoutineBuilder GroupBy<T>(Ecs.GroupByCallback callback)
-        {
-            QueryBuilder.GroupBy<T>(callback);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.QueryBuilder.GroupBy(ulong, Ecs.GroupByAction)"/>
+        /// <inheritdoc cref="QueryBuilder.GroupBy(ulong, Ecs.GroupByAction)"/>
         public ref RoutineBuilder GroupBy(ulong component, Ecs.GroupByAction callback)
         {
             QueryBuilder.GroupBy(component, callback);
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.QueryBuilder.GroupBy(ulong, Ecs.GroupByCallback)"/>
+        /// <inheritdoc cref="QueryBuilder.GroupBy{T}(Ecs.GroupByAction)"/>
+        public ref RoutineBuilder GroupBy<T>(Ecs.GroupByAction callback)
+        {
+            QueryBuilder.GroupBy<T>(callback);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.GroupBy(ulong, Ecs.GroupByCallback)"/>
         public ref RoutineBuilder GroupBy(ulong component, Ecs.GroupByCallback callback)
         {
             QueryBuilder.GroupBy(component, callback);
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.QueryBuilder.GroupBy{T}()"/>
-        public ref RoutineBuilder GroupBy<T>()
+        /// <inheritdoc cref="QueryBuilder.GroupBy{T}(Ecs.GroupByCallback)"/>
+        public ref RoutineBuilder GroupBy<T>(Ecs.GroupByCallback callback)
         {
-            QueryBuilder.GroupBy<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.QueryBuilder.GroupBy(ulong)"/>
-        public ref RoutineBuilder GroupBy(ulong component)
-        {
-            QueryBuilder.GroupBy(component);
+            QueryBuilder.GroupBy<T>(callback);
             return ref this;
         }
 
@@ -1406,31 +1320,17 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.QueryBuilder.OnGroupCreate"/>
+        /// <inheritdoc cref="QueryBuilder.OnGroupCreate(Ecs.GroupCreateAction)"/>
         public ref RoutineBuilder OnGroupCreate(Ecs.GroupCreateAction onGroupCreate)
         {
             QueryBuilder.OnGroupCreate(onGroupCreate);
             return ref this;
         }
 
-        /// <inheritdoc cref="Core.QueryBuilder.OnGroupDelete"/>
+        /// <inheritdoc cref="QueryBuilder.OnGroupDelete(Ecs.GroupDeleteAction)"/>
         public ref RoutineBuilder OnGroupDelete(Ecs.GroupDeleteAction onGroupDelete)
         {
             QueryBuilder.OnGroupDelete(onGroupDelete);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.QueryBuilder.Observable(Query)"/>
-        public ref RoutineBuilder Observable(Query parent)
-        {
-            QueryBuilder.Observable(parent);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.QueryBuilder.Observable(ref Query)"/>
-        public ref RoutineBuilder Observable(ref Query parent)
-        {
-            QueryBuilder.Observable(ref parent);
             return ref this;
         }
     }

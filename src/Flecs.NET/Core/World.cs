@@ -2565,8 +2565,8 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public void Each(ulong id, Ecs.EachEntityCallback callback)
         {
-            ecs_iter_t it = Macros.TermIter(Handle, id);
-            while (ecs_term_next(&it) == 1)
+            ecs_iter_t it = ecs_each_id(Handle, id);
+            while (ecs_each_next(&it) == 1)
                 Invoker.Each(&it, callback);
         }
 
@@ -2600,8 +2600,8 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         public void Each<TFirst>(ulong second, Ecs.EachEntityCallback<TFirst> callback)
         {
-            ecs_iter_t it = Macros.TermIter(Handle, Macros.Pair<TFirst>(second, Handle));
-            while (ecs_term_next(&it) == 1)
+            ecs_iter_t it = ecs_each_id(Handle, Macros.Pair<TFirst>(second, Handle));
+            while (ecs_each_next(&it) == 1)
                 Invoker.Each(&it, callback);
         }
 
@@ -2670,8 +2670,8 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void EachSecond<TSecond>(ulong first, Ecs.EachEntityCallback<TSecond> callback)
         {
-            ecs_iter_t it = Macros.TermIter(Handle, Macros.PairSecond<TSecond>(first, Handle));
-            while (ecs_term_next(&it) == 1)
+            ecs_iter_t it = ecs_each_id(Handle, Macros.PairSecond<TSecond>(first, Handle));
+            while (ecs_each_next(&it) == 1)
                 Invoker.Each(&it, callback);
         }
 
@@ -2832,15 +2832,6 @@ namespace Flecs.NET.Core
         public bool UsingTaskThreads()
         {
             return ecs_using_task_threads(Handle) == 1;
-        }
-
-        /// <summary>
-        ///     Creates a snapshot.
-        /// </summary>
-        /// <returns></returns>
-        public Snapshot Snapshot()
-        {
-            return new Snapshot(Handle);
         }
 
         /// <summary>
@@ -3232,45 +3223,6 @@ namespace Flecs.NET.Core
         public MetricBuilder Metric(ulong entity)
         {
             return new MetricBuilder(Handle, entity);
-        }
-
-        /// <summary>
-        ///     Creates a filter builder.
-        /// </summary>
-        /// <returns></returns>
-        public FilterBuilder FilterBuilder(string? name = null)
-        {
-            return new FilterBuilder(Handle, name);
-        }
-
-        /// <summary>
-        ///     Creates a filter.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Filter Filter(string? name = null)
-        {
-            return FilterBuilder(name).Build();
-        }
-
-        /// <summary>
-        ///     Creates a rule builder.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public RuleBuilder RuleBuilder(string? name = null)
-        {
-            return new RuleBuilder(Handle, name);
-        }
-
-        /// <summary>
-        ///     Creates a rule builder.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Rule Rule(string? name = null)
-        {
-            return RuleBuilder(name).Build();
         }
 
         /// <summary>

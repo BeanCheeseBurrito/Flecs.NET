@@ -104,7 +104,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ecs_inout_kind_t InOut()
         {
-            return Value.inout;
+            return (ecs_inout_kind_t)Value.inout;
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ecs_oper_kind_t Oper()
         {
-            return Value.oper;
+            return (ecs_oper_kind_t)Value.oper;
         }
 
         /// <summary>

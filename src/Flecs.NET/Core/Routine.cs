@@ -86,14 +86,9 @@ namespace Flecs.NET.Core
         ///     Run the routine.
         /// </summary>
         /// <param name="deltaTime"></param>
-        /// <param name="offset"></param>
-        /// <param name="limit"></param>
-        public void Run(
-            float deltaTime = 0,
-            int offset = 0,
-            int limit = 0)
+        public void Run(float deltaTime = 0)
         {
-            RunWithParam(deltaTime, null, offset, limit);
+            ecs_run(World, Id, deltaTime, null);
         }
 
         /// <summary>
@@ -101,15 +96,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="deltaTime"></param>
         /// <param name="param"></param>
-        /// <param name="offset"></param>
-        /// <param name="limit"></param>
-        public void RunWithParam(
-            float deltaTime = 0,
-            void* param = null,
-            int offset = 0,
-            int limit = 0)
+        public void RunWithParam(float deltaTime = 0, void* param = null)
         {
-            ecs_run_w_filter(World, Id, deltaTime, offset, limit, param);
+            ecs_run(World, Id, deltaTime, param);
         }
 
         /// <summary>
@@ -118,16 +107,9 @@ namespace Flecs.NET.Core
         /// <param name="stageCurrent"></param>
         /// <param name="stageCount"></param>
         /// <param name="deltaTime"></param>
-        /// <param name="offset"></param>
-        /// <param name="limit"></param>
-        public void RunWorker(
-            int stageCurrent,
-            int stageCount,
-            float deltaTime = 0,
-            int offset = 0,
-            int limit = 0)
+        public void RunWorker(int stageCurrent, int stageCount, float deltaTime = 0)
         {
-            RunWorkerWithParam(stageCurrent, stageCount, deltaTime, null, offset, limit);
+            RunWorkerWithParam(stageCurrent, stageCount, deltaTime, null);
         }
 
         /// <summary>
@@ -137,20 +119,13 @@ namespace Flecs.NET.Core
         /// <param name="stageCount"></param>
         /// <param name="deltaTime"></param>
         /// <param name="param"></param>
-        /// <param name="offset"></param>
-        /// <param name="limit"></param>
-        public void RunWorkerWithParam(
-            int stageCurrent,
-            int stageCount,
-            float deltaTime = 0,
-            void* param = null,
-            int offset = 0,
-            int limit = 0)
+        public void RunWorkerWithParam(int stageCurrent, int stageCount, float deltaTime = 0, void* param = null)
         {
             if (stageCount != 0)
                 ecs_run_worker(World, Id, stageCurrent, stageCount, deltaTime, param);
             else
-                ecs_run_w_filter(World, Id, deltaTime, offset, limit, param);
+                ecs_run(World, Id, deltaTime, param);
+
         }
 
         /// <summary>

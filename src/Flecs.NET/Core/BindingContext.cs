@@ -344,14 +344,10 @@ namespace Flecs.NET.Core
             public Callback Iterator;
             public Callback Run;
 
-            public QueryContext QueryContext;
-
             public void Dispose()
             {
                 Iterator.Dispose();
                 Run.Dispose();
-
-                QueryContext.Dispose();
             }
         }
 

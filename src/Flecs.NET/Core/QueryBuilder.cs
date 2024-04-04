@@ -1,89 +1,1665 @@
 using System;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Core
 {
     /// <summary>
-    ///     Wrapper around ecs_query_desc_t.
+    ///     A wrapper around <see cref="ecs_query_desc_t"/>.
     /// </summary>
-    public unsafe partial struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>
+    public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>
     {
         private ecs_world_t* _world;
+        private ecs_query_desc_t _desc;
+        private int _termIndex;
+        private int _exprCount;
+        private TermIdType _termIdType;
+        private NativeList<NativeString> _strings;
+        private ref ecs_term_t CurrentTerm => ref Desc.terms[_termIndex - 1];
+        private ref ecs_term_ref_t CurrentTermId
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                switch (_termIdType)
+                {
+                    case TermIdType.First:
+                        return ref CurrentTerm.first;
+                    case TermIdType.Second:
+                        return ref CurrentTerm.second;
+                    case TermIdType.Src:
+                        return ref CurrentTerm.src;
+                    default:
+                        return ref Unsafe.NullRef<ecs_term_ref_t>();
+                }
+            }
+        }
 
-        internal ecs_query_desc_t QueryDesc;
-        internal FilterBuilder FilterBuilder;
-        internal BindingContext.QueryContext QueryContext;
+        internal BindingContext.QueryContext Context;
 
         /// <summary>
-        ///     Reference to the world.
+        ///     A reference to the world.
         /// </summary>
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        ///     Reference to the query description.
+        ///     A reference to the filter description.
         /// </summary>
-        public ref ecs_query_desc_t Desc => ref QueryDesc;
+        public ref ecs_query_desc_t Desc => ref _desc;
 
         /// <summary>
-        ///     Creates a named query builder for the provided world.
+        ///     Creates a filter builder for the provided world.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
         public QueryBuilder(ecs_world_t* world, string? name = null)
         {
             _world = world;
-            FilterBuilder = new FilterBuilder(world);
-            QueryDesc = default;
-            QueryContext = default;
+            _desc = default;
+            _termIndex = -1;
+            _exprCount = default;
+            _termIdType = TermIdType.Src;
+            _strings = default;
+
+            Context = default;
 
             if (string.IsNullOrEmpty(name))
                 return;
 
             using NativeString nativeName = (NativeString)name;
 
-            ecs_entity_desc_t entityDesc = default;
-            entityDesc.name = nativeName;
-            entityDesc.sep = BindingContext.DefaultSeparator;
-            entityDesc.root_sep = BindingContext.DefaultRootSeparator;
-            FilterBuilder.Desc.entity = ecs_entity_init(world, &entityDesc);
+            ecs_entity_desc_t desc = default;
+            desc.name = nativeName;
+            desc.sep = BindingContext.DefaultSeparator;
+            desc.root_sep = BindingContext.DefaultRootSeparator;
+            Desc.entity = ecs_entity_init(World, &desc);
         }
 
         /// <summary>
-        ///     Disposes the query builder.
+        ///     Cleans up resources.
         /// </summary>
         public void Dispose()
         {
-            QueryContext.Dispose();
+            Context.Dispose();
+
+            if (_strings == default)
+                return;
+
+            for (int i = 0; i < _strings.Count; i++)
+                _strings[i].Dispose();
+
+            _strings.Dispose();
         }
 
         /// <summary>
-        ///     Builds a new query.
+        ///     Builds a new Query.
         /// </summary>
         /// <returns></returns>
         public Query Build()
         {
-            fixed (QueryBuilder* self = &this)
+            fixed (ecs_query_desc_t* ptr = &Desc)
             {
-                BindingContext.QueryContext* queryContext = Memory.Alloc<BindingContext.QueryContext>(1);
-                queryContext[0] = QueryContext;
-
-                ecs_query_desc_t* queryDesc = &self->QueryDesc;
-                queryDesc->filter = FilterBuilder.Desc;
-                queryDesc->filter.terms_buffer = FilterBuilder.Terms.Data;
-                queryDesc->filter.terms_buffer_count = FilterBuilder.Terms.Count;
-                queryDesc->binding_ctx = queryContext;
-                queryDesc->binding_ctx_free = BindingContext.QueryContextFreePointer;
-
-                ecs_query_t* handle = ecs_query_init(World, queryDesc);
-
-                if (handle == null)
-                    Ecs.Error("Query failed to init");
-
-                FilterBuilder.Dispose();
-
-                return new Query(World, handle);
+                Dispose();
+                return new Query(World, ecs_query_init(World, ptr));
             }
+        }
+
+        /// <summary>
+        ///     The self flags indicates the term identifier itself is used.
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Self()
+        {
+            AssertTermId();
+            CurrentTermId.id |= EcsSelf;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Specify value of identifier by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Id(ulong id)
+        {
+            AssertTermId();
+            CurrentTermId.id = id;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Specify value of identifier by id. Almost the same as id(entity), but this
+        ///     operation explicitly sets the EcsIsEntity flag. This forces the id to
+        ///     be interpreted as entity, whereas not setting the flag would implicitly
+        ///     convert ids for builtin variables such as EcsThis to a variable.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Entity(ulong entity)
+        {
+            AssertTermId();
+            CurrentTermId.id = entity | EcsIsEntity;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Specify value of identifier by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Name(string name)
+        {
+            AssertTermId();
+
+            NativeString nativeName = (NativeString)name;
+            _strings.Add(nativeName);
+
+            CurrentTermId.id |= EcsIsEntity;
+            CurrentTermId.name = nativeName;
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Specify identifier is a variable (resolved at query evaluation time).
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Var(string name)
+        {
+            AssertTermId();
+
+            NativeString nativeName = (NativeString)name;
+            _strings.Add(nativeName);
+
+            CurrentTermId.id |= EcsIsVariable;
+            CurrentTermId.name = nativeName;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Override term id flags.
+        /// </summary>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Flags(uint flags)
+        {
+            AssertTermId();
+            CurrentTermId.id = flags;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Sets term id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Term(ulong id)
+        {
+            return ref Id(id);
+        }
+
+        /// <summary>
+        ///     Call prior to setting values for src identifier.
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Src()
+        {
+            AssertTerm();
+            _termIdType = TermIdType.Src;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Call prior to setting values for first identifier. This is either the
+        ///     component identifier, or first element of a pair (in case second is
+        ///     populated as well).
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder First()
+        {
+            AssertTerm();
+            _termIdType = TermIdType.First;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Call prior to setting values for second identifier. This is the second
+        ///     element of a pair. Requires that First() is populated as well.
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Second()
+        {
+            AssertTerm();
+            _termIdType = TermIdType.Second;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Select src identifier, initialize it with entity id.
+        /// </summary>
+        /// <param name="srcId"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Src(ulong srcId)
+        {
+            return ref Src().Id(srcId);
+        }
+
+        /// <summary>
+        ///     Select src identifier, initialize it with id associated with type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Src<T>()
+        {
+            return ref Src(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Select src identifier, initialize it with id associated with enum member.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Src<T>(T value) where T : Enum
+        {
+            return ref Src(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
+        ///     Select src identifier, initialize it with name. If name starts with a $
+        ///     the name is interpreted as a variable.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Src(string name)
+        {
+            Src();
+            return ref name[0] == '$' ? ref Var(name[1..]) : ref Name(name);
+        }
+
+        /// <summary>
+        ///     Select first identifier, initialize it with entity id.
+        /// </summary>
+        /// <param name="firstId"></param>
+        /// <returns></returns>
+        public ref QueryBuilder First(ulong firstId)
+        {
+            return ref First().Id(firstId);
+        }
+
+        /// <summary>
+        ///     Select first identifier, initialize it with id associated with type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder First<T>()
+        {
+            return ref First(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Select first identifier, initialize it with id associated with enum member.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder First<T>(T value) where T : Enum
+        {
+            return ref First(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
+        ///     Select first identifier, initialize it with name. If name starts with a $
+        ///     the name is interpreted as a variable.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ref QueryBuilder First(string name)
+        {
+            First();
+            return ref name[0] == '$' ? ref Var(name[1..]) : ref Name(name);
+        }
+
+        /// <summary>
+        ///     Select second identifier, initialize it with entity id.
+        /// </summary>
+        /// <param name="secondId"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Second(ulong secondId)
+        {
+            return ref Second().Id(secondId);
+        }
+
+        /// <summary>
+        ///     Select second identifier, initialize it with id associated with type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Second<T>()
+        {
+            return ref Second(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     Select second identifier, initialize it with id associated with enum member.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Second<T>(T value) where T : Enum
+        {
+            return ref Second(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
+        ///     Select second identifier, initialize it with name. If name starts with a $
+        ///     the name is interpreted as a variable.
+        /// </summary>
+        /// <param name="secondName"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Second(string secondName)
+        {
+            Second();
+            return ref secondName[0] == '$' ? ref Var(secondName[1..]) : ref Name(secondName);
+        }
+
+        /// <summary>
+        ///     The up flag indicates that the term identifier may be substituted by
+        ///     traversing a relationship upwards. For example: substitute the identifier
+        ///     with its parent by traversing the ChildOf relationship.
+        /// </summary>
+        /// <param name="traverse"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Up(ulong traverse = 0)
+        {
+            AssertTermId();
+            CurrentTermId.id |= EcsUp;
+
+            if (traverse != 0)
+                CurrentTerm.trav = traverse;
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     The up flag indicates that the term identifier may be substituted by
+        ///     traversing a relationship upwards. For example: substitute the identifier
+        ///     with its parent by traversing the ChildOf relationship.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Up<T>()
+        {
+            return ref Up(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     The up flag indicates that the term identifier may be substituted by
+        ///     traversing a relationship upwards. For example: substitute the identifier
+        ///     with its parent by traversing the ChildOf relationship.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Up<T>(T value) where T : Enum
+        {
+            return ref Up(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
+        ///     The cascade flag is like up, but returns results in breadth-first order.
+        ///     Only supported for Query.
+        /// </summary>
+        /// <param name="traverse"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Cascade(ulong traverse = 0)
+        {
+            AssertTermId();
+            CurrentTermId.id |= EcsCascade;
+
+            if (traverse != 0)
+                CurrentTerm.trav = traverse;
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     The cascade flag is like up, but returns results in breadth-first order.
+        ///     Only supported for Query.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Cascade<T>()
+        {
+            return ref Cascade(Type<T>.Id(World));
+        }
+
+        /// <summary>
+        ///     The cascade flag is like up, but returns results in breadth-first order.
+        ///     Only supported for Query.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Cascade<T>(T value) where T : Enum
+        {
+            return ref Cascade(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
+        ///     Use with cascade to iterate results in descending (bottom -> top) order
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Descend()
+        {
+            AssertTermId();
+            CurrentTermId.id |= EcsDesc;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Same as up(), exists for backwards compatibility.
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Parent()
+        {
+            return ref Up();
+        }
+
+        /// <summary>
+        ///     Specify relationship to traverse, and flags to indicate direction.
+        /// </summary>
+        /// <param name="traverse"></param>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Trav(ulong traverse, uint flags = 0)
+        {
+            AssertTermId();
+            CurrentTerm.trav = traverse;
+            CurrentTermId.id |= flags;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Specify relationship to traverse, and flags to indicate direction.
+        /// </summary>
+        /// <param name="flags"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Trav<T>(uint flags = 0)
+        {
+            return ref Trav(Type<T>.Id(World), flags);
+        }
+
+        /// <summary>
+        ///     Specify relationship to traverse, and flags to indicate direction.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="flags"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Trav<T>(T value, uint flags = 0) where T : Enum
+        {
+            return ref Trav(EnumType<T>.Id(value, World), flags);
+        }
+
+        /// <summary>
+        ///     Set id flags for term.
+        /// </summary>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        public ref QueryBuilder IdFlags(ulong flags)
+        {
+            AssertTerm();
+            CurrentTerm.id |= flags;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Set read/write access of term.
+        /// </summary>
+        /// <param name="inOut"></param>
+        /// <returns></returns>
+        public ref QueryBuilder InOut(ecs_inout_kind_t inOut)
+        {
+            AssertTerm();
+            CurrentTerm.inout = (short)inOut;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Set read/write access for stage. Use this when a system reads or writes
+        ///     components other than the ones provided by the query. This information
+        ///     can be used by schedulers to insert sync/merge points between systems
+        ///     where deferred operations are flushed.
+        ///     Setting this is optional. If not set, the value of the accessed component
+        ///     may be out of sync for at most one frame.
+        /// </summary>
+        /// <param name="inOut"></param>
+        /// <returns></returns>
+        public ref QueryBuilder InOutStage(ecs_inout_kind_t inOut)
+        {
+            AssertTerm();
+            CurrentTerm.inout = (short)inOut;
+            if (CurrentTerm.oper != (short)EcsNot)
+                Src().Entity(0);
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Short for InOutStage(EcsOut).
+        ///     Use when system uses add, remove or set.
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Write()
+        {
+            return ref InOutStage(EcsOut);
+        }
+
+        /// <summary>
+        ///     Short for InOutStage(EcsIn).
+        ///     Use when system uses get.
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Read()
+        {
+            return ref InOutStage(EcsIn);
+        }
+
+        /// <summary>
+        ///     Short for InOutStage(EcsInOut).
+        ///     Use when system uses get_mut.
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder ReadWrite()
+        {
+            return ref InOutStage(EcsInOut);
+        }
+
+        /// <summary>
+        ///     Short for InOut(EcsIn)
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder In()
+        {
+            return ref InOut(EcsIn);
+        }
+
+        /// <summary>
+        ///     Short for InOut(EcsOut)
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Out()
+        {
+            return ref InOut(EcsOut);
+        }
+
+        /// <summary>
+        ///     Short for InOut(EcsInOut)
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder InOut()
+        {
+            return ref InOut(EcsInOut);
+        }
+
+        /// <summary>
+        ///     Short for InOut(EcsInOutNone)
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder InOutNone()
+        {
+            return ref InOut(EcsInOutNone);
+        }
+
+        /// <summary>
+        ///     Set operator of term.
+        /// </summary>
+        /// <param name="oper"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Oper(ecs_oper_kind_t oper)
+        {
+            AssertTerm();
+            CurrentTerm.oper = (short)oper;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Short for Oper(EcsAnd).
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder And()
+        {
+            return ref Oper(EcsAnd);
+        }
+
+        /// <summary>
+        ///     Short for Oper(EcsOr).
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Or()
+        {
+            return ref Oper(EcsOr);
+        }
+
+        /// <summary>
+        ///     Short for Oper(EcsNot).
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Not()
+        {
+            return ref Oper(EcsNot);
+        }
+
+        /// <summary>
+        ///     Short for Oper(EcsOptional).
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Optional()
+        {
+            return ref Oper(EcsOptional);
+        }
+
+
+        /// <summary>
+        ///     Short for Oper(EcsAndFrom).
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder AndFrom()
+        {
+            return ref Oper(EcsAndFrom);
+        }
+
+        /// <summary>
+        ///     Short for Oper(EcsOFrom).
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder OrFrom()
+        {
+            return ref Oper(EcsOrFrom);
+        }
+
+        /// <summary>
+        ///     Short for Oper(EcsNotFrom).
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder NotFrom()
+        {
+            return ref Oper(EcsNotFrom);
+        }
+
+        /// <summary>
+        ///     Match singleton.
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Singleton()
+        {
+            AssertTerm();
+            Ecs.Assert(CurrentTerm.id != 0 || CurrentTerm.first.id != 0, "no component specified for singleton");
+
+            ulong singletonId = CurrentTerm.id;
+
+            if (singletonId == 0)
+                singletonId = CurrentTerm.first.id;
+
+            Ecs.Assert(singletonId != 0, nameof(ECS_INVALID_PARAMETER));
+            CurrentTerm.src.id = !Macros.IsPair(singletonId) ? singletonId : Macros.PairFirst(World, singletonId);
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Filter terms are not triggered on by observers.
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Filter()
+        {
+            CurrentTerm.inout = (short)EcsInOutFilter;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     When true, terms returned by an iterator may either contain 1 or N
+        ///     elements, where terms with N elements are owned, and terms with 1 element
+        ///     are shared, for example from a parent or base entity. When false, the
+        ///     iterator will at most return 1 element when the result contains both
+        ///     owned and shared terms.
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Instanced()
+        {
+            Desc.flags |= EcsQueryIsInstanced;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Set flags for advanced usage
+        /// </summary>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        public ref QueryBuilder QueryFlags(uint flags)
+        {
+            Desc.flags |= flags;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Sets the cache kind.
+        /// </summary>
+        /// <param name="kind"></param>
+        /// <returns></returns>
+        public ref QueryBuilder CacheKind(ecs_query_cache_kind_t kind)
+        {
+            Desc.cache_kind = kind;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Cache query terms that are cacheable.
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Cached()
+        {
+            return ref CacheKind(EcsQueryCacheAuto);
+        }
+
+        /// <summary>
+        ///     Filter expression. Should not be set at the same time as terms array.
+        /// </summary>
+        /// <param name="expr"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Expr(string expr)
+        {
+            Ecs.Assert(_exprCount == 0, "QueryBuilder.Expr() called more than once");
+
+            NativeString nativeExpr = (NativeString)expr;
+            _strings.Add(nativeExpr);
+
+            Desc.expr = nativeExpr;
+            _exprCount++;
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided value.
+        /// </summary>
+        /// <param name="term"></param>
+        /// <returns></returns>
+        public ref QueryBuilder With(Term term)
+        {
+            Term();
+            CurrentTerm = term.Value;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ref QueryBuilder With(ulong id)
+        {
+            Term();
+            SetTermId(id);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ref QueryBuilder With(string name)
+        {
+            Term();
+            SetTermId();
+            First(name);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder With(ulong first, ulong second)
+        {
+            Term();
+            SetTermId(first, second);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder With(ulong first, string second)
+        {
+            Term();
+            SetTermId(first);
+            Second(second);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder With(string first, ulong second)
+        {
+            Term();
+            SetTermId();
+            First(first);
+            Second(second);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder With(string first, string second)
+        {
+            Term();
+            SetTermId();
+            First(first);
+            Second(second);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder With<T>()
+        {
+            Term();
+            SetTermId(Type<T>.Id(World));
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided enum.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder With<T>(T value) where T : Enum
+        {
+            return ref With<T>(EnumType<T>.Id(value, World));
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder With<TFirst>(ulong second)
+        {
+            return ref With(Type<TFirst>.Id(World), second);
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder With<TFirst>(string second)
+        {
+            return ref With(Type<TFirst>.Id(World)).Second(second);
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder With<TFirst, TSecond>()
+        {
+            return ref With<TFirst>(Type<TSecond>.Id(World));
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder With<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref With<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder With<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref WithSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder With<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            return ref With(EnumType<TFirst>.Id(first, World), second);
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder With<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            return ref With(first, EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder WithSecond<TSecond>(ulong first)
+        {
+            ulong pair = Macros.PairSecond<TSecond>(first, World);
+            return ref With(pair);
+        }
+
+        /// <summary>
+        ///     Increments to the next term with the provided pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder WithSecond<TSecond>(string first)
+        {
+            return ref With(first, Type<TSecond>.Id(World));
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="term"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Without(Term term)
+        {
+            return ref With(term).Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Without(ulong id)
+        {
+            return ref With(id).Not();
+        }
+
+        /// <summary>
+        ///    Alternative form of With().Not().
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Without(string name)
+        {
+            return ref With(name).Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Without(ulong first, ulong second)
+        {
+            return ref With(first, second).Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Without(ulong first, string second)
+        {
+            return ref With(first, second).Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Without(string first, ulong second)
+        {
+            return ref With(first, second).Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Without(string first, string second)
+        {
+            return ref With(first, second).Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Without<T>()
+        {
+            return ref With<T>().Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Without<T>(T value) where T : Enum
+        {
+            return ref With(value).Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Without<TFirst>(ulong second)
+        {
+            return ref With<TFirst>(second).Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Without<TFirst>(string second)
+        {
+            return ref With<TFirst>(second).Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Without<TFirst, TSecond>()
+        {
+            return ref With<TFirst, TSecond>().Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Without<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref Without<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Without<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref WithoutSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Without<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            return ref Without(EnumType<TFirst>.Id(first, World), second);
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Not().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Without<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            return ref Without(first, EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of WithSecond().Not().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder WithoutSecond<TSecond>(ulong first)
+        {
+            return ref WithSecond<TSecond>(first).Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of WithSecond().Not().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder WithoutSecond<TSecond>(string first)
+        {
+            return ref WithSecond<TSecond>(first).Not();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="term"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Write(Term term)
+        {
+            return ref With(term).Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Write(ulong id)
+        {
+            return ref With(id).Write();
+        }
+
+        /// <summary>
+        ///    Alternative form of With().Write().
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Write(string name)
+        {
+            return ref With(name).Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Write(ulong first, ulong second)
+        {
+            return ref With(first, second).Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Write(ulong first, string second)
+        {
+            return ref With(first, second).Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Write(string first, ulong second)
+        {
+            return ref With(first, second).Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Write(string first, string second)
+        {
+            return ref With(first, second).Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Write<T>()
+        {
+            return ref With<T>().Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Write<T>(T value) where T : Enum
+        {
+            return ref With(value).Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Write<TFirst>(ulong second)
+        {
+            return ref With<TFirst>(second).Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Write<TFirst>(string second)
+        {
+            return ref With<TFirst>(second).Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Write<TFirst, TSecond>()
+        {
+            return ref With<TFirst, TSecond>().Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Write<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref Write<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Write<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref WriteSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Write<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            return ref Write(EnumType<TFirst>.Id(first, World), second);
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Write().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Write<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            return ref Write(first, EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of WithSecond().Write().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder WriteSecond<TSecond>(ulong first)
+        {
+            return ref WithSecond<TSecond>(first).Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of WithSecond().Write().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder WriteSecond<TSecond>(string first)
+        {
+            return ref WithSecond<TSecond>(first).Write();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="term"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Read(Term term)
+        {
+            return ref With(term).Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Read(ulong id)
+        {
+            return ref With(id).Read();
+        }
+
+        /// <summary>
+        ///    Alternative form of With().Read().
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Read(string name)
+        {
+            return ref With(name).Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Read(ulong first, ulong second)
+        {
+            return ref With(first, second).Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Read(ulong first, string second)
+        {
+            return ref With(first, second).Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Read(string first, ulong second)
+        {
+            return ref With(first, second).Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public ref QueryBuilder Read(string first, string second)
+        {
+            return ref With(first, second).Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Read<T>()
+        {
+            return ref With<T>().Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Read<T>(T value) where T : Enum
+        {
+            return ref With(value).Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Read<TFirst>(ulong second)
+        {
+            return ref With<TFirst>(second).Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Read<TFirst>(string second)
+        {
+            return ref With<TFirst>(second).Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Read<TFirst, TSecond>()
+        {
+            return ref With<TFirst, TSecond>().Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Read<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref Read<TFirst>(EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Read<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref ReadSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Read<TFirst>(TFirst first, string second) where TFirst : Enum
+        {
+            return ref Read(EnumType<TFirst>.Id(first, World), second);
+        }
+
+        /// <summary>
+        ///     Alternative form of With().Read().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder Read<TSecond>(string first, TSecond second) where TSecond : Enum
+        {
+            return ref Read(first, EnumType<TSecond>.Id(second, World));
+        }
+
+        /// <summary>
+        ///     Alternative form of WithSecond().Read().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder ReadSecond<TSecond>(ulong first)
+        {
+            return ref WithSecond<TSecond>(first).Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of WithSecond().Read().
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder ReadSecond<TSecond>(string first)
+        {
+            return ref WithSecond<TSecond>(first).Read();
+        }
+
+        /// <summary>
+        ///     Alternative form of With(EcsScopeOpen).Entity(0)
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder ScopeOpen()
+        {
+            return ref With(EcsScopeOpen).Entity(0);
+        }
+
+        /// <summary>
+        ///     Alternative form of With(EcsScopeClose).Entity(0)
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder ScopeClose()
+        {
+            return ref With(EcsScopeClose).Entity(0);
+        }
+
+        /// <summary>
+        ///     Term notation for more complex query features.
+        /// </summary>
+        /// <returns></returns>
+        public ref QueryBuilder Term()
+        {
+            Ecs.Assert(_termIndex < FLECS_TERM_COUNT_MAX, "Cannot have more than 16 terms.");
+            _termIndex++;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Sets the current term to the one at the provided index.
+        /// </summary>
+        /// <param name="termIndex"></param>
+        /// <returns></returns>
+        public ref QueryBuilder TermAt(int termIndex)
+        {
+            Ecs.Assert(termIndex > 0 && termIndex <= FLECS_TERM_COUNT_MAX, "TermIndex argument must be between 1-16.");
+
+            _termIndex = termIndex;
+            _termIdType = TermIdType.Src;
+
+            fixed (ecs_term_t* ptr = &CurrentTerm)
+                Ecs.Assert(ecs_term_is_initialized(ptr) == Macros.True, "Term is not initialized.");
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Sort the output of a query.
+        /// </summary>
+        /// <param name="component"></param>
+        /// <param name="compare"></param>
+        /// <returns></returns>
+        public ref QueryBuilder OrderBy(ulong component, Ecs.OrderByAction compare)
+        {
+            BindingContext.SetCallback(ref Context.OrderByAction, compare);
+            Desc.order_by_callback = Context.OrderByAction.Function;
+            Desc.order_by = component;
+            return ref this;
         }
 
         /// <summary>
@@ -98,16 +1674,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Sort the output of a query.
+        ///     Group and sort matched tables.
         /// </summary>
         /// <param name="component"></param>
-        /// <param name="compare"></param>
+        /// <param name="callback"></param>
         /// <returns></returns>
-        public ref QueryBuilder OrderBy(ulong component, Ecs.OrderByAction compare)
+        public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByAction callback)
         {
-            BindingContext.SetCallback(ref QueryContext.OrderByAction, compare);
-            QueryDesc.order_by = QueryContext.OrderByAction.Function;
-            QueryDesc.order_by_component = component;
+            BindingContext.SetCallback(ref Context.GroupByAction, callback);
+            Desc.group_by_callback = Context.GroupByAction.Function;
+            Desc.group_by = component;
             return ref this;
         }
 
@@ -125,72 +1701,36 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Group and sort matched tables.
         /// </summary>
+        /// <param name="component"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByCallback callback)
+        {
+            Ecs.Assert(Desc.group_by_ctx == null,
+                "Cannot set .GroupBy callback if group_by_ctx is already occupied.");
+
+            Context.GroupByAction.Dispose();
+            Context.ContextFree.Dispose();
+
+            BindingContext.QueryGroupByContext* context = Memory.AllocZeroed<BindingContext.QueryGroupByContext>(1);
+            BindingContext.SetCallback(ref context->GroupBy, callback);
+            Desc.group_by_callback = BindingContext.QueryGroupByPointer;
+            Desc.group_by_ctx_free = BindingContext.QueryGroupByContextFreePointer;
+            Desc.group_by_ctx = context;
+            Desc.group_by = component;
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Group and sort matched tables.
+        /// </summary>
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public ref QueryBuilder GroupBy<T>(Ecs.GroupByCallback callback)
         {
             return ref GroupBy(Type<T>.Id(World), callback);
-        }
-
-        /// <summary>
-        ///     Group and sort matched tables.
-        /// </summary>
-        /// <param name="component"></param>
-        /// <param name="callback"></param>
-        /// <returns></returns>
-        public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByAction callback)
-        {
-            BindingContext.SetCallback(ref QueryContext.GroupByAction, callback);
-            QueryDesc.group_by = QueryContext.GroupByAction.Function;
-            QueryDesc.group_by_id = component;
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Group and sort matched tables.
-        /// </summary>
-        /// <param name="component"></param>
-        /// <param name="callback"></param>
-        /// <returns></returns>
-        public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByCallback callback)
-        {
-            Ecs.Assert(QueryDesc.group_by_ctx == null,
-                "Cannot set .GroupBy callback if group_by_ctx is already occupied.");
-
-            QueryContext.GroupByAction.Dispose();
-            QueryContext.ContextFree.Dispose();
-
-            BindingContext.QueryGroupByContext* context = Memory.AllocZeroed<BindingContext.QueryGroupByContext>(1);
-            BindingContext.SetCallback(ref context->GroupBy, callback);
-            QueryDesc.group_by = BindingContext.QueryGroupByPointer;
-            QueryDesc.group_by_ctx_free = BindingContext.QueryGroupByContextFreePointer;
-            QueryDesc.group_by_ctx = context;
-            QueryDesc.group_by_id = component;
-
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Group and sort matched tables.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public ref QueryBuilder GroupBy<T>()
-        {
-            return ref GroupBy(Type<T>.Id(World));
-        }
-
-        /// <summary>
-        ///     Group and sort matched tables.
-        /// </summary>
-        /// <param name="component"></param>
-        /// <returns></returns>
-        public ref QueryBuilder GroupBy(ulong component)
-        {
-            QueryDesc.group_by = IntPtr.Zero;
-            QueryDesc.group_by_id = component;
-            return ref this;
         }
 
         /// <summary>
@@ -201,9 +1741,9 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder GroupByCtx(void* ctx, Ecs.ContextFree contextFree)
         {
-            BindingContext.SetCallback(ref QueryContext.ContextFree, contextFree);
-            QueryDesc.group_by_ctx_free = QueryContext.ContextFree.Function;
-            QueryDesc.group_by_ctx = ctx;
+            BindingContext.SetCallback(ref Context.ContextFree, contextFree);
+            Desc.group_by_ctx_free = Context.ContextFree.Function;
+            Desc.group_by_ctx = ctx;
             return ref this;
         }
 
@@ -214,8 +1754,8 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder GroupByCtx(void* ctx)
         {
-            QueryDesc.group_by_ctx = ctx;
-            QueryDesc.group_by_ctx_free = IntPtr.Zero;
+            Desc.group_by_ctx = ctx;
+            Desc.group_by_ctx_free = IntPtr.Zero;
             return ref this;
         }
 
@@ -226,8 +1766,8 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder OnGroupCreate(Ecs.GroupCreateAction onGroupCreate)
         {
-            BindingContext.SetCallback(ref QueryContext.GroupCreateAction, onGroupCreate);
-            QueryDesc.on_group_create = QueryContext.GroupCreateAction.Function;
+            BindingContext.SetCallback(ref Context.GroupCreateAction, onGroupCreate);
+            Desc.on_group_create = Context.GroupCreateAction.Function;
             return ref this;
         }
 
@@ -238,30 +1778,49 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder OnGroupDelete(Ecs.GroupDeleteAction onGroupDelete)
         {
-            BindingContext.SetCallback(ref QueryContext.GroupDeleteAction, onGroupDelete);
-            QueryDesc.on_group_delete = QueryContext.GroupDeleteAction.Function;
+            BindingContext.SetCallback(ref Context.GroupDeleteAction, onGroupDelete);
+            Desc.on_group_delete = Context.GroupDeleteAction.Function;
             return ref this;
         }
 
-        /// <summary>
-        ///     Specify parent query (creates subquery)
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        public ref QueryBuilder Observable(Query parent)
+        [Conditional("DEBUG")]
+        private void AssertTermId()
         {
-            return ref Observable(ref parent);
+            Ecs.Assert(!Unsafe.IsNullRef(ref CurrentTermId), "No active term (call .Term() first)");
         }
 
-        /// <summary>
-        ///     Specify parent query (creates subquery)
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        public ref QueryBuilder Observable(ref Query parent)
+        [Conditional("DEBUG")]
+        private void AssertTerm()
         {
-            QueryDesc.parent = parent.Handle;
-            return ref this;
+            Ecs.Assert(!Unsafe.IsNullRef(ref CurrentTermId), "No active term (call .term() first)");
+        }
+
+        private void SetTermId()
+        {
+            CurrentTerm = default;
+        }
+
+        private void SetTermId(ulong id)
+        {
+            if ((id & ECS_ID_FLAGS_MASK) != 0)
+            {
+                CurrentTerm = new ecs_term_t { id = id };
+                return;
+            }
+
+            CurrentTerm = new ecs_term_t { first = new ecs_term_ref_t { id = id } };
+        }
+
+        private void SetTermId(ulong first, ulong second)
+        {
+            CurrentTerm = new ecs_term_t { id = Macros.Pair(first, second) };
+        }
+
+        private enum TermIdType
+        {
+            Src,
+            First,
+            Second
         }
 
         /// <summary>
@@ -271,7 +1830,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Equals(QueryBuilder other)
         {
-            return Desc == other.Desc && FilterBuilder == other.FilterBuilder;
+            return Desc == other.Desc;
         }
 
         /// <summary>
@@ -285,12 +1844,12 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Returns the hash code of the <see cref="QueryBuilder"/>.
+        ///     Returns the hash code for the <see cref="EventBuilder"/>.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Desc.GetHashCode(), FilterBuilder.GetHashCode());
+            return Desc.GetHashCode();
         }
 
         /// <summary>
@@ -313,1011 +1872,6 @@ namespace Flecs.NET.Core
         public static bool operator !=(QueryBuilder left, QueryBuilder right)
         {
             return !(left == right);
-        }
-    }
-
-    // FilterBuilder Extensions
-    public unsafe partial struct QueryBuilder
-    {
-        /// <inheritdoc cref="Core.FilterBuilder.Self"/>
-        public ref QueryBuilder Self()
-        {
-            FilterBuilder.Self();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Up"/>
-        public ref QueryBuilder Up(ulong traverse = 0)
-        {
-            FilterBuilder.Up(traverse);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Up{T}()"/>
-        public ref QueryBuilder Up<T>()
-        {
-            FilterBuilder.Up<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Up{T}(T)"/>
-        public ref QueryBuilder Up<T>(T value) where T : Enum
-        {
-            FilterBuilder.Up(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Cascade"/>
-        public ref QueryBuilder Cascade(ulong traverse = 0)
-        {
-            FilterBuilder.Cascade(traverse);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Cascade{T}()"/>
-        public ref QueryBuilder Cascade<T>()
-        {
-            FilterBuilder.Cascade<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Cascade{T}(T)"/>
-        public ref QueryBuilder Cascade<T>(T value) where T : Enum
-        {
-            FilterBuilder.Cascade(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Descend"/>
-        public ref QueryBuilder Descend()
-        {
-            FilterBuilder.Descend();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Parent"/>
-        public ref QueryBuilder Parent()
-        {
-            FilterBuilder.Parent();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Trav(ulong, uint)"/>
-        public ref QueryBuilder Trav(ulong traverse, uint flags = 0)
-        {
-            FilterBuilder.Trav(traverse, flags);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Trav{T}(uint)"/>
-        public ref QueryBuilder Trav<T>(uint flags = 0)
-        {
-            FilterBuilder.Trav<T>(flags);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Trav{T}(T, uint)"/>
-        public ref QueryBuilder Trav<T>(T value, uint flags = 0) where T : Enum
-        {
-            FilterBuilder.Trav(value, flags);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Id"/>
-        public ref QueryBuilder Id(ulong id)
-        {
-            FilterBuilder.Id(id);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Entity"/>
-        public ref QueryBuilder Entity(ulong entity)
-        {
-            FilterBuilder.Entity(entity);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Name"/>
-        public ref QueryBuilder Name(string name)
-        {
-            FilterBuilder.Name(name);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Var"/>
-        public ref QueryBuilder Var(string name)
-        {
-            FilterBuilder.Var(name);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Flags"/>
-        public ref QueryBuilder Flags(uint flags)
-        {
-            FilterBuilder.Flags(flags);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Src()"/>
-        public ref QueryBuilder Src()
-        {
-            FilterBuilder.Src();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.First()"/>
-        public ref QueryBuilder First()
-        {
-            FilterBuilder.First();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Second()"/>
-        public ref QueryBuilder Second()
-        {
-            FilterBuilder.Second();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Src(ulong)"/>
-        public ref QueryBuilder Src(ulong srcId)
-        {
-            FilterBuilder.Src(srcId);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Src{T}()"/>
-        public ref QueryBuilder Src<T>()
-        {
-            FilterBuilder.Src<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Src{T}(T)"/>
-        public ref QueryBuilder Src<T>(T value) where T : Enum
-        {
-            FilterBuilder.Src(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Src(string)"/>
-        public ref QueryBuilder Src(string name)
-        {
-            FilterBuilder.Src(name);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.First(ulong)"/>
-        public ref QueryBuilder First(ulong firstId)
-        {
-            FilterBuilder.First(firstId);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.First{T}()"/>
-        public ref QueryBuilder First<T>()
-        {
-            FilterBuilder.First<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.First{T}(T)"/>
-        public ref QueryBuilder First<T>(T value) where T : Enum
-        {
-            FilterBuilder.First(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.First(string)"/>
-        public ref QueryBuilder First(string name)
-        {
-            FilterBuilder.First(name);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Second(ulong)"/>
-        public ref QueryBuilder Second(ulong secondId)
-        {
-            FilterBuilder.Second(secondId);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Second{T}()"/>
-        public ref QueryBuilder Second<T>()
-        {
-            FilterBuilder.Second<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Second{T}(T)"/>
-        public ref QueryBuilder Second<T>(T value) where T : Enum
-        {
-            FilterBuilder.Second(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Second(string)"/>
-        public ref QueryBuilder Second(string secondName)
-        {
-            FilterBuilder.Second(secondName);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Role"/>
-        public ref QueryBuilder Role(ulong role)
-        {
-            FilterBuilder.Role(role);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.InOut(Flecs.NET.Bindings.Native.ecs_inout_kind_t)"/>
-        public ref QueryBuilder InOut(ecs_inout_kind_t inOut)
-        {
-            FilterBuilder.InOut(inOut);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.InOutStage"/>
-        public ref QueryBuilder InOutStage(ecs_inout_kind_t inOut)
-        {
-            FilterBuilder.InOutStage(inOut);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write()"/>
-        public ref QueryBuilder Write()
-        {
-            FilterBuilder.Write();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read()"/>
-        public ref QueryBuilder Read()
-        {
-            FilterBuilder.Read();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.ReadWrite"/>
-        public ref QueryBuilder ReadWrite()
-        {
-            FilterBuilder.ReadWrite();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.In"/>
-        public ref QueryBuilder In()
-        {
-            FilterBuilder.In();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Out"/>
-        public ref QueryBuilder Out()
-        {
-            FilterBuilder.Out();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.InOut()"/>
-        public ref QueryBuilder InOut()
-        {
-            FilterBuilder.InOut();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.InOutNone"/>
-        public ref QueryBuilder InOutNone()
-        {
-            FilterBuilder.InOutNone();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Oper"/>
-        public ref QueryBuilder Oper(ecs_oper_kind_t oper)
-        {
-            FilterBuilder.Oper(oper);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.And"/>
-        public ref QueryBuilder And()
-        {
-            FilterBuilder.And();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Or"/>
-        public ref QueryBuilder Or()
-        {
-            FilterBuilder.Or();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Not"/>
-        public ref QueryBuilder Not()
-        {
-            FilterBuilder.Not();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Optional"/>
-        public ref QueryBuilder Optional()
-        {
-            FilterBuilder.Optional();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.AndFrom"/>
-        public ref QueryBuilder AndFrom()
-        {
-            FilterBuilder.AndFrom();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.OrFrom"/>
-        public ref QueryBuilder OrFrom()
-        {
-            FilterBuilder.OrFrom();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.NotFrom"/>
-        public ref QueryBuilder NotFrom()
-        {
-            FilterBuilder.NotFrom();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Singleton"/>
-        public ref QueryBuilder Singleton()
-        {
-            FilterBuilder.Singleton();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Filter"/>
-        public ref QueryBuilder Filter()
-        {
-            FilterBuilder.Filter();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Instanced"/>
-        public ref QueryBuilder Instanced()
-        {
-            FilterBuilder.Instanced();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.FilterFlags"/>
-        public ref QueryBuilder FilterFlags(uint flags)
-        {
-            FilterBuilder.FilterFlags(flags);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Expr"/>
-        public ref QueryBuilder Expr(string expr)
-        {
-            FilterBuilder.Expr(expr);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With(ulong)"/>
-        public ref QueryBuilder With(ulong id)
-        {
-            FilterBuilder.With(id);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With(ulong, ulong)"/>
-        public ref QueryBuilder With(ulong first, ulong second)
-        {
-            FilterBuilder.With(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With(ulong, string)"/>
-        public ref QueryBuilder With(ulong first, string second)
-        {
-            FilterBuilder.With(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With(string, ulong)"/>
-        public ref QueryBuilder With(string first, ulong second)
-        {
-            FilterBuilder.With(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With(string, string)"/>
-        public ref QueryBuilder With(string first, string second)
-        {
-            FilterBuilder.With(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T}()"/>
-        public ref QueryBuilder With<T>()
-        {
-            FilterBuilder.With<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T}(T)"/>
-        public ref QueryBuilder With<T>(T value) where T : Enum
-        {
-            FilterBuilder.With(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T}(ulong)"/>
-        public ref QueryBuilder With<TFirst>(ulong second)
-        {
-            FilterBuilder.With<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T}(string)"/>
-        public ref QueryBuilder With<TFirst>(string second)
-        {
-            FilterBuilder.With<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T1, T2}()"/>
-        public ref QueryBuilder With<TFirst, TSecond>()
-        {
-            FilterBuilder.With<TFirst, TSecond>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T1, T2}(T2)"/>
-        public ref QueryBuilder With<TFirst, TSecond>(TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.With<TFirst, TSecond>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T1, T2}(T1)"/>
-        public ref QueryBuilder With<TFirst, TSecond>(TFirst first) where TFirst : Enum
-        {
-            FilterBuilder.With<TFirst, TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T1}(T1, string)"/>
-        public ref QueryBuilder With<TFirst>(TFirst first, string second) where TFirst : Enum
-        {
-            FilterBuilder.With(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.With{T2}(string, T2)"/>
-        public ref QueryBuilder With<TSecond>(string first, TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.With(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.WithSecond{T}(ulong)"/>
-        public ref QueryBuilder WithSecond<TSecond>(ulong first)
-        {
-            FilterBuilder.WithSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.WithSecond{T}(string)"/>
-        public ref QueryBuilder WithSecond<TSecond>(string first)
-        {
-            FilterBuilder.WithSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without(ulong)"/>
-        public ref QueryBuilder Without(ulong id)
-        {
-            FilterBuilder.Without(id);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without(ulong, ulong)"/>
-        public ref QueryBuilder Without(ulong first, ulong second)
-        {
-            FilterBuilder.Without(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without(ulong, string)"/>
-        public ref QueryBuilder Without(ulong first, string second)
-        {
-            FilterBuilder.Without(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without(string, ulong)"/>
-        public ref QueryBuilder Without(string first, ulong second)
-        {
-            FilterBuilder.Without(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without(string, string)"/>
-        public ref QueryBuilder Without(string first, string second)
-        {
-            FilterBuilder.Without(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T}()"/>
-        public ref QueryBuilder Without<T>()
-        {
-            FilterBuilder.Without<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T}(T)"/>
-        public ref QueryBuilder Without<T>(T value) where T : Enum
-        {
-            FilterBuilder.Without(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T}(ulong)"/>
-        public ref QueryBuilder Without<TFirst>(ulong second)
-        {
-            FilterBuilder.Without<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T}(string)"/>
-        public ref QueryBuilder Without<TFirst>(string second)
-        {
-            FilterBuilder.Without<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T1, T2}()"/>
-        public ref QueryBuilder Without<TFirst, TSecond>()
-        {
-            FilterBuilder.Without<TFirst, TSecond>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T1, T2}(T2)"/>
-        public ref QueryBuilder Without<TFirst, TSecond>(TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Without<TFirst, TSecond>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T1, T2}(T1)"/>
-        public ref QueryBuilder Without<TFirst, TSecond>(TFirst first) where TFirst : Enum
-        {
-            FilterBuilder.Without<TFirst, TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T1}(T1, string)"/>
-        public ref QueryBuilder Without<TFirst>(TFirst first, string second) where TFirst : Enum
-        {
-            FilterBuilder.Without(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Without{T2}(string, T2)"/>
-        public ref QueryBuilder Without<TSecond>(string first, TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Without(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.WithoutSecond{T}(ulong)"/>
-        public ref QueryBuilder WithoutSecond<TSecond>(ulong first)
-        {
-            FilterBuilder.WithoutSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.WithoutSecond{T}(string)"/>
-        public ref QueryBuilder WithoutSecond<TSecond>(string first)
-        {
-            FilterBuilder.WithoutSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write(ulong)"/>
-        public ref QueryBuilder Write(ulong id)
-        {
-            FilterBuilder.Write(id);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write(ulong, ulong)"/>
-        public ref QueryBuilder Write(ulong first, ulong second)
-        {
-            FilterBuilder.Write(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write(ulong, string)"/>
-        public ref QueryBuilder Write(ulong first, string second)
-        {
-            FilterBuilder.Write(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write(string, ulong)"/>
-        public ref QueryBuilder Write(string first, ulong second)
-        {
-            FilterBuilder.Write(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write(string, string)"/>
-        public ref QueryBuilder Write(string first, string second)
-        {
-            FilterBuilder.Write(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T}()"/>
-        public ref QueryBuilder Write<T>()
-        {
-            FilterBuilder.Write<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T}(T)"/>
-        public ref QueryBuilder Write<T>(T value) where T : Enum
-        {
-            FilterBuilder.Write(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T}(ulong)"/>
-        public ref QueryBuilder Write<TFirst>(ulong second)
-        {
-            FilterBuilder.Write<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T}(string)"/>
-        public ref QueryBuilder Write<TFirst>(string second)
-        {
-            FilterBuilder.Write<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T1, T2}()"/>
-        public ref QueryBuilder Write<TFirst, TSecond>()
-        {
-            FilterBuilder.Write<TFirst, TSecond>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T1, T2}(T2)"/>
-        public ref QueryBuilder Write<TFirst, TSecond>(TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Write<TFirst, TSecond>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T1, T2}(T1)"/>
-        public ref QueryBuilder Write<TFirst, TSecond>(TFirst first) where TFirst : Enum
-        {
-            FilterBuilder.Write<TFirst, TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T1}(T1, string)"/>
-        public ref QueryBuilder Write<TFirst>(TFirst first, string second) where TFirst : Enum
-        {
-            FilterBuilder.Write(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Write{T2}(string, T2)"/>
-        public ref QueryBuilder Write<TSecond>(string first, TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Write(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.WriteSecond{T}(ulong)"/>
-        public ref QueryBuilder WriteSecond<TSecond>(ulong first)
-        {
-            FilterBuilder.WriteSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.WriteSecond{T}(string)"/>
-        public ref QueryBuilder WriteSecond<TSecond>(string first)
-        {
-            FilterBuilder.WriteSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read(ulong)"/>
-        public ref QueryBuilder Read(ulong id)
-        {
-            FilterBuilder.Read(id);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read(ulong, ulong)"/>
-        public ref QueryBuilder Read(ulong first, ulong second)
-        {
-            FilterBuilder.Read(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read(ulong, string)"/>
-        public ref QueryBuilder Read(ulong first, string second)
-        {
-            FilterBuilder.Read(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read(string, ulong)"/>
-        public ref QueryBuilder Read(string first, ulong second)
-        {
-            FilterBuilder.Read(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read(string, string)"/>
-        public ref QueryBuilder Read(string first, string second)
-        {
-            FilterBuilder.Read(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T}()"/>
-        public ref QueryBuilder Read<T>()
-        {
-            FilterBuilder.Read<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T}(T)"/>
-        public ref QueryBuilder Read<T>(T value) where T : Enum
-        {
-            FilterBuilder.Read(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T}(ulong)"/>
-        public ref QueryBuilder Read<TFirst>(ulong second)
-        {
-            FilterBuilder.Read<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T}(string)"/>
-        public ref QueryBuilder Read<TFirst>(string second)
-        {
-            FilterBuilder.Read<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T1, T2}()"/>
-        public ref QueryBuilder Read<TFirst, TSecond>()
-        {
-            FilterBuilder.Read<TFirst, TSecond>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T1, T2}(T2)"/>
-        public ref QueryBuilder Read<TFirst, TSecond>(TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Read<TFirst, TSecond>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T1, T2}(T1)"/>
-        public ref QueryBuilder Read<TFirst, TSecond>(TFirst first) where TFirst : Enum
-        {
-            FilterBuilder.Read<TFirst, TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T1}(T1, string)"/>
-        public ref QueryBuilder Read<TFirst>(TFirst first, string second) where TFirst : Enum
-        {
-            FilterBuilder.Read(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Read{T2}(string, T2)"/>
-        public ref QueryBuilder Read<TSecond>(string first, TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Read(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.ReadSecond{T}(ulong)"/>
-        public ref QueryBuilder ReadSecond<TSecond>(ulong first)
-        {
-            FilterBuilder.ReadSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.ReadSecond{T}(string)"/>
-        public ref QueryBuilder ReadSecond<TSecond>(string first)
-        {
-            FilterBuilder.ReadSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.ScopeOpen"/>
-        public ref QueryBuilder ScopeOpen()
-        {
-            FilterBuilder.ScopeOpen();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.ScopeClose"/>
-        public ref QueryBuilder ScopeClose()
-        {
-            FilterBuilder.ScopeClose();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.IncrementTerm"/>
-        public ref QueryBuilder IncrementTerm()
-        {
-            FilterBuilder.IncrementTerm();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.TermAt"/>
-        public ref QueryBuilder TermAt(int termIndex)
-        {
-            FilterBuilder.TermAt(termIndex);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Arg"/>
-        public ref QueryBuilder Arg(int termIndex)
-        {
-            FilterBuilder.Arg(termIndex);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term()"/>
-        public ref QueryBuilder Term()
-        {
-            FilterBuilder.Term();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(Core.Term)"/>
-        public ref QueryBuilder Term(Term term)
-        {
-            FilterBuilder.Term(term);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(ulong)"/>
-        public ref QueryBuilder Term(ulong id)
-        {
-            FilterBuilder.Term(id);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(string)"/>
-        public ref QueryBuilder Term(string name)
-        {
-            FilterBuilder.Term(name);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(ulong, ulong)"/>
-        public ref QueryBuilder Term(ulong first, ulong second)
-        {
-            FilterBuilder.Term(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(ulong, string)"/>
-        public ref QueryBuilder Term(ulong first, string second)
-        {
-            FilterBuilder.Term(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(string, ulong)"/>
-        public ref QueryBuilder Term(string first, ulong second)
-        {
-            FilterBuilder.Term(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term(string, string)"/>
-        public ref QueryBuilder Term(string first, string second)
-        {
-            FilterBuilder.Term(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T}()"/>
-        public ref QueryBuilder Term<T>()
-        {
-            FilterBuilder.Term<T>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T}(T)"/>
-        public ref QueryBuilder Term<T>(T value) where T : Enum
-        {
-            FilterBuilder.Term(value);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T}(ulong)"/>
-        public ref QueryBuilder Term<TFirst>(ulong second)
-        {
-            FilterBuilder.Term<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T}(string)"/>
-        public ref QueryBuilder Term<TFirst>(string second)
-        {
-            FilterBuilder.Term<TFirst>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T1, T2}()"/>
-        public ref QueryBuilder Term<TFirst, TSecond>()
-        {
-            FilterBuilder.Term<TFirst, TSecond>();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T1, T2}(T2)"/>
-        public ref QueryBuilder Term<TFirst, TSecond>(TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Term<TFirst, TSecond>(second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T1, T2}(T1)"/>
-        public ref QueryBuilder Term<TFirst, TSecond>(TFirst first) where TFirst : Enum
-        {
-            FilterBuilder.Term<TFirst, TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T1}(T1, string)"/>
-        public ref QueryBuilder Term<TFirst>(TFirst first, string second) where TFirst : Enum
-        {
-            FilterBuilder.Term(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.Term{T2}(string, T2)"/>
-        public ref QueryBuilder Term<TSecond>(string first, TSecond second) where TSecond : Enum
-        {
-            FilterBuilder.Term(first, second);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.TermSecond{T}(ulong)"/>
-        public ref QueryBuilder TermSecond<TSecond>(ulong first)
-        {
-            FilterBuilder.TermSecond<TSecond>(first);
-            return ref this;
-        }
-
-        /// <inheritdoc cref="Core.FilterBuilder.TermSecond{T}(string)"/>
-        public ref QueryBuilder TermSecond<TSecond>(string first)
-        {
-            FilterBuilder.TermSecond<TSecond>(first);
-            return ref this;
         }
     }
 }

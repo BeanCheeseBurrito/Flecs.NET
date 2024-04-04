@@ -413,22 +413,7 @@ namespace Flecs.NET.Core
             int count = type->count;
 
             for (int i = 0; i < count; i++)
-            {
-                ulong id = ids[i];
-                Id entity = new Id(World, id);
-                func(entity);
-
-                if (Macros.PairFirst(id) != EcsUnion)
-                    continue;
-
-                entity = new Id(
-                    World,
-                    Macros.PairSecond(id),
-                    ecs_get_target(World, Id, Macros.PairSecond(id), 0)
-                );
-
-                func(entity);
-            }
+                func(new Id(World, ids[i]));
         }
 
         /// <summary>
@@ -506,27 +491,9 @@ namespace Flecs.NET.Core
             if (Id == EcsWildcard || Id == EcsAny)
                 return;
 
-            Span<ecs_term_t> terms = stackalloc ecs_term_t[2];
-
-            ecs_filter_t filter = ECS_FILTER_INIT;
-            filter.terms = (ecs_term_t*)Unsafe.AsPointer(ref terms[0]);
-            filter.term_count = 2;
-
-            ecs_filter_desc_t desc = default;
-            desc.terms[0].first.id = relation;
-            desc.terms[0].second.id = Id;
-            desc.terms[0].second.flags = EcsIsEntity;
-            desc.terms[1].id = EcsPrefab;
-            desc.terms[1].oper = EcsOptional;
-            desc.storage = &filter;
-
-            if (ecs_filter_init(World, &desc) == null)
-                return;
-
-            ecs_iter_t it = ecs_filter_iter(World, &filter);
-            while (ecs_filter_next_instanced(&it) == 1)
+            ecs_iter_t it = ecs_each_id(World, Macros.Pair(relation, Id));
+            while (Macros.Bool(ecs_each_next(&it)))
                 Invoker.Each(&it, callback);
-            ecs_filter_fini(&filter);
         }
 
         /// <summary>
@@ -3705,16 +3672,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Recursively flatten relationship.
-        /// </summary>
-        /// <param name="relation"></param>
-        /// <param name="desc"></param>
-        public void Flatten(ulong relation, ecs_flatten_desc_t* desc = null)
-        {
-            ecs_flatten(World, Macros.Pair(relation, Id), desc);
-        }
-
-        /// <summary>
         ///     Clear an entity.
         /// </summary>
         public void Clear()
@@ -3765,8 +3722,8 @@ namespace Flecs.NET.Core
 
             ecs_observer_desc_t desc = default;
             desc.events[0] = eventId;
-            desc.filter.terms[0].id = EcsAny;
-            desc.filter.terms[0].src.id = Id;
+            desc.query.terms[0].id = EcsAny;
+            desc.query.terms[0].src.id = Id;
             desc.callback = bindingContextCallback;
             desc.binding_ctx = observerContext;
             desc.binding_ctx_free = BindingContext.ObserverContextFreePointer;
