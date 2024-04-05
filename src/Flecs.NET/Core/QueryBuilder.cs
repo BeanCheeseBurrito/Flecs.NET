@@ -1628,7 +1628,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder TermAt(int termIndex)
         {
-            Ecs.Assert(termIndex > 0 && termIndex <= FLECS_TERM_COUNT_MAX, "TermIndex argument must be between 1-16.");
+            Ecs.Assert(termIndex >= 0 && termIndex < FLECS_TERM_COUNT_MAX, "TermIndex argument must be between 0-15.");
 
             _termIndex = termIndex;
             _termIdType = TermIdType.Src;

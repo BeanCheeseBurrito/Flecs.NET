@@ -788,9 +788,9 @@ namespace Flecs.NET.Core
         public static ref ulong AlwaysOverride => ref EcsAlwaysOverride;
 
         /// <summary>
-        ///     Reference to <see cref="EcsTag"/>.
+        ///     Reference to <see cref="EcsPairIsTag"/>.
         /// </summary>
-        public static ref ulong Tag => ref EcsTag;
+        public static ref ulong PairIsTag => ref EcsPairIsTag;
 
         /// <summary>
         ///     Reference to <see cref="EcsExclusive"/>.

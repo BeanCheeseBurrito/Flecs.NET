@@ -68,8 +68,8 @@ public static class Cpp_Relationships_Union
         {
             // Get the column with direction states. This is stored as an array
             // with identifiers to the individual states
-            Field<ulong> movement = it.Field<ulong>(1);
-            Field<ulong> direction = it.Field<ulong>(2);
+            Field<ulong> movement = it.Field<ulong>(0);
+            Field<ulong> direction = it.Field<ulong>(1);
 
             foreach (int i in it)
             {

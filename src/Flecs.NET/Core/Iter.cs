@@ -285,7 +285,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int ColumnIndex(int index)
         {
-            return ecs_field_column_index(Handle, index);
+            return ecs_field_column(Handle, index);
         }
 
         /// <summary>
@@ -415,9 +415,9 @@ namespace Flecs.NET.Core
         [Conditional("DEBUG")]
         internal static void AssertFieldId<T>(ecs_iter_t* iter, int index)
         {
-            Ecs.Assert(index > 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(index >= 0, nameof(ECS_INVALID_PARAMETER));
 
-            ulong termId = iter->ids[index - 1];
+            ulong termId = iter->ids[index];
             ulong typeId = Type<T>.Id(iter->world);
 
             if (Macros.TypeMatchesId<T>(iter->world, termId))

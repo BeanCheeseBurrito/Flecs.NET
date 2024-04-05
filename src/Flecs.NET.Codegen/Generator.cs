@@ -543,7 +543,7 @@ namespace Flecs.NET.Codegen
             for (int i = 0; i < GenericCount; i++)
             {
                 string typeParams = GenerateTypeParams(i + 1);
-                string callbackArgs = ConcatString(i + 1, ", ", index => $"it.Field<T{index}>({index + 1})");
+                string callbackArgs = ConcatString(i + 1, ", ", index => $"it.Field<T{index}>({index})");
 
                 str.AppendLine($@"
                     public static void Iter<{typeParams}>(ecs_iter_t* iter, Ecs.IterCallback<{typeParams}> callback)
@@ -568,7 +568,7 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
 
                 string typeAssertions = ConcatString(i + 1, "\n",
-                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index});");
 
                 string isSelfBools = ConcatString(i + 1, "\n",
                     index => $"int t{index}IsSelf = (iter->sources == null || iter->sources[{index}] == 0) ? 1 : 0;");
@@ -612,7 +612,7 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
 
                 string typeAssertions = ConcatString(i + 1, "\n",
-                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index});");
 
                 string isSelfBools = ConcatString(i + 1, "\n",
                     index => $"int t{index}IsSelf = (iter->sources == null || iter->sources[{index}] == 0) ? 1 : 0;");
@@ -658,7 +658,7 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
 
                 string typeAssertions = ConcatString(i + 1, "\n",
-                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index});");
 
                 string isSelfBools = ConcatString(i + 1, "\n",
                     index => $"int t{index}IsSelf = (iter->sources == null || iter->sources[{index}] == 0) ? 1 : 0;");
@@ -704,7 +704,7 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
 
                 string typeAssertions = ConcatString(i + 1, "\n",
-                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index});");
 
                 string callbackArgs = ConcatString(i + 1, ", ",
                     index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
@@ -748,7 +748,7 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
 
                 string typeAssertions = ConcatString(i + 1, "\n",
-                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index});");
 
                 string callbackArgs = ConcatString(i + 1, ", ",
                     index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");
@@ -793,7 +793,7 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
 
                 string typeAssertions = ConcatString(i + 1, "\n",
-                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index + 1});");
+                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index});");
 
                 string callbackArgs = ConcatString(i + 1, ", ",
                     index => $"ref Managed.GetTypeRef<T{index}>(iter->ptrs[{index}], i)");

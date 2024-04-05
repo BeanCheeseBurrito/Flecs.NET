@@ -229,7 +229,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int GetStageId()
         {
-            return ecs_get_stage_id(Handle);
+            return ecs_stage_get_id(Handle);
         }
 
         /// <summary>
@@ -244,15 +244,6 @@ namespace Flecs.NET.Core
                 nameof(ECS_INVALID_PARAMETER)
             );
             return ecs_poly_is_(Handle, ecs_stage_t_magic) == 1;
-        }
-
-        /// <summary>
-        ///     Enable/disable auto merging for world or stage.
-        /// </summary>
-        /// <param name="autoMerge"></param>
-        public void SetAutoMerge(bool autoMerge)
-        {
-            ecs_set_automerge(Handle, Macros.Bool(autoMerge));
         }
 
         /// <summary>
@@ -279,7 +270,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public World AsyncStage()
         {
-            return new World(ecs_async_stage_new(Handle));
+            return new World(ecs_stage_new(Handle));
         }
 
         /// <summary>
