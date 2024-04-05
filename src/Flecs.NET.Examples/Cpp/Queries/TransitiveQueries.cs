@@ -99,7 +99,7 @@ public static class Cpp_Queries_TransitiveQueries
         //
         // The equivalent of this query in the DSL is:
         //   Person, (LocatedIn, $location), Country($location)
-        using Query q = world.QueryBuilder<Person>()
+        using Query q = world.QueryBuilder()
             .With<Person>()
             .With<LocatedIn>("$location")
             .With<Country>().Src("$location")
