@@ -57,7 +57,8 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Disposes the rule builder.
+        ///     Disposes the pipeline builder. This should be called if the rule builder
+        ///     will be discarded and .Build() isn't called.
         /// </summary>
         public void Dispose()
         {
@@ -83,9 +84,6 @@ namespace Flecs.NET.Core
 
                 if (entity == 0)
                     Ecs.Error("Pipeline failed to init.");
-
-                QueryBuilder.Context = default;
-                QueryBuilder.Dispose();
 
                 return new Pipeline(entity);
             }

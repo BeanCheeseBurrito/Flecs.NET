@@ -51,11 +51,13 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Disposes the routine builder.
+        ///     Disposes the routine builder. This should be called if the routine builder
+        ///     will be discarded and .Iter()/Each() isn't called.
         /// </summary>
         public void Dispose()
         {
             RoutineContext.Dispose();
+            QueryBuilder.Dispose();
         }
 
         /// <summary>
@@ -265,8 +267,6 @@ namespace Flecs.NET.Core
             fixed (ecs_system_desc_t* ptr = &RoutineDesc)
             {
                 Entity entity = new Entity(World, ecs_system_init(World, ptr));
-                QueryBuilder.Context = default;
-                QueryBuilder.Dispose();
                 return new Routine(entity);
             }
         }

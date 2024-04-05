@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -359,6 +360,8 @@ namespace Flecs.NET.Core
             public Callback GroupCreateAction;
             public Callback GroupDeleteAction;
 
+            public NativeList<NativeString> Strings;
+
             public void Dispose()
             {
                 OrderByAction.Dispose();
@@ -366,6 +369,14 @@ namespace Flecs.NET.Core
                 ContextFree.Dispose();
                 GroupCreateAction.Dispose();
                 GroupDeleteAction.Dispose();
+
+                if (Strings == default)
+                    return;
+
+                for (int i = 0; i < Strings.Count; i++)
+                    Strings[i].Dispose();
+
+                Strings.Dispose();
             }
         }
 

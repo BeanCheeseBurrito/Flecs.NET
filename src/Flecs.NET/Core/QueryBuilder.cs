@@ -17,7 +17,6 @@ namespace Flecs.NET.Core
         private int _termIndex;
         private int _exprCount;
         private TermIdType _termIdType;
-        private NativeList<NativeString> _strings;
         private ref ecs_term_t CurrentTerm => ref Desc.terms[_termIndex];
         private ref ecs_term_ref_t CurrentTermId
         {
@@ -62,7 +61,6 @@ namespace Flecs.NET.Core
             _termIndex = -1;
             _exprCount = default;
             _termIdType = TermIdType.Src;
-            _strings = default;
 
             Context = default;
 
@@ -79,19 +77,12 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Cleans up resources.
+        ///     Cleans up native resources. This should be called if the query builder
+        ///     will be discarded and .Build() isn't called.
         /// </summary>
         public void Dispose()
         {
             Context.Dispose();
-
-            if (_strings == default)
-                return;
-
-            for (int i = 0; i < _strings.Count; i++)
-                _strings[i].Dispose();
-
-            _strings.Dispose();
         }
 
         /// <summary>
@@ -103,7 +94,6 @@ namespace Flecs.NET.Core
             fixed (ecs_query_desc_t* ptr = &Desc)
             {
                 Query query = new Query(World, ecs_query_init(World, ptr));
-                Dispose();
                 return query;
             }
         }
@@ -147,7 +137,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Specify value of identifier by name
+        ///     Specify value of identifier by name.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -156,7 +146,7 @@ namespace Flecs.NET.Core
             AssertTermId();
 
             NativeString nativeName = (NativeString)name;
-            _strings.Add(nativeName);
+            Context.Strings.Add(nativeName);
 
             CurrentTermId.id |= EcsIsEntity;
             CurrentTermId.name = nativeName;
@@ -174,7 +164,7 @@ namespace Flecs.NET.Core
             AssertTermId();
 
             NativeString nativeName = (NativeString)name;
-            _strings.Add(nativeName);
+            Context.Strings.Add(nativeName);
 
             CurrentTermId.id |= EcsIsVariable;
             CurrentTermId.name = nativeName;
@@ -776,10 +766,10 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Expr(string expr)
         {
-            Ecs.Assert(_exprCount == 0, "QueryBuilder.Expr() called more than once");
+            Ecs.Assert(_exprCount == 0, "QueryBuilder.Expr() cannot be called more than once");
 
             NativeString nativeExpr = (NativeString)expr;
-            _strings.Add(nativeExpr);
+            Context.Strings.Add(nativeExpr);
 
             Desc.expr = nativeExpr;
             _exprCount++;

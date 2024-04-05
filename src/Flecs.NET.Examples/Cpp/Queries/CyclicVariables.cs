@@ -37,9 +37,9 @@ public static class Cpp_Queries_CyclicVariables
         // Because this query does not use This at all, the entities array will not
         // be populated, and it.Count() will always be 0.
         using Query q = world.QueryBuilder()
-                .With<Likes>("$y").Src("$x")
-                .With<Likes>("$x").Src("$y")
-                .Build();
+            .With<Likes>("$y").Src("$x")
+            .With<Likes>("$x").Src("$y")
+            .Build();
 
         // Lookup the index of the variables. This will let us quickly lookup their
         // values while we're iterating.

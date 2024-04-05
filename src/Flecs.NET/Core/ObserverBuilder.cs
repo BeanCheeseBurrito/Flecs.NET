@@ -50,11 +50,13 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Disposes the observer builder.
+        ///     Disposes the observer builder. This should be called if the observer builder
+        ///     will be discarded and .Iter()/Each() isn't called.
         /// </summary>
         public void Dispose()
         {
             ObserverContext.Dispose();
+            QueryBuilder.Dispose();
         }
 
         /// <summary>
@@ -178,8 +180,6 @@ namespace Flecs.NET.Core
                 Ecs.Assert(ptr->query.terms[0] != default, "Observers require at least 1 term.");
 
                 Entity entity = new Entity(World, ecs_observer_init(World, ptr));
-                QueryBuilder.Context = default;
-                QueryBuilder.Dispose();
                 return new Observer(entity);
             }
         }

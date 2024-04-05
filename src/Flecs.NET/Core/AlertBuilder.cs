@@ -1,5 +1,4 @@
 using System;
-using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -11,7 +10,6 @@ namespace Flecs.NET.Core
     public unsafe partial struct AlertBuilder : IDisposable, IEquatable<AlertBuilder>
     {
         private ecs_world_t* _world;
-        private NativeList<NativeString> _strings;
         private int _severityFilterCount;
 
         internal ecs_alert_desc_t AlertDesc;
@@ -37,7 +35,6 @@ namespace Flecs.NET.Core
             AlertDesc = default;
             QueryBuilder = new QueryBuilder(world);
             _world = world;
-            _strings = default;
             _severityFilterCount = default;
 
             if (string.IsNullOrEmpty(name))
@@ -53,16 +50,12 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Cleans up the alert builder's resources.
+        ///     Cleans up native resources. This should be called if the alert builder
+        ///     will be discarded and .Build() isn't called.
         /// </summary>
         public void Dispose()
         {
             QueryBuilder.Dispose();
-
-            for (int i = 0; i < _strings.Count; i++)
-                _strings[i].Dispose();
-
-            _strings.Dispose();
         }
 
         /// <summary>
@@ -85,8 +78,6 @@ namespace Flecs.NET.Core
                 if (entity == 0)
                     Ecs.Error("Alert failed to init.");
 
-                QueryBuilder.Context = default;
-                Dispose();
                 return new Alert(entity);
             }
         }
@@ -99,7 +90,7 @@ namespace Flecs.NET.Core
         public ref AlertBuilder Message(string message)
         {
             NativeString nativeMessage = (NativeString)message;
-            _strings.Add(nativeMessage);
+            QueryBuilder.Context.Strings.Add(nativeMessage);
 
             Desc.message = nativeMessage;
             return ref this;
@@ -113,7 +104,7 @@ namespace Flecs.NET.Core
         public ref AlertBuilder Brief(string brief)
         {
             NativeString nativeBrief = (NativeString)brief;
-            _strings.Add(nativeBrief);
+            QueryBuilder.Context.Strings.Add(nativeBrief);
 
             Desc.brief = nativeBrief;
             return ref this;
@@ -127,7 +118,7 @@ namespace Flecs.NET.Core
         public ref AlertBuilder DocName(string docName)
         {
             NativeString nativeDocName = (NativeString)docName;
-            _strings.Add(nativeDocName);
+            QueryBuilder.Context.Strings.Add(nativeDocName);
 
             Desc.doc_name = nativeDocName;
             return ref this;
