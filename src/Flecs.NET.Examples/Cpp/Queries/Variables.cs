@@ -4,7 +4,7 @@ using Flecs.NET.Core;
 file struct Eats;
 file struct Healthy;
 
-public static class Cpp_Rules_Basics
+public static class Cpp_Queries_Variables
 {
     public static void Main()
     {
@@ -26,12 +26,12 @@ public static class Cpp_Rules_Basics
             .Add<Eats>(chocolate)
             .Add<Eats>(apples);
 
-        // Here we're creating a rule that in the query DSL would look like this:
-        //   Eats($This, $Food), Healthy($Food)
+        // Here we're creating a query that in the query DSL would look like this:
+        //   Eats($this, $food), Healthy($food)
         //
         // Rules are similar to queries, but support more advanced features. This
-        // example shows how the basics of how to use rules & variables.
-        Rule r = world.RuleBuilder()
+        // example shows how the basics of how to use queries & variables.
+        using Query q = world.QueryBuilder()
             // Identifiers that start with _ are query variables. Query variables
             // are like wildcards, but enforce that the entity substituted by the
             // wildcard is the same across terms.
@@ -42,22 +42,19 @@ public static class Cpp_Rules_Basics
             //
             // By replacing * with _Food, both terms are constrained to use the
             // same entity.
-            .With<Eats>("$Food")
-            .With<Healthy>().Src("$Food")
+            .With<Eats>("$food")
+            .With<Healthy>().Src("$food")
             .Build();
 
         // Lookup the index of the variable. This will let us quickly lookup its
         // value while we're iterating.
-        int foodVar = r.FindVar("Food");
+        int foodVar = q.FindVar("food");
 
-        // Iterate the rule
-        r.Each((Iter it, int i) =>
+        // Iterate the query
+        q.Each((Iter it, int i) =>
         {
             Console.WriteLine($"{it.Entity(i)} eats {it.GetVar(foodVar).Name()}");
         });
-
-        // Rules need to be explicitly deleted.
-        r.Destruct();
     }
 }
 

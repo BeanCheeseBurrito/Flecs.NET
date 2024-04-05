@@ -18,7 +18,7 @@ namespace Flecs.NET.Core
         private int _exprCount;
         private TermIdType _termIdType;
         private NativeList<NativeString> _strings;
-        private ref ecs_term_t CurrentTerm => ref Desc.terms[_termIndex - 1];
+        private ref ecs_term_t CurrentTerm => ref Desc.terms[_termIndex];
         private ref ecs_term_ref_t CurrentTermId
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -102,8 +102,9 @@ namespace Flecs.NET.Core
         {
             fixed (ecs_query_desc_t* ptr = &Desc)
             {
+                Query query = new Query(World, ecs_query_init(World, ptr));
                 Dispose();
-                return new Query(World, ecs_query_init(World, ptr));
+                return query;
             }
         }
 
@@ -1671,6 +1672,28 @@ namespace Flecs.NET.Core
         public ref QueryBuilder OrderBy<T>(Ecs.OrderByAction compare)
         {
             return ref OrderBy(Type<T>.Id(World), compare);
+        }
+
+        /// <summary>
+        ///     Group and sort matched tables.
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public ref QueryBuilder GroupBy(ulong component)
+        {
+            Desc.group_by_callback = IntPtr.Zero;
+            Desc.group_by = component;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Group and sort matched tables.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref QueryBuilder GroupBy<T>()
+        {
+            return ref GroupBy(Type<T>.Id(World));
         }
 
         /// <summary>

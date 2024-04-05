@@ -1,4 +1,4 @@
-// This example shows how a rule may have terms with cyclic dependencies on
+// This example shows how a query may have terms with cyclic dependencies on
 // variables.
 
 using Flecs.NET.Core;
@@ -6,7 +6,7 @@ using Flecs.NET.Core;
 // Tags
 file struct Likes;
 
-public static class Cpp_Rules_CyclicVariables
+public static class Cpp_Queries_CyclicVariables
 {
     public static void Main()
     {
@@ -23,11 +23,11 @@ public static class Cpp_Rules_CyclicVariables
         jane.Add<Likes>(john);
         bob.Add<Likes>(jane); // inserting a bit of drama
 
-        // The following rule will only return entities that have a cyclic Likes
+        // The following query will only return entities that have a cyclic Likes
         // relationship- that is they must both like each other.
         //
         // The equivalent query in the DSL is:
-        //   Likes($X, $Y), Likes($Y, $X)
+        //   Likes($x, $y), Likes($y, $x)
         //
         // This is also an example of a query where all sources are variables. By
         // default queries use the builtin "This" variable as subject, which is what
@@ -36,32 +36,30 @@ public static class Cpp_Rules_CyclicVariables
         //
         // Because this query does not use This at all, the entities array will not
         // be populated, and it.Count() will always be 0.
-        Rule r = world.RuleBuilder()
-                .With<Likes>("$Y").Src("$X")
-                .With<Likes>("$X").Src("$Y")
+        using Query q = world.QueryBuilder()
+                .With<Likes>("$y").Src("$x")
+                .With<Likes>("$x").Src("$y")
                 .Build();
 
         // Lookup the index of the variables. This will let us quickly lookup their
         // values while we're iterating.
-        int xVar = r.FindVar("X");
-        int yVar = r.FindVar("Y");
+        int xVar = q.FindVar("x");
+        int yVar = q.FindVar("y");
 
         // Because the query doesn't use the This variable we cannot use "each"
         // which iterates the entities array. Instead we can use iter like this:
-        r.Iter((Iter it) =>
+        q.Iter((Iter it) =>
         {
             Entity x = it.GetVar(xVar);
             Entity y = it.GetVar(yVar);
             Console.WriteLine($"{x.Name()} likes {y.Name()}");
         });
 
-        // Note that the rule returns each pair twice. The reason for this is that
-        // the goal of the rule engine is to return all "facts" that are true
+        // Note that the query returns each pair twice. The reason for this is that
+        // the goal of the query engine is to return all "facts" that are true
         // within the given constraints. Since we did not give it any constraints
-        // that would favor a person being matched by X or Y, the rule engine
+        // that would favor a person being matched by X or Y, the query engine
         // returns both.
-
-        r.Destruct();
     }
 }
 

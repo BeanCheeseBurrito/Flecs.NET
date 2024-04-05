@@ -23,10 +23,7 @@ public static class Cpp_Queries_WorldQuery
         world.Entity("e3")
             .Set<Position>(new(25, 35));
 
-        // Ad hoc queries are bit slower to iterate than Query, but are
-        // faster to create, and in most cases require no allocations. Under the
-        // hood this API uses Filter, which can be used directly for more
-        // complex queries.
+        // World.Each is a quick way to run simple component queries.
         world.Each((Entity e, ref Position p, ref Velocity v) =>
         {
             p.X += v.X;

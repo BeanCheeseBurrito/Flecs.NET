@@ -36,8 +36,9 @@ public static class Cpp_Relationships_Union
     {
         using World world = World.Create();
 
-        world.Component<Movement>().Entity.Add(Ecs.Union);
-        world.Component<Direction>().Entity.Add(Ecs.Union);
+        // TODO: RIP unions
+        // world.Component<Movement>().Entity.Add(Ecs.Union);
+        // world.Component<Direction>().Entity.Add(Ecs.Union);
 
         // Create a query that subscribes for all entities that have a Direction
         // and that are walking

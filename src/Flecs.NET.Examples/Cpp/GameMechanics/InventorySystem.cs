@@ -174,8 +174,8 @@ public static class Cpp_GameMechanics_InventorySystem
     {
         World world = container.CsWorld();
 
-        using Filter filter = world.FilterBuilder()
-            .Term<ContainedBy>(container)
+        using Query filter = world.QueryBuilder()
+            .With<ContainedBy>(container)
             .Build();
 
         filter.Each(func);

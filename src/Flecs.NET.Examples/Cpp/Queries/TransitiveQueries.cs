@@ -22,7 +22,7 @@ file struct State;
 file struct City;
 file struct Person;
 
-public static class Cpp_Rules_TransitiveQueries
+public static class Cpp_Queries_TransitiveQueries
 {
     public static void Main()
     {
@@ -94,29 +94,26 @@ public static class Cpp_Rules_TransitiveQueries
 
         // Create a query that finds the countries persons live in. Note that these
         // have not been explicitly added to the Person entities, but because the
-        // LocatedIn is transitive, the rule engine will traverse the relationship
+        // LocatedIn is transitive, the query engine will traverse the relationship
         // until it found something that is a country.
         //
         // The equivalent of this query in the DSL is:
-        //   Person, (LocatedIn, $Location), Country($Location)
-        Rule r = world.RuleBuilder<Person>()
+        //   Person, (LocatedIn, $location), Country($location)
+        using Query q = world.QueryBuilder<Person>()
             .With<Person>()
-            .With<LocatedIn>("$Location")
-            .With<Country>().Src("$Location")
+            .With<LocatedIn>("$location")
+            .With<Country>().Src("$location")
             .Build();
 
         // Lookup the index of the variable. This will let us quickly lookup its
         // value while we're iterating.
-        int locationVar = r.FindVar("Location");
+        int locationVar = q.FindVar("location");
 
-        // Iterate the rule
-        r.Each((Iter it, int i) =>
+        // Iterate the query
+        q.Each((Iter it, int i) =>
         {
             Console.WriteLine($"{it.Entity(i)} lives in {it.GetVar(locationVar)}");
         });
-
-        // Rules need to be explicitly deleted.
-        r.Destruct();
     }
 }
 

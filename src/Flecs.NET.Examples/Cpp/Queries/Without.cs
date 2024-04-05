@@ -19,7 +19,7 @@ public static class Cpp_Queries_Without
         // value are less useful to pass to the Each/Iter functions as argument.
         //
         // The without method is short for:
-        //   .Term<Npc>().Not()
+        //   .With<Npc>().Not()
         Query q = world.QueryBuilder<Position>()
             .Without<Npc>()
             .Build();

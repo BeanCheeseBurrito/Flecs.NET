@@ -1,5 +1,5 @@
 // This example extends the ComponentInheritance example, and shows how
-// we can use a single rule to match units from different players and platoons
+// we can use a single query to match units from different players and platoons
 // by setting query variables before we iterate.
 //
 // The units in this example belong to a platoon, with the platoons belonging
@@ -20,7 +20,7 @@ file struct Marksman;
 file struct Player;
 file struct Platoon;
 
-public static class Cpp_Rules_SettingVariables
+public static class Cpp_Queries_SettingVariables
 {
     const int PlayerCount = 100;
     const int PlatoonsPerPlayer = 3;
@@ -66,36 +66,34 @@ public static class Cpp_Rules_SettingVariables
             }
         }
 
-        // Create a rule to find all RangedUnits for a platoon/player. The
+        // Create a query to find all RangedUnits for a platoon/player. The
         // equivalent query in the query DSL would look like this:
-        //   (Platoon, $Platoon), Player($Platoon, $Player)
+        //   (Platoon, $platoon), Player($platoon, $player)
         //
         // The way to read how this query is evaluated is:
         // - find all entities with (Platoon, *), store * in _Platoon
         // - check if _Platoon has (Player, *), store * in _Player
-        Rule r = world.RuleBuilder<RangedUnit>()
-            .With<Platoon>().Second("$Platoon")
-            .With<Player>("$Player").Src("$Platoon")
+        using Query q = world.QueryBuilder<RangedUnit>()
+            .With<Platoon>().Second("$platoon")
+            .With<Player>("$player").Src("$platoon")
             .Build();
 
-        // If we would iterate this rule it would return all ranged units for all
+        // If we would iterate this query it would return all ranged units for all
         // platoons & for all players. We can limit the results to just a single
         // platoon or a single player setting a variable beforehand. In this example
         // we'll just find all platoons & ranged units for a single player.
 
-        int playerVar = r.FindVar("Player");
-        int platoonVar = r.FindVar("Platoon");
+        int playerVar = q.FindVar("Player");
+        int platoonVar = q.FindVar("Platoon");
 
-        // Iterate rule, limit the results to units of MyPlayer
-        r.Iter().SetVar(playerVar, world.Lookup("MyPlayer")).Each((Iter it, int i) =>
+        // Iterate query, limit the results to units of MyPlayer
+        q.Iter().SetVar(playerVar, world.Lookup("MyPlayer")).Each((Iter it, int i) =>
         {
             Entity unit = it.Entity(i);
             Console.Write($"Unit {unit.Path()} of class {it.Id(1).Str()} ");
             Console.Write($"in platoon {it.GetVar(platoonVar).Path()} ");
             Console.WriteLine($"for player {it.GetVar(playerVar).Path()}");
         });
-
-        r.Destruct();
     }
 }
 

@@ -1,4 +1,4 @@
-// This example shows how rules can be used to match simple inheritance trees.
+// This example shows how queries can be used to match simple inheritance trees.
 
 using Flecs.NET.Core;
 
@@ -12,7 +12,7 @@ file struct Wizard;
 file struct Marksman;
 file struct Builder;
 
-public static class Cpp_Rules_ComponentInheritance
+public static class Cpp_Queries_ComponentInheritance
 {
     public static void Main()
     {
@@ -42,13 +42,11 @@ public static class Cpp_Rules_ComponentInheritance
         world.Entity("Builder1").Add<Builder>();
         world.Entity("Builder2").Add<Builder>();
 
-        // Create a rule to find all ranged units
-        Rule r = world.Rule<RangedUnit>();
+        // Create a query to find all ranged units
+        using Query q = world.Query<RangedUnit>();
 
-        // Iterate the rule
-        r.Each((Entity entity) => Console.WriteLine($"Unit {entity} found"));
-
-        r.Destruct();
+        // Iterate the query
+        q.Each((Entity entity) => Console.WriteLine($"Unit {entity} found"));
     }
 }
 

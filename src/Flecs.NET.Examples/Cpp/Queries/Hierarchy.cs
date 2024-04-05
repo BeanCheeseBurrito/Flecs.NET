@@ -41,9 +41,9 @@ public static class Cpp_Queries_Hierarchy
         // Create a hierarchical query to compute the global position from the
         // local position and the parent position.
         Query q = world.QueryBuilder()
-            .Term<Position, Local>()  // Self local position
-            .Term<Position, Global>() // Self global position
-            .Term<Position, Global>() // Parent global position
+            .With<Position, Local>()  // Self local position
+            .With<Position, Global>() // Self global position
+            .With<Position, Global>() // Parent global position
                 .Parent().Cascade() // Get from the parent, in breadth-first order (cascade)
                 .Optional() // Make term component optional so we also match the root (sun)
             .Build();

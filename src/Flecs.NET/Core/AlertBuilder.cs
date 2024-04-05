@@ -1288,6 +1288,20 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
+        /// <inheritdoc cref="QueryBuilder.GroupBy(ulong)"/>
+        public ref AlertBuilder GroupBy(ulong component)
+        {
+            QueryBuilder.GroupBy(component);
+            return ref this;
+        }
+
+        /// <inheritdoc cref="QueryBuilder.GroupBy{T}()"/>
+        public ref AlertBuilder GroupBy<T>()
+        {
+            QueryBuilder.GroupBy<T>();
+            return ref this;
+        }
+
         /// <inheritdoc cref="QueryBuilder.GroupBy(ulong, Ecs.GroupByAction)"/>
         public ref AlertBuilder GroupBy(ulong component, Ecs.GroupByAction callback)
         {

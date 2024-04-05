@@ -61,11 +61,11 @@ public static class Cpp_Relationships_EnumRelations
         world.Entity().Add(Tile.Sand).Add(TileStatus.Occupied);
 
         // Iterate all entities with a Tile relationship
-        using Filter filter1 = world.FilterBuilder()
+        using Query q1 = world.QueryBuilder()
             .With<Tile>(Ecs.Wildcard)
             .Build();
 
-        filter1.Each((Iter it, int i) =>
+        q1.Each((Iter it, int i) =>
         {
             Entity tileConstant = it.Pair(1).Second();
             Console.WriteLine(tileConstant.Path());
@@ -77,12 +77,12 @@ public static class Cpp_Relationships_EnumRelations
         //  Tile.Sand
 
         // Iterate only occupied tiles
-        using Filter filter2 = world.FilterBuilder()
+        using Query q2 = world.QueryBuilder()
             .With<Tile>(Ecs.Wildcard)
             .With(TileStatus.Occupied)
             .Build();
 
-        filter2.Each((Iter it, int i) =>
+        q2.Each((Iter it, int i) =>
         {
             Entity tileConstant = it.Pair(1).Second();
             Console.WriteLine(tileConstant.Path());
