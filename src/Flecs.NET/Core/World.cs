@@ -2667,6 +2667,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Convert enum constant to entity.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Entity ToEntity<T>(T value) where T : Enum
+        {
+            return Entity(value);
+        }
+
+        /// <summary>
         ///     Define a module.
         /// </summary>
         /// <param name="name"></param>
