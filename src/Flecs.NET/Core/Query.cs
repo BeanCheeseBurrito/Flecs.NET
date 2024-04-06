@@ -245,6 +245,46 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts a <see cref="Query"/> instance to an <see cref="ecs_query_t"/>*.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static ecs_query_t* To(Query query)
+        {
+            return query.Handle;
+        }
+
+        /// <summary>
+        ///     Returns true if query handle is not a null pointer, otherwise return false.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static bool ToBoolean(Query query)
+        {
+            return query.Handle != null;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Query"/> instance to an <see cref="ecs_query_t"/>*.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static implicit operator ecs_query_t*(Query query)
+        {
+            return To(query);
+        }
+
+        /// <summary>
+        ///     Returns true if query handle is not a null pointer, otherwise return false.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static implicit operator bool(Query query)
+        {
+            return ToBoolean(query);
+        }
+
+        /// <summary>
         ///     Checks if two <see cref="Query"/> instances are equal.
         /// </summary>
         /// <param name="other"></param>
