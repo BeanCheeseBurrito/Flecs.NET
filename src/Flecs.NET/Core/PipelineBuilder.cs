@@ -179,13 +179,6 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        /// <inheritdoc cref="QueryBuilder.Flags(uint)"/>
-        public ref PipelineBuilder Flags(uint flags)
-        {
-            QueryBuilder.Flags(flags);
-            return ref this;
-        }
-
         /// <inheritdoc cref="QueryBuilder.Term(ulong)"/>
         public ref PipelineBuilder Term(ulong id)
         {
@@ -522,10 +515,10 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        /// <inheritdoc cref="QueryBuilder.QueryFlags(uint)"/>
-        public ref PipelineBuilder QueryFlags(uint flags)
+        /// <inheritdoc cref="QueryBuilder.Flags(uint)"/>
+        public ref PipelineBuilder Flags(uint flags)
         {
-            QueryBuilder.QueryFlags(flags);
+            QueryBuilder.Flags(flags);
             return ref this;
         }
 

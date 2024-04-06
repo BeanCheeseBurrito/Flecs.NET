@@ -172,18 +172,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Override term id flags.
-        /// </summary>
-        /// <param name="flags"></param>
-        /// <returns></returns>
-        public ref QueryBuilder Flags(uint flags)
-        {
-            AssertTermId();
-            CurrentTermId.id = flags;
-            return ref this;
-        }
-
-        /// <summary>
         ///     Sets term id.
         /// </summary>
         /// <param name="id"></param>
@@ -733,7 +721,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="flags"></param>
         /// <returns></returns>
-        public ref QueryBuilder QueryFlags(uint flags)
+        public ref QueryBuilder Flags(uint flags)
         {
             Desc.flags |= flags;
             return ref this;
