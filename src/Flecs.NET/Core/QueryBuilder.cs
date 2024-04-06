@@ -15,6 +15,7 @@ namespace Flecs.NET.Core
         private ecs_world_t* _world;
         private ecs_query_desc_t _desc;
         private int _termIndex;
+        private int _termCount;
         private int _exprCount;
         private TermIdType _termIdType;
         private ref ecs_term_t CurrentTerm => ref Desc.terms[_termIndex];
@@ -58,7 +59,8 @@ namespace Flecs.NET.Core
         {
             _world = world;
             _desc = default;
-            _termIndex = -1;
+            _termIndex = default;
+            _termCount = default;
             _exprCount = default;
             _termIdType = TermIdType.Src;
 
@@ -1605,7 +1607,7 @@ namespace Flecs.NET.Core
         public ref QueryBuilder Term()
         {
             Ecs.Assert(_termIndex < FLECS_TERM_COUNT_MAX, "Cannot have more than 16 terms.");
-            _termIndex++;
+            _termIndex = _termCount++;
             return ref this;
         }
 
