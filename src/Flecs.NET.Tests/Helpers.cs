@@ -117,6 +117,16 @@ public struct Singleton
     }
 }
 
+public struct QueryWrapper
+{
+    public Query Query;
+
+    public QueryWrapper(Query query)
+    {
+        Query = query;
+    }
+}
+
 public struct MyModule : IFlecsModule
 {
     public void InitModule(ref World world)
