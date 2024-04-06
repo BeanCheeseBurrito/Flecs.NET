@@ -371,5 +371,25 @@ namespace Flecs.NET.Utilities
         {
             ecs_table_unlock(world, table);
         }
+
+        /// <summary>
+        ///     Returns the id of a term ref.
+        /// </summary>
+        /// <param name="termRef"></param>
+        /// <returns></returns>
+        public static ulong TermRefId(ecs_term_ref_t* termRef)
+        {
+            return termRef->id & ~EcsTermRefFlags;
+        }
+
+        /// <summary>
+        ///     Returns the id of a term ref.
+        /// </summary>
+        /// <param name="termRef"></param>
+        /// <returns></returns>
+        public static ulong TermRefId(ref ecs_term_ref_t termRef)
+        {
+            return termRef.id & ~EcsTermRefFlags;
+        }
     }
 }

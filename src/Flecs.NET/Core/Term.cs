@@ -122,7 +122,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetSrc()
         {
-            return new Entity(World, Value.src.id);
+            return new Entity(World, Macros.TermRefId(ref Value.src));
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetFirst()
         {
-            return new Entity(World, Value.first.id);
+            return new Entity(World, Macros.TermRefId(ref Value.first));
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetSecond()
         {
-            return new Entity(World, Value.second.id);
+            return new Entity(World, Macros.TermRefId(ref Value.second));
         }
 
         /// <summary>
