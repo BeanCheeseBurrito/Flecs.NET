@@ -177,7 +177,7 @@ namespace Flecs.NET.Core
             fixed (ecs_observer_desc_t* ptr = &ObserverDesc)
             {
                 Ecs.Assert(EventCount != 0, "Observer cannot have zero events. Use ObserverBuilder.Event() to add events.");
-                Ecs.Assert(ptr->query.terms[0] != default, "Observers require at least 1 term.");
+                Ecs.Assert(ptr->query.terms[0] != default || ptr->query.expr != null, "Observers require at least 1 term.");
 
                 Entity entity = new Entity(World, ecs_observer_init(World, ptr));
                 return new Observer(entity);

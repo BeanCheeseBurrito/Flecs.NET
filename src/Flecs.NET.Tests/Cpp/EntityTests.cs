@@ -1307,6 +1307,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.CanToggle);
+
             Entity e = world.Entity()
                 .Add<Position>();
 
@@ -1318,6 +1320,8 @@ namespace Flecs.NET.Tests.Cpp
         private void IsEnabledComponentEnabled()
         {
             using World world = World.Create();
+
+            world.Component<Position>().Entity.Add(Ecs.CanToggle);
 
             Entity e = world.Entity()
                 .Add<Position>()
@@ -1331,6 +1335,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.CanToggle);
+
             Entity e = world.Entity()
                 .Add<Position>()
                 .Disable<Position>();
@@ -1342,6 +1348,8 @@ namespace Flecs.NET.Tests.Cpp
         private void IsPairEnabled()
         {
             using World world = World.Create();
+
+            world.Component<Position>().Entity.Add(Ecs.CanToggle);
 
             Entity e = world.Entity()
                 .Add<Position, TgtA>();
@@ -1355,6 +1363,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.CanToggle);
+
             Entity e = world.Entity()
                 .Add<Position, Tgt>()
                 .Enable<Position, Tgt>();
@@ -1367,6 +1377,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.CanToggle);
+
             Entity e = world.Entity()
                 .Add<Position, Tgt>()
                 .Disable<Position, Tgt>();
@@ -1378,6 +1390,8 @@ namespace Flecs.NET.Tests.Cpp
         private void IsPairEnabledWithIds()
         {
             using World world = World.Create();
+
+            world.Component<Position>().Entity.Add(Ecs.CanToggle);
 
             Entity rel = world.Entity();
             Entity tgtA = world.Entity();
@@ -1395,7 +1409,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity rel = world.Entity();
+            Entity rel = world.Entity().Add(Ecs.CanToggle);
             Entity tgt = world.Entity();
 
             Entity e = world.Entity()
@@ -1410,7 +1424,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity rel = world.Entity();
+            Entity rel = world.Entity().Add(Ecs.CanToggle);
             Entity tgt = world.Entity();
 
             Entity e = world.Entity()
@@ -1424,6 +1438,8 @@ namespace Flecs.NET.Tests.Cpp
         private void IsPairEnabledWithTargetId()
         {
             using World world = World.Create();
+
+            world.Component<Position>().Entity.Add(Ecs.CanToggle);
 
             Entity tgtA = world.Entity();
             Entity tgtB = world.Entity();
@@ -1440,6 +1456,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.CanToggle);
+
             Entity tgt = world.Entity();
 
             Entity e = world.Entity()
@@ -1453,6 +1471,8 @@ namespace Flecs.NET.Tests.Cpp
         private void IsDisabledPairEnabledWithTargetId()
         {
             using World world = World.Create();
+
+            world.Component<Position>().Entity.Add(Ecs.CanToggle);
 
             Entity tgt = world.Entity();
 
@@ -2505,7 +2525,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!self.Entity.Has(tag));
 
             int count = 0;
-            Query query = world.QueryBuilder().Term(tag).Build();
+            Query query = world.QueryBuilder()
+                .With(tag)
+                .Build();
 
             query.Each((Entity e) =>
             {
@@ -2538,7 +2560,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!self.Entity.Has<Likes>(bob));
 
             int count = 0;
-            Query q = world.QueryBuilder().Term<Likes>(bob).Build();
+            Query q = world.QueryBuilder()
+                .With<Likes>(bob)
+                .Build();
 
             q.Each((Entity e) =>
             {
@@ -2573,7 +2597,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!self.Entity.Has(likes, bob));
 
             int count = 0;
-            Query q = world.QueryBuilder().Term(likes, bob).Build();
+            Query q = world.QueryBuilder()
+                .With(likes, bob)
+                .Build();
 
             q.Each((Entity e) =>
             {
@@ -2663,7 +2689,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!self.Entity.Has(Ecs.ChildOf, parent));
 
             int count = 0;
-            Query q = world.QueryBuilder().Term(Ecs.ChildOf, parent).Build();
+            Query q = world.QueryBuilder()
+                .With(Ecs.ChildOf, parent)
+                .Build();
 
             q.Each((Entity e) =>
             {

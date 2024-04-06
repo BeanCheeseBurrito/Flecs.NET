@@ -160,7 +160,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void System1PairInstances()
+        private void System1PairInstances() // TODO: This causes double free
         {
             using World world = World.Create();
 
@@ -175,7 +175,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Expr("(Pair, *)")
                 .Iter((Iter it) =>
                 {
-                    Field<Pair> tr = it.Field<Pair>(1);
+                    Field<Pair> tr = it.Field<Pair>(0);
                     invokeCount++;
 
                     foreach (int i in it)
@@ -209,7 +209,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Expr("(Pair, *)")
                 .Iter((Iter it) =>
                 {
-                    Field<Pair> tr = it.Field<Pair>(1);
+                    Field<Pair> tr = it.Field<Pair>(0);
                     invokeCount++;
 
                     foreach (int i in it)

@@ -266,7 +266,8 @@ namespace Flecs.NET.Core
             if (string.IsNullOrEmpty(var))
                 return ref this;
 
-            using NativeString nativeVar = (NativeString)var;
+            NativeString nativeVar = (NativeString)var;
+            QueryBuilder.Context.Strings.Add(nativeVar);
             Desc.var = nativeVar;
 
             return ref this;

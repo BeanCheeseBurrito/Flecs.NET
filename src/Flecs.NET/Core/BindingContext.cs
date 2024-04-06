@@ -426,6 +426,7 @@ namespace Flecs.NET.Core
         }
     }
 
+    [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
     internal static unsafe partial class BindingContext<T0>
     {
 #if NET5_0_OR_GREATER
@@ -777,7 +778,7 @@ namespace Flecs.NET.Core
             Iter it = new Iter(iter);
 
             for (int i = 0; i < iter->count; i++)
-                callback(it, it.Field<T0>(1));
+                callback(it, it.Field<T0>(0));
         }
 
         private static void OnSetHook(ecs_iter_t* iter)
@@ -788,7 +789,7 @@ namespace Flecs.NET.Core
             Iter it = new Iter(iter);
 
             for (int i = 0; i < iter->count; i++)
-                callback(it, it.Field<T0>(1));
+                callback(it, it.Field<T0>(0));
         }
 
         private static void OnRemoveHook(ecs_iter_t* iter)
@@ -799,7 +800,7 @@ namespace Flecs.NET.Core
             Iter it = new Iter(iter);
 
             for (int i = 0; i < iter->count; i++)
-                callback(it, it.Field<T0>(1));
+                callback(it, it.Field<T0>(0));
         }
     }
 }

@@ -90,16 +90,6 @@ public struct Self
     }
 }
 
-public struct FilterWrapper
-{
-    public Filter Filter { get; set; }
-
-    public FilterWrapper(Filter filter)
-    {
-        Filter = filter;
-    }
-}
-
 public struct Parent
 {
     public struct EntityType

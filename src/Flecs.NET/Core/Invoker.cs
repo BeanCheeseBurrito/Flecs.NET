@@ -72,7 +72,7 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Observe(ecs_iter_t* iter, Ecs.EachEntityCallback callback)
         {
-            callback(new Entity(iter->world, ecs_field_src(iter, 1)));
+            callback(new Entity(iter->world, ecs_field_src(iter, 0)));
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Flecs.NET.Core
         public static void Observe<T>(ecs_iter_t* iter, Ecs.EachEntityCallback<T> callback)
         {
             Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
-            callback(new Entity(iter->world, ecs_field_src(iter, 1)), ref Managed.GetTypeRef<T>(iter->param));
+            callback(new Entity(iter->world, ecs_field_src(iter, 0)), ref Managed.GetTypeRef<T>(iter->param));
         }
 
 #if NET5_0_OR_GREATER

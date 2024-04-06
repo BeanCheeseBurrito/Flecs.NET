@@ -247,8 +247,8 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity("::Namespace.NestedModule");
             Assert.True(e != m);
 
-            Assert.Equal(1, world.FilterBuilder().Expr("(ChildOf, p.NestedModule)").Build().Count());
-            Assert.Equal(0, world.FilterBuilder().Expr("(ChildOf, Namespace.NestedModule)").Build().Count());
+            Assert.Equal(1, world.QueryBuilder().Expr("(ChildOf, p.NestedModule)").Build().Count());
+            Assert.Equal(0, world.QueryBuilder().Expr("(ChildOf, Namespace.NestedModule)").Build().Count());
         }
 
         [Fact]

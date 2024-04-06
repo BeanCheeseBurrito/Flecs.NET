@@ -115,7 +115,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Expr("[inout] Position($)")
                 .Iter((Iter it) =>
                 {
-                    Field<Position> p = it.Field<Position>(1);
+                    Field<Position> p = it.Field<Position>(0);
                     Assert.Equal(10, p[0].X);
                     Assert.Equal(20, p[0].Y);
 

@@ -92,7 +92,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Returns the filter for the observer.
+        ///     Returns the query for the observer.
         /// </summary>
         /// <returns></returns>
         public Query Query()

@@ -188,29 +188,6 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void Snapshot()
-        {
-            using World world = World.Create();
-
-            world.Component<Position>();
-            world.Component<Velocity>();
-
-            Entity e = world.Entity()
-                .Set(new Position { X = 10, Y = 20 })
-                .Set(new Velocity { X = 1, Y = 2 });
-
-            Snapshot s = world.Snapshot();
-
-            e.Set(new Position { X = 11, Y = 22 });
-
-            s.Restore();
-
-            Position* p = e.GetPtr<Position>();
-            Assert.Equal(11, p->X);
-            Assert.Equal(22, p->Y);
-        }
-
-        [Fact]
         private void Module()
         {
             using World world = World.Create();

@@ -65,8 +65,8 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             RoutineBuilder qb = world.Routine();
-            qb.Term<Position>();
-            qb.Term<Velocity>();
+            qb.With<Position>();
+            qb.With<Velocity>();
             Routine s = qb.Each((Entity e) =>
             {
                 count++;
@@ -111,7 +111,7 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine()
-                .Term<Position>()
+                .With<Position>()
                 .Each((Entity e) =>
                 {
                     count++;
@@ -134,8 +134,8 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine()
-                .Term<Position>()
-                .Term<Velocity>()
+                .With<Position>()
+                .With<Velocity>()
                 .Each((Entity e) =>
                 {
                     count++;
@@ -158,7 +158,7 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine<Position>()
-                .Term<Velocity>()
+                .With<Velocity>()
                 .Each((Entity e, ref Position p) =>
                 {
                     count++;
@@ -181,8 +181,8 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine<Position>()
-                .Term<Velocity>()
-                .Term<Mass>()
+                .With<Velocity>()
+                .With<Mass>()
                 .Each((Entity e, ref Position p) =>
                 {
                     count++;
@@ -209,7 +209,7 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine()
-                .Term(likes, bob)
+                .With(likes, bob)
                 .Each((Entity e) =>
                 {
                     count++;
@@ -232,7 +232,7 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine<Position>()
-                .Term<Velocity>().Not()
+                .With<Velocity>().Not()
                 .Each((Entity e, ref Position p) =>
                 {
                     count++;
@@ -256,8 +256,8 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine()
-                .Term<Position>().Or()
-                .Term<Velocity>()
+                .With<Position>().Or()
+                .With<Velocity>()
                 .Each((Entity e) =>
                 {
                     count++;
@@ -281,8 +281,8 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine()
-                .Term<Position>()
-                .Term<Velocity>().Optional()
+                .With<Position>()
+                .With<Velocity>().Optional()
                 .Each((Entity e) =>
                 {
                     count++;
@@ -327,11 +327,11 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine<Entity>()
-                .Term<Singleton>().Singleton()
+                .With<Singleton>().Singleton()
                 .Iter((Iter it, Field<Entity> e) =>
                 {
-                    Field<Singleton> s = it.Field<Singleton>(2);
-                    Assert.True(!it.IsSelf(2));
+                    Field<Singleton> s = it.Field<Singleton>(0);
+                    Assert.True(!it.IsSelf(1));
                     Assert.Equal(10, s[0].Value);
 
                     ref Singleton sRef = ref s[0];
@@ -376,16 +376,16 @@ namespace Flecs.NET.Tests.Cpp
                 .Add<TagJ>();
 
             Routine s = world.Routine()
-                .Term<TagA>()
-                .Term<TagB>()
-                .Term<TagC>()
-                .Term<TagD>()
-                .Term<TagE>()
-                .Term<TagF>()
-                .Term<TagG>()
-                .Term<TagH>()
-                .Term<TagI>()
-                .Term<TagJ>()
+                .With<TagA>()
+                .With<TagB>()
+                .With<TagC>()
+                .With<TagD>()
+                .With<TagE>()
+                .With<TagF>()
+                .With<TagG>()
+                .With<TagH>()
+                .With<TagI>()
+                .With<TagJ>()
                 .Iter((Iter it) =>
                 {
                     Assert.Equal(1, it.Count());
@@ -400,7 +400,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void _20Terms()
+        private void _16Terms()
         {
             using World world = World.Create();
 
@@ -422,38 +422,30 @@ namespace Flecs.NET.Tests.Cpp
                 .Add<TagM>()
                 .Add<TagN>()
                 .Add<TagO>()
-                .Add<TagP>()
-                .Add<TagQ>()
-                .Add<TagR>()
-                .Add<TagS>()
-                .Add<TagT>();
+                .Add<TagP>();
 
             Routine s = world.Routine()
-                .Term<TagA>()
-                .Term<TagB>()
-                .Term<TagC>()
-                .Term<TagD>()
-                .Term<TagE>()
-                .Term<TagF>()
-                .Term<TagG>()
-                .Term<TagH>()
-                .Term<TagI>()
-                .Term<TagJ>()
-                .Term<TagK>()
-                .Term<TagL>()
-                .Term<TagM>()
-                .Term<TagN>()
-                .Term<TagO>()
-                .Term<TagP>()
-                .Term<TagQ>()
-                .Term<TagR>()
-                .Term<TagS>()
-                .Term<TagT>()
+                .With<TagA>()
+                .With<TagB>()
+                .With<TagC>()
+                .With<TagD>()
+                .With<TagE>()
+                .With<TagF>()
+                .With<TagG>()
+                .With<TagH>()
+                .With<TagI>()
+                .With<TagJ>()
+                .With<TagK>()
+                .With<TagL>()
+                .With<TagM>()
+                .With<TagN>()
+                .With<TagO>()
+                .With<TagP>()
                 .Iter((Iter it) =>
                 {
                     Assert.Equal(1, it.Count());
                     Assert.True(it.Entity(0) == e);
-                    Assert.Equal(20, it.FieldCount());
+                    Assert.Equal(16, it.FieldCount());
                     count++;
                 });
 
@@ -468,7 +460,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Routine s = world.Routine<Position>("MySystem")
-                .Arg(1).Src().Name("MySystem")
+                .TermAt(0).Src().Name("MySystem")
                 .Iter((Iter it, Field<Position> p) => { });
 
             Assert.True(s.Entity.Has<Position>());
@@ -484,7 +476,7 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine()
-                .Term<Position>()
+                .With<Position>()
                 .Each((Entity e) =>
                 {
                     count++;
@@ -506,7 +498,7 @@ namespace Flecs.NET.Tests.Cpp
             int aCount = 0, bCount = 0;
 
             world.Routine<TagA>()
-                .Term<TagB>().Write()
+                .With<TagB>().Write()
                 .Each((Entity e) =>
                 {
                     aCount++;

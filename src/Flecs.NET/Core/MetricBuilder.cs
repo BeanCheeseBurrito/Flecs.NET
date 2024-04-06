@@ -225,8 +225,9 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref MetricBuilder Brief(string brief)
         {
-            using NativeString nativeBrief = (NativeString)brief;
+            NativeString nativeBrief = (NativeString)brief;
             Desc.brief = nativeBrief;
+            _strings.Add(nativeBrief);
             return ref this;
         }
 

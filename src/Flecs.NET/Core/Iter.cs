@@ -403,6 +403,7 @@ namespace Flecs.NET.Core
 
         private Field<T> GetField<T>(int index)
         {
+            Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
             AssertFieldId<T>(Handle, index);
 
             bool isShared = ecs_field_is_self(Handle, index) == 0;

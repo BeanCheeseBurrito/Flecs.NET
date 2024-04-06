@@ -25,7 +25,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e3 = world.Entity().IsA(e2);
 
             Query q = world.QueryBuilder()
-                .Term(tag).Cascade().Descend()
+                .With(tag).Cascade().Descend()
                 .Build();
 
             e1.Add(bar);

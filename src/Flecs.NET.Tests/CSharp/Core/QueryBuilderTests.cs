@@ -23,12 +23,12 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Component<TagX>();
 
             Query q = world.QueryBuilder()
-                .Term<TagX>()
+                .With<TagX>()
                 .GroupBy<TagX>(GroupByFirstId)
                 .Build();
 
             Query qReverse = world.QueryBuilder()
-                .Term<TagX>()
+                .With<TagX>()
                 .GroupBy<TagX>(GroupByFirstIdNegated)
                 .Build();
 
