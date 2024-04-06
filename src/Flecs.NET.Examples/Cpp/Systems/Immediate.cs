@@ -5,10 +5,10 @@
 // or removing components) are not visible until the end of the frame (see the
 // SyncPoint example for more details).
 // Sometimes this is not what you want, and you need a change to be visible
-// immediately. For these use cases, applications can use a NoReadonly system.
+// immediately. For these use cases, applications can use an immediate system.
 // This temporarily takes the world out of readonly mode, so a system can make
 // changes that are directly visible.
-// Because they mutate the world directly, NoReadonly systems are never ran on
+// Because they mutate the world directly, immediate systems are never ran on
 // more than one thread, and no other systems are ran at the same time.
 
 using Flecs.NET.Core;
@@ -17,7 +17,7 @@ using Flecs.NET.Core;
 file struct Waiter;
 file struct Plate;
 
-public static class Cpp_Systems_NoReadonly
+public static class Cpp_Systems_Immediate
 {
     public static void Main()
     {
@@ -29,13 +29,13 @@ public static class Cpp_Systems_NoReadonly
             .Without<Plate>(Ecs.Wildcard)
             .Build();
 
-        // System that assigns plates to waiter. By making this system NoReadonly
+        // System that assigns plates to waiter. By making this system immediate,
         // plate assignments are assigned directly (not deferred) to waiters, which
         // ensures that we won't assign plates to the same waiter more than once.
         world.Routine()
             .With<Plate>()
             .Without<Waiter>(Ecs.Wildcard)
-            .NoReadonly()
+            .Immediate()
             .Iter((Iter it) =>
             {
                 foreach (int i in it)
@@ -51,7 +51,7 @@ public static class Cpp_Systems_NoReadonly
                         // that the next plate will no longer find it.
                         // The DeferSuspend function temporarily suspends deferring
                         // operations, which ensures that our plate is assigned
-                        // immediately. Even though this is a NoReadonly system,
+                        // immediately. Even though this is an immediate system,
                         // deferring is still enabled by default, as adding/removing
                         // components to the entities being iterated would interfere
                         // with the system iterator.

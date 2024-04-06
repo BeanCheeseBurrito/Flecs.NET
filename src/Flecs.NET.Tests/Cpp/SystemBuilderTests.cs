@@ -330,7 +330,7 @@ namespace Flecs.NET.Tests.Cpp
                 .With<Singleton>().Singleton()
                 .Iter((Iter it, Field<Entity> e) =>
                 {
-                    Field<Singleton> s = it.Field<Singleton>(0);
+                    Field<Singleton> s = it.Field<Singleton>(1);
                     Assert.True(!it.IsSelf(1));
                     Assert.Equal(10, s[0].Value);
 

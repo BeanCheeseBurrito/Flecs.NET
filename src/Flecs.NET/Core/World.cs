@@ -2893,7 +2893,7 @@ namespace Flecs.NET.Core
             using NativeString nativeName = (NativeString)name;
             using NativeString nativeStr = (NativeString)str;
 
-            return ecs_plecs_from_str(Handle, nativeName, nativeStr);
+            return ecs_script_from_str(Handle, nativeName, nativeStr);
         }
 
         /// <summary>
@@ -2904,7 +2904,7 @@ namespace Flecs.NET.Core
         public int PlecsFromFile(string fileName)
         {
             using NativeString nativeFileName = (NativeString)fileName;
-            return ecs_plecs_from_file(Handle, nativeFileName);
+            return ecs_script_from_file(Handle, nativeFileName);
         }
 
         /// <summary>

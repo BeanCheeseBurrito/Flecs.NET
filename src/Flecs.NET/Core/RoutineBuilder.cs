@@ -121,9 +121,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public ref RoutineBuilder NoReadonly(bool value = true)
+        public ref RoutineBuilder Immediate(bool value = true)
         {
-            RoutineDesc.no_readonly = Macros.Bool(value);
+            RoutineDesc.immediate = Macros.Bool(value);
             return ref this;
         }
 

@@ -56,7 +56,15 @@ namespace Flecs.NET.Core
         /// <param name="world"></param>
         public Entity(ecs_world_t* world)
         {
-            _id = new Id(world, ecs_new_w_id(world, 0));
+            if (ecs_get_scope(world) == 0 && ecs_get_with(world) == 0)
+            {
+                _id = new Id(world, ecs_new(world));
+            }
+            else
+            {
+                ecs_entity_desc_t desc = default;
+                _id = new Id(world, ecs_entity_init(world, &desc));
+            }
         }
 
         /// <summary>
@@ -1319,7 +1327,7 @@ namespace Flecs.NET.Core
         public Entity Clone(bool cloneValue = true, ulong dstId = 0)
         {
             if (dstId == 0)
-                dstId = ecs_new_id(World);
+                dstId = ecs_new(World);
 
             Entity dst = new Entity(World, dstId);
             ecs_clone(World, dstId, Id, Macros.Bool(cloneValue));

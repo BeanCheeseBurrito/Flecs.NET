@@ -391,7 +391,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetVar(string name)
         {
-            ecs_query_iter_t* iter = &Handle->priv.iter.query;
+            ecs_query_iter_t* iter = &Handle->priv_.iter.query;
             ecs_query_t* query = iter->query;
 
             using NativeString nativeName = (NativeString)name;

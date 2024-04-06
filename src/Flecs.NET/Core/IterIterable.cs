@@ -57,7 +57,7 @@ namespace Flecs.NET.Core
             {
                 using NativeString nativeName = (NativeString)name;
 
-                ecs_query_iter_t* iter = &it->priv.iter.query;
+                ecs_query_iter_t* iter = &it->priv_.iter.query;
                 int varId = ecs_query_find_var(iter->query, nativeName);
 
                 Ecs.Assert(varId != -1, nameof(ECS_INVALID_PARAMETER));

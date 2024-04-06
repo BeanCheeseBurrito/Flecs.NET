@@ -768,11 +768,11 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_module_path_from_c", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_module_path_from_c(byte* c_name);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_new", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern ulong ecs_new(ecs_world_t* world);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_new_from_path_w_sep", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_new_from_path_w_sep(ecs_world_t* world, ulong parent, byte* path, byte* sep, byte* prefix);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_new_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern ulong ecs_new_id(ecs_world_t* world);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_new_low_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_new_low_id(ecs_world_t* world);
@@ -923,12 +923,6 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_pipeline_stats_repeat_last", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_pipeline_stats_repeat_last(ecs_pipeline_stats_t* stats);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_plecs_from_file", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern int ecs_plecs_from_file(ecs_world_t* world, byte* filename);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_plecs_from_str", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern int ecs_plecs_from_str(ecs_world_t* world, byte* name, byte* str);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_poly_claim_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_poly_claim_(void* poly);
@@ -1143,6 +1137,12 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_script_clear", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_script_clear(ecs_world_t* world, ulong script, ulong instance);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_script_from_file", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern int ecs_script_from_file(ecs_world_t* world, byte* filename);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_script_from_str", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern int ecs_script_from_str(ecs_world_t* world, byte* name, byte* str);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_script_init", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_script_init(ecs_world_t* world, ecs_script_desc_t* desc);
 
@@ -1177,7 +1177,7 @@ namespace Flecs.NET.Bindings
         public static extern void ecs_set_hooks_id(ecs_world_t* world, ulong id, ecs_type_hooks_t* hooks);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_set_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern ulong ecs_set_id(ecs_world_t* world, ulong entity, ulong id, System.IntPtr size, void* ptr);
+        public static extern void ecs_set_id(ecs_world_t* world, ulong entity, ulong id, System.IntPtr size, void* ptr);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_set_interval", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_set_interval(ecs_world_t* world, ulong tick_source, float interval);
@@ -2871,7 +2871,9 @@ namespace Flecs.NET.Bindings
 
             public byte use_low_id;
 
-            public fixed ulong add[32];
+            public ulong* add;
+
+            public ecs_value_t* set;
 
             public byte* add_expr;
 
@@ -4441,13 +4443,11 @@ namespace Flecs.NET.Bindings
 
             public ulong interrupted_by;
 
-            public ecs_iter_private_t priv;
+            public ecs_iter_private_t priv_;
 
             public System.IntPtr next; // delegate* unmanaged<ecs_iter_t*, byte>
 
             public System.IntPtr callback; // delegate* unmanaged<ecs_iter_t*, void>
-
-            public System.IntPtr set_var; // delegate* unmanaged<ecs_iter_t*, void>
 
             public System.IntPtr fini; // delegate* unmanaged<ecs_iter_t*, void>
 
@@ -5408,24 +5408,6 @@ namespace Flecs.NET.Bindings
             public System.IntPtr binding_ctx_free; // delegate* unmanaged<void*, void>
 
             public ecs_observable_t* observable;
-
-            public int* last_event_id;
-
-            public int last_event_id_storage;
-
-            public ulong register_id;
-
-            public int term_index;
-
-            public uint flags;
-
-            public ulong id;
-
-            public ecs_vec_t children;
-
-            public ecs_query_t* not_query;
-
-            public System.IntPtr dtor; // delegate* unmanaged<void*, void>
 
             public ecs_world_t* world;
 
@@ -7449,7 +7431,7 @@ namespace Flecs.NET.Bindings
 
             public byte multi_threaded;
 
-            public byte no_readonly;
+            public byte immediate;
 
             public bool Equals(ecs_sync_stats_t other)
             {
@@ -7517,7 +7499,7 @@ namespace Flecs.NET.Bindings
 
             public byte multi_threaded;
 
-            public byte no_readonly;
+            public byte immediate;
 
             public bool Equals(ecs_system_desc_t other)
             {
@@ -7881,7 +7863,7 @@ namespace Flecs.NET.Bindings
 
             public short field_index;
 
-            public ushort flags;
+            public ushort flags_;
 
             public bool Equals(ecs_term_t other)
             {
@@ -9785,94 +9767,6 @@ namespace Flecs.NET.Bindings
             }
         }
 
-        public partial struct EcsMetaType : System.IEquatable<EcsMetaType>
-        {
-            public ecs_type_kind_t kind;
-
-            public byte existing;
-
-            public byte partial;
-
-            public bool Equals(EcsMetaType other)
-            {
-                fixed (EcsMetaType* __self = &this)
-                {
-                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMetaType)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsMetaType)));
-                }
-            }
-
-            public override bool Equals(object? obj)
-            {
-                return obj is EcsMetaType other && Equals(other);
-            }
-
-            public static bool operator ==(EcsMetaType left, EcsMetaType right)
-            {
-                return left.Equals(right);
-            }
-
-            public static bool operator !=(EcsMetaType left, EcsMetaType right)
-            {
-                return !(left == right);
-            }
-
-            public override int GetHashCode()
-            {
-                fixed (EcsMetaType* __self = &this)
-                {
-#if NET6_0_OR_GREATER
-                    System.HashCode hash = new System.HashCode();
-                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMetaType)));
-                    return hash.ToHashCode();
-#else
-                    return base.GetHashCode();
-#endif
-                }
-            }
-        }
-
-        public partial struct EcsMetaTypeSerialized : System.IEquatable<EcsMetaTypeSerialized>
-        {
-            public ecs_vec_t ops;
-
-            public bool Equals(EcsMetaTypeSerialized other)
-            {
-                fixed (EcsMetaTypeSerialized* __self = &this)
-                {
-                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMetaTypeSerialized)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsMetaTypeSerialized)));
-                }
-            }
-
-            public override bool Equals(object? obj)
-            {
-                return obj is EcsMetaTypeSerialized other && Equals(other);
-            }
-
-            public static bool operator ==(EcsMetaTypeSerialized left, EcsMetaTypeSerialized right)
-            {
-                return left.Equals(right);
-            }
-
-            public static bool operator !=(EcsMetaTypeSerialized left, EcsMetaTypeSerialized right)
-            {
-                return !(left == right);
-            }
-
-            public override int GetHashCode()
-            {
-                fixed (EcsMetaTypeSerialized* __self = &this)
-                {
-#if NET6_0_OR_GREATER
-                    System.HashCode hash = new System.HashCode();
-                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsMetaTypeSerialized)));
-                    return hash.ToHashCode();
-#else
-                    return base.GetHashCode();
-#endif
-                }
-            }
-        }
-
         public partial struct EcsMetricSource : System.IEquatable<EcsMetricSource>
         {
             public ulong entity;
@@ -10473,6 +10367,94 @@ namespace Flecs.NET.Bindings
 #if NET6_0_OR_GREATER
                     System.HashCode hash = new System.HashCode();
                     hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsTimer)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
+        }
+
+        public partial struct EcsType : System.IEquatable<EcsType>
+        {
+            public ecs_type_kind_t kind;
+
+            public byte existing;
+
+            public byte partial;
+
+            public bool Equals(EcsType other)
+            {
+                fixed (EcsType* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsType)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsType)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsType other && Equals(other);
+            }
+
+            public static bool operator ==(EcsType left, EcsType right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsType left, EcsType right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsType* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsType)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
+        }
+
+        public partial struct EcsTypeSerializer : System.IEquatable<EcsTypeSerializer>
+        {
+            public ecs_vec_t ops;
+
+            public bool Equals(EcsTypeSerializer other)
+            {
+                fixed (EcsTypeSerializer* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsTypeSerializer)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsTypeSerializer)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsTypeSerializer other && Equals(other);
+            }
+
+            public static bool operator ==(EcsTypeSerializer left, EcsTypeSerializer right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsTypeSerializer left, EcsTypeSerializer right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsTypeSerializer* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsTypeSerializer)));
                     return hash.ToHashCode();
 #else
                     return base.GetHashCode();
@@ -11229,7 +11211,7 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsEventNoOnSet = 65536;
 
-        public const uint EcsEventTableOnly = 16;
+        public const uint EcsEventTableOnly = 262144;
 
         public const int EcsFirstUserComponentId = 8;
 
@@ -11291,23 +11273,21 @@ namespace Flecs.NET.Bindings
 
         public const ulong EcsIsVariable = 288230376151711744;
 
-        public const uint EcsIterCacheSearch = 131072;
+        public const uint EcsIterCacheSearch = 8192;
 
-        public const uint EcsIterCppEach = 2097152;
+        public const uint EcsIterCppEach = 131072;
 
-        public const uint EcsIterFixedInChangeComputed = 262144;
+        public const uint EcsIterFixedInChangeComputed = 16384;
 
-        public const uint EcsIterFixedInChanged = 524288;
+        public const uint EcsIterFixedInChanged = 32768;
 
-        public const uint EcsIterHasCondSet = 1024;
+        public const uint EcsIterHasCondSet = 64;
 
-        public const uint EcsIterIgnoreThis = 128;
+        public const uint EcsIterIgnoreThis = 16;
 
         public const uint EcsIterIsInstanced = 4;
 
         public const uint EcsIterIsValid = 1;
-
-        public const uint EcsIterMatchVar = 256;
 
         public const int EcsIterNext = 1;
 
@@ -11315,23 +11295,23 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsIterNoData = 2;
 
-        public const uint EcsIterNoResults = 64;
+        public const uint EcsIterNoResults = 8;
 
-        public const uint EcsIterProfile = 2048;
+        public const uint EcsIterProfile = 128;
 
-        public const uint EcsIterSkip = 1048576;
+        public const uint EcsIterSkip = 65536;
 
-        public const uint EcsIterTableOnly = 16;
+        public const uint EcsIterTableOnly = 262144;
 
-        public const uint EcsIterTrivialSearch = 4096;
+        public const uint EcsIterTrivialSearch = 256;
 
-        public const uint EcsIterTrivialSearchNoData = 8192;
+        public const uint EcsIterTrivialSearchNoData = 512;
 
-        public const uint EcsIterTrivialSearchWildcard = 65536;
+        public const uint EcsIterTrivialSearchWildcard = 4096;
 
-        public const uint EcsIterTrivialTest = 16384;
+        public const uint EcsIterTrivialTest = 1024;
 
-        public const uint EcsIterTrivialTestWildcard = 32768;
+        public const uint EcsIterTrivialTestWildcard = 2048;
 
         public const int EcsIterYield = -1;
 
@@ -11351,47 +11331,47 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsOsApiLogWithTimeStamp = 4;
 
-        public const uint EcsQueryAllowUnresolvedByName = 2048;
+        public const uint EcsQueryAllowUnresolvedByName = 64;
 
-        public const uint EcsQueryHasCacheable = 262144;
+        public const uint EcsQueryHasCacheable = 8388608;
 
-        public const uint EcsQueryHasCondSet = 1024;
+        public const uint EcsQueryHasCondSet = 32768;
 
-        public const uint EcsQueryHasMonitor = 4194304;
+        public const uint EcsQueryHasMonitor = 2097152;
 
-        public const uint EcsQueryHasNonThisOutTerms = 2097152;
+        public const uint EcsQueryHasNonThisOutTerms = 1048576;
 
-        public const uint EcsQueryHasOutTerms = 1048576;
+        public const uint EcsQueryHasOutTerms = 524288;
 
-        public const uint EcsQueryHasPred = 4096;
+        public const uint EcsQueryHasPred = 65536;
 
-        public const uint EcsQueryHasRefs = 131072;
+        public const uint EcsQueryHasRefs = 262144;
 
-        public const uint EcsQueryHasScopes = 8192;
+        public const uint EcsQueryHasScopes = 131072;
 
-        public const uint EcsQueryIsCacheable = 524288;
+        public const uint EcsQueryIsCacheable = 16777216;
 
-        public const uint EcsQueryIsInstanced = 256;
+        public const uint EcsQueryIsInstanced = 32;
 
-        public const uint EcsQueryIsTrivial = 16384;
+        public const uint EcsQueryIsTrivial = 4194304;
 
-        public const uint EcsQueryMatchDisabled = 16;
+        public const uint EcsQueryMatchDisabled = 4;
 
-        public const uint EcsQueryMatchEmptyTables = 32;
+        public const uint EcsQueryMatchEmptyTables = 8;
 
-        public const uint EcsQueryMatchOnlySelf = 32768;
+        public const uint EcsQueryMatchOnlySelf = 8192;
 
-        public const uint EcsQueryMatchOnlyThis = 4;
+        public const uint EcsQueryMatchOnlyThis = 4096;
 
-        public const uint EcsQueryMatchPrefab = 8;
+        public const uint EcsQueryMatchPrefab = 2;
 
-        public const uint EcsQueryMatchThis = 2;
+        public const uint EcsQueryMatchThis = 2048;
 
-        public const uint EcsQueryMatchWildcards = 65536;
+        public const uint EcsQueryMatchWildcards = 16384;
 
-        public const uint EcsQueryNoData = 128;
+        public const uint EcsQueryNoData = 16;
 
-        public const uint EcsQueryTableOnly = 8388608;
+        public const uint EcsQueryTableOnly = 128;
 
         public const ulong EcsSelf = 9223372036854775808;
 
@@ -11508,8 +11488,6 @@ namespace Flecs.NET.Bindings
         public const int FLECS_HI_ID_RECORD_ID = 1024;
 
         public const int FLECS_ID_DESC_MAX = 32;
-
-        public const int FLECS_ID0ID_ = 0;
 
         public const int flecs_iter_cache_all = 255;
 
@@ -12195,10 +12173,6 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDEcsMemberRangesID__Ptr;
 
-        private static void* FLECS_IDEcsMetaTypeID__Ptr;
-
-        private static void* FLECS_IDEcsMetaTypeSerializedID__Ptr;
-
         private static void* FLECS_IDEcsMetersID__Ptr;
 
         private static void* FLECS_IDEcsMetersPerSecondID__Ptr;
@@ -12294,6 +12268,10 @@ namespace Flecs.NET.Bindings
         private static void* FLECS_IDEcsTimeID__Ptr;
 
         private static void* FLECS_IDEcsTimerID__Ptr;
+
+        private static void* FLECS_IDEcsTypeID__Ptr;
+
+        private static void* FLECS_IDEcsTypeSerializerID__Ptr;
 
         private static void* FLECS_IDEcsUnitID__Ptr;
 
@@ -12983,10 +12961,6 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong FLECS_IDEcsMemberRangesID_ => ref *(ulong*)(FLECS_IDEcsMemberRangesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMemberRangesID_", out FLECS_IDEcsMemberRangesID__Ptr) : FLECS_IDEcsMemberRangesID__Ptr);
 
-        public static ref ulong FLECS_IDEcsMetaTypeID_ => ref *(ulong*)(FLECS_IDEcsMetaTypeID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetaTypeID_", out FLECS_IDEcsMetaTypeID__Ptr) : FLECS_IDEcsMetaTypeID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMetaTypeSerializedID_ => ref *(ulong*)(FLECS_IDEcsMetaTypeSerializedID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetaTypeSerializedID_", out FLECS_IDEcsMetaTypeSerializedID__Ptr) : FLECS_IDEcsMetaTypeSerializedID__Ptr);
-
         public static ref ulong FLECS_IDEcsMetersID_ => ref *(ulong*)(FLECS_IDEcsMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetersID_", out FLECS_IDEcsMetersID__Ptr) : FLECS_IDEcsMetersID__Ptr);
 
         public static ref ulong FLECS_IDEcsMetersPerSecondID_ => ref *(ulong*)(FLECS_IDEcsMetersPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetersPerSecondID_", out FLECS_IDEcsMetersPerSecondID__Ptr) : FLECS_IDEcsMetersPerSecondID__Ptr);
@@ -13082,6 +13056,10 @@ namespace Flecs.NET.Bindings
         public static ref ulong FLECS_IDEcsTimeID_ => ref *(ulong*)(FLECS_IDEcsTimeID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTimeID_", out FLECS_IDEcsTimeID__Ptr) : FLECS_IDEcsTimeID__Ptr);
 
         public static ref ulong FLECS_IDEcsTimerID_ => ref *(ulong*)(FLECS_IDEcsTimerID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTimerID_", out FLECS_IDEcsTimerID__Ptr) : FLECS_IDEcsTimerID__Ptr);
+
+        public static ref ulong FLECS_IDEcsTypeID_ => ref *(ulong*)(FLECS_IDEcsTypeID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTypeID_", out FLECS_IDEcsTypeID__Ptr) : FLECS_IDEcsTypeID__Ptr);
+
+        public static ref ulong FLECS_IDEcsTypeSerializerID_ => ref *(ulong*)(FLECS_IDEcsTypeSerializerID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTypeSerializerID_", out FLECS_IDEcsTypeSerializerID__Ptr) : FLECS_IDEcsTypeSerializerID__Ptr);
 
         public static ref ulong FLECS_IDEcsUnitID_ => ref *(ulong*)(FLECS_IDEcsUnitID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUnitID_", out FLECS_IDEcsUnitID__Ptr) : FLECS_IDEcsUnitID__Ptr);
 

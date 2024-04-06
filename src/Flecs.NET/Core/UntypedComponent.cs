@@ -78,9 +78,11 @@ namespace Flecs.NET.Core
         {
             using NativeString nativeName = (NativeString)name;
 
+            ulong* addIds = stackalloc ulong[] { Macros.Pair(EcsChildOf, Entity), 0 };
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
-            desc.add[0] = Macros.Pair(EcsChildOf, Entity);
+            desc.add = addIds;
+
             ulong id = ecs_entity_init(World, &desc);
             Ecs.Assert(id != 0, nameof(ECS_INTERNAL_ERROR));
 
@@ -162,9 +164,10 @@ namespace Flecs.NET.Core
 
             using NativeString nativeName = (NativeString)name;
 
+            ulong* addIds = stackalloc ulong[] { Macros.Pair(EcsChildOf, Entity), 0 };
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
-            desc.add[0] = Macros.Pair(EcsChildOf, Id);
+            desc.add = addIds;
 
             ulong id = ecs_entity_init(World, &desc);
             Ecs.Assert(id != 0, nameof(ECS_INTERNAL_ERROR));
@@ -198,9 +201,10 @@ namespace Flecs.NET.Core
 
             using NativeString nativeName = (NativeString)name;
 
+            ulong* addIds = stackalloc ulong[] { Macros.Pair(EcsChildOf, Entity), 0 };
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
-            desc.add[0] = Macros.Pair(EcsChildOf, Id);
+            desc.add = addIds;
 
             ulong id = ecs_entity_init(World, &desc);
             Ecs.Assert(id != 0, nameof(ECS_INTERNAL_ERROR));
