@@ -492,12 +492,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Equivalent to <see cref="EcsInOutFilter"/>
         /// </summary>
-        public const ecs_inout_kind_t InOutQuery = EcsInOutFilter;
+        public const ecs_inout_kind_t InOutFilter = EcsInOutFilter;
 
         /// <summary>
-        ///     Equivalent to <see cref="EcsOut"/>
+        ///     Equivalent to <see cref="EcsInOut"/>
         /// </summary>
-        public const ecs_inout_kind_t InOut = EcsOut;
+        public const ecs_inout_kind_t InOut = EcsInOut;
 
         /// <summary>
         ///     Equivalent to <see cref="EcsIn"/>
