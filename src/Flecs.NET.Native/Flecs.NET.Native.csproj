@@ -10,7 +10,7 @@
         <IncludeContentInPack>true</IncludeContentInPack>
         <IncludeBuildOutput>false</IncludeBuildOutput>
 
-        <Version>3.2.11</Version>
+        <Version>4.0.1</Version>
         <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Native.Debug</Title>
         <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Native.Release</Title>
         <Authors>BeanCheeseBurrito</Authors>
