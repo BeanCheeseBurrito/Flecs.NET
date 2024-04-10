@@ -176,7 +176,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Iterates the query.
+        ///     Iterates the query using the provided callback.
         /// </summary>
         /// <param name="func"></param>
         public void Iter(Ecs.IterCallback func)
@@ -207,6 +207,41 @@ namespace Flecs.NET.Core
             while (ecs_query_next_instanced(&iter) == 1)
                 Invoker.Each(&iter, func);
         }
+
+#if NET5_0_OR_GREATER
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="func"></param>
+        public void Iter(delegate*<Iter, void> func)
+        {
+            ecs_iter_t iter = ecs_query_iter(World, Handle);
+            while (ecs_query_next(&iter) == 1)
+                Invoker.Iter(&iter, func);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="func"></param>
+        public void Each(delegate*<Entity, void> func)
+        {
+            ecs_iter_t iter = ecs_query_iter(World, Handle);
+            while (ecs_query_next_instanced(&iter) == 1)
+                Invoker.Each(&iter, func);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="func"></param>
+        public void Each(delegate*<Iter, int, void> func)
+        {
+            ecs_iter_t iter = ecs_query_iter(World, Handle);
+            while (ecs_query_next_instanced(&iter) == 1)
+                Invoker.Each(&iter, func);
+        }
+#endif
 
         /// <summary>
         ///     Create an iterator object that can be modified before iterating.

@@ -22,6 +22,34 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
+        ///     Allocates memory for type.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T* Alloc<T>(T value) where T : unmanaged
+        {
+            T* ptr = Alloc<T>(1);
+            ptr[0] = value;
+            return ptr;
+        }
+
+        /// <summary>
+        ///     Allocates zeroed memory for type.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T* AllocZeroed<T>(T value) where T : unmanaged
+        {
+            T* ptr = AllocZeroed<T>(1);
+            ptr[0] = value;
+            return ptr;
+        }
+
+        /// <summary>
         ///     Allocates zeroed memory for type.
         /// </summary>
         /// <param name="count"></param>

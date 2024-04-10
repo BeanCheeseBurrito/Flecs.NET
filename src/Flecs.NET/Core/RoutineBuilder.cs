@@ -13,7 +13,7 @@ namespace Flecs.NET.Core
 
         internal ecs_system_desc_t RoutineDesc;
         internal QueryBuilder QueryBuilder;
-        internal BindingContext.RoutineContext RoutineContext;
+        internal BindingContext.RunIterContext Context;
 
         /// <summary>
         ///     A reference to the world.
@@ -34,7 +34,7 @@ namespace Flecs.NET.Core
         {
             QueryBuilder = new QueryBuilder(world);
             RoutineDesc = default;
-            RoutineContext = default;
+            Context = default;
             _world = world;
 
             using NativeString nativeName = (NativeString)name;
@@ -56,7 +56,7 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Dispose()
         {
-            RoutineContext.Dispose();
+            Context.Dispose();
             QueryBuilder.Dispose();
         }
 
@@ -202,8 +202,8 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref RoutineBuilder Run(Ecs.IterAction action)
         {
-            BindingContext.SetCallback(ref RoutineContext.Run, action);
-            RoutineDesc.run = RoutineContext.Run.Function;
+            BindingContext.SetCallback(ref Context.Run, action);
+            RoutineDesc.run = Context.Run.Function;
             return ref this;
         }
 
@@ -214,7 +214,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Routine Iter(Action callback)
         {
-            return Build(ref callback, BindingContext.RoutineActionPointer, false);
+            return Build(ref callback, BindingContext.ActionCallbackPointer);
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Routine Iter(Ecs.IterCallback callback)
         {
-            return Build(ref callback, BindingContext.RoutineIterPointer, false);
+            return Build(ref callback, BindingContext.IterCallbackPointer);
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Routine Each(Ecs.EachEntityCallback callback)
         {
-            return Build(ref callback, BindingContext.RoutineEachEntityPointer, false);
+            return Build(ref callback, BindingContext.EachEntityCallbackPointer);
         }
 
         /// <summary>
@@ -244,31 +244,74 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Routine Each(Ecs.EachIndexCallback callback)
         {
-            return Build(ref callback, BindingContext.RoutineEachIndexPointer, false);
+            return Build(ref callback, BindingContext.EachIndexCallbackPointer);
         }
 
-        private Routine Build<T>(ref T userCallback, IntPtr internalCallback, bool storeFunctionPointer)
-            where T : Delegate
+#if NET5_0_OR_GREATER
+        /// <summary>
+        ///     Creates a routine with the provided Iter callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public Routine Iter(delegate*<void> callback)
         {
-            BindingContext.QueryContext* queryContext = Memory.Alloc<BindingContext.QueryContext>(1);
-            queryContext[0] = QueryBuilder.Context;
+            return Build((IntPtr)callback, BindingContext.ActionCallbackPointer);
+        }
 
-            BindingContext.RoutineContext* routineContext = Memory.Alloc<BindingContext.RoutineContext>(1);
-            routineContext[0] = RoutineContext;
-            BindingContext.SetCallback(ref routineContext->Iterator, userCallback, storeFunctionPointer);
+        /// <summary>
+        ///     Creates a routine with the provided Iter callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public Routine Iter(delegate*<Iter, void> callback)
+        {
+            return Build((IntPtr)callback, BindingContext.IterCallbackPointer);
+        }
 
-            RoutineDesc.query = QueryBuilder.Desc;
-            RoutineDesc.query.binding_ctx = queryContext;
-            RoutineDesc.query.binding_ctx_free = BindingContext.QueryContextFreePointer;
-            RoutineDesc.binding_ctx = routineContext;
-            RoutineDesc.binding_ctx_free = BindingContext.RoutineContextFreePointer;
+        /// <summary>
+        ///     Creates a routine with the provided Each callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public Routine Each(delegate*<Entity, void> callback)
+        {
+            return Build((IntPtr)callback, BindingContext.EachEntityCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Creates a routine with the provided Each callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public Routine Each(delegate*<Iter, int, void> callback)
+        {
+            return Build((IntPtr)callback, BindingContext.EachIndexCallbackPointer);
+        }
+#endif
+
+        private Routine Build(IntPtr userCallback, IntPtr internalCallback)
+        {
+            BindingContext.SetCallback(ref Context.Iterator, userCallback);
+            return Build(internalCallback);
+        }
+
+        private Routine Build<T>(ref T userCallback, IntPtr internalCallback) where T : Delegate
+        {
+             BindingContext.SetCallback(ref Context.Iterator, userCallback, false);
+             return Build(internalCallback);
+        }
+
+        private Routine Build(IntPtr internalCallback)
+        {
             RoutineDesc.callback = internalCallback;
+            RoutineDesc.binding_ctx = Memory.Alloc(Context);
+            RoutineDesc.binding_ctx_free = BindingContext.RunIterContextFreePointer;
+            RoutineDesc.query = QueryBuilder.Desc;
+            RoutineDesc.query.binding_ctx = Memory.Alloc(QueryBuilder.Context);
+            RoutineDesc.query.binding_ctx_free = BindingContext.QueryContextFreePointer;
 
             fixed (ecs_system_desc_t* ptr = &RoutineDesc)
-            {
-                Entity entity = new Entity(World, ecs_system_init(World, ptr));
-                return new Routine(entity);
-            }
+                return new Routine(World, ecs_system_init(World, ptr));
         }
 
         /// <summary>

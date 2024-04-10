@@ -1715,10 +1715,10 @@ namespace Flecs.NET.Core
             Context.GroupByAction.Dispose();
             Context.ContextFree.Dispose();
 
-            BindingContext.QueryGroupByContext* context = Memory.AllocZeroed<BindingContext.QueryGroupByContext>(1);
+            BindingContext.GroupByContext* context = Memory.AllocZeroed<BindingContext.GroupByContext>(1);
             BindingContext.SetCallback(ref context->GroupBy, callback);
-            Desc.group_by_callback = BindingContext.QueryGroupByPointer;
-            Desc.group_by_ctx_free = BindingContext.QueryGroupByContextFreePointer;
+            Desc.group_by_callback = BindingContext.GroupByCallbackPointer;
+            Desc.group_by_ctx_free = BindingContext.GroupByContextFreePointer;
             Desc.group_by_ctx = context;
             Desc.group_by = component;
 

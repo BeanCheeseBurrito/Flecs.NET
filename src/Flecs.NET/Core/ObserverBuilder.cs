@@ -13,7 +13,7 @@ namespace Flecs.NET.Core
 
         internal ecs_observer_desc_t ObserverDesc;
         internal QueryBuilder QueryBuilder;
-        internal BindingContext.ObserverContext ObserverContext;
+        internal BindingContext.RunIterContext Context;
         internal int EventCount;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Flecs.NET.Core
         public ObserverBuilder(ecs_world_t* world, string? name = null)
         {
             ObserverDesc = default;
-            ObserverContext = default;
+            Context = default;
             EventCount = default;
             QueryBuilder = new QueryBuilder(world);
             _world = world;
@@ -55,7 +55,7 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Dispose()
         {
-            ObserverContext.Dispose();
+            Context.Dispose();
             QueryBuilder.Dispose();
         }
 
@@ -112,8 +112,8 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref ObserverBuilder Run(Ecs.IterAction action)
         {
-            BindingContext.SetCallback(ref ObserverContext.Run, action);
-            ObserverDesc.run = ObserverContext.Run.Function;
+            BindingContext.SetCallback(ref Context.Run, action);
+            ObserverDesc.run = Context.Run.Function;
             return ref this;
         }
 
@@ -124,7 +124,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Observer Iter(Action callback)
         {
-            return Build(ref callback, BindingContext.RoutineActionPointer, false);
+            return Build(ref callback, BindingContext.ActionCallbackPointer);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Observer Iter(Ecs.IterCallback callback)
         {
-            return Build(ref callback, BindingContext.RoutineIterPointer, false);
+            return Build(ref callback, BindingContext.IterCallbackPointer);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Observer Each(Ecs.EachEntityCallback callback)
         {
-            return Build(ref callback, BindingContext.RoutineEachEntityPointer, false);
+            return Build(ref callback, BindingContext.EachEntityCallbackPointer);
         }
 
         /// <summary>
@@ -154,31 +154,76 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Observer Each(Ecs.EachIndexCallback callback)
         {
-            return Build(ref callback, BindingContext.RoutineEachIndexPointer, false);
+            return Build(ref callback, BindingContext.EachIndexCallbackPointer);
         }
 
-        private Observer Build<T>(ref T userCallback, IntPtr internalCallback, bool storeFunctionPointer)
-            where T : Delegate
+#if NET5_0_OR_GREATER
+        /// <summary>
+        ///     Creates an observer with the provided Iter callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public Observer Iter(delegate*<void> callback)
         {
-            BindingContext.QueryContext* queryContext = Memory.Alloc<BindingContext.QueryContext>(1);
-            queryContext[0] = QueryBuilder.Context;
+            return Build((IntPtr)callback, BindingContext.ActionCallbackPointer);
+        }
 
-            BindingContext.ObserverContext* observerContext = Memory.Alloc<BindingContext.ObserverContext>(1);
-            observerContext[0] = ObserverContext;
-            BindingContext.SetCallback(ref observerContext->Iterator, userCallback, storeFunctionPointer);
+        /// <summary>
+        ///     Creates an observer with the provided Iter callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public Observer Iter(delegate*<Iter, void> callback)
+        {
+            return Build((IntPtr)callback, BindingContext.IterCallbackPointer);
+        }
 
-            ObserverDesc.query = QueryBuilder.Desc;
-            ObserverDesc.query.binding_ctx = queryContext;
-            ObserverDesc.query.binding_ctx_free = BindingContext.QueryContextFreePointer;
-            ObserverDesc.binding_ctx = observerContext;
-            ObserverDesc.binding_ctx_free = BindingContext.ObserverContextFreePointer;
+        /// <summary>
+        ///     Creates an observer with the provided Each callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public Observer Each(delegate*<Entity, void> callback)
+        {
+            return Build((IntPtr)callback, BindingContext.EachEntityCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Each callback.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public Observer Each(delegate*<Iter, int, void> callback)
+        {
+            return Build((IntPtr)callback, BindingContext.EachIndexCallbackPointer);
+        }
+#endif
+
+        private Observer Build(IntPtr userCallback, IntPtr internalCallback)
+        {
+            BindingContext.SetCallback(ref Context.Iterator, userCallback);
+            return Build(internalCallback);
+        }
+
+        private Observer Build<T>(ref T userCallback, IntPtr internalCallback) where T : Delegate
+        {
+            BindingContext.SetCallback(ref Context.Iterator, userCallback, false);
+            return Build(internalCallback);
+        }
+
+        private Observer Build(IntPtr internalCallback)
+        {
             ObserverDesc.callback = internalCallback;
+            ObserverDesc.binding_ctx = Memory.Alloc(Context);
+            ObserverDesc.binding_ctx_free = BindingContext.RunIterContextFreePointer;
+            ObserverDesc.query = QueryBuilder.Desc;
+            ObserverDesc.query.binding_ctx = Memory.Alloc(QueryBuilder.Context);
+            ObserverDesc.query.binding_ctx_free = BindingContext.QueryContextFreePointer;
 
             fixed (ecs_observer_desc_t* ptr = &ObserverDesc)
             {
                 Ecs.Assert(EventCount != 0, "Observer cannot have zero events. Use ObserverBuilder.Event() to add events.");
                 Ecs.Assert(ptr->query.terms[0] != default || ptr->query.expr != null, "Observers require at least 1 term.");
-
                 Entity entity = new Entity(World, ecs_observer_init(World, ptr));
                 return new Observer(entity);
             }
