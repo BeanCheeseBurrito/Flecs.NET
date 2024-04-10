@@ -78,6 +78,12 @@ public struct Template<T>
 {
     public T X { get; set; }
     public T Y { get; set; }
+
+    public Template(T x, T y)
+    {
+        X = x;
+        Y = y;
+    }
 }
 
 public struct Self
@@ -96,6 +102,17 @@ public struct Parent
     {
     }
 }
+
+public struct Value
+{
+    public int Number { get; set; }
+
+    public Value(int number)
+    {
+        Number = number;
+    }
+}
+
 
 public struct Other
 {
