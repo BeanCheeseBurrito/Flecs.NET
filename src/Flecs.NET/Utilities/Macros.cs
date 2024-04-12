@@ -54,7 +54,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool AreSameReadOnlyRefs<T>(in T a, in T b)
         {
-            return Unsafe.AreSame(ref Unsafe.AsRef(a), ref Unsafe.AsRef(b));
+            return Unsafe.AreSame(ref Unsafe.AsRef(in a), ref Unsafe.AsRef(in b));
         }
 
         /// <summary>
