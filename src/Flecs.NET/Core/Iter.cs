@@ -124,7 +124,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Range()
         {
-            return new Table(Handle->world, Handle->table, Handle->offset, Handle->count);
+            return new Table(Handle->real_world, Handle->table, Handle->offset, Handle->count);
         }
 
         /// <summary>
