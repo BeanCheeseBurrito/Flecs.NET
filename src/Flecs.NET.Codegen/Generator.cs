@@ -147,17 +147,17 @@ namespace Flecs.NET.Codegen
 
                     public Observer Each<{typeParams}>(Ecs.EachCallback<{typeParams}> callback) 
                     {{
-                        return Build(ref callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachCallbackPointer);
                     }}
 
                     public Observer Each<{typeParams}>(Ecs.EachEntityCallback<{typeParams}> callback) 
                     {{
-                        return Build(ref callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
                     }}
 
                     public Observer Each<{typeParams}>(Ecs.EachIndexCallback<{typeParams}> callback) 
                     {{
-                        return Build(ref callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
                     }}
 
                 #if NET5_0_OR_GREATER
@@ -168,17 +168,17 @@ namespace Flecs.NET.Codegen
 
                     public Observer Each<{typeParams}>(delegate*<{refTypeArgs}, void> callback) 
                     {{
-                        return Build((IntPtr)callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachCallbackPointer);
                     }}
 
                     public Observer Each<{typeParams}>(delegate*<Entity, {refTypeArgs}, void> callback) 
                     {{
-                        return Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
                     }}
 
                     public Observer Each<{typeParams}>(delegate*<Iter, int, {refTypeArgs}, void> callback) 
                     {{
-                        return Build((IntPtr)callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
                     }}
                 #endif
                 ");
@@ -210,17 +210,17 @@ namespace Flecs.NET.Codegen
 
                     public Routine Each<{typeParams}>(Ecs.EachCallback<{typeParams}> callback) 
                     {{
-                        return Build(ref callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachCallbackPointer);
                     }}
 
                     public Routine Each<{typeParams}>(Ecs.EachEntityCallback<{typeParams}> callback) 
                     {{
-                        return Build(ref callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
                     }}
 
                     public Routine Each<{typeParams}>(Ecs.EachIndexCallback<{typeParams}> callback) 
                     {{
-                        return Build(ref callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
                     }}
 
                 #if NET5_0_OR_GREATER
@@ -231,17 +231,17 @@ namespace Flecs.NET.Codegen
 
                     public Routine Each<{typeParams}>(delegate*<{refTypeArgs}, void> callback) 
                     {{
-                        return Build((IntPtr)callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachCallbackPointer);
                     }}
 
                     public Routine Each<{typeParams}>(delegate*<Entity, {refTypeArgs}, void> callback) 
                     {{
-                        return Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
                     }}
 
                     public Routine Each<{typeParams}>(delegate*<Iter, int, {refTypeArgs}, void> callback) 
                     {{
-                        return Build((IntPtr)callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
                     }}
                 #endif
                 ");

@@ -234,7 +234,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Routine Each(Ecs.EachEntityCallback callback)
         {
-            return Build(ref callback, BindingContext.EachEntityCallbackPointer);
+            return Instanced().Build(ref callback, BindingContext.EachEntityCallbackPointer);
         }
 
         /// <summary>
@@ -244,7 +244,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Routine Each(Ecs.EachIndexCallback callback)
         {
-            return Build(ref callback, BindingContext.EachIndexCallbackPointer);
+            return Instanced().Build(ref callback, BindingContext.EachIndexCallbackPointer);
         }
 
 #if NET5_0_OR_GREATER
@@ -275,7 +275,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Routine Each(delegate*<Entity, void> callback)
         {
-            return Build((IntPtr)callback, BindingContext.EachEntityCallbackPointer);
+            return Instanced().Build((IntPtr)callback, BindingContext.EachEntityCallbackPointer);
         }
 
         /// <summary>
@@ -285,7 +285,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Routine Each(delegate*<Iter, int, void> callback)
         {
-            return Build((IntPtr)callback, BindingContext.EachIndexCallbackPointer);
+            return Instanced().Build((IntPtr)callback, BindingContext.EachIndexCallbackPointer);
         }
 #endif
 
