@@ -59,6 +59,12 @@ public enum Number
     Three
 }
 
+public enum PipelineStepEnum
+{
+    CustomStep,
+    CustomStep2
+}
+
 public struct Mass
 {
     public float Value { get; set; }
@@ -91,6 +97,16 @@ public struct Self
     public Entity Value { get; set; }
 
     public Self(Entity value)
+    {
+        Value = value;
+    }
+}
+
+public struct EntityWrapper
+{
+    public Entity Value { get; set; }
+
+    public EntityWrapper(Entity value)
     {
         Value = value;
     }
@@ -356,6 +372,14 @@ public struct EvtData
 }
 
 public struct First
+{
+}
+
+public struct Second
+{
+}
+
+public struct PipelineType
 {
 }
 

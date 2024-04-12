@@ -1111,7 +1111,7 @@ namespace Flecs.NET.Tests.Cpp
             q.Each((Entity qe) => { Assert.True(qe == e); });
         }
 
-        private static int compare_position(ulong e1, void* p1, ulong e2, void* p2)
+        private static int ComparePosition(ulong e1, void* p1, ulong e2, void* p2)
         {
             Position* pos1 = (Position*)p1;
             Position* pos2 = (Position*)p2;
@@ -1130,7 +1130,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Set(new Position(4, 0));
 
             Query q = world.QueryBuilder<Position>()
-                .OrderBy<Position>(compare_position)
+                .OrderBy<Position>(ComparePosition)
                 .Build();
 
             q.Iter((Iter it, Field<Position> p) =>
