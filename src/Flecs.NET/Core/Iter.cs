@@ -115,7 +115,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Table()
         {
-            return new Table(Handle->world, Handle->table);
+            return new Table(Handle->real_world, Handle->table);
         }
 
         /// <summary>
