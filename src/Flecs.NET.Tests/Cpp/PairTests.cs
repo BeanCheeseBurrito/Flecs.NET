@@ -6,11 +6,6 @@ namespace Flecs.NET.Tests.Cpp
 {
     public unsafe class PairTests
     {
-        public PairTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void AddComponentPair()
         {
@@ -127,7 +122,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity entity = world.Entity()
                 .Set<Pair, Position>(new Pair { Value = 10 });
 
-            Assert.True(Type<Pair>.RawId != Type<Position>.RawId);
+            Assert.True(world.Component<Pair>().Id != world.Component<Position>().Id);
 
             Assert.True(entity.Id != 0);
             Assert.True(entity.Has<Pair, Position>());

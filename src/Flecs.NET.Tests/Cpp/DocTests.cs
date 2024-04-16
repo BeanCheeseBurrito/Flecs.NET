@@ -6,11 +6,6 @@ namespace Flecs.NET.Tests.Cpp
 {
     public class DocTests
     {
-        public DocTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void SetBrief()
         {

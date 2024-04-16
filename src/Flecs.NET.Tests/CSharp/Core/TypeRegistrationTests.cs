@@ -5,18 +5,13 @@ namespace Flecs.NET.Tests.CSharp.Core
 {
     public unsafe class TypeRegistrationTests
     {
-        public TypeRegistrationTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void TypeClassComponentSize()
         {
             using World world = World.Create();
 
             Type<Position>.Id(world);
-            Assert.Equal(sizeof(Position), Type<Position>.GetSize());
+            Assert.Equal(sizeof(Position), Type<Position>.Size);
         }
 
         [Fact]
@@ -25,7 +20,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             using World world = World.Create();
 
             Type<Tag>.Id(world);
-            Assert.Equal(0, Type<Tag>.GetSize());
+            Assert.Equal(0, Type<Tag>.Size);
         }
 
         [Fact]
@@ -34,7 +29,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             using World world = World.Create();
 
             Type<StandardEnum>.Id(world);
-            Assert.Equal(sizeof(StandardEnum), Type<StandardEnum>.GetSize());
+            Assert.Equal(sizeof(StandardEnum), Type<StandardEnum>.Size);
         }
 
         [Fact]
@@ -43,7 +38,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             using World world = World.Create();
 
             world.Component<Position>();
-            Assert.Equal(sizeof(Position), Type<Position>.GetSize());
+            Assert.Equal(sizeof(Position), Type<Position>.Size);
         }
 
         [Fact]
@@ -52,7 +47,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             using World world = World.Create();
 
             world.Component<Tag>();
-            Assert.Equal(0, Type<Tag>.GetSize());
+            Assert.Equal(0, Type<Tag>.Size);
         }
 
         [Fact]
@@ -61,7 +56,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             using World world = World.Create();
 
             world.Component<StandardEnum>();
-            Assert.Equal(sizeof(StandardEnum), Type<StandardEnum>.GetSize());
+            Assert.Equal(sizeof(StandardEnum), Type<StandardEnum>.Size);
         }
     }
 }

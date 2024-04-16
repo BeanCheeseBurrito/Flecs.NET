@@ -6,11 +6,6 @@ namespace Flecs.NET.Tests.Cpp
 {
     public unsafe class EventTests
     {
-        public EventTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         public void Event1IdEntity()
         {

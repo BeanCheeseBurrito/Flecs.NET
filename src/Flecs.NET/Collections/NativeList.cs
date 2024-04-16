@@ -194,6 +194,21 @@ namespace Flecs.NET.Collections
         }
 
         /// <summary>
+        ///     Ensures that the list has the specified count.
+        /// </summary>
+        /// <param name="newCount"></param>
+        public void EnsureCount(int newCount)
+        {
+            EnsureCapacity(newCount);
+
+            if (newCount <= Count)
+                return;
+
+            for (; Count < newCount; Count++)
+                Data[Count] = default;
+        }
+
+        /// <summary>
         ///     Returns the zero-based index of the first occurrence of a value in the <see cref="NativeList{T}"/>.
         /// </summary>
         /// <param name="item"></param>

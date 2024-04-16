@@ -5,11 +5,6 @@ namespace Flecs.NET.Tests.Cpp
 {
     public class SystemBuilderTests
     {
-        public SystemBuilderTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void BuilderAssignSameType()
         {

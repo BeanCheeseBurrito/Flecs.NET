@@ -8,11 +8,6 @@ namespace Flecs.NET.Tests.Cpp
 {
     public class ModuleTests
     {
-        public ModuleTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void Import()
         {

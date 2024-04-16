@@ -32,7 +32,7 @@ namespace Flecs.NET.Core
             if (id == 0)
                 id = Type<T>.Id(world);
 
-            Ecs.Assert(Type<T>.GetSize() != 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
 
             _ref = ecs_ref_init_id(world, entity, id);
         }

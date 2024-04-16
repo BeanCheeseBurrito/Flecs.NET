@@ -13,11 +13,10 @@ namespace Flecs.NET.Tests.Cpp
     [SuppressMessage("ReSharper", "AccessToModifiedClosure")]
     public unsafe class QueryTests
     {
-        public static int InvokedCount { get; set; }
+        public static int InvokedCount;
 
         public QueryTests()
         {
-            FlecsInternal.Reset();
             InvokedCount = default;
         }
 

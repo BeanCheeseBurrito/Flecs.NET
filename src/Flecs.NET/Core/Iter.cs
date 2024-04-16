@@ -70,7 +70,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public World World()
         {
-            return new World(Handle->world, false);
+            return new World(Handle->world);
         }
 
         /// <summary>

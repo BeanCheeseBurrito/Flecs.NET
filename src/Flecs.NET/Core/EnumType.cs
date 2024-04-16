@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Runtime.CompilerServices;
+using System.Threading;
+using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -12,38 +14,39 @@ namespace Flecs.NET.Core
     /// <typeparam name="T"></typeparam>
     public static unsafe class EnumType<T>
     {
-        private static EnumPair[] _data = Array.Empty<EnumPair>();
+        private static NativeArray<EnumMember> _data;
 
-        /// <summary>
-        ///     Inits entities for an enum type and it's members.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="id"></param>
-        public static void Init(ecs_world_t* world, ulong id)
+        [SuppressMessage("Performance", "CA1810:Initialize reference type static fields inline")]
+        static EnumType()
         {
-            ecs_cpp_enum_init(world, id);
-
             Type type = typeof(T);
 
+            if (!typeof(T).IsEnum)
+                return;
+
             Array values = type.GetEnumValues();
-            _data = new EnumPair[values.Length];
+            _data = new NativeArray<EnumMember>(values.Length);
 
             for (int i = 0; i < values.Length; i++)
             {
-                // TODO: Fix CS8600 warning.
-#pragma warning disable CS8600
-                object obj = values.GetValue(i);
-#pragma warning restore CS8600
-
-                T member = (T)obj!;
+                object obj = values.GetValue(i)!;
                 int value = Convert.ToInt32(obj, CultureInfo.InvariantCulture);
-
-                using NativeString nativeName = (NativeString)member.ToString();
-                ulong enumEntity = ecs_cpp_enum_constant_register(world, id, 0, nativeName, value);
-
-                _data[i] = new EnumPair(value, enumEntity);
+                _data[i] = new EnumMember(value, Interlocked.Increment(ref Ecs.CacheIndexCount));
             }
-            // TODO: Reimplement NativeAOT support after move to .NET Standard 2.1
+        }
+
+        internal static void Init(ecs_world_t* world, ulong id)
+        {
+            ecs_cpp_enum_init(world, id);
+
+            World w = new World(world);
+            for (int i = 0; i < _data.Length; i++)
+            {
+                T member = (T)(object)_data[i].Value;
+                using NativeString nativeName = (NativeString)member.ToString();
+                w.EnsureComponentIndex(_data[i].CacheIndex) =
+                    ecs_cpp_enum_constant_register(world, id, 0, nativeName, _data[i].Value);
+            }
         }
 
         /// <summary>
@@ -61,23 +64,24 @@ namespace Flecs.NET.Core
 
             for (int i = 0; i < _data.Length; i++)
             {
-                EnumPair enumPair = _data[i];
-                if (enumPair.Value == value)
-                    return enumPair.Id;
+                EnumMember data = _data[i];
+                if (data.Value == value)
+                    return new World(world).LookupComponentIndex(data.CacheIndex);
             }
 
-            throw new InvalidOperationException("Failed to find entity associated with enum member.");
+            Ecs.Error("Failed to find entity associated with enum member.");
+            return default;
         }
 
-        private struct EnumPair
+        private struct EnumMember
         {
-            public int Value { get; }
-            public ulong Id { get; }
+            public int Value;
+            public int CacheIndex;
 
-            public EnumPair(int value, ulong id)
+            public EnumMember(int value, int cacheIndex)
             {
                 Value = value;
-                Id = id;
+                CacheIndex = cacheIndex;
             }
         }
     }

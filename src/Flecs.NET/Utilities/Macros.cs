@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using Flecs.NET.Core;
 using static Flecs.NET.Bindings.Native;
 
@@ -390,6 +391,79 @@ namespace Flecs.NET.Utilities
         public static ulong TermRefId(ref ecs_term_ref_t termRef)
         {
             return termRef.id & ~EcsTermRefFlags;
+        }
+
+        /// <summary>
+        ///     Gets the symbol of a type.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetSymbolName<T>()
+        {
+            string name = typeof(T).ToString();
+
+            // File-local types are prefixed with a file name + GUID.
+            if (FlecsInternal.StripFileLocalTypeNameGuid)
+            {
+                int start = 0;
+                bool skip = false;
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for (int current = 0; current < name.Length;)
+                {
+                    char c = name[current];
+
+                    if (skip && c == '_')
+                    {
+                        skip = false;
+                        start = current + 2;
+                    }
+                    else if (!skip && c == '<')
+                    {
+                        skip = true;
+                        stringBuilder.Append(name.AsSpan(start, current - start));
+                        current = name.IndexOf('>', current) + 1;
+                        continue;
+                    }
+
+                    current++;
+                }
+
+                stringBuilder.Append(name.AsSpan(start));
+                name = stringBuilder.ToString();
+            }
+
+            {
+                name = name
+                    .Replace(Ecs.NativeNamespace, string.Empty, StringComparison.Ordinal)
+                    .Replace('+', '.')
+                    .Replace('[', '<')
+                    .Replace(']', '>');
+
+                int start = 0;
+                int current = 0;
+                bool skip = false;
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                foreach (char c in name)
+                {
+                    if (skip && (c == '<' || c == '.'))
+                    {
+                        start = current;
+                        skip = false;
+                    }
+                    else if (!skip && c == '`')
+                    {
+                        stringBuilder.Append(name.AsSpan(start, current - start));
+                        skip = true;
+                    }
+
+                    current++;
+                }
+
+                return stringBuilder.Append(name.AsSpan(start)).ToString();
+            }
         }
     }
 }

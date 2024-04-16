@@ -7,11 +7,6 @@ namespace Flecs.NET.Tests.Cpp
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     public unsafe class TableTests
     {
-        public TableTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void Each()
         {

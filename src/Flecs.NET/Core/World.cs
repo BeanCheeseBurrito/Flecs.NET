@@ -1,5 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -12,7 +14,6 @@ namespace Flecs.NET.Core
     public unsafe partial struct World : IDisposable, IEquatable<World>
     {
         private ecs_world_t* _handle;
-        private bool _owned;
 
         private ref BindingContext.WorldContext WorldContext => ref *EnsureBindingContext();
 
@@ -22,25 +23,12 @@ namespace Flecs.NET.Core
         public ref ecs_world_t* Handle => ref _handle;
 
         /// <summary>
-        ///     Represents whether or not the world is owned.
-        /// </summary>
-        public ref bool Owned => ref _owned;
-
-        /// <summary>
         ///     Constructs a world from an <see cref="ecs_world_t"/> pointer.
         /// </summary>
         /// <param name="handle">The world handle.</param>
-        /// <param name="owned">The owned boolean.</param>
-        /// <param name="overrideOsAbort"></param>
-        public World(ecs_world_t* handle, bool owned = true, bool overrideOsAbort = false)
+        public World(ecs_world_t* handle)
         {
             _handle = handle;
-            _owned = owned;
-
-            InitBuiltinComponents();
-
-            if (overrideOsAbort)
-                FlecsInternal.OverrideOsAbort();
         }
 
         /// <summary>
@@ -49,17 +37,32 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public static World Create(bool overrideOsAbort = true)
         {
-            return new World(ecs_init(), true, overrideOsAbort);
+            if (overrideOsAbort)
+                FlecsInternal.OverrideOsAbort();
+
+            World w = new World(ecs_init());
+            w.EnsureBindingContext();
+            w.InitBuiltinComponents();
+
+            return w;
         }
 
         /// <summary>
         ///     Creates a flecs world from an <see cref="ecs_world_t"/> pointer that is not owned.
         /// </summary>
         /// <param name="world">A C world.</param>
+        /// <param name="overrideOsAbort"></param>
         /// <returns>A newly created world.</returns>
-        public static World Create(ecs_world_t* world)
+        public static World Create(ecs_world_t* world, bool overrideOsAbort = true)
         {
-            return new World(world, false);
+            if (overrideOsAbort)
+                FlecsInternal.OverrideOsAbort();
+
+            World w = new World(world);
+            w.EnsureBindingContext();
+            w.InitBuiltinComponents();
+
+            return w;
         }
 
         /// <summary>
@@ -101,7 +104,9 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Reset()
         {
-            Ecs.Assert(Owned, nameof(ECS_INVALID_OPERATION));
+            Ecs.Assert(Handle != null, nameof(ECS_INVALID_OPERATION));
+            Ecs.Assert(Macros.IsStageOrWorld(Handle));
+            Ecs.Assert(!Macros.PolyIs(Handle, ecs_stage_t_magic));
             _ = ecs_fini(Handle);
             Handle = ecs_init();
         }
@@ -261,7 +266,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public World GetStage(int stageId)
         {
-            return new World(ecs_get_stage(Handle, stageId), false);
+            return new World(ecs_get_stage(Handle, stageId));
         }
 
         /// <summary>
@@ -279,7 +284,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public World GetWorld()
         {
-            return new World(Handle == null ? null : ecs_get_world(Handle), false);
+            return new World(Handle == null ? null : ecs_get_world(Handle));
         }
 
         /// <summary>
@@ -376,7 +381,6 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Lookup(string name, bool searchPath = true)
         {
-
             using NativeString nativeName = (NativeString)name;
 
             return new Entity(
@@ -2347,7 +2351,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Entity<T>(string name)
         {
-            return new Entity(Handle, Type<T>.IdExplicit(Handle, name, true, 0, false));
+            return new Entity(Handle, Type<T>.IdExplicit(Handle, name, 0, false));
         }
 
         /// <summary>
@@ -2685,7 +2689,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Module<TModule>(string name = "") where TModule : IFlecsModule, new()
         {
-            ulong result = Type<TModule>.Id(Handle, null, false);
+            ulong result = Type<TModule>.Id(Handle, null);
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -3355,21 +3359,66 @@ namespace Flecs.NET.Core
             return ptr;
         }
 
+        internal ref ulong EnsureComponentIndex(int index)
+        {
+            ref NativeList<ulong> cache = ref ((BindingContext.WorldContext*)ecs_get_binding_ctx(Handle))->ComponentCache;
+            cache.EnsureCount(index + 1);
+            return ref cache.Data[index];
+        }
+
+        internal ref ulong LookupComponentIndex(int index)
+        {
+            ref NativeList<ulong> cache = ref ((BindingContext.WorldContext*)ecs_get_binding_ctx(Handle))->ComponentCache;
+
+            if (index >= cache.Count)
+                return ref Unsafe.NullRef<ulong>();
+
+            ref ulong cachedId = ref cache.Data[index];
+
+            if (cachedId == 0)
+                return ref Unsafe.NullRef<ulong>();
+
+            return ref cachedId;
+        }
+
         /// <summary>
+        ///     Returns native pointer to world.
         /// </summary>
         /// <param name="world"></param>
         /// <returns></returns>
-        public static implicit operator ecs_world_t*(World world)
+        public static ecs_world_t* To(World world)
         {
             return world.Handle;
         }
 
         /// <summary>
+        ///     Returns world wrapper for native world pointer.
         /// </summary>
+        /// <param name="world"></param>
         /// <returns></returns>
-        public ecs_world_t* To()
+        public static World From(ecs_world_t* world)
         {
-            return Handle;
+            return new World(world);
+        }
+
+        /// <summary>
+        ///     Returns native pointer to world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <returns></returns>
+        public static implicit operator ecs_world_t*(World world)
+        {
+            return To(world);
+        }
+
+        /// <summary>
+        ///     Returns world wrapper for native world pointer.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <returns></returns>
+        public static implicit operator World(ecs_world_t* world)
+        {
+            return From(world);
         }
 
         /// <summary>

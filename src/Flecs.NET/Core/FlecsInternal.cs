@@ -46,14 +46,6 @@ namespace Flecs.NET.Core
             IsOsApiOverridden = true;
         }
 
-        /// <summary>
-        ///     Resets all type ids.
-        /// </summary>
-        public static void Reset()
-        {
-            ResetCount++;
-        }
-
         internal static ulong ComponentRegister(
             ecs_world_t* world,
             ulong id,

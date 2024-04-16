@@ -5,11 +5,6 @@ namespace Flecs.NET.Tests.Cpp
 {
     public unsafe class PathTests
     {
-        public PathTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void Name()
         {
@@ -121,32 +116,6 @@ namespace Flecs.NET.Tests.Cpp
 
             parentE = parent.Lookup("::foo.bar.hello.world");
             Assert.True(e == parentE);
-        }
-
-        [Fact]
-        private void EntityLookupFrom0()
-        {
-            using World world = World.Create();
-
-            Entity foo = world.Entity("foo");
-            Assert.True(world.Lookup("foo") == foo);
-
-            Entity dummy = default;
-
-            Assert.Throws<Ecs.AssertionException>(() => dummy.Lookup("foo"));
-        }
-
-        [Fact]
-        private void EntityLookupFrom0WithWorld()
-        {
-            using World world = World.Create();
-
-            Entity foo = world.Entity("foo");
-            Assert.True(world.Lookup("foo") == foo);
-
-            Entity dummy = world.Entity(0);
-
-            Assert.Throws<Ecs.AssertionException>(() => dummy.Lookup("foo"));
         }
 
         [Fact]

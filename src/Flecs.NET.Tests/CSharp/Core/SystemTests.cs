@@ -5,11 +5,6 @@ namespace Flecs.NET.Tests.CSharp.Core
 {
     public unsafe class SystemTests
     {
-        public SystemTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void IterDelegateCallback()
         {

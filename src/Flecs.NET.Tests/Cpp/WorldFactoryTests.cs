@@ -5,11 +5,6 @@ namespace Flecs.NET.Tests.Cpp
 {
     public unsafe class WorldFactoryTests
     {
-        public WorldFactoryTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void Entity()
         {

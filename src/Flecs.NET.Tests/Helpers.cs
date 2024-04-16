@@ -1,9 +1,9 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Core;
 using Xunit;
 
 [assembly: SuppressMessage("Usage", "CA1050")]
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace Test
 {
@@ -171,49 +171,50 @@ public struct MyModule : IFlecsModule
 
 public struct Pod
 {
-    public int Value { get; set; }
+    [ThreadStatic]
+    public static int CtorInvoked;
+    [ThreadStatic]
+    public static int DtorInvoked;
+    [ThreadStatic]
+    public static int MoveInvoked;
+    [ThreadStatic]
+    public static int CopyInvoked;
 
-    public static int CtorInvoked { get; set; }
-    public static int DtorInvoked { get; set; }
-    public static int MoveInvoked { get; set; }
-    public static int CopyInvoked { get; set; }
+    public int Value { get; set; }
 
     public Pod(int value)
     {
         Value = value;
     }
 
-    static Pod()
+    public static TypeHooks<Pod> TypeHooks = new TypeHooks<Pod>
     {
-        Type<Pod>.TypeHooks = new TypeHooks<Pod>
+        Ctor = (ref Pod data, TypeInfo typeInfo) =>
         {
-            Ctor = (ref Pod data, TypeInfo typeInfo) =>
-            {
-                CtorInvoked++;
-                data = default;
-            },
-            Dtor = (ref Pod data, TypeInfo typeInfo) =>
-            {
-                DtorInvoked++;
-                data = default;
-            },
-            Move = (ref Pod dst, ref Pod src, TypeInfo typeInfo) =>
-            {
-                MoveInvoked++;
-                dst = src;
-                src = default;
-            },
-            Copy = (ref Pod dst, ref Pod src, TypeInfo typeInfo) =>
-            {
-                CopyInvoked++;
-                dst = src;
-            },
+            CtorInvoked++;
+            data = default;
+        },
+        Dtor = (ref Pod data, TypeInfo typeInfo) =>
+        {
+            DtorInvoked++;
+            data = default;
+        },
+        Move = (ref Pod dst, ref Pod src, TypeInfo typeInfo) =>
+        {
+            MoveInvoked++;
+            dst = src;
+            src = default;
+        },
+        Copy = (ref Pod dst, ref Pod src, TypeInfo typeInfo) =>
+        {
+            CopyInvoked++;
+            dst = src;
+        },
 
-            OnAdd = (Iter it, Field<Pod> pod) => { },
-            OnSet = (Iter it, Field<Pod> pod) => { },
-            OnRemove = (Iter it, Field<Pod> pod) => { }
-        };
-    }
+        OnAdd = (Iter it, Field<Pod> pod) => { },
+        OnSet = (Iter it, Field<Pod> pod) => { },
+        OnRemove = (Iter it, Field<Pod> pod) => { }
+    };
 }
 
 namespace Namespace
