@@ -22,7 +22,7 @@ namespace Flecs.NET.Benchmarks.Core
             Entities = new Entity[EntityCount];
 
             World.Component<Tag>();
-            TagId = Type<Tag>.RawId;
+            TagId = World.Component<Tag>();
 
             for (int i = 0; i < EntityCount; i++)
                 Entities[i] = World.Entity();
