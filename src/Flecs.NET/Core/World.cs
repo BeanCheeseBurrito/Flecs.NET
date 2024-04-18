@@ -376,17 +376,20 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Lookup entity by name.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="searchPath"></param>
-        /// <returns></returns>
-        public Entity Lookup(string name, bool searchPath = true)
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <returns>The entity if found, else 0.</returns>
+        public Entity Lookup(string path, bool recursive = true)
         {
-            using NativeString nativeName = (NativeString)name;
+            if (string.IsNullOrEmpty(path))
+                return new Entity(Handle, 0);
+
+            using NativeString nativePath = (NativeString)path;
 
             return new Entity(
                 Handle,
-                ecs_lookup_path_w_sep(Handle, 0, nativeName,
-                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.Bool(searchPath))
+                ecs_lookup_path_w_sep(Handle, 0, nativePath,
+                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.Bool(recursive))
             );
         }
 
@@ -3495,6 +3498,144 @@ namespace Flecs.NET.Core
         public Table Table()
         {
             return new Table(Handle);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, out Entity entity)
+        {
+            return TryLookup(path, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, bool recursive, out Entity entity)
+        {
+            return (entity = Lookup(path, recursive)) != 0;
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, out ulong entity)
+        {
+            return TryLookup(path, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, bool recursive, out ulong entity)
+        {
+            return (entity = Lookup(path, recursive)) != 0;
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="recursive">If looking up as path, recursively traverse up the tree.</param>
+        /// <returns>The entity if found, else 0.</returns>
+        public Entity LookupSymbol(string symbol, bool lookupAsPath = false, bool recursive = false)
+        {
+            if (string.IsNullOrEmpty(symbol))
+                return new Entity(Handle, 0);
+
+            using NativeString nativeSymbol = (NativeString)symbol;
+
+            return new Entity(
+                Handle,
+                ecs_lookup_symbol(Handle, nativeSymbol, Macros.Bool(lookupAsPath), Macros.Bool(recursive))
+            );
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, out Entity entity)
+        {
+            return TryLookupSymbol(symbol, false, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, bool lookupAsPath, out Entity entity)
+        {
+            return TryLookupSymbol(symbol, lookupAsPath, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="recursive">If looking up as path, recursively traverse up the tree.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, bool lookupAsPath, bool recursive, out Entity entity)
+        {
+            return (entity = LookupSymbol(symbol, lookupAsPath, recursive)) != 0;
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, out ulong entity)
+        {
+            return TryLookupSymbol(symbol, false, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, bool lookupAsPath, out ulong entity)
+        {
+            return TryLookupSymbol(symbol, lookupAsPath, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="recursive">If looking up as path, recursively traverse up the tree.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, bool lookupAsPath, bool recursive, out ulong entity)
+        {
+            return (entity = LookupSymbol(symbol, lookupAsPath, recursive)) != 0;
         }
     }
 }

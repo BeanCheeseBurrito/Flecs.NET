@@ -93,7 +93,23 @@ namespace Flecs.NET.Core
         {
             ref ulong cachedId = ref new World(world).LookupComponentIndex(CacheIndex);
             return Unsafe.IsNullRef(ref cachedId)
-                ? RegisterComponent(world, true, true, 0, null)
+                ? RegisterComponent(world, true, true, 0, "")
+                : cachedId;
+        }
+
+        /// <summary>
+        ///     Returns the id for this type with the provided world. Registers a new component id if it doesn't exist.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="ignoreScope"></param>
+        /// <param name="isComponent"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static ulong Id(ecs_world_t* world, bool ignoreScope, bool isComponent, ulong id)
+        {
+            ref ulong cachedId = ref new World(world).LookupComponentIndex(CacheIndex);
+            return Unsafe.IsNullRef(ref cachedId)
+                ? RegisterComponent(world, ignoreScope, isComponent, id, "")
                 : cachedId;
         }
 
@@ -106,7 +122,7 @@ namespace Flecs.NET.Core
         /// <param name="id"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static ulong Id(ecs_world_t* world, bool ignoreScope, bool isComponent, ulong id, string? name)
+        public static ulong Id(ecs_world_t* world, bool ignoreScope, bool isComponent, ulong id, string name)
         {
             ref ulong cachedId = ref new World(world).LookupComponentIndex(CacheIndex);
             return Unsafe.IsNullRef(ref cachedId)
@@ -122,17 +138,11 @@ namespace Flecs.NET.Core
         /// <param name="isComponent">If true, type will be created with full component registration. (size, alignment, enums, hooks)</param>
         /// <param name="id">If an existing entity is found with this id, attempt to alias it. Otherwise, register new entity with this id.</param>
         /// <param name="name">If an existing entity is found with this name, attempt to alias it. Otherwise, register new entity with this name.</param>
-        /// <typeparam name="T">The type to register with the ECS world.</typeparam>
         /// <returns></returns>
-        public static ulong RegisterComponent(World world, bool ignoreScope, bool isComponent, ulong id, string? name)
+        public static ulong RegisterComponent(World world, bool ignoreScope, bool isComponent, ulong id, string name)
         {
             // If a name or id is provided, the type is being used to alias an already existing entity.
-            Entity e = default;
-
-            if (id != 0)
-                e = new Entity(world, id);
-            else if (!string.IsNullOrEmpty(name))
-                e = world.Lookup(name, false);
+            Entity e = id != 0 ? new Entity(world, id) : world.Lookup(name, false);
 
             // If an existing entity is found, ensure that the size and alignment match the entity and return its id.
             if (isComponent && e != 0)
@@ -155,14 +165,13 @@ namespace Flecs.NET.Core
 
             // Check if an entity exists with the same symbol as this type. This is normally used
             // for pairing Flecs.NET.Bindings.Native types with their C counterparts.
-            using NativeString nativeSymbol = (NativeString)FullName;
-            ulong symbol = ecs_lookup_symbol(world, nativeSymbol, Macros.False, Macros.False);
-            if (symbol != 0)
+            if (world.TryLookupSymbol(FullName, out Entity symbol))
             {
                 id = symbol;
-                name = world.Entity(id).Path();
+                name = symbol.Path();
             }
 
+            using NativeString nativeSymbol = (NativeString)FullName;
             using NativeString nativeName = string.IsNullOrEmpty(name)
                 ? (NativeString)GetTrimmedTypeName(world)
                 : (NativeString)name;

@@ -39,7 +39,7 @@ namespace Flecs.NET.Core
         /// <param name="world"></param>
         public Component(ecs_world_t* world)
         {
-            _untypedComponent = new UntypedComponent(world, Type<TComponent>.Id(world, false, true, 0, null));
+            _untypedComponent = new UntypedComponent(world, Type<TComponent>.Id(world, false, true, 0));
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Flecs.NET.Core
         /// <param name="id"></param>
         public Component(ecs_world_t* world, ulong id)
         {
-            _untypedComponent = new UntypedComponent(world, Type<TComponent>.Id(world, false, true, id, null));
+            _untypedComponent = new UntypedComponent(world, Type<TComponent>.Id(world, false, true, id));
         }
 
         /// <summary>
