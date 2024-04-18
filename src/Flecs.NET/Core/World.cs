@@ -386,7 +386,7 @@ namespace Flecs.NET.Core
             return new Entity(
                 Handle,
                 ecs_lookup_path_w_sep(Handle, 0, nativeName,
-                    BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.Bool(searchPath))
+                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.Bool(searchPath))
             );
         }
 
@@ -1482,7 +1482,7 @@ namespace Flecs.NET.Core
             using NativeString nativeName = (NativeString)name;
 
             ulong entity = ecs_lookup_path_w_sep(Handle, 0, nativeName,
-                BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.True);
+                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.True);
 
             Ecs.Assert(entity != 0, nameof(ECS_INVALID_PARAMETER));
 
@@ -2295,13 +2295,25 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get component with name.
+        ///     Get component associated with name.
         /// </summary>
+        /// <param name="name"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public Component<T> Component<T>(string name)
         {
             return new Component<T>(Handle, name);
+        }
+
+        /// <summary>
+        ///     Get component with associated with id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Component<T> Component<T>(ulong id)
+        {
+            return new Component<T>(Handle, id);
         }
 
         /// <summary>
@@ -2351,7 +2363,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Entity<T>(string name)
         {
-            return new Entity(Handle, Type<T>.IdExplicit(Handle, name, 0, false));
+            return new Entity(Handle, Type<T>.Id(Handle, false, false, 0, name));
         }
 
         /// <summary>
@@ -2689,13 +2701,13 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Module<TModule>(string name = "") where TModule : IFlecsModule, new()
         {
-            ulong result = Type<TModule>.Id(Handle, null);
+            ulong result = Type<TModule>.Id(Handle);
 
             if (!string.IsNullOrEmpty(name))
             {
                 using NativeString nativeName = (NativeString)name;
                 ecs_add_path_w_sep(Handle, result, 0, nativeName,
-                    BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator);
+                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator);
             }
 
             ecs_set_scope(Handle, result);

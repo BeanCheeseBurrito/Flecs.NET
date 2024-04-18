@@ -89,7 +89,7 @@ namespace Flecs.NET.Core
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
             desc.sep = BindingContext.DefaultSeparator;
-            desc.root_sep = BindingContext.DefaultRootSeparator;
+            desc.root_sep = BindingContext.DefaultSeparator;
 
             _id = new Id(world, ecs_entity_init(world, &desc));
         }
@@ -238,7 +238,7 @@ namespace Flecs.NET.Core
         /// <param name="sep"></param>
         /// <param name="initSep"></param>
         /// <returns></returns>
-        public string Path(string sep = Ecs.DefaultSeparator, string initSep = Ecs.DefaultRootSeparator)
+        public string Path(string sep = Ecs.DefaultSeparator, string initSep = Ecs.DefaultSeparator)
         {
             return PathFrom(0, sep, initSep);
         }
@@ -250,7 +250,7 @@ namespace Flecs.NET.Core
         /// <param name="sep"></param>
         /// <param name="initSep"></param>
         /// <returns></returns>
-        public string PathFrom(ulong parent, string sep = Ecs.DefaultSeparator, string initSep = Ecs.DefaultRootSeparator)
+        public string PathFrom(ulong parent, string sep = Ecs.DefaultSeparator, string initSep = Ecs.DefaultSeparator)
         {
             using NativeString nativeSep = (NativeString)sep;
             using NativeString nativeInitSep = (NativeString)initSep;
@@ -265,7 +265,7 @@ namespace Flecs.NET.Core
         /// <param name="initSep"></param>
         /// <typeparam name="TParent"></typeparam>
         /// <returns></returns>
-        public string PathFrom<TParent>(string sep = Ecs.DefaultSeparator, string initSep = Ecs.DefaultRootSeparator)
+        public string PathFrom<TParent>(string sep = Ecs.DefaultSeparator, string initSep = Ecs.DefaultSeparator)
         {
             return PathFrom(Type<TParent>.Id(World), sep, initSep);
         }
@@ -1084,7 +1084,7 @@ namespace Flecs.NET.Core
             Ecs.Assert(Id != 0, "invalid lookup from null handle");
             using NativeString nativePath = (NativeString)path;
             ulong id = ecs_lookup_path_w_sep(World, Id, nativePath,
-                BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.Bool(searchPath));
+                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.Bool(searchPath));
             return new Entity(World, id);
         }
 
@@ -1095,7 +1095,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has(ulong id)
         {
-            return ecs_has_id(World, Id, id) == 1;
+            return Macros.Bool(ecs_has_id(World, Id, id));
         }
 
         /// <summary>
@@ -1117,7 +1117,7 @@ namespace Flecs.NET.Core
         public bool Has<T>()
         {
             ulong typeId = Type<T>.Id(World);
-            bool result = ecs_has_id(World, Id, typeId) == 1;
+            bool result = Macros.Bool(ecs_has_id(World, Id, typeId));
 
             if (result)
                 return result;

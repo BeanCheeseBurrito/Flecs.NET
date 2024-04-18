@@ -875,13 +875,13 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity sys = world.Observer<Position>("::ns.MySystem")
+            Entity sys = world.Observer<Position>(".ns.MySystem")
                 .Event(Ecs.OnSet)
                 .Each((ref Position _) =>{ });
 
             Assert.Equal("MySystem", sys.Name());
 
-            Entity ns = world.Entity("::ns");
+            Entity ns = world.Entity(".ns");
             Assert.True(ns == sys.Parent());
         }
     }

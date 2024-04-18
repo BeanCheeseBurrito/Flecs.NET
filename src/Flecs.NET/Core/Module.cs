@@ -45,7 +45,7 @@ namespace Flecs.NET.Core
         {
             ulong scope = ecs_set_scope(world, 0);
 
-            Component<T> moduleComponent = new Component<T>(world, null);
+            Component<T> moduleComponent = new Component<T>(world);
             ecs_add_id(world, moduleComponent, EcsModule);
 
             ecs_set_scope(world, moduleComponent);

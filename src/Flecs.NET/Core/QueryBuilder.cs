@@ -74,7 +74,7 @@ namespace Flecs.NET.Core
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
             desc.sep = BindingContext.DefaultSeparator;
-            desc.root_sep = BindingContext.DefaultRootSeparator;
+            desc.root_sep = BindingContext.DefaultSeparator;
             Desc.entity = ecs_entity_init(World, &desc);
         }
 

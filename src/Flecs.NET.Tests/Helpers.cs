@@ -256,7 +256,7 @@ namespace Namespace
     {
         public void InitModule(ref World world)
         {
-            world.Module<NamedModule>("::my_scope.NamedModule");
+            world.Module<NamedModule>(".my_scope.NamedModule");
             world.Component<Position>("Position");
         }
     }
@@ -273,7 +273,7 @@ namespace Namespace
     {
         public void InitModule(ref World world)
         {
-            world.Module<NamedModuleInRoot>("::NamedModuleInRoot");
+            world.Module<NamedModuleInRoot>(".NamedModuleInRoot");
             world.Component<Position>();
         }
     }
@@ -283,9 +283,9 @@ namespace Namespace
         public void InitModule(ref World world)
         {
             Entity m = world.Module<ReparentModule>();
-            m.ChildOf(world.Entity("::parent"));
+            m.ChildOf(world.Entity(".parent"));
 
-            Entity other = world.Entity("::Namespace.ReparentModule");
+            Entity other = world.Entity(".Namespace.ReparentModule");
             Assert.True(other != 0);
             Assert.True(other != m);
         }

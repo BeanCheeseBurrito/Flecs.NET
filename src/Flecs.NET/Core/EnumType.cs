@@ -12,7 +12,7 @@ namespace Flecs.NET.Core
     ///     A static class for registering enum types and it's members.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public static unsafe class EnumType<T>
+    public static unsafe class EnumType<T> // TODO: Remove EnumType and merge enum code in Type<T> class.
     {
         private static NativeArray<EnumMember> _data;
 

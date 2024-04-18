@@ -45,7 +45,7 @@ namespace Flecs.NET.Core
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
             desc.sep = BindingContext.DefaultSeparator;
-            desc.root_sep = BindingContext.DefaultRootSeparator;
+            desc.root_sep = BindingContext.DefaultSeparator;
             AlertDesc.entity = ecs_entity_init(World, &desc);
         }
 
@@ -237,7 +237,7 @@ namespace Flecs.NET.Core
 
             ulong id = Type<T>.Id(World);
             ulong memberId = ecs_lookup_path_w_sep(World, id, nativeMember,
-                BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.False);
+                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.False);
 
             Var(var);
 

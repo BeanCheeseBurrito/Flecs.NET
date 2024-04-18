@@ -525,12 +525,12 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity sys = world.Routine("::ns.MySystem")
+            Entity sys = world.Routine(".ns.MySystem")
                 .Each((Entity e) => { });
 
             Assert.Equal("MySystem", sys.Name());
 
-            Entity ns = world.Entity("::ns");
+            Entity ns = world.Entity(".ns");
             Assert.True(ns == sys.Parent());
         }
     }

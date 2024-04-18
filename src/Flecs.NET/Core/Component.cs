@@ -34,90 +34,32 @@ namespace Flecs.NET.Core
         public ref Id Id => ref Entity.Id;
 
         /// <summary>
-        ///     Registers a component.
-        ///     If the component was already registered, this operation will return a handle to the existing component.
+        ///     Registers this type with the provided world or returns an existing id if found.
+        /// </summary>
+        /// <param name="world"></param>
+        public Component(ecs_world_t* world)
+        {
+            _untypedComponent = new UntypedComponent(world, Type<TComponent>.Id(world, false, true, 0, null));
+        }
+
+        /// <summary>
+        ///     Registers this type with the provided world or returns an existing id if found.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="id"></param>
+        public Component(ecs_world_t* world, ulong id)
+        {
+            _untypedComponent = new UntypedComponent(world, Type<TComponent>.Id(world, false, true, id, null));
+        }
+
+        /// <summary>
+        ///     Registers this type with the provided world or returns an existing id if found.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
-        /// <param name="id"></param>
-        public Component(ecs_world_t* world, string? name = null, ulong id = 0)
+        public Component(ecs_world_t* world, string name)
         {
-            bool implicitName = false;
-
-            if (string.IsNullOrEmpty(name))
-            {
-                name = Type<TComponent>.TypeName;
-                implicitName = true;
-            }
-
-            using NativeString nativeSymbolName = (NativeString)Type<TComponent>.SymbolName;
-
-            if (Type<TComponent>.TryLookup(world, out ulong registered))
-            {
-                id = registered;
-
-                using NativeString nativeName = (NativeString)name;
-
-                FlecsInternal.ComponentValidate(
-                    world, id, nativeName,
-                    nativeSymbolName,
-                    Type<TComponent>.Size,
-                    Type<TComponent>.Alignment,
-                    Macros.Bool(implicitName)
-                );
-            }
-            else
-            {
-                if (implicitName && ecs_get_scope(world) != 0)
-                {
-                    int start = name.IndexOf('<', StringComparison.Ordinal);
-                    int lastElem = 0;
-
-                    if (start != -1)
-                    {
-                        int index = start;
-
-                        while (index != 0 && name[index] != '.' && name[index] != ':')
-                            index--;
-
-                        if (name[index] == '.' || name[index] == ':')
-                            lastElem = index;
-                    }
-                    else
-                    {
-                        lastElem = name.LastIndexOf('.');
-
-                        if (lastElem == -1)
-                            lastElem = name.LastIndexOf(':');
-                    }
-
-                    name = name[(lastElem + 1)..];
-                }
-
-                using NativeString nativeName = (NativeString)name;
-                byte existing;
-
-                id = FlecsInternal.ComponentRegister(
-                    world, id, nativeName, nativeSymbolName,
-                    Type<TComponent>.Size, Type<TComponent>.Alignment,
-                    Macros.Bool(implicitName), &existing
-                );
-
-                id = Type<TComponent>.IdExplicit(world, name, id);
-
-                if (Type<TComponent>.Size != 0 && existing == Macros.False &&
-                    RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>())
-                {
-                    ecs_type_hooks_t typeHooksDesc = default;
-                    typeHooksDesc.ctor = BindingContext<TComponent>.DefaultManagedCtorPointer;
-                    typeHooksDesc.dtor = BindingContext<TComponent>.DefaultManagedDtorPointer;
-                    typeHooksDesc.move = BindingContext<TComponent>.DefaultManagedMovePointer;
-                    typeHooksDesc.copy = BindingContext<TComponent>.DefaultManagedCopyPointer;
-                    ecs_set_hooks_id(world, id, &typeHooksDesc);
-                }
-            }
-
-            _untypedComponent = new UntypedComponent(world, id);
+            _untypedComponent = new UntypedComponent(world, Type<TComponent>.Id(world, false, true, 0, name));
         }
 
         // TODO: Port opaque stuff here later

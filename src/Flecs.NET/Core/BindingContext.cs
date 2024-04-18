@@ -16,7 +16,6 @@ namespace Flecs.NET.Core
         private static readonly BindingContextCleanup _cleanup = new BindingContextCleanup();
 
         internal static readonly byte* DefaultSeparator = (byte*)Marshal.StringToHGlobalAnsi(Ecs.DefaultSeparator);
-        internal static readonly byte* DefaultRootSeparator = (byte*)Marshal.StringToHGlobalAnsi(Ecs.DefaultRootSeparator);
 
 #if NET5_0_OR_GREATER
         internal static readonly IntPtr ActionCallbackPointer =
@@ -390,7 +389,6 @@ namespace Flecs.NET.Core
             ~BindingContextCleanup()
             {
                 Memory.Free(DefaultSeparator);
-                Memory.Free(DefaultRootSeparator);
             }
         }
     }

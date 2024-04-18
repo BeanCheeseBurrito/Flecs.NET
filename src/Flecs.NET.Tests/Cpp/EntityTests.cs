@@ -47,7 +47,7 @@ namespace Flecs.NET.Tests.Cpp
             world.SetScope(prev);
 
             Assert.Equal("Bar", child.Name());
-            Assert.Equal("::Foo.Bar", child.Path());
+            Assert.Equal(".Foo.Bar", child.Path());
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace Flecs.NET.Tests.Cpp
             world.SetScope(prev);
 
             Assert.Equal("Hello", child.Name());
-            Assert.Equal("::Foo.Bar.Hello", child.Path());
+            Assert.Equal(".Foo.Bar.Hello", child.Path());
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity entity = new Entity(world, "Foo.Bar");
             Assert.True(entity != 0);
             Assert.Equal("Bar", entity.Name());
-            Assert.Equal("::Foo.Bar", entity.Path());
+            Assert.Equal(".Foo.Bar", entity.Path());
 
             Entity prev = world.SetScope(entity);
 
@@ -88,7 +88,7 @@ namespace Flecs.NET.Tests.Cpp
             world.SetScope(prev);
 
             Assert.Equal("World", child.Name());
-            Assert.Equal("::Foo.Bar.Hello.World", child.Path());
+            Assert.Equal(".Foo.Bar.Hello.World", child.Path());
         }
 
         [Fact]
@@ -1767,7 +1767,7 @@ namespace Flecs.NET.Tests.Cpp
 
             using ScopedWorld scope = world.Scope(parent);
             Entity child = world.Entity("child");
-            Assert.Equal("::parent.child", child.Path());
+            Assert.Equal(".parent.child", child.Path());
         }
 
         [Fact]
@@ -1783,7 +1783,7 @@ namespace Flecs.NET.Tests.Cpp
             using ScopedWorld childScope = world.Scope(child);
             Entity grandchild = world.Entity("grandchild");
 
-            Assert.Equal("::parent.child.grandchild", grandchild.Path());
+            Assert.Equal(".parent.child.grandchild", grandchild.Path());
             Assert.Equal("child.grandchild", grandchild.PathFrom(parent));
         }
 
@@ -1799,7 +1799,7 @@ namespace Flecs.NET.Tests.Cpp
             using ScopedWorld childScope = world.Scope(child);
             Entity grandchild = world.Entity("grandchild");
 
-            Assert.Equal("::Parent.child.grandchild", grandchild.Path());
+            Assert.Equal(".Parent.child.grandchild", grandchild.Path());
             Assert.Equal("child.grandchild", grandchild.PathFrom<Parent>());
         }
 
@@ -1827,7 +1827,7 @@ namespace Flecs.NET.Tests.Cpp
             using ScopedWorld childScope = world.Scope(child);
             Entity grandchild = world.Entity("grandchild");
 
-            Assert.Equal("::parent.child.grandchild", grandchild.Path());
+            Assert.Equal(".parent.child.grandchild", grandchild.Path());
             Assert.Equal("child_grandchild", grandchild.PathFrom(parent, "_"));
         }
 
@@ -1843,7 +1843,7 @@ namespace Flecs.NET.Tests.Cpp
             using ScopedWorld childScope = world.Scope(child);
             Entity grandchild = world.Entity("grandchild");
 
-            Assert.Equal("::Parent.child.grandchild", grandchild.Path());
+            Assert.Equal(".Parent.child.grandchild", grandchild.Path());
             Assert.Equal("child_grandchild", grandchild.PathFrom<Parent>("_"));
         }
 
@@ -1856,7 +1856,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity != 0);
             Assert.Equal("Bar", entity.Name());
 
-            Assert.Equal("::Foo.Bar", entity.Path());
+            Assert.Equal(".Foo.Bar", entity.Path());
         }
 
         [Fact]
@@ -2621,9 +2621,9 @@ namespace Flecs.NET.Tests.Cpp
                 Assert.True(world.Lookup("C2") == e2);
                 Assert.True(world.Lookup("C3") == e3);
 
-                Assert.True(world.Lookup("::P.C1") == e1);
-                Assert.True(world.Lookup("::P.C2") == e2);
-                Assert.True(world.Lookup("::P.C3") == e3);
+                Assert.True(world.Lookup(".P.C1") == e1);
+                Assert.True(world.Lookup(".P.C2") == e2);
+                Assert.True(world.Lookup(".P.C3") == e3);
             });
 
             Assert.True(world.Lookup("C1") == 0);
@@ -2669,12 +2669,12 @@ namespace Flecs.NET.Tests.Cpp
                 {
                     Entity gchild = world.Entity("GC");
                     Assert.True(gchild == world.Lookup("GC"));
-                    Assert.True(gchild == world.Lookup("::P.C.GC"));
+                    Assert.True(gchild == world.Lookup(".P.C.GC"));
                 });
 
                 Assert.True(world.Lookup("C") == child);
-                Assert.True(world.Lookup("::P.C") == child);
-                Assert.True(world.Lookup("::P.C.GC") != 0);
+                Assert.True(world.Lookup(".P.C") == child);
+                Assert.True(world.Lookup(".P.C.GC") != 0);
             });
 
             Assert.True(0 == world.Lookup("C"));
@@ -2701,12 +2701,12 @@ namespace Flecs.NET.Tests.Cpp
                 {
                     Entity gchild = world.Entity("C");
                     Assert.True(gchild == world.Lookup("C"));
-                    Assert.True(gchild == world.Lookup("::P.C.C"));
+                    Assert.True(gchild == world.Lookup(".P.C.C"));
                 });
 
                 Assert.True(world.Lookup("C") == child);
-                Assert.True(world.Lookup("::P.C") == child);
-                Assert.True(world.Lookup("::P.C.C") != 0);
+                Assert.True(world.Lookup(".P.C") == child);
+                Assert.True(world.Lookup(".P.C.C") != 0);
             });
 
             Assert.True(0 == world.Lookup("C"));
@@ -2768,7 +2768,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Bar", e.Name());
-            Assert.Equal("::Foo.Bar", e.Path());
+            Assert.Equal(".Foo.Bar", e.Path());
         }
 
 
@@ -2791,7 +2791,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Foo", e.Name());
-            Assert.Equal("::Parent.Foo", e.Path());
+            Assert.Equal(".Parent.Foo", e.Path());
         }
 
         [Fact]
@@ -2813,7 +2813,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Bar", e.Name());
-            Assert.Equal("::Parent.Foo.Bar", e.Path());
+            Assert.Equal(".Parent.Foo.Bar", e.Path());
         }
 
         [Fact]
@@ -2835,11 +2835,11 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(parent.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Parent", parent.Name());
-            Assert.Equal("::Parent", parent.Path());
+            Assert.Equal(".Parent", parent.Path());
 
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Bar", e.Name());
-            Assert.Equal("::Parent.Foo.Bar", e.Path());
+            Assert.Equal(".Parent.Foo.Bar", e.Path());
         }
 
         [Fact]
@@ -2910,7 +2910,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(tag));
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Foo", e.Name());
-            Assert.Equal("::Parent.Foo", e.Path());
+            Assert.Equal(".Parent.Foo", e.Path());
         }
 
         [Fact]
@@ -2940,7 +2940,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(tag));
             Assert.True(e.Has<EcsIdentifier>(EcsName));
             Assert.Equal("Bar", e.Name());
-            Assert.Equal("::Parent.Foo.Bar", e.Path());
+            Assert.Equal(".Parent.Foo.Bar", e.Path());
         }
 
         [Fact]
@@ -3827,9 +3827,9 @@ namespace Flecs.NET.Tests.Cpp
 
             world.DeferEnd();
 
-            Assert.Equal("::e", e1.Path());
-            Assert.Equal("::p.f", f1.Path());
-            Assert.Equal("::q.g", g1.Path());
+            Assert.Equal(".e", e1.Path());
+            Assert.Equal(".p.f", f1.Path());
+            Assert.Equal(".q.g", g1.Path());
 
             Assert.True(e1 == e2);
             Assert.True(f1 == f2);
@@ -3946,9 +3946,9 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity e = world.Entity("::foo");
+            Entity e = world.Entity(".foo");
             Assert.Equal("foo", e.Name());
-            Assert.Equal("::foo", e.Path());
+            Assert.Equal(".foo", e.Path());
         }
 
         [Fact]
@@ -3958,11 +3958,11 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity p = world.Entity("parent");
             world.SetScope(p);
-            Entity e = world.Entity("::foo");
+            Entity e = world.Entity(".foo");
             world.SetScope(0);
 
             Assert.Equal("foo", e.Name());
-            Assert.Equal("::foo", e.Path());
+            Assert.Equal(".foo", e.Path());
         }
 
         [Fact]
@@ -3973,7 +3973,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity<EntityType>();
 
             Assert.Equal("EntityType", e.Name());
-            Assert.Equal("::EntityType", e.Path());
+            Assert.Equal(".EntityType", e.Path());
 
             Entity e2 = world.Entity<EntityType>();
             Assert.True(e == e2);
@@ -3991,8 +3991,8 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(turretBase != 0);
             Assert.True(turretBase.Has(EcsChildOf, turret));
 
-            Assert.Equal("::Turret", turret.Path());
-            Assert.Equal("::Turret.Base", turretBase.Path());
+            Assert.Equal(".Turret", turret.Path());
+            Assert.Equal(".Turret.Base", turretBase.Path());
 
             Assert.Equal("Turret", turret.Symbol());
             Assert.Equal("Turret.Base", turretBase.Symbol());
@@ -4010,10 +4010,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(railgunHead.Has(EcsChildOf, railgun));
             Assert.True(railgunBeam.Has(EcsChildOf, railgun));
 
-            Assert.Equal("::Railgun", railgun.Path());
-            Assert.Equal("::Railgun.Base", railgunBase.Path());
-            Assert.Equal("::Railgun.Head", railgunHead.Path());
-            Assert.Equal("::Railgun.Beam", railgunBeam.Path());
+            Assert.Equal(".Railgun", railgun.Path());
+            Assert.Equal(".Railgun.Base", railgunBase.Path());
+            Assert.Equal(".Railgun.Head", railgunHead.Path());
+            Assert.Equal(".Railgun.Beam", railgunBeam.Path());
 
             Assert.Equal("Railgun", railgun.Symbol());
             Assert.Equal("Railgun.Head", railgunHead.Symbol());
@@ -4032,8 +4032,8 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(turretBase != 0);
             Assert.True(turretBase.Has(EcsChildOf, turret));
 
-            Assert.Equal("::Turret", turret.Path());
-            Assert.Equal("::Turret.Base", turretBase.Path());
+            Assert.Equal(".Turret", turret.Path());
+            Assert.Equal(".Turret.Base", turretBase.Path());
 
             Assert.Equal("Turret", turret.Symbol());
             Assert.Equal("Base", turretBase.Symbol());
@@ -4077,7 +4077,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity p = world.Entity<Parent>();
 
             Assert.Equal("EntityType", e.Name());
-            Assert.Equal("::Parent.EntityType", e.Path());
+            Assert.Equal(".Parent.EntityType", e.Path());
             Assert.True(e.Has(EcsChildOf, p));
 
             Entity e2 = world.Entity<Parent.EntityType>();

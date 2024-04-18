@@ -52,8 +52,8 @@
 //                 TestInteropModuleImport(world);
 //
 //                 world.Module<test::interop::module>();
-//                 world.Component<Position>("::test::interop::module::Position");
-//                 world.Component<Velocity>("::test::interop::module::Velocity");
+//                 world.Component<Position>(".test::interop::module::Position");
+//                 world.Component<Velocity>(".test::interop::module::Velocity");
 //             }
 //         };
 //
@@ -363,7 +363,7 @@
 //
 //             Entity c = world.Component<Module>();
 //             Ecs.Assert(c != 0);
-//             test_str(c.path().c_str(), "::Module");
+//             test_str(c.path().c_str(), ".Module");
 //         }
 //
 //         template <typename T>
@@ -905,9 +905,9 @@
 //                 Ecs.Assert(parent.lookup("C2") == e2);
 //                 Ecs.Assert(parent.lookup("C3") == e3);
 //
-//                 Ecs.Assert(world.lookup("::P::C1") == e1);
-//                 Ecs.Assert(world.lookup("::P::C2") == e2);
-//                 Ecs.Assert(world.lookup("::P::C3") == e3);
+//                 Ecs.Assert(world.lookup(".P::C1") == e1);
+//                 Ecs.Assert(world.lookup(".P::C2") == e2);
+//                 Ecs.Assert(world.lookup(".P::C3") == e3);
 //             });
 //
 //             Ecs.Assert(parent.lookup("C1") != 0);
@@ -1039,13 +1039,13 @@
 //                 var child = world.Entity("C").scope([&]{
 //                     var gchild = world.Entity("GC");
 //                     Ecs.Assert(gchild == world.lookup("GC"));
-//                     Ecs.Assert(gchild == world.lookup("::P::C::GC"));
+//                     Ecs.Assert(gchild == world.lookup(".P::C::GC"));
 //                 });
 //
 //                 // Ensure relative lookups work
 //                 Ecs.Assert(world.lookup("C") == child);
-//                 Ecs.Assert(world.lookup("::P::C") == child);
-//                 Ecs.Assert(world.lookup("::P::C::GC") != 0);
+//                 Ecs.Assert(world.lookup(".P::C") == child);
+//                 Ecs.Assert(world.lookup(".P::C::GC") != 0);
 //             });
 //
 //             Ecs.Assert(0 == world.lookup("C"));
@@ -1076,11 +1076,11 @@
 //
 //                 Ecs.Assert(CA == world.lookup("A"));
 //                 Ecs.Assert(CA == world.lookup("P::A"));
-//                 Ecs.Assert(CA == world.lookup("::P::A"));
-//                 Ecs.Assert(A == world.lookup("::A"));
+//                 Ecs.Assert(CA == world.lookup(".P::A"));
+//                 Ecs.Assert(A == world.lookup(".A"));
 //
 //                 Ecs.Assert(B == world.lookup("B"));
-//                 Ecs.Assert(B == world.lookup("::B"));
+//                 Ecs.Assert(B == world.lookup(".B"));
 //             });
 //         }
 //
@@ -1091,7 +1091,7 @@
 //
 //             var c = world.Component<Tag>();
 //             Ecs.Assert(c != Entity());
-//             test_str(c.path().c_str(), "::Tag");
+//             test_str(c.path().c_str(), ".Tag");
 //             Ecs.Assert(c != flecs::PairIsTag);
 //         }
 //
@@ -1102,7 +1102,7 @@
 //
 //             var c = world.Entity("Tag");
 //             Ecs.Assert(c != Entity());
-//             test_str(c.path().c_str(), "::Tag");
+//             test_str(c.path().c_str(), ".Tag");
 //             Ecs.Assert(c != flecs::PairIsTag);
 //         }
 //
@@ -1116,7 +1116,7 @@
 //
 //             var c = world.Component<TemplateType<Position>>();
 //             test_str(c.name().c_str(), "TemplateType<Position>");
-//             test_str(c.path().c_str(), "::TemplateType<Position>");
+//             test_str(c.path().c_str(), ".TemplateType<Position>");
 //         }
 //
 //         namespace ns {
@@ -1132,7 +1132,7 @@
 //
 //             var c = world.Component<ns::TemplateType<Position>>();
 //             test_str(c.name().c_str(), "TemplateType<Position>");
-//             test_str(c.path().c_str(), "::ns::TemplateType<Position>");
+//             test_str(c.path().c_str(), ".ns::TemplateType<Position>");
 //         }
 //
 //         [Fact]
@@ -1142,7 +1142,7 @@
 //
 //             var c = world.Component<ns::TemplateType<ns::foo>>();
 //             test_str(c.name().c_str(), "TemplateType<ns::foo>");
-//             test_str(c.path().c_str(), "::ns::TemplateType<ns::foo>");
+//             test_str(c.path().c_str(), ".ns::TemplateType<ns::foo>");
 //         }
 //
 //         namespace foo {
@@ -1158,7 +1158,7 @@
 //
 //             var c = world.Component<foo::foo<Position>>();
 //             test_str(c.name().c_str(), "foo<Position>");
-//             test_str(c.path().c_str(), "::foo::foo<Position>");
+//             test_str(c.path().c_str(), ".foo::foo<Position>");
 //         }
 //
 //         [Fact]
@@ -1168,7 +1168,7 @@
 //
 //             var c = world.Component<foo::foo<foo::bar>>();
 //             test_str(c.name().c_str(), "foo<foo::bar>");
-//             test_str(c.path().c_str(), "::foo::foo<foo::bar>");
+//             test_str(c.path().c_str(), ".foo::foo<foo::bar>");
 //         }
 //
 //         struct module_w_template_component {
@@ -1617,8 +1617,8 @@
 //             var inn = world.Component<Outer::Inner>();
 //             var out = world.Component<Outer>();
 //
-//             test_str(inn.path().c_str(), "::Outer::Inner");
-//             test_str(out.path().c_str(), "::Outer");
+//             test_str(inn.path().c_str(), ".Outer::Inner");
+//             test_str(out.path().c_str(), ".Outer");
 //
 //             const char *inn_sym = ecs_get_symbol(ecs, inn);
 //             const char *out_sym = ecs_get_symbol(ecs, out);
@@ -1785,10 +1785,10 @@
 //         {
 //             using World world = World.Create();
 //
-//             var c = world.Component<Scope>("::Root");
+//             var c = world.Component<Scope>(".Root");
 //
 //             Ecs.Assert(!c.has(flecs::ChildOf, flecs::Wildcard));
-//             test_str(c.path().c_str(), "::Root");
+//             test_str(c.path().c_str(), ".Root");
 //         }
 //
 //         [Fact]
@@ -1796,10 +1796,10 @@
 //         {
 //             using World world = World.Create();
 //
-//             var c = world.Component<Nested::FromScope>("::Root");
+//             var c = world.Component<Nested::FromScope>(".Root");
 //
 //             Ecs.Assert(!c.has(flecs::ChildOf, flecs::Wildcard));
-//             test_str(c.path().c_str(), "::Root");
+//             test_str(c.path().c_str(), ".Root");
 //         }
 //
 //         [Fact]
@@ -2091,8 +2091,8 @@
 //             Entity foo = world.Component<nested_component_module::Foo>();
 //             Entity bar = world.Component<nested_component_module::Foo::Bar>();
 //
-//             test_str(foo.path().c_str(), "::nested_component_module::Foo");
-//             test_str(bar.path().c_str(), "::nested_component_module::Foo::Bar");
+//             test_str(foo.path().c_str(), ".nested_component_module::Foo");
+//             test_str(bar.path().c_str(), ".nested_component_module::Foo::Bar");
 //         }
 //
 //         static void *atfini_ctx = nullptr;

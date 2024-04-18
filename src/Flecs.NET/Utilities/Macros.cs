@@ -68,7 +68,7 @@ namespace Flecs.NET.Utilities
         public static bool IsNullReadOnlyRef<T>(in T obj)
         {
 #if NET5_0_OR_GREATER
-            return Unsafe.IsNullRef(ref Unsafe.AsRef(obj));
+            return Unsafe.IsNullRef(ref Unsafe.AsRef(in obj));
 #else
             return Unsafe.AsPointer(ref Unsafe.AsRef(obj)) == null;
 #endif
@@ -83,7 +83,7 @@ namespace Flecs.NET.Utilities
         public static void OsFree(IntPtr data)
         {
 #if NET5_0_OR_GREATER
-            ((delegate* unmanaged[Cdecl]<IntPtr, void>)ecs_os_api.free_)(data);
+            ((delegate* unmanaged<IntPtr, void>)ecs_os_api.free_)(data);
 #else
             Marshal.GetDelegateForFunctionPointer<Ecs.Free>(ecs_os_api.free_)(data);
 #endif
@@ -394,10 +394,30 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
-        ///     Gets the symbol of a type.
+        ///     Gets the name of a type.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static string GetSymbolName<T>()
+        public static string Name<T>()
+        {
+            string fullname = FullName<T>();
+
+            int trimEnd;
+
+            if (fullname.Contains('<', StringComparison.Ordinal))
+                trimEnd = fullname.LastIndexOf('.', fullname.IndexOf('<', StringComparison.Ordinal)) + 1;
+            else
+                trimEnd = fullname.LastIndexOf('.') + 1;
+
+            return fullname[trimEnd..];
+        }
+
+        /// <summary>
+        ///     Gets the full name of a type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static string FullName<T>()
         {
             string name = typeof(T).ToString();
 

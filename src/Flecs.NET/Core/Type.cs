@@ -20,7 +20,22 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     The index that corresponds to its location in a world's component id cache.
         /// </summary>
-        public static readonly int TypeIndex = Interlocked.Increment(ref Ecs.CacheIndexCount);
+        public static readonly int CacheIndex = Interlocked.Increment(ref Ecs.CacheIndexCount);
+
+        /// <summary>
+        ///     The full name of this type.
+        /// </summary>
+        public static readonly string FullName = Macros.FullName<T>();
+
+        /// <summary>
+        ///     The name of this type.
+        /// </summary>
+        public static readonly string Name = Macros.Name<T>();
+
+        /// <summary>
+        ///     The symbol name of the type.
+        /// </summary>
+        public static readonly string SymbolName = Macros.FullName<T>();
 
         /// <summary>
         ///     The size of the type.
@@ -33,97 +48,12 @@ namespace Flecs.NET.Core
         public static readonly int Alignment = AlignOf();
 
         /// <summary>
-        ///     The type name of the type.
+        ///     Whether or not the type is a tag.
         /// </summary>
-        public static readonly string TypeName = "::" + Macros.GetSymbolName<T>();
+        public static readonly bool IsTag = Size == 0 && Alignment == 0;
 
         /// <summary>
-        ///     The symbol name of the type.
-        /// </summary>
-        public static readonly string SymbolName = Macros.GetSymbolName<T>();
-
-        /// <summary>
-        ///     Registers a type and returns it's id.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="name"></param>
-        /// <param name="id"></param>
-        /// <param name="isComponent"></param>
-        /// <param name="existing"></param>
-        /// <returns></returns>
-        public static ulong IdExplicit(ecs_world_t* world, string? name = null,
-            ulong id = default, bool isComponent = true, bool* existing = null)
-        {
-            World w = new World(world);
-
-            ref ulong cachedId = ref w.LookupComponentIndex(TypeIndex);
-
-            if (!Unsafe.IsNullRef(ref cachedId))
-                return cachedId;
-
-            string symbol = id == 0 ? SymbolName : NativeString.GetString(ecs_get_symbol(world, id));
-
-            using NativeString nativeName = (NativeString)name;
-            using NativeString nativeTypeName = (NativeString)TypeName;
-            using NativeString nativeSymbolName = (NativeString)symbol;
-
-            NativeLayout(out int size, out int alignment);
-
-            ulong entity = FlecsInternal.ComponentRegisterExplicit(
-                world, 0, id,
-                nativeName, nativeTypeName, nativeSymbolName,
-                size, alignment,
-                Macros.Bool(isComponent), (byte*)existing
-            );
-
-            w.EnsureComponentIndex(TypeIndex) = entity;
-
-            if (typeof(T).IsEnum)
-                EnumType<T>.Init(world, entity);
-
-            return entity;
-        }
-
-        /// <summary>
-        ///     Registers a type and returns it's id.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static ulong Id(ecs_world_t* world, string? name = null)
-        {
-            ref ulong cachedId = ref new World(world).LookupComponentIndex(TypeIndex);
-
-            if (!Unsafe.IsNullRef(ref cachedId))
-                return cachedId;
-
-            ulong prevScope = ecs_set_scope(world, 0);
-            ulong prevWith = ecs_set_with(world, 0);
-
-            bool existing = false;
-            ulong entity = IdExplicit(world, name, 0, true, &existing);
-
-            if (Size != 0 && !existing && RuntimeHelpers.IsReferenceOrContainsReferences<T>())
-            {
-                ecs_type_hooks_t typeHooksDesc = default;
-                typeHooksDesc.ctor = BindingContext<T>.DefaultManagedCtorPointer;
-                typeHooksDesc.dtor = BindingContext<T>.DefaultManagedDtorPointer;
-                typeHooksDesc.move = BindingContext<T>.DefaultManagedMovePointer;
-                typeHooksDesc.copy = BindingContext<T>.DefaultManagedCopyPointer;
-                ecs_set_hooks_id(world, entity, &typeHooksDesc);
-            }
-
-            if (prevWith != 0)
-                ecs_set_with(world, prevWith);
-
-            if (prevScope != 0)
-                ecs_set_scope(world, prevScope);
-
-            return entity;
-        }
-
-        /// <summary>
-        ///     Tests if the type is registered.
+        ///     Cecks if the type is registered in the provided world.
         /// </summary>
         /// <param name="world"></param>
         /// <returns></returns>
@@ -133,18 +63,18 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///
+        ///     Looks up a type id for the provided world. Returns 0 if the type is not yet registered in that world.
         /// </summary>
         /// <param name="world"></param>
         /// <returns></returns>
         public static ulong Lookup(ecs_world_t* world)
         {
-            ref ulong cachedId = ref new World(world).LookupComponentIndex(TypeIndex);
+            ref ulong cachedId = ref new World(world).LookupComponentIndex(CacheIndex);
             return Unsafe.IsNullRef(ref cachedId) ? 0 : cachedId;
         }
 
         /// <summary>
-        ///
+        ///     Looks up a type id for the provided world. Returns 0 if the type is not yet registered in that world.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="entity"></param>
@@ -152,6 +82,163 @@ namespace Flecs.NET.Core
         public static bool TryLookup(ecs_world_t* world, out ulong entity)
         {
             return (entity = Lookup(world)) != 0;
+        }
+
+        /// <summary>
+        ///     Returns the id for this type with the provided world. Registers a new component id if it doesn't exist.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <returns></returns>
+        public static ulong Id(ecs_world_t* world)
+        {
+            ref ulong cachedId = ref new World(world).LookupComponentIndex(CacheIndex);
+            return Unsafe.IsNullRef(ref cachedId)
+                ? RegisterComponent(world, true, true, 0, null)
+                : cachedId;
+        }
+
+        /// <summary>
+        ///     Returns the id for this type with the provided world. Registers a new component id if it doesn't exist.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="ignoreScope"></param>
+        /// <param name="isComponent"></param>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static ulong Id(ecs_world_t* world, bool ignoreScope, bool isComponent, ulong id, string? name)
+        {
+            ref ulong cachedId = ref new World(world).LookupComponentIndex(CacheIndex);
+            return Unsafe.IsNullRef(ref cachedId)
+                ? RegisterComponent(world, ignoreScope, isComponent, id, name)
+                : cachedId;
+        }
+
+        /// <summary>
+        ///     Registers this type with the provided world.
+        /// </summary>
+        /// <param name="world">The ECS world.</param>
+        /// <param name="ignoreScope">If true, the type will be registered in the root scope with it's full type name.</param>
+        /// <param name="isComponent">If true, type will be created with full component registration. (size, alignment, enums, hooks)</param>
+        /// <param name="id">If an existing entity is found with this id, attempt to alias it. Otherwise, register new entity with this id.</param>
+        /// <param name="name">If an existing entity is found with this name, attempt to alias it. Otherwise, register new entity with this name.</param>
+        /// <typeparam name="T">The type to register with the ECS world.</typeparam>
+        /// <returns></returns>
+        public static ulong RegisterComponent(World world, bool ignoreScope, bool isComponent, ulong id, string? name)
+        {
+            // If a name or id is provided, the type is being used to alias an already existing entity.
+            Entity e = default;
+
+            if (id != 0)
+                e = new Entity(world, id);
+            else if (!string.IsNullOrEmpty(name))
+                e = world.Lookup(name, false);
+
+            // If an existing entity is found, ensure that the size and alignment match the entity and return its id.
+            if (isComponent && e != 0)
+            {
+                if (!e.Has<EcsComponent>())
+                {
+                    Ecs.Assert(IsTag, $"Cannot alias '{e.Path()}' with a component. '{FullName}' must be a zero-sized struct");
+                    return e;
+                }
+
+                ref readonly EcsComponent info = ref e.Get<EcsComponent>();
+                Ecs.Assert(info.size == Size, $"Size of type '{FullName}' ({Size}) does not match currently registered size ({info.size})");
+                Ecs.Assert(info.alignment == Alignment, $"Alignment of type '{FullName}' ({Alignment}) does not match currently registered alignment ({info.alignment})");
+
+                return e;
+            }
+
+            ulong prevScope = ecs_set_scope(world, ignoreScope ? 0 : ecs_get_scope(world));
+            ulong prevWith = ecs_set_with(world, ignoreScope ? 0 : ecs_get_with(world));
+
+            // Check if an entity exists with the same symbol as this type. This is normally used
+            // for pairing Flecs.NET.Bindings.Native types with their C counterparts.
+            using NativeString nativeSymbol = (NativeString)FullName;
+            ulong symbol = ecs_lookup_symbol(world, nativeSymbol, Macros.False, Macros.False);
+            if (symbol != 0)
+            {
+                id = symbol;
+                name = world.Entity(id).Path();
+            }
+
+            using NativeString nativeName = string.IsNullOrEmpty(name)
+                ? (NativeString)GetTrimmedTypeName(world)
+                : (NativeString)name;
+
+            ecs_entity_desc_t entityDesc = default;
+            entityDesc.id = id;
+            entityDesc.use_low_id = Macros.True;
+            entityDesc.name = nativeName;
+            entityDesc.symbol = nativeSymbol;
+            entityDesc.sep = BindingContext.DefaultSeparator;
+            entityDesc.root_sep = BindingContext.DefaultSeparator;
+            ulong entity = ecs_entity_init(world, &entityDesc);
+            Ecs.Assert(entity != 0, $"Failed to register entity for type '{FullName}'");
+
+            world.EnsureComponentIndex(CacheIndex) = entity;
+
+            if (!isComponent)
+                return entity;
+
+            ecs_component_desc_t componentDesc = default;
+            componentDesc.entity = entity;
+            componentDesc.type.size = Size;
+            componentDesc.type.alignment = Alignment;
+            ulong component = ecs_component_init(world, &componentDesc);
+            Ecs.Assert(component != 0, $"Failed to register component for type '{FullName}'");
+
+            ecs_set_scope(world, prevScope);
+            ecs_set_with(world, prevWith);
+
+            if (typeof(T).IsEnum)
+                EnumType<T>.Init(world, entity);
+
+            if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+                return component;
+
+            ecs_type_hooks_t hooksDesc = default;
+            hooksDesc.ctor = BindingContext<T>.DefaultManagedCtorPointer;
+            hooksDesc.dtor = BindingContext<T>.DefaultManagedDtorPointer;
+            hooksDesc.move = BindingContext<T>.DefaultManagedMovePointer;
+            hooksDesc.copy = BindingContext<T>.DefaultManagedCopyPointer;
+            ecs_set_hooks_id(world, component, &hooksDesc);
+
+            return component;
+        }
+
+        /// <summary>
+        ///     Returns a trimmed version of this type's full name with respect to the current scope of the world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <typeparam name="T"></typeparam>
+        public static string GetTrimmedTypeName(World world)
+        {
+            Entity scope = world.GetScope();
+
+            if (scope == 0)
+                return FullName;
+
+            string scopePath = scope.Path(initSep: "");
+
+            // If the the start of the type's full name matches the current scope's path, trim the scope's path
+            // from the full type name and return. Otherwise return only the name of the type.
+            return FullName.StartsWith(scopePath, StringComparison.Ordinal)
+                ? FullName[(scopePath.Length + 1)..]
+                : Name;
+        }
+
+        private static int SizeOf()
+        {
+            NativeLayout(out int size, out int _);
+            return size;
+        }
+
+        private static int AlignOf()
+        {
+            NativeLayout(out int _, out int alignment);
+            return alignment;
         }
 
         [SuppressMessage("Usage", "CA1508")]
@@ -204,18 +291,6 @@ namespace Flecs.NET.Core
                 size = 0;
                 alignment = 0;
             }
-        }
-
-        private static int SizeOf()
-        {
-            NativeLayout(out int size, out int _);
-            return size;
-        }
-
-        private static int AlignOf()
-        {
-            NativeLayout(out int _, out int alignment);
-            return alignment;
         }
 
         [SuppressMessage("ReSharper", "PrivateFieldCanBeConvertedToLocalVariable")]

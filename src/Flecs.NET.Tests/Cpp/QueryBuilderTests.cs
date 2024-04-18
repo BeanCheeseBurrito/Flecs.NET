@@ -4926,7 +4926,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity qe = q.Entity();
             Assert.True(qe != 0);
             Assert.Equal("query", qe.Name());
-            Assert.Equal("::my.query", qe.Path());
+            Assert.Equal(".my.query", qe.Path());
         }
 
         [Theory]
