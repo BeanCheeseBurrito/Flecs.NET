@@ -133,7 +133,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref ulong EnsureCacheIndex(ecs_world_t* world, int index)
         {
-            ref NativeList<ulong> cache = ref ((BindingContext.WorldContext*)ecs_get_binding_ctx(world))->TypeCache;
+            ref NativeList<ulong> cache = ref ((BindingContext.WorldContext*)ecs_get_binding_ctx_fast(world))->TypeCache;
             cache.EnsureCount(index + 1);
             return ref cache.Data[index];
         }
@@ -158,7 +158,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref ulong LookupCacheIndex(ecs_world_t* world, int index)
         {
-            ref NativeList<ulong> cache = ref ((BindingContext.WorldContext*)ecs_get_binding_ctx(world))->TypeCache;
+            ref NativeList<ulong> cache = ref ((BindingContext.WorldContext*)ecs_get_binding_ctx_fast(world))->TypeCache;
             return ref index >= cache.Count || cache.Data[index] == 0
                 ? ref Unsafe.NullRef<ulong>()
                 : ref cache.Data[index];

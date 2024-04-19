@@ -3364,7 +3364,7 @@ namespace Flecs.NET.Core
 
         private BindingContext.WorldContext* EnsureBindingContext()
         {
-            BindingContext.WorldContext* ptr = (BindingContext.WorldContext*)ecs_get_binding_ctx(Handle);
+            BindingContext.WorldContext* ptr = (BindingContext.WorldContext*)ecs_get_binding_ctx_fast(Handle);
 
             if (ptr != null)
                 return ptr;
