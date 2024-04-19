@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
@@ -25,17 +26,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     The full name of this type.
         /// </summary>
-        public static readonly string FullName = Macros.FullName<T>();
+        public static readonly string FullName = GetFullName();
 
         /// <summary>
         ///     The name of this type.
         /// </summary>
-        public static readonly string Name = Macros.Name<T>();
-
-        /// <summary>
-        ///     The symbol name of the type.
-        /// </summary>
-        public static readonly string SymbolName = Macros.FullName<T>();
+        public static readonly string Name = GetName();
 
         /// <summary>
         ///     The size of the type.
@@ -429,6 +425,89 @@ namespace Flecs.NET.Core
                 return IntegerType.UInt64;
 
             return IntegerType.None;
+        }
+
+        private static string GetName()
+        {
+            string fullname = GetFullName();
+
+            int trimEnd;
+
+            if (fullname.Contains('<', StringComparison.Ordinal))
+                trimEnd = fullname.LastIndexOf('.', fullname.IndexOf('<', StringComparison.Ordinal)) + 1;
+            else
+                trimEnd = fullname.LastIndexOf('.') + 1;
+
+            return fullname[trimEnd..];
+        }
+
+        private static string GetFullName()
+        {
+            string name = typeof(T).ToString();
+
+            // File-local types are prefixed with a file name + GUID.
+            if (FlecsInternal.StripFileLocalTypeNameGuid)
+            {
+                int start = 0;
+                bool skip = false;
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for (int current = 0; current < name.Length;)
+                {
+                    char c = name[current];
+
+                    if (skip && c == '_')
+                    {
+                        skip = false;
+                        start = current + 2;
+                    }
+                    else if (!skip && c == '<')
+                    {
+                        skip = true;
+                        stringBuilder.Append(name.AsSpan(start, current - start));
+                        current = name.IndexOf('>', current) + 1;
+                        continue;
+                    }
+
+                    current++;
+                }
+
+                stringBuilder.Append(name.AsSpan(start));
+                name = stringBuilder.ToString();
+            }
+
+            {
+                name = name
+                    .Replace(Ecs.NativeNamespace, string.Empty, StringComparison.Ordinal)
+                    .Replace('+', '.')
+                    .Replace('[', '<')
+                    .Replace(']', '>');
+
+                int start = 0;
+                int current = 0;
+                bool skip = false;
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                foreach (char c in name)
+                {
+                    if (skip && (c == '<' || c == '.'))
+                    {
+                        start = current;
+                        skip = false;
+                    }
+                    else if (!skip && c == '`')
+                    {
+                        stringBuilder.Append(name.AsSpan(start, current - start));
+                        skip = true;
+                    }
+
+                    current++;
+                }
+
+                return stringBuilder.Append(name.AsSpan(start)).ToString();
+            }
         }
 
         private static int SizeOf()

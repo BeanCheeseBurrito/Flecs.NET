@@ -16,19 +16,16 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public static Entity Import<T>(World world) where T : IFlecsModule, new()
         {
-            string symbol = Type<T>.SymbolName;
-            using NativeString nativeSymbol = (NativeString)symbol;
-
-            ulong module = ecs_lookup_symbol(world, nativeSymbol, Macros.True, Macros.False);
+            ulong module = world.LookupSymbol(Type<T>.FullName, true, false);
 
             if (!Type<T>.IsRegistered(world))
             {
                 if (module == 0)
-                    module = DoImport<T>(world, symbol);
+                    module = DoImport<T>(world, Type<T>.FullName);
             }
             else if (module == 0)
             {
-                module = DoImport<T>(world, symbol);
+                module = DoImport<T>(world, Type<T>.FullName);
             }
 
             return new Entity(world, module);
