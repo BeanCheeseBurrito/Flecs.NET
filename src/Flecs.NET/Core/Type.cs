@@ -18,7 +18,7 @@ namespace Flecs.NET.Core
     public static unsafe class Type<T>
     {
         /// <summary>
-        ///     The index that corresponds to its location in a world's component id cache.
+        ///     The index that corresponds to its location in a world's type id cache.
         /// </summary>
         public static readonly int CacheIndex = Interlocked.Increment(ref Ecs.CacheIndexCount);
 
@@ -51,6 +51,21 @@ namespace Flecs.NET.Core
         ///     Whether or not the type is a tag.
         /// </summary>
         public static readonly bool IsTag = Size == 0 && Alignment == 0;
+
+        /// <summary>
+        ///     Whether or not the type is an enum.
+        /// </summary>
+        public static readonly bool IsEnum = typeof(T).IsEnum;
+
+        /// <summary>
+        ///     The underlying integer type if this type is an enum.
+        /// </summary>
+        public static readonly IntegerType UnderlyingType = GetUnderlyingType();
+
+        /// <summary>
+        ///     The cache indexes of all enum members if this type is an enum.
+        /// </summary>
+        private static readonly NativeArray<EnumMember> Constants = InitEnumCacheIndexes();
 
         /// <summary>
         ///     Returns the id for this type with the provided world. Registers a new component id if it doesn't exist.
@@ -99,6 +114,20 @@ namespace Flecs.NET.Core
             return Unsafe.IsNullRef(ref cachedId)
                 ? RegisterComponent(world, ignoreScope, isComponent, id, name)
                 : cachedId;
+        }
+
+        /// <summary>
+        ///     Returns the id for this enum member with the provided world. Registers a new id if it doesn't exist.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="constant"></param>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong Id<TEnum>(ecs_world_t* world, TEnum constant) where TEnum : Enum, T
+        {
+            Id(world); // Ensures that component ids are registered for enum members.
+            return LookupCacheIndex(world, GetEnumCacheIndex(constant));
         }
 
         /// <summary>
@@ -236,7 +265,7 @@ namespace Flecs.NET.Core
             world.SetScope(prevScope);
 
             if (typeof(T).IsEnum)
-                EnumType<T>.Init(world, entity);
+                RegisterConstants(world, world.Entity(component));
 
             if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
                 return component;
@@ -270,6 +299,136 @@ namespace Flecs.NET.Core
             return FullName.StartsWith(scopePath, StringComparison.Ordinal)
                 ? FullName[(scopePath.Length + 1)..]
                 : Name;
+        }
+
+        private static NativeArray<EnumMember> InitEnumCacheIndexes()
+        {
+            if (!IsEnum)
+                return default;
+
+            Array values = typeof(T).GetEnumValues();
+            NativeArray<EnumMember> constants = new NativeArray<EnumMember>(values.Length);
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                long value = UnderlyingType switch
+                {
+                    IntegerType.SByte => (sbyte)values.GetValue(i)!,
+                    IntegerType.Byte => (byte)values.GetValue(i)!,
+                    IntegerType.Int16 => (short)values.GetValue(i)!,
+                    IntegerType.UInt16 => (ushort)values.GetValue(i)!,
+                    IntegerType.Int32 => (int)values.GetValue(i)!,
+                    IntegerType.UInt32 => (uint)values.GetValue(i)!,
+                    IntegerType.Int64 => (long)values.GetValue(i)!,
+                    IntegerType.UInt64 => (long)(ulong)values.GetValue(i)!,
+                    _ => throw new Ecs.ErrorException("Type is not an enum.")
+                };
+
+                constants[i] = new EnumMember(value, Interlocked.Increment(ref Ecs.CacheIndexCount));
+            }
+
+            return constants;
+        }
+
+        private static void RegisterConstants(World world, Entity type)
+        {
+            ecs_suspend_readonly_state_t state = default;
+            world = flecs_suspend_readonly(world, &state);
+
+            type.Set<EcsEnum>(default);
+
+            Entity prevScope = world.SetScope(type);
+
+            for (int i = 0; i < Constants.Length; i++)
+            {
+                long value = Constants[i].Value;
+                T constant = Unsafe.As<long, T>(ref value);
+
+                // TODO: Support all integer types when flecs adds support for non-int enums.
+                EnsureCacheIndex(world, Constants[i].CacheIndex) = world.Entity(constant!.ToString()!)
+                    .SetPtr(EcsConstant, FLECS_IDecs_i32_tID_, sizeof(int), &value);
+            }
+
+            world.SetScope(prevScope);
+
+            flecs_resume_readonly(world, &state);
+        }
+
+        // Binary search enum list for enum constant's cache index.
+        private static int GetEnumCacheIndex<TEnum>(TEnum constant) where TEnum : Enum, T
+        {
+            long value = GetEnumConstantAsLong(constant);
+
+            int left = 0;
+            int right = Constants.Length - 1;
+
+            while (left <= right)
+            {
+                int mid = left + (right - left) / 2;
+
+                ref EnumMember data = ref Constants.Data[mid];
+
+                if (data.Value == value)
+                    return data.CacheIndex;
+
+                if (data.Value < value)
+                    left = ++mid;
+                else
+                    right = --mid;
+            }
+
+            Ecs.Assert(false, $"No id registered for '{constant}'");
+            return 0;
+        }
+
+        private static long GetEnumConstantAsLong<TEnum>(TEnum constant) where TEnum : Enum, T
+        {
+            return UnderlyingType switch
+            {
+                IntegerType.SByte => Unsafe.As<TEnum, sbyte>(ref constant),
+                IntegerType.Byte => Unsafe.As<TEnum, byte>(ref constant),
+                IntegerType.Int16 => Unsafe.As<TEnum, short>(ref constant),
+                IntegerType.UInt16 => Unsafe.As<TEnum, ushort>(ref constant),
+                IntegerType.Int32 => Unsafe.As<TEnum, int>(ref constant),
+                IntegerType.UInt32 => Unsafe.As<TEnum, uint>(ref constant),
+                IntegerType.Int64 => Unsafe.As<TEnum, long>(ref constant),
+                IntegerType.UInt64 => (long)Unsafe.As<TEnum, ulong>(ref constant),
+                _ => throw new Ecs.ErrorException("Type is not an enum.")
+            };
+        }
+
+        private static IntegerType GetUnderlyingType()
+        {
+            if (!IsEnum)
+                return IntegerType.None;
+
+            Type underlyingType = typeof(T).GetEnumUnderlyingType();
+
+            if (underlyingType == typeof(sbyte))
+                return IntegerType.SByte;
+
+            if (underlyingType == typeof(byte))
+                return IntegerType.Byte;
+
+            if (underlyingType == typeof(short))
+                return IntegerType.Int16;
+
+            if (underlyingType == typeof(ushort))
+                return IntegerType.UInt16;
+
+            if (underlyingType == typeof(int))
+                return IntegerType.Int32;
+
+            if (underlyingType == typeof(uint))
+                return IntegerType.UInt32;
+
+            if (underlyingType == typeof(long))
+                return IntegerType.Int64;
+
+            if (underlyingType == typeof(ulong))
+                return IntegerType.UInt64;
+
+            return IntegerType.None;
         }
 
         private static int SizeOf()
@@ -350,6 +509,70 @@ namespace Flecs.NET.Core
                 _ = _dummy;
                 _ = _data;
             }
+        }
+
+        [SuppressMessage("ReSharper", "MemberHidesStaticFromOuterClass")]
+        private readonly struct EnumMember
+        {
+            public readonly long Value;
+            public readonly int CacheIndex;
+
+            public EnumMember(long value, int cacheIndex)
+            {
+                Value = value;
+                CacheIndex = cacheIndex;
+            }
+        }
+
+        /// <summary>
+        ///     Represents the underlying integer type of an enum.
+        /// </summary>
+        public enum IntegerType
+        {
+            /// <summary>
+            ///     This type is not an enum.
+            /// </summary>
+            None,
+
+            /// <summary>
+            ///     <see cref="sbyte"/>
+            /// </summary>
+            SByte,
+
+            /// <summary>
+            ///     <see cref="byte"/>
+            /// </summary>
+            Byte,
+
+            /// <summary>
+            ///     <see cref="short"/>
+            /// </summary>
+            Int16,
+
+            /// <summary>
+            ///     <see cref="ushort"/>
+            /// </summary>
+            UInt16,
+
+            /// <summary>
+            ///     <see cref="int"/>
+            /// </summary>
+            Int32,
+
+            /// <summary>
+            ///     <see cref="uint"/>
+            /// </summary>
+            UInt32,
+
+            /// <summary>
+            ///     <see cref="long"/>
+            /// </summary>
+            Int64,
+
+            /// <summary>
+            ///     <see cref="ulong"/>
+            /// </summary>
+            UInt64
         }
     }
 }

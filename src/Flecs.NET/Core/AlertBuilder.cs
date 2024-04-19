@@ -210,7 +210,7 @@ namespace Flecs.NET.Core
         public ref AlertBuilder SeverityFilter<TSeverity, TWithEnum>(TWithEnum withEnum, string var = "")
             where TWithEnum : Enum
         {
-            return ref SeverityFilter(Type<TSeverity>.Id(World), EnumType<TWithEnum>.Id(withEnum, World), var);
+            return ref SeverityFilter(Type<TSeverity>.Id(World), Type<TWithEnum>.Id(World, withEnum), var);
         }
 
         /// <summary>

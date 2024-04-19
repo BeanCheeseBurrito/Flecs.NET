@@ -247,7 +247,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Src<T>(T value) where T : Enum
         {
-            return ref Src(EnumType<T>.Id(value, World));
+            return ref Src(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder First<T>(T value) where T : Enum
         {
-            return ref First(EnumType<T>.Id(value, World));
+            return ref First(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -333,7 +333,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Second<T>(T value) where T : Enum
         {
-            return ref Second(EnumType<T>.Id(value, World));
+            return ref Second(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -388,7 +388,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Up<T>(T value) where T : Enum
         {
-            return ref Up(EnumType<T>.Id(value, World));
+            return ref Up(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -428,7 +428,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Cascade<T>(T value) where T : Enum
         {
-            return ref Cascade(EnumType<T>.Id(value, World));
+            return ref Cascade(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -485,7 +485,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Trav<T>(T value, uint flags = 0) where T : Enum
         {
-            return ref Trav(EnumType<T>.Id(value, World), flags);
+            return ref Trav(Type<T>.Id(World, value), flags);
         }
 
         /// <summary>
@@ -881,7 +881,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder With<T>(T value) where T : Enum
         {
-            return ref With<T>(EnumType<T>.Id(value, World));
+            return ref With<T>(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -926,7 +926,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder With<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref With<TFirst>(EnumType<TSecond>.Id(second, World));
+            return ref With<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -938,7 +938,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder With<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return ref WithSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+            return ref WithSecond<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -950,7 +950,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder With<TFirst>(TFirst first, string second) where TFirst : Enum
         {
-            return ref With(EnumType<TFirst>.Id(first, World), second);
+            return ref With(Type<TFirst>.Id(World, first), second);
         }
 
         /// <summary>
@@ -962,7 +962,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder With<TSecond>(string first, TSecond second) where TSecond : Enum
         {
-            return ref With(first, EnumType<TSecond>.Id(second, World));
+            return ref With(first, Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -1125,7 +1125,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Without<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Without<TFirst>(EnumType<TSecond>.Id(second, World));
+            return ref Without<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -1137,7 +1137,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Without<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return ref WithoutSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+            return ref WithoutSecond<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -1149,7 +1149,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Without<TFirst>(TFirst first, string second) where TFirst : Enum
         {
-            return ref Without(EnumType<TFirst>.Id(first, World), second);
+            return ref Without(Type<TFirst>.Id(World, first), second);
         }
 
         /// <summary>
@@ -1161,7 +1161,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Without<TSecond>(string first, TSecond second) where TSecond : Enum
         {
-            return ref Without(first, EnumType<TSecond>.Id(second, World));
+            return ref Without(first, Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -1323,7 +1323,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Write<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Write<TFirst>(EnumType<TSecond>.Id(second, World));
+            return ref Write<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -1335,7 +1335,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Write<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return ref WriteSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+            return ref WriteSecond<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -1347,7 +1347,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Write<TFirst>(TFirst first, string second) where TFirst : Enum
         {
-            return ref Write(EnumType<TFirst>.Id(first, World), second);
+            return ref Write(Type<TFirst>.Id(World, first), second);
         }
 
         /// <summary>
@@ -1359,7 +1359,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Write<TSecond>(string first, TSecond second) where TSecond : Enum
         {
-            return ref Write(first, EnumType<TSecond>.Id(second, World));
+            return ref Write(first, Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -1521,7 +1521,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Read<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Read<TFirst>(EnumType<TSecond>.Id(second, World));
+            return ref Read<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -1533,7 +1533,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Read<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return ref ReadSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+            return ref ReadSecond<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -1545,7 +1545,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Read<TFirst>(TFirst first, string second) where TFirst : Enum
         {
-            return ref Read(EnumType<TFirst>.Id(first, World), second);
+            return ref Read(Type<TFirst>.Id(World, first), second);
         }
 
         /// <summary>
@@ -1557,7 +1557,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Read<TSecond>(string first, TSecond second) where TSecond : Enum
         {
-            return ref Read(first, EnumType<TSecond>.Id(second, World));
+            return ref Read(first, Type<TSecond>.Id(World, second));
         }
 
         /// <summary>

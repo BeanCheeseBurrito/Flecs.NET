@@ -183,7 +183,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Pair<TFirst, TSecond>(TSecond second, ecs_world_t* world) where TSecond : Enum
         {
-            return Pair<TFirst>(EnumType<TSecond>.Id(second, world), world);
+            return Pair<TFirst>(Type<TSecond>.Id(world, second), world);
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Pair<TFirst, TSecond>(TFirst first, ecs_world_t* world) where TFirst : Enum
         {
-            return PairSecond<TSecond>(EnumType<TFirst>.Id(first, world), world);
+            return PairSecond<TSecond>(Type<TFirst>.Id(world, first), world);
         }
 
         /// <summary>

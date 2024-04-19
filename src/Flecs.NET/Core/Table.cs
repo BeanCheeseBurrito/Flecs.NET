@@ -127,7 +127,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int TypeIndex<T>(T value) where T : Enum
         {
-            return TypeIndex<T>(EnumType<T>.Id(value, World));
+            return TypeIndex<T>(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int TypeIndex<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return TypeIndex<TFirst>(EnumType<TSecond>.Id(second, World));
+            return TypeIndex<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int TypeIndex<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return TypeIndexSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+            return TypeIndexSecond<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int ColumnIndex<T>(T value) where T : Enum
         {
-            return ColumnIndex<T>(EnumType<T>.Id(value, World));
+            return ColumnIndex<T>(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -263,7 +263,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int ColumnIndex<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ColumnIndex<TFirst>(EnumType<TSecond>.Id(second, World));
+            return ColumnIndex<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int ColumnIndex<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return ColumnIndexSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+            return ColumnIndexSecond<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -330,7 +330,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has<T>(T value) where T : Enum
         {
-            return Has<T>(EnumType<T>.Id(value, World));
+            return Has<T>(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Has<TFirst>(EnumType<TSecond>.Id(second, World));
+            return Has<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -376,7 +376,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return HasSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+            return HasSecond<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -457,7 +457,7 @@ namespace Flecs.NET.Core
             where TFirst : unmanaged
             where TSecond : Enum
         {
-            return GetPtr<TFirst>(EnumType<TSecond>.Id(second, World));
+            return GetPtr<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -471,7 +471,7 @@ namespace Flecs.NET.Core
             where TFirst : Enum
             where TSecond : unmanaged
         {
-            return GetSecondPtr<TSecond>(EnumType<TFirst>.Id(first, World));
+            return GetSecondPtr<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -545,7 +545,7 @@ namespace Flecs.NET.Core
             where TFirst : unmanaged
             where TSecond : Enum
         {
-            return Get<TFirst>(EnumType<TSecond>.Id(second, World));
+            return Get<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -559,7 +559,7 @@ namespace Flecs.NET.Core
             where TFirst : Enum
             where TSecond : unmanaged
         {
-            return GetSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+            return GetSecond<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -639,7 +639,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Depth<T>(T value) where T : Enum
         {
-            return Depth(EnumType<T>.Id(value, World));
+            return Depth(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -776,7 +776,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Add<T>(T value) where T : Enum
         {
-            return Add<T>(EnumType<T>.Id(value, World));
+            return Add<T>(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -799,7 +799,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Add<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Add<TFirst>(EnumType<TSecond>.Id(second, World));
+            return Add<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -811,7 +811,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Add<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return AddSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+            return AddSecond<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -875,7 +875,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Remove<T>(T value) where T : Enum
         {
-            return Remove<T>(EnumType<T>.Id(value, World));
+            return Remove<T>(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -898,7 +898,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Remove<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Remove<TFirst>(EnumType<TSecond>.Id(second, World));
+            return Remove<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -910,7 +910,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Remove<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return RemoveSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+            return RemoveSecond<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -974,7 +974,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<T>(T value) where T : Enum
         {
-            return Search<T>(EnumType<T>.Id(value, World));
+            return Search<T>(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -997,7 +997,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Search<TFirst>(EnumType<TSecond>.Id(second, World));
+            return Search<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -1009,7 +1009,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return SearchSecond<TSecond>(EnumType<TFirst>.Id(first, World));
+            return SearchSecond<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -1081,7 +1081,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<T>(T value, out ulong idOut) where T : Enum
         {
-            return Search<T>(EnumType<T>.Id(value, World), out idOut);
+            return Search<T>(Type<T>.Id(World, value), out idOut);
         }
 
         /// <summary>
@@ -1106,7 +1106,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<TFirst, TSecond>(TSecond second, out ulong inOut) where TSecond : Enum
         {
-            return Search<TFirst>(EnumType<TSecond>.Id(second, World), out inOut);
+            return Search<TFirst>(Type<TSecond>.Id(World, second), out inOut);
         }
 
         /// <summary>
@@ -1119,7 +1119,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<TFirst, TSecond>(TFirst first, out ulong inOut) where TFirst : Enum
         {
-            return SearchSecond<TSecond>(EnumType<TFirst>.Id(first, World), out inOut);
+            return SearchSecond<TSecond>(Type<TFirst>.Id(World, first), out inOut);
         }
 
         /// <summary>
@@ -1178,7 +1178,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<T>(T value, out Id idOut) where T : Enum
         {
-            return Search<T>(EnumType<T>.Id(value, World), out idOut);
+            return Search<T>(Type<T>.Id(World, value), out idOut);
         }
 
         /// <summary>
@@ -1215,7 +1215,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<TFirst, TSecond>(TSecond second, out Id inOut) where TSecond : Enum
         {
-            return Search<TFirst>(EnumType<TSecond>.Id(second, World), out inOut);
+            return Search<TFirst>(Type<TSecond>.Id(World, second), out inOut);
         }
 
         /// <summary>
@@ -1228,7 +1228,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<TFirst, TSecond>(TFirst first, out Id inOut) where TFirst : Enum
         {
-            return SearchSecond<TSecond>(EnumType<TFirst>.Id(first, World), out inOut);
+            return SearchSecond<TSecond>(Type<TFirst>.Id(World, first), out inOut);
         }
 
         /// <summary>

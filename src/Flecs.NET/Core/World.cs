@@ -454,7 +454,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref World Set<TFirst, TSecond>(TSecond second, ref TFirst component) where TSecond : Enum
         {
-            return ref Set(EnumType<TSecond>.Id(second, Handle), ref component);
+            return ref Set(Type<TSecond>.Id(Handle, second), ref component);
         }
 
         /// <summary>
@@ -467,7 +467,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref World Set<TFirst, TSecond>(TFirst first, ref TSecond component) where TFirst : Enum
         {
-            return ref SetSecond(EnumType<TFirst>.Id(first, Handle), ref component);
+            return ref SetSecond(Type<TFirst>.Id(Handle, first), ref component);
         }
 
         /// <summary>
@@ -611,7 +611,7 @@ namespace Flecs.NET.Core
             where TFirst : unmanaged
             where TSecond : Enum
         {
-            return EnsurePtr<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return EnsurePtr<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -625,7 +625,7 @@ namespace Flecs.NET.Core
             where TFirst : Enum
             where TSecond : unmanaged
         {
-            return EnsureSecondPtr<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return EnsureSecondPtr<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -691,7 +691,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref TFirst Ensure<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Ensure<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return ref Ensure<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -703,7 +703,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref TSecond Ensure<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return ref EnsureSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return ref EnsureSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -776,7 +776,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Modified<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            Modified<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            Modified<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -787,7 +787,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Modified<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            ModifiedSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            ModifiedSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -830,7 +830,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Ref<TFirst> GetRef<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return GetRef<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return GetRef<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -842,7 +842,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Ref<TSecond> GetRef<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return GetRefSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return GetRefSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -910,7 +910,7 @@ namespace Flecs.NET.Core
             where TFirst : unmanaged
             where TSecond : Enum
         {
-            return GetPtr<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return GetPtr<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -924,7 +924,7 @@ namespace Flecs.NET.Core
             where TFirst : Enum
             where TSecond : unmanaged
         {
-            return GetSecondPtr<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return GetSecondPtr<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -991,7 +991,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref readonly TFirst Get<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Get<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return ref Get<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1003,7 +1003,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref readonly TSecond Get<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return ref GetSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return ref GetSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1132,7 +1132,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Has<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Has<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1144,7 +1144,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return HasSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return HasSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1224,7 +1224,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Add<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            Add<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            Add<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1235,7 +1235,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Add<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            AddSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            AddSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1314,7 +1314,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Remove<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            Remove<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            Remove<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1325,7 +1325,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Remove<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            RemoveSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            RemoveSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1471,7 +1471,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Use<T>(T value, string alias = "") where T : Enum
         {
-            return Use(EnumType<T>.Id(value, Handle), alias);
+            return Use(Type<T>.Id(Handle, value), alias);
         }
 
         /// <summary>
@@ -1534,7 +1534,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<T>(T value) where T : Enum
         {
-            return Count<T>(EnumType<T>.Id(value, Handle));
+            return Count<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1568,7 +1568,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Count<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Count<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1580,7 +1580,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return CountSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return CountSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1635,7 +1635,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void With<T>(T value, Action func) where T : Enum
         {
-            With<T>(EnumType<T>.Id(value, Handle), func);
+            With<T>(Type<T>.Id(Handle, value), func);
         }
 
         /// <summary>
@@ -1669,7 +1669,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void With<TFirst, TSecond>(TSecond second, Action func) where TSecond : Enum
         {
-            With<TFirst>(EnumType<TSecond>.Id(second, Handle), func);
+            With<TFirst>(Type<TSecond>.Id(Handle, second), func);
         }
 
         /// <summary>
@@ -1681,7 +1681,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void With<TFirst, TSecond>(TFirst first, Action func) where TFirst : Enum
         {
-            WithSecond<TSecond>(EnumType<TFirst>.Id(first, Handle), func);
+            WithSecond<TSecond>(Type<TFirst>.Id(Handle, first), func);
         }
 
         /// <summary>
@@ -1726,7 +1726,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void Scope<T>(T value, Action func) where T : Enum
         {
-            Scope(EnumType<T>.Id(value, Handle), func);
+            Scope(Type<T>.Id(Handle, value), func);
         }
 
         /// <summary>
@@ -1757,7 +1757,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ScopedWorld Scope<T>(T value) where T : Enum
         {
-            return Scope(EnumType<T>.Id(value, Handle));
+            return Scope(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1805,7 +1805,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void DeleteWith<T>(T value) where T : Enum
         {
-            DeleteWith<T>(EnumType<T>.Id(value, Handle));
+            DeleteWith<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1836,7 +1836,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void DeleteWith<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            DeleteWith<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            DeleteWith<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1847,7 +1847,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void DeleteWith<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            DeleteWithSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            DeleteWithSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1895,7 +1895,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void RemoveAll<T>(T value) where T : Enum
         {
-            RemoveAll<T>(EnumType<T>.Id(value, Handle));
+            RemoveAll<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1926,7 +1926,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void RemoveAll<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            RemoveAll<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            RemoveAll<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1937,7 +1937,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void RemoveAll<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            RemoveAllSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            RemoveAllSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -2119,7 +2119,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id<T>(T value) where T : Enum
         {
-            return new Id(Handle, EnumType<T>.Id(value, Handle));
+            return new Id(Handle, Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2153,7 +2153,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Id<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Id<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -2165,7 +2165,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return IdSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return IdSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -2198,7 +2198,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair<T>(T value) where T : Enum
         {
-            return Id<T>(EnumType<T>.Id(value, Handle));
+            return Id<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2232,7 +2232,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Pair<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Pair<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -2244,7 +2244,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return PairSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return PairSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -2377,7 +2377,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Entity<T>(T value) where T : Enum
         {
-            return new Entity(Handle, EnumType<T>.Id(value, Handle));
+            return new Entity(Handle, Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2447,7 +2447,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public EventBuilder Event<T>(T value) where T : Enum
         {
-            return new EventBuilder(Handle, EnumType<T>.Id(value, Handle));
+            return new EventBuilder(Handle, Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2508,7 +2508,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<T>(T value) where T : Enum
         {
-            return Term<T>(EnumType<T>.Id(value, Handle));
+            return Term<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2542,7 +2542,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Term<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Term<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -2554,7 +2554,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return TermSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return TermSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -2599,7 +2599,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void Each<T>(T value, Ecs.EachEntityCallback<T> callback) where T : Enum
         {
-            Each(EnumType<T>.Id(value, Handle), callback);
+            Each(Type<T>.Id(Handle, value), callback);
         }
 
         /// <summary>
@@ -2657,7 +2657,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Each<TFirst, TSecond>(TSecond second, Ecs.EachEntityCallback<TFirst> callback) where TSecond : Enum
         {
-            Each(EnumType<TSecond>.Id(second, Handle), callback);
+            Each(Type<TSecond>.Id(Handle, second), callback);
         }
 
         /// <summary>
@@ -2669,7 +2669,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Each<TFirst, TSecond>(TFirst first, Ecs.EachEntityCallback<TSecond> callback) where TFirst : Enum
         {
-            EachSecond(EnumType<TFirst>.Id(first, Handle), callback);
+            EachSecond(Type<TFirst>.Id(Handle, first), callback);
         }
 
         /// <summary>
@@ -2752,7 +2752,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void SetPipeline<T>(T value) where T : Enum
         {
-            SetPipeline(EnumType<T>.Id(value, Handle));
+            SetPipeline(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2901,7 +2901,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void Timer<T>(T value) where T : Enum
         {
-            Timer(EnumType<T>.Id(value, Handle));
+            Timer(Type<T>.Id(Handle, value));
         }
 
         /// <summary>

@@ -102,7 +102,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref RoutineBuilder Kind<TEnum>(TEnum enumMember) where TEnum : Enum
         {
-            return ref Kind(EnumType<TEnum>.Id(enumMember, World));
+            return ref Kind(Type<TEnum>.Id(World, enumMember));
         }
 
         /// <summary>
