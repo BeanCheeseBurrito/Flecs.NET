@@ -345,19 +345,19 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Set current scope.
+        ///     Set the current scope.
         /// </summary>
-        /// <param name="scope"></param>
-        /// <returns></returns>
+        /// <param name="scope">The entity to use as scope.</param>
+        /// <returns>The previous scope.</returns>
         public Entity SetScope(ulong scope)
         {
-            return new Entity(ecs_set_scope(Handle, scope));
+            return new Entity(Handle, ecs_set_scope(Handle, scope));
         }
 
         /// <summary>
-        ///     Get current scope.
+        ///     Get the current scope.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The current scope.</returns>
         public Entity GetScope()
         {
             return new Entity(Handle, ecs_get_scope(Handle));
@@ -3498,6 +3498,25 @@ namespace Flecs.NET.Core
         public Table Table()
         {
             return new Table(Handle);
+        }
+
+        /// <summary>
+        ///     Set current with id.
+        /// </summary>
+        /// <param name="with">The id.</param>
+        /// <returns>The previous id.</returns>
+        public Entity SetWith(ulong with)
+        {
+            return new Entity(Handle, ecs_set_with(Handle, with));
+        }
+
+        /// <summary>
+        ///     Get current with id.
+        /// </summary>
+        /// <returns>The last id provided to ecs_set_with().</returns>
+        public Entity GetWith()
+        {
+            return new Entity(Handle, ecs_get_with(Handle));
         }
 
         /// <summary>

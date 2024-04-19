@@ -160,8 +160,8 @@ namespace Flecs.NET.Core
                 return e;
             }
 
-            ulong prevScope = ecs_set_scope(world, ignoreScope ? 0 : ecs_get_scope(world));
-            ulong prevWith = ecs_set_with(world, ignoreScope ? 0 : ecs_get_with(world));
+            Entity prevScope = world.SetScope(ignoreScope ? 0ul : world.GetScope());
+            Entity prevWith = world.SetWith(ignoreScope ? 0ul : world.GetWith());
 
             // Check if an entity exists with the same symbol as this type. This is normally used
             // for pairing Flecs.NET.Bindings.Native types with their C counterparts.
@@ -198,8 +198,8 @@ namespace Flecs.NET.Core
             ulong component = ecs_component_init(world, &componentDesc);
             Ecs.Assert(component != 0, $"Failed to register component for type '{FullName}'");
 
-            ecs_set_scope(world, prevScope);
-            ecs_set_with(world, prevWith);
+            world.SetWith(prevWith);
+            world.SetScope(prevScope);
 
             if (typeof(T).IsEnum)
                 EnumType<T>.Init(world, entity);
