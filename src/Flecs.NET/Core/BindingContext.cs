@@ -297,14 +297,14 @@ namespace Flecs.NET.Core
             public Callback AtFini;
             public Callback RunPostFrame;
             public Callback ContextFree;
-            public NativeList<ulong> ComponentCache;
+            public NativeList<ulong> TypeCache;
 
             public void Dispose()
             {
                 AtFini.Dispose();
                 RunPostFrame.Dispose();
                 ContextFree.Dispose();
-                ComponentCache.Dispose();
+                TypeCache.Dispose();
             }
         }
 

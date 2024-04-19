@@ -3374,28 +3374,6 @@ namespace Flecs.NET.Core
             return ptr;
         }
 
-        internal ref ulong EnsureComponentIndex(int index)
-        {
-            ref NativeList<ulong> cache = ref ((BindingContext.WorldContext*)ecs_get_binding_ctx(Handle))->ComponentCache;
-            cache.EnsureCount(index + 1);
-            return ref cache.Data[index];
-        }
-
-        internal ref ulong LookupComponentIndex(int index)
-        {
-            ref NativeList<ulong> cache = ref ((BindingContext.WorldContext*)ecs_get_binding_ctx(Handle))->ComponentCache;
-
-            if (index >= cache.Count)
-                return ref Unsafe.NullRef<ulong>();
-
-            ref ulong cachedId = ref cache.Data[index];
-
-            if (cachedId == 0)
-                return ref Unsafe.NullRef<ulong>();
-
-            return ref cachedId;
-        }
-
         /// <summary>
         ///     Returns native pointer to world.
         /// </summary>

@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -13,7 +14,6 @@ namespace Flecs.NET.Core
     ///     Static class that registers and stores information about types.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [SuppressMessage("Usage", "CA1721")]
     [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
     public static unsafe class Type<T>
     {
@@ -53,45 +53,14 @@ namespace Flecs.NET.Core
         public static readonly bool IsTag = Size == 0 && Alignment == 0;
 
         /// <summary>
-        ///     Cecks if the type is registered in the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <returns></returns>
-        public static bool IsRegistered(ecs_world_t* world)
-        {
-            return Lookup(world) != 0;
-        }
-
-        /// <summary>
-        ///     Looks up a type id for the provided world. Returns 0 if the type is not yet registered in that world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <returns></returns>
-        public static ulong Lookup(ecs_world_t* world)
-        {
-            ref ulong cachedId = ref new World(world).LookupComponentIndex(CacheIndex);
-            return Unsafe.IsNullRef(ref cachedId) ? 0 : cachedId;
-        }
-
-        /// <summary>
-        ///     Looks up a type id for the provided world. Returns 0 if the type is not yet registered in that world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public static bool TryLookup(ecs_world_t* world, out ulong entity)
-        {
-            return (entity = Lookup(world)) != 0;
-        }
-
-        /// <summary>
         ///     Returns the id for this type with the provided world. Registers a new component id if it doesn't exist.
         /// </summary>
         /// <param name="world"></param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Id(ecs_world_t* world)
         {
-            ref ulong cachedId = ref new World(world).LookupComponentIndex(CacheIndex);
+            ref ulong cachedId = ref LookupCacheIndex(world);
             return Unsafe.IsNullRef(ref cachedId)
                 ? RegisterComponent(world, true, true, 0, "")
                 : cachedId;
@@ -105,9 +74,10 @@ namespace Flecs.NET.Core
         /// <param name="isComponent"></param>
         /// <param name="id"></param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Id(ecs_world_t* world, bool ignoreScope, bool isComponent, ulong id)
         {
-            ref ulong cachedId = ref new World(world).LookupComponentIndex(CacheIndex);
+            ref ulong cachedId = ref LookupCacheIndex(world);
             return Unsafe.IsNullRef(ref cachedId)
                 ? RegisterComponent(world, ignoreScope, isComponent, id, "")
                 : cachedId;
@@ -122,12 +92,76 @@ namespace Flecs.NET.Core
         /// <param name="id"></param>
         /// <param name="name"></param>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Id(ecs_world_t* world, bool ignoreScope, bool isComponent, ulong id, string name)
         {
-            ref ulong cachedId = ref new World(world).LookupComponentIndex(CacheIndex);
+            ref ulong cachedId = ref LookupCacheIndex(world);
             return Unsafe.IsNullRef(ref cachedId)
                 ? RegisterComponent(world, ignoreScope, isComponent, id, name)
                 : cachedId;
+        }
+
+        /// <summary>
+        ///     Checks if the type is registered in the provided world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsRegistered(ecs_world_t* world)
+        {
+            ref ulong cachedId = ref LookupCacheIndex(world);
+            return !Unsafe.IsNullRef(ref cachedId) && cachedId != 0;
+        }
+
+        /// <summary>
+        ///     Ensures that the world has memory allocated at the provided cache index.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <returns>Reference to the id at the provided cache index.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref ulong EnsureCacheIndex(ecs_world_t* world)
+        {
+            return ref EnsureCacheIndex(world, CacheIndex);
+        }
+
+        /// <summary>
+        ///     Ensures that the world has memory allocated at the provided cache index.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="index">The type cache index.</param>
+        /// <returns>Reference to the id at the provided cache index.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref ulong EnsureCacheIndex(ecs_world_t* world, int index)
+        {
+            ref NativeList<ulong> cache = ref ((BindingContext.WorldContext*)ecs_get_binding_ctx(world))->TypeCache;
+            cache.EnsureCount(index + 1);
+            return ref cache.Data[index];
+        }
+
+        /// <summary>
+        ///     Gets a reference to the id occupying the provided cache index for this world.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <returns>Reference to the id at the provided cache index. Returns a null reference if the index does not have a registered id yet.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref ulong LookupCacheIndex(ecs_world_t* world)
+        {
+            return ref LookupCacheIndex(world, CacheIndex);
+        }
+
+        /// <summary>
+        ///     Gets a reference to the id occupying the provided cache index for this world.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="index">The type cache index.</param>
+        /// <returns>Reference to the id at the provided cache index. Returns a null reference if the index does not have a registered id yet.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref ulong LookupCacheIndex(ecs_world_t* world, int index)
+        {
+            ref NativeList<ulong> cache = ref ((BindingContext.WorldContext*)ecs_get_binding_ctx(world))->TypeCache;
+            return ref index >= cache.Count || cache.Data[index] == 0
+                ? ref Unsafe.NullRef<ulong>()
+                : ref cache.Data[index];
         }
 
         /// <summary>
@@ -186,7 +220,7 @@ namespace Flecs.NET.Core
             ulong entity = ecs_entity_init(world, &entityDesc);
             Ecs.Assert(entity != 0, $"Failed to register entity for type '{FullName}'");
 
-            world.EnsureComponentIndex(CacheIndex) = entity;
+            EnsureCacheIndex(world) = entity;
 
             if (!isComponent)
                 return entity;

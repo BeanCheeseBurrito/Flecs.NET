@@ -39,12 +39,11 @@ namespace Flecs.NET.Core
         {
             ecs_cpp_enum_init(world, id);
 
-            World w = new World(world);
             for (int i = 0; i < _data.Length; i++)
             {
                 T member = (T)(object)_data[i].Value;
                 using NativeString nativeName = (NativeString)member.ToString();
-                w.EnsureComponentIndex(_data[i].CacheIndex) =
+                Type<T>.EnsureCacheIndex(world, _data[i].CacheIndex) =
                     ecs_cpp_enum_constant_register(world, id, 0, nativeName, _data[i].Value);
             }
         }
@@ -66,7 +65,7 @@ namespace Flecs.NET.Core
             {
                 EnumMember data = _data[i];
                 if (data.Value == value)
-                    return new World(world).LookupComponentIndex(data.CacheIndex);
+                    return Type<T>.LookupCacheIndex(world, data.CacheIndex);
             }
 
             Ecs.Error("Failed to find entity associated with enum member.");
