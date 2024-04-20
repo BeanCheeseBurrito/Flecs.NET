@@ -1074,17 +1074,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Lookup an entity by name.
+        ///     Lookup an entity from a path.
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="searchPath"></param>
-        /// <returns></returns>
-        public Entity Lookup(string path, bool searchPath = false)
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public Entity Lookup(string path, bool recursive = false)
         {
-            Ecs.Assert(Id != 0, "invalid lookup from null handle");
+            Ecs.Assert(Id != 0, "Invalid lookup from null handle.");
             using NativeString nativePath = (NativeString)path;
             ulong id = ecs_lookup_path_w_sep(World, Id, nativePath,
-                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.Bool(searchPath));
+                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.Bool(recursive));
             return new Entity(World, id);
         }
 
@@ -3807,6 +3807,56 @@ namespace Flecs.NET.Core
         public override string ToString()
         {
             return Id.ToString();
+        }
+    }
+
+    // Flecs.NET Extensions
+    public unsafe partial struct Entity
+    {
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, out Entity entity)
+        {
+            return TryLookup(path, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, bool recursive, out Entity entity)
+        {
+            return (entity = Lookup(path, recursive)) != 0;
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, out ulong entity)
+        {
+            return TryLookup(path, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, bool recursive, out ulong entity)
+        {
+            return (entity = Lookup(path, recursive)) != 0;
         }
     }
 }
