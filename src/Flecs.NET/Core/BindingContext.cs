@@ -15,8 +15,7 @@ namespace Flecs.NET.Core
         [SuppressMessage("Usage", "CA1823")]
         private static readonly BindingContextCleanup _cleanup = new BindingContextCleanup();
 
-        internal static readonly byte* DefaultSeparator = (byte*)Marshal.StringToHGlobalAnsi(".");
-        internal static readonly byte* DefaultRootSeparator = (byte*)Marshal.StringToHGlobalAnsi("::");
+        internal static readonly byte* DefaultSeparator = (byte*)Marshal.StringToHGlobalAnsi(Ecs.DefaultSeparator);
 
 #if NET5_0_OR_GREATER
         internal static readonly IntPtr ActionCallbackPointer =
@@ -191,7 +190,7 @@ namespace Flecs.NET.Core
         {
             GroupByContext* context = (GroupByContext*)ctx;
             Ecs.GroupByCallback callback = (Ecs.GroupByCallback)context->GroupBy.GcHandle.Target!;
-            return callback(new World(world, false), new Table(world, table), new Entity(world, id));
+            return callback(new World(world), new Table(world, table), new Entity(world, id));
         }
 
         private static void WorldContextFree(void* context)
@@ -298,12 +297,14 @@ namespace Flecs.NET.Core
             public Callback AtFini;
             public Callback RunPostFrame;
             public Callback ContextFree;
+            public NativeList<ulong> TypeCache;
 
             public void Dispose()
             {
                 AtFini.Dispose();
                 RunPostFrame.Dispose();
                 ContextFree.Dispose();
+                TypeCache.Dispose();
             }
         }
 
@@ -388,7 +389,6 @@ namespace Flecs.NET.Core
             ~BindingContextCleanup()
             {
                 Memory.Free(DefaultSeparator);
-                Memory.Free(DefaultRootSeparator);
             }
         }
     }

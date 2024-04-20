@@ -7,11 +7,6 @@ namespace Flecs.NET.Tests.CSharp.Core
     [SuppressMessage("ReSharper", "AccessToModifiedClosure")]
     public class QueryBuilderTests
     {
-        public QueryBuilderTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void GroupBy()
         {

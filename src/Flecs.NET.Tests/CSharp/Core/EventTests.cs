@@ -5,11 +5,6 @@ namespace Flecs.NET.Tests.CSharp.Core
 {
     public class EventTests
     {
-        public EventTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         public void EntityEmitEventWithManagedPayload()
         {

@@ -1,3 +1,5 @@
+using Flecs.NET.Bindings;
+
 namespace Flecs.NET.Core
 {
     public static partial class Ecs
@@ -8,8 +10,8 @@ namespace Flecs.NET.Core
         public const string DefaultSeparator = ".";
 
         /// <summary>
-        ///     Default path root.
+        ///     Native Flecs namespace.
         /// </summary>
-        public const string DefaultRootSeparator = "::";
+        public static readonly string NativeNamespace = $"{nameof(Flecs)}.{nameof(NET)}.{nameof(Bindings)}.{nameof(Native)}+";
     }
 }

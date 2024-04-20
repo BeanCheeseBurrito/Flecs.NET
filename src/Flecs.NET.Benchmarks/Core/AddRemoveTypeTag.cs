@@ -4,9 +4,10 @@ using static Flecs.NET.Bindings.Native;
 
 namespace Flecs.NET.Benchmarks.Core
 {
-    public unsafe class AddRemoveTypeTag
+    public unsafe class AddRemoveTag
     {
-        [Params(100000)] public int EntityCount;
+        [Params(100000)]
+        public int EntityCount;
 
         public World World;
         public Entity[] Entities;
@@ -22,7 +23,7 @@ namespace Flecs.NET.Benchmarks.Core
             Entities = new Entity[EntityCount];
 
             World.Component<Tag>();
-            TagId = Type<Tag>.RawId;
+            TagId = World.Component<Tag>();
 
             for (int i = 0; i < EntityCount; i++)
                 Entities[i] = World.Entity();
@@ -35,7 +36,7 @@ namespace Flecs.NET.Benchmarks.Core
         }
 
         [Benchmark]
-        public void TypeTag()
+        public void AddRemoveTypeTag()
         {
             for (int e = 0; e < EntityCount; e++)
                 Entities[e].Add<Tag>();
@@ -45,7 +46,7 @@ namespace Flecs.NET.Benchmarks.Core
         }
 
         [Benchmark]
-        public void RawTag()
+        public void AddRemoveIntegerTag()
         {
             for (int e = 0; e < EntityCount; e++)
                 ecs_add_id(World, Entities[e], TagId);

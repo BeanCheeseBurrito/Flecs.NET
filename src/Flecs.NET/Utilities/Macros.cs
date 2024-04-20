@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using Flecs.NET.Core;
 using static Flecs.NET.Bindings.Native;
 
@@ -67,7 +68,7 @@ namespace Flecs.NET.Utilities
         public static bool IsNullReadOnlyRef<T>(in T obj)
         {
 #if NET5_0_OR_GREATER
-            return Unsafe.IsNullRef(ref Unsafe.AsRef(obj));
+            return Unsafe.IsNullRef(ref Unsafe.AsRef(in obj));
 #else
             return Unsafe.AsPointer(ref Unsafe.AsRef(obj)) == null;
 #endif
@@ -82,7 +83,7 @@ namespace Flecs.NET.Utilities
         public static void OsFree(IntPtr data)
         {
 #if NET5_0_OR_GREATER
-            ((delegate* unmanaged[Cdecl]<IntPtr, void>)ecs_os_api.free_)(data);
+            ((delegate* unmanaged<IntPtr, void>)ecs_os_api.free_)(data);
 #else
             Marshal.GetDelegateForFunctionPointer<Ecs.Free>(ecs_os_api.free_)(data);
 #endif
@@ -182,7 +183,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Pair<TFirst, TSecond>(TSecond second, ecs_world_t* world) where TSecond : Enum
         {
-            return Pair<TFirst>(EnumType<TSecond>.Id(second, world), world);
+            return Pair<TFirst>(Type<TSecond>.Id(world, second), world);
         }
 
         /// <summary>
@@ -196,7 +197,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Pair<TFirst, TSecond>(TFirst first, ecs_world_t* world) where TFirst : Enum
         {
-            return PairSecond<TSecond>(EnumType<TFirst>.Id(first, world), world);
+            return PairSecond<TSecond>(Type<TFirst>.Id(world, first), world);
         }
 
         /// <summary>

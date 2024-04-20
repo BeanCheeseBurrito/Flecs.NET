@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <NoWarn>$(NoWarn);xUnit2013</NoWarn>
+        <NoWarn>$(NoWarn);xUnit2013;CS8500</NoWarn>
     </PropertyGroup>
 
     <Import Project="../Flecs.NET.Native/Flecs.NET.Native.targets"/>

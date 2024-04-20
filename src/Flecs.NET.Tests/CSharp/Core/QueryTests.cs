@@ -5,11 +5,6 @@ namespace Flecs.NET.Tests.CSharp.Core
 {
     public unsafe class QueryTests
     {
-        public QueryTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void IterDelegateCallback()
         {

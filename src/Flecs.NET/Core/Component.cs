@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -33,85 +34,32 @@ namespace Flecs.NET.Core
         public ref Id Id => ref Entity.Id;
 
         /// <summary>
-        ///     Registers a component.
-        ///     If the component was already registered, this operation will return a handle to the existing component.
+        ///     Registers this type with the provided world or returns an existing id if found.
+        /// </summary>
+        /// <param name="world"></param>
+        public Component(ecs_world_t* world)
+        {
+            _untypedComponent = new UntypedComponent(world, Type<TComponent>.Id(world, false, true, 0));
+        }
+
+        /// <summary>
+        ///     Registers this type with the provided world or returns an existing id if found.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="id"></param>
+        public Component(ecs_world_t* world, ulong id)
+        {
+            _untypedComponent = new UntypedComponent(world, Type<TComponent>.Id(world, false, true, id));
+        }
+
+        /// <summary>
+        ///     Registers this type with the provided world or returns an existing id if found.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="name"></param>
-        /// <param name="allowTag"></param>
-        /// <param name="id"></param>
-        public Component(ecs_world_t* world, string? name = null, bool allowTag = true, ulong id = 0)
+        public Component(ecs_world_t* world, string name)
         {
-            bool implicitName = false;
-
-            if (string.IsNullOrEmpty(name))
-            {
-                name = Type<TComponent>.GetTypeName();
-                implicitName = true;
-            }
-
-            using NativeString nativeSymbolName = (NativeString)Type<TComponent>.GetSymbolName();
-
-            if (Type<TComponent>.IsRegistered(world))
-            {
-                id = Type<TComponent>.IdExplicit(world, name, allowTag, id);
-
-                using NativeString nativeName = (NativeString)name;
-
-                FlecsInternal.ComponentValidate(
-                    world, id, nativeName,
-                    nativeSymbolName,
-                    Type<TComponent>.GetSize(),
-                    Type<TComponent>.GetAlignment(),
-                    Macros.Bool(implicitName)
-                );
-            }
-            else
-            {
-                if (implicitName && ecs_get_scope(world) != 0)
-                {
-                    int start = name.IndexOf('<', StringComparison.Ordinal);
-                    int lastElem = 0;
-
-                    if (start != -1)
-                    {
-                        int index = start;
-
-                        while (index != 0 && name[index] != '.' && name[index] != ':')
-                            index--;
-
-                        if (name[index] == '.' || name[index] == ':')
-                            lastElem = index;
-                    }
-                    else
-                    {
-                        lastElem = name.LastIndexOf('.');
-
-                        if (lastElem == -1)
-                            lastElem = name.LastIndexOf(':');
-                    }
-
-                    name = name[(lastElem + 1)..];
-                }
-
-                using NativeString nativeName = (NativeString)name;
-                byte existing;
-
-                Type<TComponent>.NativeLayout(out int size, out int alignment, allowTag);
-
-                id = FlecsInternal.ComponentRegister(
-                    world, id, nativeName, nativeSymbolName,
-                    size, alignment,
-                    Macros.Bool(implicitName), &existing
-                );
-
-                id = Type<TComponent>.IdExplicit(world, name, allowTag, id);
-
-                if (Type<TComponent>.GetSize() != 0 && existing == Macros.False)
-                    Type<TComponent>.RegisterLifeCycleActions(world);
-            }
-
-            _untypedComponent = new UntypedComponent(world, id);
+            _untypedComponent = new UntypedComponent(world, Type<TComponent>.Id(world, false, true, 0, name));
         }
 
         // TODO: Port opaque stuff here later
@@ -442,16 +390,52 @@ namespace Flecs.NET.Core
         }
     }
 
-    // Flecs.NET
+    // Flecs.NET Extensions
     public unsafe partial struct Component<TComponent>
     {
         /// <summary>
         ///     Sets the component's type hooks.
         /// </summary>
-        /// <param name="typeHooks"></param>
-        public void SetHooks(TypeHooks<TComponent> typeHooks)
+        /// <param name="hooks"></param>
+        public void SetHooks(TypeHooks<TComponent> hooks)
         {
-            Type<TComponent>.SetTypeHooks(World, typeHooks);
+            ecs_type_hooks_t desc = default;
+
+            if (RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>())
+            {
+                desc.ctor = hooks.Ctor == null ? BindingContext<TComponent>.DefaultManagedCtorPointer : BindingContext<TComponent>.ManagedCtorPointer;
+                desc.dtor = hooks.Dtor == null ? BindingContext<TComponent>.DefaultManagedDtorPointer : BindingContext<TComponent>.ManagedDtorPointer;
+                desc.move = hooks.Move == null ? BindingContext<TComponent>.DefaultManagedMovePointer : BindingContext<TComponent>.ManagedMovePointer;
+                desc.copy = hooks.Copy == null ? BindingContext<TComponent>.DefaultManagedCopyPointer : BindingContext<TComponent>.ManagedCopyPointer;
+            }
+            else
+            {
+                desc.ctor = hooks.Ctor == null ? IntPtr.Zero : BindingContext<TComponent>.UnmanagedCtorPointer;
+                desc.dtor = hooks.Dtor == null ? IntPtr.Zero : BindingContext<TComponent>.UnmanagedDtorPointer;
+                desc.move = hooks.Move == null ? IntPtr.Zero : BindingContext<TComponent>.UnmanagedMovePointer;
+                desc.copy = hooks.Copy == null ? IntPtr.Zero : BindingContext<TComponent>.UnmanagedCopyPointer;
+            }
+
+            BindingContext.TypeHooksContext* bindingContext = Memory.AllocZeroed<BindingContext.TypeHooksContext>(1);
+            BindingContext.SetCallback(ref bindingContext->Ctor, hooks.Ctor, false);
+            BindingContext.SetCallback(ref bindingContext->Dtor, hooks.Dtor, false);
+            BindingContext.SetCallback(ref bindingContext->Move, hooks.Move, false);
+            BindingContext.SetCallback(ref bindingContext->Copy, hooks.Copy, false);
+            BindingContext.SetCallback(ref bindingContext->OnAdd, hooks.OnAdd, false);
+            BindingContext.SetCallback(ref bindingContext->OnSet, hooks.OnSet, false);
+            BindingContext.SetCallback(ref bindingContext->OnRemove, hooks.OnRemove, false);
+            BindingContext.SetCallback(ref bindingContext->ContextFree, hooks.ContextFree);
+
+            desc.on_add = hooks.OnAdd == null ? IntPtr.Zero : BindingContext<TComponent>.OnAddHookPointer;
+            desc.on_set = hooks.OnSet == null ? IntPtr.Zero : BindingContext<TComponent>.OnSetHookPointer;
+            desc.on_remove = hooks.OnRemove == null ? IntPtr.Zero : BindingContext<TComponent>.OnRemoveHookPointer;
+            desc.ctx = hooks.Context;
+            desc.ctx_free = bindingContext->ContextFree.Function;
+            desc.binding_ctx = bindingContext;
+            desc.binding_ctx_free = BindingContext.TypeHooksContextFreePointer;
+
+            if (desc != default)
+                ecs_set_hooks_id(World, Id, &desc);
         }
     }
 }

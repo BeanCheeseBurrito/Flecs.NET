@@ -12,7 +12,6 @@ namespace Flecs.NET.Core
     public unsafe partial struct World : IDisposable, IEquatable<World>
     {
         private ecs_world_t* _handle;
-        private bool _owned;
 
         private ref BindingContext.WorldContext WorldContext => ref *EnsureBindingContext();
 
@@ -22,25 +21,12 @@ namespace Flecs.NET.Core
         public ref ecs_world_t* Handle => ref _handle;
 
         /// <summary>
-        ///     Represents whether or not the world is owned.
-        /// </summary>
-        public ref bool Owned => ref _owned;
-
-        /// <summary>
         ///     Constructs a world from an <see cref="ecs_world_t"/> pointer.
         /// </summary>
         /// <param name="handle">The world handle.</param>
-        /// <param name="owned">The owned boolean.</param>
-        /// <param name="overrideOsAbort"></param>
-        public World(ecs_world_t* handle, bool owned = true, bool overrideOsAbort = false)
+        public World(ecs_world_t* handle)
         {
             _handle = handle;
-            _owned = owned;
-
-            InitBuiltinComponents();
-
-            if (overrideOsAbort)
-                FlecsInternal.OverrideOsAbort();
         }
 
         /// <summary>
@@ -49,17 +35,32 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public static World Create(bool overrideOsAbort = true)
         {
-            return new World(ecs_init(), true, overrideOsAbort);
+            if (overrideOsAbort)
+                FlecsInternal.OverrideOsAbort();
+
+            World w = new World(ecs_init());
+            w.EnsureBindingContext();
+            w.InitBuiltinComponents();
+
+            return w;
         }
 
         /// <summary>
         ///     Creates a flecs world from an <see cref="ecs_world_t"/> pointer that is not owned.
         /// </summary>
         /// <param name="world">A C world.</param>
+        /// <param name="overrideOsAbort"></param>
         /// <returns>A newly created world.</returns>
-        public static World Create(ecs_world_t* world)
+        public static World Create(ecs_world_t* world, bool overrideOsAbort = true)
         {
-            return new World(world, false);
+            if (overrideOsAbort)
+                FlecsInternal.OverrideOsAbort();
+
+            World w = new World(world);
+            w.EnsureBindingContext();
+            w.InitBuiltinComponents();
+
+            return w;
         }
 
         /// <summary>
@@ -101,7 +102,9 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Reset()
         {
-            Ecs.Assert(Owned, nameof(ECS_INVALID_OPERATION));
+            Ecs.Assert(Handle != null, nameof(ECS_INVALID_OPERATION));
+            Ecs.Assert(Macros.IsStageOrWorld(Handle));
+            Ecs.Assert(!Macros.PolyIs(Handle, ecs_stage_t_magic));
             _ = ecs_fini(Handle);
             Handle = ecs_init();
         }
@@ -261,7 +264,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public World GetStage(int stageId)
         {
-            return new World(ecs_get_stage(Handle, stageId), false);
+            return new World(ecs_get_stage(Handle, stageId));
         }
 
         /// <summary>
@@ -279,7 +282,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public World GetWorld()
         {
-            return new World(Handle == null ? null : ecs_get_world(Handle), false);
+            return new World(Handle == null ? null : ecs_get_world(Handle));
         }
 
         /// <summary>
@@ -340,19 +343,40 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Set current scope.
+        ///     Set the current scope.
         /// </summary>
-        /// <param name="scope"></param>
-        /// <returns></returns>
+        /// <param name="scope">The entity to use as scope.</param>
+        /// <returns>The previous scope.</returns>
         public Entity SetScope(ulong scope)
         {
-            return new Entity(ecs_set_scope(Handle, scope));
+            return new Entity(Handle, ecs_set_scope(Handle, scope));
         }
 
         /// <summary>
-        ///     Get current scope.
+        ///     Set the current scope.
         /// </summary>
-        /// <returns></returns>
+        /// <typeparam name="T">The entity to use as scope.</typeparam>
+        /// <returns>The previous scope.</returns>
+        public Entity SetScope<T>()
+        {
+            return SetScope(Type<T>.Id(Handle));
+        }
+
+        /// <summary>
+        ///     Set the current scope.
+        /// </summary>
+        /// <param name="value">The entity to use as scope.</param>
+        /// <typeparam name="T">The enum type of the entity.</typeparam>
+        /// <returns>The previous scope.</returns>
+        public Entity SetScope<T>(T value) where T : Enum
+        {
+            return SetScope(Type<T>.Id(Handle, value));
+        }
+
+        /// <summary>
+        ///     Get the current scope.
+        /// </summary>
+        /// <returns>The current scope.</returns>
         public Entity GetScope()
         {
             return new Entity(Handle, ecs_get_scope(Handle));
@@ -371,18 +395,20 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Lookup entity by name.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="searchPath"></param>
-        /// <returns></returns>
-        public Entity Lookup(string name, bool searchPath = true)
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <returns>The entity if found, else 0.</returns>
+        public Entity Lookup(string path, bool recursive = true)
         {
+            if (string.IsNullOrEmpty(path))
+                return new Entity(Handle, 0);
 
-            using NativeString nativeName = (NativeString)name;
+            using NativeString nativePath = (NativeString)path;
 
             return new Entity(
                 Handle,
-                ecs_lookup_path_w_sep(Handle, 0, nativeName,
-                    BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.Bool(searchPath))
+                ecs_lookup_path_w_sep(Handle, 0, nativePath,
+                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.Bool(recursive))
             );
         }
 
@@ -447,7 +473,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref World Set<TFirst, TSecond>(TSecond second, ref TFirst component) where TSecond : Enum
         {
-            return ref Set(EnumType<TSecond>.Id(second, Handle), ref component);
+            return ref Set(Type<TSecond>.Id(Handle, second), ref component);
         }
 
         /// <summary>
@@ -460,7 +486,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref World Set<TFirst, TSecond>(TFirst first, ref TSecond component) where TFirst : Enum
         {
-            return ref SetSecond(EnumType<TFirst>.Id(first, Handle), ref component);
+            return ref SetSecond(Type<TFirst>.Id(Handle, first), ref component);
         }
 
         /// <summary>
@@ -604,7 +630,7 @@ namespace Flecs.NET.Core
             where TFirst : unmanaged
             where TSecond : Enum
         {
-            return EnsurePtr<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return EnsurePtr<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -618,7 +644,7 @@ namespace Flecs.NET.Core
             where TFirst : Enum
             where TSecond : unmanaged
         {
-            return EnsureSecondPtr<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return EnsureSecondPtr<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -684,7 +710,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref TFirst Ensure<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Ensure<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return ref Ensure<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -696,7 +722,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref TSecond Ensure<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return ref EnsureSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return ref EnsureSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -769,7 +795,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Modified<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            Modified<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            Modified<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -780,7 +806,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Modified<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            ModifiedSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            ModifiedSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -823,7 +849,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Ref<TFirst> GetRef<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return GetRef<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return GetRef<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -835,7 +861,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Ref<TSecond> GetRef<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return GetRefSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return GetRefSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -903,7 +929,7 @@ namespace Flecs.NET.Core
             where TFirst : unmanaged
             where TSecond : Enum
         {
-            return GetPtr<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return GetPtr<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -917,7 +943,7 @@ namespace Flecs.NET.Core
             where TFirst : Enum
             where TSecond : unmanaged
         {
-            return GetSecondPtr<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return GetSecondPtr<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -984,7 +1010,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref readonly TFirst Get<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Get<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return ref Get<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -996,7 +1022,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref readonly TSecond Get<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return ref GetSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return ref GetSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1125,7 +1151,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Has<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Has<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1137,7 +1163,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return HasSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return HasSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1217,7 +1243,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Add<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            Add<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            Add<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1228,7 +1254,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Add<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            AddSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            AddSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1307,7 +1333,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Remove<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            Remove<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            Remove<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1318,7 +1344,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Remove<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            RemoveSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            RemoveSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1464,7 +1490,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Use<T>(T value, string alias = "") where T : Enum
         {
-            return Use(EnumType<T>.Id(value, Handle), alias);
+            return Use(Type<T>.Id(Handle, value), alias);
         }
 
         /// <summary>
@@ -1478,7 +1504,7 @@ namespace Flecs.NET.Core
             using NativeString nativeName = (NativeString)name;
 
             ulong entity = ecs_lookup_path_w_sep(Handle, 0, nativeName,
-                BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.True);
+                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.True);
 
             Ecs.Assert(entity != 0, nameof(ECS_INVALID_PARAMETER));
 
@@ -1527,7 +1553,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<T>(T value) where T : Enum
         {
-            return Count<T>(EnumType<T>.Id(value, Handle));
+            return Count<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1561,7 +1587,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Count<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Count<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1573,7 +1599,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return CountSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return CountSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1628,7 +1654,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void With<T>(T value, Action func) where T : Enum
         {
-            With<T>(EnumType<T>.Id(value, Handle), func);
+            With<T>(Type<T>.Id(Handle, value), func);
         }
 
         /// <summary>
@@ -1662,7 +1688,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void With<TFirst, TSecond>(TSecond second, Action func) where TSecond : Enum
         {
-            With<TFirst>(EnumType<TSecond>.Id(second, Handle), func);
+            With<TFirst>(Type<TSecond>.Id(Handle, second), func);
         }
 
         /// <summary>
@@ -1674,7 +1700,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void With<TFirst, TSecond>(TFirst first, Action func) where TFirst : Enum
         {
-            WithSecond<TSecond>(EnumType<TFirst>.Id(first, Handle), func);
+            WithSecond<TSecond>(Type<TFirst>.Id(Handle, first), func);
         }
 
         /// <summary>
@@ -1692,34 +1718,68 @@ namespace Flecs.NET.Core
         ///     All entities created in function are created in scope. All operations
         ///     called in function (such as lookup) are relative to scope.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="func"></param>
-        public void Scope(ulong parent, Action func)
+        /// <param name="parent">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        public void Scope(ulong parent, Action callback)
         {
             ulong prev = ecs_set_scope(Handle, parent);
-            func();
+            callback();
             ecs_set_scope(Handle, prev);
         }
 
         /// <summary>
         ///     Same as Scope(parent, func), but with T as parent.
         /// </summary>
-        /// <param name="func"></param>
-        /// <typeparam name="T"></typeparam>
-        public void Scope<T>(Action func)
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The entity to use as scope.</typeparam>
+        public void Scope<T>(Action callback)
         {
-            Scope(Type<T>.Id(Handle), func);
+            Scope(Type<T>.Id(Handle), callback);
         }
 
         /// <summary>
         ///     Same as Scope(parent, func), but with enum as parent.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="T"></typeparam>
-        public void Scope<T>(T value, Action func) where T : Enum
+        /// <param name="value">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The enum type of the entity.</typeparam>
+        public void Scope<T>(T value, Action callback) where T : Enum
         {
-            Scope(EnumType<T>.Id(value, Handle), func);
+            Scope(Type<T>.Id(Handle, value), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created in scope. All operations
+        ///     called in function (such as lookup) are relative to scope.
+        /// </summary>
+        /// <param name="parent">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        public void Scope(ulong parent, Ecs.WorldCallback callback)
+        {
+            ulong prev = ecs_set_scope(Handle, parent);
+            callback(Handle);
+            ecs_set_scope(Handle, prev);
+        }
+
+        /// <summary>
+        ///     Same as Scope(parent, func), but with T as parent.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The entity to use as scope.</typeparam>
+        public void Scope<T>(Ecs.WorldCallback callback)
+        {
+            Scope(Type<T>.Id(Handle), callback);
+        }
+
+        /// <summary>
+        ///     Same as Scope(parent, func), but with enum as parent.
+        /// </summary>
+        /// <param name="value">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The enum type of the entity.</typeparam>
+        public void Scope<T>(T value, Ecs.WorldCallback callback) where T : Enum
+        {
+            Scope(Type<T>.Id(Handle, value), callback);
         }
 
         /// <summary>
@@ -1750,7 +1810,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ScopedWorld Scope<T>(T value) where T : Enum
         {
-            return Scope(EnumType<T>.Id(value, Handle));
+            return Scope(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1798,7 +1858,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void DeleteWith<T>(T value) where T : Enum
         {
-            DeleteWith<T>(EnumType<T>.Id(value, Handle));
+            DeleteWith<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1829,7 +1889,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void DeleteWith<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            DeleteWith<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            DeleteWith<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1840,7 +1900,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void DeleteWith<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            DeleteWithSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            DeleteWithSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1888,7 +1948,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void RemoveAll<T>(T value) where T : Enum
         {
-            RemoveAll<T>(EnumType<T>.Id(value, Handle));
+            RemoveAll<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1919,7 +1979,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void RemoveAll<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            RemoveAll<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            RemoveAll<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1930,7 +1990,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void RemoveAll<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            RemoveAllSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            RemoveAllSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1963,7 +2023,7 @@ namespace Flecs.NET.Core
         public void Defer(Ecs.WorldCallback callback)
         {
             ecs_defer_begin(Handle);
-            callback(ref this);
+            callback(Handle);
             ecs_defer_end(Handle);
         }
 
@@ -2112,7 +2172,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id<T>(T value) where T : Enum
         {
-            return new Id(Handle, EnumType<T>.Id(value, Handle));
+            return new Id(Handle, Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2146,7 +2206,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Id<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Id<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -2158,7 +2218,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return IdSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return IdSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -2191,7 +2251,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair<T>(T value) where T : Enum
         {
-            return Id<T>(EnumType<T>.Id(value, Handle));
+            return Id<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2225,7 +2285,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Pair<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Pair<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -2237,7 +2297,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return PairSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return PairSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -2291,13 +2351,25 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get component with name.
+        ///     Get component associated with name.
         /// </summary>
+        /// <param name="name"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public Component<T> Component<T>(string name)
         {
             return new Component<T>(Handle, name);
+        }
+
+        /// <summary>
+        ///     Get component with associated with id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Component<T> Component<T>(ulong id)
+        {
+            return new Component<T>(Handle, id);
         }
 
         /// <summary>
@@ -2347,7 +2419,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Entity<T>(string name)
         {
-            return new Entity(Handle, Type<T>.IdExplicit(Handle, name, true, 0, false));
+            return new Entity(Handle, Type<T>.Id(Handle, false, false, 0, name));
         }
 
         /// <summary>
@@ -2358,7 +2430,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Entity<T>(T value) where T : Enum
         {
-            return new Entity(Handle, EnumType<T>.Id(value, Handle));
+            return new Entity(Handle, Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2428,7 +2500,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public EventBuilder Event<T>(T value) where T : Enum
         {
-            return new EventBuilder(Handle, EnumType<T>.Id(value, Handle));
+            return new EventBuilder(Handle, Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2489,7 +2561,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<T>(T value) where T : Enum
         {
-            return Term<T>(EnumType<T>.Id(value, Handle));
+            return Term<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2523,7 +2595,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Term<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Term<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -2535,7 +2607,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return TermSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return TermSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -2580,7 +2652,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void Each<T>(T value, Ecs.EachEntityCallback<T> callback) where T : Enum
         {
-            Each(EnumType<T>.Id(value, Handle), callback);
+            Each(Type<T>.Id(Handle, value), callback);
         }
 
         /// <summary>
@@ -2638,7 +2710,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Each<TFirst, TSecond>(TSecond second, Ecs.EachEntityCallback<TFirst> callback) where TSecond : Enum
         {
-            Each(EnumType<TSecond>.Id(second, Handle), callback);
+            Each(Type<TSecond>.Id(Handle, second), callback);
         }
 
         /// <summary>
@@ -2650,7 +2722,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Each<TFirst, TSecond>(TFirst first, Ecs.EachEntityCallback<TSecond> callback) where TFirst : Enum
         {
-            EachSecond(EnumType<TFirst>.Id(first, Handle), callback);
+            EachSecond(Type<TFirst>.Id(Handle, first), callback);
         }
 
         /// <summary>
@@ -2685,13 +2757,13 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Module<TModule>(string name = "") where TModule : IFlecsModule, new()
         {
-            ulong result = Type<TModule>.Id(Handle, null, false);
+            ulong result = Type<TModule>.Id(Handle);
 
             if (!string.IsNullOrEmpty(name))
             {
                 using NativeString nativeName = (NativeString)name;
                 ecs_add_path_w_sep(Handle, result, 0, nativeName,
-                    BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator);
+                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator);
             }
 
             ecs_set_scope(Handle, result);
@@ -2733,7 +2805,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void SetPipeline<T>(T value) where T : Enum
         {
-            SetPipeline(EnumType<T>.Id(value, Handle));
+            SetPipeline(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2882,7 +2954,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void Timer<T>(T value) where T : Enum
         {
-            Timer(EnumType<T>.Id(value, Handle));
+            Timer(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -3345,7 +3417,7 @@ namespace Flecs.NET.Core
 
         private BindingContext.WorldContext* EnsureBindingContext()
         {
-            BindingContext.WorldContext* ptr = (BindingContext.WorldContext*)ecs_get_binding_ctx(Handle);
+            BindingContext.WorldContext* ptr = (BindingContext.WorldContext*)ecs_get_binding_ctx_fast(Handle);
 
             if (ptr != null)
                 return ptr;
@@ -3356,20 +3428,43 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Returns native pointer to world.
         /// </summary>
         /// <param name="world"></param>
         /// <returns></returns>
-        public static implicit operator ecs_world_t*(World world)
+        public static ecs_world_t* To(World world)
         {
             return world.Handle;
         }
 
         /// <summary>
+        ///     Returns world wrapper for native world pointer.
         /// </summary>
+        /// <param name="world"></param>
         /// <returns></returns>
-        public ecs_world_t* To()
+        public static World From(ecs_world_t* world)
         {
-            return Handle;
+            return new World(world);
+        }
+
+        /// <summary>
+        ///     Returns native pointer to world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <returns></returns>
+        public static implicit operator ecs_world_t*(World world)
+        {
+            return To(world);
+        }
+
+        /// <summary>
+        ///     Returns world wrapper for native world pointer.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <returns></returns>
+        public static implicit operator World(ecs_world_t* world)
+        {
+            return From(world);
         }
 
         /// <summary>
@@ -3434,6 +3529,163 @@ namespace Flecs.NET.Core
         public Table Table()
         {
             return new Table(Handle);
+        }
+
+        /// <summary>
+        ///     Set current with id.
+        /// </summary>
+        /// <param name="with">The id.</param>
+        /// <returns>The previous id.</returns>
+        public Entity SetWith(ulong with)
+        {
+            return new Entity(Handle, ecs_set_with(Handle, with));
+        }
+
+        /// <summary>
+        ///     Get current with id.
+        /// </summary>
+        /// <returns>The last id provided to ecs_set_with().</returns>
+        public Entity GetWith()
+        {
+            return new Entity(Handle, ecs_get_with(Handle));
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, out Entity entity)
+        {
+            return TryLookup(path, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, bool recursive, out Entity entity)
+        {
+            return (entity = Lookup(path, recursive)) != 0;
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, out ulong entity)
+        {
+            return TryLookup(path, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, bool recursive, out ulong entity)
+        {
+            return (entity = Lookup(path, recursive)) != 0;
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="recursive">If looking up as path, recursively traverse up the tree.</param>
+        /// <returns>The entity if found, else 0.</returns>
+        public Entity LookupSymbol(string symbol, bool lookupAsPath = false, bool recursive = false)
+        {
+            if (string.IsNullOrEmpty(symbol))
+                return new Entity(Handle, 0);
+
+            using NativeString nativeSymbol = (NativeString)symbol;
+
+            return new Entity(
+                Handle,
+                ecs_lookup_symbol(Handle, nativeSymbol, Macros.Bool(lookupAsPath), Macros.Bool(recursive))
+            );
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, out Entity entity)
+        {
+            return TryLookupSymbol(symbol, false, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, bool lookupAsPath, out Entity entity)
+        {
+            return TryLookupSymbol(symbol, lookupAsPath, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="recursive">If looking up as path, recursively traverse up the tree.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, bool lookupAsPath, bool recursive, out Entity entity)
+        {
+            return (entity = LookupSymbol(symbol, lookupAsPath, recursive)) != 0;
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, out ulong entity)
+        {
+            return TryLookupSymbol(symbol, false, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, bool lookupAsPath, out ulong entity)
+        {
+            return TryLookupSymbol(symbol, lookupAsPath, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="recursive">If looking up as path, recursively traverse up the tree.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, bool lookupAsPath, bool recursive, out ulong entity)
+        {
+            return (entity = LookupSymbol(symbol, lookupAsPath, recursive)) != 0;
         }
     }
 }

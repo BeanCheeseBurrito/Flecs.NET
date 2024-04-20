@@ -13,11 +13,6 @@ namespace Flecs.NET.Tests.Cpp
     [SuppressMessage("Usage", "xUnit1026:Theory methods should use all of their parameters")]
     public unsafe class QueryBuilderTests
     {
-        public QueryBuilderTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         public static IEnumerable<object[]> CacheKinds => new List<object[]>
         {
             new object[] { EcsQueryCacheDefault },
@@ -4931,7 +4926,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity qe = q.Entity();
             Assert.True(qe != 0);
             Assert.Equal("query", qe.Name());
-            Assert.Equal("::my.query", qe.Path());
+            Assert.Equal(".my.query", qe.Path());
         }
 
         [Theory]

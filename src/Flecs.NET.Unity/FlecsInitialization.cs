@@ -26,7 +26,7 @@ namespace Flecs.NET.Unity
 #endif
             Native.BindgenInternal.ResolveLibrary();
 
-            if (Native.BindgenInternal._libraryHandle == IntPtr.Zero) // TODO add BindgenInternal#IsLibraryResolved?
+            if (Native.BindgenInternal.LibraryHandle == IntPtr.Zero) // TODO add BindgenInternal#IsLibraryResolved?
                 Debug.LogError("Failed to initialize Flecs.NET: unable to find valid flecs library for platform.");
         }
 

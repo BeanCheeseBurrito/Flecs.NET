@@ -45,7 +45,7 @@ namespace Flecs.NET.Core
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
             desc.sep = BindingContext.DefaultSeparator;
-            desc.root_sep = BindingContext.DefaultRootSeparator;
+            desc.root_sep = BindingContext.DefaultSeparator;
             AlertDesc.entity = ecs_entity_init(World, &desc);
         }
 
@@ -210,7 +210,7 @@ namespace Flecs.NET.Core
         public ref AlertBuilder SeverityFilter<TSeverity, TWithEnum>(TWithEnum withEnum, string var = "")
             where TWithEnum : Enum
         {
-            return ref SeverityFilter(Type<TSeverity>.Id(World), EnumType<TWithEnum>.Id(withEnum, World), var);
+            return ref SeverityFilter(Type<TSeverity>.Id(World), Type<TWithEnum>.Id(World, withEnum), var);
         }
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace Flecs.NET.Core
 
             ulong id = Type<T>.Id(World);
             ulong memberId = ecs_lookup_path_w_sep(World, id, nativeMember,
-                BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.False);
+                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.False);
 
             Var(var);
 

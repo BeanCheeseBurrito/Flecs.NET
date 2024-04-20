@@ -5,11 +5,6 @@ namespace Flecs.NET.Tests.Cpp
 {
     public unsafe class SingletonTests
     {
-        public SingletonTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void SetGetSingleton()
         {

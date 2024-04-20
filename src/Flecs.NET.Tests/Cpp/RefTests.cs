@@ -5,11 +5,6 @@ namespace Flecs.NET.Tests.Cpp
 {
     public unsafe class RefTests
     {
-        public RefTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         public void GetRefByPtr()
         {
