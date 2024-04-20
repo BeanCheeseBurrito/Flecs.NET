@@ -313,6 +313,14 @@ namespace NamespaceLvl1
     }
 }
 
+public struct Child
+{
+    public struct GrandChild
+    {
+        public struct GreatGrandChild { }
+    }
+}
+
 public struct PositionInitialized
 {
     public float X;
