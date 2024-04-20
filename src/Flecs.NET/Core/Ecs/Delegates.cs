@@ -127,7 +127,7 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     A callback that takes a reference to a world.
         /// </summary>
-        public delegate void WorldCallback(ref World world);
+        public delegate void WorldCallback(World world);
 
         /// <summary>
         ///     A callback that takes a reference to a term.

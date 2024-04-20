@@ -1,7 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -352,6 +350,27 @@ namespace Flecs.NET.Core
         public Entity SetScope(ulong scope)
         {
             return new Entity(Handle, ecs_set_scope(Handle, scope));
+        }
+
+        /// <summary>
+        ///     Set the current scope.
+        /// </summary>
+        /// <typeparam name="T">The entity to use as scope.</typeparam>
+        /// <returns>The previous scope.</returns>
+        public Entity SetScope<T>()
+        {
+            return SetScope(Type<T>.Id(Handle));
+        }
+
+        /// <summary>
+        ///     Set the current scope.
+        /// </summary>
+        /// <param name="value">The entity to use as scope.</param>
+        /// <typeparam name="T">The enum type of the entity.</typeparam>
+        /// <returns>The previous scope.</returns>
+        public Entity SetScope<T>(T value) where T : Enum
+        {
+            return SetScope(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1699,34 +1718,68 @@ namespace Flecs.NET.Core
         ///     All entities created in function are created in scope. All operations
         ///     called in function (such as lookup) are relative to scope.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="func"></param>
-        public void Scope(ulong parent, Action func)
+        /// <param name="parent">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        public void Scope(ulong parent, Action callback)
         {
             ulong prev = ecs_set_scope(Handle, parent);
-            func();
+            callback();
             ecs_set_scope(Handle, prev);
         }
 
         /// <summary>
         ///     Same as Scope(parent, func), but with T as parent.
         /// </summary>
-        /// <param name="func"></param>
-        /// <typeparam name="T"></typeparam>
-        public void Scope<T>(Action func)
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The entity to use as scope.</typeparam>
+        public void Scope<T>(Action callback)
         {
-            Scope(Type<T>.Id(Handle), func);
+            Scope(Type<T>.Id(Handle), callback);
         }
 
         /// <summary>
         ///     Same as Scope(parent, func), but with enum as parent.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="T"></typeparam>
-        public void Scope<T>(T value, Action func) where T : Enum
+        /// <param name="value">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The enum type of the entity.</typeparam>
+        public void Scope<T>(T value, Action callback) where T : Enum
         {
-            Scope(Type<T>.Id(Handle, value), func);
+            Scope(Type<T>.Id(Handle, value), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created in scope. All operations
+        ///     called in function (such as lookup) are relative to scope.
+        /// </summary>
+        /// <param name="parent">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        public void Scope(ulong parent, Ecs.WorldCallback callback)
+        {
+            ulong prev = ecs_set_scope(Handle, parent);
+            callback(Handle);
+            ecs_set_scope(Handle, prev);
+        }
+
+        /// <summary>
+        ///     Same as Scope(parent, func), but with T as parent.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The entity to use as scope.</typeparam>
+        public void Scope<T>(Ecs.WorldCallback callback)
+        {
+            Scope(Type<T>.Id(Handle), callback);
+        }
+
+        /// <summary>
+        ///     Same as Scope(parent, func), but with enum as parent.
+        /// </summary>
+        /// <param name="value">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The enum type of the entity.</typeparam>
+        public void Scope<T>(T value, Ecs.WorldCallback callback) where T : Enum
+        {
+            Scope(Type<T>.Id(Handle, value), callback);
         }
 
         /// <summary>
@@ -1970,7 +2023,7 @@ namespace Flecs.NET.Core
         public void Defer(Ecs.WorldCallback callback)
         {
             ecs_defer_begin(Handle);
-            callback(ref this);
+            callback(Handle);
             ecs_defer_end(Handle);
         }
 
