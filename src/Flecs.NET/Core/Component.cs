@@ -403,10 +403,10 @@ namespace Flecs.NET.Core
 
             if (RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>())
             {
-                desc.ctor = hooks.Ctor == null ? IntPtr.Zero : BindingContext<TComponent>.ManagedCtorPointer;
-                desc.dtor = hooks.Dtor == null ? IntPtr.Zero : BindingContext<TComponent>.ManagedDtorPointer;
-                desc.move = hooks.Move == null ? IntPtr.Zero : BindingContext<TComponent>.ManagedMovePointer;
-                desc.copy = hooks.Copy == null ? IntPtr.Zero : BindingContext<TComponent>.ManagedCopyPointer;
+                desc.ctor = hooks.Ctor == null ? BindingContext<TComponent>.DefaultManagedCtorPointer : BindingContext<TComponent>.ManagedCtorPointer;
+                desc.dtor = hooks.Dtor == null ? BindingContext<TComponent>.DefaultManagedDtorPointer : BindingContext<TComponent>.ManagedDtorPointer;
+                desc.move = hooks.Move == null ? BindingContext<TComponent>.DefaultManagedMovePointer : BindingContext<TComponent>.ManagedMovePointer;
+                desc.copy = hooks.Copy == null ? BindingContext<TComponent>.DefaultManagedCopyPointer : BindingContext<TComponent>.ManagedCopyPointer;
             }
             else
             {
