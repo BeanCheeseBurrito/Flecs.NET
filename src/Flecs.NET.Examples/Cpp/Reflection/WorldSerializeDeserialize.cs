@@ -42,7 +42,7 @@ public static class Cpp_Reflection_WorldSerializeDeserialize
 // from the serialized data, and makes it easier to import across worlds.
 file struct Move : IFlecsModule
 {
-    public void InitModule(ref World world)
+    public void InitModule(World world)
     {
         world.Component<Position>()
             .Member<float>("X")

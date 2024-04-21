@@ -38,7 +38,7 @@ namespace Simple
     // Modules need to implement the IFlecsModule interface
     public struct Module : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             // Register module with world. The module entity will be created with the
             // same hierarchy as the .NET namespaces (e.g. Simple.Module)
