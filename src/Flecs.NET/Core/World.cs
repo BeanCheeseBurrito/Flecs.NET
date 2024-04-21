@@ -3532,6 +3532,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Create new entity in table.
+        /// </summary>
+        /// <param name="table">The table to which to add the new entity.</param>
+        /// <returns>The new entity.</returns>
+        public Entity Entity(Table table)
+        {
+            return Entity(ecs_new_w_table(Handle, table));
+        }
+
+        /// <summary>
         ///     Set current with id.
         /// </summary>
         /// <param name="with">The id.</param>
