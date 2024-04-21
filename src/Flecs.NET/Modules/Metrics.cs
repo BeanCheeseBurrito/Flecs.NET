@@ -16,7 +16,7 @@ namespace Flecs.NET.Core
             ///     Initializes metrics module.
             /// </summary>
             /// <param name="world"></param>
-            public readonly void InitModule(ref World world)
+            public readonly void InitModule(World world)
             {
                 world.Import<Units>();
 

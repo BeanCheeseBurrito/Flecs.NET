@@ -9,6 +9,6 @@ namespace Flecs.NET.Core
         ///     Register entities, components, and systems.
         /// </summary>
         /// <param name="world"></param>
-        public void InitModule(ref World world);
+        public void InitModule(World world);
     }
 }

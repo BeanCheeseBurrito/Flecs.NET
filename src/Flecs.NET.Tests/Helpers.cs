@@ -162,7 +162,7 @@ public struct QueryWrapper
 
 public struct MyModule : IFlecsModule
 {
-    public void InitModule(ref World world)
+    public void InitModule(World world)
     {
         world.Module<MyModule>();
         world.Component<Position>();
@@ -223,7 +223,7 @@ namespace Namespace
 
     public struct NestedModule : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             world.Module<NestedModule>();
             world.Component<Velocity>("Velocity");
@@ -232,7 +232,7 @@ namespace Namespace
 
     public struct SimpleModule : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             world.Module<SimpleModule>();
             world.Import<NestedModule>();
@@ -244,7 +244,7 @@ namespace Namespace
     {
         public struct NestedType { }
 
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             world.Module<NestedTypeModule>();
             world.Component<NestedType>();
@@ -254,7 +254,7 @@ namespace Namespace
 
     public struct NamedModule : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             world.Module<NamedModule>(".my_scope.NamedModule");
             world.Component<Position>("Position");
@@ -263,7 +263,7 @@ namespace Namespace
 
     public struct ImplicitModule : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             world.Component<Position>();
         }
@@ -271,7 +271,7 @@ namespace Namespace
 
     public struct NamedModuleInRoot : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             world.Module<NamedModuleInRoot>(".NamedModuleInRoot");
             world.Component<Position>();
@@ -280,7 +280,7 @@ namespace Namespace
 
     public struct ReparentModule : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             Entity m = world.Module<ReparentModule>();
             m.ChildOf(world.Entity(".parent"));
@@ -294,7 +294,7 @@ namespace Namespace
 
 public struct Module : IFlecsModule
 {
-    public void InitModule(ref World world)
+    public void InitModule(World world)
     {
         world.Module<Module>();
         world.Component<Position>();

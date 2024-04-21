@@ -14,7 +14,7 @@ namespace Flecs.NET.Core
             ///     Initializes the alerts module.
             /// </summary>
             /// <param name="world"></param>
-            public readonly void InitModule(ref World world)
+            public readonly void InitModule(World world)
             {
                 FlecsAlertsImport(world);
 

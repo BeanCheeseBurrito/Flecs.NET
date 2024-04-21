@@ -14,7 +14,7 @@ namespace Flecs.NET.Core
             ///     Initializes meta module.
             /// </summary>
             /// <param name="world"></param>
-            public readonly void InitModule(ref World world)
+            public readonly void InitModule(World world)
             {
                 world.Component<bool>().Entity.Set(new EcsPrimitive { kind = EcsBool });
                 world.Component<char>().Entity.Set(new EcsPrimitive { kind = EcsChar });

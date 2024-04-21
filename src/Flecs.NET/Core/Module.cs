@@ -48,7 +48,7 @@ namespace Flecs.NET.Core
             ecs_set_scope(world, moduleComponent);
 
             T module = new T();
-            module.InitModule(ref world);
+            module.InitModule(world);
 
             if (Type<T>.Size != 0)
                 world.Set(ref module);
