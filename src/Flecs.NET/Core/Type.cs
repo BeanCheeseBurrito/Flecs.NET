@@ -66,8 +66,8 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Returns the id for this type with the provided world. Registers a new component id if it doesn't exist.
         /// </summary>
-        /// <param name="world"></param>
-        /// <returns></returns>
+        /// <param name="world">The world.</param>
+        /// <returns>The id of the type in the world.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Id(ecs_world_t* world)
         {
@@ -80,11 +80,11 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Returns the id for this type with the provided world. Registers a new component id if it doesn't exist.
         /// </summary>
-        /// <param name="world"></param>
-        /// <param name="ignoreScope"></param>
-        /// <param name="isComponent"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="world">The world.</param>
+        /// <param name="ignoreScope">If true, the type will be registered in the root scope with it's full type name.</param>
+        /// <param name="isComponent">If true, type will be created with full component registration. (size, alignment, enums, hooks)</param>
+        /// <param name="id">If an existing entity is found with this id, attempt to alias it. Otherwise, register new entity with this id.</param>
+        /// <returns>The id of the type in the world.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Id(ecs_world_t* world, bool ignoreScope, bool isComponent, ulong id)
         {
@@ -97,12 +97,12 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Returns the id for this type with the provided world. Registers a new component id if it doesn't exist.
         /// </summary>
-        /// <param name="world"></param>
-        /// <param name="ignoreScope"></param>
-        /// <param name="isComponent"></param>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        /// <param name="world">The world.</param>
+        /// <param name="ignoreScope">If true, the type will be registered in the root scope with it's full type name.</param>
+        /// <param name="isComponent">If true, type will be created with full component registration. (size, alignment, enums, hooks)</param>
+        /// <param name="id">If an existing entity is found with this id, attempt to alias it. Otherwise, register new entity with this id.</param>
+        /// <param name="name">If an existing entity is found with this name, attempt to alias it. Otherwise, register new entity with this name.</param>
+        /// <returns>The id of the type in the world.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Id(ecs_world_t* world, bool ignoreScope, bool isComponent, ulong id, string name)
         {
@@ -113,29 +113,17 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Returns the id for this enum member with the provided world. Registers a new id if it doesn't exist.
+        ///     Returns the id for this enum member in the provided world. Registers a new id if it doesn't exist.
         /// </summary>
-        /// <param name="world"></param>
-        /// <param name="constant"></param>
-        /// <typeparam name="TEnum"></typeparam>
-        /// <returns></returns>
+        /// <param name="world">The world.</param>
+        /// <param name="constant">The enum member.</param>
+        /// <typeparam name="TEnum">The enum type.</typeparam>
+        /// <returns>The id of the enum member in the world.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Id<TEnum>(ecs_world_t* world, TEnum constant) where TEnum : Enum, T
         {
             Id(world); // Ensures that component ids are registered for enum members.
             return LookupCacheIndex(world, GetEnumCacheIndex(constant));
-        }
-
-        /// <summary>
-        ///     Checks if the type is registered in the provided world.
-        /// </summary>
-        /// <param name="world"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsRegistered(ecs_world_t* world)
-        {
-            ref ulong cachedId = ref LookupCacheIndex(world);
-            return !Unsafe.IsNullRef(ref cachedId) && cachedId != 0;
         }
 
         /// <summary>
@@ -190,6 +178,54 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Checks if the type is registered in the provided world.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <returns>True if the type is registered in the world.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsRegistered(ecs_world_t* world)
+        {
+            ref ulong cachedId = ref LookupCacheIndex(world);
+            return !Unsafe.IsNullRef(ref cachedId) && cachedId != 0;
+        }
+
+        /// <summary>
+        ///     Checks if the type is registered in the provided world.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="id">The id of the type if registered, else 0.</param>
+        /// <returns>True if the type was registered.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsRegistered(ecs_world_t* world, out ulong id)
+        {
+            ref ulong cachedId = ref LookupCacheIndex(world);
+
+            if (!Unsafe.IsNullRef(ref cachedId))
+                return (id = cachedId) != 0;
+
+            id = 0;
+            return false;
+        }
+
+        /// <summary>
+        ///     Checks if the type is registered in the provided world.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="id">The id of the type if registered, else 0.</param>
+        /// <returns>True if the type was registered.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsRegistered(ecs_world_t* world, out Entity id)
+        {
+            ref ulong cachedId = ref LookupCacheIndex(world);
+
+            if (!Unsafe.IsNullRef(ref cachedId))
+                return (id = new Entity(world, cachedId)) != 0;
+
+            id = new Entity(world, 0);
+            return false;
+        }
+
+        /// <summary>
         ///     Registers this type with the provided world.
         /// </summary>
         /// <param name="world">The ECS world.</param>
@@ -197,7 +233,7 @@ namespace Flecs.NET.Core
         /// <param name="isComponent">If true, type will be created with full component registration. (size, alignment, enums, hooks)</param>
         /// <param name="id">If an existing entity is found with this id, attempt to alias it. Otherwise, register new entity with this id.</param>
         /// <param name="name">If an existing entity is found with this name, attempt to alias it. Otherwise, register new entity with this name.</param>
-        /// <returns></returns>
+        /// <returns>The registered id of this type.</returns>
         public static ulong RegisterComponent(World world, bool ignoreScope, bool isComponent, ulong id, string name)
         {
             // If a name or id is provided, the type is being used to alias an already existing entity.
@@ -279,7 +315,7 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Returns a trimmed version of this type's full name with respect to the current scope of the world.
         /// </summary>
-        /// <param name="world"></param>
+        /// <param name="world">The world.</param>
         public static string GetTrimmedTypeName(World world)
         {
             Entity scope = world.GetScope();
