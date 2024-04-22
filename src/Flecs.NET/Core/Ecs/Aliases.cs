@@ -415,13 +415,6 @@ namespace Flecs.NET.Core
         /// </summary>
         public static ref ulong Panic => ref EcsPanic;
 
-        // Misc
-
-        /// <summary>
-        ///     Reference to <see cref="EcsDefaultChildComponent"/>.
-        /// </summary>
-        public static ref ulong DefaultChildComponent => ref EcsDefaultChildComponent;
-
         // Built-in predicates for comparing entity ids in queries. Only supported by rules.
 
         /// <summary>

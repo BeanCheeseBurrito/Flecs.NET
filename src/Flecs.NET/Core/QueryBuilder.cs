@@ -94,10 +94,7 @@ namespace Flecs.NET.Core
         public Query Build()
         {
             fixed (ecs_query_desc_t* ptr = &Desc)
-            {
-                Query query = new Query(World, ecs_query_init(World, ptr));
-                return query;
-            }
+                return new Query(World, ecs_query_init(World, ptr));
         }
 
         /// <summary>

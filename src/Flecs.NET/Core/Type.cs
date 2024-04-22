@@ -280,7 +280,6 @@ namespace Flecs.NET.Core
         ///     Returns a trimmed version of this type's full name with respect to the current scope of the world.
         /// </summary>
         /// <param name="world"></param>
-        /// <typeparam name="T"></typeparam>
         public static string GetTrimmedTypeName(World world)
         {
             Entity scope = world.GetScope();

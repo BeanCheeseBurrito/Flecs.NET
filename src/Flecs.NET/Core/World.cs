@@ -2966,28 +2966,28 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Load plecs string.
+        ///     Run script.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public int PlecsFromStr(string name, string str)
+        /// <param name="name">The script name (typically the file).</param>
+        /// <param name="str">The script.</param>
+        /// <returns>Zero if success, non-zero otherwise.</returns>
+        public int ScriptRun(string name, string str)
         {
             using NativeString nativeName = (NativeString)name;
             using NativeString nativeStr = (NativeString)str;
 
-            return ecs_script_from_str(Handle, nativeName, nativeStr);
+            return ecs_script_run(Handle, nativeName, nativeStr);
         }
 
         /// <summary>
-        ///     Load plecs from file.
+        ///     Run script from file.
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public int PlecsFromFile(string fileName)
+        /// <param name="fileName">The script file name.</param>
+        /// <returns>Zero if success, non-zero if failed.</returns>
+        public int ScriptRunFile(string fileName)
         {
             using NativeString nativeFileName = (NativeString)fileName;
-            return ecs_script_from_file(Handle, nativeFileName);
+            return ecs_script_run_file(Handle, nativeFileName);
         }
 
         /// <summary>
@@ -3004,9 +3004,9 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Convert value to string.
         /// </summary>
-        /// <param name="value"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <param name="value">The value to serialize.</param>
+        /// <typeparam name="T">The type of the value to serialize.</typeparam>
+        /// <returns>String with expression, or empty string if failed.</returns>
         public string ToExpr<T>(T* value) where T : unmanaged
         {
             return ToExpr(Type<T>.Id(Handle), value);
@@ -3015,9 +3015,9 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Covert value to string.
         /// </summary>
-        /// <param name="value"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <param name="value">The value to serialize.</param>
+        /// <typeparam name="T">The type of the value to serialize.</typeparam>
+        /// <returns>String with expression, or empty string if failed.</returns>
         public string ToExpr<T>(ref T value) where T : unmanaged
         {
             fixed (T* ptr = &value)

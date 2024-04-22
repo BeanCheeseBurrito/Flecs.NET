@@ -1461,10 +1461,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity likes = world.Entity();
-            Entity dislikes = world.Entity();
             Entity bob = world.Entity();
             Entity alice = world.Entity();
+            Entity likes = world.Entity();
+            Entity dislikes = world.Entity();
 
             Query q = world.QueryBuilder<Self>()
                 .With(Ecs.Wildcard, alice)

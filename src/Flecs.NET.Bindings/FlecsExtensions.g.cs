@@ -23,5 +23,11 @@ namespace Flecs.NET.Bindings
         // Larger size just in case it changes.
         [StructLayout(LayoutKind.Explicit, Size = 96 * 2)]
         internal struct ecs_suspend_readonly_state_t { }
+
+        // TODO: Added manually because bindgen can't handle this yet. Fix during bindgen rewrite.
+        public partial struct ecs_script_vars_t
+        {
+            public struct ecs_stack_t { }
+        }
     }
 }
