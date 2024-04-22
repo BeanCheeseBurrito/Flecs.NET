@@ -2771,13 +2771,13 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Import a module.
+        ///     Imports a module.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">The module type.</typeparam>
+        /// <returns>The module entity.</returns>
         public Entity Import<T>() where T : IFlecsModule, new()
         {
-            return Core.Module.Import<T>(this);
+            return Ecs.Import<T>(this);
         }
 
         /// <summary>
