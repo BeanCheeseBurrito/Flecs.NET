@@ -12,6 +12,6 @@ public static class Example
     [ModuleInitializer]
     internal static void Setup()
     {
-        FlecsInternal.StripFileLocalTypeNameGuid = true;
+        Ecs.StripFileLocalTypeNameGuid = true;
     }
 }

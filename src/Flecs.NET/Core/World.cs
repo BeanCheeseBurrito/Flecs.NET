@@ -36,7 +36,7 @@ namespace Flecs.NET.Core
         public static World Create(bool overrideOsAbort = true)
         {
             if (overrideOsAbort)
-                FlecsInternal.OverrideOsAbort();
+                Ecs.OverrideOsAbort();
 
             World w = new World(ecs_init());
             w.EnsureBindingContext();
@@ -54,7 +54,7 @@ namespace Flecs.NET.Core
         public static World Create(ecs_world_t* world, bool overrideOsAbort = true)
         {
             if (overrideOsAbort)
-                FlecsInternal.OverrideOsAbort();
+                Ecs.OverrideOsAbort();
 
             World w = new World(world);
             w.EnsureBindingContext();

@@ -481,7 +481,7 @@ namespace Flecs.NET.Core
             string name = typeof(T).ToString();
 
             // File-local types are prefixed with a file name + GUID.
-            if (FlecsInternal.StripFileLocalTypeNameGuid)
+            if (Ecs.StripFileLocalTypeNameGuid)
             {
                 int start = 0;
                 bool skip = false;
