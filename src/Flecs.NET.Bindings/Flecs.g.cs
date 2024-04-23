@@ -36,14 +36,8 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_array_to_json_buf", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_array_to_json_buf(ecs_world_t* world, ulong type, void* data, int count, ecs_strbuf_t* buf_out);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_asprintf", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_asprintf(byte* fmt);
-
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_assert_log_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_assert_log_(int error_code, byte* condition_str, byte* file, int line, byte* fmt);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_astresc", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_astresc(byte delimiter, byte* @in);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_atfini", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_atfini(ecs_world_t* world, System.IntPtr action, void* ctx);
@@ -62,12 +56,6 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_children_next", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte ecs_children_next(ecs_iter_t* it);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_chresc", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_chresc(byte* @out, byte @in, byte delimiter);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_chrparse", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_chrparse(byte* @in, byte* @out);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_clear", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_clear(ecs_world_t* world, ulong entity);
@@ -119,9 +107,6 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_cpp_trim_module", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_cpp_trim_module(ecs_world_t* world, byte* type_name);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_default_ctor", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void ecs_default_ctor(void* ptr, int count, ecs_type_info_t* ctx);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_defer_begin", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte ecs_defer_begin(ecs_world_t* world);
@@ -428,9 +413,6 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_id_str_buf", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_id_str_buf(ecs_world_t* world, ulong id, ecs_strbuf_t* buf);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_identifier_is_0", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_identifier_is_0(byte* id);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_import", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_import(ecs_world_t* world, System.IntPtr module, byte* module_name);
@@ -759,9 +741,6 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_module_init", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_module_init(ecs_world_t* world, byte* c_name, ecs_component_desc_t* desc);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_module_path_from_c", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_module_path_from_c(byte* c_name);
-
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_new", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_new(ecs_world_t* world);
 
@@ -911,18 +890,6 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_pipeline_stats_repeat_last", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_pipeline_stats_repeat_last(ecs_pipeline_stats_t* stats);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_poly_claim_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern int ecs_poly_claim_(void* poly);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_poly_is_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_poly_is_(void* @object, int type);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_poly_refcount", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern int ecs_poly_refcount(void* poly);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_poly_release_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern int ecs_poly_release_(void* poly);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_primitive_init", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_primitive_init(ecs_world_t* world, ecs_primitive_desc_t* desc);
@@ -1368,9 +1335,6 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strerror", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_strerror(int error_code);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_stresc", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern int ecs_stresc(byte* @out, int size, byte delimiter, byte* @in);
-
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_strip_generation", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_strip_generation(ulong e);
 
@@ -1545,9 +1509,6 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_value_new_w_type_info", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* ecs_value_new_w_type_info(ecs_world_t* world, ecs_type_info_t* ti);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_vasprintf", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_vasprintf(byte* fmt, void* args);
-
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_vec_append", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* ecs_vec_append(ecs_allocator_t* allocator, ecs_vec_t* vec, int size);
 
@@ -1668,6 +1629,12 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_allocator_init", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void flecs_allocator_init(ecs_allocator_t* a);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_asprintf", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* flecs_asprintf(byte* fmt);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_astresc", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* flecs_astresc(byte delimiter, byte* @in);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_balloc", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* flecs_balloc(ecs_block_allocator_t* allocator);
 
@@ -1697,6 +1664,15 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_brealloc", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* flecs_brealloc(ecs_block_allocator_t* dst, ecs_block_allocator_t* src, void* memory);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_chresc", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* flecs_chresc(byte* @out, byte @in, byte delimiter);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_chrparse", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* flecs_chrparse(byte* @in, byte* @out);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_default_ctor", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void flecs_default_ctor(void* ptr, int count, ecs_type_info_t* ctx);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_dump_backtrace", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void flecs_dump_backtrace(void* stream);
@@ -1739,6 +1715,27 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_hm_bucket_remove", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void flecs_hm_bucket_remove(ecs_hashmap_t* map, ecs_hm_bucket_t* bucket, ulong hash, int index);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_identifier_is_0", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte flecs_identifier_is_0(byte* id);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_module_path_from_c", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* flecs_module_path_from_c(byte* c_name);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_poly_claim_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern int flecs_poly_claim_(void* poly);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_poly_is_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte flecs_poly_is_(void* @object, int type);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_poly_refcount", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern int flecs_poly_refcount(void* poly);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_poly_release_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern int flecs_poly_release_(void* poly);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_resume_readonly", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void flecs_resume_readonly(ecs_world_t* world, ecs_suspend_readonly_state_t* state);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_sparse_add", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* flecs_sparse_add(ecs_sparse_t* sparse, int elem_size);
@@ -1788,17 +1785,50 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_sparse_try", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* flecs_sparse_try(ecs_sparse_t* sparse, int elem_size, ulong id);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_stack_alloc", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void* flecs_stack_alloc(ecs_stack_t* stack, int size, int align);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_stack_calloc", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void* flecs_stack_calloc(ecs_stack_t* stack, int size, int align);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_stack_fini", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void flecs_stack_fini(ecs_stack_t* stack);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_stack_free", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void flecs_stack_free(void* ptr, int size);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_stack_get_cursor", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern ecs_stack_cursor_t* flecs_stack_get_cursor(ecs_stack_t* stack);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_stack_init", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void flecs_stack_init(ecs_stack_t* stack);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_stack_reset", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void flecs_stack_reset(ecs_stack_t* stack);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_stack_restore_cursor", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void flecs_stack_restore_cursor(ecs_stack_t* stack, ecs_stack_cursor_t* cursor);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_strdup", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* flecs_strdup(ecs_allocator_t* a, byte* str);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_stresc", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern int flecs_stresc(byte* @out, int size, byte delimiter, byte* @in);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_strfree", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void flecs_strfree(ecs_allocator_t* a, byte* str);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_suspend_readonly", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern ecs_world_t* flecs_suspend_readonly(ecs_world_t* world, ecs_suspend_readonly_state_t* state);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_table_observed_count", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int flecs_table_observed_count(ecs_table_t* table);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_to_snake_case", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* flecs_to_snake_case(byte* str);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_vasprintf", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* flecs_vasprintf(byte* fmt, void* args);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FlecsAlertsImport", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void FlecsAlertsImport(ecs_world_t* world);
@@ -7005,6 +7035,14 @@ namespace Flecs.NET.Bindings
 
             public partial struct ecs_stack_t : System.IEquatable<ecs_stack_t>
             {
+                public ecs_stack_page_t first;
+
+                public ecs_stack_page_t* tail_page;
+
+                public ecs_stack_cursor_t* tail_cursor;
+
+                public int cursor_count;
+
                 public bool Equals(ecs_stack_t other)
                 {
                     fixed (ecs_stack_t* __self = &this)
@@ -7083,6 +7121,14 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_stack_page_t : System.IEquatable<ecs_stack_page_t>
         {
+            public void* data;
+
+            public ecs_stack_page_t* next;
+
+            public short sp;
+
+            public uint id;
+
             public bool Equals(ecs_stack_page_t other)
             {
                 fixed (ecs_stack_page_t* __self = &this)
@@ -7113,6 +7159,54 @@ namespace Flecs.NET.Bindings
 #if NET6_0_OR_GREATER
                     System.HashCode hash = new System.HashCode();
                     hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_stack_page_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
+        }
+
+        public partial struct ecs_stack_t : System.IEquatable<ecs_stack_t>
+        {
+            public ecs_stack_page_t first;
+
+            public ecs_stack_page_t* tail_page;
+
+            public ecs_stack_cursor_t* tail_cursor;
+
+            public int cursor_count;
+
+            public bool Equals(ecs_stack_t other)
+            {
+                fixed (ecs_stack_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_stack_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_stack_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_stack_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_stack_t left, ecs_stack_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_stack_t left, ecs_stack_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_stack_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_stack_t)));
                     return hash.ToHashCode();
 #else
                     return base.GetHashCode();
@@ -7511,6 +7605,62 @@ namespace Flecs.NET.Bindings
 #if NET6_0_OR_GREATER
                     System.HashCode hash = new System.HashCode();
                     hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_struct_desc_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
+        }
+
+        public partial struct ecs_suspend_readonly_state_t : System.IEquatable<ecs_suspend_readonly_state_t>
+        {
+            public byte is_readonly;
+
+            public byte is_deferred;
+
+            public int defer_count;
+
+            public ulong scope;
+
+            public ulong with;
+
+            public ecs_vec_t commands;
+
+            public ecs_stack_t defer_stack;
+
+            public ecs_stage_t* stage;
+
+            public bool Equals(ecs_suspend_readonly_state_t other)
+            {
+                fixed (ecs_suspend_readonly_state_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_suspend_readonly_state_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_suspend_readonly_state_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_suspend_readonly_state_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_suspend_readonly_state_t left, ecs_suspend_readonly_state_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_suspend_readonly_state_t left, ecs_suspend_readonly_state_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_suspend_readonly_state_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_suspend_readonly_state_t)));
                     return hash.ToHashCode();
 #else
                     return base.GetHashCode();
@@ -11271,6 +11421,8 @@ namespace Flecs.NET.Bindings
 
         public const uint ECS_ROW_MASK = 268435455;
 
+        public const int ECS_STACK_PAGE_SIZE = 4096;
+
         public const int ecs_stage_t_magic = 1701016435;
 
         public const int ECS_STAT_WINDOW = 60;
@@ -11538,6 +11690,8 @@ namespace Flecs.NET.Bindings
         public const uint EcsTermIsToggle = 1024;
 
         public const uint EcsTermIsTrivial = 32;
+
+        public const uint EcsTermKeepAlive = 2048;
 
         public const uint EcsTermMatchAny = 1;
 

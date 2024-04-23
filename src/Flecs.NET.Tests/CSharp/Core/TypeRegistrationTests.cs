@@ -234,5 +234,23 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.Equal(".Child.GrandChild.GreatGrandChild", greatGrandChild.Path());
             Assert.Equal(".Child.Position", position.Path());
         }
+
+        [Fact]
+        private void EnumInSystem()
+        {
+            using World world = World.Create();
+
+            world.Routine()
+                .Iter((Iter it) =>
+                {
+                    Entity color = it.World().Component<Color>();
+                    Entity red = it.World().Entity(Color.Red);
+                    Assert.True(red != 0);
+                    Assert.True(red.IsChildOf(color));
+                    Assert.True(red.Has(EcsConstant, Ecs.Wildcard));
+                });
+
+            world.Progress();
+        }
     }
 }
