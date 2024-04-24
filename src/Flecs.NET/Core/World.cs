@@ -75,14 +75,16 @@ namespace Flecs.NET.Core
             for (int i = 0; i < args.Length; i++)
                 nativeStrings[i] = (NativeString)args[i];
 
-            ecs_world_t* world = ecs_init_w_args(args.Length, (byte**)nativeStrings);
+            World w = new World(ecs_init_w_args(args.Length, (byte**)nativeStrings));
+            w.EnsureBindingContext();
+            w.InitBuiltinComponents();
 
             for (int i = 0; i < args.Length; i++)
                 nativeStrings[i].Dispose();
 
             Memory.Free(nativeStrings);
 
-            return new World(world);
+            return w;
         }
 
         /// <summary>
