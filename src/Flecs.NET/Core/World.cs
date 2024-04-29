@@ -368,7 +368,7 @@ namespace Flecs.NET.Core
         ///     Set the current scope.
         /// </summary>
         /// <param name="value">The entity to use as scope.</param>
-        /// <typeparam name="T">The enum type of the entity.</typeparam>
+        /// <typeparam name="T">The enum.</typeparam>
         /// <returns>The previous scope.</returns>
         public Entity SetScope<T>(T value) where T : Enum
         {
@@ -1619,101 +1619,101 @@ namespace Flecs.NET.Core
         ///     All entities created in function are created with id.
         /// </summary>
         /// <param name="id">Id to be added to the created entities.</param>
-        /// <param name="func"></param>
-        public void With(ulong id, Action func)
+        /// <param name="callback">The callback.</param>
+        public void With(ulong id, Action callback)
         {
             ulong prev = ecs_set_with(Handle, id);
-            func();
+            callback();
             ecs_set_with(Handle, prev);
         }
 
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        /// <param name="func"></param>
-        public void With(ulong first, ulong second, Action func)
+        /// <param name="first">The first id.</param>
+        /// <param name="second">The second id.</param>
+        /// <param name="callback">The callback.</param>
+        public void With(ulong first, ulong second, Action callback)
         {
-            With(Macros.Pair(first, second), func);
+            With(Macros.Pair(first, second), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with type.
         /// </summary>
-        /// <param name="func"></param>
-        /// <typeparam name="T"></typeparam>
-        public void With<T>(Action func)
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The component.</typeparam>
+        public void With<T>(Action callback)
         {
-            With(Type<T>.Id(Handle), func);
+            With(Type<T>.Id(Handle), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with enum.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="T"></typeparam>
-        public void With<T>(T value, Action func) where T : Enum
+        /// <param name="value">The enum constant.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The enum.</typeparam>
+        public void With<T>(T value, Action callback) where T : Enum
         {
-            With<T>(Type<T>.Id(Handle, value), func);
+            With<T>(Type<T>.Id(Handle, value), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="second"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        public void With<TFirst>(ulong second, Action func)
+        /// <param name="second">The second id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first component.</typeparam>
+        public void With<TFirst>(ulong second, Action callback)
         {
-            With(Macros.Pair<TFirst>(second, Handle), func);
+            With(Macros.Pair<TFirst>(second, Handle), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="func"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        public void With<TFirst, TSecond>(Action func)
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first component.</typeparam>
+        /// <typeparam name="TSecond">The second component.</typeparam>
+        public void With<TFirst, TSecond>(Action callback)
         {
-            With(Macros.Pair<TFirst, TSecond>(Handle), func);
+            With(Macros.Pair<TFirst, TSecond>(Handle), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="second"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        public void With<TFirst, TSecond>(TSecond second, Action func) where TSecond : Enum
+        /// <param name="second">The second enum constant id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first component.</typeparam>
+        /// <typeparam name="TSecond">The second enum.</typeparam>
+        public void With<TFirst, TSecond>(TSecond second, Action callback) where TSecond : Enum
         {
-            With<TFirst>(Type<TSecond>.Id(Handle, second), func);
+            With<TFirst>(Type<TSecond>.Id(Handle, second), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        public void With<TFirst, TSecond>(TFirst first, Action func) where TFirst : Enum
+        /// <param name="first">The first enum constant.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first enum.</typeparam>
+        /// <typeparam name="TSecond">The second component.</typeparam>
+        public void With<TFirst, TSecond>(TFirst first, Action callback) where TFirst : Enum
         {
-            WithSecond<TSecond>(Type<TFirst>.Id(Handle, first), func);
+            WithSecond<TSecond>(Type<TFirst>.Id(Handle, first), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="TSecond"></typeparam>
-        public void WithSecond<TSecond>(ulong first, Action func)
+        /// <param name="first">The first id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TSecond">The second component.</typeparam>
+        public void WithSecond<TSecond>(ulong first, Action callback)
         {
-            With(first, Type<TSecond>.Id(Handle), func);
+            With(first, Type<TSecond>.Id(Handle), callback);
         }
 
         /// <summary>
@@ -1730,7 +1730,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Same as Scope(parent, func), but with T as parent.
+        ///     Same as Scope(parent, callback), but with T as parent.
         /// </summary>
         /// <param name="callback">The callback.</param>
         /// <typeparam name="T">The entity to use as scope.</typeparam>
@@ -1740,46 +1740,12 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Same as Scope(parent, func), but with enum as parent.
+        ///     Same as Scope(parent, callback), but with enum as parent.
         /// </summary>
         /// <param name="value">The entity to use as scope.</param>
         /// <param name="callback">The callback.</param>
-        /// <typeparam name="T">The enum type of the entity.</typeparam>
+        /// <typeparam name="T">The enum.</typeparam>
         public void Scope<T>(T value, Action callback) where T : Enum
-        {
-            Scope(Type<T>.Id(Handle, value), callback);
-        }
-
-        /// <summary>
-        ///     All entities created in function are created in scope. All operations
-        ///     called in function (such as lookup) are relative to scope.
-        /// </summary>
-        /// <param name="parent">The entity to use as scope.</param>
-        /// <param name="callback">The callback.</param>
-        public void Scope(ulong parent, Ecs.WorldCallback callback)
-        {
-            ulong prev = ecs_set_scope(Handle, parent);
-            callback(Handle);
-            ecs_set_scope(Handle, prev);
-        }
-
-        /// <summary>
-        ///     Same as Scope(parent, func), but with T as parent.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <typeparam name="T">The entity to use as scope.</typeparam>
-        public void Scope<T>(Ecs.WorldCallback callback)
-        {
-            Scope(Type<T>.Id(Handle), callback);
-        }
-
-        /// <summary>
-        ///     Same as Scope(parent, func), but with enum as parent.
-        /// </summary>
-        /// <param name="value">The entity to use as scope.</param>
-        /// <param name="callback">The callback.</param>
-        /// <typeparam name="T">The enum type of the entity.</typeparam>
-        public void Scope<T>(T value, Ecs.WorldCallback callback) where T : Enum
         {
             Scope(Type<T>.Id(Handle, value), callback);
         }
@@ -2009,23 +1975,11 @@ namespace Flecs.NET.Core
         ///     Defer all operations called in function. If the world is already in
         ///     deferred mode, do nothing.
         /// </summary>
-        /// <param name="func"></param>
-        public void Defer(Action func)
+        /// <param name="callback">The callback.</param>
+        public void Defer(Action callback)
         {
             ecs_defer_begin(Handle);
-            func();
-            ecs_defer_end(Handle);
-        }
-
-        /// <summary>
-        ///     Defer all operations called in function. If the world is already in
-        ///     deferred mode, do nothing.
-        /// </summary>
-        /// <param name="callback"></param>
-        public void Defer(Ecs.WorldCallback callback)
-        {
-            ecs_defer_begin(Handle);
-            callback(Handle);
+            callback();
             ecs_defer_end(Handle);
         }
 
@@ -3560,6 +3514,153 @@ namespace Flecs.NET.Core
         public Entity GetWith()
         {
             return new Entity(Handle, ecs_get_with(Handle));
+        }
+
+        /// <summary>
+        ///     All entities created in function are created in scope. All operations
+        ///     called in function (such as lookup) are relative to scope.
+        /// </summary>
+        /// <param name="parent">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        public void Scope(ulong parent, Ecs.WorldCallback callback)
+        {
+            ulong prev = ecs_set_scope(Handle, parent);
+            callback(Handle);
+            ecs_set_scope(Handle, prev);
+        }
+
+        /// <summary>
+        ///     Same as Scope(parent, func), but with T as parent.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The entity to use as scope.</typeparam>
+        public void Scope<T>(Ecs.WorldCallback callback)
+        {
+            Scope(Type<T>.Id(Handle), callback);
+        }
+
+        /// <summary>
+        ///     Same as Scope(parent, func), but with enum as parent.
+        /// </summary>
+        /// <param name="value">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The enum.</typeparam>
+        public void Scope<T>(T value, Ecs.WorldCallback callback) where T : Enum
+        {
+            Scope(Type<T>.Id(Handle, value), callback);
+        }
+
+        /// <summary>
+        ///     Defer all operations called in function. If the world is already in
+        ///     deferred mode, do nothing.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        public void Defer(Ecs.WorldCallback callback)
+        {
+            ecs_defer_begin(Handle);
+            callback(Handle);
+            ecs_defer_end(Handle);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with id.
+        /// </summary>
+        /// <param name="id">Id to be added to the created entities.</param>
+        /// <param name="callback">The callback.</param>
+        public void With(ulong id, Ecs.WorldCallback callback)
+        {
+            ulong prev = ecs_set_with(Handle, id);
+            callback(Handle);
+            ecs_set_with(Handle, prev);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="first">The first id.</param>
+        /// <param name="second">The second id.</param>
+        /// <param name="callback">The callback.</param>
+        public void With(ulong first, ulong second, Ecs.WorldCallback callback)
+        {
+            With(Macros.Pair(first, second), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with type.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The component.</typeparam>
+        public void With<T>(Ecs.WorldCallback callback)
+        {
+            With(Type<T>.Id(Handle), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with enum.
+        /// </summary>
+        /// <param name="value">The enum constant.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The enum.</typeparam>
+        public void With<T>(T value, Ecs.WorldCallback callback) where T : Enum
+        {
+            With<T>(Type<T>.Id(Handle, value), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="second">The second id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first component.</typeparam>
+        public void With<TFirst>(ulong second, Ecs.WorldCallback callback)
+        {
+            With(Macros.Pair<TFirst>(second, Handle), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first component.</typeparam>
+        /// <typeparam name="TSecond">The second component.</typeparam>
+        public void With<TFirst, TSecond>(Ecs.WorldCallback callback)
+        {
+            With(Macros.Pair<TFirst, TSecond>(Handle), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="second">The second enum constant id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first component.</typeparam>
+        /// <typeparam name="TSecond">The second enum.</typeparam>
+        public void With<TFirst, TSecond>(TSecond second, Ecs.WorldCallback callback) where TSecond : Enum
+        {
+            With<TFirst>(Type<TSecond>.Id(Handle, second), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="first">The first enum constant.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first enum.</typeparam>
+        /// <typeparam name="TSecond">The second component.</typeparam>
+        public void With<TFirst, TSecond>(TFirst first, Ecs.WorldCallback callback) where TFirst : Enum
+        {
+            WithSecond<TSecond>(Type<TFirst>.Id(Handle, first), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="first">The first id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TSecond">The second component.</typeparam>
+        public void WithSecond<TSecond>(ulong first, Ecs.WorldCallback callback)
+        {
+            With(first, Type<TSecond>.Id(Handle), callback);
         }
 
         /// <summary>

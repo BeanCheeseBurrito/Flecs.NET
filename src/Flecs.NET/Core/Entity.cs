@@ -2827,26 +2827,26 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Entities created in function will have the current entity.
         /// </summary>
-        /// <param name="func"></param>
-        /// <returns></returns>
-        public ref Entity With(Action func)
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Entity With(Action callback)
         {
             ulong prev = ecs_set_with(World, Id);
-            func();
+            callback();
             ecs_set_with(World, prev);
             return ref this;
         }
 
         /// <summary>
-        ///     Entities created in function will have (First, this).
+        ///     Entities created in function will have (first, this).
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="func"></param>
-        /// <returns></returns>
-        public ref Entity With(ulong first, Action func)
+        /// <param name="first">The id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Entity With(ulong first, Action callback)
         {
             ulong prev = ecs_set_with(World, Macros.Pair(first, Id));
-            func();
+            callback();
             ecs_set_with(World, prev);
             return ref this;
         }
@@ -2854,23 +2854,23 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Entities created in function will have (TFirst, this).
         /// </summary>
-        /// <param name="func"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <returns></returns>
-        public ref Entity With<TFirst>(Action func)
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The component id.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity With<TFirst>(Action callback)
         {
-            return ref With(Type<TFirst>.Id(World), func);
+            return ref With(Type<TFirst>.Id(World), callback);
         }
 
         /// <summary>
-        ///     The function will be ran with the scope set to the current entity.
+        ///     The function will be run with the scope set to the current entity.
         /// </summary>
-        /// <param name="func"></param>
-        /// <returns></returns>
-        public ref Entity Scope(Action func)
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Entity Scope(Action callback)
         {
             ulong prev = ecs_set_scope(World, Id);
-            func();
+            callback();
             ecs_set_scope(World, prev);
             return ref this;
         }
@@ -3813,6 +3813,57 @@ namespace Flecs.NET.Core
     // Flecs.NET Extensions
     public unsafe partial struct Entity
     {
+        /// <summary>
+        ///     Entities created in function will have the current entity.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Entity With(Ecs.WorldCallback callback)
+        {
+            ulong prev = ecs_set_with(World, Id);
+            callback(World);
+            ecs_set_with(World, prev);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Entities created in function will have (first, this).
+        /// </summary>
+        /// <param name="first">The id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Entity With(ulong first, Ecs.WorldCallback callback)
+        {
+            ulong prev = ecs_set_with(World, Macros.Pair(first, Id));
+            callback(World);
+            ecs_set_with(World, prev);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Entities created in function will have (TFirst, this).
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The component id.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity With<TFirst>(Ecs.WorldCallback callback)
+        {
+            return ref With(Type<TFirst>.Id(World), callback);
+        }
+
+        /// <summary>
+        ///     The function will be run with the scope set to the current entity.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Entity Scope(Ecs.WorldCallback callback)
+        {
+            ulong prev = ecs_set_scope(World, Id);
+            callback(World);
+            ecs_set_scope(World, prev);
+            return ref this;
+        }
+
         /// <summary>
         ///     Lookup an entity from a path.
         /// </summary>
