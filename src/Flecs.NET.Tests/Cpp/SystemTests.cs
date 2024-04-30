@@ -9,6 +9,9 @@ using static Flecs.NET.Bindings.Native;
 namespace Flecs.NET.Tests.Cpp
 {
     [SuppressMessage("ReSharper", "AccessToModifiedClosure")]
+    [SuppressMessage("ReSharper", "VariableHidesOuterVariable")]
+    [SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Local")]
+    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     public unsafe class SystemTests
     {
         [Fact]
@@ -2065,200 +2068,224 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        // [Fact]
-        // private void MultiThreadSystemWithQueryEach()
-        // {
-        //     using World world = World.Create();
-        //
-        //     world.SetThreads(2);
-        //
-        //     Entity e = world.Entity()
-        //         .Set(new Position(10, 20))
-        //         .Set(new Velocity(1, 2));
-        //
-        //     Query q = world.Query<Velocity>();
-        //
-        //     world.Routine<Position>()
-        //         .MultiThreaded()
-        //         .Each((Entity e, ref Position p) =>
-        //         {
-        //             q.Each(e, (ref Velocity v) =>
-        //             {
-        //                 p.X += v.X;
-        //                 p.Y += v.Y;
-        //             });
-        //         });
-        //
-        //     world.Progress();
-        //
-        //     Position* p = e.GetPtr<Position>();
-        //     Assert.Equal(11, p->X);
-        //     Assert.Equal(22, p->Y);
-        // }
+        [Fact]
+        private void MultiThreadSystemWithQueryEach()
+        {
+            using World world = World.Create();
 
-        // [Fact]
-        // private void MultiThreadSystemWithQueryEachWithIter()
-        // {
-        //     using World world = World.Create();
-        //
-        //     world.SetThreads(2);
-        //
-        //     Entity e = world.Entity()
-        //         .Set(new Position(10, 20))
-        //         .Set(new Velocity(1, 2));
-        //
-        //     Query q = world.Query<Velocity>();
-        //
-        //     world.Routine<Position>()
-        //         .MultiThreaded()
-        //         .Each((Iter it, int i, ref Position p) =>
-        //         {
-        //             q.Each(it, (ref Velocity v) =>
-        //             {
-        //                 p.X += v.X;
-        //                 p.Y += v.Y;
-        //             });
-        //         });
-        //
-        //     world.Progress();
-        //
-        //     Position* p = e.GetPtr<Position>();
-        //     Assert.Equal(11, p->X);
-        //     Assert.Equal(22, p->Y);
-        // }
+            world.SetThreads(2);
 
-        // [Fact]
-        // private void MultiThreadSystemWithQueryEachWithWorld()
-        // {
-        //     using World world = World.Create();
-        //
-        //     world.SetThreads(2);
-        //
-        //     Entity e = world.Entity()
-        //         .Set(new Position(10, 20))
-        //         .Set(new Velocity(1, 2));
-        //
-        //     Query q = world.Query<Velocity>();
-        //
-        //     world.Routine<Position>()
-        //         .MultiThreaded()
-        //         .Each((Iter it, int i, ref Position p) =>
-        //         {
-        //             q.Each(it.World(), (ref Velocity v) =>
-        //             {
-        //                 p.X += v.X;
-        //                 p.Y += v.Y;
-        //             });
-        //         });
-        //
-        //     world.Progress();
-        //
-        //     Position* p = e.GetPtr<Position>();
-        //     Assert.Equal(11, p->X);
-        //     Assert.Equal(22, p->Y);
-        // }
+            Entity e = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
 
-        // [Fact]
-        // private void MultiThreadSystemWithQueryIter()
-        // {
-        //     using World world = World.Create();
-        //
-        //     world.SetThreads(2);
-        //
-        //     Entity e = world.Entity()
-        //         .Set(new Position(10, 20))
-        //         .Set(new Velocity(1, 2));
-        //
-        //     Query q = world.Query<Velocity>();
-        //
-        //     world.Routine<Position>()
-        //         .MultiThreaded()
-        //         .Each((Entity e, ref Position p) =>
-        //         {
-        //             q.Iter(e, (Iter it, Field<Velocity> v) =>
-        //             {
-        //                 foreach (int i in it)
-        //                 {
-        //                     p.X += v[i].X;
-        //                     p.Y += v[i].Y;
-        //                 }
-        //             });
-        //         });
-        //
-        //     world.Progress();
-        //
-        //     Position* p = e.GetPtr<Position>();
-        //     Assert.Equal(11, p->X);
-        //     Assert.Equal(22, p->Y);
-        // }
+            Query q = world.Query<Velocity>();
 
-        // [Fact]
-        // private void MultiThreadSystemWithQueryIterWithIter()
-        // {
-        //     using World world = World.Create();
-        //
-        //     world.SetThreads(2);
-        //
-        //     Entity e = world.Entity()
-        //         .Set(new Position(10, 20))
-        //         .Set(new Velocity(1, 2));
-        //
-        //     Query q = world.Query<Velocity>();
-        //
-        //     world.Routine<Position>()
-        //         .MultiThreaded()
-        //         .Each((Iter it, int i, ref Position p) =>
-        //         {
-        //             q.Iter(it, (Iter it, Field<Velocity> v) =>
-        //             {
-        //                 foreach (int i in it)
-        //                 {
-        //                     p.X += v[i].X;
-        //                     p.Y += v[i].Y;
-        //                 }
-        //             });
-        //         });
-        //
-        //     world.Progress();
-        //
-        //     Position* p = e.GetPtr<Position>();
-        //     Assert.Equal(11, p->X);
-        //     Assert.Equal(22, p->Y);
-        // }
+            world.Routine<Position>()
+                .MultiThreaded()
+                .Each((Entity e, ref Position p) =>
+                {
+                    Position temp = p;
 
-        // [Fact]
-        // private void MultiThreadSystemWithQueryIterWithWorld()
-        // {
-        //     using World world = World.Create();
-        //
-        //     world.SetThreads(2);
-        //
-        //     Entity e = world.Entity()
-        //         .Set(new Position(10, 20))
-        //         .Set(new Velocity(1, 2));
-        //
-        //     Query q = world.Query<Velocity>();
-        //
-        //     world.Routine<Position>()
-        //         .MultiThreaded()
-        //         .Each((Iter it, int i, ref Position p) =>
-        //         {
-        //             q.Iter(it.World(), (Iter it, Field<Velocity> v) =>
-        //             {
-        //                 foreach (int i in it)
-        //                 {
-        //                     p.X += v[i].X;
-        //                     p.Y += v[i].Y;
-        //                 }
-        //             });
-        //         });
-        //
-        //     world.Progress();
-        //
-        //     Position* p = e.GetPtr<Position>();
-        //     Assert.Equal(11, p->X);
-        //     Assert.Equal(22, p->Y);
-        // }
+                    q.Each(e, (ref Velocity v) =>
+                    {
+                        temp.X += v.X;
+                        temp.Y += v.Y;
+                    });
+
+                    p = temp;
+                });
+
+            world.Progress();
+
+            Position* p = e.GetPtr<Position>();
+            Assert.Equal(11, p->X);
+            Assert.Equal(22, p->Y);
+        }
+
+        [Fact]
+        private void MultiThreadSystemWithQueryEachWithIter()
+        {
+            using World world = World.Create();
+
+            world.SetThreads(2);
+
+            Entity e = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Query q = world.Query<Velocity>();
+
+            world.Routine<Position>()
+                .MultiThreaded()
+                .Each((Iter it, int i, ref Position p) =>
+                {
+                    Position temp = p;
+
+                    q.Each(it, (ref Velocity v) =>
+                    {
+                        temp.X += v.X;
+                        temp.Y += v.Y;
+                    });
+
+                    p = temp;
+                });
+
+            world.Progress();
+
+            Position* p = e.GetPtr<Position>();
+            Assert.Equal(11, p->X);
+            Assert.Equal(22, p->Y);
+        }
+
+        [Fact]
+        private void MultiThreadSystemWithQueryEachWithWorld()
+        {
+            using World world = World.Create();
+
+            world.SetThreads(2);
+
+            Entity e = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Query q = world.Query<Velocity>();
+
+            world.Routine<Position>()
+                .MultiThreaded()
+                .Each((Iter it, int i, ref Position p) =>
+                {
+                    Position temp = p;
+
+                    q.Each(it.World(), (ref Velocity v) =>
+                    {
+                        temp.X += v.X;
+                        temp.Y += v.Y;
+                    });
+
+                    p = temp;
+                });
+
+            world.Progress();
+
+            Position* p = e.GetPtr<Position>();
+            Assert.Equal(11, p->X);
+            Assert.Equal(22, p->Y);
+        }
+
+        [Fact]
+        private void MultiThreadSystemWithQueryIter()
+        {
+            using World world = World.Create();
+
+            world.SetThreads(2);
+
+            Entity e = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Query q = world.Query<Velocity>();
+
+            world.Routine<Position>()
+                .MultiThreaded()
+                .Each((Entity e, ref Position p) =>
+                {
+                    Position temp = p;
+
+                    q.Iter(e, (Iter it, Field<Velocity> v) =>
+                    {
+                        foreach (int i in it)
+                        {
+                            temp.X += v[i].X;
+                            temp.Y += v[i].Y;
+                        }
+                    });
+
+                    p = temp;
+                });
+
+            world.Progress();
+
+            Position* p = e.GetPtr<Position>();
+            Assert.Equal(11, p->X);
+            Assert.Equal(22, p->Y);
+        }
+
+        [Fact]
+        private void MultiThreadSystemWithQueryIterWithIter()
+        {
+            using World world = World.Create();
+
+            world.SetThreads(2);
+
+            Entity e = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Query q = world.Query<Velocity>();
+
+            world.Routine<Position>()
+                .MultiThreaded()
+                .Each((Iter it, int i, ref Position p) =>
+                {
+                    Position temp = p;
+
+                    q.Iter(it, (Iter it, Field<Velocity> v) =>
+                    {
+                        foreach (int i in it)
+                        {
+                            temp.X += v[i].X;
+                            temp.Y += v[i].Y;
+                        }
+                    });
+
+                    p = temp;
+                });
+
+            world.Progress();
+
+            Position* p = e.GetPtr<Position>();
+            Assert.Equal(11, p->X);
+            Assert.Equal(22, p->Y);
+        }
+
+        [Fact]
+        private void MultiThreadSystemWithQueryIterWithWorld()
+        {
+            using World world = World.Create();
+
+            world.SetThreads(2);
+
+            Entity e = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Query q = world.Query<Velocity>();
+
+            world.Routine<Position>()
+                .MultiThreaded()
+                .Each((Iter it, int i, ref Position p) =>
+                {
+                    Position temp = p;
+
+                    q.Iter(it.World(), (Iter it, Field<Velocity> v) =>
+                    {
+                        foreach (int i in it)
+                        {
+                            temp.X += v[i].X;
+                            temp.Y += v[i].Y;
+                        }
+                    });
+
+                    p = temp;
+                });
+
+            world.Progress();
+
+            Position* p = e.GetPtr<Position>();
+            Assert.Equal(11, p->X);
+            Assert.Equal(22, p->Y);
+        }
 
         // TODO: Doesn't work in release mode.
         // [Fact]

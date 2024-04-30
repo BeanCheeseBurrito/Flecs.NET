@@ -2318,35 +2318,34 @@ namespace Flecs.NET.Tests.Cpp
             }));
         }
 
-        // TODO: FIX
-        // [Fact]
-        // private void Set2AfterFluent()
-        // {
-        //     using World world = World.Create();
-        //
-        //     Entity e = world.Entity()
-        //         .Set(new Mass(50))
-        //         .Ensure((ref Position p, ref Velocity v) =>
-        //         {
-        //             p = new Position(10, 20);
-        //             v = new Velocity(1, 2);
-        //         });
-        //
-        //     Assert.True(e.Has<Position>());
-        //     Assert.True(e.Has<Velocity>());
-        //     Assert.True(e.Has<Mass>());
-        //
-        //     Assert.True(e.Read((in Position p, in Velocity v, in Mass m) =>
-        //     {
-        //         Assert.Equal(10, p.X);
-        //         Assert.Equal(20, p.Y);
-        //
-        //         Assert.Equal(1, v.X);
-        //         Assert.Equal(2, v.Y);
-        //
-        //         Assert.Equal(50, m.Value);
-        //     }));
-        // }
+        [Fact]
+        private void Set2AfterFluent()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity()
+                .Set(new Mass(50))
+                .Ensure((ref Position p, ref Velocity v) =>
+                {
+                    p = new Position(10, 20);
+                    v = new Velocity(1, 2);
+                });
+
+            Assert.True(e.Has<Position>());
+            Assert.True(e.Has<Velocity>());
+            Assert.True(e.Has<Mass>());
+
+            Assert.True(e.Read((in Position p, in Velocity v, in Mass m) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+
+                Assert.Equal(50, m.Value);
+            }));
+        }
 
         [Fact]
         private void Set2BeforeFluent()

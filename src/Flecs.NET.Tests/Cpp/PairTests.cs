@@ -155,7 +155,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void System1PairInstances() // TODO: This causes double free
+        private void System1PairInstances()
         {
             using World world = World.Create();
 

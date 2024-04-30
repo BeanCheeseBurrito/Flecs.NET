@@ -178,68 +178,248 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Iterates the query using the provided callback.
         /// </summary>
-        /// <param name="func"></param>
-        public void Iter(Ecs.IterCallback func)
+        /// <param name="callback">The callback.</param>
+        public void Iter(Ecs.IterCallback callback)
         {
-            ecs_iter_t iter = ecs_query_iter(World, Handle);
+            Iter(World, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="callback">The callback.</param>
+        public void Iter(Entity entity, Ecs.IterCallback callback)
+        {
+            Iter(entity.World, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="it">The iter.</param>
+        /// <param name="callback">The callback.</param>
+        public void Iter(Iter it, Ecs.IterCallback callback)
+        {
+            Iter(it.World(), callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="callback">The callback.</param>
+        public void Iter(World world, Ecs.IterCallback callback)
+        {
+            ecs_iter_t iter = ecs_query_iter(world, Handle);
             while (ecs_query_next(&iter) == 1)
-                Invoker.Iter(&iter, func);
+                Invoker.Iter(&iter, callback);
         }
 
         /// <summary>
         ///     Iterates the query using the provided callback.
         /// </summary>
-        /// <param name="func"></param>
-        public void Each(Ecs.EachEntityCallback func)
+        /// <param name="callback">The callback.</param>
+        public void Each(Ecs.EachEntityCallback callback)
         {
-            ecs_iter_t iter = ecs_query_iter(World, Handle);
-            while (ecs_query_next_instanced(&iter) == 1)
-                Invoker.Each(&iter, func);
+            Each(World, callback);
         }
 
         /// <summary>
         ///     Iterates the query using the provided callback.
         /// </summary>
-        /// <param name="func"></param>
-        public void Each(Ecs.EachIndexCallback func)
+        /// <param name="entity">The entity.</param>
+        /// <param name="callback">The callback.</param>
+        public void Each(Entity entity, Ecs.EachEntityCallback callback)
         {
-            ecs_iter_t iter = ecs_query_iter(World, Handle);
+            Each(entity.World, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="it">The iter.</param>
+        /// <param name="callback">The callback.</param>
+        public void Each(Iter it, Ecs.EachEntityCallback callback)
+        {
+            Each(it.World(), callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="callback">The callback.</param>
+        public void Each(World world, Ecs.EachEntityCallback callback)
+        {
+            ecs_iter_t iter = ecs_query_iter(world, Handle);
             while (ecs_query_next_instanced(&iter) == 1)
-                Invoker.Each(&iter, func);
+                Invoker.Each(&iter, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        public void Each(Ecs.EachIndexCallback callback)
+        {
+            Each(World, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="callback">The callback.</param>
+        public void Each(Entity entity, Ecs.EachIndexCallback callback)
+        {
+            Each(entity.World, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="it">The iter.</param>
+        /// <param name="callback">The callback.</param>
+        public void Each(Iter it, Ecs.EachIndexCallback callback)
+        {
+            Each(it.World(), callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="callback">The callback.</param>
+        public void Each(World world, Ecs.EachIndexCallback callback)
+        {
+            ecs_iter_t iter = ecs_query_iter(world, Handle);
+            while (ecs_query_next_instanced(&iter) == 1)
+                Invoker.Each(&iter, callback);
         }
 
 #if NET5_0_OR_GREATER
         /// <summary>
         ///     Iterates the query using the provided callback.
         /// </summary>
-        /// <param name="func"></param>
-        public void Iter(delegate*<Iter, void> func)
+        /// <param name="callback">The callback.</param>
+        public void Iter(delegate*<Iter, void> callback)
         {
-            ecs_iter_t iter = ecs_query_iter(World, Handle);
+            Iter(World, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="callback">The callback.</param>
+        public void Iter(Entity entity, delegate*<Iter, void> callback)
+        {
+            Iter(entity.World, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="it">The iter.</param>
+        /// <param name="callback">The callback.</param>
+        public void Iter(Iter it, delegate*<Iter, void> callback)
+        {
+            Iter(it.World(), callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="callback">The callback.</param>
+        public void Iter(World world, delegate*<Iter, void> callback)
+        {
+            ecs_iter_t iter = ecs_query_iter(world, Handle);
             while (ecs_query_next(&iter) == 1)
-                Invoker.Iter(&iter, func);
+                Invoker.Iter(&iter, callback);
         }
 
         /// <summary>
         ///     Iterates the query using the provided callback.
         /// </summary>
-        /// <param name="func"></param>
-        public void Each(delegate*<Entity, void> func)
+        /// <param name="callback">The callback.</param>
+        public void Each(delegate*<Entity, void> callback)
         {
-            ecs_iter_t iter = ecs_query_iter(World, Handle);
-            while (ecs_query_next_instanced(&iter) == 1)
-                Invoker.Each(&iter, func);
+            Each(World, callback);
         }
 
         /// <summary>
         ///     Iterates the query using the provided callback.
         /// </summary>
-        /// <param name="func"></param>
-        public void Each(delegate*<Iter, int, void> func)
+        /// <param name="entity">The entity.</param>
+        /// <param name="callback">The callback.</param>
+        public void Each(Entity entity, delegate*<Entity, void> callback)
         {
-            ecs_iter_t iter = ecs_query_iter(World, Handle);
+            Each(entity.World, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="it">The iter.</param>
+        /// <param name="callback">The callback.</param>
+        public void Each(Iter it, delegate*<Entity, void> callback)
+        {
+            Each(it.World(), callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="callback">The callback.</param>
+        public void Each(World world, delegate*<Entity, void> callback)
+        {
+            ecs_iter_t iter = ecs_query_iter(world, Handle);
             while (ecs_query_next_instanced(&iter) == 1)
-                Invoker.Each(&iter, func);
+                Invoker.Each(&iter, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        public void Each(delegate*<Iter, int, void> callback)
+        {
+            Each(World, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="callback">The callback.</param>
+        public void Each(Entity entity, delegate*<Iter, int, void> callback)
+        {
+            Each(entity.World, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="it">The iter.</param>
+        /// <param name="callback">The callback.</param>
+        public void Each(Iter it, delegate*<Iter, int, void> callback)
+        {
+            Each(it.World(), callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="callback">The callback.</param>
+        public void Each(World world, delegate*<Iter, int, void>callback)
+        {
+            ecs_iter_t iter = ecs_query_iter(world, Handle);
+            while (ecs_query_next_instanced(&iter) == 1)
+                Invoker.Each(&iter, callback);
         }
 #endif
 
@@ -249,7 +429,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public IterIterable Iter()
         {
-            return new IterIterable(ecs_query_iter(World, Handle), _next, _nextInstanced);
+            return new IterIterable(ecs_query_iter(World, Handle));
         }
 
         /// <summary>
@@ -370,27 +550,4 @@ namespace Flecs.NET.Core
             return !(left == right);
         }
     }
-
-#if NET5_0_OR_GREATER
-    public unsafe partial struct Query
-    {
-        private static IntPtr _next = (IntPtr)(delegate* <ecs_iter_t*, byte>)&ecs_query_next;
-        private static IntPtr _nextInstanced = (IntPtr)(delegate* <ecs_iter_t*, byte>)&ecs_query_next_instanced;
-    }
-#else
-    public unsafe partial struct Query
-    {
-        private static readonly IntPtr _next;
-        private static readonly IntPtr _nextInstanced;
-
-        private static readonly Ecs.IterNextAction _nextReference = ecs_query_next;
-        private static readonly Ecs.IterNextAction _nextInstancedReference = ecs_query_next_instanced;
-
-        static Query()
-        {
-            _next = Marshal.GetFunctionPointerForDelegate(_nextReference);
-            _nextInstanced = Marshal.GetFunctionPointerForDelegate(_nextInstancedReference);
-        }
-    }
-#endif
 }

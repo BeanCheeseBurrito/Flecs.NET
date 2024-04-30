@@ -2660,104 +2660,104 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        // [Fact]
-        // private void InstancedNestedQueryWithIter()
-        // {
-        //     using World world = World.Create();
-        //
-        //     Query q1 = world.QueryBuilder()
-        //         .With<Position>()
-        //         .With<Mass>().Singleton().InOut()
-        //         .Build();
-        //
-        //     Query q2 = world.QueryBuilder()
-        //         .With<Velocity>()
-        //         .Build();
-        //
-        //     world.Add<Mass>();
-        //     world.Entity().Add<Velocity>();
-        //     world.Entity().Add<Position>();
-        //     world.Entity().Add<Position>();
-        //
-        //     int count = 0;
-        //
-        //     q2.Iter((Iter it2) =>
-        //     {
-        //         q1.Iter(it2, (Iter it1) =>
-        //         {
-        //             Assert.Equal(1, it1.Count());
-        //             count += it1.Count();
-        //         });
-        //     });
-        //
-        //     Assert.Equal(2, count);
-        // }
+        [Fact]
+        private void InstancedNestedQueryWithIter()
+        {
+            using World world = World.Create();
 
-        // [Fact]
-        // private void InstancedNestedQueryWithEntity()
-        // {
-        //     using World world = World.Create();
-        //
-        //     Query q1 = world.QueryBuilder()
-        //         .With<Position>()
-        //         .With<Mass>().Singleton().InOut()
-        //         .Build();
-        //
-        //     Query q2 = world.QueryBuilder()
-        //         .With<Velocity>()
-        //         .Build();
-        //
-        //     world.Add<Mass>();
-        //     world.Entity().Add<Velocity>();
-        //     world.Entity().Add<Position>();
-        //     world.Entity().Add<Position>();
-        //
-        //     int count = 0;
-        //
-        //     q2.Each((Entity e2) =>
-        //     {
-        //         q1.Iter(e2, (Iter it1) =>
-        //         {
-        //             Assert.Equal(1, it1.Count());
-        //             count += it1.Count();
-        //         });
-        //     });
-        //
-        //     Assert.Equal(2, count);
-        // }
+            Query q1 = world.QueryBuilder()
+                .With<Position>()
+                .With<Mass>().Singleton().InOut()
+                .Build();
 
-        // [Fact]
-        // private void InstancedNestedQueryWithWorld()
-        // {
-        //     using World world = World.Create();
-        //
-        //     Query q1 = world.QueryBuilder()
-        //         .With<Position>()
-        //         .With<Mass>().Singleton().InOut()
-        //         .Build();
-        //
-        //     Query q2 = world.QueryBuilder()
-        //         .With<Velocity>()
-        //         .Build();
-        //
-        //     world.Add<Mass>();
-        //     world.Entity().Add<Velocity>();
-        //     world.Entity().Add<Position>();
-        //     world.Entity().Add<Position>();
-        //
-        //     int count = 0;
-        //
-        //     q2.Iter((Iter it2) =>
-        //     {
-        //         q1.Iter(it2.World(), (Iter it1) =>
-        //         {
-        //             Assert.Equal(1, it1.Count());
-        //             count += it1.Count();
-        //         });
-        //     });
-        //
-        //     Assert.Equal(2, count);
-        // }
+            Query q2 = world.QueryBuilder()
+                .With<Velocity>()
+                .Build();
+
+            world.Add<Mass>();
+            world.Entity().Add<Velocity>();
+            world.Entity().Add<Position>();
+            world.Entity().Add<Position>();
+
+            int count = 0;
+
+            q2.Iter((Iter it2) =>
+            {
+                q1.Iter(it2, (Iter it1) =>
+                {
+                    Assert.Equal(1, it1.Count());
+                    count += it1.Count();
+                });
+            });
+
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        private void InstancedNestedQueryWithEntity()
+        {
+            using World world = World.Create();
+
+            Query q1 = world.QueryBuilder()
+                .With<Position>()
+                .With<Mass>().Singleton().InOut()
+                .Build();
+
+            Query q2 = world.QueryBuilder()
+                .With<Velocity>()
+                .Build();
+
+            world.Add<Mass>();
+            world.Entity().Add<Velocity>();
+            world.Entity().Add<Position>();
+            world.Entity().Add<Position>();
+
+            int count = 0;
+
+            q2.Each((Entity e2) =>
+            {
+                q1.Iter(e2, (Iter it1) =>
+                {
+                    Assert.Equal(1, it1.Count());
+                    count += it1.Count();
+                });
+            });
+
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        private void InstancedNestedQueryWithWorld()
+        {
+            using World world = World.Create();
+
+            Query q1 = world.QueryBuilder()
+                .With<Position>()
+                .With<Mass>().Singleton().InOut()
+                .Build();
+
+            Query q2 = world.QueryBuilder()
+                .With<Velocity>()
+                .Build();
+
+            world.Add<Mass>();
+            world.Entity().Add<Velocity>();
+            world.Entity().Add<Position>();
+            world.Entity().Add<Position>();
+
+            int count = 0;
+
+            q2.Iter((Iter it2) =>
+            {
+                q1.Iter(it2.World(), (Iter it1) =>
+                {
+                    Assert.Equal(1, it1.Count());
+                    count += it1.Count();
+                });
+            });
+
+            Assert.Equal(2, count);
+        }
 
         [Fact]
         private void CapturedQuery()
