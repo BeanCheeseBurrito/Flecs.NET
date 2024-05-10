@@ -24,11 +24,11 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Set var value.
+        ///     Set value for iterator variable.
         /// </summary>
-        /// <param name="varId"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="varId">The variable id.</param>
+        /// <param name="value">The entity variable value.</param>
+        /// <returns>Reference to self.</returns>
         public ref IterIterable SetVar(int varId, ulong value)
         {
             fixed (ecs_iter_t* it = &_iter)
@@ -40,11 +40,11 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Set var value.
+        ///     Set value for iterator variable.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="name">The variable name.</param>
+        /// <param name="value">The entity variable value.</param>
+        /// <returns>Reference to self.</returns>
         public ref IterIterable SetVar(string name, ulong value)
         {
             fixed (ecs_iter_t* it = &_iter)
@@ -59,6 +59,65 @@ namespace Flecs.NET.Core
 
                 return ref this;
             }
+        }
+
+        /// <summary>
+        ///     Set value for iterator variable.
+        /// </summary>
+        /// <param name="name">The variable name.</param>
+        /// <param name="value">The table variable value.</param>
+        /// <returns>Reference to self.</returns>
+        public ref IterIterable SetVar(string name, ecs_table_t* value)
+        {
+            fixed (ecs_iter_t* it = &_iter)
+            {
+                using NativeString nativeName = (NativeString)name;
+
+                ecs_query_iter_t* iter = &it->priv_.iter.query;
+                int varId = ecs_query_find_var(iter->query, nativeName);
+
+                Ecs.Assert(varId != -1, nameof(ECS_INVALID_PARAMETER));
+                ecs_iter_set_var_as_table(it, varId, value);
+
+                return ref this;
+            }
+        }
+
+        /// <summary>
+        ///     Set value for iterator variable.
+        /// </summary>
+        /// <param name="name">The variable name.</param>
+        /// <param name="value">The table variable value.</param>
+        /// <returns>Reference to self.</returns>
+        public ref IterIterable SetVar(string name, ecs_table_range_t value)
+        {
+            fixed (ecs_iter_t* it = &_iter)
+            {
+                using NativeString nativeName = (NativeString)name;
+
+                ecs_query_iter_t* iter = &it->priv_.iter.query;
+                int varId = ecs_query_find_var(iter->query, nativeName);
+
+                Ecs.Assert(varId != -1, nameof(ECS_INVALID_PARAMETER));
+                ecs_iter_set_var_as_range(it, varId, &value);
+
+                return ref this;
+            }
+        }
+
+        /// <summary>
+        ///     Set value for iterator variable.
+        /// </summary>
+        /// <param name="name">The variable name.</param>
+        /// <param name="value">The table variable value.</param>
+        /// <returns>Reference to self.</returns>
+        public ref IterIterable SetVar(string name, Table value)
+        {
+            ecs_table_range_t range;
+            range.table = value.GetTable();
+            range.offset = value.Offset;
+            range.count = value.Count;
+            return ref SetVar(name, range);
         }
 
         /// <summary>
@@ -158,8 +217,8 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Limit results to tables with specified group id (grouped queries only)
         /// </summary>
-        /// <param name="groupId"></param>
-        /// <returns></returns>
+        /// <param name="groupId">The group id.</param>
+        /// <returns>Reference to self.</returns>
         public ref IterIterable SetGroup(ulong groupId)
         {
             fixed (ecs_iter_t* it = &_iter)
@@ -172,8 +231,8 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Limit results to tables with specified group id (grouped queries only)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">The group type.</typeparam>
+        /// <returns>Reference to self.</returns>
         public ref IterIterable SetGroup<T>()
         {
             fixed (ecs_iter_t* it = &_iter)

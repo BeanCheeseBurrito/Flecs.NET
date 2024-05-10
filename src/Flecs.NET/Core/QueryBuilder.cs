@@ -46,16 +46,15 @@ namespace Flecs.NET.Core
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        ///     A reference to the filter description.
+        ///     A reference to the query description.
         /// </summary>
         public ref ecs_query_desc_t Desc => ref _desc;
 
         /// <summary>
-        ///     Creates a filter builder for the provided world.
+        ///     Creates a query builder for the provided world.
         /// </summary>
-        /// <param name="world"></param>
-        /// <param name="name"></param>
-        public QueryBuilder(ecs_world_t* world, string? name = null)
+        /// <param name="world">The world.</param>
+        public QueryBuilder(ecs_world_t* world)
         {
             _world = world;
             _desc = default;
@@ -63,9 +62,26 @@ namespace Flecs.NET.Core
             _termCount = default;
             _exprCount = default;
             _termIdType = TermIdType.Src;
-
             Context = default;
+        }
 
+        /// <summary>
+        ///     Creates a query builder for the provided world.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="entity">The query entity.</param>
+        public QueryBuilder(ecs_world_t* world, ulong entity) : this(world)
+        {
+            Desc.entity = entity;
+        }
+
+        /// <summary>
+        ///     Creates a query builder for the provided world.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="name">The query name.</param>
+        public QueryBuilder(ecs_world_t* world, string name) : this(world)
+        {
             if (string.IsNullOrEmpty(name))
                 return;
 
@@ -747,7 +763,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Filter expression. Should not be set at the same time as terms array.
+        ///     Query expression. Should not be set at the same time as terms array.
         /// </summary>
         /// <param name="expr"></param>
         /// <returns></returns>

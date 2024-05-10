@@ -83,11 +83,11 @@ public static class Cpp_Queries_SettingVariables
         // platoon or a single player setting a variable beforehand. In this example
         // we'll just find all platoons & ranged units for a single player.
 
-        int playerVar = q.FindVar("Player");
-        int platoonVar = q.FindVar("Platoon");
+        int playerVar = q.FindVar("player");
+        int platoonVar = q.FindVar("platoon");
 
         // Iterate query, limit the results to units of MyPlayer
-        q.Iter().SetVar(playerVar, world.Lookup("MyPlayer")).Each((Iter it, int i) =>
+        q.SetVar(playerVar, world.Lookup("MyPlayer")).Each((Iter it, int i) =>
         {
             Entity unit = it.Entity(i);
             Console.Write($"Unit {unit.Path()} of class {it.Id(1).Str()} ");

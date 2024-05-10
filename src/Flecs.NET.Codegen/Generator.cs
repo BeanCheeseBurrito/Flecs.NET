@@ -329,32 +329,82 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
                 string termBuilders = ConcatString(i + 1, "\n", index => $".With<T{index}>()");
                 str.AppendLine($@"
-                    public AlertBuilder AlertBuilder<{typeParams}>(string? name = null)
+                    public AlertBuilder AlertBuilder<{typeParams}>()
+                    {{
+                        return new AlertBuilder(Handle){termBuilders};
+                    }}
+
+                    public AlertBuilder AlertBuilder<{typeParams}>(string name)
                     {{
                         return new AlertBuilder(Handle, name){termBuilders};
                     }}
 
-                    public Alert Alert<{typeParams}>(string? name = null)
+                    public AlertBuilder AlertBuilder<{typeParams}>(ulong entity)
+                    {{
+                        return new AlertBuilder(Handle, entity){termBuilders};
+                    }}
+
+                    public Alert Alert<{typeParams}>()
+                    {{
+                        return AlertBuilder<{typeParams}>().Build();
+                    }}
+
+                    public Alert Alert<{typeParams}>(string name)
                     {{
                         return AlertBuilder<{typeParams}>(name).Build();
                     }}
 
-                    public QueryBuilder QueryBuilder<{typeParams}>(string? name = null)
+                    public Alert Alert<{typeParams}>(ulong entity)
+                    {{
+                        return AlertBuilder<{typeParams}>(entity).Build();
+                    }}
+
+                    public QueryBuilder QueryBuilder<{typeParams}>()
+                    {{
+                        return new QueryBuilder(Handle){termBuilders};
+                    }}
+
+                    public QueryBuilder QueryBuilder<{typeParams}>(string name)
                     {{
                         return new QueryBuilder(Handle, name){termBuilders};
                     }}
 
-                    public Query Query<{typeParams}>(string? name = null)
+                    public QueryBuilder QueryBuilder<{typeParams}>(ulong entity)
+                    {{
+                        return new QueryBuilder(Handle, entity){termBuilders};
+                    }}
+
+                    public Query Query<{typeParams}>()
+                    {{
+                        return QueryBuilder<{typeParams}>().Build();
+                    }}
+
+                    public Query Query<{typeParams}>(string name)
                     {{
                         return QueryBuilder<{typeParams}>(name).Build();
                     }}
 
-                    public RoutineBuilder Routine<{typeParams}>(string? name = null)
+                    public Query Query<{typeParams}>(ulong entity)
+                    {{
+                        return QueryBuilder<{typeParams}>(entity).Build();
+                    }}
+
+                    public RoutineBuilder Routine<{typeParams}>()
+                    {{
+                        return new RoutineBuilder(Handle){termBuilders};
+                    }}
+
+                    public RoutineBuilder Routine<{typeParams}>(string name)
                     {{
                         return new RoutineBuilder(Handle, name){termBuilders};
                     }}
 
-                    public ObserverBuilder Observer<{typeParams}>(string? name = null)
+                    public ObserverBuilder Observer<{typeParams}>()
+                    {{
+                        return new ObserverBuilder(Handle){termBuilders};
+                    }}
+
+                    public ObserverBuilder Observer<{typeParams}>(string name)
                     {{
                         return new ObserverBuilder(Handle, name){termBuilders};
                     }}
@@ -451,7 +501,7 @@ namespace Flecs.NET.Codegen
                 string typeParams = GenerateTypeParams(i + 1);
 
                 str.AppendLine($@"
-                    public ref Entity Ensure<{typeParams}>(Ecs.InvokeEnsureCallback<{typeParams}> callback)
+                    public ref Entity Insert<{typeParams}>(Ecs.InvokeInsertCallback<{typeParams}> callback)
                     {{
                         Invoker.InvokeEnsure(World, Id, callback);
                         return ref this;
@@ -484,7 +534,7 @@ namespace Flecs.NET.Codegen
 
                 str.AppendLine($"public delegate void InvokeReadCallback<{typeParams}>({inParams});");
                 str.AppendLine($"public delegate void InvokeWriteCallback<{typeParams}>({refParams});");
-                str.AppendLine($"public delegate void InvokeEnsureCallback<{typeParams}>({refParams});");
+                str.AppendLine($"public delegate void InvokeInsertCallback<{typeParams}>({refParams});");
             }
 
             return str.ToString();
@@ -1036,7 +1086,7 @@ namespace Flecs.NET.Codegen
                     index => $"ecs_modified_id(world, id, Type<T{index}>.Id(world));");
 
                 str.AppendLine($@"
-                    internal static bool InvokeEnsure<{typeParams}>(ecs_world_t* world, ulong id, Ecs.InvokeEnsureCallback<{typeParams}> callback)
+                    internal static bool InvokeEnsure<{typeParams}>(ecs_world_t* world, ulong id, Ecs.InvokeInsertCallback<{typeParams}> callback)
                     {{
                         World w = new World(world);
 

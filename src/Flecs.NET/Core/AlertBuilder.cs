@@ -26,17 +26,34 @@ namespace Flecs.NET.Core
         public ref ecs_alert_desc_t Desc => ref AlertDesc;
 
         /// <summary>
-        ///     Creates an alert builder for world.
+        ///     Creates an alert builder for the provided world.
         /// </summary>
-        /// <param name="world"></param>
-        /// <param name="name"></param>
-        public AlertBuilder(ecs_world_t* world, string? name = null)
+        /// <param name="world">The world.</param>
+        public AlertBuilder(ecs_world_t* world)
         {
-            AlertDesc = default;
-            QueryBuilder = new QueryBuilder(world);
             _world = world;
             _severityFilterCount = default;
+            AlertDesc = default;
+            QueryBuilder = new QueryBuilder(world);
+        }
 
+        /// <summary>
+        ///     Creates an alert builder for the provided world.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="entity">The alert entity.</param>
+        public AlertBuilder(ecs_world_t* world, ulong entity) : this(world)
+        {
+            AlertDesc.entity = entity;
+        }
+
+        /// <summary>
+        ///     Creates an alert builder for the provided world.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="name">The alert name.</param>
+        public AlertBuilder(ecs_world_t* world, string name) : this(world)
+        {
             if (string.IsNullOrEmpty(name))
                 return;
 

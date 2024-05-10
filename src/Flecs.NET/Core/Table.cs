@@ -643,6 +643,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Get table.
+        /// </summary>
+        /// <returns>The table.</returns>
+        public ecs_table_t* GetTable()
+        {
+            return Handle;
+        }
+
+        /// <summary>
         ///     Converts a <see cref="Table"/> instance to a <see cref="ecs_table_t"/>*.
         /// </summary>
         /// <param name="table"></param>

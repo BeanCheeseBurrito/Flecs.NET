@@ -162,7 +162,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            world.Ensure((ref Position p) =>
+            world.Insert((ref Position p) =>
             {
                 p.X = 10;
                 p.Y = 20;
@@ -172,7 +172,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(10, p->X);
             Assert.Equal(20, p->Y);
 
-            world.Ensure((ref Position p) =>
+            world.Insert((ref Position p) =>
             {
                 p.X++;
                 p.Y++;

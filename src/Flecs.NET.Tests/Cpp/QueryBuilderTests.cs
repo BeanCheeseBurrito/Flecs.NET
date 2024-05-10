@@ -632,6 +632,227 @@ namespace Flecs.NET.Tests.Cpp
 
         [Theory]
         [MemberData(nameof(CacheKinds))]
+        private void SetVarOnQuery(ecs_query_cache_kind_t cacheKind)
+        {
+            using World world = World.Create();
+
+            Entity apples = world.Entity();
+            Entity pears = world.Entity();
+
+            world.Entity()
+                .Add<Likes>(apples);
+
+            Entity e2 = world.Entity()
+                .Add<Likes>(pears);
+
+            Query r = world.QueryBuilder()
+                .With<Likes>().Second().Var("Food")
+                .CacheKind(cacheKind)
+                .Build();
+
+            int foodVar = r.FindVar("Food");
+
+            int count = 0;
+            r.SetVar(foodVar, pears)
+                .Each((Iter it, int index) =>
+                {
+                    Assert.True(it.Entity(index) == e2);
+                    Assert.True(it.Id(0) == world.Pair<Likes>(pears));
+                    Assert.True(it.GetVar("Food") == pears);
+                    Assert.True(it.GetVar(foodVar) == pears);
+                    count++;
+                });
+
+            Assert.Equal(1, count);
+        }
+
+        [Theory]
+        [MemberData(nameof(CacheKinds))]
+        private void SetVarByNameOnQuery(ecs_query_cache_kind_t cacheKind)
+        {
+            using World world = World.Create();
+
+            Entity apples = world.Entity();
+            Entity pears = world.Entity();
+
+            world.Entity()
+                .Add<Likes>(apples);
+
+            Entity e2 = world.Entity()
+                .Add<Likes>(pears);
+
+            Query r = world.QueryBuilder()
+                .With<Likes>().Second().Var("Food")
+                .CacheKind(cacheKind)
+                .Build();
+
+            int count = 0;
+            r.SetVar("Food", pears)
+                .Each((Iter it, int index) =>
+                {
+                    Assert.True(it.Entity(index) == e2);
+                    Assert.True(it.Id(0) == world.Pair<Likes>(pears));
+                    Assert.True(it.GetVar("Food") == pears);
+                    count++;
+                });
+
+            Assert.Equal(1, count);
+        }
+
+        [Theory]
+        [MemberData(nameof(CacheKinds))]
+        private void SetTableVar(ecs_query_cache_kind_t cacheKind)
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity().Add<Position>();
+            Entity e2 = world.Entity().Add<Position>();
+            Entity e3 = world.Entity().Add<Position>().Add<Velocity>();
+
+            Query r = world.QueryBuilder<Position>()
+                .CacheKind(cacheKind)
+                .Build();
+
+            int count = 0;
+            r.SetVar("this", e1.Table())
+                .Each((Iter it, int index) =>
+                {
+                    if (index == 0)
+                        Assert.True(it.Entity(index) == e1);
+                    else if (index == 1) Assert.True(it.Entity(index) == e2);
+                    count++;
+                });
+
+            Assert.Equal(2, count);
+
+            r.SetVar("this", e3.Table())
+                .Each((Iter it, int index) =>
+                {
+                    Assert.True(it.Entity(index) == e3);
+                    count++;
+                });
+
+            Assert.Equal(3, count);
+        }
+
+        [Theory]
+        [MemberData(nameof(CacheKinds))]
+        private void SetRangeVar(ecs_query_cache_kind_t cacheKind)
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity().Add<Position>();
+            Entity e2 = world.Entity().Add<Position>();
+            Entity e3 = world.Entity().Add<Position>().Add<Velocity>();
+
+            Query r = world.QueryBuilder<Position>()
+                .CacheKind(cacheKind)
+                .Build();
+
+            int count = 0;
+
+            r.SetVar("this", e1.Range())
+                .Each((Iter it, int index) =>
+                {
+                    Assert.True(it.Entity(index) == e1);
+                    count++;
+                });
+
+            Assert.Equal(1, count);
+
+            r.SetVar("this", e2.Range())
+                .Each((Iter it, int index) =>
+                {
+                    Assert.True(it.Entity(index) == e2);
+                    count++;
+                });
+
+            Assert.Equal(2, count);
+
+            r.SetVar("this", e3.Range())
+                .Each((Iter it, int index) =>
+                {
+                    Assert.True(it.Entity(index) == e3);
+                    count++;
+                });
+
+            Assert.Equal(3, count);
+        }
+
+        [Theory]
+        [MemberData(nameof(CacheKinds))]
+        private void SetTableVarChained(ecs_query_cache_kind_t cacheKind)
+        {
+            using World world = World.Create();
+
+            /* var e1 = */
+            world.Entity().Add<Position>();
+            /* var e2 = */
+            world.Entity().Add<Position>();
+            Entity e3 = world.Entity().Add<Position>().Add<Velocity>();
+            /* var e4 = */
+            world.Entity().Add<Velocity>();
+
+            Query q1 = world.QueryBuilder<Position>()
+                .CacheKind(cacheKind)
+                .Build();
+
+            Query q2 = world.QueryBuilder<Velocity>()
+                .CacheKind(cacheKind)
+                .Build();
+
+            int count = 0;
+
+            q1.Iter((Iter it) =>
+            {
+                q2.SetVar("this", it.Table()).Each((Entity e) =>
+                {
+                    Assert.True(e == e3);
+                    count++;
+                });
+            });
+
+            Assert.Equal(1, count);
+        }
+
+        [Theory]
+        [MemberData(nameof(CacheKinds))]
+        private void SetRangeVarChained(ecs_query_cache_kind_t cacheKind)
+        {
+            using World world = World.Create();
+
+            /* var e1 = */
+            world.Entity().Add<Position>();
+            /* var e2 = */
+            world.Entity().Add<Position>();
+            Entity e3 = world.Entity().Add<Position>().Add<Velocity>();
+            /* var e4 = */
+            world.Entity().Add<Velocity>();
+
+            Query q1 = world.QueryBuilder<Position>()
+                .CacheKind(cacheKind)
+                .Build();
+
+            Query q2 = world.QueryBuilder<Velocity>()
+                .CacheKind(cacheKind)
+                .Build();
+
+            int count = 0;
+
+            q1.Iter((Iter it) =>
+            {
+                q2.SetVar("this", it.Range()).Each((Entity e) =>
+                {
+                    Assert.True(e == e3);
+                    count++;
+                });
+            });
+
+            Assert.Equal(1, count);
+        }
+
+        [Theory]
+        [MemberData(nameof(CacheKinds))]
         private void ExprWithVar(ecs_query_cache_kind_t cacheKind)
         {
             using World world = World.Create();
@@ -2487,6 +2708,90 @@ namespace Flecs.NET.Tests.Cpp
 
         [Theory]
         [MemberData(nameof(CacheKinds))]
+        private void SetGroupOnQuery(ecs_query_cache_kind_t cacheKind)
+        {
+            using World world = World.Create();
+
+            Entity rel = world.Entity();
+            Entity tgtA = world.Entity();
+            Entity tgtB = world.Entity();
+            Entity tgtC = world.Entity();
+            Entity tag = world.Entity();
+
+            world.Entity().Add(rel, tgtA);
+            Entity e2 = world.Entity().Add(rel, tgtB);
+            world.Entity().Add(rel, tgtC);
+
+            world.Entity().Add(rel, tgtA).Add(tag);
+            Entity e5 = world.Entity().Add(rel, tgtB).Add(tag);
+            world.Entity().Add(rel, tgtC).Add(tag);
+
+            Query q = world.QueryBuilder()
+                .With(rel, Ecs.Wildcard)
+                .GroupBy(rel, group_by_rel)
+                .Build();
+
+            bool e2Found = false;
+            bool e5Found = false;
+            int count = 0;
+
+            q.SetGroup(tgtB).Each((Iter it, int i) =>
+            {
+                Entity e = it.Entity(i);
+                Assert.True(it.GroupId() == tgtB);
+
+                if (e == e2) e2Found = true;
+                if (e == e5) e5Found = true;
+                count++;
+            });
+
+            Assert.Equal(2, count);
+            Assert.True(e2Found);
+            Assert.True(e5Found);
+        }
+
+        [Theory]
+        [MemberData(nameof(CacheKinds))]
+        private void SetGroupTypeOnQuery(ecs_query_cache_kind_t cacheKind)
+        {
+            using World world = World.Create();
+
+            Entity tag = world.Entity();
+
+            world.Entity().Add<Rel, TgtA>();
+            Entity e2 = world.Entity().Add<Rel, TgtB>();
+            world.Entity().Add<Rel, TgtC>();
+
+            world.Entity().Add<Rel, TgtA>().Add(tag);
+            Entity e5 = world.Entity().Add<Rel, TgtB>().Add(tag);
+            world.Entity().Add<Rel, TgtC>().Add(tag);
+
+            Query q = world.QueryBuilder()
+                .With<Rel>(Ecs.Wildcard)
+                .GroupBy<Rel>(group_by_rel)
+                .Build();
+
+            bool e2Found = false;
+            bool e5Found = false;
+            int count = 0;
+
+            q.SetGroup<TgtB>().Each((Iter it, int i) =>
+            {
+                Entity e = it.Entity(i);
+                Assert.True(it.GroupId() == world.Id<TgtB>());
+
+                if (e == e2) e2Found = true;
+                if (e == e5) e5Found = true;
+                count++;
+            });
+
+            Assert.Equal(2, count);
+            Assert.True(e2Found);
+            Assert.True(e5Found);
+        }
+
+        [Theory]
+        [MemberData(nameof(CacheKinds))]
         private void CreateWithNoTemplateArgs(ecs_query_cache_kind_t cacheKind)
         {
             using World world = World.Create();
@@ -2896,29 +3201,29 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        // [Theory]
-        // [MemberData(nameof(CacheKinds))]
-        // private void IterWithStage(ecs_query_cache_kind_t cacheKind)
-        // {
-        //     using World world = World.Create();
-        //
-        //     world.SetStageCount(2);
-        //     World stage = world.GetStage(1);
-        //
-        //     Entity e1 = world.Entity().Add<Position>();
-        //
-        //     Query q = world.Query<Position>();
-        //
-        //     int count = 0;
-        //     q.Each(stage, (Iter it, int i) =>
-        //     {
-        //         Assert.True(it.World() == stage);
-        //         Assert.True(it.Entity(i) == e1);
-        //         count++;
-        //     });
-        //
-        //     Assert.Equal(1, count);
-        // }
+        [Theory]
+        [MemberData(nameof(CacheKinds))]
+        private void IterWithStage(ecs_query_cache_kind_t cacheKind)
+        {
+            using World world = World.Create();
+
+            world.SetStageCount(2);
+            World stage = world.GetStage(1);
+
+            Entity e1 = world.Entity().Add<Position>();
+
+            Query q = world.Query<Position>();
+
+            int count = 0;
+            q.Each(stage, (Iter it, int i) =>
+            {
+                Assert.True(it.World() == stage);
+                Assert.True(it.Entity(i) == e1);
+                count++;
+            });
+
+            Assert.Equal(1, count);
+        }
 
         [Theory]
         [MemberData(nameof(CacheKinds))]
@@ -3215,7 +3520,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Add<TagB>();
 
             Query f = world.QueryBuilder<TagA, TagB>()
-                .TermAt(0).Src(Ecs.This) // dummy
+                .TermAt(0).Src(Ecs.This)
                 .With<TagC>()
                 .CacheKind(cacheKind)
                 .Build();

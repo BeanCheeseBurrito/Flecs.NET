@@ -20,30 +20,33 @@ namespace Flecs.NET.Core
         public ref ecs_world_t* World => ref _world;
 
         /// <summary>
-        ///     Creates a pipeline builder with the provided world and entity id.
+        ///     Creates a pipeline builder for the provided world.
         /// </summary>
-        /// <param name="world"></param>
-        /// <param name="entity"></param>
-        public PipelineBuilder(ecs_world_t* world, ulong entity)
+        /// <param name="world">The world.</param>
+        public PipelineBuilder(ecs_world_t* world)
         {
             _world = world;
             _pipelineDesc = default;
             QueryBuilder = new QueryBuilder(world);
+        }
 
+        /// <summary>
+        ///     Creates a pipeline builder for the provided world.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="entity">The pipeline entity.</param>
+        public PipelineBuilder(ecs_world_t* world, ulong entity) : this(world)
+        {
             _pipelineDesc.entity = entity;
         }
 
         /// <summary>
         ///     Creates a pipeline builder for the provided world.
         /// </summary>
-        /// <param name="world"></param>
-        /// <param name="name"></param>
-        public PipelineBuilder(ecs_world_t* world, string? name = null)
+        /// <param name="world">The world.</param>
+        /// <param name="name">The pipeline name.</param>
+        public PipelineBuilder(ecs_world_t* world, string name) : this(world)
         {
-            _world = world;
-            _pipelineDesc = default;
-            QueryBuilder = new QueryBuilder(world);
-
             if (string.IsNullOrEmpty(name))
                 return;
 

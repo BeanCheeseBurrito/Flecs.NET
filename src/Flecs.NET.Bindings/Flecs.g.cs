@@ -175,7 +175,7 @@ namespace Flecs.NET.Bindings
         public static extern void ecs_emit(ecs_world_t* world, ecs_event_desc_t* desc);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_emplace_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void* ecs_emplace_id(ecs_world_t* world, ulong entity, ulong id);
+        public static extern void* ecs_emplace_id(ecs_world_t* world, ulong entity, ulong id, byte* is_new);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_enable", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_enable(ecs_world_t* world, ulong entity, byte enabled);
@@ -690,9 +690,6 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_meta_set_char", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_meta_set_char(ecs_meta_cursor_t* cursor, byte value);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_meta_set_component", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern int ecs_meta_set_component(ecs_meta_cursor_t* cursor, ulong value);
-
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_meta_set_entity", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_meta_set_entity(ecs_meta_cursor_t* cursor, ulong value);
 
@@ -846,24 +843,6 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_page_next", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte ecs_page_next(ecs_iter_t* it);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_parse_digit", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_parse_digit(byte* ptr, byte* token);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_parse_identifier", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_parse_identifier(byte* name, byte* expr, byte* ptr, byte* token_out);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_parse_term", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_parse_term(ecs_world_t* world, ecs_stage_t* stage, byte* name, byte* expr, byte* ptr, ecs_term_t* term_out, ecs_oper_kind_t* extra_oper, ecs_term_ref_t* extra_args, byte allow_newline);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_parse_token", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_parse_token(byte* name, byte* expr, byte* ptr, byte* token_out, byte delim);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_parse_ws", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_parse_ws(byte* ptr);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_parse_ws_eol", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_parse_ws_eol(byte* ptr);
-
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_parser_error_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_parser_error_(byte* name, byte* expr, long column, byte* fmt);
 
@@ -927,6 +906,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_quantity_init", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_quantity_init(ecs_world_t* world, ecs_entity_desc_t* desc);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_query_args_parse", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* ecs_query_args_parse(ecs_query_t* query, ecs_iter_t* it, byte* expr);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_query_cache_stats_copy_last", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_query_cache_stats_copy_last(ecs_query_stats_t* dst, ecs_query_stats_t* src);
 
@@ -983,9 +965,6 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_query_next_instanced", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte ecs_query_next_instanced(ecs_iter_t* it);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_query_parse_vars", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_query_parse_vars(ecs_query_t* query, ecs_iter_t* it, byte* expr);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_query_plan", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_query_plan(ecs_query_t* query);
@@ -1721,6 +1700,12 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_module_path_from_c", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* flecs_module_path_from_c(byte* c_name);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_parse_digit", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* flecs_parse_digit(byte* ptr, byte* token);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_parse_ws_eol", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* flecs_parse_ws_eol(byte* ptr);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_poly_claim_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int flecs_poly_claim_(void* poly);
@@ -12145,6 +12130,8 @@ namespace Flecs.NET.Bindings
 
         private static void* EcsReflexive_Ptr;
 
+        private static void* EcsRelationship_Ptr;
+
         private static void* EcsRemove_Ptr;
 
         private static void* EcsScopeClose_Ptr;
@@ -12163,6 +12150,8 @@ namespace Flecs.NET.Bindings
 
         private static void* EcsSystem_Ptr;
 
+        private static void* EcsTarget_Ptr;
+
         private static void* EcsTebi_Ptr;
 
         private static void* EcsTemperature_Ptr;
@@ -12172,6 +12161,8 @@ namespace Flecs.NET.Bindings
         private static void* EcsThis_Ptr;
 
         private static void* EcsTime_Ptr;
+
+        private static void* EcsTrait_Ptr;
 
         private static void* EcsTransitive_Ptr;
 
@@ -12933,6 +12924,8 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong EcsReflexive => ref *(ulong*)(EcsReflexive_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsReflexive", out EcsReflexive_Ptr) : EcsReflexive_Ptr);
 
+        public static ref ulong EcsRelationship => ref *(ulong*)(EcsRelationship_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsRelationship", out EcsRelationship_Ptr) : EcsRelationship_Ptr);
+
         public static ref ulong EcsRemove => ref *(ulong*)(EcsRemove_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsRemove", out EcsRemove_Ptr) : EcsRemove_Ptr);
 
         public static ref ulong EcsScopeClose => ref *(ulong*)(EcsScopeClose_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsScopeClose", out EcsScopeClose_Ptr) : EcsScopeClose_Ptr);
@@ -12951,6 +12944,8 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong EcsSystem => ref *(ulong*)(EcsSystem_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSystem", out EcsSystem_Ptr) : EcsSystem_Ptr);
 
+        public static ref ulong EcsTarget => ref *(ulong*)(EcsTarget_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTarget", out EcsTarget_Ptr) : EcsTarget_Ptr);
+
         public static ref ulong EcsTebi => ref *(ulong*)(EcsTebi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTebi", out EcsTebi_Ptr) : EcsTebi_Ptr);
 
         public static ref ulong EcsTemperature => ref *(ulong*)(EcsTemperature_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTemperature", out EcsTemperature_Ptr) : EcsTemperature_Ptr);
@@ -12960,6 +12955,8 @@ namespace Flecs.NET.Bindings
         public static ref ulong EcsThis => ref *(ulong*)(EcsThis_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsThis", out EcsThis_Ptr) : EcsThis_Ptr);
 
         public static ref ulong EcsTime => ref *(ulong*)(EcsTime_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTime", out EcsTime_Ptr) : EcsTime_Ptr);
+
+        public static ref ulong EcsTrait => ref *(ulong*)(EcsTrait_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTrait", out EcsTrait_Ptr) : EcsTrait_Ptr);
 
         public static ref ulong EcsTransitive => ref *(ulong*)(EcsTransitive_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTransitive", out EcsTransitive_Ptr) : EcsTransitive_Ptr);
 

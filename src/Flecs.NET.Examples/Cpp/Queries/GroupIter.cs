@@ -79,7 +79,7 @@ public static class Cpp_Queries_GroupIter
 
         // Only iterate entities in cell 10
         Console.WriteLine("Tables for cell 1_0:");
-        q.Iter().SetGroup<Cell10>().Iter((Iter it) =>
+        q.SetGroup<Cell10>().Iter((Iter it) =>
         {
             Entity group = it.World().Entity(it.GroupId());
             Console.WriteLine($" - Group {group.Path()}: Table [{it.Table()}]");

@@ -24,10 +24,20 @@ namespace Flecs.NET.Core
         public ref ecs_query_t* Handle => ref _handle;
 
         /// <summary>
+        ///     Creates a query from a handle.
+        /// </summary>
+        /// <param name="query">The query pointer.</param>
+        public Query(ecs_query_t* query)
+        {
+            _world = query->world;
+            _handle = query;
+        }
+
+        /// <summary>
         ///     Creates a query from a world and handle.
         /// </summary>
-        /// <param name="world"></param>
-        /// <param name="query"></param>
+        /// <param name="world">The world.</param>
+        /// <param name="query">The query pointer.</param>
         public Query(ecs_world_t* world, ecs_query_t* query = null)
         {
             _world = world;
@@ -35,13 +45,35 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates a query from a handle.
+        ///     Creates a query from an entity.
         /// </summary>
-        /// <param name="query"></param>
-        public Query(ecs_query_t* query)
+        /// <param name="world">The world.</param>
+        /// <param name="entity">The query entity.</param>
+        public Query(ecs_world_t* world, ulong entity) : this (new Entity(world, entity))
         {
-            _world = query->world;
-            _handle = query;
+        }
+
+        /// <summary>
+        ///     Creates a query from an entity.
+        /// </summary>
+        /// <param name="entity">The query entity.</param>
+        public Query(Entity entity)
+        {
+            _world = entity.World;
+
+            if (entity != 0)
+            {
+                EcsPoly* poly = entity.GetPtr<EcsPoly>(EcsQuery);
+
+                if (poly != null)
+                {
+                    _handle = (ecs_query_t*)poly->poly;
+                    return;
+                }
+            }
+
+            ecs_query_desc_t desc = default;
+            _handle = ecs_query_init(_world, &desc);
         }
 
         /// <summary>
@@ -457,6 +489,81 @@ namespace Flecs.NET.Core
         public Entity First()
         {
             return Iter().First();
+        }
+
+        /// <summary>
+        ///     Set value for iterator variable.
+        /// </summary>
+        /// <param name="varId">The variable id.</param>
+        /// <param name="value">The entity variable value.</param>
+        /// <returns>Iterable iter struct.</returns>
+        public IterIterable SetVar(int varId, ulong value)
+        {
+            return Iter().SetVar(varId, value);
+        }
+
+        /// <summary>
+        ///     Set value for iterator variable.
+        /// </summary>
+        /// <param name="name">The variable name.</param>
+        /// <param name="value">The entity variable value.</param>
+        /// <returns>Iterable iter struct.</returns>
+        public IterIterable SetVar(string name, ulong value)
+        {
+            return Iter().SetVar(name, value);
+        }
+
+        /// <summary>
+        ///     Set value for iterator variable.
+        /// </summary>
+        /// <param name="name">The variable name.</param>
+        /// <param name="value">The table variable value.</param>
+        /// <returns>Iterable iter struct.</returns>
+        public IterIterable SetVar(string name, ecs_table_t *value)
+        {
+            return Iter().SetVar(name, value);
+        }
+
+        /// <summary>
+        ///     Set value for iterator variable.
+        /// </summary>
+        /// <param name="name">The variable name.</param>
+        /// <param name="value">The table variable value.</param>
+        /// <returns>Iterable iter struct.</returns>
+        public IterIterable SetVar(string name, ecs_table_range_t value)
+        {
+            return Iter().SetVar(name, value);
+        }
+
+        /// <summary>
+        ///     Set value for iterator variable.
+        /// </summary>
+        /// <param name="name">The variable name.</param>
+        /// <param name="value">The table variable value.</param>
+        /// <returns>Iterable iter struct.</returns>
+        public IterIterable SetVar(string name, Table value)
+        {
+            return Iter().SetVar(name, value);
+        }
+
+        /// <summary>
+        ///     Limit results to tables with specified group id (grouped queries only)
+        /// </summary>
+        /// <param name="groupId">The group id.</param>
+        /// <returns>Iterable iter struct.</returns>
+        public IterIterable SetGroup(ulong groupId)
+        {
+            return Iter().SetGroup(groupId);
+        }
+
+        /// <summary>
+        ///     Limit results to tables with specified group id (grouped queries only)
+        /// </summary>
+        /// <typeparam name="T">The group type.</typeparam>
+        /// <returns>Iterable iter struct.</returns>
+        public IterIterable SetGroup<T>()
+        {
+            return Iter().SetGroup<T>();
         }
 
         /// <summary>

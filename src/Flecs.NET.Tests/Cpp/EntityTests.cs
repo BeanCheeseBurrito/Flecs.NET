@@ -2054,7 +2054,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity e = world.Entity()
-                .Ensure((ref Position p) =>
+                .Insert((ref Position p) =>
                 {
                     p.X = 10;
                     p.Y = 20;
@@ -2074,7 +2074,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity e = world.Entity()
-                .Ensure((ref Position p, ref Velocity v) =>
+                .Insert((ref Position p, ref Velocity v) =>
                 {
                     p = new Position(10, 20);
                     v = new Velocity(1, 2);
@@ -2099,7 +2099,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity e = world.Entity()
-                .Ensure((ref Position p, ref Velocity v, ref Mass m) =>
+                .Insert((ref Position p, ref Velocity v, ref Mass m) =>
                 {
                     p = new Position(10, 20);
                     v = new Velocity(1, 2);
@@ -2131,7 +2131,7 @@ namespace Flecs.NET.Tests.Cpp
             world.DeferBegin();
 
             Entity e = world.Entity()
-                .Ensure((ref Position p) =>
+                .Insert((ref Position p) =>
                 {
                     p.X = 10;
                     p.Y = 20;
@@ -2158,7 +2158,7 @@ namespace Flecs.NET.Tests.Cpp
             world.DeferBegin();
 
             Entity e = world.Entity()
-                .Ensure((ref Position p, ref Velocity v) =>
+                .Insert((ref Position p, ref Velocity v) =>
                 {
                     p = new Position(10, 20);
                     v = new Velocity(1, 2);
@@ -2190,7 +2190,7 @@ namespace Flecs.NET.Tests.Cpp
             world.DeferBegin();
 
             Entity e = world.Entity()
-                .Ensure((ref Position p, ref Velocity v, ref Mass m) =>
+                .Insert((ref Position p, ref Velocity v, ref Mass m) =>
                 {
                     p = new Position(10, 20);
                     v = new Velocity(1, 2);
@@ -2246,7 +2246,7 @@ namespace Flecs.NET.Tests.Cpp
                 });
 
             Entity e = world.Entity()
-                .Ensure((ref Position p, ref Velocity v) =>
+                .Insert((ref Position p, ref Velocity v) =>
                 {
                     p = new Position(10, 20);
                     v = new Velocity(1, 2);
@@ -2294,7 +2294,7 @@ namespace Flecs.NET.Tests.Cpp
             world.DeferBegin();
 
             Entity e = world.Entity()
-                .Ensure((ref Position p, ref Velocity v) =>
+                .Insert((ref Position p, ref Velocity v) =>
                 {
                     p = new Position(10, 20);
                     v = new Velocity(1, 2);
@@ -2325,7 +2325,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity()
                 .Set(new Mass(50))
-                .Ensure((ref Position p, ref Velocity v) =>
+                .Insert((ref Position p, ref Velocity v) =>
                 {
                     p = new Position(10, 20);
                     v = new Velocity(1, 2);
@@ -2353,7 +2353,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity e = world.Entity()
-                .Ensure((ref Position p, ref Velocity v) =>
+                .Insert((ref Position p, ref Velocity v) =>
                 {
                     p = new Position(10, 20);
                     v = new Velocity(1, 2);
@@ -2392,7 +2392,7 @@ namespace Flecs.NET.Tests.Cpp
                 Assert.Equal(10, p.Y);
             }));
 
-            e.Ensure((ref Position p, ref Velocity v) =>
+            e.Insert((ref Position p, ref Velocity v) =>
             {
                 p = new Position(10, 20);
                 v = new Velocity(1, 2);
@@ -2438,7 +2438,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal(1, called);
 
-            e.Ensure((ref Position p, ref Velocity v) =>
+            e.Insert((ref Position p, ref Velocity v) =>
             {
                 p = new Position(10, 20);
                 v = new Velocity(3, 4);
@@ -4514,8 +4514,65 @@ namespace Flecs.NET.Tests.Cpp
             child.Scope(() =>
             {
                 Assert.True(world.Lookup("foo") == foo);
-                Assert.True(world.Lookup("foo", false) == 0);
+                Assert.True(world.Lookup("foo", ".", ".", false) == 0);
             });
+        }
+
+        [Fact]
+        private void WorldLookupCustomSep()
+        {
+            using World world = World.Create();
+
+            Entity parent = world.Entity("parent");
+            Entity child = default;
+            Entity foo = default;
+
+            parent.Scope(() =>
+            {
+                child = world.Entity("child");
+                foo = world.Entity("foo");
+            });
+
+            Assert.True(world.Lookup("parent::child", "::") == child);
+            Assert.True(world.Lookup("parent::foo", "::") == foo);
+        }
+
+        [Fact]
+        private void WorldLookupCustomRootSep()
+        {
+            using World world = World.Create();
+
+            Entity parent = world.Entity("parent");
+            Entity child = default;
+            Entity foo = default;
+
+            parent.Scope(() =>
+            {
+                child = world.Entity("child");
+                foo = world.Entity("foo");
+            });
+
+            Assert.True(world.Lookup("::parent::child", "::", "::") == child);
+            Assert.True(world.Lookup("::parent::foo", "::", "::") == foo);
+        }
+
+        [Fact]
+        private void DependsOn()
+        {
+            using World world = World.Create();
+
+            Entity a = world.Entity();
+            Entity b = world.Entity().DependsOn(a);
+            Assert.True(b.Has(Ecs.DependsOn, a));
+        }
+
+        [Fact]
+        private void DependsOnType()
+        {
+            using World world = World.Create();
+
+            Entity b = world.Entity().DependsOn<Position>();
+            Assert.True(b.Has(Ecs.DependsOn, world.Id<Position>()));
         }
     }
 }

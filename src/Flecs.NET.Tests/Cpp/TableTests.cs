@@ -84,7 +84,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Add<Position>().Add<Velocity>();
             Entity e2 = world.Entity().Add<Position>();
 
-            e1.Ensure((ref Position p, ref Velocity v) => { e2.Add<Mass>(); });
+            e1.Insert((ref Position p, ref Velocity v) => { e2.Add<Mass>(); });
 
             Assert.True(e2.Has<Mass>());
         }

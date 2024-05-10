@@ -398,19 +398,26 @@ namespace Flecs.NET.Core
         ///     Lookup entity by name.
         /// </summary>
         /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="rootSeparator">The root separator.</param>
         /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
         /// <returns>The entity if found, else 0.</returns>
-        public Entity Lookup(string path, bool recursive = true)
+        public Entity Lookup(
+            string path,
+            string separator = Ecs.DefaultSeparator,
+            string rootSeparator = Ecs.DefaultSeparator,
+            bool recursive = true)
         {
             if (string.IsNullOrEmpty(path))
                 return new Entity(Handle, 0);
 
             using NativeString nativePath = (NativeString)path;
+            using NativeString nativeSeparator = (NativeString)separator;
+            using NativeString nativeRootSeparator = (NativeString)rootSeparator;
 
             return new Entity(
                 Handle,
-                ecs_lookup_path_w_sep(Handle, 0, nativePath,
-                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.Bool(recursive))
+                ecs_lookup_path_w_sep(Handle, 0, nativePath, nativeSeparator, nativeRootSeparator, Macros.Bool(recursive))
             );
         }
 
@@ -595,7 +602,7 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public void Ensure<T>(Ecs.InvokeEnsureCallback<T> callback)
+        public void Insert<T>(Ecs.InvokeInsertCallback<T> callback)
         {
             Invoker.InvokeEnsure(Handle, Type<T>.Id(Handle), callback);
         }
@@ -3258,57 +3265,143 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates an alert builder.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public AlertBuilder AlertBuilder(string? name = null)
+        /// <returns>An alert builder.</returns>
+        public AlertBuilder AlertBuilder()
+        {
+            return new AlertBuilder(Handle);
+        }
+
+        /// <summary>
+        ///     Creates an alert builder.
+        /// </summary>
+        /// <param name="name">The alert name.</param>
+        /// <returns>An alert builder.</returns>
+        public AlertBuilder AlertBuilder(string name)
         {
             return new AlertBuilder(Handle, name);
         }
 
         /// <summary>
+        ///     Creates an alert builder.
+        /// </summary>
+        /// <param name="entity">The alert entity.</param>
+        /// <returns>An alert builder.</returns>
+        public AlertBuilder AlertBuilder(ulong entity)
+        {
+            return new AlertBuilder(Handle, entity);
+        }
+
+        /// <summary>
         ///     Creates an alert.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Alert Alert(string? name = null)
+        /// <returns>An alert.</returns>
+        public Alert Alert()
+        {
+            return AlertBuilder().Build();
+        }
+
+        /// <summary>
+        ///     Creates an alert.
+        /// </summary>
+        /// <param name="name">The alert name.</param>
+        /// <returns>An alert.</returns>
+        public Alert Alert(string name)
         {
             return AlertBuilder(name).Build();
         }
 
         /// <summary>
+        ///     Creates an alert.
+        /// </summary>
+        /// <param name="entity">The alert entity.</param>
+        /// <returns>An alert.</returns>
+        public Alert Alert(ulong entity)
+        {
+            return AlertBuilder(entity).Build();
+        }
+
+        /// <summary>
         ///     Creates a query builder.
         /// </summary>
-        /// <returns></returns>
-        public QueryBuilder QueryBuilder(string? name = null)
+        /// <returns>A query builder.</returns>
+        public QueryBuilder QueryBuilder()
+        {
+            return new QueryBuilder(Handle);
+        }
+
+        /// <summary>
+        ///     Creates a query builder.
+        /// </summary>
+        /// <param name="name">The query name.</param>
+        /// <returns>A query builder.</returns>
+        public QueryBuilder QueryBuilder(string name)
         {
             return new QueryBuilder(Handle, name);
         }
 
         /// <summary>
+        ///     Creates a query builder.
+        /// </summary>
+        /// <param name="entity">The query entity.</param>
+        /// <returns>A query builder.</returns>
+        public QueryBuilder QueryBuilder(ulong entity)
+        {
+            return new QueryBuilder(Handle, entity);
+        }
+
+        /// <summary>
         ///     Creates a query.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Query Query(string? name = null)
+        /// <returns>A query.</returns>
+        public Query Query()
         {
-            return QueryBuilder(name).Build();
+            return QueryBuilder().Build();
+        }
+
+        /// <summary>
+        ///     Creates a query.
+        /// </summary>
+        /// <param name="name">The query name.</param>
+        /// <returns>A query.</returns>
+        public Query Query(string name)
+        {
+            return new Query(Handle, Lookup(name));
+        }
+
+        /// <summary>
+        ///     Creates a query.
+        /// </summary>
+        /// <param name="entity">The query entity.</param>
+        /// <returns>A query.</returns>
+        public Query Query(ulong entity)
+        {
+            return new Query(Handle, entity);
         }
 
         /// <summary>
         ///     Creates a pipeline builder.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public PipelineBuilder Pipeline(string? name = null)
+        /// <returns>A pipeline builder.</returns>
+        public PipelineBuilder Pipeline()
+        {
+            return new PipelineBuilder(Handle);
+        }
+
+        /// <summary>
+        ///     Creates a pipeline builder.
+        /// </summary>
+        /// <param name="name">The pipeline name.</param>
+        /// <returns>A pipeline builder.</returns>
+        public PipelineBuilder Pipeline(string name)
         {
             return new PipelineBuilder(Handle, name);
         }
 
         /// <summary>
-        ///     Creates a pipeline builder associated with the provided type.
+        ///     Creates a pipeline builder.
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <param name="entity">The pipeline entity.</param>
+        /// <returns>A pipeline builder.</returns>
         public PipelineBuilder Pipeline(ulong entity)
         {
             return new PipelineBuilder(Handle, entity);
@@ -3317,7 +3410,7 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates a pipeline builder associated with the provided type.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A pipeline builder.</returns>
         public PipelineBuilder Pipeline<T>()
         {
             return Pipeline(Type<T>.Id(Handle));
@@ -3326,9 +3419,18 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates an observer builder.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public ObserverBuilder Observer(string? name = null)
+        /// <returns>An observer builder.</returns>
+        public ObserverBuilder Observer()
+        {
+            return new ObserverBuilder(Handle);
+        }
+
+        /// <summary>
+        ///     Creates an observer builder.
+        /// </summary>
+        /// <param name="name">The observer name.</param>
+        /// <returns>An observer builder.</returns>
+        public ObserverBuilder Observer(string name)
         {
             return new ObserverBuilder(Handle, name);
         }
@@ -3336,8 +3438,8 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates an observer.
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <param name="entity">The observer entity.</param>
+        /// <returns>An observer.</returns>
         public Observer Observer(ulong entity)
         {
             return new Observer(Handle, entity);
@@ -3346,9 +3448,18 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates an observer builder.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public RoutineBuilder Routine(string? name = null)
+        /// <returns>A routine builder.</returns>
+        public RoutineBuilder Routine()
+        {
+            return new RoutineBuilder(Handle);
+        }
+
+        /// <summary>
+        ///     Creates an observer builder.
+        /// </summary>
+        /// <param name="name">The routine name.</param>
+        /// <returns>A routine builder.</returns>
+        public RoutineBuilder Routine(string name)
         {
             return new RoutineBuilder(Handle, name);
         }
@@ -3356,8 +3467,8 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Create routine.
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <param name="entity">The routine entity.</param>
+        /// <returns>A routine.</returns>
         public Routine Routine(ulong entity)
         {
             return new Routine(Handle, entity);
@@ -3664,6 +3775,36 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Lookup entity by name.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <returns>The entity if found, else 0.</returns>
+        public Entity Lookup(string path)
+        {
+            return Lookup(path, true);
+        }
+
+        /// <summary>
+        ///     Lookup entity by name.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <returns>The entity if found, else 0.</returns>
+        public Entity Lookup(string path, bool recursive)
+        {
+            if (string.IsNullOrEmpty(path))
+                return new Entity(Handle, 0);
+
+            using NativeString nativePath = (NativeString)path;
+
+            return new Entity(
+                Handle,
+                ecs_lookup_path_w_sep(Handle, 0, nativePath,
+                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.Bool(recursive))
+            );
+        }
+
+        /// <summary>
         ///     Lookup an entity from a path.
         /// </summary>
         /// <param name="path">The path to resolve.</param>
@@ -3671,7 +3812,7 @@ namespace Flecs.NET.Core
         /// <returns>True if the entity was found, else false.</returns>
         public bool TryLookup(string path, out Entity entity)
         {
-            return TryLookup(path, true, out entity);
+            return TryLookup(path, Ecs.DefaultSeparator, Ecs.DefaultSeparator, true, out entity);
         }
 
         /// <summary>
@@ -3683,7 +3824,46 @@ namespace Flecs.NET.Core
         /// <returns>True if the entity was found, else false.</returns>
         public bool TryLookup(string path, bool recursive, out Entity entity)
         {
-            return (entity = Lookup(path, recursive)) != 0;
+            return TryLookup(path, Ecs.DefaultSeparator, Ecs.DefaultSeparator, recursive, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, string separator, out Entity entity)
+        {
+            return TryLookup(path, separator, Ecs.DefaultSeparator, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="rootSeparator">The root separator.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, string separator, string rootSeparator, out Entity entity)
+        {
+            return TryLookup(path, separator, rootSeparator, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="rootSeparator">The root separator.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, string separator, string rootSeparator, bool recursive, out Entity entity)
+        {
+            return (entity = Lookup(path, separator, rootSeparator, recursive)) != 0;
         }
 
         /// <summary>
@@ -3694,7 +3874,7 @@ namespace Flecs.NET.Core
         /// <returns>True if the entity was found, else false.</returns>
         public bool TryLookup(string path, out ulong entity)
         {
-            return TryLookup(path, true, out entity);
+            return TryLookup(path, Ecs.DefaultSeparator, Ecs.DefaultSeparator, true, out entity);
         }
 
         /// <summary>
@@ -3706,7 +3886,46 @@ namespace Flecs.NET.Core
         /// <returns>True if the entity was found, else false.</returns>
         public bool TryLookup(string path, bool recursive, out ulong entity)
         {
-            return (entity = Lookup(path, recursive)) != 0;
+            return TryLookup(path, Ecs.DefaultSeparator, Ecs.DefaultSeparator, recursive, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, string separator, out ulong entity)
+        {
+            return TryLookup(path, separator, Ecs.DefaultSeparator, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="rootSeparator">The root separator.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, string separator, string rootSeparator, out ulong entity)
+        {
+            return TryLookup(path, separator, rootSeparator, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="rootSeparator">The root separator.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, string separator, string rootSeparator, bool recursive, out ulong entity)
+        {
+            return (entity = Lookup(path, separator, rootSeparator, recursive)) != 0;
         }
 
         /// <summary>

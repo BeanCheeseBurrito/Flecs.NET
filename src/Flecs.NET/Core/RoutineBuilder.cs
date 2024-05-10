@@ -28,14 +28,31 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates a routine builder for the provided world.
         /// </summary>
-        /// <param name="world"></param>
-        /// <param name="name"></param>
-        public RoutineBuilder(ecs_world_t* world, string? name = null)
+        /// <param name="world">The world.</param>
+        public RoutineBuilder(ecs_world_t* world)
         {
+            _world = world;
             QueryBuilder = new QueryBuilder(world);
             RoutineDesc = default;
             Context = default;
+
+            ecs_entity_desc_t entityDesc = default;
+            RoutineDesc.entity = ecs_entity_init(world, &entityDesc);
+            ecs_add_id(world, RoutineDesc.entity, Macros.DependsOn(EcsOnUpdate));
+            ecs_add_id(world, RoutineDesc.entity, EcsOnUpdate);
+        }
+
+        /// <summary>
+        ///     Creates a routine builder for the provided world.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="name">The routine name.</param>
+        public RoutineBuilder(ecs_world_t* world, string name)
+        {
             _world = world;
+            QueryBuilder = new QueryBuilder(world);
+            RoutineDesc = default;
+            Context = default;
 
             using NativeString nativeName = (NativeString)name;
 
@@ -45,7 +62,6 @@ namespace Flecs.NET.Core
             entityDesc.root_sep = BindingContext.DefaultSeparator;
 
             RoutineDesc.entity = ecs_entity_init(world, &entityDesc);
-
             ecs_add_id(world, RoutineDesc.entity, Macros.DependsOn(EcsOnUpdate));
             ecs_add_id(world, RoutineDesc.entity, EcsOnUpdate);
         }

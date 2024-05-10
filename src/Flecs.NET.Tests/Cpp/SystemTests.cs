@@ -90,7 +90,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(3, 4));
 
-            world.Routine<Position>().Expr("Velocity(self|up(IsA))")
+            world.Routine<Position>().Expr("Velocity(self|up IsA)")
                 .Iter((Iter it, Field<Position> p) =>
                 {
                     Field<Velocity> v = it.Field<Velocity>(1);
@@ -400,7 +400,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(3, 4));
 
-            world.Routine().Expr("Position, [in] Velocity(self|up(IsA))")
+            world.Routine().Expr("Position, [in] Velocity(self|up IsA)")
                 .Iter((Iter it) =>
                 {
                     Field<Position> p = it.Field<Position>(0);

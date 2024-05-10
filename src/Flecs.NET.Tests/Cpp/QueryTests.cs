@@ -627,7 +627,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Velocity(3, 4));
 
             Query q = world.QueryBuilder<Position>()
-                .Expr("Velocity(self|up(IsA))")
+                .Expr("Velocity(self|up IsA)")
                 .Build();
 
             q.Iter((Iter it, Field<Position> p) =>
@@ -957,7 +957,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Velocity(3, 4));
 
             Query q = world.QueryBuilder()
-                .Expr("Position, [in] Velocity(self|up(IsA))")
+                .Expr("Position, [in] Velocity(self|up IsA)")
                 .Build();
 
             q.Iter((Iter it) =>
@@ -2881,6 +2881,63 @@ namespace Flecs.NET.Tests.Cpp
             });
 
             Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void QueryFromEntity()
+        {
+            using World world = World.Create();
+
+            Entity qe = world.Entity();
+            Query q1 = world.QueryBuilder<Position, Velocity>(qe)
+                .Build();
+
+            world.Entity().Add<Position>();
+            Entity e2 = world.Entity().Add<Position>().Add<Velocity>();
+
+            int count = 0;
+            q1.Each((Entity e) =>
+            {
+                count++;
+                Assert.True(e == e2);
+            });
+            Assert.Equal(1, count);
+
+            Query q2 = world.Query(qe);
+            q2.Each((Entity e) =>
+            {
+                count++;
+                Assert.True(e == e2);
+            });
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        private void QueryFromEntityName()
+        {
+            using World world = World.Create();
+
+            Query q1 = world.QueryBuilder<Position, Velocity>("qe")
+                .Build();
+
+            world.Entity().Add<Position>();
+            Entity e2 = world.Entity().Add<Position>().Add<Velocity>();
+
+            int count = 0;
+            q1.Each((Entity e) =>
+            {
+                count++;
+                Assert.True(e == e2);
+            });
+            Assert.Equal(1, count);
+
+            Query q2 = world.Query("qe");
+            q2.Each((Entity e) =>
+            {
+                count++;
+                Assert.True(e == e2);
+            });
+            Assert.Equal(2, count);
         }
     }
 }

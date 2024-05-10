@@ -27,18 +27,25 @@ namespace Flecs.NET.Core
         public ref ecs_observer_desc_t Desc => ref ObserverDesc;
 
         /// <summary>
-        ///     Creates an observer builder for the provided world.
+        /// Creates an observer builder for the provided world.
         /// </summary>
-        /// <param name="world"></param>
-        /// <param name="name"></param>
-        public ObserverBuilder(ecs_world_t* world, string? name = null)
+        /// <param name="world">The world.</param>
+        public ObserverBuilder(ecs_world_t* world)
         {
+            _world = world;
             ObserverDesc = default;
             Context = default;
             EventCount = default;
             QueryBuilder = new QueryBuilder(world);
-            _world = world;
+        }
 
+        /// <summary>
+        ///     Creates an observer builder for the provided world.
+        /// </summary>
+        /// <param name="world">The world.</param>
+        /// <param name="name">The observer name.</param>
+        public ObserverBuilder(ecs_world_t* world, string name) : this(world)
+        {
             using NativeString nativeName = (NativeString)name;
 
             ecs_entity_desc_t entityDesc = default;
