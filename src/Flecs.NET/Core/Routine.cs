@@ -70,7 +70,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public void* Ctx()
         {
-            return ecs_system_get_ctx(World, Entity);
+            return ecs_system_get(World, Entity)->ctx;
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Query Query()
         {
-            return new Query(World, ecs_system_get_query(World, Entity));
+            return new Query(World, ecs_system_get(World, Entity)->query);
         }
 
         /// <summary>

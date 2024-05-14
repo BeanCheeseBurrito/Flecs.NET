@@ -221,8 +221,8 @@ namespace Flecs.NET.Core
         private Observer Build(IntPtr internalCallback)
         {
             ObserverDesc.callback = internalCallback;
-            ObserverDesc.binding_ctx = Memory.Alloc(Context);
-            ObserverDesc.binding_ctx_free = BindingContext.RunIterContextFreePointer;
+            ObserverDesc.callback_ctx = Memory.Alloc(Context);
+            ObserverDesc.callback_ctx_free = BindingContext.RunIterContextFreePointer;
             ObserverDesc.query = QueryBuilder.Desc;
             ObserverDesc.query.binding_ctx = Memory.Alloc(QueryBuilder.Context);
             ObserverDesc.query.binding_ctx_free = BindingContext.QueryContextFreePointer;

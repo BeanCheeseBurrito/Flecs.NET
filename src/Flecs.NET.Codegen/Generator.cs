@@ -1168,7 +1168,7 @@ namespace Flecs.NET.Codegen
             return $@"
                 internal static void {callbackName}(ecs_iter_t* iter)
                 {{
-                    BindingContext.RunIterContext* context = (BindingContext.RunIterContext*)iter->binding_ctx;
+                    BindingContext.RunIterContext* context = (BindingContext.RunIterContext*)iter->callback_ctx;
             #if NET5_0_OR_GREATER
                     if (context->Iterator.GcHandle == default)
                     {{

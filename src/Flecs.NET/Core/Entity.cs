@@ -3700,8 +3700,8 @@ namespace Flecs.NET.Core
             desc.query.terms[0].id = EcsAny;
             desc.query.terms[0].src.id = Id;
             desc.callback = bindingContextCallback;
-            desc.binding_ctx = observerContext;
-            desc.binding_ctx_free = BindingContext.RunIterContextFreePointer;
+            desc.callback_ctx = observerContext;
+            desc.callback_ctx_free = BindingContext.RunIterContextFreePointer;
 
             ulong observer = ecs_observer_init(World, &desc);
             ecs_add_id(World, observer, Macros.Pair(EcsChildOf, Id));

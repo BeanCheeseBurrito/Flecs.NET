@@ -108,7 +108,7 @@ namespace Flecs.NET.Core
 
         private static void ActionCallback(ecs_iter_t* iter)
         {
-            RunIterContext* context = (RunIterContext*)iter->binding_ctx;
+            RunIterContext* context = (RunIterContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
             if (context->Iterator.GcHandle == default)
@@ -124,7 +124,7 @@ namespace Flecs.NET.Core
 
         private static void IterCallback(ecs_iter_t* iter)
         {
-            RunIterContext* context = (RunIterContext*)iter->binding_ctx;
+            RunIterContext* context = (RunIterContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
             if (context->Iterator.GcHandle == default)
@@ -140,7 +140,7 @@ namespace Flecs.NET.Core
 
         private static void EachEntityCallback(ecs_iter_t* iter)
         {
-            RunIterContext* context = (RunIterContext*)iter->binding_ctx;
+            RunIterContext* context = (RunIterContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
             if (context->Iterator.GcHandle == default)
@@ -156,7 +156,7 @@ namespace Flecs.NET.Core
 
         private static void EachIndexCallback(ecs_iter_t* iter)
         {
-            RunIterContext* context = (RunIterContext*)iter->binding_ctx;
+            RunIterContext* context = (RunIterContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
             if (context->Iterator.GcHandle == default)
@@ -172,7 +172,7 @@ namespace Flecs.NET.Core
 
         private static void ObserveCallback(ecs_iter_t* iter)
         {
-            RunIterContext* context = (RunIterContext*)iter->binding_ctx;
+            RunIterContext* context = (RunIterContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
             if (context->Iterator.GcHandle == default)
@@ -524,14 +524,14 @@ namespace Flecs.NET.Core
 
         private static void EntityObserverEach(ecs_iter_t* iter)
         {
-            BindingContext.RunIterContext* context = (BindingContext.RunIterContext*)iter->binding_ctx;
+            BindingContext.RunIterContext* context = (BindingContext.RunIterContext*)iter->callback_ctx;
             Ecs.EachCallback<T0> callback = (Ecs.EachCallback<T0>)context->Iterator.GcHandle.Target!;
             Invoker.Observe(iter, callback);
         }
 
         private static void EntityObserverEachEntity(ecs_iter_t* iter)
         {
-            BindingContext.RunIterContext* context = (BindingContext.RunIterContext*)iter->binding_ctx;
+            BindingContext.RunIterContext* context = (BindingContext.RunIterContext*)iter->callback_ctx;
             Ecs.EachEntityCallback<T0> callback = (Ecs.EachEntityCallback<T0>)context->Iterator.GcHandle.Target!;
             Invoker.Observe(iter, callback);
         }
@@ -739,7 +739,7 @@ namespace Flecs.NET.Core
 
         private static void OnAddHook(ecs_iter_t* iter)
         {
-            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->binding_ctx;
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
             Ecs.IterCallback<T0> callback = (Ecs.IterCallback<T0>)context->OnAdd.GcHandle.Target!;
 
             Iter it = new Iter(iter);
@@ -750,7 +750,7 @@ namespace Flecs.NET.Core
 
         private static void OnSetHook(ecs_iter_t* iter)
         {
-            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->binding_ctx;
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
             Ecs.IterCallback<T0> callback = (Ecs.IterCallback<T0>)context->OnSet.GcHandle.Target!;
 
             Iter it = new Iter(iter);
@@ -761,7 +761,7 @@ namespace Flecs.NET.Core
 
         private static void OnRemoveHook(ecs_iter_t* iter)
         {
-            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->binding_ctx;
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
             Ecs.IterCallback<T0> callback = (Ecs.IterCallback<T0>)context->OnRemove.GcHandle.Target!;
 
             Iter it = new Iter(iter);

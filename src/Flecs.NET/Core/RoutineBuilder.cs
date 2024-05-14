@@ -320,8 +320,8 @@ namespace Flecs.NET.Core
         private Routine Build(IntPtr internalCallback)
         {
             RoutineDesc.callback = internalCallback;
-            RoutineDesc.binding_ctx = Memory.Alloc(Context);
-            RoutineDesc.binding_ctx_free = BindingContext.RunIterContextFreePointer;
+            RoutineDesc.callback_ctx = Memory.Alloc(Context);
+            RoutineDesc.callback_ctx_free = BindingContext.RunIterContextFreePointer;
             RoutineDesc.query = QueryBuilder.Desc;
             RoutineDesc.query.binding_ctx = Memory.Alloc(QueryBuilder.Context);
             RoutineDesc.query.binding_ctx_free = BindingContext.QueryContextFreePointer;

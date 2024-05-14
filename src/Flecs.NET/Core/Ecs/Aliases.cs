@@ -415,6 +415,18 @@ namespace Flecs.NET.Core
         /// </summary>
         public static ref ulong Panic => ref EcsPanic;
 
+        // Storage
+
+        /// <summary>
+        ///     Reference to <see cref="EcsSparse"/>.
+        /// </summary>
+        public static ref ulong Sparse => ref EcsSparse;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsUnion"/>.
+        /// </summary>
+        public static ref ulong Union => ref EcsUnion;
+
         // Built-in predicates for comparing entity ids in queries. Only supported by rules.
 
         /// <summary>
