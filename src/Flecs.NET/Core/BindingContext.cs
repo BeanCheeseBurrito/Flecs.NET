@@ -740,7 +740,7 @@ namespace Flecs.NET.Core
         private static void OnAddHook(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.IterCallback<T0> callback = (Ecs.IterCallback<T0>)context->OnAdd.GcHandle.Target!;
+            Ecs.IterFieldCallback<T0> callback = (Ecs.IterFieldCallback<T0>)context->OnAdd.GcHandle.Target!;
 
             Iter it = new Iter(iter);
 
@@ -751,7 +751,7 @@ namespace Flecs.NET.Core
         private static void OnSetHook(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.IterCallback<T0> callback = (Ecs.IterCallback<T0>)context->OnSet.GcHandle.Target!;
+            Ecs.IterFieldCallback<T0> callback = (Ecs.IterFieldCallback<T0>)context->OnSet.GcHandle.Target!;
 
             Iter it = new Iter(iter);
 
@@ -762,7 +762,7 @@ namespace Flecs.NET.Core
         private static void OnRemoveHook(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.IterCallback<T0> callback = (Ecs.IterCallback<T0>)context->OnRemove.GcHandle.Target!;
+            Ecs.IterFieldCallback<T0> callback = (Ecs.IterFieldCallback<T0>)context->OnRemove.GcHandle.Target!;
 
             Iter it = new Iter(iter);
 

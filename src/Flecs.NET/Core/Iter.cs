@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -11,20 +13,12 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     Class for iterating over query results.
     /// </summary>
-    public readonly unsafe struct Iter : IEnumerable<int>, IEquatable<Iter>
+    public readonly unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>
     {
         /// <summary>
         ///     Reference to handle.
         /// </summary>
         public ecs_iter_t* Handle { get; }
-
-        /// <summary>
-        /// </summary>
-        public int Begin { get; }
-
-        /// <summary>
-        /// </summary>
-        public int End { get; }
 
         /// <summary>
         ///     Creates an iter wrapper using the provided handle.
@@ -33,8 +27,6 @@ namespace Flecs.NET.Core
         public Iter(ecs_iter_t* iter)
         {
             Handle = iter;
-            Begin = 0;
-            End = iter->count;
         }
 
         /// <summary>
@@ -74,27 +66,30 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Returns count of iter.
+        ///     Returns the number of entities to iterate.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Number of entities to iterate.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Count()
         {
             return Handle->count;
         }
 
         /// <summary>
-        ///     Returns the delta time.
+        ///     Returns the time elapsed since last frame.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Time elapsed since last frame</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float DeltaTime()
         {
             return Handle->delta_time;
         }
 
         /// <summary>
-        ///     Returns the delta system time.
+        ///     Returns the time elapsed since last system invocation.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Time elapsed since last system invocation.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float DeltaSystemTime()
         {
             return Handle->delta_system_time;
@@ -323,18 +318,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed ref to the first element in a field.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        [SuppressMessage("Usage", "CA1720")]
-        public ref T Single<T>(int index)
-        {
-            return ref GetField<T>(index)[0];
-        }
-
-        /// <summary>
         ///     Get access to entity ids.
         /// </summary>
         /// <returns></returns>
@@ -401,7 +384,7 @@ namespace Flecs.NET.Core
             return new Entity(Handle->world, ecs_iter_get_var(Handle, varId));
         }
 
-        private Field<T> GetField<T>(int index)
+        internal Field<T> GetField<T>(int index)
         {
             Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
             AssertFieldId<T>(Handle, index);
@@ -409,7 +392,7 @@ namespace Flecs.NET.Core
             bool isShared = ecs_field_is_self(Handle, index) == 0;
             int count = isShared ? 1 : Handle->count;
 
-            void* ptr = ecs_field_w_size(Handle, (IntPtr)Managed.ManagedSize<T>(), index);
+            void* ptr = ecs_field_w_size(Handle, (IntPtr)Type<T>.Size, index);
             return new Field<T>(ptr, count, isShared);
         }
 
@@ -505,6 +488,75 @@ namespace Flecs.NET.Core
         public static bool operator !=(Iter left, Iter right)
         {
             return !(left == right);
+        }
+    }
+
+    // Flecs.NET Extensions
+    public readonly unsafe partial struct Iter
+    {
+        /// <summary>
+        ///     Get managed ref to the first element in a field.
+        /// </summary>
+        /// <param name="index">The index of the field in the iterator.</param>
+        /// <typeparam name="T">The field type.</typeparam>
+        /// <returns>Reference to first component of field.</returns>
+        [SuppressMessage("Usage", "CA1720")]
+        public ref T Single<T>(int index)
+        {
+            return ref GetField<T>(index)[0];
+        }
+
+        /// <summary>
+        ///     Obtain span for a query field.
+        /// </summary>
+        /// <param name="index">The index of the field in the iterator.</param>
+        /// <typeparam name="T">The field type.</typeparam>
+        /// <returns>A span to the data of the field.</returns>
+        public Span<T> Span<T>(int index) where T : unmanaged
+        {
+            return GetSpan<T>(index);
+        }
+
+        /// <summary>
+        ///     Obtain pointer to a query field.
+        /// </summary>
+        /// <param name="index">The index of the field in the iterator.</param>
+        /// <typeparam name="T">The field type.</typeparam>
+        /// <returns>A pointer to the data of the field.</returns>
+        public T* Pointer<T>(int index) where T : unmanaged
+        {
+            return GetPointer<T>(index);
+        }
+
+        /// <summary>
+        ///     Get pointer to field at row.
+        /// </summary>
+        /// <param name="index">The index of the field in the iterator.</param>
+        /// <param name="row">The row.</param>
+        /// <typeparam name="T">The field type.</typeparam>
+        /// <returns>A pointer to the data of the field.</returns>
+        public T* PointerAt<T>(int index, int row) where T : unmanaged
+        {
+            return &Pointer<T>(index)[row];
+        }
+
+        internal Span<T> GetSpan<T>(int index)
+        {
+            Ecs.Assert((Handle->flags & EcsIterCppEach) == 0,
+                "Cannot use .Span<T>(field) from .Each(), use .FieldAt<T>(field, index) instead.");
+
+            Field<T> field = GetField<T>(index);
+            return new Span<T>(field.Data, field.Length);
+        }
+
+        internal T* GetPointer<T>(int index)
+        {
+            Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
+            Ecs.Assert((Handle->flags & EcsIterCppEach) == 0,
+                "Cannot use .Pointer<T>(field) from .Each(), use .PointerAt<T>(field, index) instead.");
+            AssertFieldId<T>(Handle, index);
+
+            return (T*)ecs_field_w_size(Handle, (IntPtr)Type<T>.Size, index);
         }
     }
 

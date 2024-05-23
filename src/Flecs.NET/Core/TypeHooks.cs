@@ -28,17 +28,17 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     On add callback delegate.
         /// </summary>
-        public Ecs.IterCallback<T>? OnAdd { get; set; }
+        public Ecs.IterFieldCallback<T>? OnAdd { get; set; }
 
         /// <summary>
         ///     On set callback delegate.
         /// </summary>
-        public Ecs.IterCallback<T>? OnSet { get; set; }
+        public Ecs.IterFieldCallback<T>? OnSet { get; set; }
 
         /// <summary>
         ///     On remove callback delegate.
         /// </summary>
-        public Ecs.IterCallback<T>? OnRemove { get; set; }
+        public Ecs.IterFieldCallback<T>? OnRemove { get; set; }
 
         /// <summary>
         ///     Context free callback delegate.
