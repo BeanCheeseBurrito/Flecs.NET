@@ -33,14 +33,20 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr ObserveCallbackPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserveCallback;
 
+        internal static readonly IntPtr RunCallbackPointer =
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&RunCallback;
+
         internal static readonly IntPtr GroupByCallbackPointer =
             (IntPtr)(delegate* <ecs_world_t*, ecs_table_t*, ulong, void*, ulong>)&GroupByCallback;
 
         internal static readonly IntPtr WorldContextFreePointer =
             (IntPtr)(delegate* <void*, void>)&WorldContextFree;
 
-        internal static readonly IntPtr RunIterContextFreePointer =
-            (IntPtr)(delegate* <void*, void>)&RunIterContextFree;
+        internal static readonly IntPtr IteratorContextFreePointer =
+            (IntPtr)(delegate* <void*, void>)&IteratorContextFree;
+
+        internal static readonly IntPtr RunContextFreePointer =
+            (IntPtr)(delegate* <void*, void>)&RunContextFree;
 
         internal static readonly IntPtr QueryContextFreePointer =
             (IntPtr)(delegate* <void*, void>)&QueryContextFree;
@@ -69,14 +75,20 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr ObserveCallbackPointer =
             Marshal.GetFunctionPointerForDelegate(ObserveCallbackReference = ObserveCallback);
 
+        internal static readonly IntPtr RunCallbackPointer =
+            Marshal.GetFunctionPointerForDelegate(RunCallbackReference = RunCallback);
+
         internal static readonly IntPtr GroupByCallbackPointer =
             Marshal.GetFunctionPointerForDelegate(GroupByCallbackReference = GroupByCallback);
 
         internal static readonly IntPtr WorldContextFreePointer =
             Marshal.GetFunctionPointerForDelegate(WorldContextFreeReference = WorldContextFree);
 
-        internal static readonly IntPtr RunIterContextFreePointer =
-            Marshal.GetFunctionPointerForDelegate(RunIterContextFreeReference = RunIterContextFree);
+        internal static readonly IntPtr IteratorContextFreePointer =
+            Marshal.GetFunctionPointerForDelegate(IteratorContextFreeReference = IteratorContextFree);
+
+        internal static readonly IntPtr RunContextFreePointer =
+            Marshal.GetFunctionPointerForDelegate(RunContextFreeReference = RunContextFree);
 
         internal static readonly IntPtr QueryContextFreePointer =
             Marshal.GetFunctionPointerForDelegate(QueryContextFreeReference = QueryContextFree);
@@ -95,10 +107,12 @@ namespace Flecs.NET.Core
         private static readonly Ecs.IterAction EachEntityCallbackReference;
         private static readonly Ecs.IterAction EachIndexCallbackReference;
         private static readonly Ecs.IterAction ObserveCallbackReference;
+        private static readonly Ecs.IterAction RunCallbackReference;
         private static readonly Ecs.GroupByAction GroupByCallbackReference;
 
         private static readonly Ecs.ContextFree WorldContextFreeReference;
-        private static readonly Ecs.ContextFree RunIterContextFreeReference;
+        private static readonly Ecs.ContextFree IteratorContextFreeReference;
+        private static readonly Ecs.ContextFree RunContextFreeReference;
         private static readonly Ecs.ContextFree QueryContextFreeReference;
         private static readonly Ecs.ContextFree GroupByContextFreeReference;
         private static readonly Ecs.ContextFree TypeHooksContextFreeReference;
@@ -108,82 +122,98 @@ namespace Flecs.NET.Core
 
         private static void ActionCallback(ecs_iter_t* iter)
         {
-            RunIterContext* context = (RunIterContext*)iter->callback_ctx;
+            IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Iterator.GcHandle == default)
+            if (context->Callback.GcHandle == default)
             {
-                ((delegate*<void>)context->Iterator.Function)();
+                ((delegate*<void>)context->Callback.Function)();
                 return;
             }
 #endif
 
-            Action callback = (Action)context->Iterator.GcHandle.Target!;
+            Action callback = (Action)context->Callback.GcHandle.Target!;
             callback();
         }
 
         private static void IterCallback(ecs_iter_t* iter)
         {
-            RunIterContext* context = (RunIterContext*)iter->callback_ctx;
+            IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Iterator.GcHandle == default)
+            if (context->Callback.GcHandle == default)
             {
-                Invoker.Iter(iter, (delegate*<Iter, void>)context->Iterator.Function);
+                Invoker.Iter(iter, (delegate*<Iter, void>)context->Callback.Function);
                 return;
             }
 #endif
 
-            Ecs.IterCallback callback = (Ecs.IterCallback)context->Iterator.GcHandle.Target!;
+            Ecs.IterCallback callback = (Ecs.IterCallback)context->Callback.GcHandle.Target!;
             Invoker.Iter(iter, callback);
         }
 
         private static void EachEntityCallback(ecs_iter_t* iter)
         {
-            RunIterContext* context = (RunIterContext*)iter->callback_ctx;
+            IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Iterator.GcHandle == default)
+            if (context->Callback.GcHandle == default)
             {
-                Invoker.Each(iter, (delegate*<Entity, void>)context->Iterator.Function);
+                Invoker.Each(iter, (delegate*<Entity, void>)context->Callback.Function);
                 return;
             }
 #endif
 
-            Ecs.EachEntityCallback callback = (Ecs.EachEntityCallback)context->Iterator.GcHandle.Target!;
+            Ecs.EachEntityCallback callback = (Ecs.EachEntityCallback)context->Callback.GcHandle.Target!;
             Invoker.Each(iter, callback);
         }
 
         private static void EachIndexCallback(ecs_iter_t* iter)
         {
-            RunIterContext* context = (RunIterContext*)iter->callback_ctx;
+            IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Iterator.GcHandle == default)
+            if (context->Callback.GcHandle == default)
             {
-                Invoker.Each(iter, (delegate*<Iter, int, void>)context->Iterator.Function);
+                Invoker.Each(iter, (delegate*<Iter, int, void>)context->Callback.Function);
                 return;
             }
 #endif
 
-            Ecs.EachIndexCallback callback = (Ecs.EachIndexCallback)context->Iterator.GcHandle.Target!;
+            Ecs.EachIndexCallback callback = (Ecs.EachIndexCallback)context->Callback.GcHandle.Target!;
             Invoker.Each(iter, callback);
         }
 
         private static void ObserveCallback(ecs_iter_t* iter)
         {
-            RunIterContext* context = (RunIterContext*)iter->callback_ctx;
+            IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Iterator.GcHandle == default)
+            if (context->Callback.GcHandle == default)
             {
-                Invoker.Each(iter, (delegate*<Entity, void>)context->Iterator.Function);
+                Invoker.Each(iter, (delegate*<Entity, void>)context->Callback.Function);
                 return;
             }
 #endif
 
-            Ecs.EachEntityCallback callback = (Ecs.EachEntityCallback)context->Iterator.GcHandle.Target!;
+            Ecs.EachEntityCallback callback = (Ecs.EachEntityCallback)context->Callback.GcHandle.Target!;
             Invoker.Observe(iter, callback);
+        }
+
+        private static void RunCallback(ecs_iter_t* iter)
+        {
+            RunContext* context = (RunContext*)iter->run_ctx;
+
+#if NET5_0_OR_GREATER
+            if (context->Callback.GcHandle == default)
+            {
+                Invoker.Run(iter, (delegate*<Iter, void>)context->Callback.Function);
+                return;
+            }
+#endif
+
+            Ecs.IterCallback callback = (Ecs.IterCallback)context->Callback.GcHandle.Target!;
+            Invoker.Run(iter, callback);
         }
 
         private static ulong GroupByCallback(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
@@ -200,12 +230,20 @@ namespace Flecs.NET.Core
             Memory.Free(context);
         }
 
-        private static void RunIterContextFree(void* context)
+        private static void IteratorContextFree(void* context)
         {
-            RunIterContext* runIterContext = (RunIterContext*)context;
-            runIterContext->Dispose();
+            IteratorContext* iteratorContext = (IteratorContext*)context;
+            iteratorContext->Dispose();
             Memory.Free(context);
         }
+
+        private static void RunContextFree(void* context)
+        {
+            RunContext* runContext = (RunContext*)context;
+            runContext->Dispose();
+            Memory.Free(context);
+        }
+
         private static void QueryContextFree(void* context)
         {
             QueryContext* queryContext = (QueryContext*)context;
@@ -308,15 +346,23 @@ namespace Flecs.NET.Core
             }
         }
 
-        internal struct RunIterContext : IDisposable
+        internal struct IteratorContext : IDisposable
         {
-            public Callback Run;
-            public Callback Iterator;
+            public Callback Callback;
 
             public void Dispose()
             {
-                Run.Dispose();
-                Iterator.Dispose();
+                Callback.Dispose();
+            }
+        }
+
+        internal struct RunContext : IDisposable
+        {
+            public Callback Callback;
+
+            public void Dispose()
+            {
+                Callback.Dispose();
             }
         }
 
@@ -524,15 +570,15 @@ namespace Flecs.NET.Core
 
         private static void EntityObserverEach(ecs_iter_t* iter)
         {
-            BindingContext.RunIterContext* context = (BindingContext.RunIterContext*)iter->callback_ctx;
-            Ecs.EachCallback<T0> callback = (Ecs.EachCallback<T0>)context->Iterator.GcHandle.Target!;
+            BindingContext.IteratorContext* context = (BindingContext.IteratorContext*)iter->callback_ctx;
+            Ecs.EachCallback<T0> callback = (Ecs.EachCallback<T0>)context->Callback.GcHandle.Target!;
             Invoker.Observe(iter, callback);
         }
 
         private static void EntityObserverEachEntity(ecs_iter_t* iter)
         {
-            BindingContext.RunIterContext* context = (BindingContext.RunIterContext*)iter->callback_ctx;
-            Ecs.EachEntityCallback<T0> callback = (Ecs.EachEntityCallback<T0>)context->Iterator.GcHandle.Target!;
+            BindingContext.IteratorContext* context = (BindingContext.IteratorContext*)iter->callback_ctx;
+            Ecs.EachEntityCallback<T0> callback = (Ecs.EachEntityCallback<T0>)context->Callback.GcHandle.Target!;
             Invoker.Observe(iter, callback);
         }
 

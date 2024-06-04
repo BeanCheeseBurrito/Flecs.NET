@@ -3692,8 +3692,8 @@ namespace Flecs.NET.Core
         private ref Entity ObserveInternal<T>(ulong eventId, T callback, IntPtr bindingContextCallback)
             where T : Delegate
         {
-            BindingContext.RunIterContext* observerContext = Memory.AllocZeroed<BindingContext.RunIterContext>(1);
-            BindingContext.SetCallback(ref observerContext->Iterator, callback, false);
+            BindingContext.IteratorContext* observerContext = Memory.AllocZeroed<BindingContext.IteratorContext>(1);
+            BindingContext.SetCallback(ref observerContext->Callback, callback, false);
 
             ecs_observer_desc_t desc = default;
             desc.events[0] = eventId;
@@ -3701,7 +3701,7 @@ namespace Flecs.NET.Core
             desc.query.terms[0].src.id = Id;
             desc.callback = bindingContextCallback;
             desc.callback_ctx = observerContext;
-            desc.callback_ctx_free = BindingContext.RunIterContextFreePointer;
+            desc.callback_ctx_free = BindingContext.IteratorContextFreePointer;
 
             ulong observer = ecs_observer_init(World, &desc);
             ecs_add_id(World, observer, Macros.Pair(EcsChildOf, Id));

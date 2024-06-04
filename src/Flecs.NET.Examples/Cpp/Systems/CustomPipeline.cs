@@ -31,7 +31,7 @@ public static class Cpp_Systems_CustomPipeline
         // Create system with Physics tag
         world.Routine()
             .Kind<Physics>()
-            .Iter(() =>
+            .Run((Iter it) =>
             {
                 Console.WriteLine("System ran!");
             });

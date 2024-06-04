@@ -29,17 +29,14 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Each(ecs_iter_t* iter, Ecs.EachEntityCallback callback)
         {
+            Ecs.Assert(iter->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
+
             iter->flags |= EcsIterCppEach;
-
-            ecs_world_t* world = iter->world;
-            int count = iter->count;
-
-            Ecs.Assert(count > 0, "No entities returned, use Iter() instead.");
 
             Macros.TableLock(iter->world, iter->table);
 
-            for (int i = 0; i < count; i++)
-                callback(new Entity(world, iter->entities[i]));
+            for (int i = 0; i < iter->count; i++)
+                callback(new Entity(iter->world, iter->entities[i]));
 
             Macros.TableUnlock(iter->world, iter->table);
         }
@@ -53,16 +50,25 @@ namespace Flecs.NET.Core
         {
             iter->flags |= EcsIterCppEach;
 
-            int count = iter->count == 0 ? 1 : iter->count;
-
-            Iter it = new Iter(iter);
-
             Macros.TableLock(iter->world, iter->table);
 
+            int count = iter->count == 0 ? 1 : iter->count;
+
             for (int i = 0; i < count; i++)
-                callback(it, i);
+                callback(new Iter(iter), i);
 
             Macros.TableUnlock(iter->world, iter->table);
+        }
+
+        /// <summary>
+        ///     Invokes a run callback using a delegate.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void Run(ecs_iter_t* iter, Ecs.IterCallback callback)
+        {
+            iter->flags &= ~EcsIterIsValid;
+            callback(new Iter(iter));
         }
 
         /// <summary>
@@ -119,17 +125,14 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Each(ecs_iter_t* iter, delegate*<Entity, void> callback)
         {
+            Ecs.Assert(iter->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
+
             iter->flags |= EcsIterCppEach;
 
             Macros.TableLock(iter->world, iter->table);
 
-            ecs_world_t* world = iter->world;
-            int count = iter->count;
-
-            Ecs.Assert(count > 0, "No entities returned, use Iter() instead.");
-
-            for (int i = 0; i < count; i++)
-                callback(new Entity(world, iter->entities[i]));
+            for (int i = 0; i < iter->count; i++)
+                callback(new Entity(iter->world, iter->entities[i]));
 
             Macros.TableUnlock(iter->world, iter->table);
         }
@@ -143,19 +146,25 @@ namespace Flecs.NET.Core
         {
             iter->flags |= EcsIterCppEach;
 
-            int count = iter->count;
-
-            if (count == 0)
-                count = 1;
-
-            Iter it = new Iter(iter);
-
             Macros.TableLock(iter->world, iter->table);
 
+            int count = iter->count == 0 ? 1 : iter->count;
+
             for (int i = 0; i < count; i++)
-                callback(it, i);
+                callback(new Iter(iter), i);
 
             Macros.TableUnlock(iter->world, iter->table);
+        }
+
+        /// <summary>
+        ///     Invokes a run callback using a delegate.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void Run(ecs_iter_t* iter, delegate*<Iter, void> callback)
+        {
+            iter->flags &= ~EcsIterIsValid;
+            callback(new Iter(iter));
         }
 #endif
     }

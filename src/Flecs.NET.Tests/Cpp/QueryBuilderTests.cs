@@ -803,13 +803,16 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            q1.Iter((Iter it) =>
+            q1.Run((Iter it) =>
             {
-                q2.SetVar("this", it.Table()).Each((Entity e) =>
+                while (it.Next())
                 {
-                    Assert.True(e == e3);
-                    count++;
-                });
+                    q2.SetVar("this", it.Table()).Each((Entity e) =>
+                    {
+                        Assert.True(e == e3);
+                        count++;
+                    });
+                }
             });
 
             Assert.Equal(1, count);
@@ -839,13 +842,16 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            q1.Iter((Iter it) =>
+            q1.Run((Iter it) =>
             {
-                q2.SetVar("this", it.Range()).Each((Entity e) =>
+                while (it.Next())
                 {
-                    Assert.True(e == e3);
-                    count++;
-                });
+                    q2.SetVar("this", it.Range()).Each((Entity e) =>
+                    {
+                        Assert.True(e == e3);
+                        count++;
+                    });
+                }
             });
 
             Assert.Equal(1, count);
@@ -1130,19 +1136,23 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            q.Iter((Iter it, Field<Self> s) =>
+            q.Run((Iter it) =>
             {
-                Field<Other> o = it.Field<Other>(1);
-                Assert.True(!it.IsSelf(1));
-                Assert.Equal(10, o[0].Value);
-
-                ref Other oRef = ref o[0];
-                Assert.Equal(10, oRef.Value);
-
-                foreach (int i in it)
+                while (it.Next())
                 {
-                    Assert.True(it.Entity(i) == s[i].Value);
-                    count++;
+                    Field<Self> s = it.Field<Self>(0);
+                    Field<Other> o = it.Field<Other>(1);
+                    Assert.True(!it.IsSelf(1));
+                    Assert.Equal(10, o[0].Value);
+
+                    ref Other oRef = ref o[0];
+                    Assert.Equal(10, oRef.Value);
+
+                    foreach (int i in it)
+                    {
+                        Assert.True(it.Entity(i) == s[i].Value);
+                        count++;
+                    }
                 }
             });
 
@@ -1171,16 +1181,20 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            q.Iter((Iter it, Field<Self> s) =>
+            q.Run((Iter it) =>
             {
-                Field<Other> o = it.Field<Other>(1);
-                Assert.True(!it.IsSelf(1));
-                Assert.Equal(10, o[0].Value);
-
-                foreach (int i in it)
+                while (it.Next())
                 {
-                    Assert.True(it.Entity(i) == s[i].Value);
-                    count++;
+                    Field<Self> s = it.Field<Self>(0);
+                    Field<Other> o = it.Field<Other>(1);
+                    Assert.True(!it.IsSelf(1));
+                    Assert.Equal(10, o[0].Value);
+
+                    foreach (int i in it)
+                    {
+                        Assert.True(it.Entity(i) == s[i].Value);
+                        count++;
+                    }
                 }
             });
 
@@ -1214,23 +1228,27 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
             int ownedCount = 0;
 
-            q.Iter((Iter it, Field<Self> s) =>
+            q.Run((Iter it) =>
             {
-                Field<Other> o = it.Field<Other>(1);
+                while (it.Next())
+                {
+                    Field<Self> s = it.Field<Self>(0);
+                    Field<Other> o = it.Field<Other>(1);
 
-                if (!it.IsSelf(1))
-                    Assert.Equal(10, o[0].Value);
-                else
+                    if (!it.IsSelf(1))
+                        Assert.Equal(10, o[0].Value);
+                    else
+                        foreach (int i in it)
+                        {
+                            Assert.Equal(20, o[i].Value);
+                            ownedCount++;
+                        }
+
                     foreach (int i in it)
                     {
-                        Assert.Equal(20, o[i].Value);
-                        ownedCount++;
+                        Assert.True(it.Entity(i) == s[i].Value);
+                        count++;
                     }
-
-                foreach (int i in it)
-                {
-                    Assert.True(it.Entity(i) == s[i].Value);
-                    count++;
                 }
             });
 
@@ -1260,16 +1278,20 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            q.Iter((Iter it, Field<Self> s) =>
+            q.Run((Iter it) =>
             {
-                Field<Other> o = it.Field<Other>(1);
-                Assert.True(!it.IsSelf(1));
-                Assert.Equal(10, o[0].Value);
-
-                foreach (int i in it)
+                while (it.Next())
                 {
-                    Assert.True(it.Entity(i) == s[i].Value);
-                    count++;
+                    Field<Self> s = it.Field<Self>(0);
+                    Field<Other> o = it.Field<Other>(1);
+                    Assert.True(!it.IsSelf(1));
+                    Assert.Equal(10, o[0].Value);
+
+                    foreach (int i in it)
+                    {
+                        Assert.True(it.Entity(i) == s[i].Value);
+                        count++;
+                    }
                 }
             });
 
@@ -1303,23 +1325,27 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
             int ownedCount = 0;
 
-            q.Iter((Iter it, Field<Self> s) =>
+            q.Run((Iter it) =>
             {
-                Field<Other> o = it.Field<Other>(1);
+                while (it.Next())
+                {
+                    Field<Self> s = it.Field<Self>(0);
+                    Field<Other> o = it.Field<Other>(1);
 
-                if (!it.IsSelf(1))
-                    Assert.Equal(10, o[0].Value);
-                else
+                    if (!it.IsSelf(1))
+                        Assert.Equal(10, o[0].Value);
+                    else
+                        foreach (int i in it)
+                        {
+                            Assert.Equal(20, o[i].Value);
+                            ownedCount++;
+                        }
+
                     foreach (int i in it)
                     {
-                        Assert.Equal(20, o[i].Value);
-                        ownedCount++;
+                        Assert.True(it.Entity(i) == s[i].Value);
+                        count++;
                     }
-
-                foreach (int i in it)
-                {
-                    Assert.True(it.Entity(i) == s[i].Value);
-                    count++;
                 }
             });
 
@@ -2037,7 +2063,11 @@ namespace Flecs.NET.Tests.Cpp
             Routine s = world.Routine<RelData, Velocity>()
                 .TermAt(0).Second(Ecs.Wildcard)
                 .TermAt(1).Singleton()
-                .Iter((Iter it) => { count += it.Count(); });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        count += it.Count();
+                });
 
             world.Entity().Add<RelData, Tag>();
             world.Set(new Velocity());
@@ -2064,22 +2094,25 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            q.Iter((Iter it) =>
+            q.Run((Iter it) =>
             {
-                Assert.Equal(1, it.Count());
-
-                count += it.Count();
-
-                if (it.Entity(0) == e1)
+                while (it.Next())
                 {
-                    Assert.True(it.IsSet(0));
-                    Assert.True(it.IsSet(1));
-                }
-                else
-                {
-                    Assert.True(it.Entity(0) == e2);
-                    Assert.True(it.IsSet(0));
-                    Assert.False(it.IsSet(1));
+                    Assert.Equal(1, it.Count());
+
+                    count += it.Count();
+
+                    if (it.Entity(0) == e1)
+                    {
+                        Assert.True(it.IsSet(0));
+                        Assert.True(it.IsSet(1));
+                    }
+                    else
+                    {
+                        Assert.True(it.Entity(0) == e2);
+                        Assert.True(it.IsSet(0));
+                        Assert.False(it.IsSet(1));
+                    }
                 }
             });
 
@@ -2121,12 +2154,15 @@ namespace Flecs.NET.Tests.Cpp
                 .Add<TagJ>();
 
             int count = 0;
-            f.Iter((Iter it) =>
+            f.Run((Iter it) =>
             {
-                Assert.Equal(1, it.Count());
-                Assert.True(it.Entity(0) == e);
-                Assert.Equal(10, it.FieldCount());
-                count++;
+                while (it.Next())
+                {
+                    Assert.Equal(1, it.Count());
+                    Assert.True(it.Entity(0) == e);
+                    Assert.Equal(10, it.FieldCount());
+                    count++;
+                }
             });
 
             Assert.Equal(1, count);
@@ -2183,12 +2219,15 @@ namespace Flecs.NET.Tests.Cpp
                 .Add<TagT>();
 
             int count = 0;
-            f.Iter((Iter it) =>
+            f.Run((Iter it) =>
             {
-                Assert.Equal(1, it.Count());
-                Assert.True(it.Entity(0) == e);
-                Assert.Equal(16, it.FieldCount());
-                count++;
+                while (it.Next())
+                {
+                    Assert.Equal(1, it.Count());
+                    Assert.True(it.Entity(0) == e);
+                    Assert.Equal(16, it.FieldCount());
+                    count++;
+                }
             });
 
             Assert.Equal(1, count);
@@ -2232,34 +2271,40 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            q.Iter((Iter it) =>
+            q.Run((Iter it) =>
             {
-                Assert.Equal(1, it.Count());
-                if (count == 0)
-                    Assert.True(it.Entity(0) == e1);
-                else if (count == 1)
-                    Assert.True(it.Entity(0) == e2);
-                else if (count == 2)
-                    Assert.True(it.Entity(0) == e3);
-                else
-                    Assert.True(false);
-                count++;
+                while (it.Next())
+                {
+                    Assert.Equal(1, it.Count());
+                    if (count == 0)
+                        Assert.True(it.Entity(0) == e1);
+                    else if (count == 1)
+                        Assert.True(it.Entity(0) == e2);
+                    else if (count == 2)
+                        Assert.True(it.Entity(0) == e3);
+                    else
+                        Assert.True(false);
+                    count++;
+                }
             });
             Assert.Equal(3, count);
 
             count = 0;
-            qReverse.Iter((Iter it) =>
+            qReverse.Run((Iter it) =>
             {
-                Assert.Equal(1, it.Count());
-                if (count == 0)
-                    Assert.True(it.Entity(0) == e3);
-                else if (count == 1)
-                    Assert.True(it.Entity(0) == e2);
-                else if (count == 2)
-                    Assert.True(it.Entity(0) == e1);
-                else
-                    Assert.True(false);
-                count++;
+                while (it.Next())
+                {
+                    Assert.Equal(1, it.Count());
+                    if (count == 0)
+                        Assert.True(it.Entity(0) == e3);
+                    else if (count == 1)
+                        Assert.True(it.Entity(0) == e2);
+                    else if (count == 2)
+                        Assert.True(it.Entity(0) == e1);
+                    else
+                        Assert.True(false);
+                    count++;
+                }
             });
             Assert.Equal(3, count);
         }
@@ -2291,34 +2336,40 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            q.Iter((Iter it) =>
+            q.Run((Iter it) =>
             {
-                Assert.Equal(1, it.Count());
-                if (count == 0)
-                    Assert.True(it.Entity(0) == e1);
-                else if (count == 1)
-                    Assert.True(it.Entity(0) == e2);
-                else if (count == 2)
-                    Assert.True(it.Entity(0) == e3);
-                else
-                    Assert.True(false);
-                count++;
+                while (it.Next())
+                {
+                    Assert.Equal(1, it.Count());
+                    if (count == 0)
+                        Assert.True(it.Entity(0) == e1);
+                    else if (count == 1)
+                        Assert.True(it.Entity(0) == e2);
+                    else if (count == 2)
+                        Assert.True(it.Entity(0) == e3);
+                    else
+                        Assert.True(false);
+                    count++;
+                }
             });
             Assert.Equal(3, count);
 
             count = 0;
-            qReverse.Iter((Iter it) =>
+            qReverse.Run((Iter it) =>
             {
-                Assert.Equal(1, it.Count());
-                if (count == 0)
-                    Assert.True(it.Entity(0) == e3);
-                else if (count == 1)
-                    Assert.True(it.Entity(0) == e2);
-                else if (count == 2)
-                    Assert.True(it.Entity(0) == e1);
-                else
-                    Assert.True(false);
-                count++;
+                while (it.Next())
+                {
+                    Assert.Equal(1, it.Count());
+                    if (count == 0)
+                        Assert.True(it.Entity(0) == e3);
+                    else if (count == 1)
+                        Assert.True(it.Entity(0) == e2);
+                    else if (count == 2)
+                        Assert.True(it.Entity(0) == e1);
+                    else
+                        Assert.True(false);
+                    count++;
+                }
             });
             Assert.Equal(3, count);
         }
@@ -3056,16 +3107,20 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            q.Iter((Iter it, Field<Self> s) =>
+            q.Run((Iter it) =>
             {
-                Field<Other> o = it.Field<Other>(1);
-                Assert.True(!it.IsSelf(1));
-                Assert.Equal(10, o[0].Value);
-
-                foreach (int i in it)
+                while (it.Next())
                 {
-                    Assert.True(it.Entity(i) == s[i].Value);
-                    count++;
+                    Field<Self> s = it.Field<Self>(0);
+                    Field<Other> o = it.Field<Other>(1);
+                    Assert.True(!it.IsSelf(1));
+                    Assert.Equal(10, o[0].Value);
+
+                    foreach (int i in it)
+                    {
+                        Assert.True(it.Entity(i) == s[i].Value);
+                        count++;
+                    }
                 }
             });
 
@@ -3215,7 +3270,7 @@ namespace Flecs.NET.Tests.Cpp
             Query q = world.Query<Position>();
 
             int count = 0;
-            q.Each(stage, (Iter it, int i) =>
+            q.Iter(stage).Each((Iter it, int i) =>
             {
                 Assert.True(it.World() == stage);
                 Assert.True(it.Entity(i) == e1);
@@ -3551,12 +3606,16 @@ namespace Flecs.NET.Tests.Cpp
                 .Build();
 
             int count = 0;
-            f.Iter((Iter it, Field<Position> p) =>
+            f.Run((Iter it) =>
             {
-                count++;
-                Assert.Equal(10, p[0].X);
-                Assert.Equal(20, p[0].Y);
-                Assert.True(it.Src(0) == e);
+                while (it.Next())
+                {
+                    Field<Position> p = it.Field<Position>(0);
+                    count++;
+                    Assert.Equal(10, p[0].X);
+                    Assert.Equal(20, p[0].Y);
+                    Assert.True(it.Src(0) == e);
+                }
             });
 
             Assert.Equal(1, count);
@@ -3576,7 +3635,7 @@ namespace Flecs.NET.Tests.Cpp
         //         .Build();
         //
         //     int count = 0;
-        //     f.Iter((Iter it) =>
+        //     f.Run((Iter it) =>
         //     {
         //         Field<Position> p = it.Field<Position>(0);
         //         Assert.True(it.IsReadonly(0));
@@ -3605,7 +3664,7 @@ namespace Flecs.NET.Tests.Cpp
         //         .Build();
         //
         //     int count = 0, setCount = 0;
-        //     f.Iter((Iter it) =>
+        //     f.Run((Iter it) =>
         //     {
         //         Assert.Equal(1, it.Count());
         //         if (it.IsSet(1))
@@ -3786,15 +3845,18 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set(new Position(20, 30));
 
             int count = 0;
-            f.Iter((Iter it) =>
+            f.Run((Iter it) =>
             {
-                Field<Position> p = it.Field<Position>(0);
-                foreach (int i in it)
+                while (it.Next())
                 {
-                    p[i].X += 1;
-                    p[i].Y += 2;
+                    Field<Position> p = it.Field<Position>(0);
+                    foreach (int i in it)
+                    {
+                        p[i].X += 1;
+                        p[i].Y += 2;
 
-                    count++;
+                        count++;
+                    }
                 }
             });
 
@@ -3824,14 +3886,17 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().IsA(@base);
 
             int count = 0;
-            f.Iter((Iter it) =>
+            f.Run((Iter it) =>
             {
-                Field<Position> p = it.Field<Position>(0);
-                for (int i = 0; i < it.Count(); i++)
+                while (it.Next())
                 {
-                    Assert.Equal(10, p[0].X);
-                    Assert.Equal(20, p[0].Y);
-                    count++;
+                    Field<Position> p = it.Field<Position>(0);
+                    for (int i = 0; i < it.Count(); i++)
+                    {
+                        Assert.Equal(10, p[0].X);
+                        Assert.Equal(20, p[0].Y);
+                        count++;
+                    }
                 }
             });
 
@@ -3853,15 +3918,18 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().IsA(@base);
 
             int count = 0;
-            f.Iter((Iter it) =>
+            f.Run((Iter it) =>
             {
-                Field<Position> p = it.Field<Position>(0);
-                Position pv = p[0];
-                for (int i = 0; i < it.Count(); i++)
+                while (it.Next())
                 {
-                    Assert.Equal(10, pv.X);
-                    Assert.Equal(20, pv.Y);
-                    count++;
+                    Field<Position> p = it.Field<Position>(0);
+                    Position pv = p[0];
+                    for (int i = 0; i < it.Count(); i++)
+                    {
+                        Assert.Equal(10, pv.X);
+                        Assert.Equal(20, pv.Y);
+                        count++;
+                    }
                 }
             });
 
@@ -5066,10 +5134,13 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity().Add<Foo>();
 
             int count = 0;
-            r.Iter((Iter it) =>
+            r.Run((Iter it) =>
             {
-                Assert.True(it.GetVar("Var") == e);
-                count++;
+                while (it.Next())
+                {
+                    Assert.True(it.GetVar("Var") == e);
+                    count++;
+                }
             });
 
             Assert.Equal(1, count);
@@ -5090,12 +5161,15 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity().Add<Foo>();
 
             int count = 0;
-            r.Iter((Iter it) =>
+            r.Run((Iter it) =>
             {
-                Assert.Equal(1, it.Count());
-                Assert.Equal(e, it.Entity(0));
-                Assert.True(it.GetVar("Var") == world.Id<Foo>());
-                count++;
+                while (it.Next())
+                {
+                    Assert.Equal(1, it.Count());
+                    Assert.Equal(e, it.Entity(0));
+                    Assert.True(it.GetVar("Var") == world.Id<Foo>());
+                    count++;
+                }
             });
 
             Assert.Equal(1, count);
@@ -5116,12 +5190,15 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity().Add<Foo>(t);
 
             int count = 0;
-            r.Iter((Iter it) =>
+            r.Run((Iter it) =>
             {
-                Assert.Equal(1, it.Count());
-                Assert.Equal(e, it.Entity(0));
-                Assert.True(it.GetVar("Var") == t);
-                count++;
+                while (it.Next())
+                {
+                    Assert.Equal(1, it.Count());
+                    Assert.Equal(e, it.Entity(0));
+                    Assert.True(it.GetVar("Var") == t);
+                    count++;
+                }
             });
 
             Assert.Equal(1, count);
@@ -5144,12 +5221,15 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity().Add(foo, t);
 
             int count = 0;
-            r.Iter((Iter it) =>
+            r.Run((Iter it) =>
             {
-                Assert.Equal(1, it.Count());
-                Assert.Equal(e, it.Entity(0));
-                Assert.True(it.GetVar("Var") == t);
-                count++;
+                while (it.Next())
+                {
+                    Assert.Equal(1, it.Count());
+                    Assert.Equal(e, it.Entity(0));
+                    Assert.True(it.GetVar("Var") == t);
+                    count++;
+                }
             });
 
             Assert.Equal(1, count);
@@ -5170,12 +5250,15 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity().Add<Foo>(t);
 
             int count = 0;
-            r.Iter((Iter it) =>
+            r.Run((Iter it) =>
             {
-                Assert.Equal(1, it.Count());
-                Assert.Equal(e, it.Entity(0));
-                Assert.True(it.GetVar("Var") == t);
-                count++;
+                while (it.Next())
+                {
+                    Assert.Equal(1, it.Count());
+                    Assert.Equal(e, it.Entity(0));
+                    Assert.True(it.GetVar("Var") == t);
+                    count++;
+                }
             });
 
             Assert.Equal(1, count);

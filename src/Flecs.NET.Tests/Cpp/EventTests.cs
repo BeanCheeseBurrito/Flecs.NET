@@ -246,11 +246,14 @@ namespace Flecs.NET.Tests.Cpp
             world.Observer()
                 .Event(evt)
                 .With(id)
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Assert.True(it.Entity(0) == e1);
-                    Assert.Equal(10, it.Param<EvtData>().Value);
-                    count++;
+                    while (it.Next())
+                    {
+                        Assert.True(it.Entity(0) == e1);
+                        Assert.Equal(10, it.Param<EvtData>().Value);
+                        count++;
+                    }
                 });
 
             EvtData data = new EvtData { Value = 10 };
@@ -277,11 +280,14 @@ namespace Flecs.NET.Tests.Cpp
             world.Observer()
                 .Event<EvtData>()
                 .With(id)
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Assert.True(it.Entity(0) == e1);
-                    Assert.Equal(10, it.Param<EvtData>().Value);
-                    count++;
+                    while (it.Next())
+                    {
+                        Assert.True(it.Entity(0) == e1);
+                        Assert.Equal(10, it.Param<EvtData>().Value);
+                        count++;
+                    }
                 });
 
             EvtData evtData = new EvtData { Value = 10 };

@@ -42,6 +42,18 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Creates a table from the provided handle.
+        /// </summary>
+        /// <param name="table"></param>
+        public Table(ecs_table_t* table)
+        {
+            World = null;
+            Handle = table;
+            Offset = 0;
+            Count = 0;
+        }
+
+        /// <summary>
         ///     Creates a table from the provided world and handle.
         /// </summary>
         /// <param name="world"></param>
@@ -656,9 +668,19 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="table"></param>
         /// <returns></returns>
-        public static implicit operator ecs_table_t*(Table table)
+        public static ecs_table_t* To(Table table)
         {
-            return To(table);
+            return table.Handle;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="ecs_table_t"/>* instance to a <see cref="Table"/>.
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static Table From(ecs_table_t* table)
+        {
+            return new Table(table);
         }
 
         /// <summary>
@@ -666,9 +688,19 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="table"></param>
         /// <returns></returns>
-        public static ecs_table_t* To(Table table)
+        public static implicit operator ecs_table_t*(Table table)
         {
-            return table.Handle;
+            return To(table);
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="ecs_table_t"/>* instance to a <see cref="Table"/>.
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static implicit operator Table(ecs_table_t* table)
+        {
+            return From(table);
         }
 
         /// <summary>

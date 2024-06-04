@@ -168,15 +168,18 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine()
                 .Expr("(Pair, *)")
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Field<Pair> tr = it.Field<Pair>(0);
-                    invokeCount++;
-
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        entityCount++;
-                        traitValue += (int)tr[i].Value;
+                        Field<Pair> tr = it.Field<Pair>(0);
+                        invokeCount++;
+
+                        foreach (int i in it)
+                        {
+                            entityCount++;
+                            traitValue += (int)tr[i].Value;
+                        }
                     }
                 });
 
@@ -202,15 +205,18 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine()
                 .Expr("(Pair, *)")
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Field<Pair> tr = it.Field<Pair>(0);
-                    invokeCount++;
-
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        entityCount++;
-                        traitValue += (int)tr[i].Value;
+                        Field<Pair> tr = it.Field<Pair>(0);
+                        invokeCount++;
+
+                        foreach (int i in it)
+                        {
+                            entityCount++;
+                            traitValue += (int)tr[i].Value;
+                        }
                     }
                 });
 

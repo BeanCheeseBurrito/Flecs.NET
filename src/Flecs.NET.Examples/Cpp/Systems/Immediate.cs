@@ -36,42 +36,39 @@ public static class Cpp_Systems_Immediate
             .With<Plate>()
             .Without<Waiter>(Ecs.Wildcard)
             .Immediate()
-            .Iter((Iter it) =>
+            .Each((Iter it, int i) =>
             {
-                foreach (int i in it)
+                Entity plate = it.Entity(i);
+
+                // Find an available waiter
+                Entity waiter = qWaiter.First();
+
+                if (waiter != 0)
                 {
-                    Entity plate = it.Entity(i);
+                    // An available waiter was found, assign a plate to it so
+                    // that the next plate will no longer find it.
+                    // The DeferSuspend function temporarily suspends deferring
+                    // operations, which ensures that our plate is assigned
+                    // immediately. Even though this is an immediate system,
+                    // deferring is still enabled by default, as adding/removing
+                    // components to the entities being iterated would interfere
+                    // with the system iterator.
+                    it.World().DeferSuspend();
+                    waiter.Add<Plate>(plate);
+                    it.World().DeferResume();
 
-                    // Find an available waiter
-                    Entity waiter = qWaiter.First();
+                    // Now that deferring is resumed, we can safely also add the
+                    // waiter to the plate. We can't do this while deferring is
+                    // suspended, because the plate is the entity we're
+                    // currently iterating, and we don't want to move it to a
+                    // different table while we're iterating it.
+                    plate.Add<Waiter>(waiter);
 
-                    if (waiter != 0)
-                    {
-                        // An available waiter was found, assign a plate to it so
-                        // that the next plate will no longer find it.
-                        // The DeferSuspend function temporarily suspends deferring
-                        // operations, which ensures that our plate is assigned
-                        // immediately. Even though this is an immediate system,
-                        // deferring is still enabled by default, as adding/removing
-                        // components to the entities being iterated would interfere
-                        // with the system iterator.
-                        it.World().DeferSuspend();
-                        waiter.Add<Plate>(plate);
-                        it.World().DeferResume();
-
-                        // Now that deferring is resumed, we can safely also add the
-                        // waiter to the plate. We can't do this while deferring is
-                        // suspended, because the plate is the entity we're
-                        // currently iterating, and we don't want to move it to a
-                        // different table while we're iterating it.
-                        plate.Add<Waiter>(waiter);
-
-                        Console.WriteLine($"Assigned {waiter.Name()} to {plate}!");
-                    }
-                    else
-                    {
-                        // No available waiters, can't assign the plate
-                    }
+                    Console.WriteLine($"Assigned {waiter.Name()} to {plate}!");
+                }
+                else
+                {
+                    // No available waiters, can't assign the plate
                 }
             });
 

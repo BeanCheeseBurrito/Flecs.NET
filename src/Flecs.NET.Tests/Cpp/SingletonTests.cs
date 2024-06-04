@@ -42,7 +42,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<Position>()
                 .Event(Ecs.OnSet)
-                .Iter((Iter it, Field<Position> p) => { invoked++; });
+                .Each((ref Position p) => { invoked++; });
 
             Entity e = world.Entity();
             e.Ensure<Position>();
@@ -61,7 +61,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<Position>()
                 .Event(Ecs.OnAdd)
-                .Iter((Iter it, Field<Position> p) => { invoked++; });
+                .Each((ref Position p) => { invoked++; });
 
             world.Add<Position>();
 
@@ -78,7 +78,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<Position>()
                 .Event(Ecs.OnRemove)
-                .Iter((Iter it, Field<Position> p) => { invoked++; });
+                .Each((ref Position p) => { invoked++; });
 
             world.Ensure<Position>();
             Assert.Equal(0, invoked);
@@ -108,14 +108,17 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine()
                 .Expr("[inout] Position($)")
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Field<Position> p = it.Field<Position>(0);
-                    Assert.Equal(10, p[0].X);
-                    Assert.Equal(20, p[0].Y);
+                    while (it.Next())
+                    {
+                        Field<Position> p = it.Field<Position>(0);
+                        Assert.Equal(10, p[0].X);
+                        Assert.Equal(20, p[0].Y);
 
-                    p[0].X++;
-                    p[0].Y++;
+                        p[0].X++;
+                        p[0].Y++;
+                    }
                 });
 
             world.Progress();

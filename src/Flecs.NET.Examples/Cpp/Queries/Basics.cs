@@ -56,16 +56,21 @@ public static class Cpp_Queries_Basics
             Console.WriteLine($"{it.Entity(i)}: ({p.X}, {p.Y})");
         });
 
-        // Iter is a bit more verbose, but allows for more control over how entities
+        // Run is a bit more verbose, but allows for more control over how entities
         // are iterated as it provides multiple entities in the same callback.
-        q.Iter((Iter it, Field<Position> p, Field<Velocity> v) =>
+        q.Run((Iter it) =>
         {
-
-            foreach (int i in it)
+            while (it.Next())
             {
-                p[i].X += v[i].X;
-                p[i].Y += v[i].Y;
-                Console.WriteLine($"{it.Entity(i)}: ({p[i].X}, {p[i].Y})");
+                Field<Position> p = it.Field<Position>(0);
+                Field<Velocity> v = it.Field<Velocity>(1);
+
+                foreach (int i in it)
+                {
+                    p[i].X += v[i].X;
+                    p[i].Y += v[i].Y;
+                    Console.WriteLine($"{it.Entity(i)}: ({p[i].X}, {p[i].Y})");
+                }
             }
         });
     }

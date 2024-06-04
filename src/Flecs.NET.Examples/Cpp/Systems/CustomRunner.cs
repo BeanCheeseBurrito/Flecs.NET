@@ -20,28 +20,25 @@ public static unsafe class Cpp_Systems_CustomRunner
         using World world = World.Create();
 
         Routine routine = world.Routine<Position, Velocity>()
-            // The run function has a signature that accepts a C iterator. By
-            // forwarding the iterator to it->callback, the each function of the
-            // system is invoked.
-            .Run((Native.ecs_iter_t* it) =>
-            {
-                Console.WriteLine("Move begin");
+            // Forward each result from the run callback to the each callback.
+            .Run(
+                (Iter it) =>
+                {
+                    Console.WriteLine("Move begin");
 
-                delegate* unmanaged<Native.ecs_iter_t*, void> callback =
-                    (delegate* unmanaged<Native.ecs_iter_t*, void>)it->callback;
+                    // Walk over the iterator, forward to the system callback
+                    while (it.Next())
+                        it.Each();
 
-                // Walk over the iterator, forward to the system callback
-                while (Native.ecs_iter_next(it) == Macros.True)
-                    callback(it);
-
-                Console.WriteLine("Move end");
-            })
-            .Each((Entity e, ref Position p, ref Velocity v) =>
-            {
-                p.X += v.X;
-                p.Y += v.Y;
-                Console.WriteLine($"{e}: ({p.X}, {p.Y})");
-            });
+                    Console.WriteLine("Move end");
+                },
+                (Entity e, ref Position p, ref Velocity v) =>
+                {
+                    p.X += v.X;
+                    p.Y += v.Y;
+                    Console.WriteLine($"{e}: ({p.X}, {p.Y})");
+                }
+            );
 
         // Create a few test entities for a Position, Velocity query
         world.Entity("e1")
