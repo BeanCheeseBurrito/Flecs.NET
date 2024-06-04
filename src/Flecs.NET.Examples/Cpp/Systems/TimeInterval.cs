@@ -10,11 +10,11 @@ public static class Cpp_Systems_TimeInterval
 
         world.Routine("Tick")
             .Interval(1.0f)
-            .Iter(Tick);
+            .Run(Tick);
 
         world.Routine("FastTick")
             .Interval(0.5f)
-            .Iter(Tick);
+            .Run(Tick);
 
         // Run the main loop at 60 FPS
         world.SetTargetFps(60);

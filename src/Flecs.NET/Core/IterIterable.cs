@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 #endif
 using System;
+using System.Runtime.CompilerServices;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.Native;
 
@@ -10,17 +11,20 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     An iterator object that can be modified before iterating.
     /// </summary>
-    public unsafe partial struct IterIterable : IEquatable<IterIterable>
+    public unsafe partial struct IterIterable : IIterable, IEquatable<IterIterable>
     {
         private ecs_iter_t _iter;
+        private IterableType _iterableType;
 
         /// <summary>
         ///     Creates an iter iterable.
         /// </summary>
-        /// <param name="iter"></param>
-        public IterIterable(ecs_iter_t iter)
+        /// <param name="iter">The iterator.</param>
+        /// <param name="iterableType">The iterator type.</param>
+        public IterIterable(ecs_iter_t iter, IterableType iterableType)
         {
             _iter = iter;
+            _iterableType = iterableType;
         }
 
         /// <summary>
@@ -248,39 +252,8 @@ namespace Flecs.NET.Core
         /// <param name="callback">The callback.</param>
         public void Iter(Ecs.IterCallback callback)
         {
-            Iter(_iter.world, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <param name="callback">The callback.</param>
-        public void Iter(Entity entity, Ecs.IterCallback callback)
-        {
-            Iter(entity.World, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="it">The iter.</param>
-        /// <param name="callback">The callback.</param>
-        public void Iter(Iter it, Ecs.IterCallback callback)
-        {
-            Iter(it.World(), callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="world">The world.</param>
-        /// <param name="callback">The callback.</param>
-        public void Iter(World world, Ecs.IterCallback callback)
-        {
-            ecs_iter_t iter = _iter;
-            iter.world = world;
-            while (ecs_query_next(&iter) == 1)
+            ecs_iter_t iter = GetIter();
+            while (GetNext(&iter))
                 Invoker.Iter(&iter, callback);
         }
 
@@ -290,39 +263,8 @@ namespace Flecs.NET.Core
         /// <param name="callback">The callback.</param>
         public void Each(Ecs.EachEntityCallback callback)
         {
-            Each(_iter.world, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <param name="callback">The callback.</param>
-        public void Each(Entity entity, Ecs.EachEntityCallback callback)
-        {
-            Each(entity.World, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="it">The iter.</param>
-        /// <param name="callback">The callback.</param>
-        public void Each(Iter it, Ecs.EachEntityCallback callback)
-        {
-            Each(it.World(), callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="world">The world.</param>
-        /// <param name="callback">The callback.</param>
-        public void Each(World world, Ecs.EachEntityCallback callback)
-        {
-            ecs_iter_t iter = _iter;
-            iter.world = world;
-            while (ecs_query_next_instanced(&iter) == 1)
+            ecs_iter_t iter = GetIter();
+            while (GetNextInstanced(&iter))
                 Invoker.Each(&iter, callback);
         }
 
@@ -332,40 +274,19 @@ namespace Flecs.NET.Core
         /// <param name="callback">The callback.</param>
         public void Each(Ecs.EachIndexCallback callback)
         {
-            Each(_iter.world, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <param name="callback">The callback.</param>
-        public void Each(Entity entity, Ecs.EachIndexCallback callback)
-        {
-            Each(entity.World, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="it">The iter.</param>
-        /// <param name="callback">The callback.</param>
-        public void Each(Iter it, Ecs.EachIndexCallback callback)
-        {
-            Each(it.World(), callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="world">The world.</param>
-        /// <param name="callback">The callback.</param>
-        public void Each(World world, Ecs.EachIndexCallback callback)
-        {
-            ecs_iter_t iter = _iter;
-            iter.world = world;
-            while (ecs_query_next_instanced(&iter) == 1)
+            ecs_iter_t iter = GetIter();
+            while (GetNextInstanced(&iter))
                 Invoker.Each(&iter, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        public void Run(Ecs.IterCallback callback)
+        {
+            ecs_iter_t iter = GetIter();
+            Invoker.Run(&iter, callback);
         }
 
 #if NET5_0_OR_GREATER
@@ -375,39 +296,8 @@ namespace Flecs.NET.Core
         /// <param name="callback">The callback.</param>
         public void Iter(delegate*<Iter, void> callback)
         {
-            Iter(_iter.world, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <param name="callback">The callback.</param>
-        public void Iter(Entity entity, delegate*<Iter, void> callback)
-        {
-            Iter(entity.World, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="it">The iter.</param>
-        /// <param name="callback">The callback.</param>
-        public void Iter(Iter it, delegate*<Iter, void> callback)
-        {
-            Iter(it.World(), callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="world">The world.</param>
-        /// <param name="callback">The callback.</param>
-        public void Iter(World world, delegate*<Iter, void> callback)
-        {
-            ecs_iter_t iter = _iter;
-            iter.world = world;
-            while (ecs_query_next(&iter) == 1)
+            ecs_iter_t iter = GetIter();
+            while (GetNext(&iter))
                 Invoker.Iter(&iter, callback);
         }
 
@@ -417,39 +307,8 @@ namespace Flecs.NET.Core
         /// <param name="callback">The callback.</param>
         public void Each(delegate*<Entity, void> callback)
         {
-            Each(_iter.world, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <param name="callback">The callback.</param>
-        public void Each(Entity entity, delegate*<Entity, void> callback)
-        {
-            Each(entity.World, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="it">The iter.</param>
-        /// <param name="callback">The callback.</param>
-        public void Each(Iter it, delegate*<Entity, void> callback)
-        {
-            Each(it.World(), callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="world">The world.</param>
-        /// <param name="callback">The callback.</param>
-        public void Each(World world, delegate*<Entity, void> callback)
-        {
-            ecs_iter_t iter = _iter;
-            iter.world = world;
-            while (ecs_query_next_instanced(&iter) == 1)
+            ecs_iter_t iter = GetIter();
+            while (GetNextInstanced(&iter))
                 Invoker.Each(&iter, callback);
         }
 
@@ -459,40 +318,19 @@ namespace Flecs.NET.Core
         /// <param name="callback">The callback.</param>
         public void Each(delegate*<Iter, int, void> callback)
         {
-            Each(_iter.world, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <param name="callback">The callback.</param>
-        public void Each(Entity entity, delegate*<Iter, int, void> callback)
-        {
-            Each(entity.World, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="it">The iter.</param>
-        /// <param name="callback">The callback.</param>
-        public void Each(Iter it, delegate*<Iter, int, void> callback)
-        {
-            Each(it.World(), callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="world">The world.</param>
-        /// <param name="callback">The callback.</param>
-        public void Each(World world, delegate*<Iter, int, void>callback)
-        {
-            ecs_iter_t iter = _iter;
-            iter.world = world;
-            while (ecs_query_next_instanced(&iter) == 1)
+            ecs_iter_t iter = GetIter();
+            while (GetNextInstanced(&iter))
                 Invoker.Each(&iter, callback);
+        }
+
+        /// <summary>
+        ///     Iterates the query using the provided callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        public void Run(delegate*<Iter, void> callback)
+        {
+            ecs_iter_t iter = GetIter();
+            Invoker.Run(&iter, callback);
         }
 #endif
 
@@ -545,6 +383,126 @@ namespace Flecs.NET.Core
         public static bool operator !=(IterIterable left, IterIterable right)
         {
             return !(left == right);
+        }
+    }
+
+    // IIterable Interface
+    public unsafe partial struct IterIterable
+    {
+        /// <inheritdoc cref="IIterable.GetIter"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ecs_iter_t GetIter(ecs_world_t* world = null)
+        {
+            if (world == null)
+                return _iter;
+
+            ecs_iter_t result = _iter;
+            result.world = world;
+            return result;
+        }
+
+        /// <inheritdoc cref="IIterable.GetNext"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool GetNext(ecs_iter_t* it)
+        {
+            return _iterableType switch
+            {
+                IterableType.Query => Macros.Bool(ecs_query_next(it)),
+                IterableType.Worker => Macros.Bool(ecs_worker_next(it)),
+                IterableType.Page => Macros.Bool(ecs_page_next(it)),
+                _ => throw new Ecs.ErrorException()
+            };
+        }
+
+        /// <inheritdoc cref="IIterable.GetNextInstanced"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool GetNextInstanced(ecs_iter_t* it)
+        {
+            return _iterableType switch
+            {
+                IterableType.Query => Macros.Bool(ecs_query_next_instanced(it)),
+                IterableType.Worker => Macros.Bool(ecs_worker_next(it)),
+                IterableType.Page => Macros.Bool(ecs_page_next(it)),
+                _ => throw new Ecs.ErrorException()
+            };
+        }
+
+        /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.World)"/>
+        public IterIterable Iter(World world = default)
+        {
+            return new IterIterable(GetIter(world), _iterableType);
+        }
+
+        /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.Iter)"/>
+        public IterIterable Iter(Iter it)
+        {
+            return Iter(it.World());
+        }
+
+        /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.Entity)"/>
+        public IterIterable Iter(Entity entity)
+        {
+            return Iter(entity.CsWorld());
+        }
+
+        /// <inheritdoc cref="IIterable.Count()"/>
+        int IIterable.Count()
+        {
+            return Iter().Count();
+        }
+
+        /// <inheritdoc cref="IIterable.IsTrue()"/>
+        bool IIterable.IsTrue()
+        {
+            return Iter().IsTrue();
+        }
+
+        /// <inheritdoc cref="IIterable.First()"/>
+        Entity IIterable.First()
+        {
+            return Iter().First();
+        }
+
+        /// <inheritdoc cref="IIterable.SetVar(int, ulong)"/>
+        IterIterable IIterable.SetVar(int varId, ulong value)
+        {
+            return Iter().SetVar(varId, value);
+        }
+
+        /// <inheritdoc cref="IIterable.SetVar(string, ulong)"/>
+        IterIterable IIterable.SetVar(string name, ulong value)
+        {
+            return Iter().SetVar(name, value);
+        }
+
+        /// <inheritdoc cref="IIterable.SetVar(string, ecs_table_t*)"/>
+        IterIterable IIterable.SetVar(string name, ecs_table_t* value)
+        {
+            return Iter().SetVar(name, value);
+        }
+
+        /// <inheritdoc cref="IIterable.SetVar(string, ecs_table_range_t)"/>
+        IterIterable IIterable.SetVar(string name, ecs_table_range_t value)
+        {
+            return Iter().SetVar(name, value);
+        }
+
+        /// <inheritdoc cref="IIterable.SetVar(string, Table)"/>
+        IterIterable IIterable.SetVar(string name, Table value)
+        {
+            return Iter().SetVar(name, value);
+        }
+
+        /// <inheritdoc cref="IIterable.SetGroup(ulong)"/>
+        IterIterable IIterable.SetGroup(ulong groupId)
+        {
+            return Iter().SetGroup(groupId);
+        }
+
+        /// <inheritdoc cref="IIterable.SetGroup{T}()"/>
+        IterIterable IIterable.SetGroup<T>()
+        {
+            return Iter().SetGroup<T>();
         }
     }
 }

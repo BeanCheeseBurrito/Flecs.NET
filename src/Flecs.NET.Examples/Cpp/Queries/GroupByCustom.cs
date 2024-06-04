@@ -67,15 +67,20 @@ public static class Cpp_Queries_GroupByCustom
         //     - table [Postion, Tag, (Group, Third)]
         //
 
-        q.Iter((Iter it, Field<Position> p) =>
+        q.Run((Iter it) =>
         {
-            Entity group = world.Entity(it.GroupId());
-            Console.WriteLine($" - Group {group.Path()}: Table [{it.Table()}]");
+            while (it.Next())
+            {
+                Field<Position> p = it.Field<Position>(0);
 
-            foreach (int i in it)
-                Console.WriteLine($"     ({p[i].X}, {p[i].Y})");
+                Entity group = world.Entity(it.GroupId());
+                Console.WriteLine($" - Group {group.Path()}: Table [{it.Table()}]");
 
-            Console.WriteLine();
+                foreach (int i in it)
+                    Console.WriteLine($"     ({p[i].X}, {p[i].Y})");
+
+                Console.WriteLine();
+            }
         });
     }
 
@@ -89,20 +94,20 @@ public static class Cpp_Queries_GroupByCustom
 }
 
 // Output:
-//  - Group First: Table [Position, (Group,First)]
+//  - Group .First: Table [Position, (Group,First)]
 //      (3, 3)
 //
-//  - Group First: Table [Position, Tag, (Group,First)]
+//  - Group .First: Table [Position, Tag, (Group,First)]
 //      (6, 6)
 //
-//  - Group Second: Table [Position, (Group,Second)]
+//  - Group .Second: Table [Position, (Group,Second)]
 //      (2, 2)
 //
-//  - Group Second: Table [Position, Tag, (Group,Second)]
+//  - Group .Second: Table [Position, Tag, (Group,Second)]
 //      (5, 5)
 //
-//  - Group Third: Table [Position, (Group,Third)]
+//  - Group .Third: Table [Position, (Group,Third)]
 //      (1, 1)
 //
-//  - Group Third: Table [Position, Tag, (Group,Third)]
+//  - Group .Third: Table [Position, Tag, (Group,Third)]
 //      (4, 4)

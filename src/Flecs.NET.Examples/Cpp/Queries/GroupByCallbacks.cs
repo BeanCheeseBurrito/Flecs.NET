@@ -102,18 +102,23 @@ public static unsafe class Cpp_Queries_GroupByCallbacks
         //     - table [Position, Tag, (Group, Third)]
         //
 
-        q.Iter((Iter it, Field<Position> p) =>
+        q.Run((Iter it) =>
         {
-            Entity group = it.World().Entity(it.GroupId());
-            GroupCtx* ctx = (GroupCtx*)q.GroupCtx(group);
+            while (it.Next())
+            {
+                Field<Position> p = it.Field<Position>(0);
 
-            Console.WriteLine($" - Group {group.Path()}: table [{it.Table().Str()}]");
-            Console.WriteLine($"    Counter: {ctx->Counter}");
+                Entity group = it.World().Entity(it.GroupId());
+                GroupCtx* ctx = (GroupCtx*)q.GroupCtx(group);
 
-            foreach (int i in it)
-                Console.WriteLine($"    ({p[i].X}, {p[i].Y})");
+                Console.WriteLine($" - Group {group.Path()}: table [{it.Table().Str()}]");
+                Console.WriteLine($"    Counter: {ctx->Counter}");
 
-            Console.WriteLine();
+                foreach (int i in it)
+                    Console.WriteLine($"    ({p[i].X}, {p[i].Y})");
+
+                Console.WriteLine();
+            }
         });
 
         // Deleting the query will call the OnGroupDeleted callback
@@ -126,27 +131,27 @@ public static unsafe class Cpp_Queries_GroupByCallbacks
 // Group Second created
 // Group First created
 //
-//  - Group First: table [Position, (Group,First)]
+//  - Group .First: table [Position, (Group,First)]
 //     Counter: 3
 //     (3, 3)
 //
-//  - Group First: table [Position, Tag, (Group,First)]
+//  - Group .First: table [Position, Tag, (Group,First)]
 //     Counter: 3
 //     (6, 6)
 //
-//  - Group Second: table [Position, (Group,Second)]
+//  - Group .Second: table [Position, (Group,Second)]
 //     Counter: 2
 //     (2, 2)
 //
-//  - Group Second: table [Position, Tag, (Group,Second)]
+//  - Group .Second: table [Position, Tag, (Group,Second)]
 //     Counter: 2
 //     (5, 5)
 //
-//  - Group Third: table [Position, (Group,Third)]
+//  - Group .Third: table [Position, (Group,Third)]
 //     Counter: 1
 //     (1, 1)
 //
-//  - Group Third: table [Position, Tag, (Group,Third)]
+//  - Group .Third: table [Position, Tag, (Group,Third)]
 //     Counter: 1
 //     (4, 4)
 //

@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Flecs.NET.Core;
 
 // Components
@@ -48,19 +49,15 @@ public static class Cpp_Queries_Hierarchy
                 .Optional() // Make term component optional so we also match the root (sun)
             .Build();
 
-        // Do the transform
-        q.Iter((Iter it, Field<Position> selfLocal, Field<Position> selfGlobal, Field<Position> parentGlobal) =>
+        q.Each((ref Position selfLocal, ref Position selfGlobal, ref Position parentGlobal) =>
         {
-            foreach (int i in it)
-            {
-                selfGlobal[i].X = selfLocal[i].X;
-                selfGlobal[i].Y = selfLocal[i].Y;
+            selfGlobal.X = selfLocal.X;
+            selfGlobal.Y = selfLocal.Y;
 
-                if (!parentGlobal.IsNull)
-                {
-                    selfGlobal[i].X += parentGlobal[i].X;
-                    selfGlobal[i].Y += parentGlobal[i].Y;
-                }
+            if (!Unsafe.IsNullRef(ref parentGlobal))
+            {
+                selfGlobal.X += parentGlobal.X;
+                selfGlobal.Y += parentGlobal.Y;
             }
         });
 

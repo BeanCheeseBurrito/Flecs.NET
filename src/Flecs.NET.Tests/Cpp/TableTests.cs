@@ -44,7 +44,11 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add<Velocity>();
 
             world.Query<Position>()
-                .Iter((Iter it, Field<Position> p) => { e2.Add<Mass>(); });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        e2.Add<Mass>();
+                });
 
             Assert.True(e2.Has<Mass>());
         }
@@ -58,7 +62,10 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add<Velocity>();
 
             world.Query<Position>()
-                .Iter((Iter it) => { e2.Add<Mass>(); });
+                .Run((Iter it) => {
+                    while (it.Next())
+                        e2.Add<Mass>();
+                });
 
             Assert.True(e2.Has<Mass>());
         }

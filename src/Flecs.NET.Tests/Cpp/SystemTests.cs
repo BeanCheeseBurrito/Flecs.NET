@@ -24,12 +24,18 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Velocity(1, 2));
 
             world.Routine<Position, Velocity>()
-                .Iter((Iter it, Field<Position> p, Field<Velocity> v) =>
+                .Run((Iter it) =>
                 {
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        p[i].X += v[i].X;
-                        p[i].Y += v[i].Y;
+                        Field<Position> p = it.Field<Position>(0);
+                        Field<Velocity> v = it.Field<Velocity>(1);
+
+                        foreach (int i in it)
+                        {
+                            p[i].X += v[i].X;
+                            p[i].Y += v[i].Y;
+                        }
                     }
                 });
 
@@ -54,12 +60,18 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Velocity(1, 2));
 
             world.Routine<Position, Velocity>()
-                .Iter((Iter it, Field<Position> p, Field<Velocity> v) =>
+                .Run((Iter it) =>
                 {
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        p[i].X += v[i].X;
-                        p[i].Y += v[i].Y;
+                        Field<Position> p = it.Field<Position>(0);
+                        Field<Velocity> v = it.Field<Velocity>(1);
+
+                        foreach (int i in it)
+                        {
+                            p[i].X += v[i].X;
+                            p[i].Y += v[i].Y;
+                        }
                     }
                 });
 
@@ -91,22 +103,26 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Velocity(3, 4));
 
             world.Routine<Position>().Expr("Velocity(self|up IsA)")
-                .Iter((Iter it, Field<Position> p) =>
+                .Run((Iter it) =>
                 {
-                    Field<Velocity> v = it.Field<Velocity>(1);
+                    while (it.Next())
+                    {
+                        Field<Position> p = it.Field<Position>(0);
+                        Field<Velocity> v = it.Field<Velocity>(1);
 
-                    if (!it.IsSelf(1))
-                        foreach (int i in it)
-                        {
-                            p[i].X += v[0].X;
-                            p[i].Y += v[0].Y;
-                        }
-                    else
-                        foreach (int i in it)
-                        {
-                            p[i].X += v[i].X;
-                            p[i].Y += v[i].Y;
-                        }
+                        if (!it.IsSelf(1))
+                            foreach (int i in it)
+                            {
+                                p[i].X += v[0].X;
+                                p[i].Y += v[0].Y;
+                            }
+                        else
+                            foreach (int i in it)
+                            {
+                                p[i].X += v[i].X;
+                                p[i].Y += v[i].Y;
+                            }
+                    }
                 });
 
             world.Progress();
@@ -145,20 +161,27 @@ namespace Flecs.NET.Tests.Cpp
             world.Routine<Position, Velocity, Mass>()
                 .TermAt(1).Optional()
                 .TermAt(2).Optional()
-                .Iter((Iter it, Field<Position> p, Field<Velocity> v, Field<Mass> m) =>
+                .Run((Iter it) =>
                 {
-                    if (it.IsSet(1) && it.IsSet(2))
-                        foreach (int i in it)
-                        {
-                            p[i].X += v[i].X * m[i].Value;
-                            p[i].Y += v[i].Y * m[i].Value;
-                        }
-                    else
-                        foreach (int i in it)
-                        {
-                            p[i].X++;
-                            p[i].Y++;
-                        }
+                    while (it.Next())
+                    {
+                        Field<Position> p = it.Field<Position>(0);
+                        Field<Velocity> v = it.Field<Velocity>(1);
+                        Field<Mass> m = it.Field<Mass>(2);
+
+                        if (it.IsSet(1) && it.IsSet(2))
+                            foreach (int i in it)
+                            {
+                                p[i].X += v[i].X * m[i].Value;
+                                p[i].Y += v[i].Y * m[i].Value;
+                            }
+                        else
+                            foreach (int i in it)
+                            {
+                                p[i].X++;
+                                p[i].Y++;
+                            }
+                    }
                 });
 
             world.Progress();
@@ -328,15 +351,18 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Velocity(1, 2));
 
             world.Routine().Expr("Position, Velocity")
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Field<Position> p = it.Field<Position>(0);
-                    Field<Velocity> v = it.Field<Velocity>(1);
-
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        p[i].X += v[i].X;
-                        p[i].Y += v[i].Y;
+                        Field<Position> p = it.Field<Position>(0);
+                        Field<Velocity> v = it.Field<Velocity>(1);
+
+                        foreach (int i in it)
+                        {
+                            p[i].X += v[i].X;
+                            p[i].Y += v[i].Y;
+                        }
                     }
                 });
 
@@ -361,15 +387,18 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Velocity(1, 2));
 
             world.Routine().Expr("Position, [in] Velocity")
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Field<Position> p = it.Field<Position>(0);
-                    Field<Velocity> v = it.Field<Velocity>(1);
-
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        p[i].X += v[i].X;
-                        p[i].Y += v[i].Y;
+                        Field<Position> p = it.Field<Position>(0);
+                        Field<Velocity> v = it.Field<Velocity>(1);
+
+                        foreach (int i in it)
+                        {
+                            p[i].X += v[i].X;
+                            p[i].Y += v[i].Y;
+                        }
                     }
                 });
 
@@ -401,23 +430,26 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Velocity(3, 4));
 
             world.Routine().Expr("Position, [in] Velocity(self|up IsA)")
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Field<Position> p = it.Field<Position>(0);
-                    Field<Velocity> v = it.Field<Velocity>(1);
+                    while (it.Next())
+                    {
+                        Field<Position> p = it.Field<Position>(0);
+                        Field<Velocity> v = it.Field<Velocity>(1);
 
-                    if (!it.IsSelf(1))
-                        foreach (int i in it)
-                        {
-                            p[i].X += v[0].X;
-                            p[i].Y += v[0].Y;
-                        }
-                    else
-                        foreach (int i in it)
-                        {
-                            p[i].X += v[i].X;
-                            p[i].Y += v[i].Y;
-                        }
+                        if (!it.IsSelf(1))
+                            foreach (int i in it)
+                            {
+                                p[i].X += v[0].X;
+                                p[i].Y += v[0].Y;
+                            }
+                        else
+                            foreach (int i in it)
+                            {
+                                p[i].X += v[i].X;
+                                p[i].Y += v[i].Y;
+                            }
+                    }
                 });
 
             world.Progress();
@@ -454,24 +486,27 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(70, 80));
 
             world.Routine().Expr("Position, ?Velocity, ?Mass")
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Field<Position> p = it.Field<Position>(0);
-                    Field<Velocity> v = it.Field<Velocity>(1);
-                    Field<Mass> m = it.Field<Mass>(2);
+                    while (it.Next())
+                    {
+                        Field<Position> p = it.Field<Position>(0);
+                        Field<Velocity> v = it.Field<Velocity>(1);
+                        Field<Mass> m = it.Field<Mass>(2);
 
-                    if (it.IsSet(1) && it.IsSet(2))
-                        foreach (int i in it)
-                        {
-                            p[i].X += v[i].X * m[i].Value;
-                            p[i].Y += v[i].Y * m[i].Value;
-                        }
-                    else
-                        foreach (int i in it)
-                        {
-                            p[i].X++;
-                            p[i].Y++;
-                        }
+                        if (it.IsSet(1) && it.IsSet(2))
+                            foreach (int i in it)
+                            {
+                                p[i].X += v[i].X * m[i].Value;
+                                p[i].Y += v[i].Y * m[i].Value;
+                            }
+                        else
+                            foreach (int i in it)
+                            {
+                                p[i].X++;
+                                p[i].Y++;
+                            }
+                    }
                 });
 
             world.Progress();
@@ -501,11 +536,11 @@ namespace Flecs.NET.Tests.Cpp
             string name = "Hello";
 
             Routine system1 = world.Routine<Position>(name)
-                .Iter((Iter it, Field<Position> p) => { });
+                .Run((Iter it) => { while (it.Next()) { } });
 
             name = "World";
             Routine system2 = world.Routine<Position>(name)
-                .Iter((Iter it, Field<Position> p) => { });
+                .Run((Iter it) => { while (it.Next()) { } });
 
             Assert.True(system1.Id != system2.Id);
         }
@@ -516,7 +551,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Routine system1 = world.Routine<Position>("foo.bar")
-                .Iter((Iter it, Field<Position> p) => { });
+                .Run((Iter it) => { while (it.Next()) { } });
 
             Assert.Equal("bar", system1.Entity.Name());
 
@@ -537,7 +572,11 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             world.Routine()
-                .Iter((Iter it) => { count++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        count++;
+                });
 
             world.Progress();
 
@@ -552,7 +591,11 @@ namespace Flecs.NET.Tests.Cpp
             int invoked = 0;
 
             world.Routine<MyTag>()
-                .Iter((Iter it) => { invoked++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        invoked++;
+                });
 
             world.Entity()
                 .Add<MyTag>();
@@ -588,7 +631,7 @@ namespace Flecs.NET.Tests.Cpp
             Routine sys = world.Routine()
                 .Kind(0)
                 .Interval(1.0f)
-                .Iter((Iter it) => { });
+                .Run((Iter it) => { });
 
             float i = sys.Interval();
             Assert.Equal(1.0f, i);
@@ -747,20 +790,20 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine sys = world.Routine<Position>()
-                .Each((Entity e, ref Position p) =>
-                {
-                    // Not used
-                });
+                .Each((Entity e, ref Position p) => { });
 
             Query q = sys.Query();
 
-            q.Iter((Iter it) =>
+            q.Run((Iter it) =>
             {
-                Field<Position> pos = it.Field<Position>(0);
-                foreach (int i in it)
+                while (it.Next())
                 {
-                    Assert.Equal(i, pos[i].X);
-                    count++;
+                    Field<Position> pos = it.Field<Position>(0);
+                    foreach (int i in it)
+                    {
+                        Assert.Equal(i, pos[i].X);
+                        count++;
+                    }
                 }
             });
 
@@ -780,7 +823,6 @@ namespace Flecs.NET.Tests.Cpp
                 .Each((Entity e, ref Position p) =>
                 {
                     e.Add<Velocity>();
-                    // Add is deferred
                     Assert.True(!e.Has<Velocity>());
                 });
 
@@ -804,7 +846,6 @@ namespace Flecs.NET.Tests.Cpp
                 .Each((Entity e, ref Position p) =>
                 {
                     e.Destruct();
-                    // Delete is deferred
                     Assert.True(e.IsAlive());
                 });
 
@@ -872,12 +913,17 @@ namespace Flecs.NET.Tests.Cpp
             Entity e3 = world.Entity().Set(new Position(2, 0));
 
             world.Routine<Position>()
-                .Iter((Iter it, Field<Position> p) =>
+                .Run((Iter it) =>
                 {
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        it.Entity(i).Add<Velocity>();
-                        Assert.True(!it.Entity(i).Has<Velocity>());
+                        Field<Position> p = it.Field<Position>(0);
+
+                        foreach (int i in it)
+                        {
+                            it.Entity(i).Add<Velocity>();
+                            Assert.True(!it.Entity(i).Has<Velocity>());
+                        }
                     }
                 });
 
@@ -898,13 +944,17 @@ namespace Flecs.NET.Tests.Cpp
             Entity e3 = world.Entity().Set(new Position(2, 0));
 
             world.Routine<Position>()
-                .Iter((Iter it, Field<Position> p) =>
+                .Run((Iter it) =>
                 {
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        it.Entity(i).Destruct();
-                        // Delete is deferred
-                        Assert.True(it.Entity(i).IsAlive());
+                        Field<Position> p = it.Field<Position>(0);
+
+                        foreach (int i in it)
+                        {
+                            it.Entity(i).Destruct();
+                            Assert.True(it.Entity(i).IsAlive());
+                        }
                     }
                 });
 
@@ -925,9 +975,15 @@ namespace Flecs.NET.Tests.Cpp
             Entity e3 = world.Entity().Set(new EntityWrapper(world.Entity()));
 
             world.Routine<EntityWrapper>()
-                .Iter((Iter it, Field<EntityWrapper> c) =>
+                .Run((Iter it) =>
                 {
-                    foreach (int i in it) c[i].Value.Mut(it).Add<Position>();
+                    while (it.Next())
+                    {
+                        Field<EntityWrapper> c = it.Field<EntityWrapper>(0);
+
+                        foreach (int i in it)
+                            c[i].Value.Mut(it).Add<Position>();
+                    }
                 });
 
             world.Progress();
@@ -947,12 +1003,19 @@ namespace Flecs.NET.Tests.Cpp
             Entity e3 = world.Entity().Set(new Position(0, 0));
 
             world.Routine<Position>()
-                .Iter((Iter it, Field<Position> p) =>
+                .Run((Iter it) =>
                 {
-                    foreach (int i in it)
-                        it.Entity(i).Set(new EntityWrapper(
-                            it.World().Entity().Add<Velocity>()
-                        ));
+                    while (it.Next())
+                    {
+                        Field<Position> p = it.Field<Position>(0);
+
+                        foreach (int i in it)
+                        {
+                            it.Entity(i).Set(new EntityWrapper(
+                                it.World().Entity().Add<Velocity>()
+                            ));
+                        }
+                    }
                 });
 
             world.Progress();
@@ -979,14 +1042,21 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             world.Routine<Position>()
-                .Iter((Iter it, Field<Position> p) =>
+                .Run((Iter it) =>
                 {
-                    foreach (int i in it)
-                        it.Entity(i).Children((Entity child) =>
+                    while (it.Next())
+                    {
+                        Field<Position> p = it.Field<Position>(0);
+
+                        foreach (int i in it)
                         {
-                            child.Add<Velocity>();
-                            count++;
-                        });
+                            it.Entity(i).Children((Entity child) =>
+                            {
+                                child.Add<Velocity>();
+                                count++;
+                            });
+                        }
+                    }
                 });
 
             world.Progress();
@@ -1012,18 +1082,24 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             world.Routine<EntityWrapper>()
-                .Iter((Iter it, Field<EntityWrapper> c) =>
+                .Run((Iter it) =>
                 {
-                    foreach (int i in it)
-                        c[i].Value.Children((Entity child) =>
-                        {
-                            // Dummy code to ensure we can access the entity
-                            Position* p = child.GetPtr<Position>();
-                            Assert.Equal(1, p->X);
-                            Assert.Equal(0, p->Y);
+                    while (it.Next())
+                    {
+                        Field<EntityWrapper> c = it.Field<EntityWrapper>(0);
 
-                            count++;
-                        });
+                        foreach (int i in it)
+                        {
+                            c[i].Value.Children((Entity child) =>
+                            {
+                                Position* p = child.GetPtr<Position>();
+                                Assert.Equal(1, p->X);
+                                Assert.Equal(0, p->Y);
+
+                                count++;
+                            });
+                        }
+                    }
                 });
 
             world.Progress();
@@ -1052,27 +1128,51 @@ namespace Flecs.NET.Tests.Cpp
                 frameCount = 0;
 
             Routine root = world.Routine("root")
-                .Iter((Iter it) => { rootCount++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        rootCount++;
+                });
 
             Routine l1A = world.Routine("l1_a")
                 .Rate(root, 1)
-                .Iter((Iter it) => { l1ACount++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        l1ACount++;
+                });
 
             Routine l1B = world.Routine("l1_b")
                 .Rate(root, 2)
-                .Iter((Iter it) => { l1BCount++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        l1BCount++;
+                });
 
             world.Routine("l1_c")
                 .Rate(root, 3)
-                .Iter((Iter it) => { l1CCount++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        l1CCount++;
+                });
 
             world.Routine("l2_a")
                 .Rate(l1A, 2)
-                .Iter((Iter it) => { l2ACount++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        l2ACount++;
+                });
 
             world.Routine("l2_b")
                 .Rate(l1B, 2)
-                .Iter((Iter it) => { l2BCount++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        l2BCount++;
+                });
 
             for (int i = 0; i < 30; i++)
             {
@@ -1102,15 +1202,25 @@ namespace Flecs.NET.Tests.Cpp
                 frameCount = 0;
 
             Routine root = world.Routine("root")
-                .Iter((Iter it) => { rootCount++; });
+                .Run((Iter it) => {
+                    while (it.Next())
+                        rootCount++; });
 
             Routine l1 = world.Routine("l1")
                 .Rate(root, 2)
-                .Iter((Iter it) => { l1Count++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        l1Count++;
+                });
 
             world.Routine("l2")
                 .Rate(l1, 3)
-                .Iter((Iter it) => { l2Count++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        l2Count++;
+                });
 
             for (int i = 0; i < 12; i++)
             {
@@ -1121,7 +1231,7 @@ namespace Flecs.NET.Tests.Cpp
                 Assert.Equal(l2Count, frameCount / l2Mult);
             }
 
-            l1.Rate(4); // Run twice as slow
+            l1.Rate(4);
             l1Mult *= 2;
             l2Mult *= 2;
 
@@ -1183,12 +1293,17 @@ namespace Flecs.NET.Tests.Cpp
 
             Routine s = world.Routine<Value>()
                 .With<Tag>()
-                .Iter((Iter it, Field<Value> v) =>
+                .Run((Iter it) =>
                 {
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        v[i].Number++;
-                        it.Entity(i).Remove<Tag>();
+                        Field<Value> v = it.Field<Value>(0);
+
+                        foreach (int i in it)
+                        {
+                            v[i].Number++;
+                            it.Entity(i).Remove<Tag>();
+                        }
                     }
                 });
 
@@ -1227,28 +1342,37 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine()
                 .Kind(postFrame)
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Assert.Equal(2, count);
-                    count++;
+                    while (it.Next())
+                    {
+                        Assert.Equal(2, count);
+                        count++;
+                    }
                 })
                 .Entity.Add(tag);
 
             world.Routine()
                 .Kind(onFrame)
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Assert.Equal(1, count);
-                    count++;
+                    while (it.Next())
+                    {
+                        Assert.Equal(1, count);
+                        count++;
+                    }
                 })
                 .Entity.Add(tag);
 
             world.Routine()
                 .Kind(preFrame)
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Assert.Equal(0, count);
-                    count++;
+                    while (it.Next())
+                    {
+                        Assert.Equal(0, count);
+                        count++;
+                    }
                 })
                 .Entity.Add(tag);
 
@@ -1277,26 +1401,35 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine()
                 .Kind(tag)
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Assert.Equal(0, count);
-                    count++;
+                    while (it.Next())
+                    {
+                        Assert.Equal(0, count);
+                        count++;
+                    }
                 });
 
             world.Routine()
                 .Kind(tag)
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Assert.Equal(1, count);
-                    count++;
+                    while (it.Next())
+                    {
+                        Assert.Equal(1, count);
+                        count++;
+                    }
                 });
 
             world.Routine()
                 .Kind(tag)
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Assert.Equal(2, count);
-                    count++;
+                    while (it.Next())
+                    {
+                        Assert.Equal(2, count);
+                        count++;
+                    }
                 });
 
             Assert.Equal(0, count);
@@ -1631,16 +1764,23 @@ namespace Flecs.NET.Tests.Cpp
             Routine s = world.Routine<Self, Position, Velocity>()
                 .TermAt(2).Singleton()
                 .Instanced()
-                .Iter((Iter it, Field<Self> s, Field<Position> p, Field<Velocity> v) =>
+                .Run((Iter it) =>
                 {
-                    Assert.True(it.Count() > 1);
-
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        p[i].X += v[0].X;
-                        p[i].Y += v[0].Y;
-                        Assert.True(it.Entity(i) == s[i].Value);
-                        count++;
+                        Field<Self> s = it.Field<Self>(0);
+                        Field<Position> p = it.Field<Position>(1);
+                        Field<Velocity> v = it.Field<Velocity>(2);
+
+                        Assert.True(it.Count() > 1);
+
+                        foreach (int i in it)
+                        {
+                            p[i].X += v[0].X;
+                            p[i].Y += v[0].Y;
+                            Assert.True(it.Entity(i) == s[i].Value);
+                            count++;
+                        }
                     }
                 });
 
@@ -1705,25 +1845,32 @@ namespace Flecs.NET.Tests.Cpp
 
             Routine s = world.Routine<Self, Position, Velocity>()
                 .Instanced()
-                .Iter((Iter it, Field<Self> s, Field<Position> p, Field<Velocity> v) =>
+                .Run((Iter it) =>
                 {
-                    Assert.True(it.Count() > 1);
-
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        if (it.IsSelf(2))
-                        {
-                            p[i].X += v[i].X;
-                            p[i].Y += v[i].Y;
-                        }
-                        else
-                        {
-                            p[i].X += v[0].X;
-                            p[i].Y += v[0].Y;
-                        }
+                        Field<Self> s = it.Field<Self>(0);
+                        Field<Position> p = it.Field<Position>(1);
+                        Field<Velocity> v = it.Field<Velocity>(2);
 
-                        Assert.True(it.Entity(i) == s[i].Value);
-                        count++;
+                        Assert.True(it.Count() > 1);
+
+                        foreach (int i in it)
+                        {
+                            if (it.IsSelf(2))
+                            {
+                                p[i].X += v[i].X;
+                                p[i].Y += v[i].Y;
+                            }
+                            else
+                            {
+                                p[i].X += v[0].X;
+                                p[i].Y += v[0].Y;
+                            }
+
+                            Assert.True(it.Entity(i) == s[i].Value);
+                            count++;
+                        }
                     }
                 });
 
@@ -1799,16 +1946,23 @@ namespace Flecs.NET.Tests.Cpp
 
             Routine s = world.Routine<Self, Position, Velocity>()
                 .TermAt(2).Singleton()
-                .Iter((Iter it, Field<Self> s, Field<Position> p, Field<Velocity> v) =>
+                .Run((Iter it) =>
                 {
-                    Assert.True(it.Count() == 1);
-
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        p[i].X += v[i].X;
-                        p[i].Y += v[i].Y;
-                        Assert.True(it.Entity(i) == s[i].Value);
-                        count++;
+                        Field<Self> s = it.Field<Self>(0);
+                        Field<Position> p = it.Field<Position>(1);
+                        Field<Velocity> v = it.Field<Velocity>(2);
+
+                        Assert.True(it.Count() == 1);
+
+                        foreach (int i in it)
+                        {
+                            p[i].X += v[i].X;
+                            p[i].Y += v[i].Y;
+                            Assert.True(it.Entity(i) == s[i].Value);
+                            count++;
+                        }
                     }
                 });
 
@@ -1872,14 +2026,21 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Routine s = world.Routine<Self, Position, Velocity>()
-                .Iter((Iter it, Field<Self> s, Field<Position> p, Field<Velocity> v) =>
+                .Run((Iter it) =>
                 {
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        p[i].X += v[i].X;
-                        p[i].Y += v[i].Y;
-                        Assert.True(it.Entity(i) == s[i].Value);
-                        count++;
+                        Field<Self> s = it.Field<Self>(0);
+                        Field<Position> p = it.Field<Position>(1);
+                        Field<Velocity> v = it.Field<Velocity>(2);
+
+                        foreach (int i in it)
+                        {
+                            p[i].X += v[i].X;
+                            p[i].Y += v[i].Y;
+                            Assert.True(it.Entity(i) == s[i].Value);
+                            count++;
+                        }
                     }
                 });
 
@@ -2035,7 +2196,11 @@ namespace Flecs.NET.Tests.Cpp
             int invoked = 0;
 
             Entity sys = world.Routine()
-                .Iter((Iter it) => { invoked++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        invoked++;
+                });
 
             Routine sysFromId = world.Routine(sys);
 
@@ -2087,7 +2252,7 @@ namespace Flecs.NET.Tests.Cpp
                 {
                     Position temp = p;
 
-                    q.Each(e, (ref Velocity v) =>
+                    q.Iter(e).Each((ref Velocity v) =>
                     {
                         temp.X += v.X;
                         temp.Y += v.Y;
@@ -2122,7 +2287,7 @@ namespace Flecs.NET.Tests.Cpp
                 {
                     Position temp = p;
 
-                    q.Each(it, (ref Velocity v) =>
+                    q.Iter(it).Each((ref Velocity v) =>
                     {
                         temp.X += v.X;
                         temp.Y += v.Y;
@@ -2157,7 +2322,7 @@ namespace Flecs.NET.Tests.Cpp
                 {
                     Position temp = p;
 
-                    q.Each(it.World(), (ref Velocity v) =>
+                    q.Iter(it.World()).Each((ref Velocity v) =>
                     {
                         temp.X += v.X;
                         temp.Y += v.Y;
@@ -2192,12 +2357,17 @@ namespace Flecs.NET.Tests.Cpp
                 {
                     Position temp = p;
 
-                    q.Iter(e, (Iter it, Field<Velocity> v) =>
+                    q.Iter(e).Run((Iter it) =>
                     {
-                        foreach (int i in it)
+                        while (it.Next())
                         {
-                            temp.X += v[i].X;
-                            temp.Y += v[i].Y;
+                            Field<Velocity> v = it.Field<Velocity>(0);
+
+                            foreach (int i in it)
+                            {
+                                temp.X += v[i].X;
+                                temp.Y += v[i].Y;
+                            }
                         }
                     });
 
@@ -2230,12 +2400,17 @@ namespace Flecs.NET.Tests.Cpp
                 {
                     Position temp = p;
 
-                    q.Iter(it, (Iter it, Field<Velocity> v) =>
+                    q.Iter(it).Run((Iter it) =>
                     {
-                        foreach (int i in it)
+                        while (it.Next())
                         {
-                            temp.X += v[i].X;
-                            temp.Y += v[i].Y;
+                            Field<Velocity> v = it.Field<Velocity>(0);
+
+                            foreach (int i in it)
+                            {
+                                temp.X += v[i].X;
+                                temp.Y += v[i].Y;
+                            }
                         }
                     });
 
@@ -2268,12 +2443,17 @@ namespace Flecs.NET.Tests.Cpp
                 {
                     Position temp = p;
 
-                    q.Iter(it.World(), (Iter it, Field<Velocity> v) =>
+                    q.Iter(it.World()).Run((Iter it) =>
                     {
-                        foreach (int i in it)
+                        while (it.Next())
                         {
-                            temp.X += v[i].X;
-                            temp.Y += v[i].Y;
+                            Field<Velocity> v = it.Field<Velocity>(0);
+
+                            foreach (int i in it)
+                            {
+                                temp.X += v[i].X;
+                                temp.Y += v[i].Y;
+                            }
                         }
                     });
 
@@ -2287,44 +2467,39 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(22, p->Y);
         }
 
-        // TODO: Doesn't work in release mode.
-        // [Fact]
-        // private void RunCallback()
-        // {
-        //     using World world = World.Create();
-        //
-        //     Entity entity = world.Entity()
-        //         .Set(new Position(10, 20))
-        //         .Set(new Velocity(1, 2));
-        //
-        //     world.Routine<Position, Velocity>()
-        //         .Run((ecs_iter_t* it) =>
-        //         {
-        //             while (ecs_iter_next(it) == 1)
-        //             {
-        //                 Ecs.IterAction callback = Marshal.GetDelegateForFunctionPointer<Ecs.IterAction>(it->callback);
-        //                 callback(it);
-        //             }
-        //         })
-        //         .Iter((Iter it, Field<Position> p, Field<Velocity> v) =>
-        //         {
-        //             foreach (int i in it)
-        //             {
-        //                 p[i].X += v[i].X;
-        //                 p[i].Y += v[i].Y;
-        //             }
-        //         });
-        //
-        //     world.Progress();
-        //
-        //     Position* p = entity.GetPtr<Position>();
-        //     Assert.Equal(11, p->X);
-        //     Assert.Equal(22, p->Y);
-        //
-        //     Velocity* v = entity.GetPtr<Velocity>();
-        //     Assert.Equal(1, v->X);
-        //     Assert.Equal(2, v->Y);
-        // }
+        [Fact]
+        private void RunCallback()
+        {
+            using World world = World.Create();
+
+            Entity entity = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            world.Routine<Position, Velocity>()
+                .Run(
+                    (Iter it) =>
+                    {
+                        while (it.Next())
+                            it.Callback();
+                    },
+                    (ref Position p, ref Velocity v) =>
+                    {
+                            p.X += v.X;
+                            p.Y += v.Y;
+                    }
+                );
+
+            world.Progress();
+
+            Position* p = entity.GetPtr<Position>();
+            Assert.Equal(11, p->X);
+            Assert.Equal(22, p->Y);
+
+            Velocity* v = entity.GetPtr<Velocity>();
+            Assert.Equal(1, v->X);
+            Assert.Equal(2, v->Y);
+        }
 
         [Fact]
         private void StartupSystem()
@@ -2335,18 +2510,24 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine()
                 .Kind(Ecs.OnStart)
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Assert.True(it.DeltaTime() == 0);
-                    countA++;
+                    while (it.Next())
+                    {
+                        Assert.True(it.DeltaTime() == 0);
+                        countA++;
+                    }
                 });
 
             world.Routine()
                 .Kind(Ecs.OnUpdate)
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Assert.True(it.DeltaTime() != 0);
-                    countB++;
+                    while (it.Next())
+                    {
+                        Assert.True(it.DeltaTime() != 0);
+                        countB++;
+                    }
                 });
 
             world.Progress();
@@ -2372,11 +2553,19 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine()
                 .TickSource(t)
-                .Iter((Iter it) => { sysAInvoked++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        sysAInvoked++;
+                });
 
             world.Routine()
                 .TickSource(t)
-                .Iter((Iter it) => { sysBInvoked++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        sysBInvoked++;
+                });
 
             world.Progress(1.0f);
             Assert.Equal(0, sysAInvoked);
@@ -2402,11 +2591,19 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine()
                 .TickSource(t)
-                .Iter((Iter it) => { sysAInvoked++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        sysAInvoked++;
+                });
 
             world.Routine()
                 .TickSource(t)
-                .Iter((Iter it) => { sysBInvoked++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        sysBInvoked++;
+                });
 
             world.Progress(1.0f);
             Assert.Equal(0, sysAInvoked);
@@ -2433,11 +2630,19 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine()
                 .TickSource(t3)
-                .Iter((Iter it) => { sysAInvoked++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        sysAInvoked++;
+                });
 
             world.Routine()
                 .TickSource(t6)
-                .Iter((Iter it) => { sysBInvoked++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        sysBInvoked++;
+                });
 
             world.Progress(1.0f);
             Assert.Equal(0, sysAInvoked);
@@ -2533,7 +2738,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity s1 = world.Routine()
                 .Interval(1.0f)
-                .Iter((Iter it) => { });
+                .Run((Iter it) => { while (it.Next()) { } });
 
             {
                 EcsTimer* t = s1.GetPtr<EcsTimer>();
@@ -2545,7 +2750,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity s2 = world.Routine()
                 .Interval(1.0f)
-                .Iter((Iter it) => { });
+                .Run((Iter it) => { while (it.Next()) { } });
 
             {
                 EcsTimer* t = s1.GetPtr<EcsTimer>();
@@ -2571,7 +2776,11 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine()
                 .TickSource<TagA>()
-                .Iter((Iter it) => { sysInvoked++; });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        sysInvoked++;
+                });
 
             world.Progress(1.0f);
             Assert.Equal(0, sysInvoked);
@@ -2592,7 +2801,11 @@ namespace Flecs.NET.Tests.Cpp
 
             bool ranTest = false;
 
-            world.Routine().Kind(PipelineStepEnum.CustomStep).Iter((Iter it) => { ranTest = true; });
+            world.Routine().Kind(PipelineStepEnum.CustomStep).Run((Iter it) =>
+            {
+                while (it.Next())
+                    ranTest = true;
+            });
 
             world.Progress();
             Assert.True(ranTest);
@@ -2608,7 +2821,11 @@ namespace Flecs.NET.Tests.Cpp
 
             bool ranTest = false;
 
-            world.Routine().Kind(PipelineStepEnum.CustomStep2).Iter((Iter it) => { ranTest = true; });
+            world.Routine().Kind(PipelineStepEnum.CustomStep2).Run((Iter it) =>
+            {
+                while (it.Next())
+                    ranTest = true;
+            });
 
             world.Progress();
             Assert.True(ranTest);

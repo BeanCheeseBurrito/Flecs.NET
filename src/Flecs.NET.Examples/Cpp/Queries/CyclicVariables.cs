@@ -48,7 +48,7 @@ public static class Cpp_Queries_CyclicVariables
 
         // Because the query doesn't use the This variable we cannot use "each"
         // which iterates the entities array. Instead we can use iter like this:
-        q.Iter((Iter it) =>
+        q.Each((Iter it, int i) =>
         {
             Entity x = it.GetVar(xVar);
             Entity y = it.GetVar(yVar);

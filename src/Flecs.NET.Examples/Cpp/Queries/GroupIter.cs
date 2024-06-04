@@ -69,20 +69,26 @@ public static class Cpp_Queries_GroupIter
 
         // Iterate all tables
         Console.WriteLine("All tables:");
-        q.Iter((Iter it) =>
+        q.Run((Iter it) =>
         {
-            Entity group = it.World().Entity(it.GroupId());
-            Console.WriteLine($" - Group {group.Path()}: Table [{it.Table()}]");
+            while (it.Next())
+            {
+                Entity group = it.World().Entity(it.GroupId());
+                Console.WriteLine($" - Group {group.Path()}: Table [{it.Table()}]");
+            }
         });
 
         Console.WriteLine();
 
         // Only iterate entities in cell 10
         Console.WriteLine("Tables for cell 1_0:");
-        q.SetGroup<Cell10>().Iter((Iter it) =>
+        q.SetGroup<Cell10>().Run((Iter it) =>
         {
-            Entity group = it.World().Entity(it.GroupId());
-            Console.WriteLine($" - Group {group.Path()}: Table [{it.Table()}]");
+            while (it.Next())
+            {
+                Entity group = it.World().Entity(it.GroupId());
+                Console.WriteLine($" - Group {group.Path()}: Table [{it.Table()}]");
+            }
         });
     }
 }

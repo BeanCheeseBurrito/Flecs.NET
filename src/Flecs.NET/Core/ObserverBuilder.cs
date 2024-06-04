@@ -13,7 +13,6 @@ namespace Flecs.NET.Core
 
         internal ecs_observer_desc_t ObserverDesc;
         internal QueryBuilder QueryBuilder;
-        internal BindingContext.RunIterContext Context;
         internal int EventCount;
 
         /// <summary>
@@ -34,7 +33,6 @@ namespace Flecs.NET.Core
         {
             _world = world;
             ObserverDesc = default;
-            Context = default;
             EventCount = default;
             QueryBuilder = new QueryBuilder(world);
         }
@@ -62,7 +60,6 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Dispose()
         {
-            Context.Dispose();
             QueryBuilder.Dispose();
         }
 
@@ -113,19 +110,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Set observer run callback.
-        /// </summary>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public ref ObserverBuilder Run(Ecs.IterAction action)
-        {
-            BindingContext.SetCallback(ref Context.Run, action);
-            ObserverDesc.run = Context.Run.Function;
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Creates a routine with the provided Iter callback.
+        ///     Creates an observer with the provided Iter callback.
         /// </summary>
         /// <param name="callback"></param>
         /// <returns></returns>
@@ -135,7 +120,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates a routine with the provided Iter callback.
+        ///     Creates an observer with the provided Iter callback.
         /// </summary>
         /// <param name="callback"></param>
         /// <returns></returns>
@@ -145,7 +130,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates a routine with the provided Each callback.
+        ///     Creates an observer with the provided Each callback.
         /// </summary>
         /// <param name="callback"></param>
         /// <returns></returns>
@@ -155,13 +140,67 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates a routine with the provided Each callback.
+        ///     Creates an observer with the provided Each callback.
         /// </summary>
         /// <param name="callback"></param>
         /// <returns></returns>
         public Observer Each(Ecs.EachIndexCallback callback)
         {
             return Instanced().Build(ref callback, BindingContext.EachIndexCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <returns>Reference to self.</returns>
+        public Observer Run(Ecs.IterCallback run)
+        {
+            return PopulateRun(run).Init();
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>An observer.</returns>
+        public Observer Run(Ecs.IterCallback run, Action callback)
+        {
+            return PopulateRun(run).Build(ref callback, BindingContext.ActionCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>An observer.</returns>
+        public Observer Run(Ecs.IterCallback run, Ecs.IterCallback callback)
+        {
+            return PopulateRun(run).Build(ref callback, BindingContext.IterCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>An observer.</returns>
+        public Observer Run(Ecs.IterCallback run, Ecs.EachEntityCallback callback)
+        {
+            return PopulateRun(run).Build(ref callback, BindingContext.EachEntityCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>An observer.</returns>
+        public Observer Run(Ecs.IterCallback run, Ecs.EachIndexCallback callback)
+        {
+            return PopulateRun(run).Build(ref callback, BindingContext.EachIndexCallbackPointer);
         }
 
 #if NET5_0_OR_GREATER
@@ -204,25 +243,138 @@ namespace Flecs.NET.Core
         {
             return Instanced().Build((IntPtr)callback, BindingContext.EachIndexCallbackPointer);
         }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>An observer.</returns>
+        public Observer Run(delegate*<Iter, void> run, Action callback)
+        {
+            return PopulateRun((IntPtr)run).Build(ref callback, BindingContext.ActionCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>An observer.</returns>
+        public Observer Run(delegate*<Iter, void> run, Ecs.IterCallback callback)
+        {
+            return PopulateRun((IntPtr)run).Build(ref callback, BindingContext.IterCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>An observer.</returns>
+        public Observer Run(delegate*<Iter, void> run, Ecs.EachEntityCallback callback)
+        {
+            return PopulateRun((IntPtr)run).Build(ref callback, BindingContext.EachEntityCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>An observer.</returns>
+        public Observer Run(delegate*<Iter, void> run, Ecs.EachIndexCallback callback)
+        {
+            return PopulateRun((IntPtr)run).Build(ref callback, BindingContext.EachIndexCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>An observer.</returns>
+        public Observer Run(Ecs.IterCallback run, delegate*<void> callback)
+        {
+            return PopulateRun(run).Build((IntPtr)callback, BindingContext.ActionCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>An observer.</returns>
+        public Observer Run(Ecs.IterCallback run, delegate*<Iter, void> callback)
+        {
+            return PopulateRun(run).Build((IntPtr)callback, BindingContext.IterCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>An observer.</returns>
+        public Observer Run(Ecs.IterCallback run, delegate*<Entity, void> callback)
+        {
+            return PopulateRun(run).Build((IntPtr)callback, BindingContext.EachEntityCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>An observer.</returns>
+        public Observer Run(Ecs.IterCallback run, delegate*<Iter, int, void> callback)
+        {
+            return PopulateRun(run).Build((IntPtr)callback, BindingContext.EachIndexCallbackPointer);
+        }
 #endif
 
         private Observer Build(IntPtr userCallback, IntPtr internalCallback)
         {
-            BindingContext.SetCallback(ref Context.Iterator, userCallback);
-            return Build(internalCallback);
+            BindingContext.IteratorContext context = default;
+            BindingContext.SetCallback(ref context.Callback, userCallback);
+            ObserverDesc.callback = internalCallback;
+            ObserverDesc.callback_ctx = Memory.Alloc(context);
+            ObserverDesc.callback_ctx_free = BindingContext.IteratorContextFreePointer;
+            return Init();
         }
 
         private Observer Build<T>(ref T userCallback, IntPtr internalCallback) where T : Delegate
         {
-            BindingContext.SetCallback(ref Context.Iterator, userCallback, false);
-            return Build(internalCallback);
+            BindingContext.IteratorContext context = default;
+            BindingContext.SetCallback(ref context.Callback, userCallback, false);
+            ObserverDesc.callback = internalCallback;
+            ObserverDesc.callback_ctx = Memory.Alloc(context);
+            ObserverDesc.callback_ctx_free = BindingContext.IteratorContextFreePointer;
+            return Init();
         }
 
-        private Observer Build(IntPtr internalCallback)
+        private ref ObserverBuilder PopulateRun(Ecs.IterCallback callback)
         {
-            ObserverDesc.callback = internalCallback;
-            ObserverDesc.callback_ctx = Memory.Alloc(Context);
-            ObserverDesc.callback_ctx_free = BindingContext.RunIterContextFreePointer;
+            BindingContext.RunContext context = default;
+            BindingContext.SetCallback(ref context.Callback, callback, false);
+            ObserverDesc.run = BindingContext.RunCallbackPointer;
+            ObserverDesc.run_ctx = Memory.Alloc(context);
+            ObserverDesc.run_ctx_free = BindingContext.RunContextFreePointer;
+            return ref this;
+        }
+
+        private ref ObserverBuilder PopulateRun(IntPtr callback)
+        {
+            BindingContext.RunContext context = default;
+            BindingContext.SetCallback(ref context.Callback, callback);
+            ObserverDesc.run = BindingContext.RunCallbackPointer;
+            ObserverDesc.run_ctx = Memory.Alloc(context);
+            ObserverDesc.run_ctx_free = BindingContext.RunContextFreePointer;
+            return ref this;
+        }
+
+        private Observer Init()
+        {
             ObserverDesc.query = QueryBuilder.Desc;
             ObserverDesc.query.binding_ctx = Memory.Alloc(QueryBuilder.Context);
             ObserverDesc.query.binding_ctx_free = BindingContext.QueryContextFreePointer;

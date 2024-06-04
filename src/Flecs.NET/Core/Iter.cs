@@ -13,12 +13,14 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     Class for iterating over query results.
     /// </summary>
-    public readonly unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>
+    public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposable
     {
+        private ecs_iter_t* _handle;
+
         /// <summary>
         ///     Reference to handle.
         /// </summary>
-        public ecs_iter_t* Handle { get; }
+        public ref ecs_iter_t* Handle => ref _handle;
 
         /// <summary>
         ///     Creates an iter wrapper using the provided handle.
@@ -26,7 +28,19 @@ namespace Flecs.NET.Core
         /// <param name="iter"></param>
         public Iter(ecs_iter_t* iter)
         {
-            Handle = iter;
+            _handle = iter;
+        }
+
+        /// <summary>
+        ///     Calls <see cref="ecs_iter_fini"/>.
+        /// </summary>
+        public void Dispose()
+        {
+            if (Handle == null)
+                return;
+
+            ecs_iter_fini(Handle);
+            Handle = null;
         }
 
         /// <summary>
@@ -384,6 +398,49 @@ namespace Flecs.NET.Core
             return new Entity(Handle->world, ecs_iter_get_var(Handle, varId));
         }
 
+        /// <summary>
+        ///     Progress iterator.
+        /// </summary>
+        /// <returns>The result.</returns>
+        public bool Next()
+        {
+            if ((Handle->flags & EcsIterIsValid) != 0 && Handle->table != null)
+                Macros.TableUnlock(Handle->world, Handle->table);
+
+#if NET5_0_OR_GREATER
+            bool result = ((delegate*<ecs_iter_t*, byte>)Handle->next)(Handle) != 0;
+#else
+            bool result = Marshal.GetDelegateForFunctionPointer<Ecs.IterNextAction>(Handle->next)(Handle) != 0;
+#endif
+
+            Handle->flags |= EcsIterIsValid;
+
+            if (result && Handle->table != null)
+                Macros.TableLock(Handle->world, Handle->table);
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Forward to Each callback.
+        /// </summary>
+        public void Each()
+        {
+            Callback();
+        }
+
+        /// <summary>
+        ///     Forward to callback.
+        /// </summary>
+        public void Callback()
+        {
+#if NET5_0_OR_GREATER
+            ((delegate*<ecs_iter_t*, void>)Handle->callback)(Handle);
+#else
+            Marshal.GetDelegateForFunctionPointer<Ecs.IterAction>(Handle->callback)(Handle);
+#endif
+        }
+
         internal Field<T> GetField<T>(int index)
         {
             Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
@@ -492,7 +549,7 @@ namespace Flecs.NET.Core
     }
 
     // Flecs.NET Extensions
-    public readonly unsafe partial struct Iter
+    public unsafe partial struct Iter
     {
         /// <summary>
         ///     Get managed ref to the first element in a field.

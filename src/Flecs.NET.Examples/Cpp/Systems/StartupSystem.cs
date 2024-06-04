@@ -18,14 +18,14 @@ public static class Cpp_Systems_StartupSystem
         // Startup system
         world.Routine("Startup")
             .Kind(Ecs.OnStart)
-            .Iter((Iter it) =>
+            .Run((Iter it) =>
             {
                 Console.WriteLine(it.System().ToString());
             });
 
         // Regular system
         world.Routine("Update")
-            .Iter((Iter it) =>
+            .Run((Iter it) =>
             {
                 Console.WriteLine(it.System().ToString());
             });

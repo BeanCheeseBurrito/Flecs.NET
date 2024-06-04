@@ -38,7 +38,7 @@ public static class Cpp_Queries_Instancing
         // Create a query for Position, Velocity. We'll create a few entities that
         // have Velocity as owned and shared component.
         Query q = world.QueryBuilder<Position, Velocity>()
-            .TermAt(1).Self() // Position must always be owned by the entity
+            .TermAt(0).Self() // Position must always be owned by the entity
             .Instanced()      // Create instanced query
             .Build();
 
@@ -67,31 +67,37 @@ public static class Cpp_Queries_Instancing
         // to check whether a field is owned or not in order to know how to access
         // it. In the case of an owned field it is iterated as an array, whereas
         // in the case of a shared field, it is accessed as a pointer.
-        q.Iter((Iter it, Field<Position> p , Field<Velocity> v) =>
+        q.Run((Iter it) =>
         {
-            // Check if Velocity is owned, in which case it's accessed as array.
-            // Position will always be owned, since we set the term to Self.
-            if (it.IsSelf(2)) // Velocity is term 2
+            while (it.Next())
             {
-                Console.WriteLine("Velocity is owned");
+                Field<Position> p = it.Field<Position>(0);
+                Field<Velocity> v = it.Field<Velocity>(1);
 
-                foreach (int i in it)
+                // Check if Velocity is owned, in which case it's accessed as array.
+                // Position will always be owned, since we set the term to Self.
+                if (it.IsSelf(1)) // Velocity is term 2
                 {
-                    p[i].X += v[i].X;
-                    p[i].Y += v[i].Y;
-                    Console.WriteLine($"{it.Entity(i)}: ({p[i].X}, {p[i].Y})");
+                    Console.WriteLine("Velocity is owned");
+
+                    foreach (int i in it)
+                    {
+                        p[i].X += v[i].X;
+                        p[i].Y += v[i].Y;
+                        Console.WriteLine($"{it.Entity(i)}: ({p[i].X}, {p[i].Y})");
+                    }
                 }
-            }
-            // If Velocity is shared, access the field from the index 0.
-            else
-            {
-                Console.WriteLine("Velocity is shared");
-
-                foreach (int i in it)
+                // If Velocity is shared, access the field from the index 0.
+                else
                 {
-                    p[i].X += v[0].X;
-                    p[i].Y += v[0].Y;
-                    Console.WriteLine($"{it.Entity(i)}: ({p[i].X}, {p[i].Y})");
+                    Console.WriteLine("Velocity is shared");
+
+                    foreach (int i in it)
+                    {
+                        p[i].X += v[0].X;
+                        p[i].Y += v[0].Y;
+                        Console.WriteLine($"{it.Entity(i)}: ({p[i].X}, {p[i].Y})");
+                    }
                 }
             }
         });
