@@ -434,6 +434,7 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Callback()
         {
+            Ecs.Assert(Handle->callback != default, "Iter/Each callback is not set.");
 #if NET5_0_OR_GREATER
             ((delegate*<ecs_iter_t*, void>)Handle->callback)(Handle);
 #else
