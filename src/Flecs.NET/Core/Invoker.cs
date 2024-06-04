@@ -67,9 +67,8 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Run(ecs_iter_t* iter, Ecs.IterCallback callback)
         {
-            Iter it = new Iter(iter);
             iter->flags &= ~EcsIterIsValid;
-            callback(it);
+            callback(new Iter(iter));
         }
 
         /// <summary>
@@ -164,9 +163,8 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Run(ecs_iter_t* iter, delegate*<Iter, void> callback)
         {
-            Iter it = new Iter(iter);
             iter->flags &= ~EcsIterIsValid;
-            callback(it);
+            callback(new Iter(iter));
         }
 #endif
     }
