@@ -130,6 +130,16 @@ namespace Flecs.NET.Codegen
                 {{
                     {str}
                 }}
+
+                public unsafe partial struct PageIterable
+                {{
+                    {str}
+                }}
+
+                public unsafe partial struct WorkerIterable
+                {{
+                    {str}
+                }}
             ";
         }
 

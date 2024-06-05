@@ -342,7 +342,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Equals(IterIterable other)
         {
-            return Equals(_iter, other._iter);
+            return Equals(_iter, other._iter) && Equals(_iterableType, other._iterableType);
         }
 
         /// <summary>
@@ -361,7 +361,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return _iter.GetHashCode();
+            return HashCode.Combine(_iter.GetHashCode(), _iterableType.GetHashCode());
         }
 
         /// <summary>
@@ -444,6 +444,18 @@ namespace Flecs.NET.Core
         public IterIterable Iter(Entity entity)
         {
             return Iter(entity.CsWorld());
+        }
+
+        /// <inheritdoc cref="IIterable.Page(int, int)"/>
+        public PageIterable Page(int offset, int limit)
+        {
+            return new PageIterable(GetIter(), offset, limit);
+        }
+
+        /// <inheritdoc cref="IIterable.Worker(int, int)"/>
+        public WorkerIterable Worker(int index, int count)
+        {
+            return new WorkerIterable(GetIter(), index, count);
         }
 
         /// <inheritdoc cref="IIterable.Count()"/>

@@ -435,6 +435,18 @@ namespace Flecs.NET.Core
             return Iter(entity.CsWorld());
         }
 
+        /// <inheritdoc cref="IIterable.Page(int, int)"/>
+        public PageIterable Page(int offset, int limit)
+        {
+            return new PageIterable(GetIter(), offset, limit);
+        }
+
+        /// <inheritdoc cref="IIterable.Worker(int, int)"/>
+        public WorkerIterable Worker(int index, int count)
+        {
+            return new WorkerIterable(GetIter(), index, count);
+        }
+
         /// <inheritdoc cref="IIterable.Count()"/>
         public int Count()
         {

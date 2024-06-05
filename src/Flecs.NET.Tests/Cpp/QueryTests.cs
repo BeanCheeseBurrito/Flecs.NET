@@ -2896,57 +2896,57 @@ namespace Flecs.NET.Tests.Cpp
             action();
         }
 
-        // [Fact]
-        // private void PageIterCapturedQuery()
-        // {
-        //     using World world = World.Create();
-        //
-        //     Query q = world.Query<Position>();
-        //     world.Entity().Set(new Position(10, 20));
-        //     Entity e2 = world.Entity().Set(new Position(20, 30));
-        //     world.Entity().Set(new Position(10, 20));
-        //
-        //     Action action = () =>
-        //     {
-        //         int count = 0;
-        //         q.Iter().Page(1, 1).Each((Entity e, ref Position p) =>
-        //         {
-        //             Assert.True(e == e2);
-        //             Assert.Equal(20, p.X);
-        //             Assert.Equal(30, p.Y);
-        //             count++;
-        //         });
-        //         Assert.Equal(1, count);
-        //     };
-        //
-        //     action();
-        // }
+        [Fact]
+        private void PageIterCapturedQuery()
+        {
+            using World world = World.Create();
 
-        // [Fact]
-        // private void WorkerIterCapturedQuery()
-        // {
-        //     using World world = World.Create();
-        //
-        //     Query q = world.Query<Position>();
-        //     world.Entity().Set(new Position(10, 20));
-        //     Entity e2 = world.Entity().Set(new Position(20, 30));
-        //     world.Entity().Set(new Position(10, 20));
-        //
-        //     Action action = () =>
-        //     {
-        //         int count = 0;
-        //         q.Iter().Worker(1, 3).Each((Entity e, ref Position p) =>
-        //         {
-        //             Assert.True(e == e2);
-        //             Assert.Equal(20, p.X);
-        //             Assert.Equal(30, p.Y);
-        //             count++;
-        //         });
-        //         Assert.Equal(1, count);
-        //     };
-        //
-        //     action();
-        // }
+            Query q = world.Query<Position>();
+            world.Entity().Set(new Position(10, 20));
+            Entity e2 = world.Entity().Set(new Position(20, 30));
+            world.Entity().Set(new Position(10, 20));
+
+            Action action = () =>
+            {
+                int count = 0;
+                q.Iter().Page(1, 1).Each((Entity e, ref Position p) =>
+                {
+                    Assert.True(e == e2);
+                    Assert.Equal(20, p.X);
+                    Assert.Equal(30, p.Y);
+                    count++;
+                });
+                Assert.Equal(1, count);
+            };
+
+            action();
+        }
+
+        [Fact]
+        private void WorkerIterCapturedQuery()
+        {
+            using World world = World.Create();
+
+            Query q = world.Query<Position>();
+            world.Entity().Set(new Position(10, 20));
+            Entity e2 = world.Entity().Set(new Position(20, 30));
+            world.Entity().Set(new Position(10, 20));
+
+            Action action = () =>
+            {
+                int count = 0;
+                q.Iter().Worker(1, 3).Each((Entity e, ref Position p) =>
+                {
+                    Assert.True(e == e2);
+                    Assert.Equal(20, p.X);
+                    Assert.Equal(30, p.Y);
+                    count++;
+                });
+                Assert.Equal(1, count);
+            };
+
+            action();
+        }
 
         [Fact]
         private void IterEntities()

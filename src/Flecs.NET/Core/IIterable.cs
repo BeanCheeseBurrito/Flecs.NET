@@ -8,6 +8,26 @@ namespace Flecs.NET.Core
     public unsafe interface IIterable
     {
         /// <summary>
+        ///     Iterate a query.
+        /// </summary>
+        /// <returns>An iterator.</returns>
+        public ecs_iter_t GetIter(ecs_world_t* world = null);
+
+        /// <summary>
+        ///     Progress iterator.
+        /// </summary>
+        /// <param name="it">The iterator.</param>
+        /// <returns>The result.</returns>
+        public bool GetNext(ecs_iter_t* it);
+
+        /// <summary>
+        ///     Progress instanced iterator.
+        /// </summary>
+        /// <param name="it">The iterator.</param>
+        /// <returns>The result.</returns>
+        public bool GetNextInstanced(ecs_iter_t* it);
+
+        /// <summary>
         ///     Create an iterator object that can be modified before iterating.
         /// </summary>
         /// <returns>An iterable iter.</returns>
@@ -24,6 +44,22 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <returns>An iterable iter.</returns>
         public IterIterable Iter(Entity entity);
+
+        /// <summary>
+        ///     Create an iterator that limits the returned entities with offset/limit.
+        /// </summary>
+        /// <param name="offset">The number of entities to skip.</param>
+        /// <param name="limit">The maximum number of entities to return.</param>
+        /// <returns>Iterable that can be iterated with Each/Iter.</returns>
+        public PageIterable Page(int offset, int limit);
+
+        /// <summary>
+        ///     Create an iterator that divides the number of matched entities across a number of resources.
+        /// </summary>
+        /// <param name="index">The index of the current resource.</param>
+        /// <param name="count">The total number of resources to divide entities between.</param>
+        /// <returns>Iterable that can be iterated with Each/Iter.</returns>
+        public WorkerIterable Worker(int index, int count);
 
         /// <summary>
         ///     Return number of entities matched by iterable.
@@ -96,26 +132,5 @@ namespace Flecs.NET.Core
         /// <typeparam name="T">The group type.</typeparam>
         /// <returns>An iterable iter.</returns>
         public IterIterable SetGroup<T>();
-
-        /// <summary>
-        ///     Iterate a query.
-        /// </summary>
-        /// <returns>An iterator.</returns>
-        public ecs_iter_t GetIter(ecs_world_t* world = null);
-
-        /// <summary>
-        ///     Progress iterator.
-        /// </summary>
-        /// <param name="it">The iterator.</param>
-        /// <returns>The result.</returns>
-        public bool GetNext(ecs_iter_t* it);
-
-        /// <summary>
-        ///     Progress instanced iterator.
-        /// </summary>
-        /// <param name="it">The iterator.</param>
-        /// <returns>The result.</returns>
-        public bool GetNextInstanced(ecs_iter_t* it);
-
     }
 }
