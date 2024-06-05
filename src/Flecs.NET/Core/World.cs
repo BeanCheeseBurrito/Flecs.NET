@@ -2613,7 +2613,7 @@ namespace Flecs.NET.Core
         /// <param name="value"></param>
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
-        public void Each<T>(T value, Ecs.EachEntityCallback<T> callback) where T : Enum
+        public void Each<T>(T value, Ecs.EachEntityRefCallback<T> callback) where T : Enum
         {
             Each(Type<T>.Id(Handle, value), callback);
         }
@@ -2624,7 +2624,7 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         /// <param name="callback"></param>
         /// <typeparam name="TFirst"></typeparam>
-        public void Each<TFirst>(ulong second, Ecs.EachEntityCallback<TFirst> callback)
+        public void Each<TFirst>(ulong second, Ecs.EachEntityRefCallback<TFirst> callback)
         {
             ecs_iter_t it = ecs_each_id(Handle, Macros.Pair<TFirst>(second, Handle));
             while (ecs_each_next(&it) == 1)
@@ -2648,7 +2648,7 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
-        public void Each<TFirst, TSecond>(Ecs.EachEntityCallback<TFirst> callback)
+        public void Each<TFirst, TSecond>(Ecs.EachEntityRefCallback<TFirst> callback)
         {
             Each(Type<TSecond>.Id(Handle), callback);
         }
@@ -2659,7 +2659,7 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
-        public void Each<TFirst, TSecond>(Ecs.EachEntityCallback<TSecond> callback)
+        public void Each<TFirst, TSecond>(Ecs.EachEntityRefCallback<TSecond> callback)
         {
             EachSecond(Type<TFirst>.Id(Handle), callback);
         }
@@ -2671,7 +2671,7 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
-        public void Each<TFirst, TSecond>(TSecond second, Ecs.EachEntityCallback<TFirst> callback) where TSecond : Enum
+        public void Each<TFirst, TSecond>(TSecond second, Ecs.EachEntityRefCallback<TFirst> callback) where TSecond : Enum
         {
             Each(Type<TSecond>.Id(Handle, second), callback);
         }
@@ -2683,7 +2683,7 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
-        public void Each<TFirst, TSecond>(TFirst first, Ecs.EachEntityCallback<TSecond> callback) where TFirst : Enum
+        public void Each<TFirst, TSecond>(TFirst first, Ecs.EachEntityRefCallback<TSecond> callback) where TFirst : Enum
         {
             EachSecond(Type<TFirst>.Id(Handle, first), callback);
         }
@@ -2694,7 +2694,7 @@ namespace Flecs.NET.Core
         /// <param name="first"></param>
         /// <param name="callback"></param>
         /// <typeparam name="TSecond"></typeparam>
-        public void EachSecond<TSecond>(ulong first, Ecs.EachEntityCallback<TSecond> callback)
+        public void EachSecond<TSecond>(ulong first, Ecs.EachEntityRefCallback<TSecond> callback)
         {
             ecs_iter_t it = ecs_each_id(Handle, Macros.PairSecond<TSecond>(first, Handle));
             while (ecs_each_next(&it) == 1)

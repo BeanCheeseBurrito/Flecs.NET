@@ -46,7 +46,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="iter"></param>
         /// <param name="callback"></param>
-        public static void Each(ecs_iter_t* iter, Ecs.EachIndexCallback callback)
+        public static void Each(ecs_iter_t* iter, Ecs.EachIterCallback callback)
         {
             iter->flags |= EcsIterCppEach;
 
@@ -87,7 +87,7 @@ namespace Flecs.NET.Core
         /// <param name="iter"></param>
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
-        public static void Observe<T>(ecs_iter_t* iter, Ecs.EachCallback<T> callback)
+        public static void Observe<T>(ecs_iter_t* iter, Ecs.EachRefCallback<T> callback)
         {
             Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
             callback(ref Managed.GetTypeRef<T>(iter->param));
@@ -99,7 +99,7 @@ namespace Flecs.NET.Core
         /// <param name="iter"></param>
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
-        public static void Observe<T>(ecs_iter_t* iter, Ecs.EachEntityCallback<T> callback)
+        public static void Observe<T>(ecs_iter_t* iter, Ecs.EachEntityRefCallback<T> callback)
         {
             Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
             callback(new Entity(iter->world, ecs_field_src(iter, 0)), ref Managed.GetTypeRef<T>(iter->param));

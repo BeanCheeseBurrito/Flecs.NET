@@ -3244,7 +3244,7 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref Entity Observe<T>(Ecs.EachCallback<T> callback)
+        public ref Entity Observe<T>(Ecs.EachRefCallback<T> callback)
         {
             return ref ObserveInternal(Type<T>.Id(World), callback, BindingContext<T>.EntityObserverEachPointer);
         }
@@ -3255,7 +3255,7 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref Entity Observe<T>(Ecs.EachEntityCallback<T> callback)
+        public ref Entity Observe<T>(Ecs.EachEntityRefCallback<T> callback)
         {
             return ref ObserveInternal(Type<T>.Id(World), callback, BindingContext<T>.EntityObserverEachEntityPointer);
         }

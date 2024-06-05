@@ -111,9 +111,9 @@ namespace Flecs.NET.Codegen
                     {GenerateIterableCallbackFunctions(false, $"Iter<{typeParams}>", $"Ecs.IterFieldCallback<{typeParams}>", $"delegate*<Iter, {fieldParams}, void>", "GetNext")}
                     {GenerateIterableCallbackFunctions(false, $"Iter<{typeParams}>", $"Ecs.IterSpanCallback<{typeParams}>", $"delegate*<Iter, {spanParams}, void>", "GetNext", typeConstraints)}
                     {GenerateIterableCallbackFunctions(false, $"Iter<{typeParams}>", $"Ecs.IterPointerCallback<{typeParams}>", $"delegate*<Iter, {pointerParams}, void>", "GetNext", typeConstraints)}
-                    {GenerateIterableCallbackFunctions(true, $"Each<{typeParams}>", $"Ecs.EachCallback<{typeParams}>", $"delegate*<{refParams}, void>", "GetNextInstanced")} 
-                    {GenerateIterableCallbackFunctions(true, $"Each<{typeParams}>", $"Ecs.EachEntityCallback<{typeParams}>", $"delegate*<Entity, {refParams}, void>", "GetNextInstanced")} 
-                    {GenerateIterableCallbackFunctions(true, $"Each<{typeParams}>", $"Ecs.EachIndexCallback<{typeParams}>", $"delegate*<Iter, int, {refParams}, void>", "GetNextInstanced")}
+                    {GenerateIterableCallbackFunctions(true, $"Each<{typeParams}>", $"Ecs.EachRefCallback<{typeParams}>", $"delegate*<{refParams}, void>", "GetNextInstanced")} 
+                    {GenerateIterableCallbackFunctions(true, $"Each<{typeParams}>", $"Ecs.EachEntityRefCallback<{typeParams}>", $"delegate*<Entity, {refParams}, void>", "GetNextInstanced")} 
+                    {GenerateIterableCallbackFunctions(true, $"Each<{typeParams}>", $"Ecs.EachIterRefCallback<{typeParams}>", $"delegate*<Iter, int, {refParams}, void>", "GetNextInstanced")}
                     {GenerateIterableFindCallbackFunctions(typeParams, $"Ecs.FindCallback<{typeParams}>", $"delegate*<{refParams}, bool>")}
                     {GenerateIterableFindCallbackFunctions(typeParams, $"Ecs.FindEntityCallback<{typeParams}>", $"delegate*<Entity, {refParams}, bool>")}
                     {GenerateIterableFindCallbackFunctions(typeParams, $"Ecs.FindIndexCallback<{typeParams}>", $"delegate*<Iter, int, {refParams}, bool>")}
@@ -172,19 +172,19 @@ namespace Flecs.NET.Codegen
                         return Build(ref callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
                     }}
 
-                    public Observer Each<{typeParams}>(Ecs.EachCallback<{typeParams}> callback) 
+                    public Observer Each<{typeParams}>(Ecs.EachRefCallback<{typeParams}> callback) 
                     {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
                     }}
 
-                    public Observer Each<{typeParams}>(Ecs.EachEntityCallback<{typeParams}> callback) 
+                    public Observer Each<{typeParams}>(Ecs.EachEntityRefCallback<{typeParams}> callback) 
                     {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
                     }}
 
-                    public Observer Each<{typeParams}>(Ecs.EachIndexCallback<{typeParams}> callback) 
+                    public Observer Each<{typeParams}>(Ecs.EachIterRefCallback<{typeParams}> callback) 
                     {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
                     }}
 
                     public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.IterFieldCallback<{typeParams}> callback)
@@ -202,19 +202,19 @@ namespace Flecs.NET.Codegen
                         return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
                     }}
 
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachCallback<{typeParams}> callback)
+                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachRefCallback<{typeParams}> callback)
                     {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
                     }}
 
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachEntityCallback<{typeParams}> callback)
+                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachEntityRefCallback<{typeParams}> callback)
                     {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
                     }}
 
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachIndexCallback<{typeParams}> callback)
+                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachIterRefCallback<{typeParams}> callback)
                     {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
                     }}
 
                 #if NET5_0_OR_GREATER
@@ -235,17 +235,17 @@ namespace Flecs.NET.Codegen
 
                     public Observer Each<{typeParams}>(delegate*<{refParams}, void> callback) 
                     {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
                     }}
 
                     public Observer Each<{typeParams}>(delegate*<Entity, {refParams}, void> callback) 
                     {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
                     }}
 
                     public Observer Each<{typeParams}>(delegate*<Iter, int, {refParams}, void> callback) 
                     {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
                     }}
 
                     public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.IterFieldCallback<{typeParams}> callback)
@@ -263,19 +263,19 @@ namespace Flecs.NET.Codegen
                         return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
                     }}
 
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachCallback<{typeParams}> callback)
+                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachRefCallback<{typeParams}> callback)
                     {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
                     }}
 
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachEntityCallback<{typeParams}> callback)
+                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachEntityRefCallback<{typeParams}> callback)
                     {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
                     }}
 
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachIndexCallback<{typeParams}> callback)
+                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachIterRefCallback<{typeParams}> callback)
                     {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
                     }}
 
                     public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, {fieldParams}, void> callback)
@@ -295,17 +295,17 @@ namespace Flecs.NET.Codegen
 
                     public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<{refParams}, void> callback)
                     {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
                     }}
 
                     public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<Entity, {refParams}, void> callback)
                     {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
                     }}
 
                     public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, int, {refParams}, void> callback)
                     {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
                     }}
                 #endif
                 ");
@@ -348,19 +348,19 @@ namespace Flecs.NET.Codegen
                         return Build(ref callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
                     }}
 
-                    public Routine Each<{typeParams}>(Ecs.EachCallback<{typeParams}> callback) 
+                    public Routine Each<{typeParams}>(Ecs.EachRefCallback<{typeParams}> callback) 
                     {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
                     }}
 
-                    public Routine Each<{typeParams}>(Ecs.EachEntityCallback<{typeParams}> callback) 
+                    public Routine Each<{typeParams}>(Ecs.EachEntityRefCallback<{typeParams}> callback) 
                     {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
                     }}
 
-                    public Routine Each<{typeParams}>(Ecs.EachIndexCallback<{typeParams}> callback) 
+                    public Routine Each<{typeParams}>(Ecs.EachIterRefCallback<{typeParams}> callback) 
                     {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
                     }}
 
                     public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.IterFieldCallback<{typeParams}> callback)
@@ -378,19 +378,19 @@ namespace Flecs.NET.Codegen
                         return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
                     }}
 
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachCallback<{typeParams}> callback)
+                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachRefCallback<{typeParams}> callback)
                     {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
                     }}
 
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachEntityCallback<{typeParams}> callback)
+                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachEntityRefCallback<{typeParams}> callback)
                     {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
                     }}
 
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachIndexCallback<{typeParams}> callback)
+                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachIterRefCallback<{typeParams}> callback)
                     {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
                     }}
 
                 #if NET5_0_OR_GREATER
@@ -411,17 +411,17 @@ namespace Flecs.NET.Codegen
 
                     public Routine Each<{typeParams}>(delegate*<{refParams}, void> callback) 
                     {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
                     }}
 
                     public Routine Each<{typeParams}>(delegate*<Entity, {refParams}, void> callback) 
                     {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
                     }}
 
                     public Routine Each<{typeParams}>(delegate*<Iter, int, {refParams}, void> callback) 
                     {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
                     }}
 
                     public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.IterFieldCallback<{typeParams}> callback)
@@ -439,19 +439,19 @@ namespace Flecs.NET.Codegen
                         return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
                     }}
 
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachCallback<{typeParams}> callback)
+                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachRefCallback<{typeParams}> callback)
                     {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
                     }}
 
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachEntityCallback<{typeParams}> callback)
+                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachEntityRefCallback<{typeParams}> callback)
                     {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
                     }}
 
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachIndexCallback<{typeParams}> callback)
+                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachIterRefCallback<{typeParams}> callback)
                     {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
                     }}
 
                     public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, {fieldParams}, void> callback)
@@ -471,17 +471,17 @@ namespace Flecs.NET.Codegen
 
                     public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<{refParams}, void> callback)
                     {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachCallbackPointer);
+                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
                     }}
 
                     public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<Entity, {refParams}, void> callback)
                     {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityCallbackPointer);
+                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
                     }}
 
                     public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, int, {refParams}, void> callback)
                     {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachIndexCallbackPointer);
+                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
                     }}
                 #endif
                 ");
@@ -514,23 +514,23 @@ namespace Flecs.NET.Codegen
                         {GenerateBindingContextPointers("IterFieldCallback")}
                         {GenerateBindingContextPointers("IterSpanCallback")}
                         {GenerateBindingContextPointers("IterPointerCallback")}
-                        {GenerateBindingContextPointers("EachCallback")}
-                        {GenerateBindingContextPointers("EachEntityCallback")}
-                        {GenerateBindingContextPointers("EachIndexCallback")}
+                        {GenerateBindingContextPointers("EachRefCallback")}
+                        {GenerateBindingContextPointers("EachEntityRefCallback")}
+                        {GenerateBindingContextPointers("EachIterRefCallback")}
                         #else
                         {GenerateBindingContextDelegates("IterFieldCallback")}
                         {GenerateBindingContextDelegates("IterSpanCallback")}
                         {GenerateBindingContextDelegates("IterPointerCallback")}
-                        {GenerateBindingContextDelegates("EachCallback")}
-                        {GenerateBindingContextDelegates("EachEntityCallback")}
-                        {GenerateBindingContextDelegates("EachIndexCallback")}
+                        {GenerateBindingContextDelegates("EachRefCallback")}
+                        {GenerateBindingContextDelegates("EachEntityRefCallback")}
+                        {GenerateBindingContextDelegates("EachIterRefCallback")}
                         #endif
                         {GenerateBindingContextCallbacks("IterFieldCallback", $"Ecs.IterFieldCallback<{typeParams}>", $"delegate*<Iter, {fieldParams}, void>", "Iter")}
                         {GenerateBindingContextCallbacks("IterSpanCallback", $"Ecs.IterSpanCallback<{typeParams}>", $"delegate*<Iter, {spanParams}, void>", "Iter")}
                         {GenerateBindingContextCallbacks("IterPointerCallback", $"Ecs.IterPointerCallback<{typeParams}>", $"delegate*<Iter, {pointerParams}, void>", "Iter")}
-                        {GenerateBindingContextCallbacks("EachCallback", $"Ecs.EachCallback<{typeParams}>", $"delegate*<{refParams}, void>", "Each")}
-                        {GenerateBindingContextCallbacks("EachEntityCallback", $"Ecs.EachEntityCallback<{typeParams}>", $"delegate*<Entity, {refParams}, void>", "Each")}
-                        {GenerateBindingContextCallbacks("EachIndexCallback", $"Ecs.EachIndexCallback<{typeParams}>", $"delegate*<Iter, int, {refParams}, void>", "Each")} 
+                        {GenerateBindingContextCallbacks("EachRefCallback", $"Ecs.EachRefCallback<{typeParams}>", $"delegate*<{refParams}, void>", "Each")}
+                        {GenerateBindingContextCallbacks("EachEntityRefCallback", $"Ecs.EachEntityRefCallback<{typeParams}>", $"delegate*<Entity, {refParams}, void>", "Each")}
+                        {GenerateBindingContextCallbacks("EachIterRefCallback", $"Ecs.EachIterRefCallback<{typeParams}>", $"delegate*<Iter, int, {refParams}, void>", "Each")} 
                     }}
                 ");
             }
@@ -642,13 +642,13 @@ namespace Flecs.NET.Codegen
                 string refArgs = ConcatString(i + 1, ", ", index => $"ref T{index}");
 
                 str.AppendLine($@"
-                    public void Each<{typeParams}>(Ecs.EachCallback<{typeParams}> callback) 
+                    public void Each<{typeParams}>(Ecs.EachRefCallback<{typeParams}> callback) 
                     {{
                         using Query query = Query<{typeParams}>();
                         query.Each(callback);   
                     }}
 
-                    public void Each<{typeParams}>(Ecs.EachEntityCallback<{typeParams}> callback) 
+                    public void Each<{typeParams}>(Ecs.EachEntityRefCallback<{typeParams}> callback) 
                     {{
                         using Query query = Query<{typeParams}>();
                         query.Each(callback);
@@ -748,9 +748,9 @@ namespace Flecs.NET.Codegen
                 str.AppendLine($"public delegate void IterSpanCallback<{typeParams}>(Iter it, {spanParams});");
                 str.AppendLine($"public delegate void IterPointerCallback<{typeParams}>(Iter it, {pointerParams});");
 
-                str.AppendLine($"public delegate void EachCallback<{typeParams}>({refParams});");
-                str.AppendLine($"public delegate void EachEntityCallback<{typeParams}>(Entity entity, {refParams});");
-                str.AppendLine($"public delegate void EachIndexCallback<{typeParams}>(Iter it, int i, {refParams});");
+                str.AppendLine($"public delegate void EachRefCallback<{typeParams}>({refParams});");
+                str.AppendLine($"public delegate void EachEntityRefCallback<{typeParams}>(Entity entity, {refParams});");
+                str.AppendLine($"public delegate void EachIterRefCallback<{typeParams}>(Iter it, int i, {refParams});");
 
                 str.AppendLine($"public delegate bool FindCallback<{typeParams}>({refParams});");
                 str.AppendLine($"public delegate bool FindEntityCallback<{typeParams}>(Entity entity, {refParams});");
@@ -864,7 +864,7 @@ namespace Flecs.NET.Codegen
                 string increments = ConcatString(i + 1, ", ",
                     index => $"pointer{index} += size{index}");
 
-                string each = $@"
+                string eachRef = $@"
                     {fieldAssertions}
                     {sizes}
                     {pointers}
@@ -881,7 +881,7 @@ namespace Flecs.NET.Codegen
                     Macros.TableUnlock(iter->world, iter->table);
                 ";
 
-                string eachEntity = $@"
+                string eachEntityRef = $@"
                     Ecs.Assert(iter->count > 0, ""No entities returned, use Iter() or Each() without the entity argument instead."");
 
                     {fieldAssertions}
@@ -898,7 +898,7 @@ namespace Flecs.NET.Codegen
                     Macros.TableUnlock(iter->world, iter->table);
                 ";
 
-                string eachIndex = $@"
+                string eachIterRef = $@"
                     {fieldAssertions}
                     {sizes}
                     {pointers}
@@ -915,7 +915,7 @@ namespace Flecs.NET.Codegen
                     Macros.TableUnlock(iter->world, iter->table);
                 ";
 
-                string find = $@"
+                string findRef = $@"
                     {fieldAssertions}
                     {sizes}
                     {pointers}
@@ -940,7 +940,7 @@ namespace Flecs.NET.Codegen
                     return result;
                 ";
 
-                string findEntity = $@"
+                string findEntityRef = $@"
                     Ecs.Assert(iter->count > 0, ""No entities returned, use Find() without the Entity argument instead."");
 
                     {fieldAssertions}
@@ -965,7 +965,7 @@ namespace Flecs.NET.Codegen
                     return result;
                 ";
 
-                string findIndex = $@"
+                string findIterRef = $@"
                     {fieldAssertions}
                     {sizes}
                     {pointers}
@@ -991,65 +991,65 @@ namespace Flecs.NET.Codegen
                 ";
 
                 str.AppendLine($@"
-                    public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachCallback<{typeParams}> callback)
+                    public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachRefCallback<{typeParams}> callback)
                     {{
-                        {each}
+                        {eachRef}
                     }}
 
-                    public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachEntityCallback<{typeParams}> callback)
+                    public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachEntityRefCallback<{typeParams}> callback)
                     {{
-                        {eachEntity}
+                        {eachEntityRef}
                     }}
 
-                    public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachIndexCallback<{typeParams}> callback)
+                    public static void Each<{typeParams}>(ecs_iter_t* iter, Ecs.EachIterRefCallback<{typeParams}> callback)
                     {{
-                        {eachIndex}
+                        {eachIterRef}
                     }}
 
                     public static Entity Find<{typeParams}>(ecs_iter_t* iter, Ecs.FindCallback<{typeParams}> callback)
                     {{
-                        {find}
+                        {findRef}
                     }}
 
                     public static Entity Find<{typeParams}>(ecs_iter_t* iter, Ecs.FindEntityCallback<{typeParams}> callback)
                     {{
-                        {findEntity}
+                        {findEntityRef}
                     }}
 
                     public static Entity Find<{typeParams}>(ecs_iter_t* iter, Ecs.FindIndexCallback<{typeParams}> callback)
                     {{
-                        {findIndex}
+                        {findIterRef}
                     }}
 
                 #if NET5_0_OR_GREATER
                     public static void Each<{typeParams}>(ecs_iter_t* iter, delegate*<{refArgs}, void> callback)
                     {{
-                        {each}
+                        {eachRef}
                     }}
 
                     public static void Each<{typeParams}>(ecs_iter_t* iter, delegate*<Entity, {refArgs}, void> callback)
                     {{
-                        {eachEntity}
+                        {eachEntityRef}
                     }}
 
                     public static void Each<{typeParams}>(ecs_iter_t* iter, delegate*<Iter, int, {refArgs}, void> callback)
                     {{
-                        {eachIndex}
+                        {eachIterRef}
                     }}
 
                     public static Entity Find<{typeParams}>(ecs_iter_t* iter, delegate*<{refArgs}, bool> callback)
                     {{
-                        {find}
+                        {findRef}
                     }}
 
                     public static Entity Find<{typeParams}>(ecs_iter_t* iter, delegate*<Entity, {refArgs}, bool> callback)
                     {{
-                        {findEntity}
+                        {findEntityRef}
                     }}
 
                     public static Entity Find<{typeParams}>(ecs_iter_t* iter, delegate*<Iter, int, {refArgs}, bool> callback)
                     {{
-                        {findIndex}
+                        {findIterRef}
                     }}
                 #endif
                 ");

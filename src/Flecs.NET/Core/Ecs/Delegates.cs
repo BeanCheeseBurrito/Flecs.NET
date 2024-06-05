@@ -61,7 +61,7 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Each index callback.
         /// </summary>
-        public delegate void EachIndexCallback(Iter it, int i);
+        public delegate void EachIterCallback(Iter it, int i);
 
         /// <summary>
         ///     Finish action.

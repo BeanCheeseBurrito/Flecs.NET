@@ -144,9 +144,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public Observer Each(Ecs.EachIndexCallback callback)
+        public Observer Each(Ecs.EachIterCallback callback)
         {
-            return Instanced().Build(ref callback, BindingContext.EachIndexCallbackPointer);
+            return Instanced().Build(ref callback, BindingContext.EachIterCallbackPointer);
         }
 
         /// <summary>
@@ -198,9 +198,9 @@ namespace Flecs.NET.Core
         /// <param name="run">The run callback.</param>
         /// <param name="callback">The iterator callback.</param>
         /// <returns>An observer.</returns>
-        public Observer Run(Ecs.IterCallback run, Ecs.EachIndexCallback callback)
+        public Observer Run(Ecs.IterCallback run, Ecs.EachIterCallback callback)
         {
-            return PopulateRun(run).Build(ref callback, BindingContext.EachIndexCallbackPointer);
+            return PopulateRun(run).Build(ref callback, BindingContext.EachIterCallbackPointer);
         }
 
 #if NET5_0_OR_GREATER
@@ -241,7 +241,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Observer Each(delegate*<Iter, int, void> callback)
         {
-            return Instanced().Build((IntPtr)callback, BindingContext.EachIndexCallbackPointer);
+            return Instanced().Build((IntPtr)callback, BindingContext.EachIterCallbackPointer);
         }
 
         /// <summary>
@@ -283,9 +283,9 @@ namespace Flecs.NET.Core
         /// <param name="run">The run callback.</param>
         /// <param name="callback">The iterator callback.</param>
         /// <returns>An observer.</returns>
-        public Observer Run(delegate*<Iter, void> run, Ecs.EachIndexCallback callback)
+        public Observer Run(delegate*<Iter, void> run, Ecs.EachIterCallback callback)
         {
-            return PopulateRun((IntPtr)run).Build(ref callback, BindingContext.EachIndexCallbackPointer);
+            return PopulateRun((IntPtr)run).Build(ref callback, BindingContext.EachIterCallbackPointer);
         }
 
         /// <summary>
@@ -329,7 +329,7 @@ namespace Flecs.NET.Core
         /// <returns>An observer.</returns>
         public Observer Run(Ecs.IterCallback run, delegate*<Iter, int, void> callback)
         {
-            return PopulateRun(run).Build((IntPtr)callback, BindingContext.EachIndexCallbackPointer);
+            return PopulateRun(run).Build((IntPtr)callback, BindingContext.EachIterCallbackPointer);
         }
 #endif
 

@@ -27,8 +27,8 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr EachEntityCallbackPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&EachEntityCallback;
 
-        internal static readonly IntPtr EachIndexCallbackPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&EachIndexCallback;
+        internal static readonly IntPtr EachIterCallbackPointer =
+            (IntPtr)(delegate* <ecs_iter_t*, void>)&EachIterCallback;
 
         internal static readonly IntPtr ObserveCallbackPointer =
             (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserveCallback;
@@ -69,8 +69,8 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr EachEntityCallbackPointer =
             Marshal.GetFunctionPointerForDelegate(EachEntityCallbackReference = EachEntityCallback);
 
-        internal static readonly IntPtr EachIndexCallbackPointer =
-            Marshal.GetFunctionPointerForDelegate(EachIndexCallbackReference = EachIndexCallback);
+        internal static readonly IntPtr EachIterCallbackPointer =
+            Marshal.GetFunctionPointerForDelegate(EachIterCallbackReference = EachIterCallback);
 
         internal static readonly IntPtr ObserveCallbackPointer =
             Marshal.GetFunctionPointerForDelegate(ObserveCallbackReference = ObserveCallback);
@@ -105,7 +105,7 @@ namespace Flecs.NET.Core
         private static readonly Ecs.IterAction ActionCallbackReference;
         private static readonly Ecs.IterAction IterCallbackReference;
         private static readonly Ecs.IterAction EachEntityCallbackReference;
-        private static readonly Ecs.IterAction EachIndexCallbackReference;
+        private static readonly Ecs.IterAction EachIterCallbackReference;
         private static readonly Ecs.IterAction ObserveCallbackReference;
         private static readonly Ecs.IterAction RunCallbackReference;
         private static readonly Ecs.GroupByAction GroupByCallbackReference;
@@ -168,7 +168,7 @@ namespace Flecs.NET.Core
             Invoker.Each(iter, callback);
         }
 
-        private static void EachIndexCallback(ecs_iter_t* iter)
+        private static void EachIterCallback(ecs_iter_t* iter)
         {
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
@@ -180,7 +180,7 @@ namespace Flecs.NET.Core
             }
 #endif
 
-            Ecs.EachIndexCallback callback = (Ecs.EachIndexCallback)context->Callback.GcHandle.Target!;
+            Ecs.EachIterCallback callback = (Ecs.EachIterCallback)context->Callback.GcHandle.Target!;
             Invoker.Each(iter, callback);
         }
 
@@ -571,14 +571,14 @@ namespace Flecs.NET.Core
         private static void EntityObserverEach(ecs_iter_t* iter)
         {
             BindingContext.IteratorContext* context = (BindingContext.IteratorContext*)iter->callback_ctx;
-            Ecs.EachCallback<T0> callback = (Ecs.EachCallback<T0>)context->Callback.GcHandle.Target!;
+            Ecs.EachRefCallback<T0> callback = (Ecs.EachRefCallback<T0>)context->Callback.GcHandle.Target!;
             Invoker.Observe(iter, callback);
         }
 
         private static void EntityObserverEachEntity(ecs_iter_t* iter)
         {
             BindingContext.IteratorContext* context = (BindingContext.IteratorContext*)iter->callback_ctx;
-            Ecs.EachEntityCallback<T0> callback = (Ecs.EachEntityCallback<T0>)context->Callback.GcHandle.Target!;
+            Ecs.EachEntityRefCallback<T0> callback = (Ecs.EachEntityRefCallback<T0>)context->Callback.GcHandle.Target!;
             Invoker.Observe(iter, callback);
         }
 

@@ -53,7 +53,7 @@ namespace Flecs.NET.Core
         ///     Iterates the query using the provided callback.
         /// </summary>
         /// <param name="callback">The callback.</param>
-        public void Each(Ecs.EachIndexCallback callback)
+        public void Each(Ecs.EachIterCallback callback)
         {
             ecs_iter_t iter = GetIter();
             while (GetNextInstanced(&iter))

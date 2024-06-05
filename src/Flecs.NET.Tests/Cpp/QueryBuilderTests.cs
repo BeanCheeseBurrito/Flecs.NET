@@ -2509,7 +2509,7 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
             ulong groupId = 0;
 
-            Ecs.EachIndexCallback func = (Iter it, int i) =>
+            Ecs.EachIterCallback func = (Iter it, int i) =>
             {
                 Entity e = it.Entity(i);
                 Assert.True(it.GroupId() == groupId);
