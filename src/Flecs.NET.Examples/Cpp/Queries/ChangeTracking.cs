@@ -18,6 +18,9 @@ public static class Cpp_Queries_ChangeTracking
     {
         using World world = World.Create();
 
+        // Make Dirty inheritable so that queries can match it on prefabs.
+        world.Component<Dirty>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
         // Create a query that just reads a component. We'll use this query for
         // change tracking. Change tracking for a query is automatically enabled
         // when Query.Changed() is called.

@@ -1063,7 +1063,7 @@ namespace Flecs.NET.Codegen
                     index => $"t{index} == -1");
 
                 string typeIds = ConcatString(i + 1, "\n",
-                    index => $"ptrs[{index}] = ecs_record_get_column(r, t{index}, default);");
+                    index => $"ptrs[{index}] = ecs_record_get_by_column(r, t{index}, default);");
 
                 str.AppendLine($@"
                     internal static bool GetPointers<{typeParams}>(ecs_world_t* world, ecs_record_t* r, ecs_table_t* table, void** ptrs)

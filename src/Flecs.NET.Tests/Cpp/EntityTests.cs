@@ -1171,10 +1171,13 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+            world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity prefab = world.Prefab()
                 .Add<Position>()
                 .Add<Velocity>()
-                .Override<Position>();
+                .AutoOverride<Position>();
 
             Entity e = world.Entity()
                 .Add(EcsIsA, prefab);
@@ -1190,11 +1193,14 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+            world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity prefab = world.Prefab()
                 .Add<Position>()
                 .Add<Velocity>()
-                .Override<Position>()
-                .Override<Velocity>();
+                .AutoOverride<Position>()
+                .AutoOverride<Velocity>();
 
             Entity e = world.Entity()
                 .Add(EcsIsA, prefab);
@@ -1210,10 +1216,13 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+            world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity prefab = world.Prefab()
                 .Add<Position>()
                 .Add<Velocity>()
-                .Override<Position>();
+                .AutoOverride<Position>();
 
             Entity prefab2 = world.Prefab()
                 .Add(EcsIsA, prefab);
@@ -1527,8 +1536,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity @base = world.Entity()
-                .Override<Position>();
+                .AutoOverride<Position>();
 
             Entity e = world.Entity()
                 .Add(EcsIsA, @base);
@@ -1542,11 +1553,11 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity tagA = world.Entity();
-            Entity tagB = world.Entity();
+            Entity tagA = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
+            Entity tagB = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Entity @base = world.Entity()
-                .Override(tagA)
+                .AutoOverride(tagA)
                 .Add(tagB);
 
             Entity e = world.Entity()
@@ -1564,11 +1575,12 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
             Entity tgtA = world.Entity();
             Entity tgtB = world.Entity();
 
             Entity @base = world.Entity()
-                .Override<Position>(tgtA)
+                .AutoOverride<Position>(tgtA)
                 .Add<Position>(tgtB);
 
             Entity e = world.Entity()
@@ -1586,12 +1598,12 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity rel = world.Entity();
+            Entity rel = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
             Entity tgtA = world.Entity();
             Entity tgtB = world.Entity();
 
             Entity @base = world.Entity()
-                .Override(rel, tgtA)
+                .AutoOverride(rel, tgtA)
                 .Add(rel, tgtB);
 
             Entity e = world.Entity()
@@ -1609,8 +1621,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity @base = world.Entity()
-                .Override<Position, TagA>()
+                .AutoOverride<Position, TagA>()
                 .Add<Position, TagB>();
 
             Entity e = world.Entity()
@@ -1628,8 +1642,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity @base = world.Entity()
-                .SetOverride(new Position(10, 20));
+                .SetAutoOverride(new Position(10, 20));
 
             Entity e = world.Entity()
                 .Add(EcsIsA, @base);
@@ -1652,10 +1668,12 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Position plvalue = new Position(10, 20);
 
             Entity @base = world.Entity()
-                .SetOverride(plvalue);
+                .SetAutoOverride(plvalue);
 
             Entity e = world.Entity()
                 .Add(EcsIsA, @base);
@@ -1678,8 +1696,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity @base = world.Entity()
-                .SetOverride<Position, Tgt>(new Position(10, 20));
+                .SetAutoOverride<Position, Tgt>(new Position(10, 20));
 
             Entity e = world.Entity()
                 .Add(EcsIsA, @base);
@@ -1702,10 +1722,12 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity tgt = world.Entity();
 
             Entity @base = world.Entity()
-                .SetOverride(tgt, new Position(10, 20));
+                .SetAutoOverride(tgt, new Position(10, 20));
 
             Entity e = world.Entity()
                 .Add(EcsIsA, @base);
@@ -1728,8 +1750,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Tgt>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity @base = world.Entity()
-                .SetOverride<Tgt, Position>(new Position(10, 20));
+                .SetAutoOverride<Tgt, Position>(new Position(10, 20));
 
             Entity e = world.Entity()
                 .Add(EcsIsA, @base);
@@ -3134,9 +3158,9 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Id id = new Id(world, ECS_OVERRIDE | world.Entity("Foo"));
+            Id id = new Id(world, ECS_AUTO_OVERRIDE | world.Entity("Foo"));
 
-            Assert.Equal("OVERRIDE|Foo", id.Str());
+            Assert.Equal("AUTO_OVERRIDE|Foo", id.Str());
         }
 
         [Fact]

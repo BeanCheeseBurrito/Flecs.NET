@@ -144,7 +144,7 @@ namespace Flecs.NET.Core
         /// </summary>
         public const ulong TermRefFlags = EcsTermRefFlags;
 
-        // Build-in id flags
+        // Id bit flags
 
         /// <summary>
         ///     Reference to <see cref="ECS_PAIR"/>.
@@ -152,9 +152,9 @@ namespace Flecs.NET.Core
         public static ref ulong Pair => ref ECS_PAIR;
 
         /// <summary>
-        ///     Reference to <see cref="ECS_OVERRIDE"/>.
+        ///     Reference to <see cref="ECS_AUTO_OVERRIDE"/>.
         /// </summary>
-        public static ref ulong Override => ref ECS_OVERRIDE;
+        public static ref ulong AutoOverride => ref ECS_AUTO_OVERRIDE;
 
         /// <summary>
         ///     Reference to <see cref="ECS_TOGGLE"/>.
@@ -272,7 +272,7 @@ namespace Flecs.NET.Core
         /// </summary>
         public static ref ulong World => ref EcsWorld;
 
-        // Relationship properties
+        // Component Traits
 
         /// <summary>
         ///     Reference to <see cref="EcsWildcard"/>.
@@ -303,16 +303,6 @@ namespace Flecs.NET.Core
         ///     Reference to <see cref="EcsFinal"/>.
         /// </summary>
         public static ref ulong Final => ref EcsFinal;
-
-        /// <summary>
-        ///     Reference to <see cref="EcsDontInherit"/>.
-        /// </summary>
-        public static ref ulong DontInherit => ref EcsDontInherit;
-
-        /// <summary>
-        ///     Reference to <see cref="EcsAlwaysOverride"/>.
-        /// </summary>
-        public static ref ulong AlwaysOverride => ref EcsAlwaysOverride;
 
         /// <summary>
         ///     Reference to <see cref="EcsPairIsTag"/>.
@@ -354,6 +344,55 @@ namespace Flecs.NET.Core
         /// </summary>
         public static ref ulong CanToggle => ref EcsCanToggle;
 
+        // OnInstantiate Trait
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOnInstantiate"/>.
+        /// </summary>
+        public static ref ulong OnInstantiate => ref EcsOnInstantiate;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOverride"/>.
+        /// </summary>
+        public static ref ulong Override => ref EcsOverride;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsInherit"/>.
+        /// </summary>
+        public static ref ulong Inherit => ref EcsInherit;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsDontInherit"/>.
+        /// </summary>
+        public static ref ulong DontInherit => ref EcsDontInherit;
+
+        // OnDelete/OnDeleteTarget Traits
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOnDelete"/>.
+        /// </summary>
+        public static ref ulong OnDelete => ref EcsOnDelete;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsOnDeleteTarget"/>.
+        /// </summary>
+        public static ref ulong OnDeleteTarget => ref EcsOnDeleteTarget;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsRemove"/>.
+        /// </summary>
+        public static ref ulong Remove => ref EcsRemove;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsDelete"/>.
+        /// </summary>
+        public static ref ulong Delete => ref EcsDelete;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsPanic"/>.
+        /// </summary>
+        public static ref ulong Panic => ref EcsPanic;
+
         // Built-in relationships
 
         /// <summary>
@@ -387,33 +426,6 @@ namespace Flecs.NET.Core
         ///     Reference to <see cref="EcsSymbol"/>.
         /// </summary>
         public static ref ulong Symbol => ref EcsSymbol;
-
-        // Cleanup policies
-
-        /// <summary>
-        ///     Reference to <see cref="EcsOnDelete"/>.
-        /// </summary>
-        public static ref ulong OnDelete => ref EcsOnDelete;
-
-        /// <summary>
-        ///     Reference to <see cref="EcsOnDeleteTarget"/>.
-        /// </summary>
-        public static ref ulong OnDeleteTarget => ref EcsOnDeleteTarget;
-
-        /// <summary>
-        ///     Reference to <see cref="EcsRemove"/>.
-        /// </summary>
-        public static ref ulong Remove => ref EcsRemove;
-
-        /// <summary>
-        ///     Reference to <see cref="EcsDelete"/>.
-        /// </summary>
-        public static ref ulong Delete => ref EcsDelete;
-
-        /// <summary>
-        ///     Reference to <see cref="EcsPanic"/>.
-        /// </summary>
-        public static ref ulong Panic => ref EcsPanic;
 
         // Storage
 

@@ -2126,9 +2126,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ref Entity Override(ulong id)
+        public ref Entity AutoOverride(ulong id)
         {
-            ecs_add_id(World, Id, ECS_OVERRIDE | id);
+            ecs_add_id(World, Id, ECS_AUTO_OVERRIDE | id);
             return ref this;
         }
 
@@ -2138,9 +2138,9 @@ namespace Flecs.NET.Core
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public ref Entity Override(ulong first, ulong second)
+        public ref Entity AutoOverride(ulong first, ulong second)
         {
-            return ref Override(Macros.Pair(first, second));
+            return ref AutoOverride(Macros.Pair(first, second));
         }
 
         /// <summary>
@@ -2148,9 +2148,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref Entity Override<T>()
+        public ref Entity AutoOverride<T>()
         {
-            return ref Override(Type<T>.Id(World));
+            return ref AutoOverride(Type<T>.Id(World));
         }
 
         /// <summary>
@@ -2159,9 +2159,9 @@ namespace Flecs.NET.Core
         /// <param name="value"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref Entity Override<T>(T value) where T : Enum
+        public ref Entity AutoOverride<T>(T value) where T : Enum
         {
-            return ref Override<T>(Type<T>.Id(World, value));
+            return ref AutoOverride<T>(Type<T>.Id(World, value));
         }
 
         /// <summary>
@@ -2170,9 +2170,9 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <returns></returns>
-        public ref Entity Override<TFirst>(ulong second)
+        public ref Entity AutoOverride<TFirst>(ulong second)
         {
-            return ref Override(Macros.Pair<TFirst>(second, World));
+            return ref AutoOverride(Macros.Pair<TFirst>(second, World));
         }
 
         /// <summary>
@@ -2181,9 +2181,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity Override<TFirst, TSecond>()
+        public ref Entity AutoOverride<TFirst, TSecond>()
         {
-            return ref Override(Macros.Pair<TFirst, TSecond>(World));
+            return ref AutoOverride(Macros.Pair<TFirst, TSecond>(World));
         }
 
         /// <summary>
@@ -2193,9 +2193,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity Override<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        public ref Entity AutoOverride<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Override<TFirst>(Type<TSecond>.Id(World, second));
+            return ref AutoOverride<TFirst>(Type<TSecond>.Id(World, second));
         }
 
         /// <summary>
@@ -2205,9 +2205,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity Override<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        public ref Entity AutoOverride<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return ref OverrideSecond<TSecond>(Type<TFirst>.Id(World, first));
+            return ref AutoOverrideSecond<TSecond>(Type<TFirst>.Id(World, first));
         }
 
         /// <summary>
@@ -2216,9 +2216,9 @@ namespace Flecs.NET.Core
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity OverrideSecond<TSecond>(ulong first)
+        public ref Entity AutoOverrideSecond<TSecond>(ulong first)
         {
-            return ref Override(first, Type<TSecond>.Id(World));
+            return ref AutoOverride(first, Type<TSecond>.Id(World));
         }
 
         /// <summary>
@@ -2227,9 +2227,9 @@ namespace Flecs.NET.Core
         /// <param name="component"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverride<T>(T component)
+        public ref Entity SetAutoOverride<T>(T component)
         {
-            return ref SetOverride(ref component);
+            return ref SetAutoOverride(ref component);
         }
 
         /// <summary>
@@ -2238,9 +2238,9 @@ namespace Flecs.NET.Core
         /// <param name="component"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverride<T>(ref T component)
+        public ref Entity SetAutoOverride<T>(ref T component)
         {
-            return ref Override<T>().Set(ref component);
+            return ref AutoOverride<T>().Set(ref component);
         }
 
         /// <summary>
@@ -2250,9 +2250,9 @@ namespace Flecs.NET.Core
         /// <param name="component"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverride<TFirst>(ulong second, TFirst component)
+        public ref Entity SetAutoOverride<TFirst>(ulong second, TFirst component)
         {
-            return ref SetOverride(second, ref component);
+            return ref SetAutoOverride(second, ref component);
         }
 
         /// <summary>
@@ -2262,9 +2262,9 @@ namespace Flecs.NET.Core
         /// <param name="component"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverride<TFirst>(ulong second, ref TFirst component)
+        public ref Entity SetAutoOverride<TFirst>(ulong second, ref TFirst component)
         {
-            return ref Override<TFirst>(second).Set(second, ref component);
+            return ref AutoOverride<TFirst>(second).Set(second, ref component);
         }
 
         /// <summary>
@@ -2274,9 +2274,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverride<TFirst, TSecond>(TFirst component)
+        public ref Entity SetAutoOverride<TFirst, TSecond>(TFirst component)
         {
-            return ref SetOverride<TFirst, TSecond>(ref component);
+            return ref SetAutoOverride<TFirst, TSecond>(ref component);
         }
 
         /// <summary>
@@ -2286,9 +2286,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverride<TFirst, TSecond>(ref TFirst component)
+        public ref Entity SetAutoOverride<TFirst, TSecond>(ref TFirst component)
         {
-            return ref Override<TFirst, TSecond>().Set<TFirst, TSecond>(ref component);
+            return ref AutoOverride<TFirst, TSecond>().Set<TFirst, TSecond>(ref component);
         }
 
         /// <summary>
@@ -2298,9 +2298,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverride<TFirst, TSecond>(TSecond component)
+        public ref Entity SetAutoOverride<TFirst, TSecond>(TSecond component)
         {
-            return ref SetOverride<TFirst, TSecond>(ref component);
+            return ref SetAutoOverride<TFirst, TSecond>(ref component);
         }
 
         /// <summary>
@@ -2310,22 +2310,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverride<TFirst, TSecond>(ref TSecond component)
+        public ref Entity SetAutoOverride<TFirst, TSecond>(ref TSecond component)
         {
-            return ref Override<TFirst, TSecond>().Set<TFirst, TSecond>(ref component);
-        }
-
-        /// <summary>
-        ///     Set pair, mark component for auto-overriding.
-        /// </summary>
-        /// <param name="second"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref Entity SetOverride<TFirst, TSecond>(TSecond second, TFirst component) where TSecond : Enum
-        {
-            return ref SetOverride<TFirst, TSecond>(second, ref component);
+            return ref AutoOverride<TFirst, TSecond>().Set<TFirst, TSecond>(ref component);
         }
 
         /// <summary>
@@ -2336,10 +2323,23 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverride<TFirst, TSecond>(TSecond second, ref TFirst component) where TSecond : Enum
+        public ref Entity SetAutoOverride<TFirst, TSecond>(TSecond second, TFirst component) where TSecond : Enum
+        {
+            return ref SetAutoOverride<TFirst, TSecond>(second, ref component);
+        }
+
+        /// <summary>
+        ///     Set pair, mark component for auto-overriding.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <param name="component"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref Entity SetAutoOverride<TFirst, TSecond>(TSecond second, ref TFirst component) where TSecond : Enum
         {
             ulong secondId = Type<TSecond>.Id(World, second);
-            return ref Override<TFirst>(secondId).Set(secondId, ref component);
+            return ref AutoOverride<TFirst>(secondId).Set(secondId, ref component);
         }
 
         /// <summary>
@@ -2350,9 +2350,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverride<TFirst, TSecond>(TFirst first, TSecond component) where TFirst : Enum
+        public ref Entity SetAutoOverride<TFirst, TSecond>(TFirst first, TSecond component) where TFirst : Enum
         {
-            return ref SetOverride<TFirst, TSecond>(first, ref component);
+            return ref SetAutoOverride<TFirst, TSecond>(first, ref component);
         }
 
         /// <summary>
@@ -2363,10 +2363,10 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverride<TFirst, TSecond>(TFirst first, ref TSecond component) where TFirst : Enum
+        public ref Entity SetAutoOverride<TFirst, TSecond>(TFirst first, ref TSecond component) where TFirst : Enum
         {
             ulong firstId = Type<TFirst>.Id(World, first);
-            return ref OverrideSecond<TSecond>(firstId).SetSecond(firstId, ref component);
+            return ref AutoOverrideSecond<TSecond>(firstId).SetSecond(firstId, ref component);
         }
 
         /// <summary>
@@ -2376,9 +2376,9 @@ namespace Flecs.NET.Core
         /// <param name="component"></param>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverrideSecond<TSecond>(ulong first, TSecond component)
+        public ref Entity SetAutoOverrideSecond<TSecond>(ulong first, TSecond component)
         {
-            return ref SetOverrideSecond(first, ref component);
+            return ref SetAutoOverrideSecond(first, ref component);
         }
 
         /// <summary>
@@ -2388,9 +2388,9 @@ namespace Flecs.NET.Core
         /// <param name="component"></param>
         /// <typeparam name="TSecond"></typeparam>
         /// <returns></returns>
-        public ref Entity SetOverrideSecond<TSecond>(ulong first, ref TSecond component)
+        public ref Entity SetAutoOverrideSecond<TSecond>(ulong first, ref TSecond component)
         {
-            return ref OverrideSecond<TSecond>(first).SetSecond(first, ref component);
+            return ref AutoOverrideSecond<TSecond>(first).SetSecond(first, ref component);
         }
 
         /// <summary>

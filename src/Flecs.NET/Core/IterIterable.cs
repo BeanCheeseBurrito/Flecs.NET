@@ -178,7 +178,7 @@ namespace Flecs.NET.Core
             fixed (ecs_iter_t* it = &_iter)
             {
                 int result = 0;
-                while (Macros.Bool(ecs_query_next_instanced(it)))
+                while (GetNextInstanced(it))
                     result += _iter.count;
                 return result;
             }
@@ -192,7 +192,7 @@ namespace Flecs.NET.Core
         {
             fixed (ecs_iter_t* it = &_iter)
             {
-                bool result = Macros.Bool(ecs_query_next_instanced(it));
+                bool result = GetNextInstanced(it);
                 if (result)
                     ecs_iter_fini(it);
                 return result;
@@ -208,7 +208,8 @@ namespace Flecs.NET.Core
             fixed (ecs_iter_t* it = &_iter)
             {
                 Entity result = default;
-                if (Macros.Bool(ecs_query_next_instanced(it)) && it->count != 0)
+
+                if (GetNextInstanced(it) && it->count != 0)
                 {
                     result = new Entity(it->world, it->entities[0]);
                     ecs_iter_fini(it);
@@ -420,7 +421,7 @@ namespace Flecs.NET.Core
         {
             return _iterableType switch
             {
-                IterableType.Query => Macros.Bool(ecs_query_next_instanced(it)),
+                IterableType.Query => Macros.Bool(flecs_query_next_instanced(it)),
                 IterableType.Worker => Macros.Bool(ecs_worker_next(it)),
                 IterableType.Page => Macros.Bool(ecs_page_next(it)),
                 _ => throw new Ecs.ErrorException()

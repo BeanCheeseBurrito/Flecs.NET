@@ -395,6 +395,8 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ecs_iter_t GetIter(ecs_world_t* world = null)
         {
+            Ecs.Assert(Handle != null, "Cannot iterate invalid query.");
+
             if (world == null)
                 world = Handle->world;
 
@@ -412,7 +414,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool GetNextInstanced(ecs_iter_t* it)
         {
-            return Macros.Bool(ecs_query_next_instanced(it));
+            return Macros.Bool(flecs_query_next_instanced(it));
         }
 
         /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.World)"/>

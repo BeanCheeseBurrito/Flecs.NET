@@ -1,12 +1,18 @@
-// Overriding makes it possible for a prefab instance to obtain a private copy
-// of an inherited component. To override a component the regular add operation
-// is used. The overridden component will be initialized with the value of the
-// inherited component.
+// When an entity is instantiated from a prefab, components are by default
+// copied from the prefab to the instance. This behavior can be customized with
+// the OnInstantiate trait, which has three options:
 //
-// In some cases a prefab instance should always have a private copy of an
-// inherited component. This can be achieved with an auto override which can be
-// added to a prefab. Components with an auto override are automatically
-// overridden when the prefab is instantiated.
+// - Override (copy to instance)
+// - Inherit (inherit from prefab)
+// - DontInherit (don't copy or inherit)
+//
+// When a component is inheritable, it can be overridden manually by adding the
+// component to the instance, which also copies the value from the prefab
+// component. Additionally, when creating a prefab it is possible to flag a
+// component as "auto override", which can change the behavior for a specific
+// prefab from "inherit" to "override".
+//
+// This example shows how these different features can be used.
 
 using Flecs.NET.Core;
 
@@ -21,17 +27,17 @@ public static class Cpp_Prefabs_Override
     {
         using World world = World.Create();
 
+        // Change the instantiation behavior for Attack and Defense to inherit.
+        world.Component<Attack>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Defense>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
         // Attack and Damage are properties that can be shared across many
         // spaceships. This saves memory, and speeds up prefab creation as we don't
         // have to copy the values of Attack and Defense to private components.
         Entity spaceShip = world.Prefab("SpaceShip")
             .Set<Attack>(new(75))
-            .Set<Defense>(new(100));
-
-        // Damage is a property that is private to a spaceship, so add an auto
-        // override for it. This ensures that each prefab instance will have a
-        // private copy of the component.
-        spaceShip.SetOverride<Damage>(new(0));
+            .Set<Defense>(new(100))
+            .Set<Damage>(new(50));
 
         // Create a prefab instance.
         Entity inst = world.Entity("MySpaceship").IsA(spaceShip);
@@ -66,4 +72,4 @@ public static class Cpp_Prefabs_Override
 // Attack, Damage, (Identifier,Name), (IsA,SpaceShip)
 // Attack: 75
 // Defense: 100
-// Damage: 0
+// Damage: 50

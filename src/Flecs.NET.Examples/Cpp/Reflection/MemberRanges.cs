@@ -19,8 +19,9 @@ public static class Cpp_Reflection_MemberRanges
         world.Entity("MachineB").Set<CpuUtilization>(new(75.0));
         world.Entity("MachineC").Set<CpuUtilization>(new(90.0));
 
-        // Open https://www.flecs.dev/explorer?show=query&query=CpuUtilization to
-        // see how ranges affect visualization.
-        world.App().EnableRest().Run();
+        // Uncomment this line and open
+        //   https://www.flecs.dev/explorer?show=query&query=CpuUtilization
+        // to see how ranges affect visualization:
+        // world.App().EnableRest().Run();
     }
 }

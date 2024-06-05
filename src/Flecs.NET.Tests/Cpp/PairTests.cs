@@ -232,6 +232,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Pair>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity @base = world.Entity()
                 .Set<Pair, Position>(new Pair { Value = 10 });
 
@@ -261,7 +263,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity pair = world.Entity();
+            Entity pair = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Entity @base = world.Entity()
                 .SetSecond(pair, new Position { X = 10, Y = 20 });
@@ -1013,6 +1015,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Tag>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity @base = world.Entity().Add<Tag>();
             Entity self = world.Entity().IsA(@base).Add<Tag>();
 
@@ -1025,6 +1029,8 @@ namespace Flecs.NET.Tests.Cpp
         private void GetObjectForTypeBase()
         {
             using World world = World.Create();
+
+            world.Component<Tag>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Entity @base = world.Entity().Add<Tag>();
             Entity self = world.Entity().IsA(@base);
@@ -1039,7 +1045,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity tag = world.Entity();
+            Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
             Entity @base = world.Entity().Add(tag);
             Entity self = world.Entity().IsA(@base).Add(tag);
 
@@ -1053,7 +1059,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity tag = world.Entity();
+            Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
             Entity @base = world.Entity().Add(tag);
             Entity self = world.Entity().IsA(@base);
 
@@ -1067,7 +1073,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity tag = world.Entity();
+            Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
             Entity @base = world.Entity();
             Entity self = world.Entity().IsA(@base);
 

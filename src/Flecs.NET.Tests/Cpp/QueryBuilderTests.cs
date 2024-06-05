@@ -1165,6 +1165,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Query q = world.QueryBuilder<Self>()
                 .With<Other>().Src().Up(Ecs.IsA).In()
                 .CacheKind(cacheKind)
@@ -1206,6 +1208,8 @@ namespace Flecs.NET.Tests.Cpp
         private void IsASelfSupersetTerm(ecs_query_cache_kind_t cacheKind)
         {
             using World world = World.Create();
+
+            world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Query q = world.QueryBuilder<Self>()
                 .With<Other>().Src().Self().Up(Ecs.IsA).In()
@@ -1359,6 +1363,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Query q = world.QueryBuilder<Self, Other>()
                 .TermAt(1).Src().Up(Ecs.IsA)
                 .CacheKind(cacheKind)
@@ -1390,6 +1396,8 @@ namespace Flecs.NET.Tests.Cpp
         private void IsASelfSupersetTermWithEach(ecs_query_cache_kind_t cacheKind)
         {
             using World world = World.Create();
+
+            world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Query q = world.QueryBuilder<Self, Other>()
                 .TermAt(1).Src().Self().Up(Ecs.IsA)
@@ -1495,6 +1503,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Query q = world.QueryBuilder<Self, Other>()
                 .TermAt(1).Up(Ecs.IsA)
                 .CacheKind(cacheKind)
@@ -1526,6 +1536,8 @@ namespace Flecs.NET.Tests.Cpp
         private void IsASupersetShortcutWithSelf(ecs_query_cache_kind_t cacheKind)
         {
             using World world = World.Create();
+
+            world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Query q = world.QueryBuilder<Self, Other>()
                 .TermAt(1).Self().Up(Ecs.IsA)
@@ -2899,7 +2911,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity tag = world.Entity();
+            Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
             Entity foo = world.Entity();
             Entity bar = world.Entity();
 
@@ -2962,7 +2974,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity tag = world.Entity();
+            Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
             Entity foo = world.Entity();
             Entity bar = world.Entity();
 
@@ -5341,7 +5353,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Query q = world.QueryBuilder()
-                .Flags(EcsQueryAllowUnresolvedByName)
+                .QueryFlags(EcsQueryAllowUnresolvedByName)
                 .Expr("$this == Foo")
                 .CacheKind(cacheKind)
                 .Build();

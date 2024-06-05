@@ -91,6 +91,9 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+            world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity @base = world.Entity()
                 .Set(new Velocity(1, 2));
 
@@ -417,6 +420,9 @@ namespace Flecs.NET.Tests.Cpp
         private void SignatureShared()
         {
             using World world = World.Create();
+
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+            world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Entity @base = world.Entity()
                 .Set(new Velocity(1, 2));

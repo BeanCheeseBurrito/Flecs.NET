@@ -371,6 +371,8 @@ namespace Flecs.NET.Core
         public ref QueryBuilder Up(ulong traverse = 0)
         {
             AssertTermId();
+            Ecs.Assert(_termIdType == TermIdType.Src, "Up traversal can only be applied to term source.");
+
             CurrentTermId.id |= EcsUp;
 
             if (traverse != 0)
@@ -413,6 +415,8 @@ namespace Flecs.NET.Core
         public ref QueryBuilder Cascade(ulong traverse = 0)
         {
             AssertTermId();
+
+            Up();
             CurrentTermId.id |= EcsCascade;
 
             if (traverse != 0)
@@ -506,7 +510,7 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="flags"></param>
         /// <returns></returns>
-        public ref QueryBuilder IdFlags(ulong flags)
+        public ref QueryBuilder Flags(ulong flags)
         {
             AssertTerm();
             CurrentTerm.id |= flags;
@@ -732,11 +736,11 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Set flags for advanced usage
+        ///     Set query flags for advanced usage
         /// </summary>
         /// <param name="flags"></param>
         /// <returns></returns>
-        public ref QueryBuilder Flags(uint flags)
+        public ref QueryBuilder QueryFlags(uint flags)
         {
             Desc.flags |= flags;
             return ref this;

@@ -29,7 +29,7 @@ public static class Cpp_Entities_Prefab
             // By default components in an inheritance hierarchy are shared between
             // entities. The override function ensures that instances have a private
             // copy of the component.
-            .SetOverride<Position>(default);
+            .SetAutoOverride<Position>(default);
 
         Entity freighter = world.Prefab("Freighter")
             // Short for .Add(Ecs.IsA, spaceship). This ensures the entity

@@ -371,10 +371,10 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        /// <inheritdoc cref="QueryBuilder.IdFlags(ulong)"/>
-        public ref PipelineBuilder IdFlags(ulong flags)
+        /// <inheritdoc cref="Core.QueryBuilder.Flags"/>
+        public ref PipelineBuilder Flags(ulong flags)
         {
-            QueryBuilder.IdFlags(flags);
+            QueryBuilder.Flags(flags);
             return ref this;
         }
 
@@ -518,10 +518,10 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        /// <inheritdoc cref="QueryBuilder.Flags(uint)"/>
-        public ref PipelineBuilder Flags(uint flags)
+        /// <inheritdoc cref="Core.QueryBuilder.QueryFlags"/>
+        public ref PipelineBuilder QueryFlags(uint flags)
         {
-            QueryBuilder.Flags(flags);
+            QueryBuilder.QueryFlags(flags);
             return ref this;
         }
 

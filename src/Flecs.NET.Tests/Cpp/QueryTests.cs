@@ -624,8 +624,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            world.Component<Position>();
-            world.Component<Velocity>();
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+            world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Entity @base = world.Entity()
                 .Set(new Velocity(1, 2));
@@ -971,8 +971,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            world.Component<Position>();
-            world.Component<Velocity>();
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+            world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Entity @base = world.Entity()
                 .Set(new Velocity(1, 2));
@@ -1451,7 +1451,7 @@ namespace Flecs.NET.Tests.Cpp
             Query q = world.QueryBuilder<Position>()
                 .With<Velocity>()
                 .Build();
-            Assert.Equal("Position, Velocity", q.Str());
+            Assert.Equal("Position($this), Velocity($this)", q.Str());
         }
 
         [Fact]
@@ -1463,7 +1463,7 @@ namespace Flecs.NET.Tests.Cpp
                 .With<Velocity>()
                 .With<Eats, Apples>()
                 .Build();
-            Assert.Equal("Position, Velocity, (Eats,Apples)", q.Str());
+            Assert.Equal("Position($this), Velocity($this), Eats($this,Apples)", q.Str());
         }
 
         [Fact]
@@ -1474,7 +1474,7 @@ namespace Flecs.NET.Tests.Cpp
             Query q = world.QueryBuilder<Position>()
                 .With<Velocity>().Oper(Ecs.Not)
                 .Build();
-            Assert.Equal("Position, !Velocity", q.Str());
+            Assert.Equal("Position($this), !Velocity($this)", q.Str());
         }
 
         [Fact]
@@ -1485,7 +1485,7 @@ namespace Flecs.NET.Tests.Cpp
             Query q = world.QueryBuilder<Position>()
                 .With<Velocity>().Oper(Ecs.Optional)
                 .Build();
-            Assert.Equal("Position, ?Velocity", q.Str());
+            Assert.Equal("Position($this), ?Velocity($this)", q.Str());
         }
 
         [Fact]
@@ -1497,7 +1497,7 @@ namespace Flecs.NET.Tests.Cpp
                 .With<Position>().Oper(Ecs.Or)
                 .With<Velocity>()
                 .Build();
-            Assert.Equal("Position || Velocity", q.Str());
+            Assert.Equal("Position($this) || Velocity($this)", q.Str());
         }
 
         [Fact]

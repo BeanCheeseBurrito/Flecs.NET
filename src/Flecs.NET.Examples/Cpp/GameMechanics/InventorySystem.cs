@@ -45,17 +45,17 @@ public static class Cpp_GameMechanics_InventorySystem
         // Register item prefabs
         ecs.Prefab<WoodenSword>().Add<Sword>()
             .Set<Attack>(new(1))
-            .SetOverride<Health>(new(5)); // copy to instance, don't share
+            .SetAutoOverride<Health>(new(5)); // copy to instance, don't share
 
         ecs.Prefab<IronSword>().Add<Sword>()
             .Set<Attack>(new(2))
-            .SetOverride<Health>(new(10));
+            .SetAutoOverride<Health>(new(10));
 
         ecs.Prefab<WoodenArmor>().Add<Armor>()
-            .SetOverride<Health>(new(10));
+            .SetAutoOverride<Health>(new(10));
 
         ecs.Prefab<IronArmor>().Add<Armor>()
-            .SetOverride<Health>(new(20));
+            .SetAutoOverride<Health>(new(20));
 
         // Create a loot box with items
         Entity lootBox = ecs.Entity("Chest").Add<Container>().With<ContainedBy>(() =>
