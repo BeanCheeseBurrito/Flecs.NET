@@ -343,6 +343,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Set run callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <returns>Reference to self.</returns>
+        public Routine Run(delegate*<Iter, void> run)
+        {
+            return PopulateRun((IntPtr)run).Init();
+        }
+
+        /// <summary>
         ///     Set run and iterator callback.
         /// </summary>
         /// <param name="run">The run callback.</param>
@@ -428,6 +438,50 @@ namespace Flecs.NET.Core
         public Routine Run(Ecs.IterCallback run, delegate*<Iter, int, void> callback)
         {
             return PopulateRun(run).Build((IntPtr)callback, BindingContext.EachIterCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>A routine.</returns>
+        public Routine Run(delegate*<Iter, void> run, delegate*<void> callback)
+        {
+            return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext.ActionCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>A routine.</returns>
+        public Routine Run(delegate*<Iter, void> run, delegate*<Iter, void> callback)
+        {
+            return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext.IterCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>A routine.</returns>
+        public Routine Run(delegate*<Iter, void> run, delegate*<Entity, void> callback)
+        {
+            return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext.EachEntityCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Set run and iterator callback.
+        /// </summary>
+        /// <param name="run">The run callback.</param>
+        /// <param name="callback">The iterator callback.</param>
+        /// <returns>A routine.</returns>
+        public Routine Run(delegate*<Iter, void> run, delegate*<Iter, int, void> callback)
+        {
+            return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext.EachIterCallbackPointer);
         }
 #endif
 
