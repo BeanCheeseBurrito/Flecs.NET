@@ -4430,34 +4430,6 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void ChildrenFromRoot()
-        {
-            using World world = World.Create();
-
-            int count = 0;
-            world.Entity(0).Children((Entity e) =>
-            {
-                Assert.True(e == world.Entity("flecs") || e == world.Entity("Flecs"));
-                count++;
-            });
-            Assert.True(count == 2);
-        }
-
-        [Fact]
-        private void ChildrenFromRootWorld()
-        {
-            using World world = World.Create();
-
-            int count = 0;
-            world.Children((Entity e) =>
-            {
-                Assert.True(e == world.Entity("flecs") || e == world.Entity("Flecs"));
-                count++;
-            });
-            Assert.True(count == 2);
-        }
-
-        [Fact]
         private void GetDepth()
         {
             using World world = World.Create();

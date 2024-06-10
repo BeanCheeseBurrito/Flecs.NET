@@ -44,14 +44,19 @@ namespace Flecs.NET.Core
         public static readonly int Alignment = AlignOf();
 
         /// <summary>
-        ///     Whether or not the type is a tag.
+        ///     Whether the type is a tag.
         /// </summary>
         public static readonly bool IsTag = Size == 0 && Alignment == 0;
 
         /// <summary>
-        ///     Whether or not the type is an enum.
+        ///     Whether the type is an enum.
         /// </summary>
         public static readonly bool IsEnum = typeof(T).IsEnum;
+
+        /// <summary>
+        ///     Whether the type is a native flecs type.
+        /// </summary>
+        public static readonly bool IsFlecsType = typeof(T).ToString().StartsWith(Ecs.NativeNamespace, StringComparison.Ordinal);
 
         /// <summary>
         ///     The underlying integer type if this type is an enum.
@@ -241,34 +246,26 @@ namespace Flecs.NET.Core
         public static ulong RegisterComponent(World world, bool ignoreScope, bool isComponent, ulong id, string name)
         {
             // If a name or id is provided, the type is being used to alias an already existing entity.
-            Entity e = id != 0 ? new Entity(world, id) : world.Lookup(name, false);
+            Entity existingEntity = id != 0 ? new Entity(world, id) : world.Lookup(name, false);
 
             // If an existing entity is found, ensure that the size and alignment match the entity and return its id.
-            if (isComponent && e != 0)
+            if (isComponent && existingEntity != 0 || world.TryLookupSymbol(FullName, out existingEntity))
             {
-                if (!e.Has<EcsComponent>())
-                {
-                    Ecs.Assert(IsTag, $"Cannot alias '{e.Path()}' with a component. '{FullName}' must be a zero-sized struct");
-                    return e;
-                }
+                if (IsFlecsType)
+                    return EnsureCacheIndex(world) = existingEntity;
 
-                ref readonly EcsComponent info = ref e.Get<EcsComponent>();
-                Ecs.Assert(info.size == Size, $"Size of type '{FullName}' ({Size}) does not match currently registered size ({info.size})");
-                Ecs.Assert(info.alignment == Alignment, $"Alignment of type '{FullName}' ({Alignment}) does not match currently registered alignment ({info.alignment})");
+                ref EcsComponent info = ref existingEntity.GetMut<EcsComponent>();
 
-                return e;
+                if (Unsafe.IsNullRef(ref info))
+                    Ecs.Assert(IsTag, $"Cannot alias '{existingEntity.Path()}' with a '{FullName}'. '{FullName}' must be a zero-sized struct");
+                else
+                    Ecs.Assert(info.size == Size && info.alignment == Alignment, $"Layout of type '{FullName}' (Size: {Size}, Alignment: {Alignment}) does not match currently registered layout (Size: {info.size}, Alignment: {info.alignment})");
+
+                return EnsureCacheIndex(world) = existingEntity;
             }
 
             Entity prevScope = world.SetScope(ignoreScope ? 0ul : world.GetScope());
             Entity prevWith = world.SetWith(ignoreScope ? 0ul : world.GetWith());
-
-            // Check if an entity exists with the same symbol as this type. This is normally used
-            // for pairing Flecs.NET.Bindings.Native types with their C counterparts.
-            if (world.TryLookupSymbol(FullName, out Entity symbol))
-            {
-                id = symbol;
-                name = symbol.Path();
-            }
 
             using NativeString nativeSymbol = (NativeString)FullName;
             using NativeString nativeName = string.IsNullOrEmpty(name)
