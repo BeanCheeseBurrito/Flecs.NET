@@ -245,6 +245,9 @@ namespace Flecs.NET.Core
         /// <returns>The registered id of this type.</returns>
         public static ulong RegisterComponent(World world, bool ignoreScope, bool isComponent, ulong id, string name)
         {
+            Ecs.Assert(!world.GetWorld().IsReadOnly() || world.GetWorld().GetStageCount() <= 1,
+                "Cannot register component while multithreaded world is progressing/readonly.");
+
             // If a name or id is provided, the type is being used to alias an already existing entity.
             Entity existingEntity = id != 0 ? new Entity(world, id) : world.Lookup(name, false);
 
