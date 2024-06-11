@@ -31,7 +31,7 @@ public static class Cpp_Queries_GroupByCustom
         world.Component<Third>();
 
         // Grouped query
-        Query q = world.QueryBuilder<Position>()
+        using Query q = world.QueryBuilder<Position>()
             .GroupBy<Group>(GroupByRelation)
             .Build();
 

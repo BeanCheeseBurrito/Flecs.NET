@@ -39,7 +39,7 @@ public static unsafe class Cpp_Queries_GroupByCallbacks
         int groupCounter = 0;
 
         // Grouped query
-        Query q = world.QueryBuilder<Position>()
+        using Query q = world.QueryBuilder<Position>()
             .GroupBy<Group>()
             // Callback invoked when a new group is created
             .OnGroupCreate((

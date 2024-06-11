@@ -37,7 +37,7 @@ public static class Cpp_Queries_Instancing
 
         // Create a query for Position, Velocity. We'll create a few entities that
         // have Velocity as owned and shared component.
-        Query q = world.QueryBuilder<Position, Velocity>()
+        using Query q = world.QueryBuilder<Position, Velocity>()
             .TermAt(0).Self() // Position must always be owned by the entity
             .Instanced()      // Create instanced query
             .Build();

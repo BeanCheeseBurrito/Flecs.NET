@@ -17,7 +17,7 @@ public static class Cpp_Queries_Wildcards
         using World world = World.Create();
 
         // Create a query that matches edible components
-        Query q = world.QueryBuilder<Eats>()
+        using Query q = world.QueryBuilder<Eats>()
             .TermAt(1).Second(Ecs.Wildcard) // Change first argument to (Eats, *)
             .Build();
 

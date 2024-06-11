@@ -29,7 +29,7 @@ public static class Cpp_Reflection_QueryToJson
         world.Entity("D").Set<Position>(new(30, 40)).Set<Velocity>(new(4, 5)).Set<Mass>(new(20));
 
         // Query for components.
-        Query query = world.Query<Position, Velocity>();
+        using Query query = world.Query<Position, Velocity>();
 
         // Serialize query to JSON. Note that this works for any iterable object,
         // including filters & rules.

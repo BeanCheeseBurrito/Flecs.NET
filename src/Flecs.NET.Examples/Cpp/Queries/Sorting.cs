@@ -26,7 +26,7 @@ public static unsafe class Cpp_Queries_Sorting
             });
 
         // Create a sorted query
-        Query q = world.QueryBuilder<Position>()
+        using Query q = world.QueryBuilder<Position>()
             .OrderBy<Position>(ComparePosition)
             .Build();
 

@@ -26,13 +26,13 @@ public static class Cpp_Queries_ChangeTracking
         // when Query.Changed() is called.
         // Each query has its own private dirty state which is reset only when the
         // query is iterated.
-        Query qRead = world.QueryBuilder()
+        using Query qRead = world.QueryBuilder()
             .Cached()
             .With<Position>().In()
             .Build();
 
         // Create a query that writes the component based on a Dirty state.
-        Query qWrite = world.QueryBuilder()
+        using Query qWrite = world.QueryBuilder()
             .With<Dirty>().Up().In() // Only match Dirty from prefab
             .With<Position>()        // Instanced iteration is faster (see example)
             .Instanced()

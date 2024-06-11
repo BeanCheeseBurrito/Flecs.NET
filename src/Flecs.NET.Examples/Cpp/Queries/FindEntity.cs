@@ -13,7 +13,7 @@ public static class Cpp_Queries_FindEntity
         world.Entity("e2").Set<Position>(new(20, 30));
 
         // Create a simple query for component Position
-        Query q = world.Query<Position>();
+        using Query q = world.Query<Position>();
 
         // Find the entity for which Position.x is 20
         Entity e = q.Find((ref Position p) => p.X == 20);

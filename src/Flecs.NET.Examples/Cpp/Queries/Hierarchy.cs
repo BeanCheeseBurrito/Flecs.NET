@@ -41,7 +41,7 @@ public static class Cpp_Queries_Hierarchy
 
         // Create a hierarchical query to compute the global position from the
         // local position and the parent position.
-        Query q = world.QueryBuilder()
+        using Query q = world.QueryBuilder()
             .With<Position, Local>()  // Self local position
             .With<Position, Global>() // Self global position
             .With<Position, Global>() // Parent global position

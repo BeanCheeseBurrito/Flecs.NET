@@ -17,7 +17,7 @@ public static class Cpp_Queries_With
         // result does not become part of the function signatures of each and iter.
         // This is useful for things like tags, which because they don't have a
         // value are less useful to pass to the Each/Iter functions as argument.
-        Query q = world.Query<Position, Npc>();
+        using Query q = world.Query<Position, Npc>();
 
         // Create a few test entities for the Position, Npc query
         world.Entity("e1")

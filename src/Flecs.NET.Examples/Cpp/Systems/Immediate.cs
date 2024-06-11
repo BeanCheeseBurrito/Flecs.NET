@@ -24,7 +24,7 @@ public static class Cpp_Systems_Immediate
         using World world = World.Create();
 
         // Create query to find all waiters without a plate
-        Query qWaiter = world.QueryBuilder()
+        using Query qWaiter = world.QueryBuilder()
             .With<Waiter>()
             .Without<Plate>(Ecs.Wildcard)
             .Build();

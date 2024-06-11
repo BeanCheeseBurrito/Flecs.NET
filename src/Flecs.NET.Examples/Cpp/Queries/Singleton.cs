@@ -23,7 +23,7 @@ public static class Cpp_Queries_Singleton
         world.Entity("e3").Set<Velocity>(new(0, 2));
 
         // Create query that matches Gravity as singleton
-        Query q = world.QueryBuilder<Velocity, Gravity>()
+        using Query q = world.QueryBuilder<Velocity, Gravity>()
             .TermAt(2).Singleton()
             .Build();
 

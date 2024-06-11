@@ -15,7 +15,7 @@ file static unsafe class Cpp_Systems_SystemCtx
     {
         using World world = World.Create();
 
-        Query qCollide = world.Query<Position, Radius>();
+        using Query qCollide = world.Query<Position, Radius>();
 
         Routine routine = world.Routine<Position, Radius>("Collide")
             .Ctx(&qCollide)

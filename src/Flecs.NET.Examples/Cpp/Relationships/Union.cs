@@ -41,7 +41,7 @@ public static class Cpp_Relationships_Union
 
         // Create a query that subscribes for all entities that have a Direction
         // and that are walking
-        Query q = world.QueryBuilder()
+        using Query q = world.QueryBuilder()
             .With(Movement.Walking)
             .With<Direction>(Ecs.Wildcard)
             .Build();
