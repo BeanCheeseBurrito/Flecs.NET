@@ -2250,7 +2250,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            Query q = world.Query<Velocity>();
+            using Query q = world.Query<Velocity>();
 
             world.Routine<Position>()
                 .MultiThreaded()
@@ -2285,7 +2285,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            Query q = world.Query<Velocity>();
+            using Query q = world.Query<Velocity>();
 
             world.Routine<Position>()
                 .MultiThreaded()
@@ -2320,7 +2320,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            Query q = world.Query<Velocity>();
+            using Query q = world.Query<Velocity>();
 
             world.Routine<Position>()
                 .MultiThreaded()
@@ -2355,7 +2355,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            Query q = world.Query<Velocity>();
+            using Query q = world.Query<Velocity>();
 
             world.Routine<Position>()
                 .MultiThreaded()
@@ -2398,7 +2398,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            Query q = world.Query<Velocity>();
+            using Query q = world.Query<Velocity>();
 
             world.Routine<Position>()
                 .MultiThreaded()
@@ -2441,7 +2441,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            Query q = world.Query<Velocity>();
+            using Query q = world.Query<Velocity>();
 
             world.Routine<Position>()
                 .MultiThreaded()

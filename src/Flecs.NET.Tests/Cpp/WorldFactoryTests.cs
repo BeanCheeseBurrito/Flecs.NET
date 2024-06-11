@@ -140,7 +140,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.Query<Position, Velocity>();
+            using Query q = world.Query<Position, Velocity>();
 
             Entity e = world.Entity()
                 .Set(new Position { X = 10, Y = 20 })
@@ -165,7 +165,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Component<Position>();
             world.Component<Velocity>();
 
-            Query q = world.QueryBuilder().Expr("Position, [in] Velocity").Build();
+            using Query q = world.QueryBuilder().Expr("Position, [in] Velocity").Build();
 
             Entity e = world.Entity()
                 .Set(new Position { X = 10, Y = 20 })

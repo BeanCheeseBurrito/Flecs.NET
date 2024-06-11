@@ -25,7 +25,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder<Position, Velocity>()
                     .CacheKind(cacheKind)
                     .Build();
@@ -49,7 +49,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Position, Velocity>()
+            using Query q = world.QueryBuilder<Position, Velocity>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -72,7 +72,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .CacheKind(cacheKind)
                 .With<Position>()
                 .With<Velocity>()
@@ -97,7 +97,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder<Position, Velocity>()
                     .CacheKind(cacheKind)
                     .Build();
@@ -121,7 +121,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Position, Velocity>()
+            using Query q = world.QueryBuilder<Position, Velocity>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -148,7 +148,7 @@ namespace Flecs.NET.Tests.Cpp
             qb.With<Position>();
             qb.With<Velocity>();
             qb.CacheKind(cacheKind);
-            Query q = qb.Build();
+            using Query q = qb.Build();
 
             Entity e1 = world.Entity().Add<Position>().Add<Velocity>();
             world.Entity().Add<Position>();
@@ -169,7 +169,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Position>()
+            using Query q = world.QueryBuilder<Position>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -198,7 +198,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Entity().Set(new Velocity(10, 20));
 
-            Query r = world.QueryBuilder<Position, Velocity>()
+            using Query r = world.QueryBuilder<Position, Velocity>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -230,7 +230,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Entity().Set(new Velocity(10, 20));
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With(tag)
                 .CacheKind(cacheKind)
                 .Build();
@@ -256,7 +256,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Entity().Set(new Velocity(10, 20));
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Position>()
                 .CacheKind(cacheKind)
                 .Build();
@@ -287,7 +287,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity()
                 .Add(likes, pears);
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With(likes, apples)
                 .CacheKind(cacheKind)
                 .Build();
@@ -318,7 +318,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity()
                 .Add(likes, pears);
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With(likes, Ecs.Wildcard)
                 .CacheKind(cacheKind)
                 .Build();
@@ -353,7 +353,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity()
                 .Add<Likes, Pears>();
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Likes>(Ecs.Wildcard)
                 .CacheKind(cacheKind)
                 .Build();
@@ -388,7 +388,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity()
                 .Add<Likes, Pears>();
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Likes>().Second().Var("Food")
                 .CacheKind(cacheKind)
                 .Build();
@@ -432,7 +432,7 @@ namespace Flecs.NET.Tests.Cpp
 
             bob.Add<Likes>(alice);
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Eats>().Second().Var("Food")
                 .With<Likes>().Second().Var("Person")
                 .CacheKind(cacheKind)
@@ -486,7 +486,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity()
                 .Add<Likes>(pears);
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Likes>().Second().Var("Food")
                 .CacheKind(cacheKind)
                 .Build();
@@ -526,7 +526,7 @@ namespace Flecs.NET.Tests.Cpp
 
             bob.Add<Likes>(alice);
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Eats>().Second().Var("Food")
                 .With<Likes>().Second().Var("Person")
                 .CacheKind(cacheKind)
@@ -568,7 +568,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity()
                 .Add<Likes>(pears);
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Likes>().Second().Var("Food")
                 .CacheKind(cacheKind)
                 .Build();
@@ -603,7 +603,7 @@ namespace Flecs.NET.Tests.Cpp
 
             bob.Add<Likes>(alice);
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Eats>().Second().Var("Food")
                 .With<Likes>().Second().Var("Person")
                 .CacheKind(cacheKind)
@@ -645,7 +645,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity()
                 .Add<Likes>(pears);
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Likes>().Second().Var("Food")
                 .CacheKind(cacheKind)
                 .Build();
@@ -681,7 +681,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity()
                 .Add<Likes>(pears);
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Likes>().Second().Var("Food")
                 .CacheKind(cacheKind)
                 .Build();
@@ -709,7 +709,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add<Position>();
             Entity e3 = world.Entity().Add<Position>().Add<Velocity>();
 
-            Query r = world.QueryBuilder<Position>()
+            using Query r = world.QueryBuilder<Position>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -745,7 +745,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add<Position>();
             Entity e3 = world.Entity().Add<Position>().Add<Velocity>();
 
-            Query r = world.QueryBuilder<Position>()
+            using Query r = world.QueryBuilder<Position>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -793,11 +793,11 @@ namespace Flecs.NET.Tests.Cpp
             /* var e4 = */
             world.Entity().Add<Velocity>();
 
-            Query q1 = world.QueryBuilder<Position>()
+            using Query q1 = world.QueryBuilder<Position>()
                 .CacheKind(cacheKind)
                 .Build();
 
-            Query q2 = world.QueryBuilder<Velocity>()
+            using Query q2 = world.QueryBuilder<Velocity>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -832,11 +832,11 @@ namespace Flecs.NET.Tests.Cpp
             /* var e4 = */
             world.Entity().Add<Velocity>();
 
-            Query q1 = world.QueryBuilder<Position>()
+            using Query q1 = world.QueryBuilder<Position>()
                 .CacheKind(cacheKind)
                 .Build();
 
-            Query q2 = world.QueryBuilder<Velocity>()
+            using Query q2 = world.QueryBuilder<Velocity>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -867,7 +867,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity obj = world.Entity();
             Entity e = world.Entity().Add(rel, obj);
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .Expr("(Rel, $X)")
                 .CacheKind(cacheKind)
                 .Build();
@@ -892,7 +892,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<Position>()
                 .CacheKind(cacheKind)
                 .Build();
@@ -916,7 +916,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<Position>()
                 .With<Velocity>()
                 .CacheKind(cacheKind)
@@ -941,7 +941,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Position>()
+            using Query q = world.QueryBuilder<Position>()
                 .With<Velocity>()
                 .CacheKind(cacheKind)
                 .Build();
@@ -965,7 +965,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Position>()
+            using Query q = world.QueryBuilder<Position>()
                 .With<Velocity>()
                 .With<Mass>()
                 .CacheKind(cacheKind)
@@ -994,7 +994,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity bob = world.Entity();
             Entity alice = world.Entity();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(likes, bob)
                 .CacheKind(cacheKind)
                 .Build();
@@ -1018,7 +1018,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Position>()
+            using Query q = world.QueryBuilder<Position>()
                 .With<Velocity>().Oper(Ecs.Not)
                 .CacheKind(cacheKind)
                 .Build();
@@ -1042,7 +1042,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<Position>().Oper(Ecs.Or)
                 .With<Velocity>()
                 .CacheKind(cacheKind)
@@ -1068,7 +1068,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<Position>()
                 .With<Velocity>().Oper(Ecs.Optional)
                 .CacheKind(cacheKind)
@@ -1096,7 +1096,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Position>();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .Expr("Position")
                 .CacheKind(cacheKind)
                 .Build();
@@ -1122,7 +1122,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Set(new Other(10));
 
-            Query q = world.QueryBuilder<Self>()
+            using Query q = world.QueryBuilder<Self>()
                 .With<Other>().Singleton().InOut()
                 .CacheKind(cacheKind)
                 .Build();
@@ -1167,7 +1167,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
-            Query q = world.QueryBuilder<Self>()
+            using Query q = world.QueryBuilder<Self>()
                 .With<Other>().Src().Up(Ecs.IsA).In()
                 .CacheKind(cacheKind)
                 .Build();
@@ -1211,7 +1211,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
-            Query q = world.QueryBuilder<Self>()
+            using Query q = world.QueryBuilder<Self>()
                 .With<Other>().Src().Self().Up(Ecs.IsA).In()
                 .CacheKind(cacheKind)
                 .Build();
@@ -1266,7 +1266,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Self>()
+            using Query q = world.QueryBuilder<Self>()
                 .With<Other>().Src().Up().In()
                 .CacheKind(cacheKind)
                 .Build();
@@ -1308,7 +1308,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Self>()
+            using Query q = world.QueryBuilder<Self>()
                 .With<Other>().Src().Self().Up().In()
                 .CacheKind(cacheKind)
                 .Build();
@@ -1365,7 +1365,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
-            Query q = world.QueryBuilder<Self, Other>()
+            using Query q = world.QueryBuilder<Self, Other>()
                 .TermAt(1).Src().Up(Ecs.IsA)
                 .CacheKind(cacheKind)
                 .Build();
@@ -1399,7 +1399,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
-            Query q = world.QueryBuilder<Self, Other>()
+            using Query q = world.QueryBuilder<Self, Other>()
                 .TermAt(1).Src().Self().Up(Ecs.IsA)
                 .CacheKind(cacheKind)
                 .Build();
@@ -1435,7 +1435,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Self, Other>()
+            using Query q = world.QueryBuilder<Self, Other>()
                 .TermAt(1).Src().Up()
                 .CacheKind(cacheKind)
                 .Build();
@@ -1467,7 +1467,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Self, Other>()
+            using Query q = world.QueryBuilder<Self, Other>()
                 .TermAt(1).Src().Self().Up()
                 .CacheKind(cacheKind)
                 .Build();
@@ -1505,7 +1505,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
-            Query q = world.QueryBuilder<Self, Other>()
+            using Query q = world.QueryBuilder<Self, Other>()
                 .TermAt(1).Up(Ecs.IsA)
                 .CacheKind(cacheKind)
                 .Build();
@@ -1539,7 +1539,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
-            Query q = world.QueryBuilder<Self, Other>()
+            using Query q = world.QueryBuilder<Self, Other>()
                 .TermAt(1).Self().Up(Ecs.IsA)
                 .CacheKind(cacheKind)
                 .Build();
@@ -1575,7 +1575,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Self, Other>()
+            using Query q = world.QueryBuilder<Self, Other>()
                 .TermAt(1).Up()
                 .CacheKind(cacheKind)
                 .Build();
@@ -1607,7 +1607,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Self, Other>()
+            using Query q = world.QueryBuilder<Self, Other>()
                 .TermAt(1).Self().Up()
                 .CacheKind(cacheKind)
                 .Build();
@@ -1647,7 +1647,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity bob = world.Entity();
             Entity alice = world.Entity();
 
-            Query q = world.QueryBuilder<Self>()
+            using Query q = world.QueryBuilder<Self>()
                 .With(likes, bob)
                 .CacheKind(cacheKind)
                 .Build();
@@ -1683,7 +1683,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity bob = world.Entity();
             Entity alice = world.Entity();
 
-            Query q = world.QueryBuilder<Self>()
+            using Query q = world.QueryBuilder<Self>()
                 .With(likes, Ecs.Wildcard)
                 .CacheKind(cacheKind)
                 .Build();
@@ -1725,7 +1725,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity likes = world.Entity();
             Entity dislikes = world.Entity();
 
-            Query q = world.QueryBuilder<Self>()
+            using Query q = world.QueryBuilder<Self>()
                 .With(Ecs.Wildcard, alice)
                 .CacheKind(cacheKind)
                 .Build();
@@ -1761,7 +1761,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity bob = world.Entity();
             Entity alice = world.Entity();
 
-            Query q = world.QueryBuilder<Self>()
+            using Query q = world.QueryBuilder<Self>()
                 .With<Likes>(Ecs.Wildcard)
                 .CacheKind(cacheKind)
                 .Build();
@@ -1793,7 +1793,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Position>()
+            using Query q = world.QueryBuilder<Position>()
                 .With<Template<int>>()
                 .CacheKind(cacheKind)
                 .Build();
@@ -1817,7 +1817,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder<Position>()
+            using Query q = world.QueryBuilder<Position>()
                 .With<Position>().Id(Ecs.This)
                 .CacheKind(cacheKind)
                 .Build();
@@ -1843,7 +1843,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Set(new Position(10, 20));
 
-            Query q = world.QueryBuilder<Position>()
+            using Query q = world.QueryBuilder<Position>()
                 .With<Position>().Src<Position>()
                 .CacheKind(cacheKind)
                 .Build();
@@ -1870,7 +1870,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity alice = world.Entity();
             Entity bob = world.Entity();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(likes).Second(alice)
                 .CacheKind(cacheKind)
                 .Build();
@@ -1897,7 +1897,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity likes = world.Entity();
             Entity bob = world.Entity();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(likes).Second<Alice>()
                 .CacheKind(cacheKind)
                 .Build();
@@ -1921,7 +1921,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(world.Term(world.Id<Position>()))
                 .CacheKind(cacheKind)
                 .Build();
@@ -1945,7 +1945,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(world.Term<Position>())
                 .CacheKind(cacheKind)
                 .Build();
@@ -1969,7 +1969,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(world.Term<Likes, Alice>())
                 .CacheKind(cacheKind)
                 .Build();
@@ -1996,7 +1996,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity apples = world.Entity();
             Entity pears = world.Entity();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(world.Term(apples))
                 .CacheKind(cacheKind)
                 .Build();
@@ -2024,7 +2024,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity apples = world.Entity();
             Entity pears = world.Entity();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(world.Term(likes, apples))
                 .CacheKind(cacheKind)
                 .Build();
@@ -2057,7 +2057,7 @@ namespace Flecs.NET.Tests.Cpp
 
             qb.With(likes, apples);
 
-            Query q = qb.Build();
+            using Query q = qb.Build();
 
             Assert.Equal(2, q.FieldCount());
             Assert.Equal(world.Id<Position>(), q.Term(0).Id());
@@ -2095,7 +2095,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<TagA>()
                 .With<TagB>().Oper(Ecs.Optional)
                 .CacheKind(cacheKind)
@@ -2137,7 +2137,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query f = world.QueryBuilder()
+            using Query f = world.QueryBuilder()
                 .With<TagA>()
                 .With<TagB>()
                 .With<TagC>()
@@ -2186,7 +2186,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query f = world.QueryBuilder()
+            using Query f = world.QueryBuilder()
                 .With<TagA>()
                 .With<TagB>()
                 .With<TagC>()
@@ -2267,12 +2267,12 @@ namespace Flecs.NET.Tests.Cpp
             world.Component<TagC>();
             world.Component<TagX>();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<TagX>()
                 .GroupBy(world.Id<TagX>(), GroupByFirstId)
                 .Build();
 
-            Query qReverse = world.QueryBuilder()
+            using Query qReverse = world.QueryBuilder()
                 .With<TagX>()
                 .GroupBy(world.Id<TagX>(), GroupByFirstIdNegated)
                 .Build();
@@ -2332,12 +2332,12 @@ namespace Flecs.NET.Tests.Cpp
             world.Component<TagC>();
             world.Component<TagX>();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<TagX>()
                 .GroupBy<TagX>(GroupByFirstId)
                 .Build();
 
-            Query qReverse = world.QueryBuilder()
+            using Query qReverse = world.QueryBuilder()
                 .With<TagX>()
                 .GroupBy<TagX>(GroupByFirstIdNegated)
                 .Build();
@@ -2412,7 +2412,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e5 = world.Entity().Add(rel, tgtB).Add(tag);
             world.Entity().Add(rel, tgtC).Add(tag);
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(rel, Ecs.Wildcard)
                 .GroupBy(rel, group_by_rel)
                 .Build();
@@ -2451,7 +2451,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e5 = world.Entity().Add<Rel, TgtB>().Add<Tag>();
             world.Entity().Add<Rel, TgtC>().Add<Tag>();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<Rel>(Ecs.Wildcard)
                 .GroupBy<Rel>(group_by_rel)
                 .Build();
@@ -2495,7 +2495,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e5 = world.Entity().Add(rel, tgtB).Add(tag);
             Entity e6 = world.Entity().Add(rel, tgtC).Add(tag);
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(rel, Ecs.Wildcard)
                 .GroupBy(rel, group_by_rel)
                 .Build();
@@ -2563,7 +2563,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add(rel, tgtB);
             Entity e3 = world.Entity().Add(rel, tgtA);
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(rel, Ecs.Wildcard)
                 .GroupBy(rel)
                 .Build();
@@ -2627,7 +2627,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add<Rel>(tgtB);
             Entity e3 = world.Entity().Add<Rel>(tgtA);
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<Rel>(Ecs.Wildcard)
                 .GroupBy<Rel>()
                 .Build();
@@ -2692,7 +2692,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int* groupByCtx = stackalloc int[1];
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<Rel>(Ecs.Wildcard)
                 .GroupBy<Rel>()
                 .GroupByCtx(&groupByCtx[0])
@@ -2789,7 +2789,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e5 = world.Entity().Add(rel, tgtB).Add(tag);
             world.Entity().Add(rel, tgtC).Add(tag);
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(rel, Ecs.Wildcard)
                 .GroupBy(rel, group_by_rel)
                 .Build();
@@ -2829,7 +2829,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e5 = world.Entity().Add<Rel, TgtB>().Add(tag);
             world.Entity().Add<Rel, TgtC>().Add(tag);
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<Rel>(Ecs.Wildcard)
                 .GroupBy<Rel>(group_by_rel)
                 .Build();
@@ -2859,7 +2859,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<Position>()
                 .CacheKind(cacheKind)
                 .Build();
@@ -2890,7 +2890,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Add(likes, apple)
                 .Add(likes, mango);
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(likes, Ecs.Any)
                 .CacheKind(cacheKind)
                 .Build();
@@ -2920,7 +2920,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().IsA(e1);
             Entity e3 = world.Entity().IsA(e2);
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(tag).Cascade(Ecs.IsA)
                 .Cached()
                 .Build();
@@ -2983,7 +2983,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().IsA(e1);
             Entity e3 = world.Entity().IsA(e2);
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(tag).Cascade(Ecs.IsA).Descend()
                 .Cached()
                 .Build();
@@ -3046,7 +3046,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().ChildOf(e1);
             Entity e3 = world.Entity().ChildOf(e2);
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(tag).Cascade(Ecs.ChildOf)
                 .Cached()
                 .Build();
@@ -3103,7 +3103,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Rel>().Entity.Add(Ecs.Traversable);
 
-            Query q = world.QueryBuilder<Self>()
+            using Query q = world.QueryBuilder<Self>()
                 .With<Other>().Src().Up<Rel>().In()
                 .CacheKind(cacheKind)
                 .Build();
@@ -3157,7 +3157,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add<Rel>(e1);
             Entity e3 = world.Entity().Add<Rel>(e2);
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(tag).Cascade<Rel>()
                 .Cached()
                 .Build();
@@ -3214,7 +3214,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Add<Position>();
             Entity e2 = world.Entity().Add<Position>();
 
-            Query q = world.QueryBuilder("my_query")
+            using Query q = world.QueryBuilder("my_query")
                 .With<Position>()
                 .CacheKind(cacheKind)
                 .Build();
@@ -3238,7 +3238,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<Position>()
                 .With<Position>().Write()
                 .CacheKind(cacheKind)
@@ -3256,7 +3256,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<Position>()
                 .With<Position>().Read()
                 .CacheKind(cacheKind)
@@ -3279,7 +3279,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e1 = world.Entity().Add<Position>();
 
-            Query q = world.Query<Position>();
+            using Query q = world.Query<Position>();
 
             int count = 0;
             q.Iter(stage).Each((Iter it, int i) =>
@@ -3336,7 +3336,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query f = world.QueryBuilder<Self>()
+            using Query f = world.QueryBuilder<Self>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -3403,7 +3403,7 @@ namespace Flecs.NET.Tests.Cpp
             e = world.Entity();
             e.Set(new Self(e));
 
-            Query f = QueryReturn(world);
+            using Query f = QueryReturn(world);
 
             int count = 0;
 
@@ -3431,7 +3431,7 @@ namespace Flecs.NET.Tests.Cpp
             e = world.Entity();
             e.Set(new Self(e));
 
-            Query f = world.QueryBuilder<Self>()
+            using Query f = world.QueryBuilder<Self>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -3586,7 +3586,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Add<TagA>()
                 .Add<TagB>();
 
-            Query f = world.QueryBuilder<TagA, TagB>()
+            using Query f = world.QueryBuilder<TagA, TagB>()
                 .TermAt(0).Src(Ecs.This)
                 .With<TagC>()
                 .CacheKind(cacheKind)
@@ -3612,7 +3612,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity("Foo").Set(new Position(10, 20));
 
-            Query f = world.QueryBuilder<Position>()
+            using Query f = world.QueryBuilder<Position>()
                 .TermAt(0).Src().Name("Foo")
                 .CacheKind(cacheKind)
                 .Build();
@@ -3641,7 +3641,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     world.Entity().Set(new Position(10, 20));
         //
-        //     Query f = world.QueryBuilder()
+        //     using Query f = world.QueryBuilder()
         //         .With<Position>()
         //         .CacheKind(cacheKind)
         //         .Build();
@@ -3671,7 +3671,7 @@ namespace Flecs.NET.Tests.Cpp
         //     world.Entity().Set(new Position(10, 20)).Add<TagA>();
         //     world.Entity().Add<TagA>();
         //
-        //     Query f = world.QueryBuilder<TagA, Position>()
+        //     using Query f = world.QueryBuilder<TagA, Position>()
         //         .CacheKind(cacheKind)
         //         .Build();
         //
@@ -3706,7 +3706,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e1 = world.Entity().Add(a).Add(b);
 
-            Query f = world.QueryBuilder()
+            using Query f = world.QueryBuilder()
                 .Expr("A, B")
                 .CacheKind(cacheKind)
                 .Build();
@@ -3740,7 +3740,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     // test_expect_abort();
         //
-        //     using Query f = world.QueryBuilder()
+        //      using Query f = world.QueryBuilder()
         //         .Term()
         //         .Term()
         //         .CacheKind(cacheKind)
@@ -3762,7 +3762,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity g = world.Entity();
             Entity h = world.Entity();
 
-            Query query = world.QueryBuilder()
+            using Query query = world.QueryBuilder()
                 .With(a).And()
                 .With(b).Or()
                 .With(c)
@@ -3818,7 +3818,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity c = world.Entity();
             Entity d = world.Entity();
 
-            Query query = world.QueryBuilder()
+            using Query query = world.QueryBuilder()
                 .With(a).In()
                 .With(b).Out()
                 .With(c).InOut()
@@ -3849,7 +3849,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query f = world.QueryBuilder<Position>()
+            using Query f = world.QueryBuilder<Position>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -3889,7 +3889,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query f = world.QueryBuilder<Position>()
+            using Query f = world.QueryBuilder<Position>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -3921,7 +3921,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query f = world.QueryBuilder<Position>()
+            using Query f = world.QueryBuilder<Position>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -3954,7 +3954,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With(world.Id<Position>())
                     .With(world.Id<Velocity>())
@@ -3982,7 +3982,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Velocity>();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .With("Velocity")
@@ -4008,7 +4008,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .With<Velocity>()
@@ -4038,7 +4038,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity apples = world.Entity();
             Entity pears = world.Entity();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .With(likes, apples)
@@ -4068,7 +4068,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity apples = world.Entity("Apples");
             Entity pears = world.Entity("Pears");
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .With("Likes", "Apples")
@@ -4094,7 +4094,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .With<Likes, Apples>()
@@ -4123,7 +4123,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity apples = world.Entity();
             Entity pears = world.Entity();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .With<Likes>(apples)
@@ -4152,7 +4152,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity apples = world.Entity("Apples");
             Entity pears = world.Entity("Pears");
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .With<Likes>("Apples")
@@ -4178,7 +4178,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .With(Color.Green)
@@ -4204,7 +4204,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With(world.Id<Position>())
                     .Without(world.Id<Velocity>())
@@ -4232,7 +4232,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Velocity>();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With(world.Id<Position>())
                     .Without("Velocity")
@@ -4258,7 +4258,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Without<Velocity>()
@@ -4288,7 +4288,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity apples = world.Entity();
             Entity pears = world.Entity();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Without(likes, apples)
@@ -4318,7 +4318,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity apples = world.Entity("Apples");
             Entity pears = world.Entity("Pears");
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Without("Likes", "Apples")
@@ -4344,7 +4344,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Without<Likes, Apples>()
@@ -4373,7 +4373,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity apples = world.Entity();
             Entity pears = world.Entity();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Without<Likes>(apples)
@@ -4402,7 +4402,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity apples = world.Entity("Apples");
             Entity pears = world.Entity("Pears");
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Without<Likes>("Apples")
@@ -4428,7 +4428,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Without(Color.Green)
@@ -4454,7 +4454,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Write(world.Id<Position>())
@@ -4474,7 +4474,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Position>();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Write("Position")
@@ -4494,7 +4494,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Position>();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Write<Position>()
@@ -4515,7 +4515,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity likes = world.Entity();
             Entity apples = world.Entity();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Write(likes, apples)
@@ -4537,7 +4537,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity likes = world.Entity("Likes");
             Entity apples = world.Entity("Apples");
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Write("Likes", "Apples")
@@ -4556,7 +4556,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Write<Likes, Apples>()
@@ -4577,7 +4577,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity apples = world.Entity();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Write<Likes>(apples)
@@ -4598,7 +4598,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity apples = world.Entity("Apples");
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Write<Likes>("Apples")
@@ -4617,7 +4617,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Write(Color.Green)
@@ -4636,7 +4636,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Read(world.Id<Position>())
@@ -4656,7 +4656,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Position>();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Read("Position")
@@ -4676,7 +4676,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Component<Position>();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Read<Position>()
@@ -4697,7 +4697,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity likes = world.Entity();
             Entity apples = world.Entity();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Read(likes, apples)
@@ -4719,7 +4719,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity likes = world.Entity("Likes");
             Entity apples = world.Entity("Apples");
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Read("Likes", "Apples")
@@ -4738,7 +4738,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Read<Likes, Apples>()
@@ -4759,7 +4759,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity apples = world.Entity();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Read<Likes>(apples)
@@ -4780,7 +4780,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity apples = world.Entity("Apples");
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Read<Likes>("Apples")
@@ -4800,7 +4800,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q =
+            using Query q =
                 world.QueryBuilder()
                     .With<Position>()
                     .Read(Color.Green)
@@ -4833,6 +4833,7 @@ namespace Flecs.NET.Tests.Cpp
                 Assert.True(e == e1);
                 count++;
             });
+            f.Destruct();
 
             Assert.Equal(1, count);
         }
@@ -4843,7 +4844,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query f = world.QueryBuilder()
+            using Query f = world.QueryBuilder()
                 .With(world.Id<Position>())
                 .CacheKind(cacheKind)
                 .Build();
@@ -4857,7 +4858,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query f = world.QueryBuilder()
+            using Query f = world.QueryBuilder()
                 .With<Position>()
                 .CacheKind(cacheKind)
                 .Build();
@@ -4871,7 +4872,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query f = world.QueryBuilder()
+            using Query f = world.QueryBuilder()
                 .With<Position, Velocity>()
                 .CacheKind(cacheKind)
                 .Build();
@@ -4885,7 +4886,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query f = world.QueryBuilder()
+            using Query f = world.QueryBuilder()
                 .With<Position>(world.Id<Velocity>())
                 .CacheKind(cacheKind)
                 .Build();
@@ -4899,7 +4900,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query f = world.QueryBuilder()
+            using Query f = world.QueryBuilder()
                 .With(world.Id<Position>(), world.Id<Velocity>())
                 .CacheKind(cacheKind)
                 .Build();
@@ -4926,7 +4927,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query f = world.QueryBuilder<Self>()
+            using Query f = world.QueryBuilder<Self>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -4964,7 +4965,7 @@ namespace Flecs.NET.Tests.Cpp
             e = world.Entity();
             e.Set(new Self(e));
 
-            Query f = FilterReturn(world, cacheKind);
+            using Query f = FilterReturn(world, cacheKind);
 
             int count = 0;
 
@@ -4992,7 +4993,7 @@ namespace Flecs.NET.Tests.Cpp
             e = world.Entity();
             e.Set(new Self(e));
 
-            Query f = world.QueryBuilder<Self>()
+            using Query f = world.QueryBuilder<Self>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -5138,7 +5139,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Foo>().Src("$Var")
                 .CacheKind(cacheKind)
                 .Build();
@@ -5164,7 +5165,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Foo>()
                 .Term().First("$Var")
                 .CacheKind(cacheKind)
@@ -5193,7 +5194,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Foo>().Second("$Var")
                 .CacheKind(cacheKind)
                 .Build();
@@ -5224,7 +5225,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity foo = world.Entity();
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With(foo, "$Var")
                 .CacheKind(cacheKind)
                 .Build();
@@ -5253,7 +5254,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With<Foo>("$Var")
                 .CacheKind(cacheKind)
                 .Build();
@@ -5285,7 +5286,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Add<Position>();
             Entity e2 = world.Entity().Add<Position>();
 
-            Query q = world.QueryBuilder<Position>("my_query")
+            using Query q = world.QueryBuilder<Position>("my_query")
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -5311,7 +5312,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Add<Position>();
             Entity e2 = world.Entity().Add<Position>();
 
-            Query q = world.QueryBuilder<Position>("my.query")
+            using Query q = world.QueryBuilder<Position>("my.query")
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -5335,11 +5336,11 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q1 = world.Query<Position>();
+            using Query q1 = world.Query<Position>();
             Assert.True(q1);
 
             Ecs.Log.SetLevel(-4);
-            Query q2 = world.QueryBuilder()
+            using Query q2 = world.QueryBuilder()
                 .Expr("foo")
                 .CacheKind(cacheKind)
                 .Build();
@@ -5352,7 +5353,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .QueryFlags(EcsQueryAllowUnresolvedByName)
                 .Expr("$this == Foo")
                 .CacheKind(cacheKind)
@@ -5393,7 +5394,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity()
                 .Add(root);
 
-            Query r = world.QueryBuilder()
+            using Query r = world.QueryBuilder()
                 .With(root)
                 .ScopeOpen().Not()
                 .With(tagA)

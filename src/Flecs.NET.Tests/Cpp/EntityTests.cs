@@ -2501,7 +2501,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!self.Entity.Has(tag));
 
             int count = 0;
-            Query query = world.QueryBuilder()
+            using Query query = world.QueryBuilder()
                 .With(tag)
                 .Build();
 
@@ -2536,7 +2536,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!self.Entity.Has<Likes>(bob));
 
             int count = 0;
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<Likes>(bob)
                 .Build();
 
@@ -2573,7 +2573,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!self.Entity.Has(likes, bob));
 
             int count = 0;
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(likes, bob)
                 .Build();
 
@@ -2665,7 +2665,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!self.Entity.Has(Ecs.ChildOf, parent));
 
             int count = 0;
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With(Ecs.ChildOf, parent)
                 .Build();
 

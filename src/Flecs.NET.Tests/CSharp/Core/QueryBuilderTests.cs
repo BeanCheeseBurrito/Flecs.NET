@@ -17,12 +17,12 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Component<TagC>();
             world.Component<TagX>();
 
-            Query q = world.QueryBuilder()
+            using Query q = world.QueryBuilder()
                 .With<TagX>()
                 .GroupBy<TagX>(GroupByFirstId)
                 .Build();
 
-            Query qReverse = world.QueryBuilder()
+            using Query qReverse = world.QueryBuilder()
                 .With<TagX>()
                 .GroupBy<TagX>(GroupByFirstIdNegated)
                 .Build();
