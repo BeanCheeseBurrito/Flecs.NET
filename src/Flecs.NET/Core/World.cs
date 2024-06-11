@@ -608,7 +608,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton component.
+        ///     Get mutable pointer to singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -618,7 +618,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton pair.
+        ///     Get mutable pointer to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -629,7 +629,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton pair.
+        ///     Get mutable pointer to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -643,7 +643,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton pair.
+        ///     Get mutable pointer to singleton pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -657,7 +657,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton pair.
+        ///     Get mutable pointer to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -668,7 +668,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton pair.
+        ///     Get mutable pointer to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -679,7 +679,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton pair.
+        ///     Get mutable pointer to singleton pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -690,7 +690,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton component.
+        ///     Get managed mutable reference to singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -700,7 +700,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton pair.
+        ///     Get managed mutable reference to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -711,7 +711,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton pair.
+        ///     Get managed mutable reference to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -723,7 +723,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton pair.
+        ///     Get managed mutable reference to singleton pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -735,7 +735,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton pair.
+        ///     Get managed mutable reference to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -746,7 +746,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton pair.
+        ///     Get managed mutable reference to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -757,7 +757,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton pair.
+        ///     Get managed mutable reference to singleton pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -1065,6 +1065,166 @@ namespace Flecs.NET.Core
         public ref readonly TSecond GetSecond<TSecond>(ulong first)
         {
             return ref Entity(first).GetSecond<TSecond>(first);
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton component.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T* GetMutPtr<T>() where T : unmanaged
+        {
+            return Entity<T>().GetMutPtr<T>();
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetMutPtr<TFirst>(ulong second) where TFirst : unmanaged
+        {
+            return Entity<TFirst>().GetMutPtr<TFirst>(second);
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetMutPtr<TFirst, TSecond>(TSecond second)
+            where TFirst : unmanaged
+            where TSecond : Enum
+        {
+            return GetMutPtr<TFirst>(Type<TSecond>.Id(Handle, second));
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetMutPtr<TFirst, TSecond>(TFirst first)
+            where TFirst : Enum
+            where TSecond : unmanaged
+        {
+            return GetMutSecondPtr<TSecond>(Type<TFirst>.Id(Handle, first));
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetMutFirstPtr<TFirst, TSecond>() where TFirst : unmanaged
+        {
+            return Entity<TFirst>().GetMutFirstPtr<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetMutSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
+        {
+            return Entity<TFirst>().GetMutSecondPtr<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetMutSecondPtr<TSecond>(ulong first) where TSecond : unmanaged
+        {
+            return Entity(first).GetMutSecondPtr<TSecond>(first);
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton component.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref T GetMut<T>()
+        {
+            return ref Entity<T>().GetMut<T>();
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref TFirst GetMut<TFirst>(ulong second)
+        {
+            return ref Entity<TFirst>().GetMut<TFirst>(second);
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TFirst GetMut<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref GetMut<TFirst>(Type<TSecond>.Id(Handle, second));
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TSecond GetMut<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref GetMutSecond<TSecond>(Type<TFirst>.Id(Handle, first));
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TFirst GetMutFirst<TFirst, TSecond>()
+        {
+            return ref Entity<TFirst>().GetMutFirst<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TSecond GetMutSecond<TFirst, TSecond>()
+        {
+            return ref Entity<TFirst>().GetMutSecond<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TSecond GetMutSecond<TSecond>(ulong first)
+        {
+            return ref Entity(first).GetMutSecond<TSecond>(first);
         }
 
         /// <summary>
