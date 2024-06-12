@@ -27,7 +27,7 @@ namespace Flecs.NET.Core
             if (condition)
                 return;
 
-            throw new AssertionException($"\n[Flecs.NET Assertion Failed]: {member}, Line {line}, {file}\n[Condition]: {conditionStr}\n[Assertion Message]: {message}");
+            throw new AssertionException($"\n[Flecs.NET Assertion Failed]: Line {line}, In Method '{member}', {file}\n[Failed Condition]: {conditionStr}\n[Assertion Message]: {message}");
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Flecs.NET.Core
             [CallerMemberName] string member = "",
             [CallerFilePath] string file = "")
         {
-            throw new ErrorException($"\n[Flecs.NET Error]: {member}, Line {line}, {file}\n[Error Message]: {message}");
+            throw new ErrorException($"\n[Flecs.NET Error]: Line {line}, In Method '{member}', {file}\n[Error Message]: {message}");
         }
 #else
         /// <summary>
@@ -67,7 +67,7 @@ namespace Flecs.NET.Core
                 return;
 
             throw new AssertionException(
-                $"\n[Flecs.NET Assertion Failed]: {member}, Line {line}, {file}\n[Assertion Message]: {message}");
+                $"\n[Flecs.NET Assertion Failed]: Line {line}, In Method '{member}', {file}\n[Assertion Message]: {message}");
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Flecs.NET.Core
             [CallerMemberName] string member = "",
             [CallerFilePath] string file = "")
         {
-            throw new ErrorException($"\n[Flecs.NET Error]: {member}, Line {line}, {file}\n[Error Message]: {message}");
+            throw new ErrorException($"\n[Flecs.NET Error]: Line {line}, In Method '{member}', {file}\n[Error Message]: {message}");
         }
 #endif
     }
