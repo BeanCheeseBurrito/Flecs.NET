@@ -22,7 +22,7 @@ public static class Cpp_Observers_Propagate
 
         // Create observer that listens for events from both self and parent.
         world.Observer<Position, Position>()
-            .TermAt(2).Parent()
+            .TermAt(1).Parent()
             .Event(Ecs.OnSet)
             .Each((Iter it, int i, ref Position pSelf, ref Position pParent) =>
             {

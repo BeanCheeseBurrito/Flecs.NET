@@ -120,14 +120,14 @@ file static class Cpp_GameMechanics_SceneManagement
         // Observer to call scene change logic for
         // MenuScene when added to the ActiveScene.
         world.Observer<ActiveScene>("Scene Change to Menu")
-            .TermAt(1).Second<MenuScene>()
+            .TermAt(0).Second<MenuScene>()
             .Event(Ecs.OnAdd)
             .Each(MenuScene);
 
         // Observer to call scene change logic for
         // GameScene when added to the ActiveScene.
         world.Observer<ActiveScene>("Scene Change to Game")
-            .TermAt(1).Second<GameScene>()
+            .TermAt(0).Second<GameScene>()
             .Event(Ecs.OnAdd)
             .Each(GameScene);
     }

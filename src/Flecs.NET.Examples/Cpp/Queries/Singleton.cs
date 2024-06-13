@@ -24,7 +24,7 @@ public static class Cpp_Queries_Singleton
 
         // Create query that matches Gravity as singleton
         using Query q = world.QueryBuilder<Velocity, Gravity>()
-            .TermAt(2).Singleton()
+            .TermAt(1).Singleton()
             .Build();
 
         // In a query string expression you can use the $ shortcut for singletons:

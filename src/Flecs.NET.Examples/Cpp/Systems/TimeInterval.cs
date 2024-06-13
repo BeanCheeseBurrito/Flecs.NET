@@ -2,7 +2,7 @@
 
 using Flecs.NET.Core;
 
-public static class Cpp_Systems_TimeInterval
+public static unsafe class Cpp_Systems_TimeInterval
 {
     public static void Main()
     {
@@ -25,6 +25,10 @@ public static class Cpp_Systems_TimeInterval
     private static void Tick(Iter it)
     {
         Console.WriteLine(it.System().ToString());
+
+        // Quit after 2 seconds.
+        if (it.World().GetInfo()->world_time_total > 2)
+            it.World().Quit();
     }
 }
 
@@ -35,8 +39,3 @@ public static class Cpp_Systems_TimeInterval
 // FastTick
 // Tick
 // FastTick
-// FastTick
-// Tick
-// FastTick
-// FastTick
-// ...

@@ -55,7 +55,7 @@ public static class Cpp_Relationships_RelationComponent
         // When querying for a relationship component, add the pair type as template
         // argument to the builder:
         using Query q = world.QueryBuilder<Requires>()
-            .TermAt(1).Second<Gigawatts>() // Set second part of pair for first term
+            .TermAt(0).Second<Gigawatts>() // Set second part of pair for first term
             .Build();
 
         // When iterating, always use the pair type:

@@ -67,7 +67,7 @@ public static class Cpp_Relationships_EnumRelations
 
         q1.Each((Iter it, int i) =>
         {
-            Entity tileConstant = it.Pair(1).Second();
+            Entity tileConstant = it.Pair(0).Second();
             Console.WriteLine(tileConstant.Path());
         });
 
