@@ -2,7 +2,7 @@
 
 using Flecs.NET.Core;
 
-public static unsafe class Cpp_Systems_TimeInterval
+public static class Cpp_Systems_TimeInterval
 {
     public static void Main()
     {
@@ -27,7 +27,7 @@ public static unsafe class Cpp_Systems_TimeInterval
         Console.WriteLine(it.System().ToString());
 
         // Quit after 2 seconds.
-        if (it.World().GetInfo()->world_time_total > 2)
+        if (it.World().GetInfo().WorldTimeTotal > 2)
             it.World().Quit();
     }
 }

@@ -2232,9 +2232,9 @@ namespace Flecs.NET.Core
         ///     Get the world info.
         /// </summary>
         /// <returns></returns>
-        public ecs_world_info_t* GetInfo()
+        public WorldInfo GetInfo()
         {
-            return ecs_get_world_info(Handle);
+            return new WorldInfo(ecs_get_world_info(Handle));
         }
 
         /// <summary>
@@ -2243,7 +2243,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public float DeltaTime()
         {
-            return GetInfo()->delta_time;
+            return ecs_get_world_info(Handle)->delta_time;
         }
 
         /// <summary>
