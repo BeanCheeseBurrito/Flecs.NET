@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {

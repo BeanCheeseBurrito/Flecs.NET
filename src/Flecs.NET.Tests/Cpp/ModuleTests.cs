@@ -2,7 +2,7 @@ using Flecs.NET.Core;
 using Namespace;
 using NamespaceLvl1.NamespaceLvl2;
 using Xunit;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Tests.Cpp
 {

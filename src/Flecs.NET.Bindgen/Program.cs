@@ -5,7 +5,7 @@ using Bindgen.NET;
 BindingOptions bindingOptions = new()
 {
     Namespace = "Flecs.NET.Bindings",
-    Class = "Native",
+    Class = "flecs",
 
     DllImportPath = "flecs",
 

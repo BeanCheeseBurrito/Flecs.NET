@@ -22,17 +22,17 @@ namespace Flecs.NET.Unity
 #if UNITY_EDITOR
             Native.BindgenInternal.DllFilePaths.InsertRange(0, EditorPackagePaths());
 #else
-            Native.BindgenInternal.DllFilePaths.InsertRange(0, RuntimePackagePaths());
+            flecs.BindgenInternal.DllFilePaths.InsertRange(0, RuntimePackagePaths());
 #endif
-            Native.BindgenInternal.ResolveLibrary();
+            flecs.BindgenInternal.ResolveLibrary();
 
-            if (Native.BindgenInternal.LibraryHandle == IntPtr.Zero) // TODO add BindgenInternal#IsLibraryResolved?
+            if (flecs.BindgenInternal.LibraryHandle == IntPtr.Zero) // TODO add BindgenInternal#IsLibraryResolved?
                 Debug.LogError("Failed to initialize Flecs.NET: unable to find valid flecs library for platform.");
         }
 
         private static string[] EditorPackagePaths()
         {
-            const string import = Native.BindgenInternal.DllImportPath;
+            const string import = flecs.BindgenInternal.DllImportPath;
 #if FLECS_UNITY_NDEBUG
             const string config = "Release";
 #else
@@ -47,7 +47,7 @@ namespace Flecs.NET.Unity
 
         private static string[] RuntimePackagePaths()
         {
-            const string import = Native.BindgenInternal.DllImportPath;
+            const string import = flecs.BindgenInternal.DllImportPath;
 
             return new[]
             {

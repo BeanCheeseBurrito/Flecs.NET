@@ -39,7 +39,7 @@ public static unsafe class Cpp_Reflection_Units
     {
         // Get unit entity and component.
         Entity unit = cursor.GetUnit();
-        ref readonly Native.EcsUnit unitData = ref unit.Get<Native.EcsUnit>();
+        ref readonly flecs.EcsUnit unitData = ref unit.Get<flecs.EcsUnit>();
 
         // Print value with unit symbol.
         string symbol = Marshal.PtrToStringAnsi((IntPtr)unitData.symbol)!;

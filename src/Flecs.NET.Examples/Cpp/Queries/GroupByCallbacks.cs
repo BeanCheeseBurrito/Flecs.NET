@@ -43,7 +43,7 @@ public static unsafe class Cpp_Queries_GroupByCallbacks
             .GroupBy<Group>()
             // Callback invoked when a new group is created
             .OnGroupCreate((
-                Native.ecs_world_t* world,
+                flecs.ecs_world_t* world,
                 ulong id,            // id of the group that was created
                 void* groupByArg) => // group_by_ctx parameter in ecs_query_desc_t struct
             {
@@ -57,7 +57,7 @@ public static unsafe class Cpp_Queries_GroupByCallbacks
             })
             // Callback invoked when a group is deleted
             .OnGroupDelete((
-                Native.ecs_world_t* world,
+                flecs.ecs_world_t* world,
                 ulong id, // id of the group that was deleted
                 void* ctx, // group context
                 void* groupByArg) => // group_by_ctx parameter in ecs_query_desc_t struct

@@ -12,6 +12,6 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Native Flecs namespace.
         /// </summary>
-        public static readonly string NativeNamespace = $"{nameof(Flecs)}.{nameof(NET)}.{nameof(Bindings)}.{nameof(Native)}+";
+        public static readonly string NativeNamespace = $"{nameof(Flecs)}.{nameof(NET)}.{nameof(Bindings)}.{nameof(flecs)}+";
     }
 }

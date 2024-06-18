@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Core;
 using Flecs.NET.Utilities;
 using Xunit;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Tests.Cpp
 {

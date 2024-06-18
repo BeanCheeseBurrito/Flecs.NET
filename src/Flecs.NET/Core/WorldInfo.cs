@@ -1,7 +1,7 @@
 using System;
 using Flecs.NET.Bindings;
 using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -177,7 +177,7 @@ namespace Flecs.NET.Core
         public Commands Cmd => new Commands(Handle);
 
         /// <summary>
-        ///     Value set by <see cref="Native.ecs_set_name_prefix"/>
+        ///     Value set by <see cref="flecs.ecs_set_name_prefix"/>
         /// </summary>
         public string NamePrefix => NativeString.GetString(Handle->name_prefix);
 

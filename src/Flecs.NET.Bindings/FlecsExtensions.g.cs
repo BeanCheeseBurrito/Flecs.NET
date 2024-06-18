@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Flecs.NET.Bindings
 {
-    public static unsafe partial class Native
+    public static unsafe partial class flecs
     {
     #if NET5_0_OR_GREATER
         [SuppressGCTransition]
