@@ -340,6 +340,21 @@ namespace Flecs.NET.Core
         public static ref ulong OneOf => ref EcsOneOf;
 
         /// <summary>
+        ///     Reference to <see cref="EcsTrait"/>.
+        /// </summary>
+        public static ref ulong Trait => ref EcsTrait;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsRelationship"/>.
+        /// </summary>
+        public static ref ulong Relationship => ref EcsRelationship;
+
+        /// <summary>
+        ///     Reference to <see cref="EcsTarget"/>.
+        /// </summary>
+        public static ref ulong Target => ref EcsTarget;
+
+        /// <summary>
         ///     Reference to <see cref="EcsCanToggle"/>.
         /// </summary>
         public static ref ulong CanToggle => ref EcsCanToggle;
