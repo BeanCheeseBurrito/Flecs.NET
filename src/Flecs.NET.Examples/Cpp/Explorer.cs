@@ -13,7 +13,7 @@ public static class Cpp_Explorer
         using World world = World.Create(args);
 
         world.Import<Ecs.Units>();
-        world.Import<Ecs.Monitor>(); // Collect statistics periodically
+        world.Import<Ecs.Stats>(); // Collect statistics periodically
 
         // Mass component
         world.Component<Mass>()

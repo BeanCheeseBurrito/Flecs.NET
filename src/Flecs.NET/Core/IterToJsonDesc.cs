@@ -20,96 +20,37 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Default serialization configuration.
         /// </summary>
-        public static IterToJsonDesc Default => default(IterToJsonDesc)
-            .TermIds()
-            .Ids()
-            .Sources()
-            .Variables()
-            .IsSet()
-            .Values()
-            .Entities();
+        public static IterToJsonDesc Default => new IterToJsonDesc()
+        {
+            Desc = new ecs_iter_to_json_desc_t
+            {
+                serialize_entity_ids =    Macros.False,
+                serialize_values =        Macros.True,
+                serialize_doc =           Macros.False,
+                serialize_full_paths =    Macros.False,
+                serialize_inherited =     Macros.False,
+                serialize_table =         Macros.False,
+                serialize_type_info =     Macros.False,
+                serialize_field_info =    Macros.False,
+                serialize_query_info =    Macros.False,
+                serialize_query_plan =    Macros.False,
+                serialize_query_profile = Macros.False,
+                dont_serialize_results =  Macros.False,
+                serialize_alerts =        Macros.False,
+                serialize_refs =          Macros.False,
+                serialize_matches =       Macros.False
+            }
+        };
 
         /// <summary>
-        ///     Serialize query term component ids.
+        ///     Serialize entity ids.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc TermIds(bool value = true)
+        public ref IterToJsonDesc EntityIds(bool value = true)
         {
-            Desc.serialize_term_ids = Macros.Bool(value);
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Serialize query term component id labels.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc TermLabels(bool value = true)
-        {
-            Desc.serialize_term_labels = Macros.Bool(value);
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Serialize actual (matched) component ids.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc Ids(bool value = true)
-        {
-            Desc.serialize_ids = Macros.Bool(value);
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Serialize actual (matched) component id labels.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc IdLabels(bool value = true)
-        {
-            Desc.serialize_id_labels = Macros.Bool(value);
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Serialize sources.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc Sources(bool value = true)
-        {
-            Desc.serialize_sources = Macros.Bool(value);
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Serialize variables.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc Variables(bool value = true)
-        {
-            Desc.serialize_variables = Macros.Bool(value);
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Serialize IsSet. (for optional terms)
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc IsSet(bool value = true)
-        {
-            Desc.serialize_is_set = Macros.Bool(value);
+            Desc.serialize_entity_ids = Macros.Bool(value);
             return ref this;
         }
 
@@ -126,110 +67,62 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Serialize private component values.
+        ///     Serialize doc attributes.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc Private(bool value = true)
+        public ref IterToJsonDesc Doc(bool value = true)
         {
-            Desc.serialize_private = Macros.Bool(value);
+            Desc.serialize_doc = Macros.Bool(value);
             return ref this;
         }
 
         /// <summary>
-        ///     Serialize entities. (for This terms)
+        ///     Serialize doc names of matched variables.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc Entities(bool value = true)
+        public ref IterToJsonDesc VarLabels(bool value = true)
         {
-            Desc.serialize_entities = Macros.Bool(value);
+            Desc.serialize_var_labels = Macros.Bool(value);
             return ref this;
         }
 
         /// <summary>
-        ///     Serialize doc name for entities.
+        ///     Serialize full paths for tags, components and pairs.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc EntityLabels(bool value = true)
+        public ref IterToJsonDesc FullPaths(bool value = true)
         {
-            Desc.serialize_entity_labels = Macros.Bool(value);
+            Desc.serialize_full_paths = Macros.Bool(value);
             return ref this;
         }
 
         /// <summary>
-        ///     Serialize numerical ids for entities.
+        ///     Serialize inherited components.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc EntityIds(bool value = true)
+        public ref IterToJsonDesc Inherited(bool value = true)
         {
-            Desc.serialize_entity_ids = Macros.Bool(value);
+            Desc.serialize_inherited = Macros.Bool(value);
             return ref this;
         }
 
         /// <summary>
-        ///     Serialize names (not paths) for entities.
+        ///     Serialize entire table vs. matched components.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc EntityNames(bool value = true)
+        public ref IterToJsonDesc Table(bool value = true)
         {
-            Desc.serialize_entity_names = Macros.Bool(value);
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Serialize doc name for variables.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc VariableLabels(bool value = true)
-        {
-            Desc.serialize_variable_labels = Macros.Bool(value);
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Serialize numerical ids for variables.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc VariableIds(bool value = true)
-        {
-            Desc.serialize_variable_ids = Macros.Bool(value);
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Serialize doc color for entities.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc Colors(bool value = true)
-        {
-            Desc.serialize_colors = Macros.Bool(value);
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Serialize evaluation duration.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc MeasureEvalDuration(bool value = true)
-        {
-            Desc.measure_eval_duration = Macros.Bool(value);
+            Desc.serialize_table = Macros.Bool(value);
             return ref this;
         }
 
@@ -246,14 +139,110 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Serialize entire table vs. matched components.
+        ///     Serialize metadata for fields returned by query.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc Table(bool value = true)
+        public ref IterToJsonDesc FieldInfo(bool value = true)
         {
-            Desc.serialize_table = Macros.Bool(value);
+            Desc.serialize_field_info = Macros.Bool(value);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Serialize query terms.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref IterToJsonDesc QueryInfo(bool value = true)
+        {
+            Desc.serialize_query_info = Macros.Bool(value);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Serialize query plan.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref IterToJsonDesc QueryPlan(bool value = true)
+        {
+            Desc.serialize_query_plan = Macros.Bool(value);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Profile query performance.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref IterToJsonDesc QueryProfile(bool value = true)
+        {
+            Desc.serialize_query_profile = Macros.Bool(value);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     If true, query won't be evaluated.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref IterToJsonDesc DontSerializeResults(bool value = true)
+        {
+            Desc.dont_serialize_results = Macros.Bool(value);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Serialize active alerts for entity.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref IterToJsonDesc SerializeAlerts(bool value = true)
+        {
+            Desc.serialize_alerts = Macros.Bool(value);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Serialize references (incoming edges) for relationship.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref IterToJsonDesc SerializeRefs(ulong value)
+        {
+            Desc.serialize_refs = value;
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Serialize which queries entity matches with
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref IterToJsonDesc SerializeMatches(bool value = true)
+        {
+            Desc.serialize_matches = Macros.Bool(value);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Query object (required for serialize_query_[plan|profile]).
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref IterToJsonDesc Query(void* value)
+        {
+            Desc.query = value;
             return ref this;
         }
 

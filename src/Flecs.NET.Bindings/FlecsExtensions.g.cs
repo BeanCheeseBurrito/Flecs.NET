@@ -1,3 +1,5 @@
+#pragma warning disable CS8981
+
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -20,3 +22,5 @@ namespace Flecs.NET.Bindings
         }
     }
 }
+
+#pragma warning restore CS8981

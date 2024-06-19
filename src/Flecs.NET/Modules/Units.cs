@@ -70,6 +70,7 @@ namespace Flecs.NET.Core
                 world.Entity<Angle>(".flecs.units.Angle");
                 world.Entity<Frequency>(".flecs.units.Frequency");
                 world.Entity<Uri>(".flecs.units.Uri");
+                world.Entity<Color>(".flecs.units.Color");
 
                 world.Entity<Durations.PicoSeconds>(".flecs.units.Duration.PicoSeconds");
                 world.Entity<Durations.NanoSeconds>(".flecs.units.Duration.NanoSeconds");
@@ -147,6 +148,10 @@ namespace Flecs.NET.Core
 
                 world.Entity<Angles.Radians>(".flecs.units.Angle.Radians");
                 world.Entity<Angles.Degrees>(".flecs.units.Angle.Degrees");
+
+                world.Entity<Colors.Rgb>(".flecs.units.Color.Rgb");
+                world.Entity<Colors.Hsl>(".flecs.units.Color.Hsl");
+                world.Entity<Colors.Css>(".flecs.units.Color.Css");
 
                 world.Entity<Percentage>(".flecs.units.Percentage");
 
@@ -466,6 +471,13 @@ namespace Flecs.NET.Core
             ///     Uri unit.
             /// </summary>
             public struct Uri
+            {
+            }
+
+            /// <summary>
+            ///     Color unit.
+            /// </summary>
+            public struct Color
             {
             }
 
@@ -992,6 +1004,32 @@ namespace Flecs.NET.Core
                 }
             }
 
+            /// <summary>
+            ///     Colors.
+            /// </summary>
+            public struct Colors
+            {
+                /// <summary>
+                ///     Rgb unit.
+                /// </summary>
+                public struct Rgb
+                {
+                }
+
+                /// <summary>
+                ///     Hsl unit.
+                /// </summary>
+                public struct Hsl
+                {
+                }
+
+                /// <summary>
+                ///     Css unit.
+                /// </summary>
+                public struct Css
+                {
+                }
+            }
 
             /// <summary>
             ///     Percentage unit.

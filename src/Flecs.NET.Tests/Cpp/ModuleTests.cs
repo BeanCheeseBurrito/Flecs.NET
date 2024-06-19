@@ -212,11 +212,11 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World a = World.Create();
 
-            Entity m1 = a.Import<Ecs.Monitor>();
+            Entity m1 = a.Import<Ecs.Stats>();
             Entity u1 = a.Import<Ecs.Units>();
 
             using World b = World.Create();
-            Entity m2 = b.Import<Ecs.Monitor>();
+            Entity m2 = b.Import<Ecs.Stats>();
             Entity u2 = b.Import<Ecs.Units>();
 
             Assert.True(m1 == m2);

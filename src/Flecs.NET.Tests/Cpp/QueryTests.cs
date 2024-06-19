@@ -489,7 +489,7 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             using Query f = world.QueryBuilder()
-                .Expr("(ChildOf,0)")
+                .Expr("(ChildOf,#0)")
                 .Build();
 
             int count = 0;

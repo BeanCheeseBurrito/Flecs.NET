@@ -1,4 +1,5 @@
 #nullable enable
+#pragma warning disable CS8981
 namespace Flecs.NET.Bindings
 {
     public static unsafe partial class flecs
@@ -200,6 +201,9 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_entity_from_json", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_entity_from_json(ecs_world_t* world, ulong entity, byte* json, ecs_from_json_desc_t* desc);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_entity_from_json_legacy", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* ecs_entity_from_json_legacy(ecs_world_t* world, ulong entity, byte* json, ecs_from_json_desc_t* desc);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_entity_init", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_entity_init(ecs_world_t* world, ecs_entity_desc_t* desc);
@@ -879,6 +883,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_ptr_from_json", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_ptr_from_json(ecs_world_t* world, ulong type, void* ptr, byte* json, ecs_from_json_desc_t* desc);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_ptr_from_json_legacy", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* ecs_ptr_from_json_legacy(ecs_world_t* world, ulong type, void* ptr, byte* json, ecs_from_json_desc_t* desc);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_ptr_to_expr", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_ptr_to_expr(ecs_world_t* world, ulong type, void* data);
 
@@ -968,9 +975,6 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_query_str", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_query_str(ecs_query_t* query);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_query_var_count", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern int ecs_query_var_count(ecs_query_t* query);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_query_var_is_entity", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte ecs_query_var_is_entity(ecs_query_t* query, int var_id);
@@ -1501,7 +1505,7 @@ namespace Flecs.NET.Bindings
         public static extern void* ecs_vec_grow(ecs_allocator_t* allocator, ecs_vec_t* vec, int size, int elem_count);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_vec_init", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern ecs_vec_t* ecs_vec_init(ecs_allocator_t* allocator, ecs_vec_t* vec, int size, int elem_count);
+        public static extern void ecs_vec_init(ecs_allocator_t* allocator, ecs_vec_t* vec, int size, int elem_count);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_vec_init_if", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_vec_init_if(ecs_vec_t* vec, int size);
@@ -1553,6 +1557,12 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_from_json_file", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_world_from_json_file(ecs_world_t* world, byte* filename, ecs_from_json_desc_t* desc);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_from_json_file_legacy", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* ecs_world_from_json_file_legacy(ecs_world_t* world, byte* filename, ecs_from_json_desc_t* desc);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_from_json_legacy", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* ecs_world_from_json_legacy(ecs_world_t* world, byte* json, ecs_from_json_desc_t* desc);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_stats_copy_last", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_world_stats_copy_last(ecs_world_stats_t* dst, ecs_world_stats_t* src);
@@ -1842,9 +1852,6 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FlecsMetricsImport", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void FlecsMetricsImport(ecs_world_t* world);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FlecsMonitorImport", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void FlecsMonitorImport(ecs_world_t* world);
-
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FlecsPipelineImport", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void FlecsPipelineImport(ecs_world_t* world);
 
@@ -1853,6 +1860,9 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FlecsScriptImport", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void FlecsScriptImport(ecs_world_t* world);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FlecsStatsImport", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void FlecsStatsImport(ecs_world_t* world);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FlecsSystemImport", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void FlecsSystemImport(ecs_world_t* world);
@@ -2961,25 +2971,15 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_entity_to_json_desc_t : System.IEquatable<ecs_entity_to_json_desc_t>
         {
+            public byte serialize_entity_id;
+
             public byte serialize_path;
 
-            public byte serialize_label;
+            public byte serialize_doc;
 
-            public byte serialize_brief;
+            public byte serialize_full_paths;
 
-            public byte serialize_link;
-
-            public byte serialize_color;
-
-            public byte serialize_ids;
-
-            public byte serialize_id_labels;
-
-            public byte serialize_base;
-
-            public byte serialize_private;
-
-            public byte serialize_hidden;
+            public byte serialize_inherited;
 
             public byte serialize_values;
 
@@ -4445,45 +4445,21 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_iter_to_json_desc_t : System.IEquatable<ecs_iter_to_json_desc_t>
         {
-            public byte serialize_term_ids;
-
-            public byte serialize_term_labels;
-
-            public byte serialize_ids;
-
-            public byte serialize_id_labels;
-
-            public byte serialize_sources;
-
-            public byte serialize_variables;
-
-            public byte serialize_is_set;
+            public byte serialize_entity_ids;
 
             public byte serialize_values;
 
-            public byte serialize_private;
+            public byte serialize_doc;
 
-            public byte serialize_entities;
+            public byte serialize_var_labels;
 
-            public byte serialize_entity_labels;
+            public byte serialize_full_paths;
 
-            public byte serialize_entity_ids;
-
-            public byte serialize_entity_names;
-
-            public byte serialize_variable_labels;
-
-            public byte serialize_variable_ids;
-
-            public byte serialize_colors;
-
-            public byte measure_eval_duration;
-
-            public byte serialize_type_info;
+            public byte serialize_inherited;
 
             public byte serialize_table;
 
-            public byte serialize_rows;
+            public byte serialize_type_info;
 
             public byte serialize_field_info;
 
@@ -4494,6 +4470,12 @@ namespace Flecs.NET.Bindings
             public byte serialize_query_profile;
 
             public byte dont_serialize_results;
+
+            public byte serialize_alerts;
+
+            public ulong serialize_refs;
+
+            public byte serialize_matches;
 
             public void* query;
 
@@ -5675,8 +5657,6 @@ namespace Flecs.NET.Bindings
 
             public ecs_vec_t sync_points;
 
-            public ecs_map_t system_stats;
-
             public int t;
 
             public int system_count;
@@ -6292,11 +6272,7 @@ namespace Flecs.NET.Bindings
 
             public ecs_metric_t matched_table_count;
 
-            public ecs_metric_t matched_empty_table_count;
-
             public ecs_metric_t matched_entity_count;
-
-            public ecs_metric_t eval_count;
 
             public long last_;
 
@@ -6352,11 +6328,15 @@ namespace Flecs.NET.Bindings
 
             public uint flags;
 
+            public short var_count;
+
             public byte term_count;
 
             public byte field_count;
 
             public ushort fixed_fields;
+
+            public ushort static_id_fields;
 
             public ushort data_fields;
 
@@ -6369,6 +6349,8 @@ namespace Flecs.NET.Bindings
             public ushort set_fields;
 
             public ecs_query_cache_kind_t cache_kind;
+
+            public byte** vars;
 
             public void* ctx;
 
@@ -6693,6 +6675,12 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_script_t : System.IEquatable<ecs_script_t>
         {
+            public ecs_world_t* world;
+
+            public byte* name;
+
+            public byte* code;
+
             public bool Equals(ecs_script_t other)
             {
                 fixed (ecs_script_t* __self = &this)
@@ -10399,7 +10387,7 @@ namespace Flecs.NET.Bindings
         {
             public EcsStatsHeader hdr;
 
-            public ecs_pipeline_stats_t stats;
+            public ecs_map_t stats;
 
             public bool Equals(EcsPipelineStats other)
             {
@@ -10739,6 +10727,50 @@ namespace Flecs.NET.Bindings
 #if NET6_0_OR_GREATER
                     System.HashCode hash = new System.HashCode();
                     hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsStruct)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
+        }
+
+        public partial struct EcsSystemStats : System.IEquatable<EcsSystemStats>
+        {
+            public EcsStatsHeader hdr;
+
+            public ecs_map_t stats;
+
+            public bool Equals(EcsSystemStats other)
+            {
+                fixed (EcsSystemStats* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsSystemStats)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(EcsSystemStats)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is EcsSystemStats other && Equals(other);
+            }
+
+            public static bool operator ==(EcsSystemStats left, EcsSystemStats right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(EcsSystemStats left, EcsSystemStats right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (EcsSystemStats* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(EcsSystemStats)));
                     return hash.ToHashCode();
 #else
                     return base.GetHashCode();
@@ -12107,6 +12139,14 @@ namespace Flecs.NET.Bindings
 
         private static void* EcsChildOf_Ptr;
 
+        private static void* EcsColor_Ptr;
+
+        private static void* EcsColorCss_Ptr;
+
+        private static void* EcsColorHsl_Ptr;
+
+        private static void* EcsColorRgb_Ptr;
+
         private static void* EcsConstant_Ptr;
 
         private static void* EcsCounter_Ptr;
@@ -12555,6 +12595,14 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDEcsCentiMetersID__Ptr;
 
+        private static void* FLECS_IDEcsColorCssID__Ptr;
+
+        private static void* FLECS_IDEcsColorHslID__Ptr;
+
+        private static void* FLECS_IDEcsColorID__Ptr;
+
+        private static void* FLECS_IDEcsColorRgbID__Ptr;
+
         private static void* FLECS_IDEcsComponentID__Ptr;
 
         private static void* FLECS_IDEcsCounterID__Ptr;
@@ -12765,6 +12813,8 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDEcsStructID__Ptr;
 
+        private static void* FLECS_IDEcsSystemStatsID__Ptr;
+
         private static void* FLECS_IDEcsTebiID__Ptr;
 
         private static void* FLECS_IDEcsTemperatureID__Ptr;
@@ -12817,7 +12867,7 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDFlecsMetricsID__Ptr;
 
-        private static void* FLECS_IDFlecsMonitorID__Ptr;
+        private static void* FLECS_IDFlecsStatsID__Ptr;
 
         public static ref ulong ECS_AUTO_OVERRIDE => ref *(ulong*)(ECS_AUTO_OVERRIDE_Ptr == null ? BindgenInternal.LoadDllSymbol("ECS_AUTO_OVERRIDE", out ECS_AUTO_OVERRIDE_Ptr) : ECS_AUTO_OVERRIDE_Ptr);
 
@@ -12908,6 +12958,14 @@ namespace Flecs.NET.Bindings
         public static ref ulong EcsCentiMeters => ref *(ulong*)(EcsCentiMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCentiMeters", out EcsCentiMeters_Ptr) : EcsCentiMeters_Ptr);
 
         public static ref ulong EcsChildOf => ref *(ulong*)(EcsChildOf_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsChildOf", out EcsChildOf_Ptr) : EcsChildOf_Ptr);
+
+        public static ref ulong EcsColor => ref *(ulong*)(EcsColor_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsColor", out EcsColor_Ptr) : EcsColor_Ptr);
+
+        public static ref ulong EcsColorCss => ref *(ulong*)(EcsColorCss_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsColorCss", out EcsColorCss_Ptr) : EcsColorCss_Ptr);
+
+        public static ref ulong EcsColorHsl => ref *(ulong*)(EcsColorHsl_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsColorHsl", out EcsColorHsl_Ptr) : EcsColorHsl_Ptr);
+
+        public static ref ulong EcsColorRgb => ref *(ulong*)(EcsColorRgb_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsColorRgb", out EcsColorRgb_Ptr) : EcsColorRgb_Ptr);
 
         public static ref ulong EcsConstant => ref *(ulong*)(EcsConstant_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsConstant", out EcsConstant_Ptr) : EcsConstant_Ptr);
 
@@ -13357,6 +13415,14 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong FLECS_IDEcsCentiMetersID_ => ref *(ulong*)(FLECS_IDEcsCentiMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCentiMetersID_", out FLECS_IDEcsCentiMetersID__Ptr) : FLECS_IDEcsCentiMetersID__Ptr);
 
+        public static ref ulong FLECS_IDEcsColorCssID_ => ref *(ulong*)(FLECS_IDEcsColorCssID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsColorCssID_", out FLECS_IDEcsColorCssID__Ptr) : FLECS_IDEcsColorCssID__Ptr);
+
+        public static ref ulong FLECS_IDEcsColorHslID_ => ref *(ulong*)(FLECS_IDEcsColorHslID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsColorHslID_", out FLECS_IDEcsColorHslID__Ptr) : FLECS_IDEcsColorHslID__Ptr);
+
+        public static ref ulong FLECS_IDEcsColorID_ => ref *(ulong*)(FLECS_IDEcsColorID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsColorID_", out FLECS_IDEcsColorID__Ptr) : FLECS_IDEcsColorID__Ptr);
+
+        public static ref ulong FLECS_IDEcsColorRgbID_ => ref *(ulong*)(FLECS_IDEcsColorRgbID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsColorRgbID_", out FLECS_IDEcsColorRgbID__Ptr) : FLECS_IDEcsColorRgbID__Ptr);
+
         public static ref ulong FLECS_IDEcsComponentID_ => ref *(ulong*)(FLECS_IDEcsComponentID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsComponentID_", out FLECS_IDEcsComponentID__Ptr) : FLECS_IDEcsComponentID__Ptr);
 
         public static ref ulong FLECS_IDEcsCounterID_ => ref *(ulong*)(FLECS_IDEcsCounterID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCounterID_", out FLECS_IDEcsCounterID__Ptr) : FLECS_IDEcsCounterID__Ptr);
@@ -13567,6 +13633,8 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong FLECS_IDEcsStructID_ => ref *(ulong*)(FLECS_IDEcsStructID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsStructID_", out FLECS_IDEcsStructID__Ptr) : FLECS_IDEcsStructID__Ptr);
 
+        public static ref ulong FLECS_IDEcsSystemStatsID_ => ref *(ulong*)(FLECS_IDEcsSystemStatsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsSystemStatsID_", out FLECS_IDEcsSystemStatsID__Ptr) : FLECS_IDEcsSystemStatsID__Ptr);
+
         public static ref ulong FLECS_IDEcsTebiID_ => ref *(ulong*)(FLECS_IDEcsTebiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTebiID_", out FLECS_IDEcsTebiID__Ptr) : FLECS_IDEcsTebiID__Ptr);
 
         public static ref ulong FLECS_IDEcsTemperatureID_ => ref *(ulong*)(FLECS_IDEcsTemperatureID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTemperatureID_", out FLECS_IDEcsTemperatureID__Ptr) : FLECS_IDEcsTemperatureID__Ptr);
@@ -13619,7 +13687,7 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong FLECS_IDFlecsMetricsID_ => ref *(ulong*)(FLECS_IDFlecsMetricsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDFlecsMetricsID_", out FLECS_IDFlecsMetricsID__Ptr) : FLECS_IDFlecsMetricsID__Ptr);
 
-        public static ref ulong FLECS_IDFlecsMonitorID_ => ref *(ulong*)(FLECS_IDFlecsMonitorID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDFlecsMonitorID_", out FLECS_IDFlecsMonitorID__Ptr) : FLECS_IDFlecsMonitorID__Ptr);
+        public static ref ulong FLECS_IDFlecsStatsID_ => ref *(ulong*)(FLECS_IDFlecsStatsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDFlecsStatsID_", out FLECS_IDFlecsStatsID__Ptr) : FLECS_IDFlecsStatsID__Ptr);
 
         public partial class BindgenInternal
         {
@@ -13810,4 +13878,5 @@ namespace Flecs.NET.Bindings
         }
     }
 }
+#pragma warning restore CS8981
 #nullable disable
