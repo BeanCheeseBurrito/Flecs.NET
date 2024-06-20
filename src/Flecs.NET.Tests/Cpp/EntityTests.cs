@@ -739,7 +739,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void SetGenericNoSizWithId()
+        private void SetGenericNoSizeWithId()
         {
             using World world = World.Create();
 

@@ -29,10 +29,10 @@ public static class Cpp_Observers_TwoComponents
 
         // Create entity, set Position (emits EcsOnSet, does not yet match observer)
         Entity e = world.Entity("e")
-            .Set<Position>(new(10, 20));
+            .Set(new Position(10, 20));
 
         // Set Velocity (emits EcsOnSet, matches observer)
-        e.Set<Velocity>(new(1, 2));
+        e.Set(new Velocity(1, 2));
     }
 }
 

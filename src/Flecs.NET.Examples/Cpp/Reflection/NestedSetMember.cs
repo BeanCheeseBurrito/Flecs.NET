@@ -22,7 +22,7 @@ public static class Cpp_Reflection_NestedSetMember
         Entity e = world.Entity();
         ref Line reference = ref e.Ensure<Line>();
 
-        Cursor cur = world.Cursor<Line>(ref reference);
+        Cursor cur = world.Cursor(ref reference);
         cur.Push();          // {
         cur.Member("Start"); //   Start:
         cur.Push();          //   {

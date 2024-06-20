@@ -25,7 +25,7 @@ public static class Cpp_Prefabs_NestedPrefabs
 
         // Create a Wheel prefab.
         Entity wheel = world.Prefab("Wheel")
-            .Set<TirePressure>(new(32));
+            .Set(new TirePressure(32));
 
         // Create a Car prefab with four wheels. Note how we're using the scope
         // method, which has the same effect as adding the (ChildOf, Car) pair.

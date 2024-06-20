@@ -12,16 +12,16 @@ public static class Cpp_Queries_WorldQuery
 
         // Create a few test entities for a Position, Velocity query
         world.Entity("e1")
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(1, 2));
+            .Set(new Position(10, 20))
+            .Set(new Velocity(1, 2));
 
         world.Entity("e2")
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(3, 4));
+            .Set(new Position(10, 20))
+            .Set(new Velocity(3, 4));
 
         // This entity will not match as it does not have Position, Velocity
         world.Entity("e3")
-            .Set<Position>(new(25, 35));
+            .Set(new Position(25, 35));
 
         // World.Each is a quick way to run simple component queries.
         world.Each((Entity e, ref Position p, ref Velocity v) =>

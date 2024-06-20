@@ -370,7 +370,7 @@ namespace Flecs.NET.Core
             ecs_suspend_readonly_state_t state = default;
             world = flecs_suspend_readonly(world, &state);
 
-            type.Set<EcsEnum>(default);
+            type.Set(default(EcsEnum));
 
             Entity prevScope = world.SetScope(type);
 

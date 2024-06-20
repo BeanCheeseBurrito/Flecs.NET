@@ -21,15 +21,15 @@ public static class Cpp_Explorer
 
         // Simple hierarchy
         Entity sun = world.Entity("Sun")
-            .Set<Mass>(new(1.988500e31));
+            .Set(new Mass(1.988500e31));
 
         Entity earth = world.Entity("Earth")
             .ChildOf(sun)
-            .Set<Mass>(new(5.9722e24));
+            .Set(new Mass(5.9722e24));
 
         world.Entity("Moon")
             .ChildOf(earth)
-            .Set<Mass>(new(7.34767309e22));
+            .Set(new Mass(7.34767309e22));
 
         // Run application with REST interface. When the application is running,
         // navigate to https://flecs.dev/explorer to inspect it!

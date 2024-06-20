@@ -294,7 +294,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity current = world.Entity<StructLvl1.StructLvl22>().Set<EcsComponent>(default);
+            Entity current = world.Entity<StructLvl1.StructLvl22>().Set(default(EcsComponent));
             Assert.True(current != 0);
             Assert.True(!current.Has(Ecs.Module));
             Assert.True(current.Has<EcsComponent>());

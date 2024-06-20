@@ -21,7 +21,7 @@ public static unsafe class Cpp_Reflection_Units
             .Member<double, Ecs.Units.Pressures.Bar>("Pressure")
             .Member<double, Ecs.Units.Lengths.MilliMeters>("Precipitation");
 
-        Entity e = world.Entity().Set<WeatherStation>(new(24, 1.2f, 0.5f));
+        Entity e = world.Entity().Set(new WeatherStation(24, 1.2f, 0.5f));
 
         // Use cursor API to print values with units
         ref WeatherStation reference = ref e.Ensure<WeatherStation>();

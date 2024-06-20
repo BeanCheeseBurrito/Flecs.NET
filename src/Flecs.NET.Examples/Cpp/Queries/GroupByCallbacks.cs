@@ -72,20 +72,20 @@ public static unsafe class Cpp_Queries_GroupByCallbacks
 
         // Create entities in 6 different tables with 3 group ids
         world.Entity().Add<Group, Third>()
-            .Set<Position>(new(1, 1));
+            .Set(new Position(1, 1));
         world.Entity().Add<Group, Second>()
-            .Set<Position>(new(2, 2));
+            .Set(new Position(2, 2));
         world.Entity().Add<Group, First>()
-            .Set<Position>(new(3, 3));
+            .Set(new Position(3, 3));
 
         world.Entity().Add<Group, Third>()
-            .Set<Position>(new(4, 4))
+            .Set(new Position(4, 4))
             .Add<Tag>();
         world.Entity().Add<Group, Second>()
-            .Set<Position>(new(5, 5))
+            .Set(new Position(5, 5))
             .Add<Tag>();
         world.Entity().Add<Group, First>()
-            .Set<Position>(new(6, 6))
+            .Set(new Position(6, 6))
             .Add<Tag>();
 
         // The query cache now looks like this:

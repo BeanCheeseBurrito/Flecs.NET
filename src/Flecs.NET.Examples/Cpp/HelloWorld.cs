@@ -25,8 +25,8 @@ public static class Cpp_HelloWorld
 
         // Create an entity with name Bob, add Position and food preference
         Entity bob = world.Entity("Bob")
-            .Set<Position>(new(0, 0))
-            .Set<Velocity>(new(1, 2))
+            .Set(new Position(0, 0))
+            .Set(new Velocity(1, 2))
             .Add<Eats, Apples>();
 
         // Show us what you got

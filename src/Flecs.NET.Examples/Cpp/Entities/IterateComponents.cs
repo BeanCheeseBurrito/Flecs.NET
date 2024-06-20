@@ -18,8 +18,8 @@ public static class Cpp_Entities_IterateComponents
         using World world = World.Create();
 
         Entity bob = world.Entity()
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(1, 1))
+            .Set(new Position(10, 20))
+            .Set(new Velocity(1, 1))
             .Add<Human>()
             .Add<Eats, Apples>();
 

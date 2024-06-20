@@ -23,8 +23,8 @@ public static class Cpp_Entities_Prefab
         // Create a prefab hierarchy.
         Entity spaceship = world.Prefab("Spaceship")
             // Add components to prefab entity as usual
-            .Set<ImpulseSpeed>(new(50))
-            .Set<Defense>(new(50))
+            .Set(new ImpulseSpeed(50))
+            .Set(new Defense(50))
 
             // By default components in an inheritance hierarchy are shared between
             // entities. The override function ensures that instances have a private
@@ -36,20 +36,20 @@ public static class Cpp_Entities_Prefab
             // inherits all components from spaceship.
             .IsA(spaceship)
             .Add<HasFTL>()
-            .Set<FreightCapacity>(new(100))
-            .Set<Defense>(new(100));
+            .Set(new FreightCapacity(100))
+            .Set(new Defense(100));
 
         Entity mammothFreighter = world.Prefab("MammothFreighter")
             .IsA(freighter)
-            .Set<FreightCapacity>(new(500))
-            .Set<Defense>(new(300));
+            .Set(new FreightCapacity(500))
+            .Set(new Defense(300));
 
         world.Prefab("Frigate")
             .IsA(spaceship)
             .Add<HasFTL>()
-            .Set<Attack>(new(100))
-            .Set<Defense>(new(75))
-            .Set<ImpulseSpeed>(new(125));
+            .Set(new Attack(100))
+            .Set(new Defense(75))
+            .Set(new ImpulseSpeed(125));
 
         // Create a regular entity from a prefab.
         // The instance will have a private copy of the Position component, because

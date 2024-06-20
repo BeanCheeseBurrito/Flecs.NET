@@ -35,9 +35,9 @@ public static class Cpp_Prefabs_Override
         // spaceships. This saves memory, and speeds up prefab creation as we don't
         // have to copy the values of Attack and Defense to private components.
         Entity spaceShip = world.Prefab("SpaceShip")
-            .Set<Attack>(new(75))
-            .Set<Defense>(new(100))
-            .Set<Damage>(new(50));
+            .Set(new Attack(75))
+            .Set(new Defense(100))
+            .Set(new Damage(50));
 
         // Create a prefab instance.
         Entity inst = world.Entity("MySpaceship").IsA(spaceShip);

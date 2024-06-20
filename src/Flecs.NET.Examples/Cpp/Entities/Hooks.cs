@@ -12,7 +12,7 @@ file static class Cpp_Entities_Hooks
     {
         World world = World.Create(args);
 
-        world.Component<NativeString>().SetHooks(new()
+        world.Component<NativeString>().SetHooks(new TypeHooks<NativeString>
         {
             // Resource management hooks. These hooks should primarily be used for
             // managing memory used by the component.
@@ -39,7 +39,7 @@ file static class Cpp_Entities_Hooks
 
         Ecs.Log.Trace("e.Set<NativeString>(new(\"Hello World\"))");
         Ecs.Log.Push();
-        e.Set<NativeString>(new("Hello World"));
+        e.Set(new NativeString("Hello World"));
         Ecs.Log.Pop();
 
         // This operation changes the entity's archetype, which invokes a move

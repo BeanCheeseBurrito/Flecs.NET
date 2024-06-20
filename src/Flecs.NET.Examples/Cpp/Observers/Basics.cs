@@ -53,7 +53,7 @@ public static class Cpp_Observers_Basics
 
         // Create entity, set Position (emits EcsOnAdd and EcsOnSet)
         Entity e = world.Entity("e")
-            .Set<Position>(new(10, 20));
+            .Set(new Position(10, 20));
 
         // Remove component (emits EcsOnRemove)
         e.Remove<Position>();
