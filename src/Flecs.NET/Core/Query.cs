@@ -108,6 +108,15 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Returns the query handle.
+        /// </summary>
+        /// <returns></returns>
+        public ecs_query_t* CPtr()
+        {
+            return Handle;
+        }
+
+        /// <summary>
         ///     Returns whether the query data changed since the last iteration.
         /// </summary>
         /// <returns></returns>

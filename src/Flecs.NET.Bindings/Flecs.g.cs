@@ -760,9 +760,6 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_new_w_table", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_new_w_table(ecs_world_t* world, ecs_table_t* table);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_observer_default_run_action", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_observer_default_run_action(ecs_iter_t* it);
-
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_observer_get", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ecs_observer_t* ecs_observer_get(ecs_world_t* world, ulong observer);
 
@@ -2094,7 +2091,7 @@ namespace Flecs.NET.Bindings
 
             public byte enable_rest;
 
-            public byte enable_monitor;
+            public byte enable_stats;
 
             public ushort port;
 
@@ -2972,8 +2969,6 @@ namespace Flecs.NET.Bindings
         public partial struct ecs_entity_to_json_desc_t : System.IEquatable<ecs_entity_to_json_desc_t>
         {
             public byte serialize_entity_id;
-
-            public byte serialize_path;
 
             public byte serialize_doc;
 
@@ -5283,7 +5278,9 @@ namespace Flecs.NET.Bindings
 
             public int* last_event_id;
 
-            public int term_index;
+            public int term_index_;
+
+            public uint flags_;
 
             public bool Equals(ecs_observer_desc_t other)
             {
@@ -11824,6 +11821,8 @@ namespace Flecs.NET.Bindings
         public const uint EcsIterTrivialTestWildcard = 2048;
 
         public const int EcsIterYield = -1;
+
+        public const uint EcsObserverBypassQuery = 32;
 
         public const uint EcsObserverIsDisabled = 8;
 

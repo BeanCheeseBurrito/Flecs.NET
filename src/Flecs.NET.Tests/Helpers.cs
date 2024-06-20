@@ -102,6 +102,16 @@ public struct Self
     }
 }
 
+public struct MyEvent
+{
+    public float Value { get; set; }
+
+    public MyEvent(float value)
+    {
+        Value = value;
+    }
+}
+
 public struct EntityWrapper
 {
     public Entity Value { get; set; }

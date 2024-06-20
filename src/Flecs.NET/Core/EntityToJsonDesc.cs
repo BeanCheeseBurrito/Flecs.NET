@@ -24,11 +24,10 @@ namespace Flecs.NET.Core
         {
             Desc = new ecs_entity_to_json_desc_t()
             {
-                serialize_path =       Macros.True,
                 serialize_doc =        Macros.False,
                 serialize_full_paths = Macros.False,
                 serialize_inherited =  Macros.False,
-                serialize_values =     Macros.False,
+                serialize_values =     Macros.True,
                 serialize_type_info =  Macros.False,
                 serialize_alerts =     Macros.False,
                 serialize_refs =       0,
@@ -45,18 +44,6 @@ namespace Flecs.NET.Core
         public ref EntityToJsonDesc EntityId(bool value = true)
         {
             Desc.serialize_entity_id = Macros.Bool(value);
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Serialize full path name.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref EntityToJsonDesc Path(bool value = true)
-        {
-            Desc.serialize_path = Macros.Bool(value);
             return ref this;
         }
 

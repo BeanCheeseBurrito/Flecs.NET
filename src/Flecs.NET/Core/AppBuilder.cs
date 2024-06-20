@@ -111,9 +111,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public ref AppBuilder EnableMonitor(bool value = true)
+        public ref AppBuilder EnableStats(bool value = true)
         {
-            Desc.enable_monitor = Macros.Bool(value);
+            Desc.enable_stats = Macros.Bool(value);
             return ref this;
         }
 
