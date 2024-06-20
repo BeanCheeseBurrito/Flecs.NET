@@ -11,6 +11,12 @@ namespace Flecs.NET.Utilities
     public static unsafe class Managed
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static void AllocGcHandle<T>(T* comp, out GCHandle handle)
+        {
+            handle = GCHandle.Alloc(new BindingContext.Box<T>(*comp, true));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static void FreeGcHandle(IntPtr handle)
         {
             if (handle != IntPtr.Zero)
@@ -29,45 +35,6 @@ namespace Flecs.NET.Utilities
         {
             IntPtr handle = ((IntPtr*)data)[index];
             FreeGcHandle(handle);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void* AllocGcHandle<T>(void* data, T comp, int index = 0)
-        {
-            return AllocGcHandle(data, ref comp, index);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void* AllocGcHandle<T>(void* data, ref T comp, int index = 0)
-        {
-            GCHandle handle = GCHandle.Alloc(new BindingContext.Box<T>(comp, true));
-            ((IntPtr*)data)[index] = GCHandle.ToIntPtr(handle);
-            return data;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void SetTypeRef<T>(void* data, T item, int index = 0)
-        {
-            SetTypeRef(data, ref item, index);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void SetTypeRef<T>(void* data, ref T item, int index = 0)
-        {
-            if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
-            {
-                AllocGcHandle((IntPtr*)data, ref item, index);
-                return;
-            }
-
-            ((T*)data)[index] = item;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void SetTypeRef<T>(GCHandle handle, ref T item)
-        {
-            BindingContext.Box<T> box = (BindingContext.Box<T>)handle.Target!;
-            box.Value = item;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

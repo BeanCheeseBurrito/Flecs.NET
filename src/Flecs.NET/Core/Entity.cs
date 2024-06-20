@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
@@ -1542,13 +1543,12 @@ namespace Flecs.NET.Core
                 if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
                 {
                     // TODO: Get rid of GC handle here and just use raw pointer since the object is pinned.
-                    IntPtr gcHandle;
-                    Managed.AllocGcHandle(&gcHandle, ref payload);
+                    Managed.AllocGcHandle(ptr, out GCHandle handle);
 
                     new World(World)
                         .Event(Type<T>.Id(World))
                         .Entity(Id)
-                        .Ctx(&gcHandle)
+                        .Ctx(&handle)
                         .Emit();
                 }
                 else
@@ -1617,12 +1617,12 @@ namespace Flecs.NET.Core
             {
                 if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
                 {
-                    IntPtr gcHandle = default;
+                    Managed.AllocGcHandle(ptr, out GCHandle handle);
 
                     new World(World)
                         .Event(Type<T>.Id(World))
                         .Entity(Id)
-                        .Ctx(Managed.AllocGcHandle(&gcHandle, ref payload))
+                        .Ctx(&handle)
                         .Enqueue();
                 }
                 else
@@ -2614,11 +2614,11 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Set the value of a component.
+        ///     Sets the data of a component.
         /// </summary>
         /// <param name="id">The id of the component to set.</param>
-        /// <param name="size">The size of the pointed-to value.</param>
-        /// <param name="data">The pointer to the value.</param>
+        /// <param name="size">The size of the pointed-to data.</param>
+        /// <param name="data">The pointer to the data.</param>
         /// <returns>Reference to self.</returns>
         public ref Entity SetPtr(ulong id, int size, void* data)
         {
@@ -2627,10 +2627,10 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Set the value of a component.
+        ///     Sets the data of a component.
         /// </summary>
         /// <param name="id">The id of the component to set.</param>
-        /// <param name="data">The pointer to the value.</param>
+        /// <param name="data">The pointer to the data.</param>
         /// <returns>Reference to self.</returns>
         public ref Entity SetPtr(ulong id, void* data)
         {
@@ -2641,12 +2641,12 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Set the value of a pair component.
+        ///     Sets the data of a pair component.
         /// </summary>
         /// <param name="first">The first id of the pair.</param>
         /// <param name="second">The second id of the pair.</param>
-        /// <param name="size">The size of the pointed-to value.</param>
-        /// <param name="data">The pointer to the value.</param>
+        /// <param name="size">The size of the pointed-to data.</param>
+        /// <param name="data">The pointer to the data.</param>
         /// <returns>Reference to self.</returns>
         public ref Entity SetPtr(ulong first, ulong second, int size, void* data)
         {
@@ -3673,20 +3673,29 @@ namespace Flecs.NET.Core
             return NativeString.GetString(ecs_entity_from_json(World, Id, nativeJson, null));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private ref Entity SetInternal<T>(ulong id, ref T component)
         {
-            Ecs.Assert(Type<T>.Size != 0,
-                "Empty structs can't be used as components. Use .Add() to add them as tags instead.");
+            fixed (T* ptr = &component)
+                return ref SetInternal(id, ptr);
+        }
 
-            bool isRef = RuntimeHelpers.IsReferenceOrContainsReferences<T>();
-            int size = isRef ? sizeof(IntPtr) : sizeof(T);
+        private ref Entity SetInternal<T>(ulong id, T* component)
+        {
+            Ecs.Assert(!Type<T>.IsTag, "Empty structs can't be used as components. Use .Add() to add them as tags instead.");
+            Ecs.Assert(Macros.TypeMatchesId<T>(World, id), "");
 
-            fixed (void* data = &component)
+            if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
             {
-                IntPtr ptr = default;
-                ecs_set_id(World, Id, id, (IntPtr)size, isRef ? Managed.AllocGcHandle(&ptr, ref component) : data);
-                return ref this;
+                Managed.AllocGcHandle(component, out GCHandle handle);
+                ecs_set_id(World, Id, id, (IntPtr)sizeof(T), &handle);
             }
+            else
+            {
+                ecs_set_id(World, Id, id, (IntPtr)sizeof(T), component);
+            }
+
+            return ref this;
         }
 
         private ref Entity ObserveInternal<T>(ulong eventId, T callback, IntPtr bindingContextCallback)
@@ -3813,6 +3822,91 @@ namespace Flecs.NET.Core
     // Flecs.NET Extensions
     public unsafe partial struct Entity
     {
+        /// <summary>
+        ///     Sets the data of a component.
+        /// </summary>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="T">The component type.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity Set<T>(T* data)
+        {
+            return ref SetInternal(Type<T>.Id(World), data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a pair component.
+        /// </summary>
+        /// <param name="second">The second id of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity Set<TFirst>(ulong second, TFirst* data)
+        {
+            return ref SetInternal(Macros.Pair<TFirst>(second, World), data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a pair component.
+        /// </summary>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of a pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of a pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity Set<TFirst, TSecond>(TSecond* data)
+        {
+            return ref SetInternal(Macros.Pair<TFirst, TSecond>(World), data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a pair component.
+        /// </summary>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity Set<TFirst, TSecond>(TFirst* data)
+        {
+            return ref SetInternal(Macros.Pair<TFirst, TSecond>(World), data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a pair component.
+        /// </summary>
+        /// <param name="second">The second id (enum member) of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity Set<TFirst, TSecond>(TSecond second, TFirst* data) where TSecond : Enum
+        {
+            return ref Set(Type<TSecond>.Id(World, second), data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a pair component.
+        /// </summary>
+        /// <param name="first">The first id (enum member) of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity Set<TFirst, TSecond>(TFirst first, TSecond* data) where TFirst : Enum
+        {
+            return ref SetSecond(Type<TFirst>.Id(World, first), data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a pair component.
+        /// </summary>
+        /// <param name="first">The first id of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity SetSecond<TSecond>(ulong first, TSecond* data)
+        {
+            return ref SetInternal(Macros.PairSecond<TSecond>(first, World), data);
+        }
+
         /// <summary>
         ///     Entities created in function will have the current entity.
         /// </summary>
