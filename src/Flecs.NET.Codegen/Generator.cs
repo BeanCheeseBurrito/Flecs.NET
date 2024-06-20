@@ -1138,7 +1138,7 @@ namespace Flecs.NET.Codegen
 
                     Macros.TableLock(iter->world, iter->table);
 
-                    int count = iter->count == 0 || iter->table == null ? 1 : iter->count;
+                    int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
                     for (int i = 0; i < count; i++, {increments})
                         callback({refArgs});
@@ -1155,7 +1155,7 @@ namespace Flecs.NET.Codegen
 
                     Macros.TableLock(iter->world, iter->table);
 
-                    int count = iter->count == 0 || iter->table == null ? 1 : iter->count;
+                    int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
                     for (int i = 0; i < count; i++, {increments})
                         callback({pointerArgs});
@@ -1206,7 +1206,7 @@ namespace Flecs.NET.Codegen
 
                     Macros.TableLock(iter->world, iter->table);
 
-                    int count = iter->count == 0 || iter->table == null ? 1 : iter->count;
+                    int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
                     for (int i = 0; i < count; i++, {increments})
                         callback(new Iter(iter), i, {refArgs});
@@ -1223,7 +1223,7 @@ namespace Flecs.NET.Codegen
 
                     Macros.TableLock(iter->world, iter->table);
 
-                    int count = iter->count == 0 || iter->table == null ? 1 : iter->count;
+                    int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
                     for (int i = 0; i < count; i++, {increments})
                         callback(new Iter(iter), i, {pointerArgs});
@@ -1242,7 +1242,7 @@ namespace Flecs.NET.Codegen
 
                     Entity result = default;
 
-                    int count = iter->count == 0 || iter->table == null ? 1 : iter->count;
+                    int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
                     for (int i = 0; i < count; i++, {increments})
                     {{
@@ -1269,7 +1269,7 @@ namespace Flecs.NET.Codegen
 
                     Entity result = default;
 
-                    int count = iter->count == 0 || iter->table == null ? 1 : iter->count;
+                    int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
                     for (int i = 0; i < count; i++, {increments})
                     {{
@@ -1350,7 +1350,7 @@ namespace Flecs.NET.Codegen
 
                     Entity result = default;
 
-                    int count = iter->count == 0 || iter->table == null ? 1 : iter->count;
+                    int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
                     for (int i = 0; i < count; i++, {increments})
                     {{
@@ -1377,7 +1377,7 @@ namespace Flecs.NET.Codegen
 
                     Entity result = default;
 
-                    int count = iter->count == 0 || iter->table == null ? 1 : iter->count;
+                    int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
                     for (int i = 0; i < count; i++, {increments})
                     {{

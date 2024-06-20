@@ -52,7 +52,7 @@ namespace Flecs.NET.Core
 
             Macros.TableLock(iter->world, iter->table);
 
-            int count = iter->count == 0 ? 1 : iter->count;
+            int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
             for (int i = 0; i < count; i++)
                 callback(new Iter(iter), i);
@@ -148,7 +148,7 @@ namespace Flecs.NET.Core
 
             Macros.TableLock(iter->world, iter->table);
 
-            int count = iter->count == 0 ? 1 : iter->count;
+            int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
             for (int i = 0; i < count; i++)
                 callback(new Iter(iter), i);
