@@ -422,178 +422,268 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Set singleton component.
+        ///     Sets the data of a singleton component.
         /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public ref World Set<T>(ref T component)
+        /// <param name="data">The data.</param>
+        /// <typeparam name="T">The component type.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<T>(T data)
         {
-            Entity<T>().Set(ref component);
+            return ref Set(ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="second">The second id of the pair.</param>
+        /// <param name="data">The data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst>(ulong second, TFirst data)
+        {
+            return ref Set(second, ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TFirst data)
+        {
+            return ref Set<TFirst, TSecond>(ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TSecond data)
+        {
+            return ref Set<TFirst, TSecond>(ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="second">The second id (enum member) of the pair.</param>
+        /// <param name="data">The data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TSecond second, TFirst data) where TSecond : Enum
+        {
+            return ref Set<TFirst, TSecond>(second, ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="first">The first id (enum member) of the pair.</param>
+        /// <param name="data">The data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TFirst first, TSecond data) where TFirst : Enum
+        {
+            return ref Set<TFirst, TSecond>(first, ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="first">The first id of the pair</param>
+        /// <param name="data">The data.</param>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World SetSecond<TSecond>(ulong first, TSecond data)
+        {
+            return ref SetSecond(first, ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton component.
+        /// </summary>
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="T">The component type.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<T>(ref T data)
+        {
+            Entity<T>().Set(ref data);
             return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="second"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst>(ulong second, ref TFirst component)
+        /// <param name="second">The second id of the pair.</param>
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst>(ulong second, ref TFirst data)
         {
-            Entity<TFirst>().Set(second, ref component);
+            Entity<TFirst>().Set(second, ref data);
             return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(ref TFirst component)
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(ref TFirst data)
         {
-            Entity<TFirst>().Set<TFirst, TSecond>(ref component);
+            Entity<TFirst>().Set<TFirst, TSecond>(ref data);
             return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(ref TSecond component)
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(ref TSecond data)
         {
-            Entity<TFirst>().Set<TFirst, TSecond>(ref component);
+            Entity<TFirst>().Set<TFirst, TSecond>(ref data);
             return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="second"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(TSecond second, ref TFirst component) where TSecond : Enum
+        /// <param name="second">The second id (enum member) of the pair.</param>
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TSecond second, ref TFirst data) where TSecond : Enum
         {
-            return ref Set(Type<TSecond>.Id(Handle, second), ref component);
+            return ref Set(Type<TSecond>.Id(Handle, second), ref data);
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(TFirst first, ref TSecond component) where TFirst : Enum
+        /// <param name="first">The first id (enum member) of the pair.</param>
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TFirst first, ref TSecond data) where TFirst : Enum
         {
-            return ref SetSecond(Type<TFirst>.Id(Handle, first), ref component);
+            return ref SetSecond(Type<TFirst>.Id(Handle, first), ref data);
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World SetSecond<TSecond>(ulong first, ref TSecond component)
+        /// <param name="first">The first id of the pair.</param>
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World SetSecond<TSecond>(ulong first, ref TSecond data)
         {
-            Entity(first).SetSecond(first, ref component);
+            Entity(first).SetSecond(first, ref data);
             return ref this;
         }
 
         /// <summary>
-        ///     Set singleton component.
+        ///     Sets the data of a singleton component.
         /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public ref World Set<T>(T component)
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="T">The component type.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<T>(T* data)
         {
-            return ref Set(ref component);
+            Entity<T>().Set(data);
+            return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="second"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst>(ulong second, TFirst component)
+        /// <param name="second">The second id of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst>(ulong second, TFirst* data)
         {
-            return ref Set(second, ref component);
+            Entity<TFirst>().Set(second, data);
+            return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(TFirst component)
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TFirst* data)
         {
-            return ref Set<TFirst, TSecond>(ref component);
+            Entity<TFirst>().Set<TFirst, TSecond>(data);
+            return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(TSecond component)
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TSecond* data)
         {
-            return ref Set<TFirst, TSecond>(ref component);
+            Entity<TFirst>().Set<TFirst, TSecond>(data);
+            return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="second"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(TSecond second, TFirst component) where TSecond : Enum
+        /// <param name="second">The second id (enum member) of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TSecond second, TFirst* data) where TSecond : Enum
         {
-            return ref Set<TFirst, TSecond>(second, ref component);
+            return ref Set(Type<TSecond>.Id(Handle, second), data);
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(TFirst first, TSecond component) where TFirst : Enum
+        /// <param name="first">The first id (enum member) of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TFirst first, TSecond* data) where TFirst : Enum
         {
-            return ref Set<TFirst, TSecond>(first, ref component);
+            return ref SetSecond(Type<TFirst>.Id(Handle, first), data);
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World SetSecond<TSecond>(ulong first, TSecond component)
+        /// <param name="first">The first id of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World SetSecond<TSecond>(ulong first, TSecond* data)
         {
-            return ref SetSecond(first, ref component);
+            Entity(first).SetSecond(first, data);
+            return ref this;
         }
 
         /// <summary>

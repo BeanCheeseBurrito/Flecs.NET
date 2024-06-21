@@ -39,7 +39,7 @@ public static class Cpp_Explorer
 
         // Alternatively you can run your own loop by setting the EcsRest singleton
         // and calling World.Progress().
-        world.Set<flecs.EcsRest>(default);
+        world.Set(default(flecs.EcsRest));
         while (world.Progress()) { }
     }
 }
