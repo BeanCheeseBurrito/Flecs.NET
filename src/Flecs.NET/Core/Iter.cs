@@ -465,21 +465,18 @@ namespace Flecs.NET.Core
         [Conditional("DEBUG")]
         internal static void AssertFieldId<T>(ecs_iter_t* iter, int index)
         {
-            Ecs.Assert(index >= 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(index >= 0, "Index out of bounds.");
 
-            ulong termId = iter->ids[index];
-            ulong typeId = Type<T>.Id(iter->world);
+            Entity expected = new Entity(iter->world, iter->ids[index]);
+            Entity provided = new Entity(iter->world, Type<T>.Id(iter->world));
 
-            if (Macros.TypeMatchesId<T>(iter->world, termId))
+            if (Macros.TypeIdIs<T>(iter->world, expected))
                 return;
-
-            Entity expected = new Entity(iter->world, termId);
-            Entity actual = new Entity(iter->world, typeId);
 
             string iteratedName = iter->system == 0 ? "" : $"[Query Name]: {new Entity(iter->world, iter->system)}";
 
             Ecs.Error(
-                $"Type argument mismatch at term index {index}.\n[Expected Term]: {expected}\n[Provided Term]: {actual}\n{iteratedName}");
+                $"Type argument mismatch at term index {index}.\n[Expected Type]: {expected}\n[Provided Type]: {provided}\n{iteratedName}");
         }
 
         /// <summary>

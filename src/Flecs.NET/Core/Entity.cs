@@ -2622,6 +2622,7 @@ namespace Flecs.NET.Core
         /// <returns>Reference to self.</returns>
         public ref Entity SetPtr(ulong id, int size, void* data)
         {
+            Ecs.Assert(ecs_get_typeid(World, id) != 0, "Cannot set component data for tag ids.");
             ecs_set_id(World, Id, id, (IntPtr)size, data);
             return ref this;
         }
@@ -2636,8 +2637,7 @@ namespace Flecs.NET.Core
         {
             EcsComponent* component = (EcsComponent*)ecs_get_id(World, id, FLECS_IDEcsComponentID_);
             Ecs.Assert(component != null, nameof(ECS_INVALID_PARAMETER));
-            ecs_set_id(World, Id, id, (IntPtr)component->size, data);
-            return ref this;
+            return ref SetPtr(id, component->size, data);
         }
 
         /// <summary>
@@ -2650,8 +2650,7 @@ namespace Flecs.NET.Core
         /// <returns>Reference to self.</returns>
         public ref Entity SetPtr(ulong first, ulong second, int size, void* data)
         {
-            ecs_set_id(World, Id, Macros.Pair(first, second), (IntPtr)size, data);
-            return ref this;
+            return ref SetPtr(Macros.Pair(first, second), size, data);
         }
 
         /// <summary>
@@ -3683,7 +3682,21 @@ namespace Flecs.NET.Core
         private ref Entity SetInternal<T>(ulong id, T* component)
         {
             Ecs.Assert(!Type<T>.IsTag, "Empty structs can't be used as components. Use .Add() to add them as tags instead.");
-            Ecs.Assert(Macros.TypeMatchesId<T>(World, id), "");
+
+#if DEBUG
+            if (Macros.IsPair(id) && !Macros.TypeIdIs<T>(World, id))
+            {
+                Id pair = new Id(World, id);
+                Entity expected = new Entity(World, ecs_get_typeid(World, id));
+                Entity provided = new Entity(World, Type<T>.Id(World));
+
+                Ecs.Error(expected == 0
+                    ? $"Attempted to set component data for tag pair.\n[Pair]: {pair}"
+                    : $"Attempted to set component data for incorrect pair type.\n[Pair]: {pair}\n[Expected Type]: {expected}\n[Provided Type]: {provided}");
+
+                return ref this;
+            }
+#endif
 
             if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
             {

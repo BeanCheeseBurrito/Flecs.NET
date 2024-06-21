@@ -328,13 +328,13 @@ namespace Flecs.NET.Utilities
         }
 
         /// <summary>
-        ///     Test if a type id matches the type of another id.
+        ///     Checks whether T matches the type of the provided id or pair.
         /// </summary>
         /// <param name="world"></param>
         /// <param name="id"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static bool TypeMatchesId<T>(ecs_world_t* world, ulong id)
+        public static bool TypeIdIs<T>(ecs_world_t* world, ulong id)
         {
             ulong typeId = Type<T>.Id(world);
 
