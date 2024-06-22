@@ -322,8 +322,6 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Field<T> Field<T>(int index)
         {
-            Ecs.Assert((Handle->flags & EcsIterCppEach) == 0,
-                "Cannot use .Field<T>(field) from .Each(), use .FieldAt<T>(field, index) instead.");
             return GetField<T>(index);
         }
 
@@ -606,9 +604,6 @@ namespace Flecs.NET.Core
 
         internal Span<T> GetSpan<T>(int index)
         {
-            Ecs.Assert((Handle->flags & EcsIterCppEach) == 0,
-                "Cannot use .Span<T>(field) from .Each(), use .FieldAt<T>(field, index) instead.");
-
             Field<T> field = GetField<T>(index);
             return new Span<T>(field.Data, field.Length);
         }
@@ -616,8 +611,6 @@ namespace Flecs.NET.Core
         internal T* GetPointer<T>(int index)
         {
             Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
-            Ecs.Assert((Handle->flags & EcsIterCppEach) == 0,
-                "Cannot use .Pointer<T>(field) from .Each(), use .PointerAt<T>(field, index) instead.");
             AssertFieldId<T>(Handle, index);
 
             return (T*)ecs_field_w_size(Handle, (IntPtr)Type<T>.Size, index);
