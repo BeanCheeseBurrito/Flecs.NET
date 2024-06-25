@@ -28,6 +28,7 @@ namespace Flecs.NET.Core
                 serialize_values =        Macros.True,
                 serialize_doc =           Macros.False,
                 serialize_full_paths =    Macros.False,
+                serialize_fields =        Macros.True,
                 serialize_inherited =     Macros.False,
                 serialize_table =         Macros.False,
                 serialize_type_info =     Macros.False,
@@ -99,6 +100,18 @@ namespace Flecs.NET.Core
         public ref IterToJsonDesc FullPaths(bool value = true)
         {
             Desc.serialize_full_paths = Macros.Bool(value);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Serialize field data.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref IterToJsonDesc Fields(bool value = true)
+        {
+            Desc.serialize_fields = Macros.Bool(value);
             return ref this;
         }
 

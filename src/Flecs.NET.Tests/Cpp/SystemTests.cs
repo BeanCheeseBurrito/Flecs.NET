@@ -2776,12 +2776,12 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            world.Timer<TagA>().Timeout(1.5f);
+            world.Timer<Tag0>().Timeout(1.5f);
 
             int sysInvoked = 0;
 
             world.Routine()
-                .TickSource<TagA>()
+                .TickSource<Tag0>()
                 .Run((Iter it) =>
                 {
                     while (it.Next())

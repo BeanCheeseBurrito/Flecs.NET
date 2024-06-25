@@ -1624,17 +1624,17 @@ namespace Flecs.NET.Tests.Cpp
             world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Entity @base = world.Entity()
-                .AutoOverride<Position, TagA>()
-                .Add<Position, TagB>();
+                .AutoOverride<Position, Tag0>()
+                .Add<Position, Tag1>();
 
             Entity e = world.Entity()
                 .Add(EcsIsA, @base);
 
-            Assert.True(e.Has<Position, TagA>());
-            Assert.True(e.Owns<Position, TagA>());
+            Assert.True(e.Has<Position, Tag0>());
+            Assert.True(e.Owns<Position, Tag0>());
 
-            Assert.True(e.Has<Position, TagB>());
-            Assert.True(!e.Owns<Position, TagB>());
+            Assert.True(e.Has<Position, Tag1>());
+            Assert.True(!e.Owns<Position, Tag1>());
         }
 
         [Fact]
@@ -2995,21 +2995,21 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Defer(() =>
             {
-                e.Add<TagA>();
-                Assert.True(!e.Has<TagA>());
+                e.Add<Tag0>();
+                Assert.True(!e.Has<Tag0>());
 
                 world.DeferSuspend();
-                e.Add<TagB>();
-                Assert.True(!e.Has<TagA>());
-                Assert.True(e.Has<TagB>());
+                e.Add<Tag1>();
+                Assert.True(!e.Has<Tag0>());
+                Assert.True(e.Has<Tag1>());
                 world.DeferResume();
 
-                Assert.True(!e.Has<TagA>());
-                Assert.True(e.Has<TagB>());
+                Assert.True(!e.Has<Tag0>());
+                Assert.True(e.Has<Tag1>());
             });
 
-            Assert.True(e.Has<TagA>());
-            Assert.True(e.Has<TagB>());
+            Assert.True(e.Has<Tag0>());
+            Assert.True(e.Has<Tag1>());
         }
 
         [Fact]

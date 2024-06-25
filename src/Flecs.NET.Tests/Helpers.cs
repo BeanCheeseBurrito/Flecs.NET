@@ -544,110 +544,134 @@ public struct TgtC
 {
 }
 
-public struct TagA
+public struct Tag0
 {
 }
 
-public struct TagB
+public struct Tag1
 {
 }
 
-public struct TagC
+public struct Tag2
 {
 }
 
-public struct TagD
+public struct Tag3
 {
 }
 
-public struct TagE
+public struct Tag4
 {
 }
 
-public struct TagF
+public struct Tag5
 {
 }
 
-public struct TagG
+public struct Tag6
 {
 }
 
-public struct TagH
+public struct Tag7
 {
 }
 
-public struct TagI
+public struct Tag8
 {
 }
 
-public struct TagJ
+public struct Tag9
 {
 }
 
-public struct TagK
+public struct Tag10
 {
 }
 
-public struct TagL
+public struct Tag11
 {
 }
 
-public struct TagM
+public struct Tag12
 {
 }
 
-public struct TagN
+public struct Tag13
 {
 }
 
-public struct TagO
+public struct Tag14
 {
 }
 
-public struct TagP
+public struct Tag15
 {
 }
 
-public struct TagQ
+public struct Tag16
 {
 }
 
-public struct TagR
+public struct Tag17
 {
 }
 
-public struct TagS
+public struct Tag18
 {
 }
 
-public struct TagT
+public struct Tag19
 {
 }
 
-public struct TagU
-{
-}
-
-
-public struct TagV
-{
-}
-
-public struct TagW
+public struct Tag20
 {
 }
 
 
-public struct TagX
+public struct Tag21
+{
+}
+
+public struct Tag22
 {
 }
 
 
-public struct TagY
+public struct Tag23
 {
 }
 
 
-public struct TagZ
+public struct Tag24
+{
+}
+
+
+public struct Tag25
+{
+}
+
+public struct Tag26
+{
+}
+
+public struct Tag27
+{
+}
+
+public struct Tag28
+{
+}
+
+public struct Tag29
+{
+}
+
+public struct Tag30
+{
+}
+
+public struct Tag31
 {
 }

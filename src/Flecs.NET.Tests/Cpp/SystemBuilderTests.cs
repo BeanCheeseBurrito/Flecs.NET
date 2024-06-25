@@ -363,28 +363,28 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Entity e = world.Entity()
-                .Add<TagA>()
-                .Add<TagB>()
-                .Add<TagC>()
-                .Add<TagD>()
-                .Add<TagE>()
-                .Add<TagF>()
-                .Add<TagG>()
-                .Add<TagH>()
-                .Add<TagI>()
-                .Add<TagJ>();
+                .Add<Tag0>()
+                .Add<Tag1>()
+                .Add<Tag2>()
+                .Add<Tag3>()
+                .Add<Tag4>()
+                .Add<Tag5>()
+                .Add<Tag6>()
+                .Add<Tag7>()
+                .Add<Tag8>()
+                .Add<Tag9>();
 
             Routine s = world.Routine()
-                .With<TagA>()
-                .With<TagB>()
-                .With<TagC>()
-                .With<TagD>()
-                .With<TagE>()
-                .With<TagF>()
-                .With<TagG>()
-                .With<TagH>()
-                .With<TagI>()
-                .With<TagJ>()
+                .With<Tag0>()
+                .With<Tag1>()
+                .With<Tag2>()
+                .With<Tag3>()
+                .With<Tag4>()
+                .With<Tag5>()
+                .With<Tag6>()
+                .With<Tag7>()
+                .With<Tag8>()
+                .With<Tag9>()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -409,40 +409,40 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             Entity e = world.Entity()
-                .Add<TagA>()
-                .Add<TagB>()
-                .Add<TagC>()
-                .Add<TagD>()
-                .Add<TagE>()
-                .Add<TagF>()
-                .Add<TagG>()
-                .Add<TagH>()
-                .Add<TagI>()
-                .Add<TagJ>()
-                .Add<TagK>()
-                .Add<TagL>()
-                .Add<TagM>()
-                .Add<TagN>()
-                .Add<TagO>()
-                .Add<TagP>();
+                .Add<Tag0>()
+                .Add<Tag1>()
+                .Add<Tag2>()
+                .Add<Tag3>()
+                .Add<Tag4>()
+                .Add<Tag5>()
+                .Add<Tag6>()
+                .Add<Tag7>()
+                .Add<Tag8>()
+                .Add<Tag9>()
+                .Add<Tag10>()
+                .Add<Tag11>()
+                .Add<Tag12>()
+                .Add<Tag13>()
+                .Add<Tag14>()
+                .Add<Tag15>();
 
             Routine s = world.Routine()
-                .With<TagA>()
-                .With<TagB>()
-                .With<TagC>()
-                .With<TagD>()
-                .With<TagE>()
-                .With<TagF>()
-                .With<TagG>()
-                .With<TagH>()
-                .With<TagI>()
-                .With<TagJ>()
-                .With<TagK>()
-                .With<TagL>()
-                .With<TagM>()
-                .With<TagN>()
-                .With<TagO>()
-                .With<TagP>()
+                .With<Tag0>()
+                .With<Tag1>()
+                .With<Tag2>()
+                .With<Tag3>()
+                .With<Tag4>()
+                .With<Tag5>()
+                .With<Tag6>()
+                .With<Tag7>()
+                .With<Tag8>()
+                .With<Tag9>()
+                .With<Tag10>()
+                .With<Tag11>()
+                .With<Tag12>()
+                .With<Tag13>()
+                .With<Tag14>()
+                .With<Tag15>()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -501,25 +501,25 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity e1 = world.Entity().Add<TagA>();
+            Entity e1 = world.Entity().Add<Tag0>();
 
             int aCount = 0, bCount = 0;
 
-            world.Routine<TagA>()
-                .With<TagB>().Write()
+            world.Routine<Tag0>()
+                .With<Tag1>().Write()
                 .Each((Entity e) =>
                 {
                     aCount++;
                     Assert.True(e == e1);
-                    e.Add<TagB>();
+                    e.Add<Tag1>();
                 });
 
-            world.Routine<TagB>()
+            world.Routine<Tag1>()
                 .Each((Entity e) =>
                 {
                     bCount++;
                     Assert.True(e == e1);
-                    Assert.True(e.Has<TagB>());
+                    Assert.True(e.Has<Tag1>());
                 });
 
             Assert.Equal(0, aCount);
@@ -530,7 +530,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, aCount);
             Assert.Equal(1, bCount);
 
-            Assert.True(e1.Has<TagB>());
+            Assert.True(e1.Has<Tag1>());
         }
 
         [Fact]

@@ -2096,13 +2096,13 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
-                .With<TagA>()
-                .With<TagB>().Oper(Ecs.Optional)
+                .With<Tag0>()
+                .With<Tag1>().Oper(Ecs.Optional)
                 .CacheKind(cacheKind)
                 .Build();
 
-            Entity e1 = world.Entity().Add<TagA>().Add<TagB>();
-            Entity e2 = world.Entity().Add<TagA>();
+            Entity e1 = world.Entity().Add<Tag0>().Add<Tag1>();
+            Entity e2 = world.Entity().Add<Tag0>();
 
             int count = 0;
 
@@ -2138,32 +2138,32 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             using Query f = world.QueryBuilder()
-                .With<TagA>()
-                .With<TagB>()
-                .With<TagC>()
-                .With<TagD>()
-                .With<TagE>()
-                .With<TagF>()
-                .With<TagG>()
-                .With<TagH>()
-                .With<TagI>()
-                .With<TagJ>()
+                .With<Tag0>()
+                .With<Tag1>()
+                .With<Tag2>()
+                .With<Tag3>()
+                .With<Tag4>()
+                .With<Tag5>()
+                .With<Tag6>()
+                .With<Tag7>()
+                .With<Tag8>()
+                .With<Tag9>()
                 .CacheKind(cacheKind)
                 .Build();
 
             Assert.Equal(10, f.FieldCount());
 
             Entity e = world.Entity()
-                .Add<TagA>()
-                .Add<TagB>()
-                .Add<TagC>()
-                .Add<TagD>()
-                .Add<TagE>()
-                .Add<TagF>()
-                .Add<TagG>()
-                .Add<TagH>()
-                .Add<TagI>()
-                .Add<TagJ>();
+                .Add<Tag0>()
+                .Add<Tag1>()
+                .Add<Tag2>()
+                .Add<Tag3>()
+                .Add<Tag4>()
+                .Add<Tag5>()
+                .Add<Tag6>()
+                .Add<Tag7>()
+                .Add<Tag8>()
+                .Add<Tag9>();
 
             int count = 0;
             f.Run((Iter it) =>
@@ -2187,48 +2187,48 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             using Query f = world.QueryBuilder()
-                .With<TagA>()
-                .With<TagB>()
-                .With<TagC>()
-                .With<TagD>()
-                .With<TagE>()
-                .With<TagF>()
-                .With<TagG>()
-                .With<TagH>()
-                .With<TagI>()
-                .With<TagJ>()
-                .With<TagK>()
-                .With<TagL>()
-                .With<TagM>()
-                .With<TagN>()
-                .With<TagO>()
-                .With<TagP>()
+                .With<Tag0>()
+                .With<Tag1>()
+                .With<Tag2>()
+                .With<Tag3>()
+                .With<Tag4>()
+                .With<Tag5>()
+                .With<Tag6>()
+                .With<Tag7>()
+                .With<Tag8>()
+                .With<Tag9>()
+                .With<Tag10>()
+                .With<Tag11>()
+                .With<Tag12>()
+                .With<Tag13>()
+                .With<Tag14>()
+                .With<Tag15>()
                 .CacheKind(cacheKind)
                 .Build();
 
             Assert.Equal(16, f.FieldCount());
 
             Entity e = world.Entity()
-                .Add<TagA>()
-                .Add<TagB>()
-                .Add<TagC>()
-                .Add<TagD>()
-                .Add<TagE>()
-                .Add<TagF>()
-                .Add<TagG>()
-                .Add<TagH>()
-                .Add<TagI>()
-                .Add<TagJ>()
-                .Add<TagK>()
-                .Add<TagL>()
-                .Add<TagM>()
-                .Add<TagN>()
-                .Add<TagO>()
-                .Add<TagP>()
-                .Add<TagQ>()
-                .Add<TagR>()
-                .Add<TagS>()
-                .Add<TagT>();
+                .Add<Tag0>()
+                .Add<Tag1>()
+                .Add<Tag2>()
+                .Add<Tag3>()
+                .Add<Tag4>()
+                .Add<Tag5>()
+                .Add<Tag6>()
+                .Add<Tag7>()
+                .Add<Tag8>()
+                .Add<Tag9>()
+                .Add<Tag10>()
+                .Add<Tag11>()
+                .Add<Tag12>()
+                .Add<Tag13>()
+                .Add<Tag14>()
+                .Add<Tag15>()
+                .Add<Tag16>()
+                .Add<Tag17>()
+                .Add<Tag18>()
+                .Add<Tag19>();
 
             int count = 0;
             f.Run((Iter it) =>
@@ -2262,24 +2262,24 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            world.Component<TagA>();
-            world.Component<TagB>();
-            world.Component<TagC>();
-            world.Component<TagX>();
+            world.Component<Tag0>();
+            world.Component<Tag1>();
+            world.Component<Tag2>();
+            world.Component<Tag23>();
 
             using Query q = world.QueryBuilder()
-                .With<TagX>()
-                .GroupBy(world.Id<TagX>(), GroupByFirstId)
+                .With<Tag23>()
+                .GroupBy(world.Id<Tag23>(), GroupByFirstId)
                 .Build();
 
             using Query qReverse = world.QueryBuilder()
-                .With<TagX>()
-                .GroupBy(world.Id<TagX>(), GroupByFirstIdNegated)
+                .With<Tag23>()
+                .GroupBy(world.Id<Tag23>(), GroupByFirstIdNegated)
                 .Build();
 
-            Entity e3 = world.Entity().Add<TagX>().Add<TagC>();
-            Entity e2 = world.Entity().Add<TagX>().Add<TagB>();
-            Entity e1 = world.Entity().Add<TagX>().Add<TagA>();
+            Entity e3 = world.Entity().Add<Tag23>().Add<Tag2>();
+            Entity e2 = world.Entity().Add<Tag23>().Add<Tag1>();
+            Entity e1 = world.Entity().Add<Tag23>().Add<Tag0>();
 
             int count = 0;
 
@@ -2327,24 +2327,24 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            world.Component<TagA>();
-            world.Component<TagB>();
-            world.Component<TagC>();
-            world.Component<TagX>();
+            world.Component<Tag0>();
+            world.Component<Tag1>();
+            world.Component<Tag2>();
+            world.Component<Tag23>();
 
             using Query q = world.QueryBuilder()
-                .With<TagX>()
-                .GroupBy<TagX>(GroupByFirstId)
+                .With<Tag23>()
+                .GroupBy<Tag23>(GroupByFirstId)
                 .Build();
 
             using Query qReverse = world.QueryBuilder()
-                .With<TagX>()
-                .GroupBy<TagX>(GroupByFirstIdNegated)
+                .With<Tag23>()
+                .GroupBy<Tag23>(GroupByFirstIdNegated)
                 .Build();
 
-            Entity e3 = world.Entity().Add<TagX>().Add<TagC>();
-            Entity e2 = world.Entity().Add<TagX>().Add<TagB>();
-            Entity e1 = world.Entity().Add<TagX>().Add<TagA>();
+            Entity e3 = world.Entity().Add<Tag23>().Add<Tag2>();
+            Entity e2 = world.Entity().Add<Tag23>().Add<Tag1>();
+            Entity e1 = world.Entity().Add<Tag23>().Add<Tag0>();
 
             int count = 0;
 
@@ -3578,17 +3578,17 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity e1 = world.Entity()
-                .Add<TagA>()
-                .Add<TagB>()
-                .Add<TagC>();
+                .Add<Tag0>()
+                .Add<Tag1>()
+                .Add<Tag2>();
 
             world.Entity()
-                .Add<TagA>()
-                .Add<TagB>();
+                .Add<Tag0>()
+                .Add<Tag1>();
 
-            using Query f = world.QueryBuilder<TagA, TagB>()
+            using Query f = world.QueryBuilder<Tag0, Tag1>()
                 .TermAt(0).Src(Ecs.This)
-                .With<TagC>()
+                .With<Tag2>()
                 .CacheKind(cacheKind)
                 .Build();
 
@@ -3668,10 +3668,10 @@ namespace Flecs.NET.Tests.Cpp
         // {
         //     using World world = World.Create();
         //
-        //     world.Entity().Set(new Position(10, 20)).Add<TagA>();
-        //     world.Entity().Add<TagA>();
+        //     world.Entity().Set(new Position(10, 20)).Add<Tag0>();
+        //     world.Entity().Add<Tag0>();
         //
-        //     using Query f = world.QueryBuilder<TagA, Position>()
+        //     using Query f = world.QueryBuilder<Tag0, Position>()
         //         .CacheKind(cacheKind)
         //         .Build();
         //

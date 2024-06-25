@@ -32,15 +32,11 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Calls <see cref="ecs_iter_fini"/>.
+        ///     Free iterator resources.
         /// </summary>
         public void Dispose()
         {
-            if (Handle == null)
-                return;
-
-            ecs_iter_fini(Handle);
-            Handle = null;
+            Fini();
         }
 
         /// <summary>
@@ -446,6 +442,18 @@ namespace Flecs.NET.Core
 #else
             Marshal.GetDelegateForFunctionPointer<Ecs.IterAction>(Handle->callback)(Handle);
 #endif
+        }
+
+        /// <summary>
+        ///     Free iterator resources.
+        /// </summary>
+        public void Fini()
+        {
+            if (Handle == null)
+                return;
+
+            ecs_iter_fini(Handle);
+            Handle = null;
         }
 
         internal Field<T> GetField<T>(int index)

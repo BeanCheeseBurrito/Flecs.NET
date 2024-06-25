@@ -134,16 +134,16 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(Ecs.OnAdd)
-                .With<TagA>()
-                .With<TagB>()
-                .With<TagC>()
-                .With<TagD>()
-                .With<TagE>()
-                .With<TagF>()
-                .With<TagG>()
-                .With<TagH>()
-                .With<TagI>()
-                .With<TagJ>()
+                .With<Tag0>()
+                .With<Tag1>()
+                .With<Tag2>()
+                .With<Tag3>()
+                .With<Tag4>()
+                .With<Tag5>()
+                .With<Tag6>()
+                .With<Tag7>()
+                .With<Tag8>()
+                .With<Tag9>()
                 .Each((Iter it, int i) =>
                 {
                     Assert.Equal(1, it.Count());
@@ -152,16 +152,16 @@ namespace Flecs.NET.Tests.Cpp
                     count++;
                 });
 
-            e.Add<TagA>()
-                .Add<TagB>()
-                .Add<TagC>()
-                .Add<TagD>()
-                .Add<TagE>()
-                .Add<TagF>()
-                .Add<TagG>()
-                .Add<TagH>()
-                .Add<TagI>()
-                .Add<TagJ>();
+            e.Add<Tag0>()
+                .Add<Tag1>()
+                .Add<Tag2>()
+                .Add<Tag3>()
+                .Add<Tag4>()
+                .Add<Tag5>()
+                .Add<Tag6>()
+                .Add<Tag7>()
+                .Add<Tag8>()
+                .Add<Tag9>();
 
             Assert.Equal(1, count);
         }
@@ -177,22 +177,22 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(Ecs.OnAdd)
-                .With<TagA>()
-                .With<TagB>()
-                .With<TagC>()
-                .With<TagD>()
-                .With<TagE>()
-                .With<TagF>()
-                .With<TagG>()
-                .With<TagH>()
-                .With<TagI>()
-                .With<TagJ>()
-                .With<TagK>()
-                .With<TagL>()
-                .With<TagM>()
-                .With<TagN>()
-                .With<TagO>()
-                .With<TagP>()
+                .With<Tag0>()
+                .With<Tag1>()
+                .With<Tag2>()
+                .With<Tag3>()
+                .With<Tag4>()
+                .With<Tag5>()
+                .With<Tag6>()
+                .With<Tag7>()
+                .With<Tag8>()
+                .With<Tag9>()
+                .With<Tag10>()
+                .With<Tag11>()
+                .With<Tag12>()
+                .With<Tag13>()
+                .With<Tag14>()
+                .With<Tag15>()
                 .Each((Iter it, int i) =>
                 {
                     Assert.Equal(1, it.Count());
@@ -201,22 +201,22 @@ namespace Flecs.NET.Tests.Cpp
                     count++;
                 });
 
-            e.Add<TagA>()
-                .Add<TagB>()
-                .Add<TagC>()
-                .Add<TagD>()
-                .Add<TagE>()
-                .Add<TagF>()
-                .Add<TagG>()
-                .Add<TagH>()
-                .Add<TagI>()
-                .Add<TagJ>()
-                .Add<TagK>()
-                .Add<TagL>()
-                .Add<TagM>()
-                .Add<TagN>()
-                .Add<TagO>()
-                .Add<TagP>();
+            e.Add<Tag0>()
+                .Add<Tag1>()
+                .Add<Tag2>()
+                .Add<Tag3>()
+                .Add<Tag4>()
+                .Add<Tag5>()
+                .Add<Tag6>()
+                .Add<Tag7>()
+                .Add<Tag8>()
+                .Add<Tag9>()
+                .Add<Tag10>()
+                .Add<Tag11>()
+                .Add<Tag12>()
+                .Add<Tag13>()
+                .Add<Tag14>()
+                .Add<Tag15>();
 
             Assert.Equal(1, count);
         }
@@ -395,13 +395,13 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity e1 = world.Entity().Add<TagA>();
-            Entity e2 = world.Entity().Add<TagA>();
-            Entity e3 = world.Entity().Add<TagA>().Add<TagB>();
+            Entity e1 = world.Entity().Add<Tag0>();
+            Entity e2 = world.Entity().Add<Tag0>();
+            Entity e3 = world.Entity().Add<Tag0>().Add<Tag1>();
 
             int count = 0;
 
-            world.Observer<TagA>()
+            world.Observer<Tag0>()
                 .Event(Ecs.OnAdd)
                 .YieldExisting()
                 .Each((Entity e) =>
@@ -422,15 +422,15 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity e1 = world.Entity().Add<TagA>().Add<TagB>();
-            Entity e2 = world.Entity().Add<TagA>().Add<TagB>();
-            Entity e3 = world.Entity().Add<TagA>().Add<TagB>().Add<TagC>();
-            world.Entity().Add<TagA>();
-            world.Entity().Add<TagB>();
+            Entity e1 = world.Entity().Add<Tag0>().Add<Tag1>();
+            Entity e2 = world.Entity().Add<Tag0>().Add<Tag1>();
+            Entity e3 = world.Entity().Add<Tag0>().Add<Tag1>().Add<Tag2>();
+            world.Entity().Add<Tag0>();
+            world.Entity().Add<Tag1>();
 
             int count = 0;
 
-            world.Observer<TagA, TagB>()
+            world.Observer<Tag0, Tag1>()
                 .Event(Ecs.OnAdd)
                 .YieldExisting()
                 .Each((Entity e) =>
@@ -456,13 +456,13 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            observer = world.Observer<TagA>()
+            observer = world.Observer<Tag0>()
                 .Event(Ecs.OnAdd)
                 .Each((Entity e) => { count++; });
 
             Assert.True(observer != 0);
 
-            world.Entity().Add<TagA>();
+            world.Entity().Add<Tag0>();
 
             Assert.Equal(1, count);
         }
@@ -472,7 +472,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Observer observer = world.Observer<TagA>()
+            Observer observer = world.Observer<Tag0>()
                 .Event(Ecs.OnAdd)
                 .Each((Entity e) => { });
 

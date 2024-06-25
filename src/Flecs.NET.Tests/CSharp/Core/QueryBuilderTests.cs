@@ -12,24 +12,24 @@ namespace Flecs.NET.Tests.CSharp.Core
         {
             using World world = World.Create();
 
-            world.Component<TagA>();
-            world.Component<TagB>();
-            world.Component<TagC>();
-            world.Component<TagX>();
+            world.Component<Tag0>();
+            world.Component<Tag1>();
+            world.Component<Tag2>();
+            world.Component<Tag23>();
 
             using Query q = world.QueryBuilder()
-                .With<TagX>()
-                .GroupBy<TagX>(GroupByFirstId)
+                .With<Tag23>()
+                .GroupBy<Tag23>(GroupByFirstId)
                 .Build();
 
             using Query qReverse = world.QueryBuilder()
-                .With<TagX>()
-                .GroupBy<TagX>(GroupByFirstIdNegated)
+                .With<Tag23>()
+                .GroupBy<Tag23>(GroupByFirstIdNegated)
                 .Build();
 
-            Entity e3 = world.Entity().Add<TagX>().Add<TagC>();
-            Entity e2 = world.Entity().Add<TagX>().Add<TagB>();
-            Entity e1 = world.Entity().Add<TagX>().Add<TagA>();
+            Entity e3 = world.Entity().Add<Tag23>().Add<Tag2>();
+            Entity e2 = world.Entity().Add<Tag23>().Add<Tag1>();
+            Entity e1 = world.Entity().Add<Tag23>().Add<Tag0>();
 
             int count = 0;
             q.Iter((Iter it) =>

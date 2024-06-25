@@ -82,19 +82,19 @@ namespace Flecs.NET.Core
         public float MergeTimeTotal => Handle->merge_time_total;
 
         /// <summary>
+        ///     Time spent on query rematching.
+        /// </summary>
+        public float RematchTimeTotal => Handle->rematch_time_total;
+
+        /// <summary>
         ///     Time elapsed in simulation.
         /// </summary>
-        public float WorldTimeTotal => Handle->world_time_total;
+        public double WorldTimeTotal => Handle->world_time_total;
 
         /// <summary>
         ///     Time elapsed in simulation. (No time scaling)
         /// </summary>
-        public float WorldTimeTotalRaw => Handle->world_time_total_raw;
-
-        /// <summary>
-        ///     Time spent on query rematching.
-        /// </summary>
-        public float RematchTimeTotal => Handle->rematch_time_total;
+        public double WorldTimeTotalRaw => Handle->world_time_total_raw;
 
         /// <summary>
         ///     Total number of frames.

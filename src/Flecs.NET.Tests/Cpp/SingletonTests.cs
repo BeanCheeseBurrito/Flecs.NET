@@ -34,6 +34,21 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
+        private void GetMutSingleton()
+        {
+            using World world = World.Create();
+
+            Position* p = world.GetMutPtr<Position>();
+            Assert.True(p == null);
+
+            world.Set(new Position(10, 20));
+            p = world.GetMutPtr<Position>();
+            Assert.True(p != null);
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
+        }
+
+        [Fact]
         private void ModifiedSingleton()
         {
             using World world = World.Create();

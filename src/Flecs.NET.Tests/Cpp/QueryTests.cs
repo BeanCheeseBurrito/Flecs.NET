@@ -3055,5 +3055,23 @@ namespace Flecs.NET.Tests.Cpp
             });
             Assert.Equal(2, count);
         }
+
+        [Fact]
+        private void RunWithIterFini()
+        {
+            using World world = World.Create();
+
+            using Query q1 = world.Query<Position>();
+
+
+            int count = 0;
+            q1.Run((Iter it) =>
+            {
+                it.Fini();
+                count++;
+            });
+
+            Assert.Equal(1, count);
+        }
     }
 }

@@ -4344,11 +4344,11 @@ namespace Flecs.NET.Bindings
 
             public int field_count;
 
-            public ushort set_fields;
+            public uint set_fields;
 
-            public ushort shared_fields;
+            public uint shared_fields;
 
-            public ushort up_fields;
+            public uint up_fields;
 
             public ulong system;
 
@@ -4369,6 +4369,8 @@ namespace Flecs.NET.Bindings
             public void* param;
 
             public void* ctx;
+
+            public void* binding_ctx;
 
             public void* callback_ctx;
 
@@ -4449,6 +4451,8 @@ namespace Flecs.NET.Bindings
             public byte serialize_var_labels;
 
             public byte serialize_full_paths;
+
+            public byte serialize_fields;
 
             public byte serialize_inherited;
 
@@ -5906,10 +5910,42 @@ namespace Flecs.NET.Bindings
 
                 public ecs_term_t Item15;
 
+                public ecs_term_t Item16;
+
+                public ecs_term_t Item17;
+
+                public ecs_term_t Item18;
+
+                public ecs_term_t Item19;
+
+                public ecs_term_t Item20;
+
+                public ecs_term_t Item21;
+
+                public ecs_term_t Item22;
+
+                public ecs_term_t Item23;
+
+                public ecs_term_t Item24;
+
+                public ecs_term_t Item25;
+
+                public ecs_term_t Item26;
+
+                public ecs_term_t Item27;
+
+                public ecs_term_t Item28;
+
+                public ecs_term_t Item29;
+
+                public ecs_term_t Item30;
+
+                public ecs_term_t Item31;
+
                 public ref ecs_term_t this[int index] => ref AsSpan()[index];
 
                 [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-                public System.Span<ecs_term_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 16);
+                public System.Span<ecs_term_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
 
                 public bool Equals(terms_FixedBuffer other)
                 {
@@ -6319,9 +6355,9 @@ namespace Flecs.NET.Bindings
 
             public terms_FixedBuffer terms;
 
-            public fixed int sizes[16];
+            public fixed int sizes[32];
 
-            public fixed ulong ids[16];
+            public fixed ulong ids[32];
 
             public uint flags;
 
@@ -6331,19 +6367,19 @@ namespace Flecs.NET.Bindings
 
             public byte field_count;
 
-            public ushort fixed_fields;
+            public uint fixed_fields;
 
-            public ushort static_id_fields;
+            public uint static_id_fields;
 
-            public ushort data_fields;
+            public uint data_fields;
 
-            public ushort write_fields;
+            public uint write_fields;
 
-            public ushort read_fields;
+            public uint read_fields;
 
-            public ushort shared_readonly_fields;
+            public uint shared_readonly_fields;
 
-            public ushort set_fields;
+            public uint set_fields;
 
             public ecs_query_cache_kind_t cache_kind;
 
@@ -6395,10 +6431,42 @@ namespace Flecs.NET.Bindings
 
                 public ecs_term_t Item15;
 
+                public ecs_term_t Item16;
+
+                public ecs_term_t Item17;
+
+                public ecs_term_t Item18;
+
+                public ecs_term_t Item19;
+
+                public ecs_term_t Item20;
+
+                public ecs_term_t Item21;
+
+                public ecs_term_t Item22;
+
+                public ecs_term_t Item23;
+
+                public ecs_term_t Item24;
+
+                public ecs_term_t Item25;
+
+                public ecs_term_t Item26;
+
+                public ecs_term_t Item27;
+
+                public ecs_term_t Item28;
+
+                public ecs_term_t Item29;
+
+                public ecs_term_t Item30;
+
+                public ecs_term_t Item31;
+
                 public ref ecs_term_t this[int index] => ref AsSpan()[index];
 
                 [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-                public System.Span<ecs_term_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 16);
+                public System.Span<ecs_term_t> AsSpan() => System.Runtime.InteropServices.MemoryMarshal.CreateSpan(ref Item0, 32);
 
                 public bool Equals(terms_FixedBuffer other)
                 {
@@ -8962,11 +9030,11 @@ namespace Flecs.NET.Bindings
 
             public float merge_time_total;
 
-            public float world_time_total;
-
-            public float world_time_total_raw;
-
             public float rematch_time_total;
+
+            public double world_time_total;
+
+            public double world_time_total_raw;
 
             public long frame_count_total;
 
@@ -11144,6 +11212,8 @@ namespace Flecs.NET.Bindings
         {
             public double target_fps;
 
+            public double time_scale;
+
             public double frame_time_total;
 
             public double system_time_total;
@@ -12036,7 +12106,7 @@ namespace Flecs.NET.Bindings
 
         public const int FLECS_TERM_ARG_COUNT_MAX = 16;
 
-        public const int FLECS_TERM_COUNT_MAX = 16;
+        public const int FLECS_TERM_COUNT_MAX = 32;
 
         public const int FLECS_VARIABLE_COUNT_MAX = 64;
 
