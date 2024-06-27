@@ -381,7 +381,7 @@ namespace Flecs.NET.Core
 
                 // TODO: Support all integer types when flecs adds support for non-int enums.
                 EnsureCacheIndex(world, Constants[i].CacheIndex) = world.Entity(constant!.ToString()!)
-                    .SetPtr(EcsConstant, FLECS_IDecs_i32_tID_, sizeof(int), &value);
+                    .SetUntyped(EcsConstant, FLECS_IDecs_i32_tID_, sizeof(int), &value);
             }
 
             world.SetScope(prevScope);

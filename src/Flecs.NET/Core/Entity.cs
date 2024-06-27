@@ -2620,7 +2620,7 @@ namespace Flecs.NET.Core
         /// <param name="size">The size of the pointed-to data.</param>
         /// <param name="data">The pointer to the data.</param>
         /// <returns>Reference to self.</returns>
-        public ref Entity SetPtr(ulong id, int size, void* data)
+        public ref Entity SetUntyped(ulong id, int size, void* data)
         {
             Ecs.Assert(ecs_get_typeid(World, id) != 0, "Cannot set component data for tag ids.");
             ecs_set_id(World, Id, id, (IntPtr)size, data);
@@ -2633,11 +2633,11 @@ namespace Flecs.NET.Core
         /// <param name="id">The id of the component to set.</param>
         /// <param name="data">The pointer to the data.</param>
         /// <returns>Reference to self.</returns>
-        public ref Entity SetPtr(ulong id, void* data)
+        public ref Entity SetUntyped(ulong id, void* data)
         {
             EcsComponent* component = (EcsComponent*)ecs_get_id(World, id, FLECS_IDEcsComponentID_);
             Ecs.Assert(component != null, nameof(ECS_INVALID_PARAMETER));
-            return ref SetPtr(id, component->size, data);
+            return ref SetUntyped(id, component->size, data);
         }
 
         /// <summary>
@@ -2648,9 +2648,94 @@ namespace Flecs.NET.Core
         /// <param name="size">The size of the pointed-to data.</param>
         /// <param name="data">The pointer to the data.</param>
         /// <returns>Reference to self.</returns>
-        public ref Entity SetPtr(ulong first, ulong second, int size, void* data)
+        public ref Entity SetUntyped(ulong first, ulong second, int size, void* data)
         {
-            return ref SetPtr(Macros.Pair(first, second), size, data);
+            return ref SetUntyped(Macros.Pair(first, second), size, data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a component.
+        /// </summary>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="T">The component type.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity SetPtr<T>(T* data)
+        {
+            return ref SetInternal(Type<T>.Id(World), data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a pair component.
+        /// </summary>
+        /// <param name="second">The second id of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity SetPtr<TFirst>(ulong second, TFirst* data)
+        {
+            return ref SetInternal(Macros.Pair<TFirst>(second, World), data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a pair component.
+        /// </summary>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of a pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of a pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity SetPtr<TFirst, TSecond>(TSecond* data)
+        {
+            return ref SetInternal(Macros.Pair<TFirst, TSecond>(World), data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a pair component.
+        /// </summary>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity SetPtr<TFirst, TSecond>(TFirst* data)
+        {
+            return ref SetInternal(Macros.Pair<TFirst, TSecond>(World), data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a pair component.
+        /// </summary>
+        /// <param name="second">The second id (enum member) of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity SetPtr<TFirst, TSecond>(TSecond second, TFirst* data) where TSecond : Enum
+        {
+            return ref SetPtr(Type<TSecond>.Id(World, second), data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a pair component.
+        /// </summary>
+        /// <param name="first">The first id (enum member) of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity SetPtr<TFirst, TSecond>(TFirst first, TSecond* data) where TFirst : Enum
+        {
+            return ref SetPtrSecond(Type<TFirst>.Id(World, first), data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a pair component.
+        /// </summary>
+        /// <param name="first">The first id of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref Entity SetPtrSecond<TSecond>(ulong first, TSecond* data)
+        {
+            return ref SetInternal(Macros.PairSecond<TSecond>(first, World), data);
         }
 
         /// <summary>
@@ -2821,91 +2906,6 @@ namespace Flecs.NET.Core
         public ref Entity SetSecond<TSecond>(ulong first, ref TSecond data)
         {
             return ref SetInternal(Macros.PairSecond<TSecond>(first, World), ref data);
-        }
-
-        /// <summary>
-        ///     Sets the data of a component.
-        /// </summary>
-        /// <param name="data">The pointer to the data.</param>
-        /// <typeparam name="T">The component type.</typeparam>
-        /// <returns>Reference to self.</returns>
-        public ref Entity Set<T>(T* data)
-        {
-            return ref SetInternal(Type<T>.Id(World), data);
-        }
-
-        /// <summary>
-        ///     Sets the data of a pair component.
-        /// </summary>
-        /// <param name="second">The second id of the pair.</param>
-        /// <param name="data">The pointer to the data.</param>
-        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-        /// <returns>Reference to self.</returns>
-        public ref Entity Set<TFirst>(ulong second, TFirst* data)
-        {
-            return ref SetInternal(Macros.Pair<TFirst>(second, World), data);
-        }
-
-        /// <summary>
-        ///     Sets the data of a pair component.
-        /// </summary>
-        /// <param name="data">The pointer to the data.</param>
-        /// <typeparam name="TFirst">The first type of a pair.</typeparam>
-        /// <typeparam name="TSecond">The second type of a pair.</typeparam>
-        /// <returns>Reference to self.</returns>
-        public ref Entity Set<TFirst, TSecond>(TSecond* data)
-        {
-            return ref SetInternal(Macros.Pair<TFirst, TSecond>(World), data);
-        }
-
-        /// <summary>
-        ///     Sets the data of a pair component.
-        /// </summary>
-        /// <param name="data">The pointer to the data.</param>
-        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-        /// <returns>Reference to self.</returns>
-        public ref Entity Set<TFirst, TSecond>(TFirst* data)
-        {
-            return ref SetInternal(Macros.Pair<TFirst, TSecond>(World), data);
-        }
-
-        /// <summary>
-        ///     Sets the data of a pair component.
-        /// </summary>
-        /// <param name="second">The second id (enum member) of the pair.</param>
-        /// <param name="data">The pointer to the data.</param>
-        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-        /// <returns>Reference to self.</returns>
-        public ref Entity Set<TFirst, TSecond>(TSecond second, TFirst* data) where TSecond : Enum
-        {
-            return ref Set(Type<TSecond>.Id(World, second), data);
-        }
-
-        /// <summary>
-        ///     Sets the data of a pair component.
-        /// </summary>
-        /// <param name="first">The first id (enum member) of the pair.</param>
-        /// <param name="data">The pointer to the data.</param>
-        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-        /// <returns>Reference to self.</returns>
-        public ref Entity Set<TFirst, TSecond>(TFirst first, TSecond* data) where TFirst : Enum
-        {
-            return ref SetSecond(Type<TFirst>.Id(World, first), data);
-        }
-
-        /// <summary>
-        ///     Sets the data of a pair component.
-        /// </summary>
-        /// <param name="first">The first id of the pair.</param>
-        /// <param name="data">The pointer to the data.</param>
-        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-        /// <returns>Reference to self.</returns>
-        public ref Entity SetSecond<TSecond>(ulong first, TSecond* data)
-        {
-            return ref SetInternal(Macros.PairSecond<TSecond>(first, World), data);
         }
 
         /// <summary>

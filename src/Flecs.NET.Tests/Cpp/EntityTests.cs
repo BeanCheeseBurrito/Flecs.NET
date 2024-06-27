@@ -666,7 +666,7 @@ namespace Flecs.NET.Tests.Cpp
             Position p = new Position(10, 20);
 
             Entity e = world.Entity()
-                .SetPtr(position, sizeof(Position), &p);
+                .SetUntyped(position, sizeof(Position), &p);
 
             Assert.True(e.Has<Position>());
             Assert.True(e.Has(position));
@@ -687,7 +687,7 @@ namespace Flecs.NET.Tests.Cpp
             Position p = new Position(10, 20);
 
             Entity e = world.Entity()
-                .SetPtr(id, sizeof(Position), &p);
+                .SetUntyped(id, sizeof(Position), &p);
 
             Assert.True(e.Has<Position>());
             Assert.True(e.Has(id));
@@ -708,7 +708,7 @@ namespace Flecs.NET.Tests.Cpp
             Position p = new Position(10, 20);
 
             Entity e = world.Entity()
-                .SetPtr(id, sizeof(Position), &p);
+                .SetUntyped(id, sizeof(Position), &p);
 
             Assert.True(e.Has<Position>());
             Assert.True(e.Has(id));
@@ -728,7 +728,7 @@ namespace Flecs.NET.Tests.Cpp
             Position p = new Position(10, 20);
 
             Entity e = world.Entity()
-                .SetPtr(position, &p);
+                .SetUntyped(position, &p);
 
             Assert.True(e.Has<Position>());
             Assert.True(e.Has(position));
@@ -749,7 +749,7 @@ namespace Flecs.NET.Tests.Cpp
             Position p = new Position(10, 20);
 
             Entity e = world.Entity()
-                .SetPtr(id, &p);
+                .SetUntyped(id, &p);
 
             Assert.True(e.Has<Position>());
             Assert.True(e.Has(id));
@@ -770,7 +770,7 @@ namespace Flecs.NET.Tests.Cpp
             Position p = new Position(10, 20);
 
             Entity e = world.Entity()
-                .SetPtr(id, &p);
+                .SetUntyped(id, &p);
 
             Assert.True(e.Has<Position>());
             Assert.True(e.Has(id));
