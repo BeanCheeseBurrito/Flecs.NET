@@ -3243,6 +3243,25 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Creates a script builder.
+        /// </summary>
+        /// <returns>The created script builder.</returns>
+        public ScriptBuilder Script()
+        {
+            return new ScriptBuilder(Handle);
+        }
+
+        /// <summary>
+        ///     Creates a script builder with the provided entity name.
+        /// </summary>
+        /// <param name="name">The entity name.</param>
+        /// <returns>The created script builder.</returns>
+        public ScriptBuilder Script(string name)
+        {
+            return new ScriptBuilder(Handle, name);
+        }
+
+        /// <summary>
         ///     Convert value to string.
         /// </summary>
         /// <param name="id"></param>
