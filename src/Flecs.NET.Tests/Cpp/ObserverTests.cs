@@ -1,3 +1,4 @@
+using System;
 using Flecs.NET.Core;
 using Xunit;
 using static Flecs.NET.Bindings.flecs;
@@ -649,17 +650,15 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<Position>()
                 .Event(EcsOnAdd)
-                .Run(
-                    (Iter it) =>
-                    {
-                        while (it.Next())
-                            it.Each();
-                    },
-                    (ref Position p) =>
-                    {
-                        count++;
-                    }
-                );
+                .Run((Iter it, Action<Iter> each) =>
+                {
+                    while (it.Next())
+                        each(it);
+                })
+                .Each((ref Position p) =>
+                {
+                    count++;
+                });
 
             Entity e = world.Entity();
             Assert.Equal(0, count);

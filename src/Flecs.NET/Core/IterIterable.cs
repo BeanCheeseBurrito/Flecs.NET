@@ -284,7 +284,7 @@ namespace Flecs.NET.Core
         ///     Iterates the query using the provided callback.
         /// </summary>
         /// <param name="callback">The callback.</param>
-        public void Run(Ecs.IterCallback callback)
+        public void Run(Ecs.RunCallback callback)
         {
             ecs_iter_t iter = GetIter();
             Invoker.Run(&iter, callback);

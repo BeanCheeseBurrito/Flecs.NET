@@ -21,24 +21,22 @@ public static unsafe class Cpp_Systems_CustomRunner
 
         Routine routine = world.Routine<Position, Velocity>()
             // Forward each result from the run callback to the each callback.
-            .Run(
-                (Iter it) =>
-                {
-                    Console.WriteLine("Move begin");
+            .Run((Iter it, Action<Iter> callback) =>
+            {
+                Console.WriteLine("Move begin");
 
-                    // Walk over the iterator, forward to the system callback
-                    while (it.Next())
-                        it.Each();
+                // Walk over the iterator, forward to the system callback
+                while (it.Next())
+                    callback(it);
 
-                    Console.WriteLine("Move end");
-                },
-                (Entity e, ref Position p, ref Velocity v) =>
-                {
-                    p.X += v.X;
-                    p.Y += v.Y;
-                    Console.WriteLine($"{e}: ({p.X}, {p.Y})");
-                }
-            );
+                Console.WriteLine("Move end");
+            })
+            .Each((Entity e, ref Position p, ref Velocity v) =>
+            {
+                p.X += v.X;
+                p.Y += v.Y;
+                Console.WriteLine($"{e}: ({p.X}, {p.Y})");
+            });
 
         // Create a few test entities for a Position, Velocity query
         world.Entity("e1")

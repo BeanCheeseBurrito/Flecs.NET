@@ -149,7 +149,7 @@ namespace Flecs.NET.Codegen
             ";
         }
 
-        private static string GenerateObserverExtensions()
+        private static string GenerateNodeBuilderExtensions(string name)
         {
             StringBuilder str = new StringBuilder();
 
@@ -163,580 +163,119 @@ namespace Flecs.NET.Codegen
                 string refParams = ConcatString(i + 1, ", ", index => $"ref T{index}");
 
                 str.AppendLine($@"
-                    public Observer Iter<{typeParams}>(Ecs.IterFieldCallback<{typeParams}> callback) 
+                    public {name} Iter<{typeParams}>(Ecs.IterFieldCallback<{typeParams}> callback) 
                     {{
-                        return Build(ref callback, BindingContext<{typeParams}>.IterFieldCallbackPointer);
+                        return SetCallback(callback, BindingContext<{typeParams}>.IterFieldCallbackPointer).Build();
                     }}
 
-                    public Observer Iter<{typeParams}>(Ecs.IterSpanCallback<{typeParams}> callback) {typeConstraints}
+                    public {name} Iter<{typeParams}>(Ecs.IterSpanCallback<{typeParams}> callback) {typeConstraints}
                     {{
-                        return Build(ref callback, BindingContext<{typeParams}>.IterSpanCallbackPointer);
+                        return SetCallback(callback, BindingContext<{typeParams}>.IterSpanCallbackPointer).Build();
                     }}
 
-                    public Observer Iter<{typeParams}>(Ecs.IterPointerCallback<{typeParams}> callback) {typeConstraints}
+                    public {name} Iter<{typeParams}>(Ecs.IterPointerCallback<{typeParams}> callback) {typeConstraints}
                     {{
-                        return Build(ref callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
+                        return SetCallback(callback, BindingContext<{typeParams}>.IterPointerCallbackPointer).Build();
                     }}
 
-                    public Observer Each<{typeParams}>(Ecs.EachRefCallback<{typeParams}> callback) 
+                    public {name} Each<{typeParams}>(Ecs.EachRefCallback<{typeParams}> callback) 
                     {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
+                        return Instanced().SetCallback(callback, BindingContext<{typeParams}>.EachRefCallbackPointer).Build();
                     }}
 
-                    public Observer Each<{typeParams}>(Ecs.EachEntityRefCallback<{typeParams}> callback) 
+                    public {name} Each<{typeParams}>(Ecs.EachEntityRefCallback<{typeParams}> callback) 
                     {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
+                        return Instanced().SetCallback(callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer).Build();
                     }}
 
-                    public Observer Each<{typeParams}>(Ecs.EachIterRefCallback<{typeParams}> callback) 
+                    public {name} Each<{typeParams}>(Ecs.EachIterRefCallback<{typeParams}> callback) 
                     {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
+                        return Instanced().SetCallback(callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer).Build();
                     }}
 
-                    public Observer Each<{typeParams}>(Ecs.EachPointerCallback<{typeParams}> callback) {typeConstraints}
+                    public {name} Each<{typeParams}>(Ecs.EachPointerCallback<{typeParams}> callback) {typeConstraints}
                     {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachPointerCallbackPointer);
+                        return Instanced().SetCallback(callback, BindingContext<{typeParams}>.EachPointerCallbackPointer).Build();
                     }}
 
-                    public Observer Each<{typeParams}>(Ecs.EachEntityPointerCallback<{typeParams}> callback) {typeConstraints}
+                    public {name} Each<{typeParams}>(Ecs.EachEntityPointerCallback<{typeParams}> callback) {typeConstraints}
                     {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer);
+                        return Instanced().SetCallback(callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer).Build();
                     }}
 
-                    public Observer Each<{typeParams}>(Ecs.EachIterPointerCallback<{typeParams}> callback) {typeConstraints}
+                    public {name} Each<{typeParams}>(Ecs.EachIterPointerCallback<{typeParams}> callback) {typeConstraints}
                     {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.IterFieldCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.IterFieldCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.IterSpanCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.IterSpanCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.IterPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachRefCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachEntityRefCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachIterRefCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachEntityPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachIterPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer);
+                        return Instanced().SetCallback(callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer).Build();
                     }}
 
                 #if NET5_0_OR_GREATER
-                    public Observer Iter<{typeParams}>(delegate*<Iter, {fieldParams}, void> callback) 
+                    public {name} Iter<{typeParams}>(delegate*<Iter, {fieldParams}, void> callback) 
                     {{
-                        return Build((IntPtr)callback, BindingContext<{typeParams}>.IterFieldCallbackPointer);
+                        return SetCallback((IntPtr)callback, BindingContext<{typeParams}>.IterFieldCallbackPointer).Build();
                     }}
 
-                    public Observer Iter<{typeParams}>(delegate*<Iter, {spanParams}, void> callback) 
+                    public {name} Iter<{typeParams}>(delegate*<Iter, {spanParams}, void> callback) 
                     {{
-                        return Build((IntPtr)callback, BindingContext<{typeParams}>.IterSpanCallbackPointer);
+                        return SetCallback((IntPtr)callback, BindingContext<{typeParams}>.IterSpanCallbackPointer).Build();
                     }}
 
-                    public Observer Iter<{typeParams}>(delegate*<Iter, {pointerParams}, void> callback) 
+                    public {name} Iter<{typeParams}>(delegate*<Iter, {pointerParams}, void> callback) 
                     {{
-                        return Build((IntPtr)callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
+                        return SetCallback((IntPtr)callback, BindingContext<{typeParams}>.IterPointerCallbackPointer).Build();
                     }}
 
-                    public Observer Each<{typeParams}>(delegate*<{refParams}, void> callback) 
+                    public {name} Each<{typeParams}>(delegate*<{refParams}, void> callback) 
                     {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
+                        return Instanced().SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer).Build();
                     }}
 
-                    public Observer Each<{typeParams}>(delegate*<Entity, {refParams}, void> callback) 
+                    public {name} Each<{typeParams}>(delegate*<Entity, {refParams}, void> callback) 
                     {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
+                        return Instanced().SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer).Build();
                     }}
 
-                    public Observer Each<{typeParams}>(delegate*<Iter, int, {refParams}, void> callback) 
+                    public {name} Each<{typeParams}>(delegate*<Iter, int, {refParams}, void> callback) 
                     {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
+                        return Instanced().SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer).Build();
                     }}
 
-                    public Observer Each<{typeParams}>(delegate*<{pointerParams}, void> callback) {typeConstraints}
+                    public {name} Each<{typeParams}>(delegate*<{pointerParams}, void> callback) {typeConstraints}
                     {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachPointerCallbackPointer);
+                        return Instanced().SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachPointerCallbackPointer).Build();
                     }}
 
-                    public Observer Each<{typeParams}>(delegate*<Entity, {pointerParams}, void> callback) {typeConstraints}
+                    public {name} Each<{typeParams}>(delegate*<Entity, {pointerParams}, void> callback) {typeConstraints}
                     {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer);
+                        return Instanced().SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer).Build();
                     }}
 
-                    public Observer Each<{typeParams}>(delegate*<Iter, int, {pointerParams}, void> callback) {typeConstraints}
+                    public {name} Each<{typeParams}>(delegate*<Iter, int, {pointerParams}, void> callback) {typeConstraints}
                     {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.IterFieldCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.IterFieldCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.IterSpanCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.IterSpanCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.IterPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachRefCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachEntityRefCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachIterRefCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachEntityPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachIterPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, {fieldParams}, void> callback)
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.IterFieldCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, {spanParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.IterSpanCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<{refParams}, void> callback)
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<Entity, {refParams}, void> callback)
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, int, {refParams}, void> callback)
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<{pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<Entity, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, int, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Iter, {fieldParams}, void> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.IterFieldCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Iter, {spanParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.IterSpanCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Iter, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, delegate*<{refParams}, void> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Entity, {refParams}, void> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Iter, int, {refParams}, void> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, delegate*<{pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Entity, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer);
-                    }}
-
-                    public Observer Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Iter, int, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer);
+                        return Instanced().SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer).Build();
                     }}
                 #endif
                 ");
             }
 
+            return str.ToString();
+        }
+
+        private static string GenerateObserverExtensions()
+        {
             return $@"
                 public unsafe partial struct ObserverBuilder
                 {{
-                    {str}
+                    {GenerateNodeBuilderExtensions("Observer")}
                 }}
             ";
         }
 
         private static string GenerateRoutineExtensions()
         {
-            StringBuilder str = new StringBuilder();
-
-            for (int i = 0; i < GenericCount; i++)
-            {
-                string typeParams = GenerateTypeParams(i + 1);
-                string typeConstraints = ConcatString(i + 1, " ", index => $"where T{index} : unmanaged");
-                string fieldParams = ConcatString(i + 1, ", ", index => $"Field<T{index}>");
-                string spanParams = ConcatString(i + 1, ", ", index => $"Span<T{index}>");
-                string pointerParams = ConcatString(i + 1, ", ", index => $"T{index}*");
-                string refParams = ConcatString(i + 1, ", ", index => $"ref T{index}");
-
-                str.AppendLine($@"
-                    public Routine Iter<{typeParams}>(Ecs.IterFieldCallback<{typeParams}> callback) 
-                    {{
-                        return Build(ref callback, BindingContext<{typeParams}>.IterFieldCallbackPointer);
-                    }}
-
-                    public Routine Iter<{typeParams}>(Ecs.IterSpanCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return Build(ref callback, BindingContext<{typeParams}>.IterSpanCallbackPointer);
-                    }}
-
-                    public Routine Iter<{typeParams}>(Ecs.IterPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return Build(ref callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
-                    }}
-
-                    public Routine Each<{typeParams}>(Ecs.EachRefCallback<{typeParams}> callback) 
-                    {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
-                    }}
-
-                    public Routine Each<{typeParams}>(Ecs.EachEntityRefCallback<{typeParams}> callback) 
-                    {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
-                    }}
-
-                    public Routine Each<{typeParams}>(Ecs.EachIterRefCallback<{typeParams}> callback) 
-                    {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
-                    }}
-
-                    public Routine Each<{typeParams}>(Ecs.EachPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachPointerCallbackPointer);
-                    }}
-
-                    public Routine Each<{typeParams}>(Ecs.EachEntityPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer);
-                    }}
-
-                    public Routine Each<{typeParams}>(Ecs.EachIterPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return Instanced().Build(ref callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.IterFieldCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.IterFieldCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.IterSpanCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.IterSpanCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.IterPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachRefCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachEntityRefCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachIterRefCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachEntityPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, Ecs.EachIterPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build(ref callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer);
-                    }}
-
-                #if NET5_0_OR_GREATER
-                    public Routine Iter<{typeParams}>(delegate*<Iter, {fieldParams}, void> callback) 
-                    {{
-                        return Build((IntPtr)callback, BindingContext<{typeParams}>.IterFieldCallbackPointer);
-                    }}
-
-                    public Routine Iter<{typeParams}>(delegate*<Iter, {spanParams}, void> callback) 
-                    {{
-                        return Build((IntPtr)callback, BindingContext<{typeParams}>.IterSpanCallbackPointer);
-                    }}
-
-                    public Routine Iter<{typeParams}>(delegate*<Iter, {pointerParams}, void> callback) 
-                    {{
-                        return Build((IntPtr)callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
-                    }}
-
-                    public Routine Each<{typeParams}>(delegate*<{refParams}, void> callback) 
-                    {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
-                    }}
-
-                    public Routine Each<{typeParams}>(delegate*<Entity, {refParams}, void> callback) 
-                    {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
-                    }}
-
-                    public Routine Each<{typeParams}>(delegate*<Iter, int, {refParams}, void> callback) 
-                    {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
-                    }}
-
-                    public Routine Each<{typeParams}>(delegate*<{pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachPointerCallbackPointer);
-                    }}
-
-                    public Routine Each<{typeParams}>(delegate*<Entity, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer);
-                    }}
-
-                    public Routine Each<{typeParams}>(delegate*<Iter, int, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return Instanced().Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.IterFieldCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.IterFieldCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.IterSpanCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.IterSpanCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.IterPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachRefCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachEntityRefCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachIterRefCallback<{typeParams}> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachEntityPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, Ecs.EachIterPointerCallback<{typeParams}> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build(ref callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, {fieldParams}, void> callback)
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.IterFieldCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, {spanParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.IterSpanCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<{refParams}, void> callback)
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<Entity, {refParams}, void> callback)
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, int, {refParams}, void> callback)
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<{pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<Entity, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(Ecs.IterCallback run, delegate*<Iter, int, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun(run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Iter, {fieldParams}, void> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.IterFieldCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Iter, {spanParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.IterSpanCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Iter, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.IterPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, delegate*<{refParams}, void> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Entity, {refParams}, void> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Iter, int, {refParams}, void> callback)
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, delegate*<{pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Entity, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer);
-                    }}
-
-                    public Routine Run<{typeParams}>(delegate*<Iter, void> run, delegate*<Iter, int, {pointerParams}, void> callback) {typeConstraints}
-                    {{
-                        return PopulateRun((IntPtr)run).Build((IntPtr)callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer);
-                    }}
-                #endif
-                ");
-            }
-
             return $@"
                 public unsafe partial struct RoutineBuilder
                 {{
-                    {str}
+                    {GenerateNodeBuilderExtensions("Routine")}
                 }}
             ";
         }

@@ -10,114 +10,73 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A static class holding methods and types for binding contexts.
     /// </summary>
-    public static unsafe partial class BindingContext
+    public static unsafe class BindingContext
     {
-        [SuppressMessage("Usage", "CA1823")]
-        private static readonly BindingContextCleanup _cleanup = new BindingContextCleanup();
+        static BindingContext()
+        {
+            AppDomain.CurrentDomain.ProcessExit += (object? sender, EventArgs e) =>
+            {
+                Memory.Free(DefaultSeparator);
+            };
+        }
 
         internal static readonly byte* DefaultSeparator = (byte*)Marshal.StringToHGlobalAnsi(Ecs.DefaultSeparator);
 
 #if NET5_0_OR_GREATER
-        internal static readonly IntPtr ActionCallbackPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&ActionCallback;
+        internal static readonly IntPtr ActionCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&ActionCallback;
+        internal static readonly IntPtr IterCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&IterCallback;
+        internal static readonly IntPtr EachEntityCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&EachEntityCallback;
+        internal static readonly IntPtr EachIterCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&EachIterCallback;
+        internal static readonly IntPtr ObserveCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserveCallback;
+        internal static readonly IntPtr RunCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&RunCallback;
+        internal static readonly IntPtr RunDelegateCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&RunDelegateCallback;
+        internal static readonly IntPtr RunPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&RunPointerCallback;
+        internal static readonly IntPtr GroupByCallbackPointer = (IntPtr)(delegate* <ecs_world_t*, ecs_table_t*, ulong, void*, ulong>)&GroupByCallback;
 
-        internal static readonly IntPtr IterCallbackPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&IterCallback;
+        internal static readonly IntPtr WorldContextFreePointer = (IntPtr)(delegate* <void*, void>)&WorldContextFree;
+        internal static readonly IntPtr IteratorContextFreePointer = (IntPtr)(delegate* <void*, void>)&IteratorContextFree;
+        internal static readonly IntPtr RunContextFreePointer = (IntPtr)(delegate* <void*, void>)&RunContextFree;
+        internal static readonly IntPtr QueryContextFreePointer = (IntPtr)(delegate* <void*, void>)&QueryContextFree;
+        internal static readonly IntPtr GroupByContextFreePointer = (IntPtr)(delegate* <void*, void>)&GroupByContextFree;
+        internal static readonly IntPtr TypeHooksContextFreePointer = (IntPtr)(delegate* <void*, void>)&TypeHooksContextFree;
 
-        internal static readonly IntPtr EachEntityCallbackPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&EachEntityCallback;
-
-        internal static readonly IntPtr EachIterCallbackPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&EachIterCallback;
-
-        internal static readonly IntPtr ObserveCallbackPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&ObserveCallback;
-
-        internal static readonly IntPtr RunCallbackPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&RunCallback;
-
-        internal static readonly IntPtr GroupByCallbackPointer =
-            (IntPtr)(delegate* <ecs_world_t*, ecs_table_t*, ulong, void*, ulong>)&GroupByCallback;
-
-        internal static readonly IntPtr WorldContextFreePointer =
-            (IntPtr)(delegate* <void*, void>)&WorldContextFree;
-
-        internal static readonly IntPtr IteratorContextFreePointer =
-            (IntPtr)(delegate* <void*, void>)&IteratorContextFree;
-
-        internal static readonly IntPtr RunContextFreePointer =
-            (IntPtr)(delegate* <void*, void>)&RunContextFree;
-
-        internal static readonly IntPtr QueryContextFreePointer =
-            (IntPtr)(delegate* <void*, void>)&QueryContextFree;
-
-        internal static readonly IntPtr GroupByContextFreePointer =
-            (IntPtr)(delegate* <void*, void>)&GroupByContextFree;
-
-        internal static readonly IntPtr TypeHooksContextFreePointer =
-            (IntPtr)(delegate* <void*, void>)&TypeHooksContextFree;
-
-        internal static readonly IntPtr OsApiAbortPointer =
-            (IntPtr)(delegate* <void>)&OsApiAbort;
+        internal static readonly IntPtr OsApiAbortPointer = (IntPtr)(delegate* <void>)&OsApiAbort;
 #else
-        internal static readonly IntPtr ActionCallbackPointer =
-            Marshal.GetFunctionPointerForDelegate(ActionCallbackReference = ActionCallback);
+        private static readonly Ecs.IterAction ActionCallbackReference = ActionCallback;
+        private static readonly Ecs.IterAction IterCallbackReference = IterCallback;
+        private static readonly Ecs.IterAction EachEntityCallbackReference = EachEntityCallback;
+        private static readonly Ecs.IterAction EachIterCallbackReference = EachIterCallback;
+        private static readonly Ecs.IterAction ObserveCallbackReference = ObserveCallback;
+        private static readonly Ecs.IterAction RunCallbackReference = RunCallback;
+        private static readonly Ecs.IterAction RunDelegateCallbackReference = RunDelegateCallback;
+        private static readonly Ecs.GroupByAction GroupByCallbackReference = GroupByCallback;
 
-        internal static readonly IntPtr IterCallbackPointer =
-            Marshal.GetFunctionPointerForDelegate(IterCallbackReference = IterCallback);
+        private static readonly Ecs.ContextFree WorldContextFreeReference = WorldContextFree;
+        private static readonly Ecs.ContextFree IteratorContextFreeReference = IteratorContextFree;
+        private static readonly Ecs.ContextFree RunContextFreeReference = RunContextFree;
+        private static readonly Ecs.ContextFree QueryContextFreeReference = QueryContextFree;
+        private static readonly Ecs.ContextFree GroupByContextFreeReference = GroupByContextFree;
+        private static readonly Ecs.ContextFree TypeHooksContextFreeReference = TypeHooksContextFree;
 
-        internal static readonly IntPtr EachEntityCallbackPointer =
-            Marshal.GetFunctionPointerForDelegate(EachEntityCallbackReference = EachEntityCallback);
+        private static readonly Action OsApiAbortReference = OsApiAbort;
 
-        internal static readonly IntPtr EachIterCallbackPointer =
-            Marshal.GetFunctionPointerForDelegate(EachIterCallbackReference = EachIterCallback);
+        internal static readonly IntPtr ActionCallbackPointer = Marshal.GetFunctionPointerForDelegate(ActionCallbackReference);
+        internal static readonly IntPtr IterCallbackPointer = Marshal.GetFunctionPointerForDelegate(IterCallbackReference);
+        internal static readonly IntPtr EachEntityCallbackPointer = Marshal.GetFunctionPointerForDelegate(EachEntityCallbackReference);
+        internal static readonly IntPtr EachIterCallbackPointer = Marshal.GetFunctionPointerForDelegate(EachIterCallbackReference);
+        internal static readonly IntPtr ObserveCallbackPointer = Marshal.GetFunctionPointerForDelegate(ObserveCallbackReference);
+        internal static readonly IntPtr RunCallbackPointer = Marshal.GetFunctionPointerForDelegate(RunCallbackReference);
+        internal static readonly IntPtr RunDelegateCallbackPointer = Marshal.GetFunctionPointerForDelegate(RunDelegateCallbackReference);
+        internal static readonly IntPtr GroupByCallbackPointer = Marshal.GetFunctionPointerForDelegate(GroupByCallbackReference);
 
-        internal static readonly IntPtr ObserveCallbackPointer =
-            Marshal.GetFunctionPointerForDelegate(ObserveCallbackReference = ObserveCallback);
+        internal static readonly IntPtr WorldContextFreePointer = Marshal.GetFunctionPointerForDelegate(WorldContextFreeReference);
+        internal static readonly IntPtr IteratorContextFreePointer = Marshal.GetFunctionPointerForDelegate(IteratorContextFreeReference);
+        internal static readonly IntPtr RunContextFreePointer = Marshal.GetFunctionPointerForDelegate(RunContextFreeReference);
+        internal static readonly IntPtr QueryContextFreePointer = Marshal.GetFunctionPointerForDelegate(QueryContextFreeReference);
+        internal static readonly IntPtr GroupByContextFreePointer = Marshal.GetFunctionPointerForDelegate(GroupByContextFreeReference);
+        internal static readonly IntPtr TypeHooksContextFreePointer = Marshal.GetFunctionPointerForDelegate(TypeHooksContextFreeReference);
 
-        internal static readonly IntPtr RunCallbackPointer =
-            Marshal.GetFunctionPointerForDelegate(RunCallbackReference = RunCallback);
-
-        internal static readonly IntPtr GroupByCallbackPointer =
-            Marshal.GetFunctionPointerForDelegate(GroupByCallbackReference = GroupByCallback);
-
-        internal static readonly IntPtr WorldContextFreePointer =
-            Marshal.GetFunctionPointerForDelegate(WorldContextFreeReference = WorldContextFree);
-
-        internal static readonly IntPtr IteratorContextFreePointer =
-            Marshal.GetFunctionPointerForDelegate(IteratorContextFreeReference = IteratorContextFree);
-
-        internal static readonly IntPtr RunContextFreePointer =
-            Marshal.GetFunctionPointerForDelegate(RunContextFreeReference = RunContextFree);
-
-        internal static readonly IntPtr QueryContextFreePointer =
-            Marshal.GetFunctionPointerForDelegate(QueryContextFreeReference = QueryContextFree);
-
-        internal static readonly IntPtr GroupByContextFreePointer =
-            Marshal.GetFunctionPointerForDelegate(GroupByContextFreeReference = GroupByContextFree);
-
-        internal static readonly IntPtr TypeHooksContextFreePointer =
-            Marshal.GetFunctionPointerForDelegate(TypeHooksContextFreeReference = TypeHooksContextFree);
-
-        internal static readonly IntPtr OsApiAbortPointer =
-            Marshal.GetFunctionPointerForDelegate(OsApiAbortReference = OsApiAbort);
-
-        private static readonly Ecs.IterAction ActionCallbackReference;
-        private static readonly Ecs.IterAction IterCallbackReference;
-        private static readonly Ecs.IterAction EachEntityCallbackReference;
-        private static readonly Ecs.IterAction EachIterCallbackReference;
-        private static readonly Ecs.IterAction ObserveCallbackReference;
-        private static readonly Ecs.IterAction RunCallbackReference;
-        private static readonly Ecs.GroupByAction GroupByCallbackReference;
-
-        private static readonly Ecs.ContextFree WorldContextFreeReference;
-        private static readonly Ecs.ContextFree IteratorContextFreeReference;
-        private static readonly Ecs.ContextFree RunContextFreeReference;
-        private static readonly Ecs.ContextFree QueryContextFreeReference;
-        private static readonly Ecs.ContextFree GroupByContextFreeReference;
-        private static readonly Ecs.ContextFree TypeHooksContextFreeReference;
-
-        private static readonly Action OsApiAbortReference;
+        internal static readonly IntPtr OsApiAbortPointer = Marshal.GetFunctionPointerForDelegate(OsApiAbortReference);
 #endif
 
         private static void ActionCallback(ecs_iter_t* iter)
@@ -212,9 +171,41 @@ namespace Flecs.NET.Core
             }
 #endif
 
-            Ecs.IterCallback callback = (Ecs.IterCallback)context->Callback.GcHandle.Target!;
+            Ecs.RunCallback callback = (Ecs.RunCallback)context->Callback.GcHandle.Target!;
             Invoker.Run(iter, callback);
         }
+
+        private static void RunDelegateCallback(ecs_iter_t* iter)
+        {
+            RunContext* context = (RunContext*)iter->run_ctx;
+
+#if NET5_0_OR_GREATER
+            if (context->Callback.GcHandle == default)
+            {
+                Invoker.Run(iter, (delegate*<Iter, Action<Iter>, void>)context->Callback.Function);
+                return;
+            }
+#endif
+
+            Ecs.RunDelegateCallback callback = (Ecs.RunDelegateCallback)context->Callback.GcHandle.Target!;
+            Invoker.Run(iter, callback);
+        }
+
+#if NET5_0_OR_GREATER
+        private static void RunPointerCallback(ecs_iter_t* iter)
+        {
+            RunContext* context = (RunContext*)iter->run_ctx;
+
+            if (context->Callback.GcHandle == default)
+            {
+                Invoker.Run(iter, (delegate*<Iter, delegate*<Iter, void>, void>)context->Callback.Function);
+                return;
+            }
+
+            Ecs.RunPointerCallback callback = (Ecs.RunPointerCallback)context->Callback.GcHandle.Target!;
+            Invoker.Run(iter, callback);
+        }
+#endif
 
         private static ulong GroupByCallback(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
         {
@@ -427,145 +418,77 @@ namespace Flecs.NET.Core
                 GroupBy.Dispose();
             }
         }
-
-        // Free native resources on program exit
-        // TODO: This isn't guaranteed to be called at program exit?
-        private class BindingContextCleanup
-        {
-            ~BindingContextCleanup()
-            {
-                Memory.Free(DefaultSeparator);
-            }
-        }
     }
 
     [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
     internal static unsafe partial class BindingContext<T0>
     {
 #if NET5_0_OR_GREATER
-        internal static readonly IntPtr EntityObserverEachPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEach;
+        internal static readonly IntPtr EntityObserverEachPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEach;
+        internal static readonly IntPtr EntityObserverEachEntityPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEachEntity;
 
-        internal static readonly IntPtr EntityObserverEachEntityPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEachEntity;
+        internal static readonly IntPtr UnmanagedCtorPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&UnmanagedCtor;
+        internal static readonly IntPtr UnmanagedDtorPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&UnmanagedDtor;
+        internal static readonly IntPtr UnmanagedMovePointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&UnmanagedMove;
+        internal static readonly IntPtr UnmanagedCopyPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&UnmanagedCopy;
 
-        internal static readonly IntPtr UnmanagedCtorPointer =
-            (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&UnmanagedCtor;
+        internal static readonly IntPtr ManagedCtorPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&ManagedCtor;
+        internal static readonly IntPtr ManagedDtorPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&ManagedDtor;
+        internal static readonly IntPtr ManagedMovePointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&ManagedMove;
+        internal static readonly IntPtr ManagedCopyPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&ManagedCopy;
 
-        internal static readonly IntPtr UnmanagedDtorPointer =
-            (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&UnmanagedDtor;
+        internal static readonly IntPtr DefaultManagedCtorPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&DefaultManagedCtor;
+        internal static readonly IntPtr DefaultManagedDtorPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&DefaultManagedDtor;
+        internal static readonly IntPtr DefaultManagedMovePointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&DefaultManagedMove;
+        internal static readonly IntPtr DefaultManagedCopyPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&DefaultManagedCopy;
 
-        internal static readonly IntPtr UnmanagedMovePointer =
-            (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&UnmanagedMove;
-
-        internal static readonly IntPtr UnmanagedCopyPointer =
-            (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&UnmanagedCopy;
-
-        internal static readonly IntPtr ManagedCtorPointer =
-            (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&ManagedCtor;
-
-        internal static readonly IntPtr ManagedDtorPointer =
-            (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&ManagedDtor;
-
-        internal static readonly IntPtr ManagedMovePointer =
-            (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&ManagedMove;
-
-        internal static readonly IntPtr ManagedCopyPointer =
-            (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&ManagedCopy;
-
-        internal static readonly IntPtr DefaultManagedCtorPointer =
-            (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&DefaultManagedCtor;
-
-        internal static readonly IntPtr DefaultManagedDtorPointer =
-            (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&DefaultManagedDtor;
-
-        internal static readonly IntPtr DefaultManagedMovePointer =
-            (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&DefaultManagedMove;
-
-        internal static readonly IntPtr DefaultManagedCopyPointer =
-            (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&DefaultManagedCopy;
-
-        internal static readonly IntPtr OnAddHookPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddHook;
-
-        internal static readonly IntPtr OnSetHookPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetHook;
-
-        internal static readonly IntPtr OnRemoveHookPointer =
-            (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveHook;
+        internal static readonly IntPtr OnAddHookPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddHook;
+        internal static readonly IntPtr OnSetHookPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetHook;
+        internal static readonly IntPtr OnRemoveHookPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveHook;
 #else
-        internal static readonly IntPtr EntityObserverEachPointer =
-            Marshal.GetFunctionPointerForDelegate(EntityObserverEachReference = EntityObserverEach);
+        private static readonly Ecs.IterAction EntityObserverEachReference = EntityObserverEach;
+        private static readonly Ecs.IterAction EntityObserverEachEntityReference = EntityObserverEachEntity;
 
-        internal static readonly IntPtr EntityObserverEachEntityPointer =
-            Marshal.GetFunctionPointerForDelegate(EntityObserverEachEntityReference = EntityObserverEachEntity);
+        private static readonly Ecs.CtorCallback UnmanagedCtorReference = UnmanagedCtor;
+        private static readonly Ecs.DtorCallback UnmanagedDtorReference = UnmanagedDtor;
+        private static readonly Ecs.MoveCallback UnmanagedMoveReference = UnmanagedMove;
+        private static readonly Ecs.CopyCallback UnmanagedCopyReference = UnmanagedCopy;
 
-        internal static readonly IntPtr UnmanagedCtorPointer =
-            Marshal.GetFunctionPointerForDelegate(UnmanagedCtorReference = UnmanagedCtor);
+        private static readonly Ecs.CtorCallback ManagedCtorReference = ManagedCtor;
+        private static readonly Ecs.DtorCallback ManagedDtorReference = ManagedDtor;
+        private static readonly Ecs.MoveCallback ManagedMoveReference = ManagedMove;
+        private static readonly Ecs.CopyCallback ManagedCopyReference = ManagedCopy;
 
-        internal static readonly IntPtr UnmanagedDtorPointer =
-            Marshal.GetFunctionPointerForDelegate(UnmanagedDtorReference = UnmanagedDtor);
+        private static readonly Ecs.CtorCallback DefaultManagedCtorReference = DefaultManagedCtor;
+        private static readonly Ecs.DtorCallback DefaultManagedDtorReference = DefaultManagedDtor;
+        private static readonly Ecs.MoveCallback DefaultManagedMoveReference = DefaultManagedMove;
+        private static readonly Ecs.CopyCallback DefaultManagedCopyReference = DefaultManagedCopy;
 
-        internal static readonly IntPtr UnmanagedMovePointer =
-            Marshal.GetFunctionPointerForDelegate(UnmanagedMoveReference = UnmanagedMove);
+        private static readonly Ecs.IterAction OnAddHookReference = OnAddHook;
+        private static readonly Ecs.IterAction OnSetHookReference = OnSetHook;
+        private static readonly Ecs.IterAction OnRemoveHookCopyReference = OnRemoveHook;
 
-        internal static readonly IntPtr UnmanagedCopyPointer =
-            Marshal.GetFunctionPointerForDelegate(UnmanagedCopyReference = UnmanagedCopy);
+        internal static readonly IntPtr EntityObserverEachPointer = Marshal.GetFunctionPointerForDelegate(EntityObserverEachReference);
+        internal static readonly IntPtr EntityObserverEachEntityPointer = Marshal.GetFunctionPointerForDelegate(EntityObserverEachEntityReference);
 
-        internal static readonly IntPtr ManagedCtorPointer =
-            Marshal.GetFunctionPointerForDelegate(ManagedCtorReference = ManagedCtor);
+        internal static readonly IntPtr UnmanagedCtorPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedCtorReference);
+        internal static readonly IntPtr UnmanagedDtorPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedDtorReference);
+        internal static readonly IntPtr UnmanagedMovePointer = Marshal.GetFunctionPointerForDelegate(UnmanagedMoveReference);
+        internal static readonly IntPtr UnmanagedCopyPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedCopyReference);
 
-        internal static readonly IntPtr ManagedDtorPointer =
-            Marshal.GetFunctionPointerForDelegate(ManagedDtorReference = ManagedDtor);
+        internal static readonly IntPtr ManagedCtorPointer = Marshal.GetFunctionPointerForDelegate(ManagedCtorReference);
+        internal static readonly IntPtr ManagedDtorPointer = Marshal.GetFunctionPointerForDelegate(ManagedDtorReference);
+        internal static readonly IntPtr ManagedMovePointer = Marshal.GetFunctionPointerForDelegate(ManagedMoveReference);
+        internal static readonly IntPtr ManagedCopyPointer = Marshal.GetFunctionPointerForDelegate(ManagedCopyReference);
 
-        internal static readonly IntPtr ManagedMovePointer =
-            Marshal.GetFunctionPointerForDelegate(ManagedMoveReference = ManagedMove);
+        internal static readonly IntPtr DefaultManagedCtorPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedCtorReference);
+        internal static readonly IntPtr DefaultManagedDtorPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedDtorReference);
+        internal static readonly IntPtr DefaultManagedMovePointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedMoveReference);
+        internal static readonly IntPtr DefaultManagedCopyPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedCopyReference);
 
-        internal static readonly IntPtr ManagedCopyPointer =
-            Marshal.GetFunctionPointerForDelegate(ManagedCopyReference = ManagedCopy);
-
-        internal static readonly IntPtr DefaultManagedCtorPointer =
-            Marshal.GetFunctionPointerForDelegate(DefaultManagedCtorReference = DefaultManagedCtor);
-
-        internal static readonly IntPtr DefaultManagedDtorPointer =
-            Marshal.GetFunctionPointerForDelegate(DefaultManagedDtorReference = DefaultManagedDtor);
-
-        internal static readonly IntPtr DefaultManagedMovePointer =
-            Marshal.GetFunctionPointerForDelegate(DefaultManagedMoveReference = DefaultManagedMove);
-
-        internal static readonly IntPtr DefaultManagedCopyPointer =
-            Marshal.GetFunctionPointerForDelegate(DefaultManagedCopyReference = DefaultManagedCopy);
-
-        internal static readonly IntPtr OnAddHookPointer =
-            Marshal.GetFunctionPointerForDelegate(OnAddHookReference = OnAddHook);
-
-        internal static readonly IntPtr OnSetHookPointer =
-            Marshal.GetFunctionPointerForDelegate(OnSetHookReference = OnSetHook);
-
-        internal static readonly IntPtr OnRemoveHookPointer =
-            Marshal.GetFunctionPointerForDelegate(OnRemoveHookCopyReference = OnRemoveHook);
-
-        private static readonly Ecs.IterAction EntityObserverEachReference;
-        private static readonly Ecs.IterAction EntityObserverEachEntityReference;
-
-        private static readonly Ecs.CtorCallback UnmanagedCtorReference;
-        private static readonly Ecs.DtorCallback UnmanagedDtorReference;
-        private static readonly Ecs.MoveCallback UnmanagedMoveReference;
-        private static readonly Ecs.CopyCallback UnmanagedCopyReference;
-
-        private static readonly Ecs.CtorCallback ManagedCtorReference;
-        private static readonly Ecs.DtorCallback ManagedDtorReference;
-        private static readonly Ecs.MoveCallback ManagedMoveReference;
-        private static readonly Ecs.CopyCallback ManagedCopyReference;
-
-        private static readonly Ecs.CtorCallback DefaultManagedCtorReference;
-        private static readonly Ecs.DtorCallback DefaultManagedDtorReference;
-        private static readonly Ecs.MoveCallback DefaultManagedMoveReference;
-        private static readonly Ecs.CopyCallback DefaultManagedCopyReference;
-
-        private static readonly Ecs.IterAction OnAddHookReference;
-        private static readonly Ecs.IterAction OnSetHookReference;
-        private static readonly Ecs.IterAction OnRemoveHookCopyReference;
+        internal static readonly IntPtr OnAddHookPointer = Marshal.GetFunctionPointerForDelegate(OnAddHookReference);
+        internal static readonly IntPtr OnSetHookPointer = Marshal.GetFunctionPointerForDelegate(OnSetHookReference);
+        internal static readonly IntPtr OnRemoveHookPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveHookCopyReference);
 #endif
 
         private static void EntityObserverEach(ecs_iter_t* iter)

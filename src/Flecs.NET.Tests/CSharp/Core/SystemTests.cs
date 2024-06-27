@@ -410,17 +410,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run(Run, Callback)
+                .Run(Run)
+                .Iter(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it)
@@ -450,17 +451,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, Callback)
+                .Run(Run)
+                .Iter<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, Field<Position> p, Field<Velocity> v)
@@ -487,17 +489,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, Callback)
+                .Run(Run)
+                .Iter<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, Span<Position> p, Span<Velocity> v)
@@ -524,17 +527,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, Callback)
+                .Run(Run)
+                .Iter<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, Position* p, Velocity* v)
@@ -561,17 +565,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run(Run, Callback)
+                .Run(Run)
+                .Each(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Entity e)
@@ -598,17 +603,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run(Run, Callback)
+                .Run(Run)
+                .Each(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, int i)
@@ -637,17 +643,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, Callback)
+                .Run(Run)
+                .Each<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(ref Position p, ref Velocity v)
@@ -670,17 +677,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, Callback)
+                .Run(Run)
+                .Each<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Position* p, Velocity* v)
@@ -703,17 +711,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, Callback)
+                .Run(Run)
+                .Each<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Entity e, ref Position p, ref Velocity v)
@@ -737,17 +746,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, Callback)
+                .Run(Run)
+                .Each<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Entity e, Position* p, Velocity* v)
@@ -771,17 +781,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, Callback)
+                .Run(Run)
+                .Each<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, int i, ref Position p, ref Velocity v)
@@ -805,17 +816,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, Callback)
+                .Run(Run)
+                .Each<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, int i, Position* p, Velocity* v)
@@ -1234,17 +1246,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run(&Run, Callback)
+                .Run(&Run)
+                .Iter(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it)
@@ -1274,17 +1287,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, Callback)
+                .Run(&Run)
+                .Iter<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, Field<Position> p, Field<Velocity> v)
@@ -1311,17 +1325,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, Callback)
+                .Run(&Run)
+                .Iter<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, Span<Position> p, Span<Velocity> v)
@@ -1348,17 +1363,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, Callback)
+                .Run(&Run)
+                .Iter<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, Position* p, Velocity* v)
@@ -1385,17 +1401,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run(&Run, Callback)
+                .Run(&Run)
+                .Each(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Entity e)
@@ -1422,17 +1439,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run(&Run, Callback)
+                .Run(&Run)
+                .Each(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, int i)
@@ -1461,17 +1479,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, Callback)
+                .Run(&Run)
+                .Each<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(ref Position p, ref Velocity v)
@@ -1494,17 +1513,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, Callback)
+                .Run(&Run)
+                .Each<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Position* p, Velocity* v)
@@ -1527,17 +1547,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, Callback)
+                .Run(&Run)
+                .Each<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Entity e, ref Position p, ref Velocity v)
@@ -1561,17 +1582,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, Callback)
+                .Run(&Run)
+                .Each<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Entity e, Position* p, Velocity* v)
@@ -1595,17 +1617,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, Callback)
+                .Run(&Run)
+                .Each<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, int i, ref Position p, ref Velocity v)
@@ -1629,17 +1652,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, Callback)
+                .Run(&Run)
+                .Each<Position, Velocity>(Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, int i, Position* p, Velocity* v)
@@ -1663,17 +1687,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run(Run, &Callback)
+                .Run(Run)
+                .Iter(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it)
@@ -1703,17 +1728,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, &Callback)
+                .Run(Run)
+                .Iter<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, Field<Position> p, Field<Velocity> v)
@@ -1740,17 +1766,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, &Callback)
+                .Run(Run)
+                .Iter<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, Span<Position> p, Span<Velocity> v)
@@ -1777,17 +1804,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, &Callback)
+                .Run(Run)
+                .Iter<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, Position* p, Velocity* v)
@@ -1814,17 +1842,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run(Run, &Callback)
+                .Run(Run)
+                .Each(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Entity e)
@@ -1851,17 +1880,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run(Run, &Callback)
+                .Run(Run)
+                .Each(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, int i)
@@ -1890,17 +1920,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, &Callback)
+                .Run(Run)
+                .Each<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(ref Position p, ref Velocity v)
@@ -1923,17 +1954,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, &Callback)
+                .Run(Run)
+                .Each<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Position* p, Velocity* v)
@@ -1956,17 +1988,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, &Callback)
+                .Run(Run)
+                .Each<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Entity e, ref Position p, ref Velocity v)
@@ -1990,17 +2023,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, &Callback)
+                .Run(Run)
+                .Each<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Entity e, Position* p, Velocity* v)
@@ -2024,17 +2058,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, &Callback)
+                .Run(Run)
+                .Each<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, int i, ref Position p, ref Velocity v)
@@ -2058,17 +2093,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(Run, &Callback)
+                .Run(Run)
+                .Each<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, int i, Position* p, Velocity* v)
@@ -2092,17 +2128,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run(&Run, &Callback)
+                .Run(&Run)
+                .Iter(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it)
@@ -2132,17 +2169,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, &Callback)
+                .Run(&Run)
+                .Iter<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, Field<Position> p, Field<Velocity> v)
@@ -2169,17 +2207,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, &Callback)
+                .Run(&Run)
+                .Iter<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, Span<Position> p, Span<Velocity> v)
@@ -2206,17 +2245,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, &Callback)
+                .Run(&Run)
+                .Iter<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, Position* p, Velocity* v)
@@ -2243,17 +2283,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run(&Run, &Callback)
+                .Run(&Run)
+                .Each(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Entity e)
@@ -2280,17 +2321,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run(&Run, &Callback)
+                .Run(&Run)
+                .Each(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, int i)
@@ -2319,17 +2361,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, &Callback)
+                .Run(&Run)
+                .Each<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(ref Position p, ref Velocity v)
@@ -2352,17 +2395,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, &Callback)
+                .Run(&Run)
+                .Each<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Position* p, Velocity* v)
@@ -2385,17 +2429,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, &Callback)
+                .Run(&Run)
+                .Each<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Entity e, ref Position p, ref Velocity v)
@@ -2419,17 +2464,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, &Callback)
+                .Run(&Run)
+                .Each<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Entity e, Position* p, Velocity* v)
@@ -2453,17 +2499,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, &Callback)
+                .Run(&Run)
+                .Each<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, int i, ref Position p, ref Velocity v)
@@ -2487,17 +2534,18 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Velocity(30, 40));
 
             world.Routine<Position, Velocity>()
-                .Run<Position, Velocity>(&Run, &Callback)
+                .Run(&Run)
+                .Each<Position, Velocity>(&Callback)
                 .Run();
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
             return;
 
-            static void Run(Iter it)
+            static void Run(Iter it, Action<Iter> callback)
             {
                 while (it.Next())
-                    it.Callback();
+                    callback(it);
             }
 
             static void Callback(Iter it, int i, Position* p, Velocity* v)

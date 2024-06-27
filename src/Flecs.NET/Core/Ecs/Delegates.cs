@@ -133,5 +133,22 @@ namespace Flecs.NET.Core
         ///     A callback that takes a reference to a term.
         /// </summary>
         public delegate void TermCallback(ref Term term);
+
+        /// <summary>
+        ///     Run callback.
+        /// </summary>
+        public delegate void RunCallback(Iter it);
+
+        /// <summary>
+        ///     Run delegate callback.
+        /// </summary>
+        public delegate void RunDelegateCallback(Iter it, Action<Iter> callback);
+
+#if NET5_0_OR_GREATER
+        /// <summary>
+        ///     Run function pointer callback.
+        /// </summary>
+        public delegate void RunPointerCallback(Iter it, delegate*<Iter, void> callback);
+#endif
     }
 }

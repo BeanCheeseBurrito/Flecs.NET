@@ -10,6 +10,15 @@ namespace Flecs.NET.Core
     public static unsafe partial class Invoker
     {
         /// <summary>
+        ///     Invokes an iterator callback.
+        /// </summary>
+        /// <param name="it">The iterator.</param>
+        public static void Callback(Iter it)
+        {
+            it.Callback();
+        }
+
+        /// <summary>
         ///     Invokes an iter callback using a delegate.
         /// </summary>
         /// <param name="iter"></param>
@@ -65,10 +74,21 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="iter"></param>
         /// <param name="callback"></param>
-        public static void Run(ecs_iter_t* iter, Ecs.IterCallback callback)
+        public static void Run(ecs_iter_t* iter, Ecs.RunCallback callback)
         {
             iter->flags &= ~EcsIterIsValid;
             callback(new Iter(iter));
+        }
+
+        /// <summary>
+        ///     Invokes a run callback using a delegate.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void Run(ecs_iter_t* iter, Ecs.RunDelegateCallback callback)
+        {
+            iter->flags &= ~EcsIterIsValid;
+            callback(new Iter(iter), Callback);
         }
 
         /// <summary>
@@ -157,7 +177,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Invokes a run callback using a delegate.
+        ///     Invokes a run callback using a managed function pointer.
         /// </summary>
         /// <param name="iter"></param>
         /// <param name="callback"></param>
@@ -165,6 +185,39 @@ namespace Flecs.NET.Core
         {
             iter->flags &= ~EcsIterIsValid;
             callback(new Iter(iter));
+        }
+
+        /// <summary>
+        ///     Invokes a run pointer callback using a delegate.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void Run(ecs_iter_t* iter, Ecs.RunPointerCallback callback)
+        {
+            iter->flags &= ~EcsIterIsValid;
+            callback(new Iter(iter), &Callback);
+        }
+
+        /// <summary>
+        ///     Invokes a run delegate callback using a managed function pointer.
+        /// </summary>
+        /// <param name="iter">The iterator.</param>
+        /// <param name="callback">The callback.</param>
+        public static void Run(ecs_iter_t* iter, delegate*<Iter, Action<Iter>, void> callback)
+        {
+            iter->flags &= ~EcsIterIsValid;
+            callback(new Iter(iter), Callback);
+        }
+
+        /// <summary>
+        ///     Invokes a run pointer callback using a managed function pointer.
+        /// </summary>
+        /// <param name="iter">The iterator.</param>
+        /// <param name="callback">The callback.</param>
+        public static void Run(ecs_iter_t* iter, delegate*<Iter, delegate*<Iter, void>, void> callback)
+        {
+            iter->flags &= ~EcsIterIsValid;
+            callback(new Iter(iter), &Callback);
         }
 #endif
     }

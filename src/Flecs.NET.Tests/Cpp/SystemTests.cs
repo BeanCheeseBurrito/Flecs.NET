@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -2483,18 +2484,16 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Velocity(1, 2));
 
             world.Routine<Position, Velocity>()
-                .Run(
-                    (Iter it) =>
-                    {
-                        while (it.Next())
-                            it.Callback();
-                    },
-                    (ref Position p, ref Velocity v) =>
-                    {
-                            p.X += v.X;
-                            p.Y += v.Y;
-                    }
-                );
+                .Run((Iter it, Action<Iter> callback) =>
+                {
+                    while (it.Next())
+                        callback(it);
+                })
+                .Each((ref Position p, ref Velocity v) =>
+                {
+                        p.X += v.X;
+                        p.Y += v.Y;
+                });
 
             world.Progress();
 
