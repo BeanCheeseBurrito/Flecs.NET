@@ -1623,7 +1623,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder Term()
         {
-            Ecs.Assert(_termIndex < FLECS_TERM_COUNT_MAX, "Cannot have more than 16 terms.");
+            Ecs.Assert(_termIndex < FLECS_TERM_COUNT_MAX, "Cannot have more than 32 terms.");
             _termIndex = _termCount++;
             return ref this;
         }
@@ -1635,7 +1635,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder TermAt(int termIndex)
         {
-            Ecs.Assert(termIndex >= 0 && termIndex < FLECS_TERM_COUNT_MAX, "TermIndex argument must be between 0-15.");
+            Ecs.Assert(termIndex >= 0 && termIndex < FLECS_TERM_COUNT_MAX, "TermIndex argument must be between 0-31.");
 
             _termIndex = termIndex;
             _termIdType = TermIdType.Src;
