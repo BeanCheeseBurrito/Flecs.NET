@@ -458,7 +458,6 @@ namespace Flecs.NET.Core
 
         internal Field<T> GetField<T>(int index)
         {
-            Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
             AssertFieldId<T>(Handle, index);
 
             bool isShared = ecs_field_is_self(Handle, index) == 0;
@@ -471,7 +470,7 @@ namespace Flecs.NET.Core
         [Conditional("DEBUG")]
         internal static void AssertFieldId<T>(ecs_iter_t* iter, int index)
         {
-            Ecs.Assert(index >= 0, "Index out of bounds.");
+            Ecs.Assert(index >= 0 && index < iter->field_count, "Index out of bounds.");
 
             Entity expected = new Entity(iter->world, iter->ids[index]);
             Entity provided = new Entity(iter->world, Type<T>.Id(iter->world));
@@ -480,9 +479,10 @@ namespace Flecs.NET.Core
                 return;
 
             string iteratedName = iter->system == 0 ? "" : $"[Query Name]: {new Entity(iter->world, iter->system)}";
+            string fields = new Query(iter->world, iter->query).Str();
 
             Ecs.Error(
-                $"Type argument mismatch at term index {index}.\n[Expected Type]: {expected}\n[Provided Type]: {provided}\n{iteratedName}");
+                $"Type argument mismatch at term index {index}.\n[Fields]: {fields}\n[Expected Type]: {expected}\n[Provided Type]: {provided}\n{iteratedName}");
         }
 
         /// <summary>
@@ -564,6 +564,15 @@ namespace Flecs.NET.Core
     public unsafe partial struct Iter
     {
         /// <summary>
+        ///     Returns the query being evaluated.
+        /// </summary>
+        /// <returns>The query.</returns>
+        public Query Query()
+        {
+            return new Query(Handle->world, Handle->query);
+        }
+
+        /// <summary>
         ///     Get managed ref to the first element in a field.
         /// </summary>
         /// <param name="index">The index of the field in the iterator.</param>
@@ -618,9 +627,7 @@ namespace Flecs.NET.Core
 
         internal T* GetPointer<T>(int index)
         {
-            Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
             AssertFieldId<T>(Handle, index);
-
             return (T*)ecs_field_w_size(Handle, (IntPtr)Type<T>.Size, index);
         }
     }
