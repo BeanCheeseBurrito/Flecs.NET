@@ -316,6 +316,7 @@ namespace Flecs.NET.Core
         /// <param name="index"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Field<T> Field<T>(int index)
         {
             return GetField<T>(index);
@@ -328,6 +329,7 @@ namespace Flecs.NET.Core
         /// <param name="row"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref T FieldAt<T>(int index, int row)
         {
             return ref GetField<T>(index)[row];
@@ -456,20 +458,18 @@ namespace Flecs.NET.Core
             Handle = null;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal Field<T> GetField<T>(int index)
         {
-            AssertFieldId<T>(Handle, index);
-
+            AssertField<T>(Handle, index);
             bool isShared = ecs_field_is_self(Handle, index) == 0;
-            int count = isShared ? 1 : Handle->count;
-
-            void* ptr = ecs_field_w_size(Handle, (IntPtr)Type<T>.Size, index);
-            return new Field<T>(ptr, count, isShared);
+            return new Field<T>(Handle->ptrs[index], isShared ? 1 : Handle->count, isShared);
         }
 
         [Conditional("DEBUG")]
-        internal static void AssertFieldId<T>(ecs_iter_t* iter, int index)
+        internal static void AssertField<T>(ecs_iter_t* iter, int index)
         {
+            Ecs.Assert((iter->flags & EcsIterIsValid) != 0, "Operation is invalid before calling .Next().");
             Ecs.Assert(index >= 0 && index < iter->field_count, "Index out of bounds.");
 
             Entity expected = new Entity(iter->world, iter->ids[index]);
@@ -579,9 +579,9 @@ namespace Flecs.NET.Core
         /// <typeparam name="T">The field type.</typeparam>
         /// <returns>Reference to first component of field.</returns>
         [SuppressMessage("Usage", "CA1720")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref T Single<T>(int index)
         {
-            Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
             return ref GetField<T>(index)[0];
         }
 
@@ -591,6 +591,7 @@ namespace Flecs.NET.Core
         /// <param name="index">The index of the field in the iterator.</param>
         /// <typeparam name="T">The field type.</typeparam>
         /// <returns>A span to the data of the field.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Span<T> Span<T>(int index) where T : unmanaged
         {
             return GetSpan<T>(index);
@@ -602,6 +603,7 @@ namespace Flecs.NET.Core
         /// <param name="index">The index of the field in the iterator.</param>
         /// <typeparam name="T">The field type.</typeparam>
         /// <returns>A pointer to the data of the field.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T* Pointer<T>(int index) where T : unmanaged
         {
             return GetPointer<T>(index);
@@ -614,21 +616,24 @@ namespace Flecs.NET.Core
         /// <param name="row">The row.</param>
         /// <typeparam name="T">The field type.</typeparam>
         /// <returns>A pointer to the data of the field.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T* PointerAt<T>(int index, int row) where T : unmanaged
         {
             return &Pointer<T>(index)[row];
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal Span<T> GetSpan<T>(int index)
         {
             Field<T> field = GetField<T>(index);
             return new Span<T>(field.Data, field.Length);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal T* GetPointer<T>(int index)
         {
-            AssertFieldId<T>(Handle, index);
-            return (T*)ecs_field_w_size(Handle, (IntPtr)Type<T>.Size, index);
+            AssertField<T>(Handle, index);
+            return (T*)Handle->ptrs[index];
         }
     }
 

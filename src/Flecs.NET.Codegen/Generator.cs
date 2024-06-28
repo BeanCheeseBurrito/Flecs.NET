@@ -651,7 +651,7 @@ namespace Flecs.NET.Codegen
                 string pointerParams = ConcatString(i + 1, ", ", index => $"T{index}*");
 
                 string fieldAssertions = ConcatString(i + 1, "\n",
-                    index => $"Core.Iter.AssertFieldId<T{index}>(iter, {index});");
+                    index => $"Core.Iter.AssertField<T{index}>(iter, {index});");
 
                 string sizes = ConcatString(i + 1, "\n",
                     index => $"int stride{index} = (iter->sources == null || iter->sources[{index}] == 0) && (iter->set_fields & (1 << {index})) != 0 && !Type<T{index}>.IsTag ? 1 : 0;");
