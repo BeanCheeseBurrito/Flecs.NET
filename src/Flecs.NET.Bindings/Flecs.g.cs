@@ -2095,7 +2095,7 @@ namespace Flecs.NET.Bindings
 
             public ushort port;
 
-            public System.IntPtr init; // delegate* unmanaged<ecs_world_t*, int>
+            public System.IntPtr init; // delegate*<ecs_world_t*, int>
 
             public void* ctx;
 
@@ -3381,7 +3381,7 @@ namespace Flecs.NET.Bindings
 
             public byte* expr;
 
-            public System.IntPtr lookup_action; // delegate* unmanaged<ecs_world_t*, byte*, void*, ulong>
+            public System.IntPtr lookup_action; // delegate*<ecs_world_t*, byte*, void*, ulong>
 
             public void* lookup_ctx;
 
@@ -3473,9 +3473,9 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_hashmap_t : System.IEquatable<ecs_hashmap_t>
         {
-            public System.IntPtr hash; // delegate* unmanaged<void*, ulong>
+            public System.IntPtr hash; // delegate*<void*, ulong>
 
-            public System.IntPtr compare; // delegate* unmanaged<void*, void*, int>
+            public System.IntPtr compare; // delegate*<void*, void*, int>
 
             public int key_size;
 
@@ -4037,7 +4037,7 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_http_server_desc_t : System.IEquatable<ecs_http_server_desc_t>
         {
-            public System.IntPtr callback; // delegate* unmanaged<ecs_http_request_t*, ecs_http_reply_t*, void*, byte>
+            public System.IntPtr callback; // delegate*<ecs_http_request_t*, ecs_http_reply_t*, void*, byte>
 
             public void* ctx;
 
@@ -4394,11 +4394,11 @@ namespace Flecs.NET.Bindings
 
             public ecs_iter_private_t priv_;
 
-            public System.IntPtr next; // delegate* unmanaged<ecs_iter_t*, byte>
+            public System.IntPtr next; // delegate*<ecs_iter_t*, byte>
 
-            public System.IntPtr callback; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr callback; // delegate*<ecs_iter_t*, void>
 
-            public System.IntPtr fini; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr fini; // delegate*<ecs_iter_t*, void>
 
             public ecs_iter_t* chain_it;
 
@@ -4778,7 +4778,7 @@ namespace Flecs.NET.Bindings
 
             public byte is_primitive_scope;
 
-            public System.IntPtr lookup_action; // delegate* unmanaged<ecs_world_t*, byte*, void*, ulong>
+            public System.IntPtr lookup_action; // delegate*<ecs_world_t*, byte*, void*, ulong>
 
             public void* lookup_ctx;
 
@@ -5262,21 +5262,21 @@ namespace Flecs.NET.Bindings
 
             public byte yield_existing;
 
-            public System.IntPtr callback; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr callback; // delegate*<ecs_iter_t*, void>
 
-            public System.IntPtr run; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr run; // delegate*<ecs_iter_t*, void>
 
             public void* ctx;
 
-            public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr ctx_free; // delegate*<void*, void>
 
             public void* callback_ctx;
 
-            public System.IntPtr callback_ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr callback_ctx_free; // delegate*<void*, void>
 
             public void* run_ctx;
 
-            public System.IntPtr run_ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr run_ctx_free; // delegate*<void*, void>
 
             public void* observable;
 
@@ -5334,9 +5334,9 @@ namespace Flecs.NET.Bindings
 
             public int event_count;
 
-            public System.IntPtr callback; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr callback; // delegate*<ecs_iter_t*, void>
 
-            public System.IntPtr run; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr run; // delegate*<ecs_iter_t*, void>
 
             public void* ctx;
 
@@ -5344,11 +5344,11 @@ namespace Flecs.NET.Bindings
 
             public void* run_ctx;
 
-            public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr ctx_free; // delegate*<void*, void>
 
-            public System.IntPtr callback_ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr callback_ctx_free; // delegate*<void*, void>
 
-            public System.IntPtr run_ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr run_ctx_free; // delegate*<void*, void>
 
             public ecs_observable_t* observable;
 
@@ -5440,75 +5440,75 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_os_api_t : System.IEquatable<ecs_os_api_t>
         {
-            public System.IntPtr init_; // delegate* unmanaged<void>
+            public System.IntPtr init_; // delegate*<void>
 
-            public System.IntPtr fini_; // delegate* unmanaged<void>
+            public System.IntPtr fini_; // delegate*<void>
 
-            public System.IntPtr malloc_; // delegate* unmanaged<int, void*>
+            public System.IntPtr malloc_; // delegate*<int, void*>
 
-            public System.IntPtr realloc_; // delegate* unmanaged<void*, int, void*>
+            public System.IntPtr realloc_; // delegate*<void*, int, void*>
 
-            public System.IntPtr calloc_; // delegate* unmanaged<int, void*>
+            public System.IntPtr calloc_; // delegate*<int, void*>
 
-            public System.IntPtr free_; // delegate* unmanaged<void*, void>
+            public System.IntPtr free_; // delegate*<void*, void>
 
-            public System.IntPtr strdup_; // delegate* unmanaged<byte*, byte*>
+            public System.IntPtr strdup_; // delegate*<byte*, byte*>
 
-            public System.IntPtr thread_new_; // delegate* unmanaged<System.IntPtr, void*, ulong>
+            public System.IntPtr thread_new_; // delegate*<System.IntPtr, void*, ulong>
 
-            public System.IntPtr thread_join_; // delegate* unmanaged<ulong, void*>
+            public System.IntPtr thread_join_; // delegate*<ulong, void*>
 
-            public System.IntPtr thread_self_; // delegate* unmanaged<ulong>
+            public System.IntPtr thread_self_; // delegate*<ulong>
 
-            public System.IntPtr task_new_; // delegate* unmanaged<System.IntPtr, void*, ulong>
+            public System.IntPtr task_new_; // delegate*<System.IntPtr, void*, ulong>
 
-            public System.IntPtr task_join_; // delegate* unmanaged<ulong, void*>
+            public System.IntPtr task_join_; // delegate*<ulong, void*>
 
-            public System.IntPtr ainc_; // delegate* unmanaged<int*, int>
+            public System.IntPtr ainc_; // delegate*<int*, int>
 
-            public System.IntPtr adec_; // delegate* unmanaged<int*, int>
+            public System.IntPtr adec_; // delegate*<int*, int>
 
-            public System.IntPtr lainc_; // delegate* unmanaged<long*, long>
+            public System.IntPtr lainc_; // delegate*<long*, long>
 
-            public System.IntPtr ladec_; // delegate* unmanaged<long*, long>
+            public System.IntPtr ladec_; // delegate*<long*, long>
 
-            public System.IntPtr mutex_new_; // delegate* unmanaged<ulong>
+            public System.IntPtr mutex_new_; // delegate*<ulong>
 
-            public System.IntPtr mutex_free_; // delegate* unmanaged<ulong, void>
+            public System.IntPtr mutex_free_; // delegate*<ulong, void>
 
-            public System.IntPtr mutex_lock_; // delegate* unmanaged<ulong, void>
+            public System.IntPtr mutex_lock_; // delegate*<ulong, void>
 
-            public System.IntPtr mutex_unlock_; // delegate* unmanaged<ulong, void>
+            public System.IntPtr mutex_unlock_; // delegate*<ulong, void>
 
-            public System.IntPtr cond_new_; // delegate* unmanaged<ulong>
+            public System.IntPtr cond_new_; // delegate*<ulong>
 
-            public System.IntPtr cond_free_; // delegate* unmanaged<ulong, void>
+            public System.IntPtr cond_free_; // delegate*<ulong, void>
 
-            public System.IntPtr cond_signal_; // delegate* unmanaged<ulong, void>
+            public System.IntPtr cond_signal_; // delegate*<ulong, void>
 
-            public System.IntPtr cond_broadcast_; // delegate* unmanaged<ulong, void>
+            public System.IntPtr cond_broadcast_; // delegate*<ulong, void>
 
-            public System.IntPtr cond_wait_; // delegate* unmanaged<ulong, ulong, void>
+            public System.IntPtr cond_wait_; // delegate*<ulong, ulong, void>
 
-            public System.IntPtr sleep_; // delegate* unmanaged<int, int, void>
+            public System.IntPtr sleep_; // delegate*<int, int, void>
 
-            public System.IntPtr now_; // delegate* unmanaged<ulong>
+            public System.IntPtr now_; // delegate*<ulong>
 
-            public System.IntPtr get_time_; // delegate* unmanaged<ecs_time_t*, void>
+            public System.IntPtr get_time_; // delegate*<ecs_time_t*, void>
 
-            public System.IntPtr log_; // delegate* unmanaged<int, byte*, int, byte*, void>
+            public System.IntPtr log_; // delegate*<int, byte*, int, byte*, void>
 
-            public System.IntPtr abort_; // delegate* unmanaged<void>
+            public System.IntPtr abort_; // delegate*<void>
 
-            public System.IntPtr dlopen_; // delegate* unmanaged<byte*, ulong>
+            public System.IntPtr dlopen_; // delegate*<byte*, ulong>
 
-            public System.IntPtr dlproc_; // delegate* unmanaged<ulong, byte*, System.IntPtr>
+            public System.IntPtr dlproc_; // delegate*<ulong, byte*, System.IntPtr>
 
-            public System.IntPtr dlclose_; // delegate* unmanaged<ulong, void>
+            public System.IntPtr dlclose_; // delegate*<ulong, void>
 
-            public System.IntPtr module_to_dl_; // delegate* unmanaged<byte*, byte*>
+            public System.IntPtr module_to_dl_; // delegate*<byte*, byte*>
 
-            public System.IntPtr module_to_etc_; // delegate* unmanaged<byte*, byte*>
+            public System.IntPtr module_to_etc_; // delegate*<byte*, byte*>
 
             public int log_level_;
 
@@ -5848,31 +5848,31 @@ namespace Flecs.NET.Bindings
 
             public uint flags;
 
-            public System.IntPtr order_by_callback; // delegate* unmanaged<ulong, void*, ulong, void*, int>
+            public System.IntPtr order_by_callback; // delegate*<ulong, void*, ulong, void*, int>
 
-            public System.IntPtr order_by_table_callback; // delegate* unmanaged<ecs_world_t*, ecs_table_t*, ulong*, void*, int, int, int, System.IntPtr, void>
+            public System.IntPtr order_by_table_callback; // delegate*<ecs_world_t*, ecs_table_t*, ulong*, void*, int, int, int, System.IntPtr, void>
 
             public ulong order_by;
 
             public ulong group_by;
 
-            public System.IntPtr group_by_callback; // delegate* unmanaged<ecs_world_t*, ecs_table_t*, ulong, void*, ulong>
+            public System.IntPtr group_by_callback; // delegate*<ecs_world_t*, ecs_table_t*, ulong, void*, ulong>
 
-            public System.IntPtr on_group_create; // delegate* unmanaged<ecs_world_t*, ulong, void*, void*>
+            public System.IntPtr on_group_create; // delegate*<ecs_world_t*, ulong, void*, void*>
 
-            public System.IntPtr on_group_delete; // delegate* unmanaged<ecs_world_t*, ulong, void*, void*, void>
+            public System.IntPtr on_group_delete; // delegate*<ecs_world_t*, ulong, void*, void*, void>
 
             public void* group_by_ctx;
 
-            public System.IntPtr group_by_ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr group_by_ctx_free; // delegate*<void*, void>
 
             public void* ctx;
 
             public void* binding_ctx;
 
-            public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr ctx_free; // delegate*<void*, void>
 
-            public System.IntPtr binding_ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr binding_ctx_free; // delegate*<void*, void>
 
             public ulong entity;
 
@@ -6694,7 +6694,7 @@ namespace Flecs.NET.Bindings
 
             public byte* expr;
 
-            public System.IntPtr lookup_action; // delegate* unmanaged<ecs_world_t*, byte*, void*, ulong>
+            public System.IntPtr lookup_action; // delegate*<ecs_world_t*, byte*, void*, ulong>
 
             public void* lookup_ctx;
 
@@ -6926,9 +6926,9 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_serializer_t : System.IEquatable<ecs_serializer_t>
         {
-            public System.IntPtr value; // delegate* unmanaged<ecs_serializer_t*, ulong, void*, int>
+            public System.IntPtr value; // delegate*<ecs_serializer_t*, ulong, void*, int>
 
-            public System.IntPtr member; // delegate* unmanaged<ecs_serializer_t*, byte*, int>
+            public System.IntPtr member; // delegate*<ecs_serializer_t*, byte*, int>
 
             public ecs_world_t* world;
 
@@ -7924,21 +7924,21 @@ namespace Flecs.NET.Bindings
 
             public ecs_query_desc_t query;
 
-            public System.IntPtr callback; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr callback; // delegate*<ecs_iter_t*, void>
 
-            public System.IntPtr run; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr run; // delegate*<ecs_iter_t*, void>
 
             public void* ctx;
 
-            public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr ctx_free; // delegate*<void*, void>
 
             public void* callback_ctx;
 
-            public System.IntPtr callback_ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr callback_ctx_free; // delegate*<void*, void>
 
             public void* run_ctx;
 
-            public System.IntPtr run_ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr run_ctx_free; // delegate*<void*, void>
 
             public float interval;
 
@@ -8042,9 +8042,9 @@ namespace Flecs.NET.Bindings
         {
             public ecs_header_t hdr;
 
-            public System.IntPtr run; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr run; // delegate*<ecs_iter_t*, void>
 
-            public System.IntPtr action; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr action; // delegate*<ecs_iter_t*, void>
 
             public ecs_query_t* query;
 
@@ -8062,11 +8062,11 @@ namespace Flecs.NET.Bindings
 
             public void* run_ctx;
 
-            public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr ctx_free; // delegate*<void*, void>
 
-            public System.IntPtr callback_ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr callback_ctx_free; // delegate*<void*, void>
 
-            public System.IntPtr run_ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr run_ctx_free; // delegate*<void*, void>
 
             public float time_spent;
 
@@ -8078,7 +8078,7 @@ namespace Flecs.NET.Bindings
 
             public ulong entity;
 
-            public System.IntPtr dtor; // delegate* unmanaged<void*, void>
+            public System.IntPtr dtor; // delegate*<void*, void>
 
             public bool Equals(ecs_system_t other)
             {
@@ -8478,35 +8478,35 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_type_hooks_t : System.IEquatable<ecs_type_hooks_t>
         {
-            public System.IntPtr ctor; // delegate* unmanaged<void*, int, ecs_type_info_t*, void>
+            public System.IntPtr ctor; // delegate*<void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr dtor; // delegate* unmanaged<void*, int, ecs_type_info_t*, void>
+            public System.IntPtr dtor; // delegate*<void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr copy; // delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>
+            public System.IntPtr copy; // delegate*<void*, void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr move; // delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>
+            public System.IntPtr move; // delegate*<void*, void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr copy_ctor; // delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>
+            public System.IntPtr copy_ctor; // delegate*<void*, void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr move_ctor; // delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>
+            public System.IntPtr move_ctor; // delegate*<void*, void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr ctor_move_dtor; // delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>
+            public System.IntPtr ctor_move_dtor; // delegate*<void*, void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr move_dtor; // delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>
+            public System.IntPtr move_dtor; // delegate*<void*, void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr on_add; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr on_add; // delegate*<ecs_iter_t*, void>
 
-            public System.IntPtr on_set; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr on_set; // delegate*<ecs_iter_t*, void>
 
-            public System.IntPtr on_remove; // delegate* unmanaged<ecs_iter_t*, void>
+            public System.IntPtr on_remove; // delegate*<ecs_iter_t*, void>
 
             public void* ctx;
 
             public void* binding_ctx;
 
-            public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr ctx_free; // delegate*<void*, void>
 
-            public System.IntPtr binding_ctx_free; // delegate* unmanaged<void*, void>
+            public System.IntPtr binding_ctx_free; // delegate*<void*, void>
 
             public bool Equals(ecs_type_hooks_t other)
             {
@@ -10380,35 +10380,35 @@ namespace Flecs.NET.Bindings
         {
             public ulong as_type;
 
-            public System.IntPtr serialize; // delegate* unmanaged<ecs_serializer_t*, void*, int>
+            public System.IntPtr serialize; // delegate*<ecs_serializer_t*, void*, int>
 
-            public System.IntPtr assign_bool; // delegate* unmanaged<void*, byte, void>
+            public System.IntPtr assign_bool; // delegate*<void*, byte, void>
 
-            public System.IntPtr assign_char; // delegate* unmanaged<void*, byte, void>
+            public System.IntPtr assign_char; // delegate*<void*, byte, void>
 
-            public System.IntPtr assign_int; // delegate* unmanaged<void*, long, void>
+            public System.IntPtr assign_int; // delegate*<void*, long, void>
 
-            public System.IntPtr assign_uint; // delegate* unmanaged<void*, ulong, void>
+            public System.IntPtr assign_uint; // delegate*<void*, ulong, void>
 
-            public System.IntPtr assign_float; // delegate* unmanaged<void*, double, void>
+            public System.IntPtr assign_float; // delegate*<void*, double, void>
 
-            public System.IntPtr assign_string; // delegate* unmanaged<void*, byte*, void>
+            public System.IntPtr assign_string; // delegate*<void*, byte*, void>
 
-            public System.IntPtr assign_entity; // delegate* unmanaged<void*, ecs_world_t*, ulong, void>
+            public System.IntPtr assign_entity; // delegate*<void*, ecs_world_t*, ulong, void>
 
-            public System.IntPtr assign_id; // delegate* unmanaged<void*, ecs_world_t*, ulong, void>
+            public System.IntPtr assign_id; // delegate*<void*, ecs_world_t*, ulong, void>
 
-            public System.IntPtr assign_null; // delegate* unmanaged<void*, void>
+            public System.IntPtr assign_null; // delegate*<void*, void>
 
-            public System.IntPtr clear; // delegate* unmanaged<void*, void>
+            public System.IntPtr clear; // delegate*<void*, void>
 
-            public System.IntPtr ensure_element; // delegate* unmanaged<void*, System.IntPtr, void*>
+            public System.IntPtr ensure_element; // delegate*<void*, System.IntPtr, void*>
 
-            public System.IntPtr ensure_member; // delegate* unmanaged<void*, byte*, void*>
+            public System.IntPtr ensure_member; // delegate*<void*, byte*, void*>
 
-            public System.IntPtr count; // delegate* unmanaged<void*, System.IntPtr>
+            public System.IntPtr count; // delegate*<void*, System.IntPtr>
 
-            public System.IntPtr resize; // delegate* unmanaged<void*, System.IntPtr, void>
+            public System.IntPtr resize; // delegate*<void*, System.IntPtr, void>
 
             public bool Equals(EcsOpaque other)
             {
