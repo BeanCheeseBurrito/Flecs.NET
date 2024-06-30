@@ -179,54 +179,6 @@ public struct MyModule : IFlecsModule
     }
 }
 
-public struct Pod
-{
-    [ThreadStatic]
-    public static int CtorInvoked;
-    [ThreadStatic]
-    public static int DtorInvoked;
-    [ThreadStatic]
-    public static int MoveInvoked;
-    [ThreadStatic]
-    public static int CopyInvoked;
-
-    public int Value { get; set; }
-
-    public Pod(int value)
-    {
-        Value = value;
-    }
-
-    public static TypeHooks<Pod> TypeHooks = new TypeHooks<Pod>
-    {
-        Ctor = (ref Pod data, TypeInfo typeInfo) =>
-        {
-            CtorInvoked++;
-            data = default;
-        },
-        Dtor = (ref Pod data, TypeInfo typeInfo) =>
-        {
-            DtorInvoked++;
-            data = default;
-        },
-        Move = (ref Pod dst, ref Pod src, TypeInfo typeInfo) =>
-        {
-            MoveInvoked++;
-            dst = src;
-            src = default;
-        },
-        Copy = (ref Pod dst, ref Pod src, TypeInfo typeInfo) =>
-        {
-            CopyInvoked++;
-            dst = src;
-        },
-
-        OnAdd = (Iter it, Field<Pod> pod) => { },
-        OnSet = (Iter it, Field<Pod> pod) => { },
-        OnRemove = (Iter it, Field<Pod> pod) => { }
-    };
-}
-
 namespace Namespace
 {
     public struct NestedNameSpaceType { }

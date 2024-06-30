@@ -1,7 +1,7 @@
 using Flecs.NET.Core;
 using Xunit;
 
-namespace Flecs.NET.Tests.CSharp
+namespace Flecs.NET.Tests.CSharp.Core
 {
     public class EntityTests
     {

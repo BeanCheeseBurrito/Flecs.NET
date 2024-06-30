@@ -394,48 +394,485 @@ namespace Flecs.NET.Core
     public unsafe partial struct Component<TComponent>
     {
         /// <summary>
-        ///     Sets the component's type hooks.
+        ///     Registers a Ctor callback for this component.
         /// </summary>
-        /// <param name="hooks"></param>
-        public void SetHooks(TypeHooks<TComponent> hooks)
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> Ctor(Ecs.CtorCallback<TComponent> callback)
         {
-            ecs_type_hooks_t desc = default;
+            GetHooksAndContext(out ecs_type_hooks_t hooks, out BindingContext.TypeHooksContext* context);
 
-            if (RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>())
+            Ecs.Assert(
+                hooks.ctor == IntPtr.Zero ||
+                hooks.ctor == BindingContext<TComponent>.UnmanagedCtorPointer ||
+                hooks.ctor == BindingContext<TComponent>.DefaultManagedCtorPointer ||
+                hooks.ctor == BindingContext<TComponent>.ManagedCtorPointer,
+                "Cannot register Ctor hook because it is already registered by a non Flecs.NET application.");
+
+            BindingContext.SetCallback(ref context->Ctor, callback, false);
+
+            hooks.ctor = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
+                ? BindingContext<TComponent>.ManagedCtorPointer
+                : BindingContext<TComponent>.UnmanagedCtorPointer;
+
+            ecs_set_hooks_id(World, Id, &hooks);
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Registers a Dtor callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> Dtor(Ecs.DtorCallback<TComponent> callback)
+        {
+            GetHooksAndContext(out ecs_type_hooks_t hooks, out BindingContext.TypeHooksContext* context);
+
+            Ecs.Assert(
+                hooks.dtor == IntPtr.Zero ||
+                hooks.dtor == BindingContext<TComponent>.UnmanagedDtorPointer ||
+                hooks.dtor == BindingContext<TComponent>.DefaultManagedDtorPointer ||
+                hooks.dtor == BindingContext<TComponent>.ManagedDtorPointer,
+                "Cannot register Dtor hook because it is already registered by a non Flecs.NET application.");
+
+            BindingContext.SetCallback(ref context->Dtor, callback, false);
+
+            hooks.dtor = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
+                ? BindingContext<TComponent>.ManagedDtorPointer
+                : BindingContext<TComponent>.UnmanagedDtorPointer;
+
+            ecs_set_hooks_id(World, Id, &hooks);
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Registers a Move callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> Move(Ecs.MoveCallback<TComponent> callback)
+        {
+            GetHooksAndContext(out ecs_type_hooks_t hooks, out BindingContext.TypeHooksContext* context);
+
+            Ecs.Assert(
+                hooks.move == IntPtr.Zero ||
+                hooks.move == BindingContext<TComponent>.UnmanagedMovePointer ||
+                hooks.move == BindingContext<TComponent>.DefaultManagedMovePointer ||
+                hooks.move == BindingContext<TComponent>.ManagedMovePointer,
+                "Cannot register Move hook because it is already registered by a non Flecs.NET application.");
+
+            BindingContext.SetCallback(ref context->Move, callback, false);
+
+            hooks.move = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
+                ? BindingContext<TComponent>.ManagedMovePointer
+                : BindingContext<TComponent>.UnmanagedMovePointer;
+
+            ecs_set_hooks_id(World, Id, &hooks);
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Registers a Copy callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> Copy(Ecs.CopyCallback<TComponent> callback)
+        {
+            GetHooksAndContext(out ecs_type_hooks_t hooks, out BindingContext.TypeHooksContext* context);
+
+            Ecs.Assert(
+                hooks.copy == IntPtr.Zero ||
+                hooks.copy == BindingContext<TComponent>.UnmanagedCopyPointer ||
+                hooks.copy == BindingContext<TComponent>.DefaultManagedCopyPointer ||
+                hooks.copy == BindingContext<TComponent>.ManagedCopyPointer,
+                "Cannot register Copy hook because it is already registered by a non Flecs.NET application.");
+
+            BindingContext.SetCallback(ref context->Copy, callback, false);
+
+            hooks.copy = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
+                ? BindingContext<TComponent>.ManagedCopyPointer
+                : BindingContext<TComponent>.UnmanagedCopyPointer;
+
+            ecs_set_hooks_id(World, Id, &hooks);
+
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Registers an OnAdd callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnAdd(Ecs.IterFieldCallback<TComponent> callback)
+        {
+            return ref SetOnAddCallback(callback, BindingContext<TComponent>.OnAddIterFieldCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnAdd callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnAdd<T>(Ecs.IterSpanCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnAddCallback(callback, BindingContext<TComponent>.OnAddIterSpanCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnAdd callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnAdd<T>(Ecs.IterPointerCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnAddCallback(callback, BindingContext<TComponent>.OnAddIterPointerCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnAdd callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnAdd(Ecs.EachRefCallback<TComponent> callback)
+        {
+            return ref SetOnAddCallback(callback, BindingContext<TComponent>.OnAddEachRefCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnAdd callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnAdd(Ecs.EachEntityRefCallback<TComponent> callback)
+        {
+            return ref SetOnAddCallback(callback, BindingContext<TComponent>.OnAddEachEntityRefCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnAdd callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnAdd(Ecs.EachIterRefCallback<TComponent> callback)
+        {
+            return ref SetOnAddCallback(callback, BindingContext<TComponent>.OnAddEachIterRefCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnAdd callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnAdd<T>(Ecs.EachPointerCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnAddCallback(callback, BindingContext<TComponent>.OnAddEachPointerCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnAdd callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnAdd<T>(Ecs.EachEntityPointerCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnAddCallback(callback, BindingContext<TComponent>.OnAddEachEntityPointerCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnAdd callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnAdd<T>(Ecs.EachIterPointerCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnAddCallback(callback, BindingContext<TComponent>.OnAddEachIterPointerCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnSet callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnSet(Ecs.IterFieldCallback<TComponent> callback)
+        {
+            return ref SetOnSetCallback(callback, BindingContext<TComponent>.OnSetIterFieldCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnSet callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnSet<T>(Ecs.IterSpanCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnSetCallback(callback, BindingContext<TComponent>.OnSetIterSpanCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnSet callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnSet<T>(Ecs.IterPointerCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnSetCallback(callback, BindingContext<TComponent>.OnSetIterPointerCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnSet callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnSet(Ecs.EachRefCallback<TComponent> callback)
+        {
+            return ref SetOnSetCallback(callback, BindingContext<TComponent>.OnSetEachRefCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnSet callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnSet(Ecs.EachEntityRefCallback<TComponent> callback)
+        {
+            return ref SetOnSetCallback(callback, BindingContext<TComponent>.OnSetEachEntityRefCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnSet callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnSet(Ecs.EachIterRefCallback<TComponent> callback)
+        {
+            return ref SetOnSetCallback(callback, BindingContext<TComponent>.OnSetEachIterRefCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnSet callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnSet<T>(Ecs.EachPointerCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnSetCallback(callback, BindingContext<TComponent>.OnSetEachPointerCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnSet callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnSet<T>(Ecs.EachEntityPointerCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnSetCallback(callback, BindingContext<TComponent>.OnSetEachEntityPointerCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnSet callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnSet<T>(Ecs.EachIterPointerCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnSetCallback(callback, BindingContext<TComponent>.OnSetEachIterPointerCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnRemove callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnRemove(Ecs.IterFieldCallback<TComponent> callback)
+        {
+            return ref SetOnRemoveCallback(callback, BindingContext<TComponent>.OnRemoveIterFieldCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnRemove callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnRemove<T>(Ecs.IterSpanCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnRemoveCallback(callback, BindingContext<TComponent>.OnRemoveIterSpanCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnRemove callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnRemove<T>(Ecs.IterPointerCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnRemoveCallback(callback, BindingContext<TComponent>.OnRemoveIterPointerCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnRemove callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnRemove(Ecs.EachRefCallback<TComponent> callback)
+        {
+            return ref SetOnRemoveCallback(callback, BindingContext<TComponent>.OnRemoveEachRefCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnRemove callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnRemove(Ecs.EachEntityRefCallback<TComponent> callback)
+        {
+            return ref SetOnRemoveCallback(callback, BindingContext<TComponent>.OnRemoveEachEntityRefCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnRemove callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnRemove(Ecs.EachIterRefCallback<TComponent> callback)
+        {
+            return ref SetOnRemoveCallback(callback, BindingContext<TComponent>.OnRemoveEachIterRefCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnRemove callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnRemove<T>(Ecs.EachPointerCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnRemoveCallback(callback, BindingContext<TComponent>.OnRemoveEachPointerCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnRemove callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnRemove<T>(Ecs.EachEntityPointerCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnRemoveCallback(callback, BindingContext<TComponent>.OnRemoveEachEntityPointerCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Registers an OnRemove callback for this component.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>Reference to self.</returns>
+        public ref Component<TComponent> OnRemove<T>(Ecs.EachIterPointerCallback<T> callback) where T : unmanaged, TComponent
+        {
+            Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+            return ref SetOnRemoveCallback(callback, BindingContext<TComponent>.OnRemoveEachIterPointerCallbackPointer);
+        }
+
+        private ref Component<TComponent> SetOnAddCallback<T>(T? callback, IntPtr invoker) where T : Delegate
+        {
+            GetHooksAndContext(out ecs_type_hooks_t hooks, out BindingContext.TypeHooksContext* context);
+
+            Ecs.Assert(
+                hooks.on_add == IntPtr.Zero ||
+                hooks.on_add == BindingContext<TComponent>.OnAddIterFieldCallbackPointer ||
+                hooks.on_add == BindingContext<TComponent>.OnAddIterSpanCallbackPointer ||
+                hooks.on_add == BindingContext<TComponent>.OnAddIterPointerCallbackPointer ||
+                hooks.on_add == BindingContext<TComponent>.OnAddEachRefCallbackPointer ||
+                hooks.on_add == BindingContext<TComponent>.OnAddEachEntityRefCallbackPointer ||
+                hooks.on_add == BindingContext<TComponent>.OnAddEachIterRefCallbackPointer ||
+                hooks.on_add == BindingContext<TComponent>.OnAddEachPointerCallbackPointer ||
+                hooks.on_add == BindingContext<TComponent>.OnAddEachEntityPointerCallbackPointer ||
+                hooks.on_add == BindingContext<TComponent>.OnAddEachIterPointerCallbackPointer,
+                "Cannot register OnAdd hook because it is already registered by a non Flecs.NET application.");
+
+            BindingContext.SetCallback(ref context->OnAdd, callback, false);
+            hooks.on_add = invoker;
+            ecs_set_hooks_id(World, Id, &hooks);
+
+            return ref this;
+        }
+
+        private ref Component<TComponent> SetOnSetCallback<T>(T? callback, IntPtr invoker) where T : Delegate
+        {
+            GetHooksAndContext(out ecs_type_hooks_t hooks, out BindingContext.TypeHooksContext* context);
+
+            Ecs.Assert(
+                hooks.on_set == IntPtr.Zero ||
+                hooks.on_set == BindingContext<TComponent>.OnSetIterFieldCallbackPointer ||
+                hooks.on_set == BindingContext<TComponent>.OnSetIterSpanCallbackPointer ||
+                hooks.on_set == BindingContext<TComponent>.OnSetIterPointerCallbackPointer ||
+                hooks.on_set == BindingContext<TComponent>.OnSetEachRefCallbackPointer ||
+                hooks.on_set == BindingContext<TComponent>.OnSetEachEntityRefCallbackPointer ||
+                hooks.on_set == BindingContext<TComponent>.OnSetEachIterRefCallbackPointer ||
+                hooks.on_set == BindingContext<TComponent>.OnSetEachPointerCallbackPointer ||
+                hooks.on_set == BindingContext<TComponent>.OnSetEachEntityPointerCallbackPointer ||
+                hooks.on_set == BindingContext<TComponent>.OnSetEachIterPointerCallbackPointer,
+                "Cannot register OnSet hook because it is already registered by a non Flecs.NET application.");
+
+            BindingContext.SetCallback(ref context->OnSet, callback, false);
+            hooks.on_set = invoker;
+            ecs_set_hooks_id(World, Id, &hooks);
+
+            return ref this;
+        }
+
+        private ref Component<TComponent> SetOnRemoveCallback<T>(T? callback, IntPtr invoker) where T : Delegate
+        {
+            GetHooksAndContext(out ecs_type_hooks_t hooks, out BindingContext.TypeHooksContext* context);
+
+            Ecs.Assert(
+                hooks.on_remove == IntPtr.Zero ||
+                hooks.on_remove == BindingContext<TComponent>.OnRemoveIterFieldCallbackPointer ||
+                hooks.on_remove == BindingContext<TComponent>.OnRemoveIterSpanCallbackPointer ||
+                hooks.on_remove == BindingContext<TComponent>.OnRemoveIterPointerCallbackPointer ||
+                hooks.on_remove == BindingContext<TComponent>.OnRemoveEachRefCallbackPointer ||
+                hooks.on_remove == BindingContext<TComponent>.OnRemoveEachEntityRefCallbackPointer ||
+                hooks.on_remove == BindingContext<TComponent>.OnRemoveEachIterRefCallbackPointer ||
+                hooks.on_remove == BindingContext<TComponent>.OnRemoveEachPointerCallbackPointer ||
+                hooks.on_remove == BindingContext<TComponent>.OnRemoveEachEntityPointerCallbackPointer ||
+                hooks.on_remove == BindingContext<TComponent>.OnRemoveEachIterPointerCallbackPointer,
+                "Cannot register OnRemove hook because it is already registered by a non Flecs.NET application.");
+
+            BindingContext.SetCallback(ref context->OnRemove, callback, false);
+            hooks.on_remove = invoker;
+            ecs_set_hooks_id(World, Id, &hooks);
+
+            return ref this;
+        }
+
+        private void GetHooksAndContext(out ecs_type_hooks_t hooks, out BindingContext.TypeHooksContext* context)
+        {
+            ecs_type_hooks_t* existingHooks = ecs_get_hooks_id(World, Id);
+            hooks = existingHooks == null ? default : *existingHooks;
+
+            context = (BindingContext.TypeHooksContext*)hooks.binding_ctx;
+
+            if (context == null)
             {
-                desc.ctor = hooks.Ctor == null ? BindingContext<TComponent>.DefaultManagedCtorPointer : BindingContext<TComponent>.ManagedCtorPointer;
-                desc.dtor = hooks.Dtor == null ? BindingContext<TComponent>.DefaultManagedDtorPointer : BindingContext<TComponent>.ManagedDtorPointer;
-                desc.move = hooks.Move == null ? BindingContext<TComponent>.DefaultManagedMovePointer : BindingContext<TComponent>.ManagedMovePointer;
-                desc.copy = hooks.Copy == null ? BindingContext<TComponent>.DefaultManagedCopyPointer : BindingContext<TComponent>.ManagedCopyPointer;
-            }
-            else
-            {
-                desc.ctor = hooks.Ctor == null ? IntPtr.Zero : BindingContext<TComponent>.UnmanagedCtorPointer;
-                desc.dtor = hooks.Dtor == null ? IntPtr.Zero : BindingContext<TComponent>.UnmanagedDtorPointer;
-                desc.move = hooks.Move == null ? IntPtr.Zero : BindingContext<TComponent>.UnmanagedMovePointer;
-                desc.copy = hooks.Copy == null ? IntPtr.Zero : BindingContext<TComponent>.UnmanagedCopyPointer;
+                context = Memory.Alloc(BindingContext.TypeHooksContext.Default);
+                hooks.binding_ctx = context;
+                hooks.binding_ctx_free = BindingContext.TypeHooksContextFreePointer;
             }
 
-            BindingContext.TypeHooksContext* bindingContext = Memory.AllocZeroed<BindingContext.TypeHooksContext>(1);
-            BindingContext.SetCallback(ref bindingContext->Ctor, hooks.Ctor, false);
-            BindingContext.SetCallback(ref bindingContext->Dtor, hooks.Dtor, false);
-            BindingContext.SetCallback(ref bindingContext->Move, hooks.Move, false);
-            BindingContext.SetCallback(ref bindingContext->Copy, hooks.Copy, false);
-            BindingContext.SetCallback(ref bindingContext->OnAdd, hooks.OnAdd, false);
-            BindingContext.SetCallback(ref bindingContext->OnSet, hooks.OnSet, false);
-            BindingContext.SetCallback(ref bindingContext->OnRemove, hooks.OnRemove, false);
-            BindingContext.SetCallback(ref bindingContext->ContextFree, hooks.ContextFree);
-
-            desc.on_add = hooks.OnAdd == null ? IntPtr.Zero : BindingContext<TComponent>.OnAddHookPointer;
-            desc.on_set = hooks.OnSet == null ? IntPtr.Zero : BindingContext<TComponent>.OnSetHookPointer;
-            desc.on_remove = hooks.OnRemove == null ? IntPtr.Zero : BindingContext<TComponent>.OnRemoveHookPointer;
-            desc.ctx = hooks.Context;
-            desc.ctx_free = bindingContext->ContextFree.Function;
-            desc.binding_ctx = bindingContext;
-            desc.binding_ctx_free = BindingContext.TypeHooksContextFreePointer;
-
-            if (desc != default)
-                ecs_set_hooks_id(World, Id, &desc);
+            Ecs.Assert(context->Header == Ecs.Header, "Type hook binding context is not owned by Flecs.NET.");
         }
     }
 }

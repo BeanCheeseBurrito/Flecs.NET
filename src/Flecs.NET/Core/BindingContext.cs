@@ -387,6 +387,8 @@ namespace Flecs.NET.Core
 
         internal struct TypeHooksContext : IDisposable
         {
+            public int Header;
+
             public Callback Ctor;
             public Callback Dtor;
             public Callback Move;
@@ -395,6 +397,8 @@ namespace Flecs.NET.Core
             public Callback OnSet;
             public Callback OnRemove;
             public Callback ContextFree;
+
+            public static readonly TypeHooksContext Default = new TypeHooksContext { Header = Ecs.Header };
 
             public void Dispose()
             {
@@ -442,9 +446,42 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr DefaultManagedMovePointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&DefaultManagedMove;
         internal static readonly IntPtr DefaultManagedCopyPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&DefaultManagedCopy;
 
-        internal static readonly IntPtr OnAddHookPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddHook;
-        internal static readonly IntPtr OnSetHookPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetHook;
-        internal static readonly IntPtr OnRemoveHookPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveHook;
+        internal static readonly IntPtr OnAddIterFieldCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddIterFieldCallback;
+        internal static readonly IntPtr OnSetIterFieldCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetIterFieldCallback;
+        internal static readonly IntPtr OnRemoveIterFieldCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveIterFieldCallback;
+
+        internal static readonly IntPtr OnAddIterSpanCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddIterSpanCallback;
+        internal static readonly IntPtr OnSetIterSpanCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetIterSpanCallback;
+        internal static readonly IntPtr OnRemoveIterSpanCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveIterSpanCallback;
+
+        internal static readonly IntPtr OnAddIterPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddIterPointerCallback;
+        internal static readonly IntPtr OnSetIterPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetIterPointerCallback;
+        internal static readonly IntPtr OnRemoveIterPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveIterPointerCallback;
+
+        internal static readonly IntPtr OnAddEachRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddEachRefCallback;
+        internal static readonly IntPtr OnSetEachRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetEachRefCallback;
+        internal static readonly IntPtr OnRemoveEachRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveEachRefCallback;
+
+        internal static readonly IntPtr OnAddEachEntityRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddEachEntityRefCallback;
+        internal static readonly IntPtr OnSetEachEntityRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetEachEntityRefCallback;
+        internal static readonly IntPtr OnRemoveEachEntityRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveEachEntityRefCallback;
+
+        internal static readonly IntPtr OnAddEachIterRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddEachIterRefCallback;
+        internal static readonly IntPtr OnSetEachIterRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetEachIterRefCallback;
+        internal static readonly IntPtr OnRemoveEachIterRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveEachIterRefCallback;
+
+        internal static readonly IntPtr OnAddEachPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddEachPointerCallback;
+        internal static readonly IntPtr OnSetEachPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetEachPointerCallback;
+        internal static readonly IntPtr OnRemoveEachPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveEachPointerCallback;
+
+        internal static readonly IntPtr OnAddEachEntityPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddEachEntityPointerCallback;
+        internal static readonly IntPtr OnSetEachEntityPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetEachEntityPointerCallback;
+        internal static readonly IntPtr OnRemoveEachEntityPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveEachEntityPointerCallback;
+
+        internal static readonly IntPtr OnAddEachIterPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddEachIterPointerCallback;
+        internal static readonly IntPtr OnSetEachIterPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetEachIterPointerCallback;
+        internal static readonly IntPtr OnRemoveEachIterPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveEachIterPointerCallback;
+
 #else
         private static readonly Ecs.IterAction EntityObserverEachReference = EntityObserverEach;
         private static readonly Ecs.IterAction EntityObserverEachEntityReference = EntityObserverEachEntity;
@@ -464,9 +501,41 @@ namespace Flecs.NET.Core
         private static readonly Ecs.MoveCallback DefaultManagedMoveReference = DefaultManagedMove;
         private static readonly Ecs.CopyCallback DefaultManagedCopyReference = DefaultManagedCopy;
 
-        private static readonly Ecs.IterAction OnAddHookReference = OnAddHook;
-        private static readonly Ecs.IterAction OnSetHookReference = OnSetHook;
-        private static readonly Ecs.IterAction OnRemoveHookCopyReference = OnRemoveHook;
+        private static readonly Ecs.IterAction OnAddIterFieldCallbackReference = OnAddIterFieldCallback;
+        private static readonly Ecs.IterAction OnSetIterFieldCallbackReference = OnSetIterFieldCallback;
+        private static readonly Ecs.IterAction OnRemoveIterFieldCallbackReference = OnRemoveIterFieldCallback;
+
+        private static readonly Ecs.IterAction OnAddIterSpanCallbackReference = OnAddIterSpanCallback;
+        private static readonly Ecs.IterAction OnSetIterSpanCallbackReference = OnSetIterSpanCallback;
+        private static readonly Ecs.IterAction OnRemoveIterSpanCallbackReference = OnRemoveIterSpanCallback;
+
+        private static readonly Ecs.IterAction OnAddIterPointerCallbackReference = OnAddIterPointerCallback;
+        private static readonly Ecs.IterAction OnSetIterPointerCallbackReference = OnSetIterPointerCallback;
+        private static readonly Ecs.IterAction OnRemoveIterPointerCallbackReference = OnRemoveIterPointerCallback;
+
+        private static readonly Ecs.IterAction OnAddEachRefCallbackReference = OnAddEachRefCallback;
+        private static readonly Ecs.IterAction OnSetEachRefCallbackReference = OnSetEachRefCallback;
+        private static readonly Ecs.IterAction OnRemoveEachRefCallbackReference = OnRemoveEachRefCallback;
+
+        private static readonly Ecs.IterAction OnAddEachEntityRefCallbackReference = OnAddEachEntityRefCallback;
+        private static readonly Ecs.IterAction OnSetEachEntityRefCallbackReference = OnSetEachEntityRefCallback;
+        private static readonly Ecs.IterAction OnRemoveEachEntityRefCallbackReference = OnRemoveEachEntityRefCallback;
+
+        private static readonly Ecs.IterAction OnAddEachIterRefCallbackReference = OnAddEachIterRefCallback;
+        private static readonly Ecs.IterAction OnSetEachIterRefCallbackReference = OnSetEachIterRefCallback;
+        private static readonly Ecs.IterAction OnRemoveEachIterRefCallbackReference = OnRemoveEachIterRefCallback;
+
+        private static readonly Ecs.IterAction OnAddEachPointerCallbackReference = OnAddEachPointerCallback;
+        private static readonly Ecs.IterAction OnSetEachPointerCallbackReference = OnSetEachPointerCallback;
+        private static readonly Ecs.IterAction OnRemoveEachPointerCallbackReference = OnRemoveEachPointerCallback;
+
+        private static readonly Ecs.IterAction OnAddEachEntityPointerCallbackReference = OnAddEachEntityPointerCallback;
+        private static readonly Ecs.IterAction OnSetEachEntityPointerCallbackReference = OnSetEachEntityPointerCallback;
+        private static readonly Ecs.IterAction OnRemoveEachEntityPointerCallbackReference = OnRemoveEachEntityPointerCallback;
+
+        private static readonly Ecs.IterAction OnAddEachIterPointerCallbackReference = OnAddEachIterPointerCallback;
+        private static readonly Ecs.IterAction OnSetEachIterPointerCallbackReference = OnSetEachIterPointerCallback;
+        private static readonly Ecs.IterAction OnRemoveEachIterPointerCallbackReference = OnRemoveEachIterPointerCallback;
 
         internal static readonly IntPtr EntityObserverEachPointer = Marshal.GetFunctionPointerForDelegate(EntityObserverEachReference);
         internal static readonly IntPtr EntityObserverEachEntityPointer = Marshal.GetFunctionPointerForDelegate(EntityObserverEachEntityReference);
@@ -486,9 +555,41 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr DefaultManagedMovePointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedMoveReference);
         internal static readonly IntPtr DefaultManagedCopyPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedCopyReference);
 
-        internal static readonly IntPtr OnAddHookPointer = Marshal.GetFunctionPointerForDelegate(OnAddHookReference);
-        internal static readonly IntPtr OnSetHookPointer = Marshal.GetFunctionPointerForDelegate(OnSetHookReference);
-        internal static readonly IntPtr OnRemoveHookPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveHookCopyReference);
+        internal static readonly IntPtr OnAddIterFieldCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddIterFieldCallbackReference);
+        internal static readonly IntPtr OnSetIterFieldCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetIterFieldCallbackReference);
+        internal static readonly IntPtr OnRemoveIterFieldCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveIterFieldCallbackReference);
+
+        internal static readonly IntPtr OnAddIterSpanCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddIterSpanCallbackReference);
+        internal static readonly IntPtr OnSetIterSpanCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetIterSpanCallbackReference);
+        internal static readonly IntPtr OnRemoveIterSpanCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveIterSpanCallbackReference);
+
+        internal static readonly IntPtr OnAddIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddIterPointerCallbackReference);
+        internal static readonly IntPtr OnSetIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetIterPointerCallbackReference);
+        internal static readonly IntPtr OnRemoveIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveIterPointerCallbackReference);
+
+        internal static readonly IntPtr OnAddEachRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddEachRefCallbackReference);
+        internal static readonly IntPtr OnSetEachRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetEachRefCallbackReference);
+        internal static readonly IntPtr OnRemoveEachRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachRefCallbackReference);
+
+        internal static readonly IntPtr OnAddEachEntityRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddEachEntityRefCallbackReference);
+        internal static readonly IntPtr OnSetEachEntityRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetEachEntityRefCallbackReference);
+        internal static readonly IntPtr OnRemoveEachEntityRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachEntityRefCallbackReference);
+
+        internal static readonly IntPtr OnAddEachIterRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddEachIterRefCallbackReference);
+        internal static readonly IntPtr OnSetEachIterRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetEachIterRefCallbackReference);
+        internal static readonly IntPtr OnRemoveEachIterRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachIterRefCallbackReference);
+
+        internal static readonly IntPtr OnAddEachPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddEachPointerCallbackReference);
+        internal static readonly IntPtr OnSetEachPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetEachPointerCallbackReference);
+        internal static readonly IntPtr OnRemoveEachPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachPointerCallbackReference);
+
+        internal static readonly IntPtr OnAddEachEntityPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddEachEntityPointerCallbackReference);
+        internal static readonly IntPtr OnSetEachEntityPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetEachEntityPointerCallbackReference);
+        internal static readonly IntPtr OnRemoveEachEntityPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachEntityPointerCallbackReference);
+
+        internal static readonly IntPtr OnAddEachIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddEachIterPointerCallbackReference);
+        internal static readonly IntPtr OnSetEachIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetEachIterPointerCallbackReference);
+        internal static readonly IntPtr OnRemoveEachIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachIterPointerCallbackReference);
 #endif
 
         private static void EntityObserverEach(ecs_iter_t* iter)
@@ -706,37 +807,274 @@ namespace Flecs.NET.Core
             }
         }
 
-        private static void OnAddHook(ecs_iter_t* iter)
+        private static void OnAddIterFieldCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
             Ecs.IterFieldCallback<T0> callback = (Ecs.IterFieldCallback<T0>)context->OnAdd.GcHandle.Target!;
 
             Iter it = new Iter(iter);
-
             for (int i = 0; i < iter->count; i++)
                 callback(it, it.Field<T0>(0));
         }
 
-        private static void OnSetHook(ecs_iter_t* iter)
+        private static void OnAddIterSpanCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.IterSpanCallback<T0> callback = (Ecs.IterSpanCallback<T0>)context->OnAdd.GcHandle.Target!;
+
+            Iter it = new Iter(iter);
+            for (int i = 0; i < iter->count; i++)
+                callback(it, it.GetSpan<T0>(0));
+        }
+
+        private static void OnAddIterPointerCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.IterPointerCallback<T0> callback = (Ecs.IterPointerCallback<T0>)context->OnAdd.GcHandle.Target!;
+
+            Iter it = new Iter(iter);
+            for (int i = 0; i < iter->count; i++)
+                callback(it, it.GetPointer<T0>(0));
+        }
+
+        private static void OnAddEachRefCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachRefCallback<T0> callback = (Ecs.EachRefCallback<T0>)context->OnAdd.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
+        }
+
+        private static void OnAddEachEntityRefCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachEntityRefCallback<T0> callback = (Ecs.EachEntityRefCallback<T0>)context->OnAdd.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
+        }
+
+        private static void OnAddEachIterRefCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachIterRefCallback<T0> callback = (Ecs.EachIterRefCallback<T0>)context->OnAdd.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
+        }
+
+        private static void OnAddEachPointerCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachPointerCallback<T0> callback = (Ecs.EachPointerCallback<T0>)context->OnAdd.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(&pointer[i]);
+        }
+
+        private static void OnAddEachEntityPointerCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachEntityPointerCallback<T0> callback = (Ecs.EachEntityPointerCallback<T0>)context->OnAdd.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
+        }
+
+        private static void OnAddEachIterPointerCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachIterPointerCallback<T0> callback = (Ecs.EachIterPointerCallback<T0>)context->OnAdd.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(new Iter(iter), i, &pointer[i]);
+        }
+
+        private static void OnSetIterFieldCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
             Ecs.IterFieldCallback<T0> callback = (Ecs.IterFieldCallback<T0>)context->OnSet.GcHandle.Target!;
 
             Iter it = new Iter(iter);
-
             for (int i = 0; i < iter->count; i++)
                 callback(it, it.Field<T0>(0));
         }
 
-        private static void OnRemoveHook(ecs_iter_t* iter)
+        private static void OnSetIterSpanCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.IterSpanCallback<T0> callback = (Ecs.IterSpanCallback<T0>)context->OnSet.GcHandle.Target!;
+
+            Iter it = new Iter(iter);
+            for (int i = 0; i < iter->count; i++)
+                callback(it, it.GetSpan<T0>(0));
+        }
+
+        private static void OnSetIterPointerCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.IterPointerCallback<T0> callback = (Ecs.IterPointerCallback<T0>)context->OnSet.GcHandle.Target!;
+
+            Iter it = new Iter(iter);
+            for (int i = 0; i < iter->count; i++)
+                callback(it, it.GetPointer<T0>(0));
+        }
+
+        private static void OnSetEachRefCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachRefCallback<T0> callback = (Ecs.EachRefCallback<T0>)context->OnSet.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
+        }
+
+        private static void OnSetEachEntityRefCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachEntityRefCallback<T0> callback = (Ecs.EachEntityRefCallback<T0>)context->OnSet.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
+        }
+
+        private static void OnSetEachIterRefCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachIterRefCallback<T0> callback = (Ecs.EachIterRefCallback<T0>)context->OnSet.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
+        }
+
+        private static void OnSetEachPointerCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachPointerCallback<T0> callback = (Ecs.EachPointerCallback<T0>)context->OnSet.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(&pointer[i]);
+        }
+
+        private static void OnSetEachEntityPointerCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachEntityPointerCallback<T0> callback = (Ecs.EachEntityPointerCallback<T0>)context->OnSet.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
+        }
+
+        private static void OnSetEachIterPointerCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachIterPointerCallback<T0> callback = (Ecs.EachIterPointerCallback<T0>)context->OnSet.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(new Iter(iter), i, &pointer[i]);
+        }
+
+        private static void OnRemoveIterFieldCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
             Ecs.IterFieldCallback<T0> callback = (Ecs.IterFieldCallback<T0>)context->OnRemove.GcHandle.Target!;
 
             Iter it = new Iter(iter);
-
             for (int i = 0; i < iter->count; i++)
                 callback(it, it.Field<T0>(0));
+        }
+
+        private static void OnRemoveIterSpanCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.IterSpanCallback<T0> callback = (Ecs.IterSpanCallback<T0>)context->OnRemove.GcHandle.Target!;
+
+            Iter it = new Iter(iter);
+            for (int i = 0; i < iter->count; i++)
+                callback(it, it.GetSpan<T0>(0));
+        }
+
+        private static void OnRemoveIterPointerCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.IterPointerCallback<T0> callback = (Ecs.IterPointerCallback<T0>)context->OnRemove.GcHandle.Target!;
+
+            Iter it = new Iter(iter);
+            for (int i = 0; i < iter->count; i++)
+                callback(it, it.GetPointer<T0>(0));
+        }
+
+        private static void OnRemoveEachRefCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachRefCallback<T0> callback = (Ecs.EachRefCallback<T0>)context->OnRemove.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
+        }
+
+        private static void OnRemoveEachEntityRefCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachEntityRefCallback<T0> callback = (Ecs.EachEntityRefCallback<T0>)context->OnRemove.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
+        }
+
+        private static void OnRemoveEachIterRefCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachIterRefCallback<T0> callback = (Ecs.EachIterRefCallback<T0>)context->OnRemove.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
+        }
+
+        private static void OnRemoveEachPointerCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachPointerCallback<T0> callback = (Ecs.EachPointerCallback<T0>)context->OnRemove.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(&pointer[i]);
+        }
+
+        private static void OnRemoveEachEntityPointerCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachEntityPointerCallback<T0> callback = (Ecs.EachEntityPointerCallback<T0>)context->OnRemove.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
+        }
+
+        private static void OnRemoveEachIterPointerCallback(ecs_iter_t* iter)
+        {
+            BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
+            Ecs.EachIterPointerCallback<T0> callback = (Ecs.EachIterPointerCallback<T0>)context->OnRemove.GcHandle.Target!;
+
+            T0* pointer = (T0*)iter->ptrs[0];
+            for (int i = 0; i < iter->count; i++)
+                callback(new Iter(iter), i, &pointer[i]);
         }
     }
 }
