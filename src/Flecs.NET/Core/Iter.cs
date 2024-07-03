@@ -454,6 +454,9 @@ namespace Flecs.NET.Core
             if (Handle == null)
                 return;
 
+            if ((Handle->flags & EcsIterIsValid) != 0 && Handle->table != null)
+                Macros.TableUnlock(Handle->world, Handle->table);
+
             ecs_iter_fini(Handle);
             Handle = null;
         }

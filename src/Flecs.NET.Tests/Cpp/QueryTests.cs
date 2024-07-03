@@ -3063,12 +3063,61 @@ namespace Flecs.NET.Tests.Cpp
 
             using Query q1 = world.Query<Position>();
 
-
             int count = 0;
             q1.Run((Iter it) =>
             {
                 it.Fini();
                 count++;
+            });
+
+            Assert.Equal(1, count);
+        }
+
+
+        [Fact]
+        private void RunWithIterFiniInterrupt()
+        {
+            using World world = World.Create();
+
+            Entity e1 = world.Entity()
+                .Set(new Position(10, 20))
+                .Add<Foo>();
+            Entity e2 = world.Entity()
+                .Set(new Position(10, 20))
+                .Add<Bar>();
+            Entity e3 = world.Entity()
+                .Set(new Position(10, 20))
+                .Add<Hello>();
+
+            using Query q = world.Query<Position>();
+
+            int count = 0;
+            q.Run((Iter it) =>
+            {
+                Assert.True(it.Next());
+                Assert.Equal(1, it.Count());
+                Assert.Equal(e1, it.Entity(0));
+
+                Assert.True(it.Next());
+                count++;
+                it.Fini();
+            });
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void RunWithIterFiniEmpty()
+        {
+            using World world = World.Create();
+
+            using Query q = world.Query<Position>();
+
+            int count = 0;
+            q.Run((Iter it) =>
+            {
+                count++;
+                it.Fini();
             });
 
             Assert.Equal(1, count);

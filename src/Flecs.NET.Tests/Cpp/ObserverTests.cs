@@ -98,7 +98,7 @@ namespace Flecs.NET.Tests.Cpp
             int count = 0;
 
             world.Observer<Position, Velocity>()
-                .Event(Ecs.UnSet)
+                .Event(Ecs.OnRemove)
                 .Each((ref Position p, ref Velocity v) =>
                 {
                     count++;

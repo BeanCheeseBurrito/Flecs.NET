@@ -241,11 +241,6 @@ namespace Flecs.NET.Core
         public static ref ulong OnSet => ref EcsOnSet;
 
         /// <summary>
-        ///     Reference to <see cref="EcsUnSet"/>.
-        /// </summary>
-        public static ref ulong UnSet => ref EcsUnSet;
-
-        /// <summary>
         ///     Reference to <see cref="EcsOnTableCreate"/>.
         /// </summary>
         public static ref ulong OnTableCreate => ref EcsOnTableCreate;

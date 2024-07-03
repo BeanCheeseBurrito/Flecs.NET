@@ -280,6 +280,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_get_depth", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_get_depth(ecs_world_t* world, ulong entity, ulong rel);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_get_entities", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern ecs_entities_t ecs_get_entities(ecs_world_t* world);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_get_entity", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_get_entity(void* poly);
 
@@ -2904,6 +2907,52 @@ namespace Flecs.NET.Bindings
             }
         }
 
+        public partial struct ecs_entities_t : System.IEquatable<ecs_entities_t>
+        {
+            public ulong* ids;
+
+            public int count;
+
+            public int alive_count;
+
+            public bool Equals(ecs_entities_t other)
+            {
+                fixed (ecs_entities_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_entities_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_entities_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_entities_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_entities_t left, ecs_entities_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_entities_t left, ecs_entities_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_entities_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_entities_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
+        }
+
         public partial struct ecs_entity_desc_t : System.IEquatable<ecs_entity_desc_t>
         {
             public int _canary;
@@ -5205,8 +5254,6 @@ namespace Flecs.NET.Bindings
             public ecs_event_record_t on_remove;
 
             public ecs_event_record_t on_set;
-
-            public ecs_event_record_t un_set;
 
             public ecs_event_record_t on_wildcard;
 
@@ -11788,7 +11835,7 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsIdCanToggle = 8192;
 
-        public const uint EcsIdEventMask = 67043328;
+        public const uint EcsIdEventMask = 66519040;
 
         public const uint EcsIdExclusive = 512;
 
@@ -11805,8 +11852,6 @@ namespace Flecs.NET.Bindings
         public const uint EcsIdHasOnTableEmpty = 2097152;
 
         public const uint EcsIdHasOnTableFill = 1048576;
-
-        public const uint EcsIdHasUnSet = 524288;
 
         public const uint EcsIdIsSparse = 16777216;
 
@@ -11998,7 +12043,7 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsTableHasPairs = 64;
 
-        public const uint EcsTableHasRemoveActions = 657416;
+        public const uint EcsTableHasRemoveActions = 133128;
 
         public const uint EcsTableHasSparse = 16777216;
 
@@ -12007,8 +12052,6 @@ namespace Flecs.NET.Bindings
         public const uint EcsTableHasTraversable = 67108864;
 
         public const uint EcsTableHasUnion = 33554432;
-
-        public const uint EcsTableHasUnSet = 524288;
 
         public const uint EcsTableIsComplex = 16796672;
 
@@ -12547,8 +12590,6 @@ namespace Flecs.NET.Bindings
         private static void* EcsUnion_Ptr;
 
         private static void* EcsUnitPrefixes_Ptr;
-
-        private static void* EcsUnSet_Ptr;
 
         private static void* EcsUri_Ptr;
 
@@ -13367,8 +13408,6 @@ namespace Flecs.NET.Bindings
         public static ref ulong EcsUnion => ref *(ulong*)(EcsUnion_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUnion", out EcsUnion_Ptr) : EcsUnion_Ptr);
 
         public static ref ulong EcsUnitPrefixes => ref *(ulong*)(EcsUnitPrefixes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUnitPrefixes", out EcsUnitPrefixes_Ptr) : EcsUnitPrefixes_Ptr);
-
-        public static ref ulong EcsUnSet => ref *(ulong*)(EcsUnSet_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUnSet", out EcsUnSet_Ptr) : EcsUnSet_Ptr);
 
         public static ref ulong EcsUri => ref *(ulong*)(EcsUri_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUri", out EcsUri_Ptr) : EcsUri_Ptr);
 

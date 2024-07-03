@@ -32,10 +32,9 @@ public static class Cpp_Queries_ChangeTracking
             .Build();
 
         // Create a query that writes the component based on a Dirty state.
-        using Query qWrite = world.QueryBuilder()
-            .With<Dirty>().Up().In() // Only match Dirty from prefab
-            .With<Position>()        // Instanced iteration is faster (see example)
-            .Instanced()
+        using Query qWrite = world.QueryBuilder<Dirty, Position>()
+            .TermAt(0).Up(Ecs.IsA).In() // Only match Dirty from prefab
+            .Instanced()                // Instanced iteration is faster (see example)
             .Build();
 
         // Create two prefabs with a Dirty component. We can use this to share a
@@ -98,8 +97,12 @@ public static class Cpp_Queries_ChangeTracking
                     // If the dirty flag is false, skip the table. This way the table's
                     // dirty state is not updated by the query.
                     it.Skip();
+
                     Console.WriteLine($"it.Skip() for table [{it.Type()}]");
-                    return;
+
+                    // Cleanup iterator resources since iterator wasn't done yet.
+                    it.Fini();
+                    break;
                 }
 
                 // For all other tables the dirty state will be set.

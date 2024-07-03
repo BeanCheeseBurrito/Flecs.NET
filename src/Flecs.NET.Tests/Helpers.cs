@@ -366,6 +366,11 @@ public struct Bar
 {
 }
 
+public struct Hello
+{
+}
+
+
 public struct Evt
 {
 }
