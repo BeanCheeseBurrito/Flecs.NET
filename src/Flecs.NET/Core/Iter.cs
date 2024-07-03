@@ -219,7 +219,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool IsSet(int index)
         {
-            Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             return ecs_field_is_set(Handle, index) == 1;
         }
 
@@ -230,7 +230,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool IsReadonly(int index)
         {
-            Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             return ecs_field_is_readonly(Handle, index) == 1;
         }
 
@@ -250,7 +250,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ulong Size(int index)
         {
-            Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             return (ulong)ecs_field_size(Handle, index);
         }
 
@@ -261,7 +261,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Src(int index)
         {
-            Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             return new Entity(Handle->world, ecs_field_src(Handle, index));
         }
 
@@ -272,7 +272,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id(int index)
         {
-            Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             return new Id(Handle->world, ecs_field_id(Handle, index));
         }
 
@@ -284,7 +284,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair(int index)
         {
-            Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             ulong id = ecs_field_id(Handle, index);
             Ecs.Assert(Macros.EntityHasIdFlag(id, ECS_PAIR) != 0, nameof(ECS_INVALID_PARAMETER));
             return new Id(Handle->world, id);
@@ -297,7 +297,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int ColumnIndex(int index)
         {
-            Ecs.Assert(index < Handle->field_count, "Index out of bounds.");
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             return ecs_field_column(Handle, index);
         }
 
@@ -470,13 +470,13 @@ namespace Flecs.NET.Core
         internal static void AssertField<T>(ecs_iter_t* iter, int index)
         {
             Ecs.Assert((iter->flags & EcsIterIsValid) != 0, "Operation is invalid before calling .Next().");
-            Ecs.Assert(index >= 0 && index < iter->field_count, "Index out of bounds.");
+            Ecs.Assert(index >= 0 && index < iter->field_count, "Field index out of range.");
+
+            if (Macros.TypeIdIs<T>(iter->world, iter->ids[index]))
+                return;
 
             Entity expected = new Entity(iter->world, iter->ids[index]);
             Entity provided = new Entity(iter->world, Type<T>.Id(iter->world));
-
-            if (Macros.TypeIdIs<T>(iter->world, expected))
-                return;
 
             string iteratedName = iter->system == 0 ? "" : $"[Query Name]: {new Entity(iter->world, iter->system)}";
             string fields = new Query(iter->world, iter->query).Str();
