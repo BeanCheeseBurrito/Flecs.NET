@@ -3122,5 +3122,59 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal(1, count);
         }
+
+        [Fact]
+        private void AddToMatchFromStagedQuery()
+        {
+            using World world = World.Create();
+
+            world.Component<Position>();
+            world.Component<Velocity>();
+
+            Entity e = world.Entity().Add<Position>();
+
+            World stage = world.GetStage(0);
+
+            world.ReadonlyBegin(false);
+
+            stage.Query<Position>()
+                .Each((Entity e) =>
+                {
+                    e.Add<Velocity>();
+                    Assert.True(!e.Has<Velocity>());
+                });
+
+            world.ReadonlyEnd();
+
+            Assert.True(e.Has<Position>());
+            Assert.True(e.Has<Velocity>());
+        }
+
+        [Fact]
+        private void AddToMatchFromStagedQueryReadonlyThreaded()
+        {
+            using World world = World.Create();
+
+            world.Component<Position>();
+            world.Component<Velocity>();
+
+            Entity e = world.Entity().Add<Position>();
+
+            World stage = world.GetStage(0);
+
+            world.ReadonlyBegin(true);
+
+            stage.Query<Position>()
+                .Each((Entity e) =>
+                {
+                    e.Add<Velocity>();
+                    Assert.True(!e.Has<Velocity>());
+                });
+
+            world.ReadonlyEnd();
+
+            Assert.True(e.Has<Position>());
+            Assert.True(e.Has<Velocity>());
+        }
     }
 }

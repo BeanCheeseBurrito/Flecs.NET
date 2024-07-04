@@ -12,7 +12,9 @@ public static class Cpp_Queries_Basics
 
         // Create a query for Position, Velocity. Queries are the fastest way to
         // iterate entities as they cache results.
-        using Query q = world.Query<Position, Velocity>();
+        using Query q = world.QueryBuilder<Position, Velocity>()
+            .Cached()
+            .Build();
 
         // Create a few test entities for a Position, Velocity query
         world.Entity("e1")

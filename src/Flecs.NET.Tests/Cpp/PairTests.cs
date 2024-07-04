@@ -1094,5 +1094,25 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(10, ptr->X);
             Assert.Equal(20, ptr->Y);
         }
+
+
+        [Fact]
+        private void SymmetricWithChildOf()
+        {
+            using World world = World.Create();
+
+            world.Component<Likes>().Entity.Add(Ecs.Symmetric);
+
+            Entity idk = world.Entity("Idk");
+
+            Entity bob = world.Entity("Bob")
+                .ChildOf(idk);
+
+            Entity alice = world.Entity("Alice")
+                .ChildOf(idk)
+                .Add<Likes>(bob);
+
+            Assert.True(bob.Has<Likes>(alice));
+        }
     }
 }

@@ -6438,9 +6438,9 @@ namespace Flecs.NET.Bindings
 
             public ulong entity;
 
-            public ecs_world_t* world;
+            public ecs_world_t* real_world;
 
-            public ecs_stage_t* stage;
+            public ecs_world_t* world;
 
             public int eval_count;
 
