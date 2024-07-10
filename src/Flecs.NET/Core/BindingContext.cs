@@ -84,7 +84,7 @@ namespace Flecs.NET.Core
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.GcHandle == default)
+            if (context->Callback.Function != default)
             {
                 ((delegate*<void>)context->Callback.Function)();
                 return;
@@ -100,7 +100,7 @@ namespace Flecs.NET.Core
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.GcHandle == default)
+            if (context->Callback.Function != default)
             {
                 Invoker.Iter(iter, (delegate*<Iter, void>)context->Callback.Function);
                 return;
@@ -116,7 +116,7 @@ namespace Flecs.NET.Core
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.GcHandle == default)
+            if (context->Callback.Function != default)
             {
                 Invoker.Each(iter, (delegate*<Entity, void>)context->Callback.Function);
                 return;
@@ -132,7 +132,7 @@ namespace Flecs.NET.Core
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.GcHandle == default)
+            if (context->Callback.Function != default)
             {
                 Invoker.Each(iter, (delegate*<Iter, int, void>)context->Callback.Function);
                 return;
@@ -148,7 +148,7 @@ namespace Flecs.NET.Core
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.GcHandle == default)
+            if (context->Callback.Function != default)
             {
                 Invoker.Each(iter, (delegate*<Entity, void>)context->Callback.Function);
                 return;
@@ -164,7 +164,7 @@ namespace Flecs.NET.Core
             RunContext* context = (RunContext*)iter->run_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.GcHandle == default)
+            if (context->Callback.Function != default)
             {
                 Invoker.Run(iter, (delegate*<Iter, void>)context->Callback.Function);
                 return;
@@ -180,7 +180,7 @@ namespace Flecs.NET.Core
             RunContext* context = (RunContext*)iter->run_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.GcHandle == default)
+            if (context->Callback.Function != default)
             {
                 Invoker.Run(iter, (delegate*<Iter, Action<Iter>, void>)context->Callback.Function);
                 return;
@@ -196,7 +196,7 @@ namespace Flecs.NET.Core
         {
             RunContext* context = (RunContext*)iter->run_ctx;
 
-            if (context->Callback.GcHandle == default)
+            if (context->Callback.Function != default)
             {
                 Invoker.Run(iter, (delegate*<Iter, delegate*<Iter, void>, void>)context->Callback.Function);
                 return;
