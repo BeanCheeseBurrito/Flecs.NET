@@ -4570,5 +4570,69 @@ namespace Flecs.NET.Tests.Cpp
             Entity b = world.Entity().DependsOn<Position>();
             Assert.True(b.Has(Ecs.DependsOn, world.Id<Position>()));
         }
+
+        [Fact]
+        private void SetSparse()
+        {
+            using World world = World.Create();
+
+            world.Component<Velocity>().Entity.Add(Ecs.Sparse);
+
+            Entity e = world.Entity().Set(new Velocity(1, 2));
+
+            Assert.True(e.Has<Velocity>());
+
+            Velocity* v = e.GetPtr<Velocity>();
+            Assert.Equal(1, v->X);
+            Assert.Equal(2, v->Y);
+        }
+
+        [Fact]
+        private void Insert1Sparse()
+        {
+            using World world = World.Create();
+
+            world.Component<Velocity>().Entity.Add(Ecs.Sparse);
+
+            Entity e = world.Entity().Insert((ref Velocity v) =>
+            {
+                v.X = 1;
+                v.Y = 2;
+            });
+
+            Assert.True(e.Has<Velocity>());
+
+            Velocity* v = e.GetPtr<Velocity>();
+            Assert.Equal(1, v->X);
+            Assert.Equal(2, v->Y);
+        }
+
+        [Fact]
+        private void Insert2With1Sparse()
+        {
+            using World world = World.Create();
+
+            world.Component<Position>();
+            world.Component<Velocity>().Entity.Add(Ecs.Sparse);
+
+            Entity e = world.Entity().Insert((ref Position p, ref Velocity v) =>
+            {
+                p.X = 10;
+                p.Y = 20;
+                v.X = 1;
+                v.Y = 2;
+            });
+
+            Assert.True(e.Has<Position>());
+            Assert.True(e.Has<Velocity>());
+
+            Position* p = e.GetPtr<Position>();
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
+
+            Velocity* v = e.GetPtr<Velocity>();
+            Assert.Equal(1, v->X);
+            Assert.Equal(2, v->Y);
+        }
     }
 }

@@ -34,7 +34,7 @@ public static class Cpp_Explorer
         // Run application with REST interface. When the application is running,
         // navigate to https://flecs.dev/explorer to inspect it!
         //
-        // See docs/RestApi.md#explorer for more information.
+        // See docs/FlecsRemoteApi.md#explorer for more information.
         world.App().EnableRest().Run();
 
         // Alternatively you can run your own loop by setting the EcsRest singleton

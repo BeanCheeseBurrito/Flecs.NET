@@ -1071,28 +1071,36 @@ namespace Flecs.NET.Codegen
                 string columnIndexes = ConcatString(i + 1, "\n",
                     index => $"int t{index} = ecs_table_get_column_index(realWorld, table, Type<T{index}>.Id(world));");
 
-                string condition = ConcatString(i + 1, " || ",
-                    index => $"t{index} == -1");
+                string populatePointers = ConcatString(i + 1, "\n",
+                    index => $@"
+                        if (t{index} == -1)
+                        {{
+                            void* ptr = ecs_get_mut_id(world, e, Type<T{index}>.Id(world));
+                    
+                            if (ptr == null)
+                                return false;
 
-                string typeIds = ConcatString(i + 1, "\n",
-                    index => $"ptrs[{index}] = ecs_record_get_by_column(r, t{index}, default);");
+                            ptrs[{index}] = ptr;
+                        }}
+                        else
+                        {{
+                            ptrs[{index}] = ecs_record_get_by_column(r, t{index}, default);
+                        }}
+                    "
+                );
 
                 str.AppendLine($@"
-                    internal static bool GetPointers<{typeParams}>(ecs_world_t* world, ecs_record_t* r, ecs_table_t* table, void** ptrs)
+                    internal static bool GetPointers<{typeParams}>(ecs_world_t* world, ulong e, ecs_record_t* r, ecs_table_t* table, void** ptrs)
                     {{
                         Ecs.Assert(table != null, nameof(ECS_INTERNAL_ERROR));
 
-                        if (ecs_table_column_count(table) == 0)
+                        if (ecs_table_column_count(table) == 0 && ecs_table_has_flags(table, EcsTableHasSparse) == 0)
                             return false;
 
                         ecs_world_t* realWorld = ecs_get_world(world);
 
                         {columnIndexes}
-
-                        if ({condition})
-                            return false;
-
-                        {typeIds}
+                        {populatePointers}
 
                         return true;
                     }}
@@ -1150,7 +1158,7 @@ namespace Flecs.NET.Codegen
                             return false;
 
                         void** ptrs = stackalloc void*[{i + 1}];
-                        bool hasComponents = GetPointers<{typeParams}>(world, r, table, ptrs);
+                        bool hasComponents = GetPointers<{typeParams}>(world, e, r, table, ptrs);
 
                         if (hasComponents)
                             callback({callbackArgs});
@@ -1190,7 +1198,7 @@ namespace Flecs.NET.Codegen
                             return false;
 
                         void** ptrs = stackalloc void*[{i + 1}];
-                        bool hasComponents = GetPointers<{typeParams}>(world, r, table, ptrs);
+                        bool hasComponents = GetPointers<{typeParams}>(world, e, r, table, ptrs);
 
                         if (hasComponents)
                             callback({callbackArgs});
@@ -1257,7 +1265,7 @@ namespace Flecs.NET.Codegen
                                 table = next;
                             }}
 
-                            if (!GetPointers<{typeParams}>(w, r, table, ptrs))
+                            if (!GetPointers<{typeParams}>(w, id, r, table, ptrs))
                                 Ecs.Error(nameof(ECS_INTERNAL_ERROR));
 
                             Macros.TableLock(world, table);

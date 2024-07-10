@@ -339,7 +339,7 @@ namespace Flecs.NET.Core
         ///     Enforce that operations cannot modify entities outside of range.
         /// </summary>
         /// <param name="enabled"></param>
-        public void EnableRangeCheck(bool enabled)
+        public void EnableRangeCheck(bool enabled = true)
         {
             ecs_enable_range_check(Handle, Macros.Bool(enabled));
         }
