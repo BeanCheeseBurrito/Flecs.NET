@@ -127,7 +127,7 @@ namespace Flecs.NET.Core
         public void AtFini(Ecs.FiniAction action, void* ctx)
         {
             BindingContext.SetCallback(ref WorldContext.AtFini, action);
-            ecs_atfini(Handle, WorldContext.AtFini.Function, ctx);
+            ecs_atfini(Handle, WorldContext.AtFini.Pointer, ctx);
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace Flecs.NET.Core
         public void SetCtx(void* ctx, Ecs.ContextFree? ctxFree = null)
         {
             BindingContext.SetCallback(ref WorldContext.ContextFree, ctxFree);
-            ecs_set_ctx(Handle, ctx, WorldContext.ContextFree.Function);
+            ecs_set_ctx(Handle, ctx, WorldContext.ContextFree.Pointer);
         }
 
         /// <summary>
@@ -2354,7 +2354,7 @@ namespace Flecs.NET.Core
         public void RunPostFrame(Ecs.FiniAction action, void* ctx)
         {
             BindingContext.SetCallback(ref WorldContext.RunPostFrame, action);
-            ecs_run_post_frame(Handle, WorldContext.RunPostFrame.Function, ctx);
+            ecs_run_post_frame(Handle, WorldContext.RunPostFrame.Pointer, ctx);
         }
 
         /// <summary>

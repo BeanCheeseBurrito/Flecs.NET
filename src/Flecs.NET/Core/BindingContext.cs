@@ -84,9 +84,9 @@ namespace Flecs.NET.Core
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.Function != default)
+            if (context->Callback.Pointer != default)
             {
-                ((delegate*<void>)context->Callback.Function)();
+                ((delegate*<void>)context->Callback.Pointer)();
                 return;
             }
 #endif
@@ -100,9 +100,9 @@ namespace Flecs.NET.Core
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.Function != default)
+            if (context->Callback.Pointer != default)
             {
-                Invoker.Iter(iter, (delegate*<Iter, void>)context->Callback.Function);
+                Invoker.Iter(iter, (delegate*<Iter, void>)context->Callback.Pointer);
                 return;
             }
 #endif
@@ -116,9 +116,9 @@ namespace Flecs.NET.Core
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.Function != default)
+            if (context->Callback.Pointer != default)
             {
-                Invoker.Each(iter, (delegate*<Entity, void>)context->Callback.Function);
+                Invoker.Each(iter, (delegate*<Entity, void>)context->Callback.Pointer);
                 return;
             }
 #endif
@@ -132,9 +132,9 @@ namespace Flecs.NET.Core
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.Function != default)
+            if (context->Callback.Pointer != default)
             {
-                Invoker.Each(iter, (delegate*<Iter, int, void>)context->Callback.Function);
+                Invoker.Each(iter, (delegate*<Iter, int, void>)context->Callback.Pointer);
                 return;
             }
 #endif
@@ -148,9 +148,9 @@ namespace Flecs.NET.Core
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.Function != default)
+            if (context->Callback.Pointer != default)
             {
-                Invoker.Each(iter, (delegate*<Entity, void>)context->Callback.Function);
+                Invoker.Each(iter, (delegate*<Entity, void>)context->Callback.Pointer);
                 return;
             }
 #endif
@@ -164,9 +164,9 @@ namespace Flecs.NET.Core
             RunContext* context = (RunContext*)iter->run_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.Function != default)
+            if (context->Callback.Pointer != default)
             {
-                Invoker.Run(iter, (delegate*<Iter, void>)context->Callback.Function);
+                Invoker.Run(iter, (delegate*<Iter, void>)context->Callback.Pointer);
                 return;
             }
 #endif
@@ -180,9 +180,9 @@ namespace Flecs.NET.Core
             RunContext* context = (RunContext*)iter->run_ctx;
 
 #if NET5_0_OR_GREATER
-            if (context->Callback.Function != default)
+            if (context->Callback.Pointer != default)
             {
-                Invoker.Run(iter, (delegate*<Iter, Action<Iter>, void>)context->Callback.Function);
+                Invoker.Run(iter, (delegate*<Iter, Action<Iter>, void>)context->Callback.Pointer);
                 return;
             }
 #endif
@@ -196,9 +196,9 @@ namespace Flecs.NET.Core
         {
             RunContext* context = (RunContext*)iter->run_ctx;
 
-            if (context->Callback.Function != default)
+            if (context->Callback.Pointer != default)
             {
-                Invoker.Run(iter, (delegate*<Iter, delegate*<Iter, void>, void>)context->Callback.Function);
+                Invoker.Run(iter, (delegate*<Iter, delegate*<Iter, void>, void>)context->Callback.Pointer);
                 return;
             }
 
@@ -275,7 +275,7 @@ namespace Flecs.NET.Core
             if (dest.GcHandle != default)
                 dest.Dispose();
 
-            dest.Function = callback;
+            dest.Pointer = callback;
         }
 
         internal static void SetCallback<T>(ref Callback dest, T? callback, bool storePtr = true) where T : Delegate
@@ -288,19 +288,19 @@ namespace Flecs.NET.Core
 
         internal struct Callback : IDisposable
         {
-            public IntPtr Function;
+            public IntPtr Pointer;
             public GCHandle GcHandle;
 
             public Callback(IntPtr function, GCHandle gcHandle)
             {
-                Function = function;
+                Pointer = function;
                 GcHandle = gcHandle;
             }
 
             public void Dispose()
             {
                 Managed.FreeGcHandle(GcHandle);
-                Function = default;
+                Pointer = default;
                 GcHandle = default;
             }
         }

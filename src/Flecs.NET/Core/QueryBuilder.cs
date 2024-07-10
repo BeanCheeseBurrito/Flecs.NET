@@ -1655,7 +1655,7 @@ namespace Flecs.NET.Core
         public ref QueryBuilder OrderBy(ulong component, Ecs.OrderByAction compare)
         {
             BindingContext.SetCallback(ref Context.OrderByAction, compare);
-            Desc.order_by_callback = Context.OrderByAction.Function;
+            Desc.order_by_callback = Context.OrderByAction.Pointer;
             Desc.order_by = component;
             return ref this;
         }
@@ -1702,7 +1702,7 @@ namespace Flecs.NET.Core
         public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByAction callback)
         {
             BindingContext.SetCallback(ref Context.GroupByAction, callback);
-            Desc.group_by_callback = Context.GroupByAction.Function;
+            Desc.group_by_callback = Context.GroupByAction.Pointer;
             Desc.group_by = component;
             return ref this;
         }
@@ -1762,7 +1762,7 @@ namespace Flecs.NET.Core
         public ref QueryBuilder GroupByCtx(void* ctx, Ecs.ContextFree contextFree)
         {
             BindingContext.SetCallback(ref Context.ContextFree, contextFree);
-            Desc.group_by_ctx_free = Context.ContextFree.Function;
+            Desc.group_by_ctx_free = Context.ContextFree.Pointer;
             Desc.group_by_ctx = ctx;
             return ref this;
         }
@@ -1787,7 +1787,7 @@ namespace Flecs.NET.Core
         public ref QueryBuilder OnGroupCreate(Ecs.GroupCreateAction onGroupCreate)
         {
             BindingContext.SetCallback(ref Context.GroupCreateAction, onGroupCreate);
-            Desc.on_group_create = Context.GroupCreateAction.Function;
+            Desc.on_group_create = Context.GroupCreateAction.Pointer;
             return ref this;
         }
 
@@ -1799,7 +1799,7 @@ namespace Flecs.NET.Core
         public ref QueryBuilder OnGroupDelete(Ecs.GroupDeleteAction onGroupDelete)
         {
             BindingContext.SetCallback(ref Context.GroupDeleteAction, onGroupDelete);
-            Desc.on_group_delete = Context.GroupDeleteAction.Function;
+            Desc.on_group_delete = Context.GroupDeleteAction.Pointer;
             return ref this;
         }
 

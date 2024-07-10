@@ -1318,9 +1318,9 @@ namespace Flecs.NET.Codegen
                 {{
                     BindingContext.IteratorContext* context = (BindingContext.IteratorContext*)iter->callback_ctx;
             #if NET5_0_OR_GREATER
-                    if (context->Callback.Function != default)
+                    if (context->Callback.Pointer != default)
                     {{
-                        Invoker.{invokerName}(iter, ({functionPointerName})context->Callback.Function);
+                        Invoker.{invokerName}(iter, ({functionPointerName})context->Callback.Pointer);
                         return;
                     }}
             #endif
