@@ -608,81 +608,126 @@ namespace Flecs.NET.Core
 
         private static void UnmanagedCtorCallback(void* dataHandle, int count, ecs_type_info_t* typeInfoHandle)
         {
-            TypeInfo typeInfo = new TypeInfo(typeInfoHandle);
-
             BindingContext.TypeHooksContext* context =
                 (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
 
-            Ecs.CtorCallback<T0> callback = (Ecs.CtorCallback<T0>)context->Ctor.GcHandle.Target!;
-
             T0* data = (T0*)dataHandle;
 
-            for (int i = 0; i < count; i++)
-                callback(ref data[i], typeInfo);
+            if (context->Ctor.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<ref T0, TypeInfo, void> callback = (delegate*<ref T0, TypeInfo, void>)context->Ctor.Pointer;
+                for (int i = 0; i < count; i++)
+                    callback(ref data[i], new TypeInfo(typeInfoHandle));
+#endif
+            }
+            else
+            {
+                Ecs.CtorCallback<T0> callback = (Ecs.CtorCallback<T0>)context->Ctor.GcHandle.Target!;
+                for (int i = 0; i < count; i++)
+                    callback(ref data[i], new TypeInfo(typeInfoHandle));
+            }
         }
 
         private static void UnmanagedDtorCallback(void* dataHandle, int count, ecs_type_info_t* typeInfoHandle)
         {
-            TypeInfo typeInfo = new TypeInfo(typeInfoHandle);
-
             BindingContext.TypeHooksContext* context =
                 (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
 
-            Ecs.DtorCallback<T0> callback = (Ecs.DtorCallback<T0>)context->Dtor.GcHandle.Target!;
-
             T0* data = (T0*)dataHandle;
 
-            for (int i = 0; i < count; i++)
-                callback(ref data[i], typeInfo);
+            if (context->Dtor.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<ref T0, TypeInfo, void> callback = (delegate*<ref T0, TypeInfo, void>)context->Dtor.Pointer;
+                for (int i = 0; i < count; i++)
+                    callback(ref data[i], new TypeInfo(typeInfoHandle));
+#endif
+            }
+            else
+            {
+                Ecs.DtorCallback<T0> callback = (Ecs.DtorCallback<T0>)context->Dtor.GcHandle.Target!;
+                for (int i = 0; i < count; i++)
+                    callback(ref data[i], new TypeInfo(typeInfoHandle));
+            }
         }
 
         private static void UnmanagedMoveCallback(void* dstHandle, void* srcHandle, int count, ecs_type_info_t* typeInfoHandle)
         {
-            TypeInfo typeInfo = new TypeInfo(typeInfoHandle);
-
             BindingContext.TypeHooksContext* context =
                 (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
-
-            Ecs.MoveCallback<T0> callback = (Ecs.MoveCallback<T0>)context->Move.GcHandle.Target!;
 
             T0* dst = (T0*)dstHandle;
             T0* src = (T0*)srcHandle;
 
-            for (int i = 0; i < count; i++)
-                callback(ref dst[i], ref src[i], typeInfo);
+            if (context->Move.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<ref T0, ref T0, TypeInfo, void> callback = (delegate*<ref T0, ref T0, TypeInfo, void>)context->Move.Pointer;
+                for (int i = 0; i < count; i++)
+                    callback(ref dst[i], ref src[i], new TypeInfo(typeInfoHandle));
+#endif
+            }
+            else
+            {
+                Ecs.MoveCallback<T0> callback = (Ecs.MoveCallback<T0>)context->Move.GcHandle.Target!;
+                for (int i = 0; i < count; i++)
+                    callback(ref dst[i], ref src[i], new TypeInfo(typeInfoHandle));
+            }
         }
 
         private static void UnmanagedCopyCallback(void* dstHandle, void* srcHandle, int count, ecs_type_info_t* typeInfoHandle)
         {
-            TypeInfo typeInfo = new TypeInfo(typeInfoHandle);
-
             BindingContext.TypeHooksContext* context =
                 (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
-
-            Ecs.CopyCallback<T0> callback = (Ecs.CopyCallback<T0>)context->Copy.GcHandle.Target!;
 
             T0* dst = (T0*)dstHandle;
             T0* src = (T0*)srcHandle;
 
-            for (int i = 0; i < count; i++)
-                callback(ref dst[i], ref src[i], typeInfo);
+            if (context->Copy.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<ref T0, ref T0, TypeInfo, void> callback = (delegate*<ref T0, ref T0, TypeInfo, void>)context->Copy.Pointer;
+                for (int i = 0; i < count; i++)
+                    callback(ref dst[i], ref src[i], new TypeInfo(typeInfoHandle));
+#endif
+            }
+            else
+            {
+                Ecs.CopyCallback<T0> callback = (Ecs.CopyCallback<T0>)context->Copy.GcHandle.Target!;
+                for (int i = 0; i < count; i++)
+                    callback(ref dst[i], ref src[i], new TypeInfo(typeInfoHandle));
+            }
         }
 
         private static void ManagedCtorCallback(void* data, int count, ecs_type_info_t* typeInfoHandle)
         {
             BindingContext.TypeHooksContext* context =
                 (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
-            Ecs.CtorCallback<T0> callback = (Ecs.CtorCallback<T0>)context->Ctor.GcHandle.Target!;
 
             GCHandle* handles = (GCHandle*)data;
 
-            for (int i = 0; i < count; i++)
+            if (context->Ctor.Pointer != default)
             {
-                BindingContext.Box<T0> box = new BindingContext.Box<T0>();
-
-                callback(ref box.Value!, new TypeInfo(typeInfoHandle));
-
-                handles[i] = GCHandle.Alloc(box);
+#if NET5_0_OR_GREATER
+                delegate*<ref T0, TypeInfo, void> callback = (delegate*<ref T0, TypeInfo, void>)context->Ctor.Pointer;
+                for (int i = 0; i < count; i++)
+                {
+                    BindingContext.Box<T0> box = new BindingContext.Box<T0>();
+                    callback(ref box.Value!, new TypeInfo(typeInfoHandle));
+                    handles[i] = GCHandle.Alloc(box);
+                }
+#endif
+            }
+            else
+            {
+                Ecs.CtorCallback<T0> callback = (Ecs.CtorCallback<T0>)context->Ctor.GcHandle.Target!;
+                for (int i = 0; i < count; i++)
+                {
+                    BindingContext.Box<T0> box = new BindingContext.Box<T0>();
+                    callback(ref box.Value!, new TypeInfo(typeInfoHandle));
+                    handles[i] = GCHandle.Alloc(box);
+                }
             }
         }
 
@@ -690,18 +735,32 @@ namespace Flecs.NET.Core
         {
             BindingContext.TypeHooksContext* context =
                 (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
-            Ecs.DtorCallback<T0> callback = (Ecs.DtorCallback<T0>)context->Dtor.GcHandle.Target!;
 
             GCHandle* handles = (GCHandle*)data;
 
-            for (int i = 0; i < count; i++)
+            if (context->Dtor.Pointer != default)
             {
-                BindingContext.Box<T0> box = (BindingContext.Box<T0>)handles[i].Target!;
-
-                callback(ref box.Value!, new TypeInfo(typeInfoHandle));
-
-                Managed.FreeGcHandle(handles[i]);
-                handles[i] = default;
+#if NET5_0_OR_GREATER
+                delegate*<ref T0, TypeInfo, void> callback = (delegate*<ref T0, TypeInfo, void>)context->Dtor.Pointer;
+                for (int i = 0; i < count; i++)
+                {
+                    BindingContext.Box<T0> box = (BindingContext.Box<T0>)handles[i].Target!;
+                    callback(ref box.Value!, new TypeInfo(typeInfoHandle));
+                    Managed.FreeGcHandle(handles[i]);
+                    handles[i] = default;
+                }
+#endif
+            }
+            else
+            {
+                Ecs.DtorCallback<T0> callback = (Ecs.DtorCallback<T0>)context->Dtor.GcHandle.Target!;
+                for (int i = 0; i < count; i++)
+                {
+                    BindingContext.Box<T0> box = (BindingContext.Box<T0>)handles[i].Target!;
+                    callback(ref box.Value!, new TypeInfo(typeInfoHandle));
+                    Managed.FreeGcHandle(handles[i]);
+                    handles[i] = default;
+                }
             }
         }
 
@@ -709,21 +768,41 @@ namespace Flecs.NET.Core
         {
             BindingContext.TypeHooksContext* context =
                 (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
-            Ecs.MoveCallback<T0> callback = (Ecs.MoveCallback<T0>)context->Move.GcHandle.Target!;
 
             GCHandle* dstHandles = (GCHandle*)dst;
             GCHandle* srcHandles = (GCHandle*)src;
 
-            for (int i = 0; i < count; i++)
+            if (context->Move.Pointer != default)
             {
-                BindingContext.Box<T0> dstBox = (BindingContext.Box<T0>)dstHandles[i].Target!;
-                BindingContext.Box<T0> srcBox = (BindingContext.Box<T0>)srcHandles[i].Target!;
+#if NET5_0_OR_GREATER
+                delegate*<ref T0, ref T0, TypeInfo, void> callback = (delegate*<ref T0, ref T0, TypeInfo, void>)context->Move.Pointer;
+                for (int i = 0; i < count; i++)
+                {
+                    BindingContext.Box<T0> dstBox = (BindingContext.Box<T0>)dstHandles[i].Target!;
+                    BindingContext.Box<T0> srcBox = (BindingContext.Box<T0>)srcHandles[i].Target!;
 
-                callback(ref dstBox.Value!, ref srcBox.Value!, new TypeInfo(typeInfoHandle));
+                    callback(ref dstBox.Value!, ref srcBox.Value!, new TypeInfo(typeInfoHandle));
 
-                // Free the gc handle if it comes from a .Set call, otherwise let the Dtor hook handle it.
-                if (srcBox.ShouldFree)
-                    Managed.FreeGcHandle(srcHandles[i]);
+                    // Free the gc handle if it comes from a .Set call, otherwise let the Dtor hook handle it.
+                    if (srcBox.ShouldFree)
+                        Managed.FreeGcHandle(srcHandles[i]);
+                }
+#endif
+            }
+            else
+            {
+                Ecs.MoveCallback<T0> callback = (Ecs.MoveCallback<T0>)context->Move.GcHandle.Target!;
+                for (int i = 0; i < count; i++)
+                {
+                    BindingContext.Box<T0> dstBox = (BindingContext.Box<T0>)dstHandles[i].Target!;
+                    BindingContext.Box<T0> srcBox = (BindingContext.Box<T0>)srcHandles[i].Target!;
+
+                    callback(ref dstBox.Value!, ref srcBox.Value!, new TypeInfo(typeInfoHandle));
+
+                    // Free the gc handle if it comes from a .Set call, otherwise let the Dtor hook handle it.
+                    if (srcBox.ShouldFree)
+                        Managed.FreeGcHandle(srcHandles[i]);
+                }
             }
         }
 
@@ -731,27 +810,44 @@ namespace Flecs.NET.Core
         {
             BindingContext.TypeHooksContext* context =
                 (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
-            Ecs.CopyCallback<T0> callback = (Ecs.CopyCallback<T0>)context->Copy.GcHandle.Target!;
 
             GCHandle* dstHandles = (GCHandle*)dst;
             GCHandle* srcHandles = (GCHandle*)src;
 
-            for (int i = 0; i < count; i++)
+            if (context->Copy.Pointer != default)
             {
-                BindingContext.Box<T0> dstBox = (BindingContext.Box<T0>)dstHandles[i].Target!;
-                BindingContext.Box<T0> srcBox = (BindingContext.Box<T0>)srcHandles[i].Target!;
+#if NET5_0_OR_GREATER
+                delegate*<ref T0, ref T0, TypeInfo, void> callback = (delegate*<ref T0, ref T0, TypeInfo, void>)context->Copy.Pointer;
+                for (int i = 0; i < count; i++)
+                {
+                    BindingContext.Box<T0> dstBox = (BindingContext.Box<T0>)dstHandles[i].Target!;
+                    BindingContext.Box<T0> srcBox = (BindingContext.Box<T0>)srcHandles[i].Target!;
 
-                callback(ref dstBox.Value!, ref srcBox.Value!, new TypeInfo(typeInfoHandle));
+                    callback(ref dstBox.Value!, ref srcBox.Value!, new TypeInfo(typeInfoHandle));
 
-                // Free the gc handle if it comes from a .Set call, otherwise let the Dtor hook handle it.
-                if (srcBox.ShouldFree)
-                    Managed.FreeGcHandle(srcHandles[i]);
+                    // Free the gc handle if it comes from a .Set call, otherwise let the Dtor hook handle it.
+                    if (srcBox.ShouldFree)
+                        Managed.FreeGcHandle(srcHandles[i]);
+                }
+#endif
+            }
+            else
+            {
+                Ecs.CopyCallback<T0> callback = (Ecs.CopyCallback<T0>)context->Copy.GcHandle.Target!;
+                for (int i = 0; i < count; i++)
+                {
+                    BindingContext.Box<T0> dstBox = (BindingContext.Box<T0>)dstHandles[i].Target!;
+                    BindingContext.Box<T0> srcBox = (BindingContext.Box<T0>)srcHandles[i].Target!;
+
+                    callback(ref dstBox.Value!, ref srcBox.Value!, new TypeInfo(typeInfoHandle));
+
+                    // Free the gc handle if it comes from a .Set call, otherwise let the Dtor hook handle it.
+                    if (srcBox.ShouldFree)
+                        Managed.FreeGcHandle(srcHandles[i]);
+                }
             }
         }
 
-        // For managed types, create a strong box and attempt to set it's value with Activator.CreateInstance<T0>().
-        // If no public parameterless constructor exists, the strong box will point to a null value until
-        // .Set is called.
         private static void DefaultManagedCtorCallback(void* data, int count, ecs_type_info_t* typeInfoHandle)
         {
             GCHandle* handles = (GCHandle*)data;
@@ -810,271 +906,595 @@ namespace Flecs.NET.Core
         private static void OnAddIterFieldCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.IterFieldCallback<T0> callback = (Ecs.IterFieldCallback<T0>)context->OnAdd.GcHandle.Target!;
 
-            Iter it = new Iter(iter);
-            for (int i = 0; i < iter->count; i++)
-                callback(it, it.Field<T0>(0));
+            if (context->OnAdd.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, Field<T0>, void> callback = (delegate*<Iter, Field<T0>, void>)context->OnAdd.Pointer;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.Field<T0>(0));
+#endif
+            }
+            else
+            {
+                Ecs.IterFieldCallback<T0> callback = (Ecs.IterFieldCallback<T0>)context->OnAdd.GcHandle.Target!;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.Field<T0>(0));
+            }
         }
 
         private static void OnAddIterSpanCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.IterSpanCallback<T0> callback = (Ecs.IterSpanCallback<T0>)context->OnAdd.GcHandle.Target!;
 
-            Iter it = new Iter(iter);
-            for (int i = 0; i < iter->count; i++)
-                callback(it, it.GetSpan<T0>(0));
+            if (context->OnAdd.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, Span<T0>, void> callback = (delegate*<Iter, Span<T0>, void>)context->OnAdd.Pointer;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.GetSpan<T0>(0));
+#endif
+            }
+            else
+            {
+                Ecs.IterSpanCallback<T0> callback = (Ecs.IterSpanCallback<T0>)context->OnAdd.GcHandle.Target!;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.GetSpan<T0>(0));
+            }
         }
 
         private static void OnAddIterPointerCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.IterPointerCallback<T0> callback = (Ecs.IterPointerCallback<T0>)context->OnAdd.GcHandle.Target!;
 
-            Iter it = new Iter(iter);
-            for (int i = 0; i < iter->count; i++)
-                callback(it, it.GetPointer<T0>(0));
+            if (context->OnAdd.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, T0*, void> callback = (delegate*<Iter, T0*, void>)context->OnAdd.Pointer;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.GetPointer<T0>(0));
+#endif
+            }
+            else
+            {
+                Ecs.IterPointerCallback<T0> callback = (Ecs.IterPointerCallback<T0>)context->OnAdd.GcHandle.Target!;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.GetPointer<T0>(0));
+            }
         }
 
         private static void OnAddEachRefCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachRefCallback<T0> callback = (Ecs.EachRefCallback<T0>)context->OnAdd.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
+            if (context->OnAdd.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<ref T0, void> callback = (delegate*<ref T0, void>)context->OnAdd.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
+#endif
+            }
+            else
+            {
+                Ecs.EachRefCallback<T0> callback = (Ecs.EachRefCallback<T0>)context->OnAdd.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
+            }
         }
 
         private static void OnAddEachEntityRefCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachEntityRefCallback<T0> callback = (Ecs.EachEntityRefCallback<T0>)context->OnAdd.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
+            if (context->OnAdd.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Entity, ref T0, void> callback = (delegate*<Entity, ref T0, void>)context->OnAdd.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
+#endif
+            }
+            else
+            {
+                Ecs.EachEntityRefCallback<T0> callback = (Ecs.EachEntityRefCallback<T0>)context->OnAdd.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
+            }
         }
 
         private static void OnAddEachIterRefCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachIterRefCallback<T0> callback = (Ecs.EachIterRefCallback<T0>)context->OnAdd.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
+            if (context->OnAdd.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, int, ref T0, void> callback = (delegate*<Iter, int, ref T0, void>)context->OnAdd.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
+#endif
+            }
+            else
+            {
+                Ecs.EachIterRefCallback<T0> callback = (Ecs.EachIterRefCallback<T0>)context->OnAdd.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
+            }
         }
 
         private static void OnAddEachPointerCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachPointerCallback<T0> callback = (Ecs.EachPointerCallback<T0>)context->OnAdd.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(&pointer[i]);
+            if (context->OnAdd.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<T0*, void> callback = (delegate*<T0*, void>)context->OnAdd.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(&pointer[i]);
+#endif
+            }
+            else
+            {
+                Ecs.EachPointerCallback<T0> callback = (Ecs.EachPointerCallback<T0>)context->OnAdd.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(&pointer[i]);
+            }
         }
 
         private static void OnAddEachEntityPointerCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachEntityPointerCallback<T0> callback = (Ecs.EachEntityPointerCallback<T0>)context->OnAdd.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
+            if (context->OnAdd.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Entity, T0*, void> callback = (delegate*<Entity, T0*, void>)context->OnAdd.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
+#endif
+            }
+            else
+            {
+                Ecs.EachEntityPointerCallback<T0> callback = (Ecs.EachEntityPointerCallback<T0>)context->OnAdd.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
+            }
         }
 
         private static void OnAddEachIterPointerCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachIterPointerCallback<T0> callback = (Ecs.EachIterPointerCallback<T0>)context->OnAdd.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(new Iter(iter), i, &pointer[i]);
+            if (context->OnAdd.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, int, T0*, void> callback = (delegate*<Iter, int, T0*, void>)context->OnAdd.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Iter(iter), i, &pointer[i]);
+#endif
+            }
+            else
+            {
+                Ecs.EachIterPointerCallback<T0> callback = (Ecs.EachIterPointerCallback<T0>)context->OnAdd.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Iter(iter), i, &pointer[i]);
+            }
         }
 
         private static void OnSetIterFieldCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.IterFieldCallback<T0> callback = (Ecs.IterFieldCallback<T0>)context->OnSet.GcHandle.Target!;
 
-            Iter it = new Iter(iter);
-            for (int i = 0; i < iter->count; i++)
-                callback(it, it.Field<T0>(0));
+            if (context->OnSet.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, Field<T0>, void> callback = (delegate*<Iter, Field<T0>, void>)context->OnSet.Pointer;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.Field<T0>(0));
+#endif
+            }
+            else
+            {
+                Ecs.IterFieldCallback<T0> callback = (Ecs.IterFieldCallback<T0>)context->OnSet.GcHandle.Target!;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.Field<T0>(0));
+            }
         }
 
         private static void OnSetIterSpanCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.IterSpanCallback<T0> callback = (Ecs.IterSpanCallback<T0>)context->OnSet.GcHandle.Target!;
 
-            Iter it = new Iter(iter);
-            for (int i = 0; i < iter->count; i++)
-                callback(it, it.GetSpan<T0>(0));
+            if (context->OnSet.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, Span<T0>, void> callback = (delegate*<Iter, Span<T0>, void>)context->OnSet.Pointer;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.GetSpan<T0>(0));
+#endif
+            }
+            else
+            {
+                Ecs.IterSpanCallback<T0> callback = (Ecs.IterSpanCallback<T0>)context->OnSet.GcHandle.Target!;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.GetSpan<T0>(0));
+            }
         }
 
         private static void OnSetIterPointerCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.IterPointerCallback<T0> callback = (Ecs.IterPointerCallback<T0>)context->OnSet.GcHandle.Target!;
 
-            Iter it = new Iter(iter);
-            for (int i = 0; i < iter->count; i++)
-                callback(it, it.GetPointer<T0>(0));
+            if (context->OnSet.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, T0*, void> callback = (delegate*<Iter, T0*, void>)context->OnSet.Pointer;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.GetPointer<T0>(0));
+#endif
+            }
+            else
+            {
+                Ecs.IterPointerCallback<T0> callback = (Ecs.IterPointerCallback<T0>)context->OnSet.GcHandle.Target!;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.GetPointer<T0>(0));
+            }
         }
 
         private static void OnSetEachRefCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachRefCallback<T0> callback = (Ecs.EachRefCallback<T0>)context->OnSet.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
+            if (context->OnSet.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<ref T0, void> callback = (delegate*<ref T0, void>)context->OnSet.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
+#endif
+            }
+            else
+            {
+                Ecs.EachRefCallback<T0> callback = (Ecs.EachRefCallback<T0>)context->OnSet.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
+            }
         }
 
         private static void OnSetEachEntityRefCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachEntityRefCallback<T0> callback = (Ecs.EachEntityRefCallback<T0>)context->OnSet.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
+            if (context->OnSet.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Entity, ref T0, void> callback = (delegate*<Entity, ref T0, void>)context->OnSet.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
+#endif
+            }
+            else
+            {
+                Ecs.EachEntityRefCallback<T0> callback = (Ecs.EachEntityRefCallback<T0>)context->OnSet.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
+            }
         }
 
         private static void OnSetEachIterRefCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachIterRefCallback<T0> callback = (Ecs.EachIterRefCallback<T0>)context->OnSet.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
+            if (context->OnSet.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, int, ref T0, void> callback = (delegate*<Iter, int, ref T0, void>)context->OnSet.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
+#endif
+            }
+            else
+            {
+                Ecs.EachIterRefCallback<T0> callback = (Ecs.EachIterRefCallback<T0>)context->OnSet.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
+            }
         }
 
         private static void OnSetEachPointerCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachPointerCallback<T0> callback = (Ecs.EachPointerCallback<T0>)context->OnSet.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(&pointer[i]);
+            if (context->OnSet.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<T0*, void> callback = (delegate*<T0*, void>)context->OnSet.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(&pointer[i]);
+#endif
+            }
+            else
+            {
+                Ecs.EachPointerCallback<T0> callback = (Ecs.EachPointerCallback<T0>)context->OnSet.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(&pointer[i]);
+            }
         }
 
         private static void OnSetEachEntityPointerCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachEntityPointerCallback<T0> callback = (Ecs.EachEntityPointerCallback<T0>)context->OnSet.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
+            if (context->OnSet.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Entity, T0*, void> callback = (delegate*<Entity, T0*, void>)context->OnSet.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
+#endif
+            }
+            else
+            {
+                Ecs.EachEntityPointerCallback<T0> callback = (Ecs.EachEntityPointerCallback<T0>)context->OnSet.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
+            }
         }
 
         private static void OnSetEachIterPointerCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachIterPointerCallback<T0> callback = (Ecs.EachIterPointerCallback<T0>)context->OnSet.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(new Iter(iter), i, &pointer[i]);
+            if (context->OnSet.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, int, T0*, void> callback = (delegate*<Iter, int, T0*, void>)context->OnSet.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Iter(iter), i, &pointer[i]);
+#endif
+            }
+            else
+            {
+                Ecs.EachIterPointerCallback<T0> callback = (Ecs.EachIterPointerCallback<T0>)context->OnSet.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Iter(iter), i, &pointer[i]);
+            }
         }
 
         private static void OnRemoveIterFieldCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.IterFieldCallback<T0> callback = (Ecs.IterFieldCallback<T0>)context->OnRemove.GcHandle.Target!;
 
-            Iter it = new Iter(iter);
-            for (int i = 0; i < iter->count; i++)
-                callback(it, it.Field<T0>(0));
+            if (context->OnRemove.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, Field<T0>, void> callback = (delegate*<Iter, Field<T0>, void>)context->OnRemove.Pointer;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.Field<T0>(0));
+#endif
+            }
+            else
+            {
+                Ecs.IterFieldCallback<T0> callback = (Ecs.IterFieldCallback<T0>)context->OnRemove.GcHandle.Target!;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.Field<T0>(0));
+            }
         }
 
         private static void OnRemoveIterSpanCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.IterSpanCallback<T0> callback = (Ecs.IterSpanCallback<T0>)context->OnRemove.GcHandle.Target!;
 
-            Iter it = new Iter(iter);
-            for (int i = 0; i < iter->count; i++)
-                callback(it, it.GetSpan<T0>(0));
+            if (context->OnRemove.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, Span<T0>, void> callback = (delegate*<Iter, Span<T0>, void>)context->OnRemove.Pointer;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.GetSpan<T0>(0));
+#endif
+            }
+            else
+            {
+                Ecs.IterSpanCallback<T0> callback = (Ecs.IterSpanCallback<T0>)context->OnRemove.GcHandle.Target!;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.GetSpan<T0>(0));
+            }
         }
 
         private static void OnRemoveIterPointerCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.IterPointerCallback<T0> callback = (Ecs.IterPointerCallback<T0>)context->OnRemove.GcHandle.Target!;
 
-            Iter it = new Iter(iter);
-            for (int i = 0; i < iter->count; i++)
-                callback(it, it.GetPointer<T0>(0));
+            if (context->OnRemove.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, T0*, void> callback = (delegate*<Iter, T0*, void>)context->OnRemove.Pointer;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.GetPointer<T0>(0));
+#endif
+            }
+            else
+            {
+                Ecs.IterPointerCallback<T0> callback = (Ecs.IterPointerCallback<T0>)context->OnRemove.GcHandle.Target!;
+                Iter it = new Iter(iter);
+                for (int i = 0; i < iter->count; i++)
+                    callback(it, it.GetPointer<T0>(0));
+            }
         }
 
         private static void OnRemoveEachRefCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachRefCallback<T0> callback = (Ecs.EachRefCallback<T0>)context->OnRemove.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
+            if (context->OnRemove.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<ref T0, void> callback = (delegate*<ref T0, void>)context->OnRemove.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
+#endif
+            }
+            else
+            {
+                Ecs.EachRefCallback<T0> callback = (Ecs.EachRefCallback<T0>)context->OnRemove.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
+            }
         }
 
         private static void OnRemoveEachEntityRefCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachEntityRefCallback<T0> callback = (Ecs.EachEntityRefCallback<T0>)context->OnRemove.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
+            if (context->OnRemove.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Entity, ref T0, void> callback = (delegate*<Entity, ref T0, void>)context->OnRemove.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
+#endif
+            }
+            else
+            {
+                Ecs.EachEntityRefCallback<T0> callback = (Ecs.EachEntityRefCallback<T0>)context->OnRemove.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
+            }
         }
 
         private static void OnRemoveEachIterRefCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachIterRefCallback<T0> callback = (Ecs.EachIterRefCallback<T0>)context->OnRemove.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
+            if (context->OnRemove.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, int, ref T0, void> callback = (delegate*<Iter, int, ref T0, void>)context->OnRemove.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
+#endif
+            }
+            else
+            {
+                Ecs.EachIterRefCallback<T0> callback = (Ecs.EachIterRefCallback<T0>)context->OnRemove.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
+            }
         }
 
         private static void OnRemoveEachPointerCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachPointerCallback<T0> callback = (Ecs.EachPointerCallback<T0>)context->OnRemove.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(&pointer[i]);
+            if (context->OnRemove.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<T0*, void> callback = (delegate*<T0*, void>)context->OnRemove.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(&pointer[i]);
+#endif
+            }
+            else
+            {
+                Ecs.EachPointerCallback<T0> callback = (Ecs.EachPointerCallback<T0>)context->OnRemove.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(&pointer[i]);
+            }
         }
 
         private static void OnRemoveEachEntityPointerCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachEntityPointerCallback<T0> callback = (Ecs.EachEntityPointerCallback<T0>)context->OnRemove.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
+            if (context->OnRemove.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Entity, T0*, void> callback = (delegate*<Entity, T0*, void>)context->OnRemove.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
+#endif
+            }
+            else
+            {
+                Ecs.EachEntityPointerCallback<T0> callback = (Ecs.EachEntityPointerCallback<T0>)context->OnRemove.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
+            }
         }
 
         private static void OnRemoveEachIterPointerCallback(ecs_iter_t* iter)
         {
             BindingContext.TypeHooksContext* context = (BindingContext.TypeHooksContext*)iter->callback_ctx;
-            Ecs.EachIterPointerCallback<T0> callback = (Ecs.EachIterPointerCallback<T0>)context->OnRemove.GcHandle.Target!;
 
-            T0* pointer = (T0*)iter->ptrs[0];
-            for (int i = 0; i < iter->count; i++)
-                callback(new Iter(iter), i, &pointer[i]);
+            if (context->OnRemove.Pointer != default)
+            {
+#if NET5_0_OR_GREATER
+                delegate*<Iter, int, T0*, void> callback = (delegate*<Iter, int, T0*, void>)context->OnRemove.Pointer;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Iter(iter), i, &pointer[i]);
+#endif
+            }
+            else
+            {
+                Ecs.EachIterPointerCallback<T0> callback = (Ecs.EachIterPointerCallback<T0>)context->OnRemove.GcHandle.Target!;
+                T0* pointer = (T0*)iter->ptrs[0];
+                for (int i = 0; i < iter->count; i++)
+                    callback(new Iter(iter), i, &pointer[i]);
+            }
         }
     }
 }

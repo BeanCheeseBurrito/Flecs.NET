@@ -16,17 +16,6 @@ namespace Flecs.NET.Core
         public delegate void ContextFree(void* ctx);
 
         /// <summary>
-        ///     Copy type hook callback.
-        /// </summary>
-        public delegate void CopyCallback(void* src, void* dst, int count, ecs_type_info_t* typeInfo);
-
-        /// <summary>
-        ///     Copy type hook callback.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public delegate void CopyCallback<T>(ref T src, ref T dst, TypeInfo typeInfo);
-
-        /// <summary>
         ///     Ctor type hook callback.
         /// </summary>
         public delegate void CtorCallback(void* data, int count, ecs_type_info_t* typeInfo);
@@ -47,6 +36,28 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public delegate void DtorCallback<T>(ref T data, TypeInfo typeInfo);
+
+        /// <summary>
+        ///     Move type hook callback.
+        /// </summary>
+        public delegate void MoveCallback(void* dst, void* src, int count, ecs_type_info_t* typeInfo);
+
+        /// <summary>
+        ///     Move type hook callback.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public delegate void MoveCallback<T>(ref T dst, ref T src, TypeInfo typeInfo);
+
+        /// <summary>
+        ///     Copy type hook callback.
+        /// </summary>
+        public delegate void CopyCallback(void* dst, void* src, int count, ecs_type_info_t* typeInfo);
+
+        /// <summary>
+        ///     Copy type hook callback.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public delegate void CopyCallback<T>(ref T dst, ref T src, TypeInfo typeInfo);
 
         /// <summary>
         ///     Each entity callback.
@@ -107,17 +118,6 @@ namespace Flecs.NET.Core
         ///     Iter next action.
         /// </summary>
         public delegate byte IterNextAction(ecs_iter_t* it);
-
-        /// <summary>
-        ///     Move type hook callback.
-        /// </summary>
-        public delegate void MoveCallback(void* src, void* dst, int count, ecs_type_info_t* typeInfo);
-
-        /// <summary>
-        ///     Move type hook callback.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public delegate void MoveCallback<T>(ref T src, ref T dst, TypeInfo typeInfo);
 
         /// <summary>
         ///     OrderBy action.
