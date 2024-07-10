@@ -581,24 +581,24 @@ namespace Flecs.NET.Codegen
                 string pointerArgs = ConcatString(i + 1, ", ", index => $"it.GetPointer<T{index}>({index})");
 
                 string fieldBody = $@"
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
                     Iter it = new Iter(iter);
                     callback(it, {fieldArgs});
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
                 ";
 
                 string spanBody = $@"
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
                     Iter it = new Iter(iter);
                     callback(it, {spanArgs});
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
                 ";
 
                 string pointerBody = $@"
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
                     Iter it = new Iter(iter);
                     callback(it, {pointerArgs});
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
                 ";
 
                 str.AppendLine($@"
@@ -675,14 +675,14 @@ namespace Flecs.NET.Codegen
 
                     iter->flags |= EcsIterCppEach;
 
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
 
                     int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
                     for (int i = 0; i < count; i++, {increments})
                         callback({refArgs});
 
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
                 ";
 
                 string eachPointer = $@"
@@ -692,14 +692,14 @@ namespace Flecs.NET.Codegen
 
                     iter->flags |= EcsIterCppEach;
 
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
 
                     int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
                     for (int i = 0; i < count; i++, {increments})
                         callback({pointerArgs});
 
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
                 ";
 
                 string eachEntityRef = $@"
@@ -711,12 +711,12 @@ namespace Flecs.NET.Codegen
 
                     iter->flags |= EcsIterCppEach;
 
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
 
                     for (int i = 0; i < iter->count; i++, {increments})
                         callback(new Entity(iter->world, iter->entities[i]), {refArgs});
 
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
                 ";
 
                 string eachEntityPointer = $@"
@@ -728,12 +728,12 @@ namespace Flecs.NET.Codegen
 
                     iter->flags |= EcsIterCppEach;
 
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
 
                     for (int i = 0; i < iter->count; i++, {increments})
                         callback(new Entity(iter->world, iter->entities[i]), {pointerArgs});
 
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
                 ";
 
                 string eachIterRef = $@"
@@ -743,14 +743,14 @@ namespace Flecs.NET.Codegen
 
                     iter->flags |= EcsIterCppEach;
 
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
 
                     int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
                     for (int i = 0; i < count; i++, {increments})
                         callback(new Iter(iter), i, {refArgs});
 
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
                 ";
 
                 string eachIterPointer = $@"
@@ -760,14 +760,14 @@ namespace Flecs.NET.Codegen
 
                     iter->flags |= EcsIterCppEach;
 
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
 
                     int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
                     for (int i = 0; i < count; i++, {increments})
                         callback(new Iter(iter), i, {pointerArgs});
 
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
                 ";
 
                 string findRef = $@"
@@ -777,7 +777,7 @@ namespace Flecs.NET.Codegen
 
                     iter->flags |= EcsIterCppEach;
 
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
 
                     Entity result = default;
 
@@ -792,7 +792,7 @@ namespace Flecs.NET.Codegen
                         break;
                     }}
 
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
 
                     return result;
                 ";
@@ -804,7 +804,7 @@ namespace Flecs.NET.Codegen
 
                     iter->flags |= EcsIterCppEach;
 
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
 
                     Entity result = default;
 
@@ -819,7 +819,7 @@ namespace Flecs.NET.Codegen
                         break;
                     }}
 
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
 
                     return result;
                 ";
@@ -833,7 +833,7 @@ namespace Flecs.NET.Codegen
 
                     iter->flags |= EcsIterCppEach;
 
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
 
                     Entity result = default;
 
@@ -846,7 +846,7 @@ namespace Flecs.NET.Codegen
                         break;
                     }}
 
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
 
                     return result;
                 ";
@@ -860,7 +860,7 @@ namespace Flecs.NET.Codegen
 
                     iter->flags |= EcsIterCppEach;
 
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
 
                     Entity result = default;
 
@@ -873,7 +873,7 @@ namespace Flecs.NET.Codegen
                         break;
                     }}
 
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
 
                     return result;
                 ";
@@ -885,7 +885,7 @@ namespace Flecs.NET.Codegen
 
                     iter->flags |= EcsIterCppEach;
 
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
 
                     Entity result = default;
 
@@ -900,7 +900,7 @@ namespace Flecs.NET.Codegen
                         break;
                     }}
 
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
 
                     return result;
                 ";
@@ -912,7 +912,7 @@ namespace Flecs.NET.Codegen
 
                     iter->flags |= EcsIterCppEach;
 
-                    Macros.TableLock(iter->world, iter->table);
+                    Ecs.TableLock(iter->world, iter->table);
 
                     Entity result = default;
 
@@ -927,7 +927,7 @@ namespace Flecs.NET.Codegen
                         break;
                     }}
 
-                    Macros.TableUnlock(iter->world, iter->table);
+                    Ecs.TableUnlock(iter->world, iter->table);
 
                     return result;
                 ";
@@ -1268,7 +1268,7 @@ namespace Flecs.NET.Codegen
                             if (!GetPointers<{typeParams}>(w, id, r, table, ptrs))
                                 Ecs.Error(nameof(ECS_INTERNAL_ERROR));
 
-                            Macros.TableLock(world, table);
+                            Ecs.TableLock(world, table);
                         }}
                         else
                         {{
@@ -1278,7 +1278,7 @@ namespace Flecs.NET.Codegen
                         callback({callbackArgs});
 
                         if (!w.IsDeferred())
-                            Macros.TableUnlock(world, table);
+                            Ecs.TableUnlock(world, table);
 
                         {modified}
 

@@ -5,15 +5,13 @@
 // once per frame. For these use cases, the run callback can be used which is
 // called once per frame per system.
 
-using Flecs.NET.Bindings;
 using Flecs.NET.Core;
-using Flecs.NET.Utilities;
 
 // Components
 file record struct Position(float X, float Y);
 file record struct Velocity(float X, float Y);
 
-public static unsafe class Cpp_Systems_CustomRunner
+public static class Cpp_Systems_CustomRunner
 {
     public static void Main()
     {

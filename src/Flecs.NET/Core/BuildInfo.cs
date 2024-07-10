@@ -54,17 +54,17 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Is this a debug build.
         /// </summary>
-        public bool Debug => Macros.Bool(Handle->debug);
+        public bool Debug => Utils.Bool(Handle->debug);
 
         /// <summary>
         ///     Is this a sanitize build.
         /// </summary>
-        public bool Sanitize => Macros.Bool(Handle->sanitize);
+        public bool Sanitize => Utils.Bool(Handle->sanitize);
 
         /// <summary>
         ///  Is this a perf tracing build.
         /// </summary>
-        public bool PerfTrace => Macros.Bool(Handle->perf_trace);
+        public bool PerfTrace => Utils.Bool(Handle->perf_trace);
 
         /// <summary>
         ///     Checks if two <see cref="BuildInfo"/> instances are equal.

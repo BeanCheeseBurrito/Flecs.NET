@@ -92,7 +92,7 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Dispose()
         {
-            if (Handle == null || !Macros.IsStageOrWorld(Handle))
+            if (Handle == null || !Ecs.IsStageOrWorld(Handle))
                 return;
 
             _ = ecs_fini(Handle);
@@ -105,8 +105,8 @@ namespace Flecs.NET.Core
         public void Reset()
         {
             Ecs.Assert(Handle != null, nameof(ECS_INVALID_OPERATION));
-            Ecs.Assert(Macros.IsStageOrWorld(Handle));
-            Ecs.Assert(!Macros.PolyIs(Handle, ecs_stage_t_magic));
+            Ecs.Assert(Ecs.IsStageOrWorld(Handle));
+            Ecs.Assert(!Ecs.PolyIs(Handle, ecs_stage_t_magic));
             _ = ecs_fini(Handle);
             Handle = ecs_init();
         }
@@ -172,7 +172,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool ReadonlyBegin(bool multiThreaded = false)
         {
-            return ecs_readonly_begin(Handle, Macros.Bool(multiThreaded)) == 1;
+            return ecs_readonly_begin(Handle, Utils.Bool(multiThreaded)) == 1;
         }
 
         /// <summary>
@@ -341,7 +341,7 @@ namespace Flecs.NET.Core
         /// <param name="enabled"></param>
         public void EnableRangeCheck(bool enabled = true)
         {
-            ecs_enable_range_check(Handle, Macros.Bool(enabled));
+            ecs_enable_range_check(Handle, Utils.Bool(enabled));
         }
 
         /// <summary>
@@ -417,7 +417,7 @@ namespace Flecs.NET.Core
 
             return new Entity(
                 Handle,
-                ecs_lookup_path_w_sep(Handle, 0, nativePath, nativeSeparator, nativeRootSeparator, Macros.Bool(recursive))
+                ecs_lookup_path_w_sep(Handle, 0, nativePath, nativeSeparator, nativeRootSeparator, Utils.Bool(recursive))
             );
         }
 
@@ -1802,7 +1802,7 @@ namespace Flecs.NET.Core
             using NativeString nativeName = (NativeString)name;
 
             ulong entity = ecs_lookup_path_w_sep(Handle, 0, nativeName,
-                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.True);
+                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Utils.True);
 
             Ecs.Assert(entity != 0, nameof(ECS_INVALID_PARAMETER));
 
@@ -1830,7 +1830,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count(ulong first, ulong second)
         {
-            return Count(Macros.Pair(first, second));
+            return Count(Ecs.Pair(first, second));
         }
 
         /// <summary>
@@ -1862,7 +1862,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<TFirst>(ulong second)
         {
-            return Count(Macros.Pair<TFirst>(second, Handle));
+            return Count(Ecs.Pair<TFirst>(second, Handle));
         }
 
         /// <summary>
@@ -1873,7 +1873,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<TFirst, TSecond>()
         {
-            return Count(Macros.Pair<TFirst, TSecond>(Handle));
+            return Count(Ecs.Pair<TFirst, TSecond>(Handle));
         }
 
         /// <summary>
@@ -1931,7 +1931,7 @@ namespace Flecs.NET.Core
         /// <param name="callback">The callback.</param>
         public void With(ulong first, ulong second, Action callback)
         {
-            With(Macros.Pair(first, second), callback);
+            With(Ecs.Pair(first, second), callback);
         }
 
         /// <summary>
@@ -1963,7 +1963,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst">The first component.</typeparam>
         public void With<TFirst>(ulong second, Action callback)
         {
-            With(Macros.Pair<TFirst>(second, Handle), callback);
+            With(Ecs.Pair<TFirst>(second, Handle), callback);
         }
 
         /// <summary>
@@ -1974,7 +1974,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond">The second component.</typeparam>
         public void With<TFirst, TSecond>(Action callback)
         {
-            With(Macros.Pair<TFirst, TSecond>(Handle), callback);
+            With(Ecs.Pair<TFirst, TSecond>(Handle), callback);
         }
 
         /// <summary>
@@ -2103,7 +2103,7 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         public void DeleteWith(ulong first, ulong second)
         {
-            DeleteWith(Macros.Pair(first, second));
+            DeleteWith(Ecs.Pair(first, second));
         }
 
         /// <summary>
@@ -2132,7 +2132,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         public void DeleteWith<TFirst>(ulong second)
         {
-            DeleteWith(Macros.Pair<TFirst>(second, Handle));
+            DeleteWith(Ecs.Pair<TFirst>(second, Handle));
         }
 
         /// <summary>
@@ -2142,7 +2142,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void DeleteWith<TFirst, TSecond>()
         {
-            DeleteWith(Macros.Pair<TFirst, TSecond>(Handle));
+            DeleteWith(Ecs.Pair<TFirst, TSecond>(Handle));
         }
 
         /// <summary>
@@ -2174,7 +2174,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void DeleteWithSecond<TSecond>(ulong first)
         {
-            DeleteWith(Macros.PairSecond<TSecond>(first, Handle));
+            DeleteWith(Ecs.PairSecond<TSecond>(first, Handle));
         }
 
         /// <summary>
@@ -2193,7 +2193,7 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         public void RemoveAll(ulong first, ulong second)
         {
-            RemoveAll(Macros.Pair(first, second));
+            RemoveAll(Ecs.Pair(first, second));
         }
 
         /// <summary>
@@ -2222,7 +2222,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         public void RemoveAll<TFirst>(ulong second)
         {
-            RemoveAll(Macros.Pair<TFirst>(second, Handle));
+            RemoveAll(Ecs.Pair<TFirst>(second, Handle));
         }
 
         /// <summary>
@@ -2232,7 +2232,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void RemoveAll<TFirst, TSecond>()
         {
-            RemoveAll(Macros.Pair<TFirst, TSecond>(Handle));
+            RemoveAll(Ecs.Pair<TFirst, TSecond>(Handle));
         }
 
         /// <summary>
@@ -2264,7 +2264,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void RemoveAllSecond<TSecond>(ulong first)
         {
-            RemoveAll(Macros.PairSecond<TSecond>(first, Handle));
+            RemoveAll(Ecs.PairSecond<TSecond>(first, Handle));
         }
 
         /// <summary>
@@ -2824,7 +2824,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<TFirst>(ulong second)
         {
-            return new Term(Handle, Macros.Pair<TFirst>(second, Handle));
+            return new Term(Handle, Ecs.Pair<TFirst>(second, Handle));
         }
 
         /// <summary>
@@ -2835,7 +2835,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<TFirst, TSecond>()
         {
-            return new Term(Handle, Macros.Pair<TFirst, TSecond>(Handle));
+            return new Term(Handle, Ecs.Pair<TFirst, TSecond>(Handle));
         }
 
         /// <summary>
@@ -2870,7 +2870,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term TermSecond<TSecond>(ulong first)
         {
-            return new Term(Handle, Macros.PairSecond<TSecond>(first, Handle));
+            return new Term(Handle, Ecs.PairSecond<TSecond>(first, Handle));
         }
 
         /// <summary>
@@ -2893,7 +2893,7 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public void Each(ulong first, ulong second, Ecs.EachEntityCallback callback)
         {
-            Each(Macros.Pair(first, second), callback);
+            Each(Ecs.Pair(first, second), callback);
         }
 
         /// <summary>
@@ -2915,7 +2915,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         public void Each<TFirst>(ulong second, Ecs.EachEntityRefCallback<TFirst> callback)
         {
-            ecs_iter_t it = ecs_each_id(Handle, Macros.Pair<TFirst>(second, Handle));
+            ecs_iter_t it = ecs_each_id(Handle, Ecs.Pair<TFirst>(second, Handle));
             while (ecs_each_next(&it) == 1)
                 Invoker.Each(&it, callback);
         }
@@ -2985,7 +2985,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void EachSecond<TSecond>(ulong first, Ecs.EachEntityRefCallback<TSecond> callback)
         {
-            ecs_iter_t it = ecs_each_id(Handle, Macros.PairSecond<TSecond>(first, Handle));
+            ecs_iter_t it = ecs_each_id(Handle, Ecs.PairSecond<TSecond>(first, Handle));
             while (ecs_each_next(&it) == 1)
                 Invoker.Each(&it, callback);
         }
@@ -4001,7 +4001,7 @@ namespace Flecs.NET.Core
         /// <param name="callback">The callback.</param>
         public void With(ulong first, ulong second, Ecs.WorldCallback callback)
         {
-            With(Macros.Pair(first, second), callback);
+            With(Ecs.Pair(first, second), callback);
         }
 
         /// <summary>
@@ -4033,7 +4033,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst">The first component.</typeparam>
         public void With<TFirst>(ulong second, Ecs.WorldCallback callback)
         {
-            With(Macros.Pair<TFirst>(second, Handle), callback);
+            With(Ecs.Pair<TFirst>(second, Handle), callback);
         }
 
         /// <summary>
@@ -4044,7 +4044,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond">The second component.</typeparam>
         public void With<TFirst, TSecond>(Ecs.WorldCallback callback)
         {
-            With(Macros.Pair<TFirst, TSecond>(Handle), callback);
+            With(Ecs.Pair<TFirst, TSecond>(Handle), callback);
         }
 
         /// <summary>
@@ -4108,7 +4108,7 @@ namespace Flecs.NET.Core
             return new Entity(
                 Handle,
                 ecs_lookup_path_w_sep(Handle, 0, nativePath,
-                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.Bool(recursive))
+                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Utils.Bool(recursive))
             );
         }
 
@@ -4252,7 +4252,7 @@ namespace Flecs.NET.Core
 
             return new Entity(
                 Handle,
-                ecs_lookup_symbol(Handle, nativeSymbol, Macros.Bool(lookupAsPath), Macros.Bool(recursive))
+                ecs_lookup_symbol(Handle, nativeSymbol, Utils.Bool(lookupAsPath), Utils.Bool(recursive))
             );
         }
 

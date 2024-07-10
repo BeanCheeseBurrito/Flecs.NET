@@ -254,7 +254,7 @@ namespace Flecs.NET.Core
 
             ulong id = Type<T>.Id(World);
             ulong memberId = ecs_lookup_path_w_sep(World, id, nativeMember,
-                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Macros.False);
+                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Utils.False);
 
             Var(var);
 

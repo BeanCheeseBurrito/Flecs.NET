@@ -101,7 +101,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref AppBuilder EnableRest(ushort port = 0)
         {
-            Desc.enable_rest = Macros.True;
+            Desc.enable_rest = Utils.True;
             Desc.port = port;
             return ref this;
         }
@@ -113,7 +113,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref AppBuilder EnableStats(bool value = true)
         {
-            Desc.enable_stats = Macros.Bool(value);
+            Desc.enable_stats = Utils.Bool(value);
             return ref this;
         }
 

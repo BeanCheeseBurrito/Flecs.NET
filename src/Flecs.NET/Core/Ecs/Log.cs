@@ -35,7 +35,7 @@ namespace Flecs.NET.Core
             /// <param name="enabled"></param>
             public static void EnableColors(bool enabled = true)
             {
-                ecs_log_enable_colors(Macros.Bool(enabled));
+                ecs_log_enable_colors(Utils.Bool(enabled));
             }
 
             /// <summary>
@@ -44,7 +44,7 @@ namespace Flecs.NET.Core
             /// <param name="enabled"></param>
             public static void EnableTimestamp(bool enabled = true)
             {
-                ecs_log_enable_timestamp(Macros.Bool(enabled));
+                ecs_log_enable_timestamp(Utils.Bool(enabled));
             }
 
             /// <summary>
@@ -53,7 +53,7 @@ namespace Flecs.NET.Core
             /// <param name="enabled"></param>
             public static void EnableTimeDelta(bool enabled = true)
             {
-                ecs_log_enable_timedelta(Macros.Bool(enabled));
+                ecs_log_enable_timedelta(Utils.Bool(enabled));
             }
 
             /// <summary>

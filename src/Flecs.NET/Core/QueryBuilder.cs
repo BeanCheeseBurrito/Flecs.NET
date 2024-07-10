@@ -706,7 +706,7 @@ namespace Flecs.NET.Core
                 singletonId = CurrentTerm.first.id;
 
             Ecs.Assert(singletonId != 0, nameof(ECS_INVALID_PARAMETER));
-            CurrentTerm.src.id = !Macros.IsPair(singletonId) ? singletonId : Macros.PairFirst(World, singletonId);
+            CurrentTerm.src.id = !Ecs.IsPair(singletonId) ? singletonId : Ecs.PairFirst(World, singletonId);
 
             return ref this;
         }
@@ -990,7 +990,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder WithSecond<TSecond>(ulong first)
         {
-            ulong pair = Macros.PairSecond<TSecond>(first, World);
+            ulong pair = Ecs.PairSecond<TSecond>(first, World);
             return ref With(pair);
         }
 
@@ -1641,7 +1641,7 @@ namespace Flecs.NET.Core
             _termIdType = TermIdType.Src;
 
             fixed (ecs_term_t* ptr = &CurrentTerm)
-                Ecs.Assert(ecs_term_is_initialized(ptr) == Macros.True, "Term is not initialized.");
+                Ecs.Assert(ecs_term_is_initialized(ptr) == Utils.True, "Term is not initialized.");
 
             return ref this;
         }
@@ -1833,7 +1833,7 @@ namespace Flecs.NET.Core
 
         private void SetTermId(ulong first, ulong second)
         {
-            CurrentTerm = new ecs_term_t { id = Macros.Pair(first, second) };
+            CurrentTerm = new ecs_term_t { id = Ecs.Pair(first, second) };
         }
 
         private enum TermIdType

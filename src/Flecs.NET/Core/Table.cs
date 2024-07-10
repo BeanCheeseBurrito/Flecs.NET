@@ -117,7 +117,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int TypeIndex(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
+            ulong pair = Ecs.Pair(first, second);
             return TypeIndex(pair);
         }
 
@@ -217,7 +217,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int ColumnIndex(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
+            ulong pair = Ecs.Pair(first, second);
             return ColumnIndex(pair);
         }
 
@@ -250,7 +250,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int ColumnIndex<TFirst>(ulong second)
         {
-            ulong pair = Macros.Pair<TFirst>(second, World);
+            ulong pair = Ecs.Pair<TFirst>(second, World);
             return ColumnIndex(pair);
         }
 
@@ -262,7 +262,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int ColumnIndex<TFirst, TSecond>()
         {
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            ulong pair = Ecs.Pair<TFirst, TSecond>(World);
             return ColumnIndex(pair);
         }
 
@@ -298,7 +298,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int ColumnIndexSecond<TSecond>(ulong first)
         {
-            ulong pair = Macros.PairSecond<TSecond>(first, World);
+            ulong pair = Ecs.PairSecond<TSecond>(first, World);
             return ColumnIndex(pair);
         }
 
@@ -320,7 +320,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
+            ulong pair = Ecs.Pair(first, second);
             return TypeIndex(pair) != -1;
         }
 
@@ -431,7 +431,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public void* GetPtr(ulong first, ulong second)
         {
-            ulong pair = Macros.Pair(first, second);
+            ulong pair = Ecs.Pair(first, second);
             return GetPtr(pair);
         }
 
@@ -455,7 +455,7 @@ namespace Flecs.NET.Core
         public TFirst* GetPtr<TFirst>(ulong second) where TFirst : unmanaged
         {
             Ecs.Assert(Type<TFirst>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            return (TFirst*)GetPtr(Macros.Pair<TFirst>(second, World));
+            return (TFirst*)GetPtr(Ecs.Pair<TFirst>(second, World));
         }
 
         /// <summary>
@@ -495,7 +495,7 @@ namespace Flecs.NET.Core
         public TFirst* GetFirstPtr<TFirst, TSecond>() where TFirst : unmanaged
         {
             Ecs.Assert(Type<TFirst>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            return (TFirst*)GetPtr(Macros.Pair<TFirst, TSecond>(World));
+            return (TFirst*)GetPtr(Ecs.Pair<TFirst, TSecond>(World));
         }
 
         /// <summary>
@@ -507,7 +507,7 @@ namespace Flecs.NET.Core
         public TSecond* GetSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
         {
             Ecs.Assert(Type<TSecond>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            return (TSecond*)GetPtr(Macros.Pair<TFirst, TSecond>(World));
+            return (TSecond*)GetPtr(Ecs.Pair<TFirst, TSecond>(World));
         }
 
         /// <summary>
@@ -519,7 +519,7 @@ namespace Flecs.NET.Core
         public TSecond* GetSecondPtr<TSecond>(ulong first) where TSecond : unmanaged
         {
             Ecs.Assert(Type<TSecond>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            return (TSecond*)GetPtr(Macros.PairSecond<TSecond>(first, World));
+            return (TSecond*)GetPtr(Ecs.PairSecond<TSecond>(first, World));
         }
 
         /// <summary>
@@ -542,7 +542,7 @@ namespace Flecs.NET.Core
         public Field<TFirst> Get<TFirst>(ulong second)
         {
             Ecs.Assert(Type<TFirst>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            ulong pair = Macros.Pair<TFirst>(second, World);
+            ulong pair = Ecs.Pair<TFirst>(second, World);
             return new Field<TFirst>(GetPtr(pair), ColumnSize(ColumnIndex<TFirst>()));
         }
 
@@ -583,7 +583,7 @@ namespace Flecs.NET.Core
         public Field<TFirst> GetFirst<TFirst, TSecond>()
         {
             Ecs.Assert(Type<TFirst>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            ulong pair = Ecs.Pair<TFirst, TSecond>(World);
             return new Field<TFirst>(GetPtr(pair), ColumnSize(ColumnIndex<TFirst, TSecond>()));
         }
 
@@ -596,7 +596,7 @@ namespace Flecs.NET.Core
         public Field<TSecond> GetSecond<TFirst, TSecond>()
         {
             Ecs.Assert(Type<TSecond>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            ulong pair = Macros.Pair<TFirst, TSecond>(World);
+            ulong pair = Ecs.Pair<TFirst, TSecond>(World);
             return new Field<TSecond>(GetPtr(pair), ColumnSize(ColumnIndex<TFirst, TSecond>()));
         }
 
@@ -609,7 +609,7 @@ namespace Flecs.NET.Core
         public Field<TSecond> GetSecond<TSecond>(ulong first)
         {
             Ecs.Assert(Type<TSecond>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            ulong pair = Macros.PairSecond<TSecond>(first, World);
+            ulong pair = Ecs.PairSecond<TSecond>(first, World);
             return new Field<TSecond>(GetPtr(pair), ColumnSize(ColumnIndexSecond<TSecond>(first)));
         }
 
@@ -709,7 +709,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return Macros.IsStageOrWorld(World) ? Str() : string.Empty;
+            return Ecs.IsStageOrWorld(World) ? Str() : string.Empty;
         }
 
         /// <summary>
@@ -785,7 +785,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Add(ulong first, ulong second)
         {
-            return Add(Macros.Pair(first, second));
+            return Add(Ecs.Pair(first, second));
         }
 
         /// <summary>
@@ -806,7 +806,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Add<TFirst>(ulong second)
         {
-            return Add(Macros.Pair<TFirst>(second, World));
+            return Add(Ecs.Pair<TFirst>(second, World));
         }
 
         /// <summary>
@@ -828,7 +828,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Add<TFirst, TSecond>()
         {
-            return Add(Macros.Pair<TFirst, TSecond>(World));
+            return Add(Ecs.Pair<TFirst, TSecond>(World));
         }
 
         /// <summary>
@@ -884,7 +884,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Remove(ulong first, ulong second)
         {
-            return Remove(Macros.Pair(first, second));
+            return Remove(Ecs.Pair(first, second));
         }
 
         /// <summary>
@@ -905,7 +905,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Remove<TFirst>(ulong second)
         {
-            return Remove(Macros.Pair<TFirst>(second, World));
+            return Remove(Ecs.Pair<TFirst>(second, World));
         }
 
         /// <summary>
@@ -927,7 +927,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Remove<TFirst, TSecond>()
         {
-            return Remove(Macros.Pair<TFirst, TSecond>(World));
+            return Remove(Ecs.Pair<TFirst, TSecond>(World));
         }
 
         /// <summary>
@@ -983,7 +983,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search(ulong first, ulong second)
         {
-            return Search(Macros.Pair(first, second));
+            return Search(Ecs.Pair(first, second));
         }
 
         /// <summary>
@@ -1004,7 +1004,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<TFirst>(ulong second)
         {
-            return Search(Macros.Pair<TFirst>(second, World));
+            return Search(Ecs.Pair<TFirst>(second, World));
         }
 
         /// <summary>
@@ -1026,7 +1026,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<TFirst, TSecond>()
         {
-            return Search(Macros.Pair<TFirst, TSecond>(World));
+            return Search(Ecs.Pair<TFirst, TSecond>(World));
         }
 
         /// <summary>
@@ -1061,7 +1061,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int SearchSecond<TSecond>(ulong first)
         {
-            return Search(Macros.PairSecond<TSecond>(first, World));
+            return Search(Ecs.PairSecond<TSecond>(first, World));
         }
 
         /// <summary>
@@ -1087,7 +1087,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search(ulong first, ulong second, out ulong idOut)
         {
-            return Search(Macros.Pair(first, second), out idOut);
+            return Search(Ecs.Pair(first, second), out idOut);
         }
 
         /// <summary>
@@ -1110,7 +1110,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<TFirst>(ulong second, out ulong idOut)
         {
-            return Search(Macros.Pair<TFirst>(second, World), out idOut);
+            return Search(Ecs.Pair<TFirst>(second, World), out idOut);
         }
 
         /// <summary>
@@ -1134,7 +1134,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<TFirst, TSecond>(out ulong idOut)
         {
-            return Search(Macros.Pair<TFirst, TSecond>(World), out idOut);
+            return Search(Ecs.Pair<TFirst, TSecond>(World), out idOut);
         }
 
         /// <summary>
@@ -1196,7 +1196,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search(ulong first, ulong second, out Id idOut)
         {
-            return Search(Macros.Pair(first, second), out idOut);
+            return Search(Ecs.Pair(first, second), out idOut);
         }
 
         /// <summary>
@@ -1231,7 +1231,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<TFirst>(ulong second, out Id idOut)
         {
-            return Search(Macros.Pair<TFirst>(second, World), out idOut);
+            return Search(Ecs.Pair<TFirst>(second, World), out idOut);
         }
 
         /// <summary>
@@ -1243,7 +1243,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Search<TFirst, TSecond>(out Id idOut)
         {
-            return Search(Macros.Pair<TFirst, TSecond>(World), out idOut);
+            return Search(Ecs.Pair<TFirst, TSecond>(World), out idOut);
         }
 
         /// <summary>

@@ -277,7 +277,7 @@ namespace Flecs.NET.Core
 
             ecs_entity_desc_t entityDesc = default;
             entityDesc.id = id;
-            entityDesc.use_low_id = Macros.True;
+            entityDesc.use_low_id = Utils.True;
             entityDesc.name = nativeName;
             entityDesc.symbol = nativeSymbol;
             entityDesc.sep = BindingContext.DefaultSeparator;

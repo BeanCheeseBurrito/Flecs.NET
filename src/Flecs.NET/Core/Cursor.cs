@@ -153,7 +153,7 @@ namespace Flecs.NET.Core
         {
             fixed (ecs_meta_cursor_t* cursor = &_cursor)
             {
-                return ecs_meta_set_bool(cursor, Macros.Bool(value));
+                return ecs_meta_set_bool(cursor, Utils.Bool(value));
             }
         }
 

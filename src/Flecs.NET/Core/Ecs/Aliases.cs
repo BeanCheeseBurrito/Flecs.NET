@@ -1,7 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
+    [SuppressMessage("Usage", "CA1708")]
+    [SuppressMessage("Usage", "CA1707")]
     public static partial class Ecs
     {
         // Enums
@@ -149,17 +152,17 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Reference to <see cref="ECS_PAIR"/>.
         /// </summary>
-        public static ref ulong Pair => ref ECS_PAIR;
+        public static ref ulong PAIR => ref ECS_PAIR;
 
         /// <summary>
         ///     Reference to <see cref="ECS_AUTO_OVERRIDE"/>.
         /// </summary>
-        public static ref ulong AutoOverride => ref ECS_AUTO_OVERRIDE;
+        public static ref ulong AUTO_OVERRIDE => ref ECS_AUTO_OVERRIDE;
 
         /// <summary>
         ///     Reference to <see cref="ECS_TOGGLE"/>.
         /// </summary>
-        public static ref ulong Toggle => ref ECS_TOGGLE;
+        public static ref ulong TOGGLE => ref ECS_TOGGLE;
 
         // Built-in tags
 

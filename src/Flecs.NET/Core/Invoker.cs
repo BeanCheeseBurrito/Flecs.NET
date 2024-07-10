@@ -26,9 +26,9 @@ namespace Flecs.NET.Core
         /// <exception cref="ArgumentNullException"></exception>
         public static void Iter(ecs_iter_t* iter, Ecs.IterCallback callback)
         {
-            Macros.TableLock(iter->world, iter->table);
+            Ecs.TableLock(iter->world, iter->table);
             callback(new Iter(iter));
-            Macros.TableUnlock(iter->world, iter->table);
+            Ecs.TableUnlock(iter->world, iter->table);
         }
 
         /// <summary>
@@ -42,12 +42,12 @@ namespace Flecs.NET.Core
 
             iter->flags |= EcsIterCppEach;
 
-            Macros.TableLock(iter->world, iter->table);
+            Ecs.TableLock(iter->world, iter->table);
 
             for (int i = 0; i < iter->count; i++)
                 callback(new Entity(iter->world, iter->entities[i]));
 
-            Macros.TableUnlock(iter->world, iter->table);
+            Ecs.TableUnlock(iter->world, iter->table);
         }
 
         /// <summary>
@@ -59,14 +59,14 @@ namespace Flecs.NET.Core
         {
             iter->flags |= EcsIterCppEach;
 
-            Macros.TableLock(iter->world, iter->table);
+            Ecs.TableLock(iter->world, iter->table);
 
             int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
             for (int i = 0; i < count; i++)
                 callback(new Iter(iter), i);
 
-            Macros.TableUnlock(iter->world, iter->table);
+            Ecs.TableUnlock(iter->world, iter->table);
         }
 
         /// <summary>
@@ -133,9 +133,9 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public static void Iter(ecs_iter_t* iter, delegate*<Iter, void> callback)
         {
-            Macros.TableLock(iter->world, iter->table);
+            Ecs.TableLock(iter->world, iter->table);
             callback(new Iter(iter));
-            Macros.TableUnlock(iter->world, iter->table);
+            Ecs.TableUnlock(iter->world, iter->table);
         }
 
         /// <summary>
@@ -149,12 +149,12 @@ namespace Flecs.NET.Core
 
             iter->flags |= EcsIterCppEach;
 
-            Macros.TableLock(iter->world, iter->table);
+            Ecs.TableLock(iter->world, iter->table);
 
             for (int i = 0; i < iter->count; i++)
                 callback(new Entity(iter->world, iter->entities[i]));
 
-            Macros.TableUnlock(iter->world, iter->table);
+            Ecs.TableUnlock(iter->world, iter->table);
         }
 
         /// <summary>
@@ -166,14 +166,14 @@ namespace Flecs.NET.Core
         {
             iter->flags |= EcsIterCppEach;
 
-            Macros.TableLock(iter->world, iter->table);
+            Ecs.TableLock(iter->world, iter->table);
 
             int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
 
             for (int i = 0; i < count; i++)
                 callback(new Iter(iter), i);
 
-            Macros.TableUnlock(iter->world, iter->table);
+            Ecs.TableUnlock(iter->world, iter->table);
         }
 
         /// <summary>

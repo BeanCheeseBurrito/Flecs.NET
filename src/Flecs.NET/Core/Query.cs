@@ -122,7 +122,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Changed()
         {
-            return Macros.Bool(ecs_query_changed(Handle));
+            return Utils.Bool(ecs_query_changed(Handle));
         }
 
         /// <summary>
@@ -416,14 +416,14 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool GetNext(ecs_iter_t* it)
         {
-            return Macros.Bool(ecs_query_next(it));
+            return Utils.Bool(ecs_query_next(it));
         }
 
         /// <inheritdoc cref="IIterable.GetNextInstanced"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool GetNextInstanced(ecs_iter_t* it)
         {
-            return Macros.Bool(flecs_query_next_instanced(it));
+            return Utils.Bool(flecs_query_next_instanced(it));
         }
 
         /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.World)"/>

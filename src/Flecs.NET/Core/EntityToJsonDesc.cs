@@ -24,14 +24,14 @@ namespace Flecs.NET.Core
         {
             Desc = new ecs_entity_to_json_desc_t()
             {
-                serialize_doc =        Macros.False,
-                serialize_full_paths = Macros.False,
-                serialize_inherited =  Macros.False,
-                serialize_values =     Macros.True,
-                serialize_type_info =  Macros.False,
-                serialize_alerts =     Macros.False,
+                serialize_doc =        Utils.False,
+                serialize_full_paths = Utils.False,
+                serialize_inherited =  Utils.False,
+                serialize_values =     Utils.True,
+                serialize_type_info =  Utils.False,
+                serialize_alerts =     Utils.False,
                 serialize_refs =       0,
-                serialize_matches =    Macros.False
+                serialize_matches =    Utils.False
             }
         };
 
@@ -43,7 +43,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref EntityToJsonDesc EntityId(bool value = true)
         {
-            Desc.serialize_entity_id = Macros.Bool(value);
+            Desc.serialize_entity_id = Utils.Bool(value);
             return ref this;
         }
 
@@ -55,7 +55,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref EntityToJsonDesc Doc(bool value = true)
         {
-            Desc.serialize_doc = Macros.Bool(value);
+            Desc.serialize_doc = Utils.Bool(value);
             return ref this;
         }
 
@@ -67,7 +67,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref EntityToJsonDesc FullPaths(bool value = true)
         {
-            Desc.serialize_full_paths = Macros.Bool(value);
+            Desc.serialize_full_paths = Utils.Bool(value);
             return ref this;
         }
 
@@ -79,7 +79,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref EntityToJsonDesc Inherited(bool value = true)
         {
-            Desc.serialize_inherited = Macros.Bool(value);
+            Desc.serialize_inherited = Utils.Bool(value);
             return ref this;
         }
 
@@ -91,7 +91,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref EntityToJsonDesc Values(bool value = true)
         {
-            Desc.serialize_values = Macros.Bool(value);
+            Desc.serialize_values = Utils.Bool(value);
             return ref this;
         }
 
@@ -103,7 +103,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref EntityToJsonDesc TypeInfo(bool value = true)
         {
-            Desc.serialize_type_info = Macros.Bool(value);
+            Desc.serialize_type_info = Utils.Bool(value);
             return ref this;
         }
 
@@ -115,7 +115,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref EntityToJsonDesc Alerts(bool value = true)
         {
-            Desc.serialize_alerts = Macros.Bool(value);
+            Desc.serialize_alerts = Utils.Bool(value);
             return ref this;
         }
 
@@ -139,7 +139,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref EntityToJsonDesc Matches(bool value = true)
         {
-            Desc.serialize_matches = Macros.Bool(value);
+            Desc.serialize_matches = Utils.Bool(value);
             return ref this;
         }
 

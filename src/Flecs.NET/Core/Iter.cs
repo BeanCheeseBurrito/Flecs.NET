@@ -286,7 +286,7 @@ namespace Flecs.NET.Core
         {
             Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             ulong id = ecs_field_id(Handle, index);
-            Ecs.Assert(Macros.EntityHasIdFlag(id, ECS_PAIR) != 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(Ecs.EntityHasIdFlag(id, ECS_PAIR) != 0, nameof(ECS_INVALID_PARAMETER));
             return new Id(Handle->world, id);
         }
 
@@ -351,7 +351,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Changed()
         {
-            return Macros.Bool(ecs_iter_changed(Handle));
+            return Utils.Bool(ecs_iter_changed(Handle));
         }
 
         /// <summary>
@@ -409,7 +409,7 @@ namespace Flecs.NET.Core
         public bool Next()
         {
             if ((Handle->flags & EcsIterIsValid) != 0 && Handle->table != null)
-                Macros.TableUnlock(Handle->world, Handle->table);
+                Ecs.TableUnlock(Handle->world, Handle->table);
 
 #if NET5_0_OR_GREATER
             bool result = ((delegate*<ecs_iter_t*, byte>)Handle->next)(Handle) != 0;
@@ -420,7 +420,7 @@ namespace Flecs.NET.Core
             Handle->flags |= EcsIterIsValid;
 
             if (result && Handle->table != null)
-                Macros.TableLock(Handle->world, Handle->table);
+                Ecs.TableLock(Handle->world, Handle->table);
 
             return result;
         }
@@ -455,7 +455,7 @@ namespace Flecs.NET.Core
                 return;
 
             if ((Handle->flags & EcsIterIsValid) != 0 && Handle->table != null)
-                Macros.TableUnlock(Handle->world, Handle->table);
+                Ecs.TableUnlock(Handle->world, Handle->table);
 
             ecs_iter_fini(Handle);
             Handle = null;
@@ -475,7 +475,7 @@ namespace Flecs.NET.Core
             Ecs.Assert((iter->flags & EcsIterIsValid) != 0, "Operation is invalid before calling .Next().");
             Ecs.Assert(index >= 0 && index < iter->field_count, "Field index out of range.");
 
-            if (Macros.TypeIdIs<T>(iter->world, iter->ids[index]))
+            if (Ecs.TypeIdIs<T>(iter->world, iter->ids[index]))
                 return;
 
             Entity expected = new Entity(iter->world, iter->ids[index]);

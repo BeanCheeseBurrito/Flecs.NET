@@ -37,7 +37,7 @@ namespace Flecs.NET.Core
 
             ecs_entity_desc_t entityDesc = default;
             RoutineDesc.entity = ecs_entity_init(world, &entityDesc);
-            ecs_add_id(world, RoutineDesc.entity, Macros.DependsOn(EcsOnUpdate));
+            ecs_add_id(world, RoutineDesc.entity, Ecs.Pair(EcsDependsOn, EcsOnUpdate));
             ecs_add_id(world, RoutineDesc.entity, EcsOnUpdate);
         }
 
@@ -60,7 +60,7 @@ namespace Flecs.NET.Core
             entityDesc.root_sep = BindingContext.DefaultSeparator;
 
             RoutineDesc.entity = ecs_entity_init(world, &entityDesc);
-            ecs_add_id(world, RoutineDesc.entity, Macros.DependsOn(EcsOnUpdate));
+            ecs_add_id(world, RoutineDesc.entity, Ecs.Pair(EcsDependsOn, EcsOnUpdate));
             ecs_add_id(world, RoutineDesc.entity, EcsOnUpdate);
         }
 
@@ -86,13 +86,13 @@ namespace Flecs.NET.Core
 
             if (currentPhase != 0)
             {
-                ecs_remove_id(World, RoutineDesc.entity, Macros.DependsOn(currentPhase));
+                ecs_remove_id(World, RoutineDesc.entity, Ecs.Pair(EcsDependsOn, currentPhase));
                 ecs_remove_id(World, RoutineDesc.entity, currentPhase);
             }
 
             if (phase != 0)
             {
-                ecs_add_id(World, RoutineDesc.entity, Macros.DependsOn(phase));
+                ecs_add_id(World, RoutineDesc.entity, Ecs.Pair(EcsDependsOn, phase));
                 ecs_add_id(World, RoutineDesc.entity, phase);
             }
 
@@ -127,7 +127,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref RoutineBuilder MultiThreaded(bool value = true)
         {
-            RoutineDesc.multi_threaded = Macros.Bool(value);
+            RoutineDesc.multi_threaded = Utils.Bool(value);
             return ref this;
         }
 
@@ -138,7 +138,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref RoutineBuilder Immediate(bool value = true)
         {
-            RoutineDesc.immediate = Macros.Bool(value);
+            RoutineDesc.immediate = Utils.Bool(value);
             return ref this;
         }
 

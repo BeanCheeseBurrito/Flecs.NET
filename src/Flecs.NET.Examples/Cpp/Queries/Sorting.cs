@@ -54,7 +54,7 @@ public static unsafe class Cpp_Queries_Sorting
     {
         Position* pos1 = (Position*)p1;
         Position* pos2 = (Position*)p2;
-        return Macros.Bool(pos1->X > pos2->X) - Macros.Bool(pos1->X < pos2->X);
+        return Utils.Bool(pos1->X > pos2->X) - Utils.Bool(pos1->X < pos2->X);
     }
 
     // Iterate query, printed values will be ordered

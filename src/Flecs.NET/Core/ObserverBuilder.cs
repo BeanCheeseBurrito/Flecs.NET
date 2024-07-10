@@ -97,7 +97,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref ObserverBuilder YieldExisting(bool value = true)
         {
-            ObserverDesc.yield_existing = Macros.Bool(value);
+            ObserverDesc.yield_existing = Utils.Bool(value);
             return ref this;
         }
 

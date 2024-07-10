@@ -1,5 +1,4 @@
 using System;
-using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
@@ -69,7 +68,7 @@ namespace Flecs.NET.Core
         {
             _world = world;
             _value = default;
-            Value.id = Macros.Pair(first, second);
+            Value.id = Ecs.Pair(first, second);
         }
 
         /// <summary>
@@ -122,7 +121,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetSrc()
         {
-            return new Entity(World, Macros.TermRefId(ref Value.src));
+            return new Entity(World, Ecs.TermRefId(ref Value.src));
         }
 
         /// <summary>
@@ -131,7 +130,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetFirst()
         {
-            return new Entity(World, Macros.TermRefId(ref Value.first));
+            return new Entity(World, Ecs.TermRefId(ref Value.first));
         }
 
         /// <summary>
@@ -140,7 +139,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetSecond()
         {
-            return new Entity(World, Macros.TermRefId(ref Value.second));
+            return new Entity(World, Ecs.TermRefId(ref Value.second));
         }
 
         /// <summary>

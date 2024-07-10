@@ -2389,7 +2389,7 @@ namespace Flecs.NET.Tests.Cpp
         private static ulong group_by_rel(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
         {
             ulong match;
-            return ecs_search(world, table, Macros.Pair(id, EcsWildcard), &match) != -1 ? Macros.PairSecond(match) : 0;
+            return ecs_search(world, table, Ecs.Pair(id, EcsWildcard), &match) != -1 ? Ecs.PairSecond(match) : 0;
         }
 
         [Theory]
