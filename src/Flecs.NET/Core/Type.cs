@@ -307,10 +307,10 @@ namespace Flecs.NET.Core
                 return component;
 
             ecs_type_hooks_t hooksDesc = default;
-            hooksDesc.ctor = BindingContext<T>.DefaultManagedCtorPointer;
-            hooksDesc.dtor = BindingContext<T>.DefaultManagedDtorPointer;
-            hooksDesc.move = BindingContext<T>.DefaultManagedMovePointer;
-            hooksDesc.copy = BindingContext<T>.DefaultManagedCopyPointer;
+            hooksDesc.ctor = BindingContext<T>.DefaultManagedCtorCallbackPointer;
+            hooksDesc.dtor = BindingContext<T>.DefaultManagedDtorCallbackPointer;
+            hooksDesc.move = BindingContext<T>.DefaultManagedMoveCallbackPointer;
+            hooksDesc.copy = BindingContext<T>.DefaultManagedCopyCallbackPointer;
             ecs_set_hooks_id(world, component, &hooksDesc);
 
             return component;

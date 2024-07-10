@@ -428,23 +428,23 @@ namespace Flecs.NET.Core
     internal static unsafe partial class BindingContext<T0>
     {
 #if NET5_0_OR_GREATER
-        internal static readonly IntPtr EntityObserverEachPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEach;
-        internal static readonly IntPtr EntityObserverEachEntityPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEachEntity;
+        internal static readonly IntPtr EntityObserverEachRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEachRefCallback;
+        internal static readonly IntPtr EntityObserverEachEntityRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEachEntityRefCallback;
 
-        internal static readonly IntPtr UnmanagedCtorPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&UnmanagedCtor;
-        internal static readonly IntPtr UnmanagedDtorPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&UnmanagedDtor;
-        internal static readonly IntPtr UnmanagedMovePointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&UnmanagedMove;
-        internal static readonly IntPtr UnmanagedCopyPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&UnmanagedCopy;
+        internal static readonly IntPtr UnmanagedCtorCallbackPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&UnmanagedCtorCallback;
+        internal static readonly IntPtr UnmanagedDtorCallbackPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&UnmanagedDtorCallback;
+        internal static readonly IntPtr UnmanagedMoveCallbackPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&UnmanagedMoveCallback;
+        internal static readonly IntPtr UnmanagedCopyCallbackPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&UnmanagedCopyCallback;
 
-        internal static readonly IntPtr ManagedCtorPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&ManagedCtor;
-        internal static readonly IntPtr ManagedDtorPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&ManagedDtor;
-        internal static readonly IntPtr ManagedMovePointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&ManagedMove;
-        internal static readonly IntPtr ManagedCopyPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&ManagedCopy;
+        internal static readonly IntPtr ManagedCtorCallbackPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&ManagedCtorCallback;
+        internal static readonly IntPtr ManagedDtorCallbackPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&ManagedDtorCallback;
+        internal static readonly IntPtr ManagedMoveCallbackPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&ManagedMoveCallback;
+        internal static readonly IntPtr ManagedCopyCallbackPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&ManagedCopyCallback;
 
-        internal static readonly IntPtr DefaultManagedCtorPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&DefaultManagedCtor;
-        internal static readonly IntPtr DefaultManagedDtorPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&DefaultManagedDtor;
-        internal static readonly IntPtr DefaultManagedMovePointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&DefaultManagedMove;
-        internal static readonly IntPtr DefaultManagedCopyPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&DefaultManagedCopy;
+        internal static readonly IntPtr DefaultManagedCtorCallbackPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&DefaultManagedCtorCallback;
+        internal static readonly IntPtr DefaultManagedDtorCallbackPointer = (IntPtr)(delegate* <void*, int, ecs_type_info_t*, void>)&DefaultManagedDtorCallback;
+        internal static readonly IntPtr DefaultManagedMoveCallbackPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&DefaultManagedMoveCallback;
+        internal static readonly IntPtr DefaultManagedCopyCallbackPointer = (IntPtr)(delegate* <void*, void*, int, ecs_type_info_t*, void>)&DefaultManagedCopyCallback;
 
         internal static readonly IntPtr OnAddIterFieldCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnAddIterFieldCallback;
         internal static readonly IntPtr OnSetIterFieldCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetIterFieldCallback;
@@ -483,23 +483,23 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr OnRemoveEachIterPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveEachIterPointerCallback;
 
 #else
-        private static readonly Ecs.IterAction EntityObserverEachReference = EntityObserverEach;
-        private static readonly Ecs.IterAction EntityObserverEachEntityReference = EntityObserverEachEntity;
+        private static readonly Ecs.IterAction EntityObserverEachRefCallbackReference = EntityObserverEachRefCallback;
+        private static readonly Ecs.IterAction EntityObserverEachEntityRefCallbackReference = EntityObserverEachEntityRefCallback;
 
-        private static readonly Ecs.CtorCallback UnmanagedCtorReference = UnmanagedCtor;
-        private static readonly Ecs.DtorCallback UnmanagedDtorReference = UnmanagedDtor;
-        private static readonly Ecs.MoveCallback UnmanagedMoveReference = UnmanagedMove;
-        private static readonly Ecs.CopyCallback UnmanagedCopyReference = UnmanagedCopy;
+        private static readonly Ecs.CtorCallback UnmanagedCtorCallbackReference = UnmanagedCtorCallback;
+        private static readonly Ecs.DtorCallback UnmanagedDtorCallbackReference = UnmanagedDtorCallback;
+        private static readonly Ecs.MoveCallback UnmanagedMoveCallbackReference = UnmanagedMoveCallback;
+        private static readonly Ecs.CopyCallback UnmanagedCopyCallbackReference = UnmanagedCopyCallback;
 
-        private static readonly Ecs.CtorCallback ManagedCtorReference = ManagedCtor;
-        private static readonly Ecs.DtorCallback ManagedDtorReference = ManagedDtor;
-        private static readonly Ecs.MoveCallback ManagedMoveReference = ManagedMove;
-        private static readonly Ecs.CopyCallback ManagedCopyReference = ManagedCopy;
+        private static readonly Ecs.CtorCallback ManagedCtorCallbackReference = ManagedCtorCallback;
+        private static readonly Ecs.DtorCallback ManagedDtorCallbackReference = ManagedDtorCallback;
+        private static readonly Ecs.MoveCallback ManagedMoveCallbackReference = ManagedMoveCallback;
+        private static readonly Ecs.CopyCallback ManagedCopyCallbackReference = ManagedCopyCallback;
 
-        private static readonly Ecs.CtorCallback DefaultManagedCtorReference = DefaultManagedCtor;
-        private static readonly Ecs.DtorCallback DefaultManagedDtorReference = DefaultManagedDtor;
-        private static readonly Ecs.MoveCallback DefaultManagedMoveReference = DefaultManagedMove;
-        private static readonly Ecs.CopyCallback DefaultManagedCopyReference = DefaultManagedCopy;
+        private static readonly Ecs.CtorCallback DefaultManagedCtorCallbackReference = DefaultManagedCtorCallback;
+        private static readonly Ecs.DtorCallback DefaultManagedDtorCallbackReference = DefaultManagedDtorCallback;
+        private static readonly Ecs.MoveCallback DefaultManagedMoveCallbackReference = DefaultManagedMoveCallback;
+        private static readonly Ecs.CopyCallback DefaultManagedCopyCallbackReference = DefaultManagedCopyCallback;
 
         private static readonly Ecs.IterAction OnAddIterFieldCallbackReference = OnAddIterFieldCallback;
         private static readonly Ecs.IterAction OnSetIterFieldCallbackReference = OnSetIterFieldCallback;
@@ -537,23 +537,23 @@ namespace Flecs.NET.Core
         private static readonly Ecs.IterAction OnSetEachIterPointerCallbackReference = OnSetEachIterPointerCallback;
         private static readonly Ecs.IterAction OnRemoveEachIterPointerCallbackReference = OnRemoveEachIterPointerCallback;
 
-        internal static readonly IntPtr EntityObserverEachPointer = Marshal.GetFunctionPointerForDelegate(EntityObserverEachReference);
-        internal static readonly IntPtr EntityObserverEachEntityPointer = Marshal.GetFunctionPointerForDelegate(EntityObserverEachEntityReference);
+        internal static readonly IntPtr EntityObserverEachRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(EntityObserverEachRefCallbackReference);
+        internal static readonly IntPtr EntityObserverEachEntityRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(EntityObserverEachEntityRefCallbackReference);
 
-        internal static readonly IntPtr UnmanagedCtorPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedCtorReference);
-        internal static readonly IntPtr UnmanagedDtorPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedDtorReference);
-        internal static readonly IntPtr UnmanagedMovePointer = Marshal.GetFunctionPointerForDelegate(UnmanagedMoveReference);
-        internal static readonly IntPtr UnmanagedCopyPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedCopyReference);
+        internal static readonly IntPtr UnmanagedCtorCallbackPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedCtorCallbackReference);
+        internal static readonly IntPtr UnmanagedDtorCallbackPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedDtorCallbackReference);
+        internal static readonly IntPtr UnmanagedMoveCallbackPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedMoveCallbackReference);
+        internal static readonly IntPtr UnmanagedCopyCallbackPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedCopyCallbackReference);
 
-        internal static readonly IntPtr ManagedCtorPointer = Marshal.GetFunctionPointerForDelegate(ManagedCtorReference);
-        internal static readonly IntPtr ManagedDtorPointer = Marshal.GetFunctionPointerForDelegate(ManagedDtorReference);
-        internal static readonly IntPtr ManagedMovePointer = Marshal.GetFunctionPointerForDelegate(ManagedMoveReference);
-        internal static readonly IntPtr ManagedCopyPointer = Marshal.GetFunctionPointerForDelegate(ManagedCopyReference);
+        internal static readonly IntPtr ManagedCtorCallbackPointer = Marshal.GetFunctionPointerForDelegate(ManagedCtorCallbackReference);
+        internal static readonly IntPtr ManagedDtorCallbackPointer = Marshal.GetFunctionPointerForDelegate(ManagedDtorCallbackReference);
+        internal static readonly IntPtr ManagedMoveCallbackPointer = Marshal.GetFunctionPointerForDelegate(ManagedMoveCallbackReference);
+        internal static readonly IntPtr ManagedCopyCallbackPointer = Marshal.GetFunctionPointerForDelegate(ManagedCopyCallbackReference);
 
-        internal static readonly IntPtr DefaultManagedCtorPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedCtorReference);
-        internal static readonly IntPtr DefaultManagedDtorPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedDtorReference);
-        internal static readonly IntPtr DefaultManagedMovePointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedMoveReference);
-        internal static readonly IntPtr DefaultManagedCopyPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedCopyReference);
+        internal static readonly IntPtr DefaultManagedCtorCallbackPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedCtorCallbackReference);
+        internal static readonly IntPtr DefaultManagedDtorCallbackPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedDtorCallbackReference);
+        internal static readonly IntPtr DefaultManagedMoveCallbackPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedMoveCallbackReference);
+        internal static readonly IntPtr DefaultManagedCopyCallbackPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedCopyCallbackReference);
 
         internal static readonly IntPtr OnAddIterFieldCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddIterFieldCallbackReference);
         internal static readonly IntPtr OnSetIterFieldCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetIterFieldCallbackReference);
@@ -592,21 +592,21 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr OnRemoveEachIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachIterPointerCallbackReference);
 #endif
 
-        private static void EntityObserverEach(ecs_iter_t* iter)
+        private static void EntityObserverEachRefCallback(ecs_iter_t* iter)
         {
             BindingContext.IteratorContext* context = (BindingContext.IteratorContext*)iter->callback_ctx;
             Ecs.EachRefCallback<T0> callback = (Ecs.EachRefCallback<T0>)context->Callback.GcHandle.Target!;
             Invoker.Observe(iter, callback);
         }
 
-        private static void EntityObserverEachEntity(ecs_iter_t* iter)
+        private static void EntityObserverEachEntityRefCallback(ecs_iter_t* iter)
         {
             BindingContext.IteratorContext* context = (BindingContext.IteratorContext*)iter->callback_ctx;
             Ecs.EachEntityRefCallback<T0> callback = (Ecs.EachEntityRefCallback<T0>)context->Callback.GcHandle.Target!;
             Invoker.Observe(iter, callback);
         }
 
-        private static void UnmanagedCtor(void* dataHandle, int count, ecs_type_info_t* typeInfoHandle)
+        private static void UnmanagedCtorCallback(void* dataHandle, int count, ecs_type_info_t* typeInfoHandle)
         {
             TypeInfo typeInfo = new TypeInfo(typeInfoHandle);
 
@@ -621,7 +621,7 @@ namespace Flecs.NET.Core
                 callback(ref data[i], typeInfo);
         }
 
-        private static void UnmanagedDtor(void* dataHandle, int count, ecs_type_info_t* typeInfoHandle)
+        private static void UnmanagedDtorCallback(void* dataHandle, int count, ecs_type_info_t* typeInfoHandle)
         {
             TypeInfo typeInfo = new TypeInfo(typeInfoHandle);
 
@@ -636,7 +636,7 @@ namespace Flecs.NET.Core
                 callback(ref data[i], typeInfo);
         }
 
-        private static void UnmanagedMove(void* dstHandle, void* srcHandle, int count, ecs_type_info_t* typeInfoHandle)
+        private static void UnmanagedMoveCallback(void* dstHandle, void* srcHandle, int count, ecs_type_info_t* typeInfoHandle)
         {
             TypeInfo typeInfo = new TypeInfo(typeInfoHandle);
 
@@ -652,7 +652,7 @@ namespace Flecs.NET.Core
                 callback(ref dst[i], ref src[i], typeInfo);
         }
 
-        private static void UnmanagedCopy(void* dstHandle, void* srcHandle, int count, ecs_type_info_t* typeInfoHandle)
+        private static void UnmanagedCopyCallback(void* dstHandle, void* srcHandle, int count, ecs_type_info_t* typeInfoHandle)
         {
             TypeInfo typeInfo = new TypeInfo(typeInfoHandle);
 
@@ -668,7 +668,7 @@ namespace Flecs.NET.Core
                 callback(ref dst[i], ref src[i], typeInfo);
         }
 
-        private static void ManagedCtor(void* data, int count, ecs_type_info_t* typeInfoHandle)
+        private static void ManagedCtorCallback(void* data, int count, ecs_type_info_t* typeInfoHandle)
         {
             BindingContext.TypeHooksContext* context =
                 (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
@@ -686,7 +686,7 @@ namespace Flecs.NET.Core
             }
         }
 
-        private static void ManagedDtor(void* data, int count, ecs_type_info_t* typeInfoHandle)
+        private static void ManagedDtorCallback(void* data, int count, ecs_type_info_t* typeInfoHandle)
         {
             BindingContext.TypeHooksContext* context =
                 (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
@@ -705,7 +705,7 @@ namespace Flecs.NET.Core
             }
         }
 
-        private static void ManagedMove(void* dst, void* src, int count, ecs_type_info_t* typeInfoHandle)
+        private static void ManagedMoveCallback(void* dst, void* src, int count, ecs_type_info_t* typeInfoHandle)
         {
             BindingContext.TypeHooksContext* context =
                 (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
@@ -727,7 +727,7 @@ namespace Flecs.NET.Core
             }
         }
 
-        private static void ManagedCopy(void* dst, void* src, int count, ecs_type_info_t* typeInfoHandle)
+        private static void ManagedCopyCallback(void* dst, void* src, int count, ecs_type_info_t* typeInfoHandle)
         {
             BindingContext.TypeHooksContext* context =
                 (BindingContext.TypeHooksContext*)typeInfoHandle->hooks.binding_ctx;
@@ -752,7 +752,7 @@ namespace Flecs.NET.Core
         // For managed types, create a strong box and attempt to set it's value with Activator.CreateInstance<T0>().
         // If no public parameterless constructor exists, the strong box will point to a null value until
         // .Set is called.
-        private static void DefaultManagedCtor(void* data, int count, ecs_type_info_t* typeInfoHandle)
+        private static void DefaultManagedCtorCallback(void* data, int count, ecs_type_info_t* typeInfoHandle)
         {
             GCHandle* handles = (GCHandle*)data;
 
@@ -760,7 +760,7 @@ namespace Flecs.NET.Core
                 handles[i] = GCHandle.Alloc(new BindingContext.Box<T0>());
         }
 
-        private static void DefaultManagedDtor(void* data, int count, ecs_type_info_t* typeInfoHandle)
+        private static void DefaultManagedDtorCallback(void* data, int count, ecs_type_info_t* typeInfoHandle)
         {
             GCHandle* handles = (GCHandle*)data;
 
@@ -771,7 +771,7 @@ namespace Flecs.NET.Core
             }
         }
 
-        private static void DefaultManagedMove(void* dst, void* src, int count, ecs_type_info_t* typeInfoHandle)
+        private static void DefaultManagedMoveCallback(void* dst, void* src, int count, ecs_type_info_t* typeInfoHandle)
         {
             GCHandle* dstHandles = (GCHandle*)dst;
             GCHandle* srcHandles = (GCHandle*)src;
@@ -789,7 +789,7 @@ namespace Flecs.NET.Core
             }
         }
 
-        private static void DefaultManagedCopy(void* dst, void* src, int count, ecs_type_info_t* typeInfoHandle)
+        private static void DefaultManagedCopyCallback(void* dst, void* src, int count, ecs_type_info_t* typeInfoHandle)
         {
             GCHandle* dstHandles = (GCHandle*)dst;
             GCHandle* srcHandles = (GCHandle*)src;

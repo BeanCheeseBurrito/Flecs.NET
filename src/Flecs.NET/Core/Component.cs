@@ -404,16 +404,16 @@ namespace Flecs.NET.Core
 
             Ecs.Assert(
                 hooks.ctor == IntPtr.Zero ||
-                hooks.ctor == BindingContext<TComponent>.UnmanagedCtorPointer ||
-                hooks.ctor == BindingContext<TComponent>.DefaultManagedCtorPointer ||
-                hooks.ctor == BindingContext<TComponent>.ManagedCtorPointer,
+                hooks.ctor == BindingContext<TComponent>.UnmanagedCtorCallbackPointer ||
+                hooks.ctor == BindingContext<TComponent>.DefaultManagedCtorCallbackPointer ||
+                hooks.ctor == BindingContext<TComponent>.ManagedCtorCallbackPointer,
                 "Cannot register Ctor hook because it is already registered by a non Flecs.NET application.");
 
             BindingContext.SetCallback(ref context->Ctor, callback, false);
 
             hooks.ctor = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
-                ? BindingContext<TComponent>.ManagedCtorPointer
-                : BindingContext<TComponent>.UnmanagedCtorPointer;
+                ? BindingContext<TComponent>.ManagedCtorCallbackPointer
+                : BindingContext<TComponent>.UnmanagedCtorCallbackPointer;
 
             ecs_set_hooks_id(World, Id, &hooks);
 
@@ -431,16 +431,16 @@ namespace Flecs.NET.Core
 
             Ecs.Assert(
                 hooks.dtor == IntPtr.Zero ||
-                hooks.dtor == BindingContext<TComponent>.UnmanagedDtorPointer ||
-                hooks.dtor == BindingContext<TComponent>.DefaultManagedDtorPointer ||
-                hooks.dtor == BindingContext<TComponent>.ManagedDtorPointer,
+                hooks.dtor == BindingContext<TComponent>.UnmanagedDtorCallbackPointer ||
+                hooks.dtor == BindingContext<TComponent>.DefaultManagedDtorCallbackPointer ||
+                hooks.dtor == BindingContext<TComponent>.ManagedDtorCallbackPointer,
                 "Cannot register Dtor hook because it is already registered by a non Flecs.NET application.");
 
             BindingContext.SetCallback(ref context->Dtor, callback, false);
 
             hooks.dtor = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
-                ? BindingContext<TComponent>.ManagedDtorPointer
-                : BindingContext<TComponent>.UnmanagedDtorPointer;
+                ? BindingContext<TComponent>.ManagedDtorCallbackPointer
+                : BindingContext<TComponent>.UnmanagedDtorCallbackPointer;
 
             ecs_set_hooks_id(World, Id, &hooks);
 
@@ -458,16 +458,16 @@ namespace Flecs.NET.Core
 
             Ecs.Assert(
                 hooks.move == IntPtr.Zero ||
-                hooks.move == BindingContext<TComponent>.UnmanagedMovePointer ||
-                hooks.move == BindingContext<TComponent>.DefaultManagedMovePointer ||
-                hooks.move == BindingContext<TComponent>.ManagedMovePointer,
+                hooks.move == BindingContext<TComponent>.UnmanagedMoveCallbackPointer ||
+                hooks.move == BindingContext<TComponent>.DefaultManagedMoveCallbackPointer ||
+                hooks.move == BindingContext<TComponent>.ManagedMoveCallbackPointer,
                 "Cannot register Move hook because it is already registered by a non Flecs.NET application.");
 
             BindingContext.SetCallback(ref context->Move, callback, false);
 
             hooks.move = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
-                ? BindingContext<TComponent>.ManagedMovePointer
-                : BindingContext<TComponent>.UnmanagedMovePointer;
+                ? BindingContext<TComponent>.ManagedMoveCallbackPointer
+                : BindingContext<TComponent>.UnmanagedMoveCallbackPointer;
 
             ecs_set_hooks_id(World, Id, &hooks);
 
@@ -485,16 +485,16 @@ namespace Flecs.NET.Core
 
             Ecs.Assert(
                 hooks.copy == IntPtr.Zero ||
-                hooks.copy == BindingContext<TComponent>.UnmanagedCopyPointer ||
-                hooks.copy == BindingContext<TComponent>.DefaultManagedCopyPointer ||
-                hooks.copy == BindingContext<TComponent>.ManagedCopyPointer,
+                hooks.copy == BindingContext<TComponent>.UnmanagedCopyCallbackPointer ||
+                hooks.copy == BindingContext<TComponent>.DefaultManagedCopyCallbackPointer ||
+                hooks.copy == BindingContext<TComponent>.ManagedCopyCallbackPointer,
                 "Cannot register Copy hook because it is already registered by a non Flecs.NET application.");
 
             BindingContext.SetCallback(ref context->Copy, callback, false);
 
             hooks.copy = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
-                ? BindingContext<TComponent>.ManagedCopyPointer
-                : BindingContext<TComponent>.UnmanagedCopyPointer;
+                ? BindingContext<TComponent>.ManagedCopyCallbackPointer
+                : BindingContext<TComponent>.UnmanagedCopyCallbackPointer;
 
             ecs_set_hooks_id(World, Id, &hooks);
 
