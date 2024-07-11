@@ -1,3 +1,4 @@
 [submodule "submodules/flecs"]
 	path = submodules/flecs
 	url = https://github.com/SanderMertens/flecs
+	branch = v4

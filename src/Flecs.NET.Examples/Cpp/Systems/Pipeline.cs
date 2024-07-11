@@ -29,12 +29,12 @@ public static class Cpp_Systems_Pipeline
 
         // Create a few test entities for a Position, Velocity query
         world.Entity("e1")
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(1, 2));
+            .Set(new Position(10, 20))
+            .Set(new Velocity(1, 2));
 
         world.Entity("e2")
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(3, 4));
+            .Set(new Position(10, 20))
+            .Set(new Velocity(3, 4));
 
         // Run the default pipeline. This will run all systems ordered by their
         // phase. Systems within the same phase are ran in declaration order. This

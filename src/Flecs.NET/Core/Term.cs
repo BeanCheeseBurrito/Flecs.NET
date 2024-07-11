@@ -1,6 +1,5 @@
 using System;
-using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -69,7 +68,7 @@ namespace Flecs.NET.Core
         {
             _world = world;
             _value = default;
-            Value.id = Macros.Pair(first, second);
+            Value.id = Ecs.Pair(first, second);
         }
 
         /// <summary>
@@ -104,7 +103,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ecs_inout_kind_t InOut()
         {
-            return Value.inout;
+            return (ecs_inout_kind_t)Value.inout;
         }
 
         /// <summary>
@@ -113,7 +112,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ecs_oper_kind_t Oper()
         {
-            return Value.oper;
+            return (ecs_oper_kind_t)Value.oper;
         }
 
         /// <summary>
@@ -122,7 +121,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetSrc()
         {
-            return new Entity(World, Value.src.id);
+            return new Entity(World, Ecs.TermRefId(ref Value.src));
         }
 
         /// <summary>
@@ -131,7 +130,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetFirst()
         {
-            return new Entity(World, Value.first.id);
+            return new Entity(World, Ecs.TermRefId(ref Value.first));
         }
 
         /// <summary>
@@ -140,7 +139,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetSecond()
         {
-            return new Entity(World, Value.second.id);
+            return new Entity(World, Ecs.TermRefId(ref Value.second));
         }
 
         /// <summary>

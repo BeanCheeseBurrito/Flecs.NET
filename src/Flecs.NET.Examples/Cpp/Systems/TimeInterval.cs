@@ -10,11 +10,11 @@ public static class Cpp_Systems_TimeInterval
 
         world.Routine("Tick")
             .Interval(1.0f)
-            .Iter(Tick);
+            .Run(Tick);
 
         world.Routine("FastTick")
             .Interval(0.5f)
-            .Iter(Tick);
+            .Run(Tick);
 
         // Run the main loop at 60 FPS
         world.SetTargetFps(60);
@@ -25,6 +25,10 @@ public static class Cpp_Systems_TimeInterval
     private static void Tick(Iter it)
     {
         Console.WriteLine(it.System().ToString());
+
+        // Quit after 2 seconds.
+        if (it.World().GetInfo().WorldTimeTotal > 2)
+            it.World().Quit();
     }
 }
 
@@ -35,8 +39,3 @@ public static class Cpp_Systems_TimeInterval
 // FastTick
 // Tick
 // FastTick
-// FastTick
-// Tick
-// FastTick
-// FastTick
-// ...

@@ -40,7 +40,7 @@ public static class Cpp_Relationships_RelationComponent
 
         // You can prevent a pair from assuming the type of a component by adding
         // the Tag property to a relationship:
-        world.Component<MustHave>().Entity.Add(Ecs.Tag);
+        world.Component<MustHave>().Entity.Add(Ecs.PairIsTag);
 
         // Even though Position is a component, <MustHave, Position> contains no
         // data because MustHave has the Tag property.
@@ -54,8 +54,8 @@ public static class Cpp_Relationships_RelationComponent
 
         // When querying for a relationship component, add the pair type as template
         // argument to the builder:
-        Query q = world.QueryBuilder<Requires>()
-            .TermAt(1).Second<Gigawatts>() // Set second part of pair for first term
+        using Query q = world.QueryBuilder<Requires>()
+            .TermAt(0).Second<Gigawatts>() // Set second part of pair for first term
             .Build();
 
         // When iterating, always use the pair type:

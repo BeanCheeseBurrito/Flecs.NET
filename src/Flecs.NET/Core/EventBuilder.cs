@@ -1,6 +1,5 @@
 using System;
-using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -62,7 +61,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref EventBuilder Id(ulong first, ulong second)
         {
-            return ref Id(Macros.Pair(first, second));
+            return ref Id(Ecs.Pair(first, second));
         }
 
         /// <summary>
@@ -83,7 +82,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref EventBuilder Id<TFirst>(ulong second)
         {
-            return ref Id(Macros.Pair<TFirst>(second, World));
+            return ref Id(Ecs.Pair<TFirst>(second, World));
         }
 
         /// <summary>
@@ -94,7 +93,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref EventBuilder Id<TFirst, TSecond>()
         {
-            return ref Id(Macros.Pair<TFirst, TSecond>(World));
+            return ref Id(Ecs.Pair<TFirst, TSecond>(World));
         }
 
         /// <summary>

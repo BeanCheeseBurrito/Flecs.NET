@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -101,7 +101,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref AppBuilder EnableRest(ushort port = 0)
         {
-            Desc.enable_rest = Macros.True;
+            Desc.enable_rest = Utils.True;
             Desc.port = port;
             return ref this;
         }
@@ -111,9 +111,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public ref AppBuilder EnableMonitor(bool value = true)
+        public ref AppBuilder EnableStats(bool value = true)
         {
-            Desc.enable_monitor = Macros.Bool(value);
+            Desc.enable_stats = Utils.Bool(value);
             return ref this;
         }
 

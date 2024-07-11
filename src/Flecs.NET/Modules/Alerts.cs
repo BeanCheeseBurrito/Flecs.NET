@@ -1,5 +1,5 @@
 using System;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -14,14 +14,14 @@ namespace Flecs.NET.Core
             ///     Initializes the alerts module.
             /// </summary>
             /// <param name="world"></param>
-            public readonly void InitModule(ref World world)
+            public readonly void InitModule(World world)
             {
                 FlecsAlertsImport(world);
 
-                world.Entity<Alert>("::flecs.alerts.Alert");
-                world.Entity<Info>("::flecs.alerts.Info");
-                world.Entity<Warning>("::flecs.alerts.Warning");
-                world.Entity<Err>("::flecs.alerts.Error");
+                world.Entity<Alert>(".flecs.alerts.Alert");
+                world.Entity<Info>(".flecs.alerts.Info");
+                world.Entity<Warning>(".flecs.alerts.Warning");
+                world.Entity<Err>(".flecs.alerts.Error");
             }
 
             /// <summary>

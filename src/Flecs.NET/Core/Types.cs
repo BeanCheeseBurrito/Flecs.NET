@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -172,7 +172,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return Macros.IsStageOrWorld(World) ? Str() : string.Empty;
+            return Ecs.IsStageOrWorld(World) ? Str() : string.Empty;
         }
     }
 

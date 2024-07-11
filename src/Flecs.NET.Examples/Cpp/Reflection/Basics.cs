@@ -16,7 +16,7 @@ public static class Cpp_Reflection_Basics
 
         // Create entity with Position as usual.
         Entity e = world.Entity()
-            .Set<Position>(new(10, 20));
+            .Set(new Position(10, 20));
 
         // Convert position component to flecs expression string.
         ref Position reference = ref e.Ensure<Position>();

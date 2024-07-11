@@ -1,28 +1,49 @@
 using System;
-using static Flecs.NET.Bindings.Native;
+using Flecs.NET.Utilities;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
     /// <summary>
-    ///     A wrapper around ecs_type_info_t.
+    ///     A wrapper around <see cref="ecs_type_info_t"/>*.
     /// </summary>
-    public unsafe struct TypeInfo : IEquatable<TypeInfo>
+    public readonly unsafe struct TypeInfo : IEquatable<TypeInfo>
     {
-        private ecs_type_info_t* _handle;
+        private readonly ecs_type_info_t* _handle;
 
         /// <summary>
-        ///     A reference to the handle.
+        ///     The pointer to the <see cref="ecs_type_info_t"/> object.
         /// </summary>
-        public ref ecs_type_info_t* Handle => ref _handle;
+        public ref readonly ecs_type_info_t* Handle => ref _handle;
 
         /// <summary>
-        ///     Creates a type info from the provided handle.
+        ///     Creates a new <see cref="TypeInfo"/> instance with the provided <see cref="ecs_type_info_t"/> pointer.
         /// </summary>
-        /// <param name="typeInfo"></param>
-        public TypeInfo(ecs_type_info_t* typeInfo)
+        /// <param name="handle">The handle.</param>
+        public TypeInfo(ecs_type_info_t* handle)
         {
-            _handle = typeInfo;
+            _handle = handle;
         }
+
+        /// <summary>
+        ///     Size of type.
+        /// </summary>
+        public int Size => Handle->size;
+
+        /// <summary>
+        ///     Alignment of type.
+        /// </summary>
+        public int Alignment => Handle->size;
+
+        /// <summary>
+        ///     Handle to component.
+        /// </summary>
+        public ulong Component => Handle->component;
+
+        /// <summary>
+        ///     Type name.
+        /// </summary>
+        public string Name => NativeString.GetString(Handle->name);
 
         /// <summary>
         ///     Checks if two <see cref="TypeInfo"/> instances are equal.

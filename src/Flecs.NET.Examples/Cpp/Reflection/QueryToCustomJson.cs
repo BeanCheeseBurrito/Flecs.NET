@@ -25,26 +25,24 @@ public static class Cpp_Reflection_QueryToCustomJson
         world.Component<Mass>()
             .Member<float>("Value");
 
-        world.Entity("A").Set<Position>(new(10, 20)).Set<Velocity>(new(1, 2));
-        world.Entity("B").Set<Position>(new(20, 30)).Set<Velocity>(new(2, 3));
-        world.Entity("C").Set<Position>(new(30, 40)).Set<Velocity>(new(3, 4)).Set<Mass>(new(10));
-        world.Entity("D").Set<Position>(new(30, 40)).Set<Velocity>(new(4, 5)).Set<Mass>(new(20));
+        world.Entity("A").Set(new Position(10, 20)).Set(new Velocity(1, 2));
+        world.Entity("B").Set(new Position(20, 30)).Set(new Velocity(2, 3));
+        world.Entity("C").Set(new Position(30, 40)).Set(new Velocity(3, 4)).Set(new Mass(10));
+        world.Entity("D").Set(new Position(30, 40)).Set(new Velocity(4, 5)).Set(new Mass(20));
 
         // Query for components.
-        Query query = world.Query<Position, Velocity>();
+        using Query query = world.Query<Position, Velocity>();
 
         // Serialize query to JSON. Customize serializer to only serialize entity
         // names and component values.
-        IterToJsonDesc desc = default(IterToJsonDesc)
-            .Entities()
+        IterToJsonDesc desc = world.IterToJsonDesc()
             .Values();
 
         Console.WriteLine(query.Iter().ToJson(desc));
         // Iterator returns 2 sets of results, one for each table.
-        // {"results":[{"entities":["A", "B"], "values":[[{"X":10, "Y":20}, {"X":20, "Y":30}], [{"X":1, "Y":2}, {"X":2, "Y":3}]]}, {"entities":["C", "D"], "values":[[{"X":30, "Y":40}, {"X":30, "Y":40}], [{"X":3, "Y":4}, {"X":4, "Y":5}]]}]}
-
+        // {"results":[{"name":"A", "fields":[{"data":{"X":10, "Y":20}}, {"data":{"X":1, "Y":2}}]}, {"name":"B", "fields":[{"data":{"X":20, "Y":30}}, {"data":{"X":2, "Y":3}}]}, {"name":"C", "fields":[{"data":{"X":30, "Y":40}}, {"data":{"X":3, "Y":4}}]}, {"name":"D", "fields":[{"data":{"X":30, "Y":40}}, {"data":{"X":4, "Y":5}}]}]}
     }
 }
 
 // Output:
-// {"results":[{"entities":["A", "B"], "values":[[{"X":10, "Y":20}, {"X":20, "Y":30}], [{"X":1, "Y":2}, {"X":2, "Y":3}]]}, {"entities":["C", "D"], "values":[[{"X":30, "Y":40}, {"X":30, "Y":40}], [{"X":3, "Y":4}, {"X":4, "Y":5}]]}]}
+// {"results":[{"name":"A", "fields":[{"data":{"X":10, "Y":20}}, {"data":{"X":1, "Y":2}}]}, {"name":"B", "fields":[{"data":{"X":20, "Y":30}}, {"data":{"X":2, "Y":3}}]}, {"name":"C", "fields":[{"data":{"X":30, "Y":40}}, {"data":{"X":3, "Y":4}}]}, {"name":"D", "fields":[{"data":{"X":30, "Y":40}}, {"data":{"X":4, "Y":5}}]}]}

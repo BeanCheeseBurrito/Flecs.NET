@@ -41,7 +41,7 @@ public static class Cpp_Relationships_Union
 
         // Create a query that subscribes for all entities that have a Direction
         // and that are walking
-        Query q = world.QueryBuilder()
+        using Query q = world.QueryBuilder()
             .With(Movement.Walking)
             .With<Direction>(Ecs.Wildcard)
             .Build();
@@ -63,23 +63,15 @@ public static class Cpp_Relationships_Union
         e3.Add(Movement.Walking);
 
         // Iterate the query
-        q.Iter((Iter it) =>
+        q.Each((Iter it, int i) =>
         {
-            // Get the column with direction states. This is stored as an array
-            // with identifiers to the individual states
-            Field<ulong> movement = it.Field<ulong>(1);
-            Field<ulong> direction = it.Field<ulong>(2);
-
-            foreach (int i in it)
-            {
-                // Movement will always be Walking, Direction can be any state
-                Console.Write(it.Entity(i).Name());
-                Console.Write(": Movement: ");
-                Console.Write(it.World().GetAlive(movement[i]).Name());
-                Console.Write(", Direction: ");
-                Console.Write(it.World().GetAlive(direction[i]).Name());
-                Console.WriteLine();
-            }
+            // Movement will always be Walking, Direction can be any state
+            Console.Write(it.Entity(i).Name());
+            Console.Write(": Movement: ");
+            Console.Write(it.Pair(0).Second().Name());
+            Console.Write(", Direction: ");
+            Console.Write(it.Pair(1).Second().Name());
+            Console.WriteLine();
         });
     }
 }

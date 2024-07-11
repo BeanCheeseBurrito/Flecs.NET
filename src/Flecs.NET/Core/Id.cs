@@ -1,6 +1,6 @@
 using System;
 using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -39,9 +39,9 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         public Id(ulong first, ulong second)
         {
-            Ecs.Assert(!Macros.IsPair(first) && !Macros.IsPair(second), "Cannot create nested pairs.");
+            Ecs.Assert(!Ecs.IsPair(first) && !Ecs.IsPair(second), "Cannot create nested pairs.");
             _world = null;
-            _value = Macros.Pair(first, second);
+            _value = Ecs.Pair(first, second);
         }
 
         /// <summary>
@@ -52,9 +52,9 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         public Id(ecs_world_t* world, ulong first, ulong second)
         {
-            Ecs.Assert(!Macros.IsPair(first) && !Macros.IsPair(second), "Cannot create nested pairs.");
+            Ecs.Assert(!Ecs.IsPair(first) && !Ecs.IsPair(second), "Cannot create nested pairs.");
             _world = world;
-            _value = Macros.Pair(first, second);
+            _value = Ecs.Pair(first, second);
         }
 
         /// <summary>
@@ -75,9 +75,9 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         public Id(Id first, Id second)
         {
-            Ecs.Assert(!Macros.IsPair(first) && !Macros.IsPair(second), "Cannot create nested pairs.");
+            Ecs.Assert(!Ecs.IsPair(first) && !Ecs.IsPair(second), "Cannot create nested pairs.");
             _world = first.World;
-            _value = Macros.Pair(first.Value, second.Value);
+            _value = Ecs.Pair(first.Value, second.Value);
         }
 
         /// <summary>
@@ -87,9 +87,9 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         public Id(Entity first, Entity second)
         {
-            Ecs.Assert(!Macros.IsPair(first) && !Macros.IsPair(second), "Cannot create nested pairs.");
+            Ecs.Assert(!Ecs.IsPair(first) && !Ecs.IsPair(second), "Cannot create nested pairs.");
             _world = first.World;
-            _value = Macros.Pair(first, second);
+            _value = Ecs.Pair(first, second);
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool HasRelation(ulong first)
         {
-            return IsPair() && Macros.PairFirst(Value) == first;
+            return IsPair() && Ecs.PairFirst(Value) == first;
         }
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace Flecs.NET.Core
         public Entity First()
         {
             Ecs.Assert(IsPair());
-            ulong entity = Macros.PairFirst(Value);
+            ulong entity = Ecs.PairFirst(Value);
             return World == null ? new Entity(entity) : new Entity(World, ecs_get_alive(World, entity));
         }
 
@@ -239,7 +239,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Second()
         {
-            ulong entity = Macros.PairSecond(Value);
+            ulong entity = Ecs.PairSecond(Value);
             return World == null ? new Entity(entity) : new Entity(World, ecs_get_alive(World, entity));
         }
 
@@ -267,7 +267,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public World CsWorld()
         {
-            return new World(World, false);
+            return new World(World);
         }
 
         /// <summary>
@@ -363,7 +363,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return World != null && Macros.IsStageOrWorld(World) ? Str() : string.Empty;
+            return World != null && Ecs.IsStageOrWorld(World) ? Str() : string.Empty;
         }
     }
 }

@@ -1,9 +1,10 @@
 using System.Runtime.InteropServices;
 using Flecs.NET.Core;
 
+// Components
 file struct NativeString(string str)
 {
-    public IntPtr Value { get; set; } = Marshal.StringToHGlobalAnsi(str);
+    public IntPtr Value = Marshal.StringToHGlobalAnsi(str);
 }
 
 file static class Cpp_Entities_Hooks
@@ -12,20 +13,56 @@ file static class Cpp_Entities_Hooks
     {
         World world = World.Create(args);
 
-        world.Component<NativeString>().SetHooks(new()
-        {
+        world.Component<NativeString>()
             // Resource management hooks. These hooks should primarily be used for
             // managing memory used by the component.
-            Ctor = Ctor,
-            Move = Move,
-            Copy = Copy,
-            Dtor = Dtor,
+
+            // The constructor should initialize the component value.
+            .Ctor((ref NativeString data, TypeInfo typeInfo) =>
+            {
+                Ecs.Log.Trace("Ctor");
+                data.Value = IntPtr.Zero;
+            })
+
+            // The destructor should free resources.
+            .Dtor((ref NativeString data, TypeInfo typeInfo) =>
+            {
+                Ecs.Log.Trace("Dtor");
+                Marshal.FreeHGlobal(data.Value);
+            })
+
+            // The move hook should move resources from one location to another.
+            .Move((ref NativeString dst, ref NativeString src, TypeInfo typeInfo) =>
+            {
+                Ecs.Log.Trace("Move");
+                Marshal.FreeHGlobal(dst.Value);
+                dst.Value = src.Value;
+                src.Value = IntPtr.Zero; // This makes sure the value doesn't get deleted twice
+                // as the destructor is still invoked after a move.
+            })
+
+            // The copy hook should copy resources from one location to another.
+            .Copy((ref NativeString dst, ref NativeString src, TypeInfo typeInfo) =>
+            {
+                Ecs.Log.Trace("Copy");
+                Marshal.FreeHGlobal(dst.Value);
+                dst = new NativeString(Marshal.PtrToStringAnsi(src.Value)!); // Allocate new copy of the string.
+            })
 
             // Lifecycle hooks. These hooks should be used for application logic.
-            OnAdd = HookCallback,
-            OnRemove = HookCallback,
-            OnSet = HookCallback
-        });
+            // Note that the signature is the same as query callbacks.
+            .OnAdd((Iter it, int i, ref NativeString str) =>
+            {
+                Ecs.Log.Trace($"{it.Event()}: {it.Entity(i)}");
+            })
+            .OnSet((Iter it, int i, ref NativeString str) =>
+            {
+                Ecs.Log.Trace($"{it.Event()}: {it.Entity(i)}");
+            })
+            .OnRemove((Iter it, int i, ref NativeString str) =>
+            {
+                Ecs.Log.Trace($"{it.Event()}: {it.Entity(i)}");
+            });
 
         Ecs.Log.SetLevel(0);
 
@@ -39,7 +76,7 @@ file static class Cpp_Entities_Hooks
 
         Ecs.Log.Trace("e.Set<NativeString>(new(\"Hello World\"))");
         Ecs.Log.Push();
-        e.Set<NativeString>(new("Hello World"));
+        e.Set(new NativeString("Hello World"));
         Ecs.Log.Pop();
 
         // This operation changes the entity's archetype, which invokes a move
@@ -54,49 +91,6 @@ file static class Cpp_Entities_Hooks
         Ecs.Log.Pop();
 
         Ecs.Log.SetLevel(-1);
-    }
-
-    // Resource management hooks.
-    // The constructor should initialize the component value.
-    private static void Ctor(ref NativeString data, TypeInfo typeInfo)
-    {
-        Ecs.Log.Trace("Ctor");
-        data.Value = IntPtr.Zero;
-    }
-
-    // The destructor should free resources.
-    private static void Dtor(ref NativeString data, TypeInfo typeInfo)
-    {
-        Ecs.Log.Trace("Dtor");
-        Marshal.FreeHGlobal(data.Value);
-    }
-
-    // The move hook should move resources from one location to another.
-    private static void Move(ref NativeString dst, ref NativeString src, TypeInfo typeInfo)
-    {
-        Ecs.Log.Trace("Move");
-        Marshal.FreeHGlobal(dst.Value);
-        dst.Value = src.Value;
-        src.Value = IntPtr.Zero; // This makes sure the value doesn't get deleted twice
-        // as the destructor is still invoked after a move.
-    }
-
-    // The copy hook should copy resources from one location to another.
-    private static void Copy(ref NativeString dst, ref NativeString src, TypeInfo typeInfo)
-    {
-        Ecs.Log.Trace("Copy");
-        Marshal.FreeHGlobal(dst.Value);
-        dst.Value = src.Value;
-    }
-
-    // This callback is used for the add, remove and set hooks. Note that the
-    // signature is the same as systems, triggers, observers.
-    private static void HookCallback(Iter it, Field<NativeString> str)
-    {
-        Entity eventEntity = it.Event();
-
-        foreach (int i in it)
-            Ecs.Log.Trace($"{eventEntity}: {it.Entity(i)}");
     }
 }
 

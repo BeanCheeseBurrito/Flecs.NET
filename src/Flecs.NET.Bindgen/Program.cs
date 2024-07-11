@@ -5,7 +5,7 @@ using Bindgen.NET;
 BindingOptions bindingOptions = new()
 {
     Namespace = "Flecs.NET.Bindings",
-    Class = "Native",
+    Class = "flecs",
 
     DllImportPath = "flecs",
 
@@ -24,6 +24,8 @@ BindingOptions bindingOptions = new()
     {
         ("(UNITY_EDITOR || UNITY_STANDALONE) && !FLECS_UNITY_NDEBUG", "flecs-debug") // Unity specific define
     },
+
+    SuppressedWarnings = { "CS8981" },
 
     IncludeBuiltInClangHeaders = true,
 

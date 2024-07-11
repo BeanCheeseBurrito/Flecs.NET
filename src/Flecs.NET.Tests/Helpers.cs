@@ -1,9 +1,9 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Core;
 using Xunit;
 
 [assembly: SuppressMessage("Usage", "CA1050")]
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace Test
 {
@@ -59,6 +59,12 @@ public enum Number
     Three
 }
 
+public enum PipelineStepEnum
+{
+    CustomStep,
+    CustomStep2
+}
+
 public struct Mass
 {
     public float Value { get; set; }
@@ -78,6 +84,12 @@ public struct Template<T>
 {
     public T X { get; set; }
     public T Y { get; set; }
+
+    public Template(T x, T y)
+    {
+        X = x;
+        Y = y;
+    }
 }
 
 public struct Self
@@ -90,13 +102,23 @@ public struct Self
     }
 }
 
-public struct FilterWrapper
+public struct MyEvent
 {
-    public Filter Filter { get; set; }
+    public float Value { get; set; }
 
-    public FilterWrapper(Filter filter)
+    public MyEvent(float value)
     {
-        Filter = filter;
+        Value = value;
+    }
+}
+
+public struct EntityWrapper
+{
+    public Entity Value { get; set; }
+
+    public EntityWrapper(Entity value)
+    {
+        Value = value;
     }
 }
 
@@ -106,6 +128,17 @@ public struct Parent
     {
     }
 }
+
+public struct Value
+{
+    public int Number { get; set; }
+
+    public Value(int number)
+    {
+        Number = number;
+    }
+}
+
 
 public struct Other
 {
@@ -127,59 +160,22 @@ public struct Singleton
     }
 }
 
-public struct MyModule : IFlecsModule
+public struct QueryWrapper
 {
-    public void InitModule(ref World world)
+    public Query Query;
+
+    public QueryWrapper(Query query)
     {
-        world.Module<MyModule>();
-        world.Component<Position>();
+        Query = query;
     }
 }
 
-public struct Pod
+public struct MyModule : IFlecsModule
 {
-    public int Value { get; set; }
-
-    public static int CtorInvoked { get; set; }
-    public static int DtorInvoked { get; set; }
-    public static int MoveInvoked { get; set; }
-    public static int CopyInvoked { get; set; }
-
-    public Pod(int value)
+    public void InitModule(World world)
     {
-        Value = value;
-    }
-
-    static Pod()
-    {
-        Type<Pod>.TypeHooks = new TypeHooks<Pod>
-        {
-            Ctor = (ref Pod data, TypeInfo typeInfo) =>
-            {
-                CtorInvoked++;
-                data = default;
-            },
-            Dtor = (ref Pod data, TypeInfo typeInfo) =>
-            {
-                DtorInvoked++;
-                data = default;
-            },
-            Move = (ref Pod dst, ref Pod src, TypeInfo typeInfo) =>
-            {
-                MoveInvoked++;
-                dst = src;
-                src = default;
-            },
-            Copy = (ref Pod dst, ref Pod src, TypeInfo typeInfo) =>
-            {
-                CopyInvoked++;
-                dst = src;
-            },
-
-            OnAdd = (Iter it, Field<Pod> pod) => { },
-            OnSet = (Iter it, Field<Pod> pod) => { },
-            OnRemove = (Iter it, Field<Pod> pod) => { }
-        };
+        world.Module<MyModule>();
+        world.Component<Position>();
     }
 }
 
@@ -189,7 +185,7 @@ namespace Namespace
 
     public struct NestedModule : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             world.Module<NestedModule>();
             world.Component<Velocity>("Velocity");
@@ -198,7 +194,7 @@ namespace Namespace
 
     public struct SimpleModule : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             world.Module<SimpleModule>();
             world.Import<NestedModule>();
@@ -210,7 +206,7 @@ namespace Namespace
     {
         public struct NestedType { }
 
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             world.Module<NestedTypeModule>();
             world.Component<NestedType>();
@@ -220,16 +216,16 @@ namespace Namespace
 
     public struct NamedModule : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
-            world.Module<NamedModule>("::my_scope.NamedModule");
+            world.Module<NamedModule>(".my_scope.NamedModule");
             world.Component<Position>("Position");
         }
     }
 
     public struct ImplicitModule : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             world.Component<Position>();
         }
@@ -237,21 +233,21 @@ namespace Namespace
 
     public struct NamedModuleInRoot : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
-            world.Module<NamedModuleInRoot>("::NamedModuleInRoot");
+            world.Module<NamedModuleInRoot>(".NamedModuleInRoot");
             world.Component<Position>();
         }
     }
 
     public struct ReparentModule : IFlecsModule
     {
-        public void InitModule(ref World world)
+        public void InitModule(World world)
         {
             Entity m = world.Module<ReparentModule>();
-            m.ChildOf(world.Entity("::parent"));
+            m.ChildOf(world.Entity(".parent"));
 
-            Entity other = world.Entity("::Namespace.ReparentModule");
+            Entity other = world.Entity(".Namespace.ReparentModule");
             Assert.True(other != 0);
             Assert.True(other != m);
         }
@@ -260,7 +256,7 @@ namespace Namespace
 
 public struct Module : IFlecsModule
 {
-    public void InitModule(ref World world)
+    public void InitModule(World world)
     {
         world.Module<Module>();
         world.Component<Position>();
@@ -276,6 +272,14 @@ namespace NamespaceLvl1
             public struct StructLvl21 { }
             public struct StructLvl22 { }
         }
+    }
+}
+
+public struct Child
+{
+    public struct GrandChild
+    {
+        public struct GreatGrandChild { }
     }
 }
 
@@ -342,6 +346,14 @@ public struct First
 {
 }
 
+public struct Second
+{
+}
+
+public struct PipelineType
+{
+}
+
 public struct Base
 {
 }
@@ -353,6 +365,11 @@ public struct Foo
 public struct Bar
 {
 }
+
+public struct Hello
+{
+}
+
 
 public struct Evt
 {
@@ -484,110 +501,134 @@ public struct TgtC
 {
 }
 
-public struct TagA
+public struct Tag0
 {
 }
 
-public struct TagB
+public struct Tag1
 {
 }
 
-public struct TagC
+public struct Tag2
 {
 }
 
-public struct TagD
+public struct Tag3
 {
 }
 
-public struct TagE
+public struct Tag4
 {
 }
 
-public struct TagF
+public struct Tag5
 {
 }
 
-public struct TagG
+public struct Tag6
 {
 }
 
-public struct TagH
+public struct Tag7
 {
 }
 
-public struct TagI
+public struct Tag8
 {
 }
 
-public struct TagJ
+public struct Tag9
 {
 }
 
-public struct TagK
+public struct Tag10
 {
 }
 
-public struct TagL
+public struct Tag11
 {
 }
 
-public struct TagM
+public struct Tag12
 {
 }
 
-public struct TagN
+public struct Tag13
 {
 }
 
-public struct TagO
+public struct Tag14
 {
 }
 
-public struct TagP
+public struct Tag15
 {
 }
 
-public struct TagQ
+public struct Tag16
 {
 }
 
-public struct TagR
+public struct Tag17
 {
 }
 
-public struct TagS
+public struct Tag18
 {
 }
 
-public struct TagT
+public struct Tag19
 {
 }
 
-public struct TagU
-{
-}
-
-
-public struct TagV
-{
-}
-
-public struct TagW
+public struct Tag20
 {
 }
 
 
-public struct TagX
+public struct Tag21
+{
+}
+
+public struct Tag22
 {
 }
 
 
-public struct TagY
+public struct Tag23
 {
 }
 
 
-public struct TagZ
+public struct Tag24
+{
+}
+
+
+public struct Tag25
+{
+}
+
+public struct Tag26
+{
+}
+
+public struct Tag27
+{
+}
+
+public struct Tag28
+{
+}
+
+public struct Tag29
+{
+}
+
+public struct Tag30
+{
+}
+
+public struct Tag31
 {
 }

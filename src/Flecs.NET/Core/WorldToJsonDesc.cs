@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -30,7 +30,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref WorldToJsonDesc BuiltIn(bool value = true)
         {
-            Desc.serialize_builtin = Macros.Bool(value);
+            Desc.serialize_builtin = Utils.Bool(value);
             return ref this;
         }
 
@@ -42,7 +42,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref WorldToJsonDesc Modules(bool value = true)
         {
-            Desc.serialize_modules = Macros.Bool(value);
+            Desc.serialize_modules = Utils.Bool(value);
             return ref this;
         }
 

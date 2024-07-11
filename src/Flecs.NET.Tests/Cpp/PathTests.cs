@@ -5,11 +5,6 @@ namespace Flecs.NET.Tests.Cpp
 {
     public unsafe class PathTests
     {
-        public PathTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void Name()
         {
@@ -21,7 +16,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity eWorld = world.Lookup("foo");
             Assert.True(e == eWorld);
 
-            eWorld = world.Lookup("::foo");
+            eWorld = world.Lookup(".foo");
             Assert.True(e == eWorld);
         }
 
@@ -32,7 +27,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = new Entity(world, "foo.bar");
             Assert.Equal("bar", e.Name());
-            Assert.Equal("::foo.bar", e.Path());
+            Assert.Equal(".foo.bar", e.Path());
 
             Entity eWorld = world.Lookup("bar");
             Assert.True(0 == eWorld);
@@ -40,7 +35,7 @@ namespace Flecs.NET.Tests.Cpp
             eWorld = world.Lookup("foo.bar");
             Assert.True(e == eWorld);
 
-            eWorld = world.Lookup("::foo.bar");
+            eWorld = world.Lookup(".foo.bar");
             Assert.True(e == eWorld);
         }
 
@@ -51,7 +46,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = new Entity(world, "foo.bar.hello");
             Assert.Equal("hello", e.Name());
-            Assert.Equal("::foo.bar.hello", e.Path());
+            Assert.Equal(".foo.bar.hello", e.Path());
 
             Entity eWorld = world.Lookup("hello");
             Assert.True(0 == eWorld);
@@ -59,7 +54,7 @@ namespace Flecs.NET.Tests.Cpp
             eWorld = world.Lookup("foo.bar.hello");
             Assert.True(e == eWorld);
 
-            eWorld = world.Lookup("::foo.bar.hello");
+            eWorld = world.Lookup(".foo.bar.hello");
             Assert.True(e == eWorld);
         }
 
@@ -70,16 +65,16 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity parent = new Entity(world, "foo");
             Assert.Equal("foo", parent.Name());
-            Assert.Equal("::foo", parent.Path());
+            Assert.Equal(".foo", parent.Path());
 
             Entity e = new Entity(world, "foo.bar");
             Assert.Equal("bar", e.Name());
-            Assert.Equal("::foo.bar", e.Path());
+            Assert.Equal(".foo.bar", e.Path());
 
             Entity parentE = parent.Lookup("bar");
             Assert.True(e == parentE);
 
-            parentE = parent.Lookup("::foo.bar");
+            parentE = parent.Lookup(".foo.bar");
             Assert.True(e == parentE);
         }
 
@@ -90,16 +85,16 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity parent = new Entity(world, "foo");
             Assert.Equal("foo", parent.Name());
-            Assert.Equal("::foo", parent.Path());
+            Assert.Equal(".foo", parent.Path());
 
             Entity e = new Entity(world, "foo.bar.hello");
             Assert.Equal("hello", e.Name());
-            Assert.Equal("::foo.bar.hello", e.Path());
+            Assert.Equal(".foo.bar.hello", e.Path());
 
             Entity parentE = parent.Lookup("bar.hello");
             Assert.True(e == parentE);
 
-            parentE = parent.Lookup("::foo.bar.hello");
+            parentE = parent.Lookup(".foo.bar.hello");
             Assert.True(e == parentE);
         }
 
@@ -110,43 +105,17 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity parent = new Entity(world, "foo");
             Assert.Equal("foo", parent.Name());
-            Assert.Equal("::foo", parent.Path());
+            Assert.Equal(".foo", parent.Path());
 
             Entity e = new Entity(world, "foo.bar.hello.world");
             Assert.Equal("world", e.Name());
-            Assert.Equal("::foo.bar.hello.world", e.Path());
+            Assert.Equal(".foo.bar.hello.world", e.Path());
 
             Entity parentE = parent.Lookup("bar.hello.world");
             Assert.True(e == parentE);
 
-            parentE = parent.Lookup("::foo.bar.hello.world");
+            parentE = parent.Lookup(".foo.bar.hello.world");
             Assert.True(e == parentE);
-        }
-
-        [Fact]
-        private void EntityLookupFrom0()
-        {
-            using World world = World.Create();
-
-            Entity foo = world.Entity("foo");
-            Assert.True(world.Lookup("foo") == foo);
-
-            Entity dummy = default;
-
-            Assert.Throws<Ecs.AssertionException>(() => dummy.Lookup("foo"));
-        }
-
-        [Fact]
-        private void EntityLookupFrom0WithWorld()
-        {
-            using World world = World.Create();
-
-            Entity foo = world.Entity("foo");
-            Assert.True(world.Lookup("foo") == foo);
-
-            Entity dummy = world.Entity(0);
-
-            Assert.Throws<Ecs.AssertionException>(() => dummy.Lookup("foo"));
         }
 
         [Fact]

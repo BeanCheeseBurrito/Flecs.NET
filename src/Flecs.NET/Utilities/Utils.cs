@@ -1,25 +1,46 @@
+using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using Flecs.NET.Core;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Utilities
 {
     /// <summary>
-    ///     Static class for simple utility functions.
+    ///     Helper macros for working with flecs.
     /// </summary>
-    internal static unsafe class Utils
+    public static unsafe class Utils
     {
         /// <summary>
-        ///     Checks if 2 native strings are equal.
+        ///     False.
         /// </summary>
-        /// <param name="s1"></param>
-        /// <param name="s2"></param>
-        /// <returns></returns>
-        public static bool StringEqual(byte* s1, byte* s2)
-        {
-            while (*s1 == *s2++)
-                if (*s1++ == 0)
-                    return true;
+        public const byte False = 0;
 
-            return *s1 - *--s1 == 0;
+        /// <summary>
+        ///     True.
+        /// </summary>
+        public const byte True = 1;
+
+        /// <summary>
+        ///     Converts a boolean to a byte.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte Bool(bool value)
+        {
+            return value ? True : False;
+        }
+
+        /// <summary>
+        ///     Converts a byte to a boolean.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Bool(byte value)
+        {
+            return value != 0;
         }
 
         /// <summary>
@@ -39,6 +60,61 @@ namespace Flecs.NET.Utilities
             num++;
 
             return num;
+        }
+
+        /// <summary>
+        ///     Tests if 2 readonly refs point to the same object.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AreSameReadOnlyRefs<T>(in T a, in T b)
+        {
+            return Unsafe.AreSame(ref Unsafe.AsRef(in a), ref Unsafe.AsRef(in b));
+        }
+
+        /// <summary>
+        ///     Tests if a readonly ref is null.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNullReadOnlyRef<T>(in T obj)
+        {
+#if NET5_0_OR_GREATER
+            return Unsafe.IsNullRef(ref Unsafe.AsRef(in obj));
+#else
+            return Unsafe.AsPointer(ref Unsafe.AsRef(obj)) == null;
+#endif
+        }
+
+        /// <summary>
+        ///     Calls the os api free function.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void OsFree(IntPtr data)
+        {
+#if NET5_0_OR_GREATER
+            ((delegate* unmanaged<IntPtr, void>)ecs_os_api.free_)(data);
+#else
+            Marshal.GetDelegateForFunctionPointer<Ecs.Free>(ecs_os_api.free_)(data);
+#endif
+        }
+
+        /// <summary>
+        ///     Calls the os api free function.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void OsFree(void* data)
+        {
+            OsFree((IntPtr)data);
         }
     }
 }

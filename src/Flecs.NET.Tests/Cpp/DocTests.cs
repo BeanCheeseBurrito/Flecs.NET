@@ -1,16 +1,11 @@
 using Flecs.NET.Core;
 using Xunit;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Tests.Cpp
 {
     public class DocTests
     {
-        public DocTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void SetBrief()
         {

@@ -1,7 +1,7 @@
 using System;
 using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -140,7 +140,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref MetricBuilder Id(ulong first, ulong second)
         {
-            return ref Id(Macros.Pair(first, second));
+            return ref Id(Ecs.Pair(first, second));
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref MetricBuilder Id<TFirst>(ulong second)
         {
-            return ref Id(Macros.Pair<TFirst>(second, World));
+            return ref Id(Ecs.Pair<TFirst>(second, World));
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref MetricBuilder Id<TFirst, TSecond>()
         {
-            return ref Id(Macros.Pair<TFirst, TSecond>(World));
+            return ref Id(Ecs.Pair<TFirst, TSecond>(World));
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref MetricBuilder IdSecond<TSecond>(ulong first)
         {
-            return ref Id(Macros.PairSecond<TSecond>(first, World));
+            return ref Id(Ecs.PairSecond<TSecond>(first, World));
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref MetricBuilder Targets(bool value = true)
         {
-            Desc.targets = Macros.Bool(value);
+            Desc.targets = Utils.Bool(value);
             return ref this;
         }
 
@@ -225,8 +225,9 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref MetricBuilder Brief(string brief)
         {
-            using NativeString nativeBrief = (NativeString)brief;
+            NativeString nativeBrief = (NativeString)brief;
             Desc.brief = nativeBrief;
+            _strings.Add(nativeBrief);
             return ref this;
         }
 

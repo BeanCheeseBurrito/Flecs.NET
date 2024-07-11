@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -12,7 +12,6 @@ namespace Flecs.NET.Core
     public unsafe partial struct World : IDisposable, IEquatable<World>
     {
         private ecs_world_t* _handle;
-        private bool _owned;
 
         private ref BindingContext.WorldContext WorldContext => ref *EnsureBindingContext();
 
@@ -22,25 +21,12 @@ namespace Flecs.NET.Core
         public ref ecs_world_t* Handle => ref _handle;
 
         /// <summary>
-        ///     Represents whether or not the world is owned.
-        /// </summary>
-        public ref bool Owned => ref _owned;
-
-        /// <summary>
         ///     Constructs a world from an <see cref="ecs_world_t"/> pointer.
         /// </summary>
         /// <param name="handle">The world handle.</param>
-        /// <param name="owned">The owned boolean.</param>
-        /// <param name="overrideOsAbort"></param>
-        public World(ecs_world_t* handle, bool owned = true, bool overrideOsAbort = false)
+        public World(ecs_world_t* handle)
         {
             _handle = handle;
-            _owned = owned;
-
-            InitBuiltinComponents();
-
-            if (overrideOsAbort)
-                FlecsInternal.OverrideOsAbort();
         }
 
         /// <summary>
@@ -49,17 +35,32 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public static World Create(bool overrideOsAbort = true)
         {
-            return new World(ecs_init(), true, overrideOsAbort);
+            if (overrideOsAbort)
+                Ecs.OverrideOsAbort();
+
+            World w = new World(ecs_init());
+            w.EnsureBindingContext();
+            w.InitBuiltinComponents();
+
+            return w;
         }
 
         /// <summary>
         ///     Creates a flecs world from an <see cref="ecs_world_t"/> pointer that is not owned.
         /// </summary>
         /// <param name="world">A C world.</param>
+        /// <param name="overrideOsAbort"></param>
         /// <returns>A newly created world.</returns>
-        public static World Create(ecs_world_t* world)
+        public static World Create(ecs_world_t* world, bool overrideOsAbort = true)
         {
-            return new World(world, false);
+            if (overrideOsAbort)
+                Ecs.OverrideOsAbort();
+
+            World w = new World(world);
+            w.EnsureBindingContext();
+            w.InitBuiltinComponents();
+
+            return w;
         }
 
         /// <summary>
@@ -74,14 +75,16 @@ namespace Flecs.NET.Core
             for (int i = 0; i < args.Length; i++)
                 nativeStrings[i] = (NativeString)args[i];
 
-            ecs_world_t* world = ecs_init_w_args(args.Length, (byte**)nativeStrings);
+            World w = new World(ecs_init_w_args(args.Length, (byte**)nativeStrings));
+            w.EnsureBindingContext();
+            w.InitBuiltinComponents();
 
             for (int i = 0; i < args.Length; i++)
                 nativeStrings[i].Dispose();
 
             Memory.Free(nativeStrings);
 
-            return new World(world);
+            return w;
         }
 
         /// <summary>
@@ -89,7 +92,7 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Dispose()
         {
-            if (Handle == null || !Macros.IsStageOrWorld(Handle))
+            if (Handle == null || !Ecs.IsStageOrWorld(Handle))
                 return;
 
             _ = ecs_fini(Handle);
@@ -101,7 +104,9 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Reset()
         {
-            Ecs.Assert(Owned, nameof(ECS_INVALID_OPERATION));
+            Ecs.Assert(Handle != null, nameof(ECS_INVALID_OPERATION));
+            Ecs.Assert(Ecs.IsStageOrWorld(Handle));
+            Ecs.Assert(!Ecs.PolyIs(Handle, ecs_stage_t_magic));
             _ = ecs_fini(Handle);
             Handle = ecs_init();
         }
@@ -122,7 +127,7 @@ namespace Flecs.NET.Core
         public void AtFini(Ecs.FiniAction action, void* ctx)
         {
             BindingContext.SetCallback(ref WorldContext.AtFini, action);
-            ecs_atfini(Handle, WorldContext.AtFini.Function, ctx);
+            ecs_atfini(Handle, WorldContext.AtFini.Pointer, ctx);
         }
 
         /// <summary>
@@ -167,7 +172,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool ReadonlyBegin(bool multiThreaded = false)
         {
-            return ecs_readonly_begin(Handle, Macros.Bool(multiThreaded)) == 1;
+            return ecs_readonly_begin(Handle, Utils.Bool(multiThreaded)) == 1;
         }
 
         /// <summary>
@@ -229,7 +234,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int GetStageId()
         {
-            return ecs_get_stage_id(Handle);
+            return ecs_stage_get_id(Handle);
         }
 
         /// <summary>
@@ -239,20 +244,11 @@ namespace Flecs.NET.Core
         public bool IsStage()
         {
             Ecs.Assert(
-                ecs_poly_is_(Handle, ecs_world_t_magic) == 1 ||
-                ecs_poly_is_(Handle, ecs_stage_t_magic) == 1,
+                flecs_poly_is_(Handle, ecs_world_t_magic) == 1 ||
+                flecs_poly_is_(Handle, ecs_stage_t_magic) == 1,
                 nameof(ECS_INVALID_PARAMETER)
             );
-            return ecs_poly_is_(Handle, ecs_stage_t_magic) == 1;
-        }
-
-        /// <summary>
-        ///     Enable/disable auto merging for world or stage.
-        /// </summary>
-        /// <param name="autoMerge"></param>
-        public void SetAutoMerge(bool autoMerge)
-        {
-            ecs_set_automerge(Handle, Macros.Bool(autoMerge));
+            return flecs_poly_is_(Handle, ecs_stage_t_magic) == 1;
         }
 
         /// <summary>
@@ -270,7 +266,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public World GetStage(int stageId)
         {
-            return new World(ecs_get_stage(Handle, stageId), false);
+            return new World(ecs_get_stage(Handle, stageId));
         }
 
         /// <summary>
@@ -279,7 +275,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public World AsyncStage()
         {
-            return new World(ecs_async_stage_new(Handle));
+            return new World(ecs_stage_new(Handle));
         }
 
         /// <summary>
@@ -288,7 +284,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public World GetWorld()
         {
-            return new World(Handle == null ? null : ecs_get_world(Handle), false);
+            return new World(Handle == null ? null : ecs_get_world(Handle));
         }
 
         /// <summary>
@@ -308,7 +304,7 @@ namespace Flecs.NET.Core
         public void SetCtx(void* ctx, Ecs.ContextFree? ctxFree = null)
         {
             BindingContext.SetCallback(ref WorldContext.ContextFree, ctxFree);
-            ecs_set_ctx(Handle, ctx, WorldContext.ContextFree.Function);
+            ecs_set_ctx(Handle, ctx, WorldContext.ContextFree.Pointer);
         }
 
         /// <summary>
@@ -343,25 +339,46 @@ namespace Flecs.NET.Core
         ///     Enforce that operations cannot modify entities outside of range.
         /// </summary>
         /// <param name="enabled"></param>
-        public void EnableRangeCheck(bool enabled)
+        public void EnableRangeCheck(bool enabled = true)
         {
-            ecs_enable_range_check(Handle, Macros.Bool(enabled));
+            ecs_enable_range_check(Handle, Utils.Bool(enabled));
         }
 
         /// <summary>
-        ///     Set current scope.
+        ///     Set the current scope.
         /// </summary>
-        /// <param name="scope"></param>
-        /// <returns></returns>
+        /// <param name="scope">The entity to use as scope.</param>
+        /// <returns>The previous scope.</returns>
         public Entity SetScope(ulong scope)
         {
-            return new Entity(ecs_set_scope(Handle, scope));
+            return new Entity(Handle, ecs_set_scope(Handle, scope));
         }
 
         /// <summary>
-        ///     Get current scope.
+        ///     Set the current scope.
         /// </summary>
-        /// <returns></returns>
+        /// <typeparam name="T">The entity to use as scope.</typeparam>
+        /// <returns>The previous scope.</returns>
+        public Entity SetScope<T>()
+        {
+            return SetScope(Type<T>.Id(Handle));
+        }
+
+        /// <summary>
+        ///     Set the current scope.
+        /// </summary>
+        /// <param name="value">The entity to use as scope.</param>
+        /// <typeparam name="T">The enum.</typeparam>
+        /// <returns>The previous scope.</returns>
+        public Entity SetScope<T>(T value) where T : Enum
+        {
+            return SetScope(Type<T>.Id(Handle, value));
+        }
+
+        /// <summary>
+        ///     Get the current scope.
+        /// </summary>
+        /// <returns>The current scope.</returns>
         public Entity GetScope()
         {
             return new Entity(Handle, ecs_get_scope(Handle));
@@ -380,194 +397,332 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Lookup entity by name.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="searchPath"></param>
-        /// <returns></returns>
-        public Entity Lookup(string name, bool searchPath = true)
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="rootSeparator">The root separator.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <returns>The entity if found, else 0.</returns>
+        public Entity Lookup(
+            string path,
+            string separator = Ecs.DefaultSeparator,
+            string rootSeparator = Ecs.DefaultSeparator,
+            bool recursive = true)
         {
+            if (string.IsNullOrEmpty(path))
+                return new Entity(Handle, 0);
 
-            using NativeString nativeName = (NativeString)name;
+            using NativeString nativePath = (NativeString)path;
+            using NativeString nativeSeparator = (NativeString)separator;
+            using NativeString nativeRootSeparator = (NativeString)rootSeparator;
 
             return new Entity(
                 Handle,
-                ecs_lookup_path_w_sep(Handle, 0, nativeName,
-                    BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.Bool(searchPath))
+                ecs_lookup_path_w_sep(Handle, 0, nativePath, nativeSeparator, nativeRootSeparator, Utils.Bool(recursive))
             );
         }
 
         /// <summary>
-        ///     Set singleton component.
+        ///     Sets the data of a component.
         /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public ref World Set<T>(ref T component)
+        /// <param name="id">The id of the component to set.</param>
+        /// <param name="size">The size of the pointed-to data.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <returns>Reference to self.</returns>
+        public ref World SetUntyped(ulong id, int size, void* data)
         {
-            Entity<T>().Set(ref component);
+            Entity(id).SetUntyped(id, size, data);
             return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a component.
         /// </summary>
-        /// <param name="second"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst>(ulong second, ref TFirst component)
+        /// <param name="id">The id of the component to set.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <returns>Reference to self.</returns>
+        public ref World SetUntyped(ulong id, void* data)
         {
-            Entity<TFirst>().Set(second, ref component);
+            Entity(id).SetUntyped(id, data);
             return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a pair component.
         /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(ref TFirst component)
+        /// <param name="first">The first id of the pair.</param>
+        /// <param name="second">The second id of the pair.</param>
+        /// <param name="size">The size of the pointed-to data.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <returns>Reference to self.</returns>
+        public ref World SetUntyped(ulong first, ulong second, int size, void* data)
         {
-            Entity<TFirst>().Set<TFirst, TSecond>(ref component);
+            Entity(first).SetUntyped(first, second, size, data);
             return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton component.
         /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(ref TSecond component)
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="T">The component type.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World SetPtr<T>(T* data)
         {
-            Entity<TFirst>().Set<TFirst, TSecond>(ref component);
+            Entity<T>().SetPtr(data);
             return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="second"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(TSecond second, ref TFirst component) where TSecond : Enum
+        /// <param name="second">The second id of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World SetPtr<TFirst>(ulong second, TFirst* data)
         {
-            return ref Set(EnumType<TSecond>.Id(second, Handle), ref component);
-        }
-
-        /// <summary>
-        ///     Set singleton pair.
-        /// </summary>
-        /// <param name="first"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(TFirst first, ref TSecond component) where TFirst : Enum
-        {
-            return ref SetSecond(EnumType<TFirst>.Id(first, Handle), ref component);
-        }
-
-        /// <summary>
-        ///     Set singleton pair.
-        /// </summary>
-        /// <param name="first"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World SetSecond<TSecond>(ulong first, ref TSecond component)
-        {
-            Entity(first).SetSecond(first, ref component);
+            Entity<TFirst>().SetPtr(second, data);
             return ref this;
         }
 
         /// <summary>
-        ///     Set singleton component.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public ref World Set<T>(T component)
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World SetPtr<TFirst, TSecond>(TFirst* data)
         {
-            return ref Set(ref component);
+            Entity<TFirst>().SetPtr<TFirst, TSecond>(data);
+            return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="second"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst>(ulong second, TFirst component)
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World SetPtr<TFirst, TSecond>(TSecond* data)
         {
-            return ref Set(second, ref component);
+            Entity<TFirst>().SetPtr<TFirst, TSecond>(data);
+            return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(TFirst component)
+        /// <param name="second">The second id (enum member) of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World SetPtr<TFirst, TSecond>(TSecond second, TFirst* data) where TSecond : Enum
         {
-            return ref Set<TFirst, TSecond>(ref component);
+            return ref SetPtr(Type<TSecond>.Id(Handle, second), data);
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(TSecond component)
+        /// <param name="first">The first id (enum member) of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World SetPtr<TFirst, TSecond>(TFirst first, TSecond* data) where TFirst : Enum
         {
-            return ref Set<TFirst, TSecond>(ref component);
+            return ref SetPtrSecond(Type<TFirst>.Id(Handle, first), data);
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="second"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(TSecond second, TFirst component) where TSecond : Enum
+        /// <param name="first">The first id of the pair.</param>
+        /// <param name="data">The pointer to the data.</param>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World SetPtrSecond<TSecond>(ulong first, TSecond* data)
         {
-            return ref Set<TFirst, TSecond>(second, ref component);
+            Entity(first).SetPtrSecond(first, data);
+            return ref this;
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton component.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World Set<TFirst, TSecond>(TFirst first, TSecond component) where TFirst : Enum
+        /// <param name="data">The data.</param>
+        /// <typeparam name="T">The component type.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<T>(T data)
         {
-            return ref Set<TFirst, TSecond>(first, ref component);
+            return ref Set(ref data);
         }
 
         /// <summary>
-        ///     Set singleton pair.
+        ///     Sets the data of a singleton pair component.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="component"></param>
-        /// <typeparam name="TSecond"></typeparam>
-        /// <returns></returns>
-        public ref World SetSecond<TSecond>(ulong first, TSecond component)
+        /// <param name="second">The second id of the pair.</param>
+        /// <param name="data">The data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst>(ulong second, TFirst data)
         {
-            return ref SetSecond(first, ref component);
+            return ref Set(second, ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TFirst data)
+        {
+            return ref Set<TFirst, TSecond>(ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TSecond data)
+        {
+            return ref Set<TFirst, TSecond>(ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="second">The second id (enum member) of the pair.</param>
+        /// <param name="data">The data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TSecond second, TFirst data) where TSecond : Enum
+        {
+            return ref Set<TFirst, TSecond>(second, ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="first">The first id (enum member) of the pair.</param>
+        /// <param name="data">The data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TFirst first, TSecond data) where TFirst : Enum
+        {
+            return ref Set<TFirst, TSecond>(first, ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="first">The first id of the pair</param>
+        /// <param name="data">The data.</param>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World SetSecond<TSecond>(ulong first, TSecond data)
+        {
+            return ref SetSecond(first, ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton component.
+        /// </summary>
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="T">The component type.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<T>(ref T data)
+        {
+            Entity<T>().Set(ref data);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="second">The second id of the pair.</param>
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst>(ulong second, ref TFirst data)
+        {
+            Entity<TFirst>().Set(second, ref data);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(ref TFirst data)
+        {
+            Entity<TFirst>().Set<TFirst, TSecond>(ref data);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(ref TSecond data)
+        {
+            Entity<TFirst>().Set<TFirst, TSecond>(ref data);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="second">The second id (enum member) of the pair.</param>
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TSecond second, ref TFirst data) where TSecond : Enum
+        {
+            return ref Set(Type<TSecond>.Id(Handle, second), ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="first">The first id (enum member) of the pair.</param>
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World Set<TFirst, TSecond>(TFirst first, ref TSecond data) where TFirst : Enum
+        {
+            return ref SetSecond(Type<TFirst>.Id(Handle, first), ref data);
+        }
+
+        /// <summary>
+        ///     Sets the data of a singleton pair component.
+        /// </summary>
+        /// <param name="first">The first id of the pair.</param>
+        /// <param name="data">The reference to the data.</param>
+        /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+        /// <returns>Reference to self.</returns>
+        public ref World SetSecond<TSecond>(ulong first, ref TSecond data)
+        {
+            Entity(first).SetSecond(first, ref data);
+            return ref this;
         }
 
         /// <summary>
@@ -576,13 +731,13 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public void Ensure<T>(Ecs.InvokeEnsureCallback<T> callback)
+        public void Insert<T>(Ecs.InvokeInsertCallback<T> callback)
         {
             Invoker.InvokeEnsure(Handle, Type<T>.Id(Handle), callback);
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton component.
+        ///     Get mutable pointer to singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -592,7 +747,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton pair.
+        ///     Get mutable pointer to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -603,7 +758,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton pair.
+        ///     Get mutable pointer to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -613,11 +768,11 @@ namespace Flecs.NET.Core
             where TFirst : unmanaged
             where TSecond : Enum
         {
-            return EnsurePtr<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return EnsurePtr<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton pair.
+        ///     Get mutable pointer to singleton pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -627,11 +782,11 @@ namespace Flecs.NET.Core
             where TFirst : Enum
             where TSecond : unmanaged
         {
-            return EnsureSecondPtr<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return EnsureSecondPtr<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton pair.
+        ///     Get mutable pointer to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -642,7 +797,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton pair.
+        ///     Get mutable pointer to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -653,7 +808,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get mut pointer to singleton pair.
+        ///     Get mutable pointer to singleton pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -664,7 +819,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton component.
+        ///     Get managed mutable reference to singleton component.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -674,7 +829,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton pair.
+        ///     Get managed mutable reference to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -685,7 +840,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton pair.
+        ///     Get managed mutable reference to singleton pair.
         /// </summary>
         /// <param name="second"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -693,11 +848,11 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref TFirst Ensure<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Ensure<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return ref Ensure<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton pair.
+        ///     Get managed mutable reference to singleton pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TFirst"></typeparam>
@@ -705,11 +860,11 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref TSecond Ensure<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return ref EnsureSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return ref EnsureSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton pair.
+        ///     Get managed mutable reference to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -720,7 +875,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton pair.
+        ///     Get managed mutable reference to singleton pair.
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -731,7 +886,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get managed mut reference to singleton pair.
+        ///     Get managed mutable reference to singleton pair.
         /// </summary>
         /// <param name="first"></param>
         /// <typeparam name="TSecond"></typeparam>
@@ -778,7 +933,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Modified<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            Modified<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            Modified<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -789,7 +944,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Modified<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            ModifiedSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            ModifiedSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -832,7 +987,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Ref<TFirst> GetRef<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return GetRef<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return GetRef<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -844,7 +999,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Ref<TSecond> GetRef<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return GetRefSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return GetRefSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -912,7 +1067,7 @@ namespace Flecs.NET.Core
             where TFirst : unmanaged
             where TSecond : Enum
         {
-            return GetPtr<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return GetPtr<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -926,7 +1081,7 @@ namespace Flecs.NET.Core
             where TFirst : Enum
             where TSecond : unmanaged
         {
-            return GetSecondPtr<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return GetSecondPtr<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -993,7 +1148,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref readonly TFirst Get<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return ref Get<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return ref Get<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1005,7 +1160,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref readonly TSecond Get<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return ref GetSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return ref GetSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1039,6 +1194,166 @@ namespace Flecs.NET.Core
         public ref readonly TSecond GetSecond<TSecond>(ulong first)
         {
             return ref Entity(first).GetSecond<TSecond>(first);
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton component.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T* GetMutPtr<T>() where T : unmanaged
+        {
+            return Entity<T>().GetMutPtr<T>();
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetMutPtr<TFirst>(ulong second) where TFirst : unmanaged
+        {
+            return Entity<TFirst>().GetMutPtr<TFirst>(second);
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetMutPtr<TFirst, TSecond>(TSecond second)
+            where TFirst : unmanaged
+            where TSecond : Enum
+        {
+            return GetMutPtr<TFirst>(Type<TSecond>.Id(Handle, second));
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetMutPtr<TFirst, TSecond>(TFirst first)
+            where TFirst : Enum
+            where TSecond : unmanaged
+        {
+            return GetMutSecondPtr<TSecond>(Type<TFirst>.Id(Handle, first));
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TFirst* GetMutFirstPtr<TFirst, TSecond>() where TFirst : unmanaged
+        {
+            return Entity<TFirst>().GetMutFirstPtr<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetMutSecondPtr<TFirst, TSecond>() where TSecond : unmanaged
+        {
+            return Entity<TFirst>().GetMutSecondPtr<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Get mutable pointer to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public TSecond* GetMutSecondPtr<TSecond>(ulong first) where TSecond : unmanaged
+        {
+            return Entity(first).GetMutSecondPtr<TSecond>(first);
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton component.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public ref T GetMut<T>()
+        {
+            return ref Entity<T>().GetMut<T>();
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <returns></returns>
+        public ref TFirst GetMut<TFirst>(ulong second)
+        {
+            return ref Entity<TFirst>().GetMut<TFirst>(second);
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton pair.
+        /// </summary>
+        /// <param name="second"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TFirst GetMut<TFirst, TSecond>(TSecond second) where TSecond : Enum
+        {
+            return ref GetMut<TFirst>(Type<TSecond>.Id(Handle, second));
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TSecond GetMut<TFirst, TSecond>(TFirst first) where TFirst : Enum
+        {
+            return ref GetMutSecond<TSecond>(Type<TFirst>.Id(Handle, first));
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TFirst GetMutFirst<TFirst, TSecond>()
+        {
+            return ref Entity<TFirst>().GetMutFirst<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton pair.
+        /// </summary>
+        /// <typeparam name="TFirst"></typeparam>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TSecond GetMutSecond<TFirst, TSecond>()
+        {
+            return ref Entity<TFirst>().GetMutSecond<TFirst, TSecond>();
+        }
+
+        /// <summary>
+        ///     Get managed mutable reference to singleton pair.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <typeparam name="TSecond"></typeparam>
+        /// <returns></returns>
+        public ref TSecond GetMutSecond<TSecond>(ulong first)
+        {
+            return ref Entity(first).GetMutSecond<TSecond>(first);
         }
 
         /// <summary>
@@ -1134,7 +1449,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Has<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Has<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1146,7 +1461,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return HasSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return HasSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1226,7 +1541,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Add<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            Add<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            Add<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1237,7 +1552,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Add<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            AddSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            AddSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1316,7 +1631,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Remove<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            Remove<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            Remove<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1327,7 +1642,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void Remove<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            RemoveSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            RemoveSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1473,7 +1788,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Use<T>(T value, string alias = "") where T : Enum
         {
-            return Use(EnumType<T>.Id(value, Handle), alias);
+            return Use(Type<T>.Id(Handle, value), alias);
         }
 
         /// <summary>
@@ -1487,7 +1802,7 @@ namespace Flecs.NET.Core
             using NativeString nativeName = (NativeString)name;
 
             ulong entity = ecs_lookup_path_w_sep(Handle, 0, nativeName,
-                BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator, Macros.True);
+                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Utils.True);
 
             Ecs.Assert(entity != 0, nameof(ECS_INVALID_PARAMETER));
 
@@ -1515,7 +1830,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count(ulong first, ulong second)
         {
-            return Count(Macros.Pair(first, second));
+            return Count(Ecs.Pair(first, second));
         }
 
         /// <summary>
@@ -1536,7 +1851,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<T>(T value) where T : Enum
         {
-            return Count<T>(EnumType<T>.Id(value, Handle));
+            return Count<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1547,7 +1862,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<TFirst>(ulong second)
         {
-            return Count(Macros.Pair<TFirst>(second, Handle));
+            return Count(Ecs.Pair<TFirst>(second, Handle));
         }
 
         /// <summary>
@@ -1558,7 +1873,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<TFirst, TSecond>()
         {
-            return Count(Macros.Pair<TFirst, TSecond>(Handle));
+            return Count(Ecs.Pair<TFirst, TSecond>(Handle));
         }
 
         /// <summary>
@@ -1570,7 +1885,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Count<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Count<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1582,7 +1897,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int Count<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return CountSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return CountSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1600,135 +1915,135 @@ namespace Flecs.NET.Core
         ///     All entities created in function are created with id.
         /// </summary>
         /// <param name="id">Id to be added to the created entities.</param>
-        /// <param name="func"></param>
-        public void With(ulong id, Action func)
+        /// <param name="callback">The callback.</param>
+        public void With(ulong id, Action callback)
         {
             ulong prev = ecs_set_with(Handle, id);
-            func();
+            callback();
             ecs_set_with(Handle, prev);
         }
 
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        /// <param name="func"></param>
-        public void With(ulong first, ulong second, Action func)
+        /// <param name="first">The first id.</param>
+        /// <param name="second">The second id.</param>
+        /// <param name="callback">The callback.</param>
+        public void With(ulong first, ulong second, Action callback)
         {
-            With(Macros.Pair(first, second), func);
+            With(Ecs.Pair(first, second), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with type.
         /// </summary>
-        /// <param name="func"></param>
-        /// <typeparam name="T"></typeparam>
-        public void With<T>(Action func)
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The component.</typeparam>
+        public void With<T>(Action callback)
         {
-            With(Type<T>.Id(Handle), func);
+            With(Type<T>.Id(Handle), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with enum.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="T"></typeparam>
-        public void With<T>(T value, Action func) where T : Enum
+        /// <param name="value">The enum constant.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The enum.</typeparam>
+        public void With<T>(T value, Action callback) where T : Enum
         {
-            With<T>(EnumType<T>.Id(value, Handle), func);
+            With<T>(Type<T>.Id(Handle, value), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="second"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        public void With<TFirst>(ulong second, Action func)
+        /// <param name="second">The second id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first component.</typeparam>
+        public void With<TFirst>(ulong second, Action callback)
         {
-            With(Macros.Pair<TFirst>(second, Handle), func);
+            With(Ecs.Pair<TFirst>(second, Handle), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="func"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        public void With<TFirst, TSecond>(Action func)
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first component.</typeparam>
+        /// <typeparam name="TSecond">The second component.</typeparam>
+        public void With<TFirst, TSecond>(Action callback)
         {
-            With(Macros.Pair<TFirst, TSecond>(Handle), func);
+            With(Ecs.Pair<TFirst, TSecond>(Handle), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="second"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        public void With<TFirst, TSecond>(TSecond second, Action func) where TSecond : Enum
+        /// <param name="second">The second enum constant id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first component.</typeparam>
+        /// <typeparam name="TSecond">The second enum.</typeparam>
+        public void With<TFirst, TSecond>(TSecond second, Action callback) where TSecond : Enum
         {
-            With<TFirst>(EnumType<TSecond>.Id(second, Handle), func);
+            With<TFirst>(Type<TSecond>.Id(Handle, second), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="TFirst"></typeparam>
-        /// <typeparam name="TSecond"></typeparam>
-        public void With<TFirst, TSecond>(TFirst first, Action func) where TFirst : Enum
+        /// <param name="first">The first enum constant.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first enum.</typeparam>
+        /// <typeparam name="TSecond">The second component.</typeparam>
+        public void With<TFirst, TSecond>(TFirst first, Action callback) where TFirst : Enum
         {
-            WithSecond<TSecond>(EnumType<TFirst>.Id(first, Handle), func);
+            WithSecond<TSecond>(Type<TFirst>.Id(Handle, first), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created with pair.
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="TSecond"></typeparam>
-        public void WithSecond<TSecond>(ulong first, Action func)
+        /// <param name="first">The first id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TSecond">The second component.</typeparam>
+        public void WithSecond<TSecond>(ulong first, Action callback)
         {
-            With(first, Type<TSecond>.Id(Handle), func);
+            With(first, Type<TSecond>.Id(Handle), callback);
         }
 
         /// <summary>
         ///     All entities created in function are created in scope. All operations
         ///     called in function (such as lookup) are relative to scope.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="func"></param>
-        public void Scope(ulong parent, Action func)
+        /// <param name="parent">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        public void Scope(ulong parent, Action callback)
         {
             ulong prev = ecs_set_scope(Handle, parent);
-            func();
+            callback();
             ecs_set_scope(Handle, prev);
         }
 
         /// <summary>
-        ///     Same as Scope(parent, func), but with T as parent.
+        ///     Same as Scope(parent, callback), but with T as parent.
         /// </summary>
-        /// <param name="func"></param>
-        /// <typeparam name="T"></typeparam>
-        public void Scope<T>(Action func)
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The entity to use as scope.</typeparam>
+        public void Scope<T>(Action callback)
         {
-            Scope(Type<T>.Id(Handle), func);
+            Scope(Type<T>.Id(Handle), callback);
         }
 
         /// <summary>
-        ///     Same as Scope(parent, func), but with enum as parent.
+        ///     Same as Scope(parent, callback), but with enum as parent.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="func"></param>
-        /// <typeparam name="T"></typeparam>
-        public void Scope<T>(T value, Action func) where T : Enum
+        /// <param name="value">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The enum.</typeparam>
+        public void Scope<T>(T value, Action callback) where T : Enum
         {
-            Scope(EnumType<T>.Id(value, Handle), func);
+            Scope(Type<T>.Id(Handle, value), callback);
         }
 
         /// <summary>
@@ -1759,7 +2074,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ScopedWorld Scope<T>(T value) where T : Enum
         {
-            return Scope(EnumType<T>.Id(value, Handle));
+            return Scope(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1788,7 +2103,7 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         public void DeleteWith(ulong first, ulong second)
         {
-            DeleteWith(Macros.Pair(first, second));
+            DeleteWith(Ecs.Pair(first, second));
         }
 
         /// <summary>
@@ -1807,7 +2122,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void DeleteWith<T>(T value) where T : Enum
         {
-            DeleteWith<T>(EnumType<T>.Id(value, Handle));
+            DeleteWith<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1817,7 +2132,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         public void DeleteWith<TFirst>(ulong second)
         {
-            DeleteWith(Macros.Pair<TFirst>(second, Handle));
+            DeleteWith(Ecs.Pair<TFirst>(second, Handle));
         }
 
         /// <summary>
@@ -1827,7 +2142,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void DeleteWith<TFirst, TSecond>()
         {
-            DeleteWith(Macros.Pair<TFirst, TSecond>(Handle));
+            DeleteWith(Ecs.Pair<TFirst, TSecond>(Handle));
         }
 
         /// <summary>
@@ -1838,7 +2153,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void DeleteWith<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            DeleteWith<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            DeleteWith<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1849,7 +2164,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void DeleteWith<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            DeleteWithSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            DeleteWithSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1859,7 +2174,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void DeleteWithSecond<TSecond>(ulong first)
         {
-            DeleteWith(Macros.PairSecond<TSecond>(first, Handle));
+            DeleteWith(Ecs.PairSecond<TSecond>(first, Handle));
         }
 
         /// <summary>
@@ -1878,7 +2193,7 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         public void RemoveAll(ulong first, ulong second)
         {
-            RemoveAll(Macros.Pair(first, second));
+            RemoveAll(Ecs.Pair(first, second));
         }
 
         /// <summary>
@@ -1897,7 +2212,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void RemoveAll<T>(T value) where T : Enum
         {
-            RemoveAll<T>(EnumType<T>.Id(value, Handle));
+            RemoveAll<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -1907,7 +2222,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TFirst"></typeparam>
         public void RemoveAll<TFirst>(ulong second)
         {
-            RemoveAll(Macros.Pair<TFirst>(second, Handle));
+            RemoveAll(Ecs.Pair<TFirst>(second, Handle));
         }
 
         /// <summary>
@@ -1917,7 +2232,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void RemoveAll<TFirst, TSecond>()
         {
-            RemoveAll(Macros.Pair<TFirst, TSecond>(Handle));
+            RemoveAll(Ecs.Pair<TFirst, TSecond>(Handle));
         }
 
         /// <summary>
@@ -1928,7 +2243,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void RemoveAll<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            RemoveAll<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            RemoveAll<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -1939,7 +2254,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void RemoveAll<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            RemoveAllSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            RemoveAllSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -1949,30 +2264,18 @@ namespace Flecs.NET.Core
         /// <typeparam name="TSecond"></typeparam>
         public void RemoveAllSecond<TSecond>(ulong first)
         {
-            RemoveAll(Macros.PairSecond<TSecond>(first, Handle));
+            RemoveAll(Ecs.PairSecond<TSecond>(first, Handle));
         }
 
         /// <summary>
         ///     Defer all operations called in function. If the world is already in
         ///     deferred mode, do nothing.
         /// </summary>
-        /// <param name="func"></param>
-        public void Defer(Action func)
+        /// <param name="callback">The callback.</param>
+        public void Defer(Action callback)
         {
             ecs_defer_begin(Handle);
-            func();
-            ecs_defer_end(Handle);
-        }
-
-        /// <summary>
-        ///     Defer all operations called in function. If the world is already in
-        ///     deferred mode, do nothing.
-        /// </summary>
-        /// <param name="callback"></param>
-        public void Defer(Ecs.WorldCallback callback)
-        {
-            ecs_defer_begin(Handle);
-            callback(ref this);
+            callback();
             ecs_defer_end(Handle);
         }
 
@@ -2051,16 +2354,16 @@ namespace Flecs.NET.Core
         public void RunPostFrame(Ecs.FiniAction action, void* ctx)
         {
             BindingContext.SetCallback(ref WorldContext.RunPostFrame, action);
-            ecs_run_post_frame(Handle, WorldContext.RunPostFrame.Function, ctx);
+            ecs_run_post_frame(Handle, WorldContext.RunPostFrame.Pointer, ctx);
         }
 
         /// <summary>
         ///     Get the world info.
         /// </summary>
         /// <returns></returns>
-        public ecs_world_info_t* GetInfo()
+        public WorldInfo GetInfo()
         {
-            return ecs_get_world_info(Handle);
+            return new WorldInfo(ecs_get_world_info(Handle));
         }
 
         /// <summary>
@@ -2069,7 +2372,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public float DeltaTime()
         {
-            return GetInfo()->delta_time;
+            return ecs_get_world_info(Handle)->delta_time;
         }
 
         /// <summary>
@@ -2121,7 +2424,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id<T>(T value) where T : Enum
         {
-            return new Id(Handle, EnumType<T>.Id(value, Handle));
+            return new Id(Handle, Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2155,7 +2458,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Id<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Id<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -2167,7 +2470,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return IdSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return IdSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -2200,7 +2503,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair<T>(T value) where T : Enum
         {
-            return Id<T>(EnumType<T>.Id(value, Handle));
+            return Id<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2234,7 +2537,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Pair<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Pair<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -2246,7 +2549,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return PairSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return PairSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -2300,13 +2603,25 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Get component with name.
+        ///     Get component associated with name.
         /// </summary>
+        /// <param name="name"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public Component<T> Component<T>(string name)
         {
             return new Component<T>(Handle, name);
+        }
+
+        /// <summary>
+        ///     Get component with associated with id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Component<T> Component<T>(ulong id)
+        {
+            return new Component<T>(Handle, id);
         }
 
         /// <summary>
@@ -2356,7 +2671,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Entity<T>(string name)
         {
-            return new Entity(Handle, Type<T>.IdExplicit(Handle, name, true, 0, false));
+            return new Entity(Handle, Type<T>.Id(Handle, false, false, 0, name));
         }
 
         /// <summary>
@@ -2367,7 +2682,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Entity<T>(T value) where T : Enum
         {
-            return new Entity(Handle, EnumType<T>.Id(value, Handle));
+            return new Entity(Handle, Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2437,7 +2752,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public EventBuilder Event<T>(T value) where T : Enum
         {
-            return new EventBuilder(Handle, EnumType<T>.Id(value, Handle));
+            return new EventBuilder(Handle, Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2498,7 +2813,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<T>(T value) where T : Enum
         {
-            return Term<T>(EnumType<T>.Id(value, Handle));
+            return Term<T>(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2509,7 +2824,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<TFirst>(ulong second)
         {
-            return new Term(Handle, Macros.Pair<TFirst>(second, Handle));
+            return new Term(Handle, Ecs.Pair<TFirst>(second, Handle));
         }
 
         /// <summary>
@@ -2520,7 +2835,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<TFirst, TSecond>()
         {
-            return new Term(Handle, Macros.Pair<TFirst, TSecond>(Handle));
+            return new Term(Handle, Ecs.Pair<TFirst, TSecond>(Handle));
         }
 
         /// <summary>
@@ -2532,7 +2847,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<TFirst, TSecond>(TSecond second) where TSecond : Enum
         {
-            return Term<TFirst>(EnumType<TSecond>.Id(second, Handle));
+            return Term<TFirst>(Type<TSecond>.Id(Handle, second));
         }
 
         /// <summary>
@@ -2544,7 +2859,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term Term<TFirst, TSecond>(TFirst first) where TFirst : Enum
         {
-            return TermSecond<TSecond>(EnumType<TFirst>.Id(first, Handle));
+            return TermSecond<TSecond>(Type<TFirst>.Id(Handle, first));
         }
 
         /// <summary>
@@ -2555,7 +2870,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Term TermSecond<TSecond>(ulong first)
         {
-            return new Term(Handle, Macros.PairSecond<TSecond>(first, Handle));
+            return new Term(Handle, Ecs.PairSecond<TSecond>(first, Handle));
         }
 
         /// <summary>
@@ -2565,8 +2880,8 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public void Each(ulong id, Ecs.EachEntityCallback callback)
         {
-            ecs_iter_t it = Macros.TermIter(Handle, id);
-            while (ecs_term_next(&it) == 1)
+            ecs_iter_t it = ecs_each_id(Handle, id);
+            while (ecs_each_next(&it) == 1)
                 Invoker.Each(&it, callback);
         }
 
@@ -2578,7 +2893,7 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         public void Each(ulong first, ulong second, Ecs.EachEntityCallback callback)
         {
-            Each(Macros.Pair(first, second), callback);
+            Each(Ecs.Pair(first, second), callback);
         }
 
         /// <summary>
@@ -2587,9 +2902,9 @@ namespace Flecs.NET.Core
         /// <param name="value"></param>
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
-        public void Each<T>(T value, Ecs.EachEntityCallback<T> callback) where T : Enum
+        public void Each<T>(T value, Ecs.EachEntityRefCallback<T> callback) where T : Enum
         {
-            Each(EnumType<T>.Id(value, Handle), callback);
+            Each(Type<T>.Id(Handle, value), callback);
         }
 
         /// <summary>
@@ -2598,10 +2913,10 @@ namespace Flecs.NET.Core
         /// <param name="second"></param>
         /// <param name="callback"></param>
         /// <typeparam name="TFirst"></typeparam>
-        public void Each<TFirst>(ulong second, Ecs.EachEntityCallback<TFirst> callback)
+        public void Each<TFirst>(ulong second, Ecs.EachEntityRefCallback<TFirst> callback)
         {
-            ecs_iter_t it = Macros.TermIter(Handle, Macros.Pair<TFirst>(second, Handle));
-            while (ecs_term_next(&it) == 1)
+            ecs_iter_t it = ecs_each_id(Handle, Ecs.Pair<TFirst>(second, Handle));
+            while (ecs_each_next(&it) == 1)
                 Invoker.Each(&it, callback);
         }
 
@@ -2622,7 +2937,7 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
-        public void Each<TFirst, TSecond>(Ecs.EachEntityCallback<TFirst> callback)
+        public void Each<TFirst, TSecond>(Ecs.EachEntityRefCallback<TFirst> callback)
         {
             Each(Type<TSecond>.Id(Handle), callback);
         }
@@ -2633,7 +2948,7 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
-        public void Each<TFirst, TSecond>(Ecs.EachEntityCallback<TSecond> callback)
+        public void Each<TFirst, TSecond>(Ecs.EachEntityRefCallback<TSecond> callback)
         {
             EachSecond(Type<TFirst>.Id(Handle), callback);
         }
@@ -2645,9 +2960,9 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
-        public void Each<TFirst, TSecond>(TSecond second, Ecs.EachEntityCallback<TFirst> callback) where TSecond : Enum
+        public void Each<TFirst, TSecond>(TSecond second, Ecs.EachEntityRefCallback<TFirst> callback) where TSecond : Enum
         {
-            Each(EnumType<TSecond>.Id(second, Handle), callback);
+            Each(Type<TSecond>.Id(Handle, second), callback);
         }
 
         /// <summary>
@@ -2657,9 +2972,9 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="TFirst"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
-        public void Each<TFirst, TSecond>(TFirst first, Ecs.EachEntityCallback<TSecond> callback) where TFirst : Enum
+        public void Each<TFirst, TSecond>(TFirst first, Ecs.EachEntityRefCallback<TSecond> callback) where TFirst : Enum
         {
-            EachSecond(EnumType<TFirst>.Id(first, Handle), callback);
+            EachSecond(Type<TFirst>.Id(Handle, first), callback);
         }
 
         /// <summary>
@@ -2668,11 +2983,22 @@ namespace Flecs.NET.Core
         /// <param name="first"></param>
         /// <param name="callback"></param>
         /// <typeparam name="TSecond"></typeparam>
-        public void EachSecond<TSecond>(ulong first, Ecs.EachEntityCallback<TSecond> callback)
+        public void EachSecond<TSecond>(ulong first, Ecs.EachEntityRefCallback<TSecond> callback)
         {
-            ecs_iter_t it = Macros.TermIter(Handle, Macros.PairSecond<TSecond>(first, Handle));
-            while (ecs_term_next(&it) == 1)
+            ecs_iter_t it = ecs_each_id(Handle, Ecs.PairSecond<TSecond>(first, Handle));
+            while (ecs_each_next(&it) == 1)
                 Invoker.Each(&it, callback);
+        }
+
+        /// <summary>
+        ///     Convert enum constant to entity.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Entity ToEntity<T>(T value) where T : Enum
+        {
+            return Entity(value);
         }
 
         /// <summary>
@@ -2683,13 +3009,13 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Module<TModule>(string name = "") where TModule : IFlecsModule, new()
         {
-            ulong result = Type<TModule>.Id(Handle, null, false);
+            ulong result = Type<TModule>.Id(Handle);
 
             if (!string.IsNullOrEmpty(name))
             {
                 using NativeString nativeName = (NativeString)name;
                 ecs_add_path_w_sep(Handle, result, 0, nativeName,
-                    BindingContext.DefaultSeparator, BindingContext.DefaultRootSeparator);
+                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator);
             }
 
             ecs_set_scope(Handle, result);
@@ -2697,13 +3023,13 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Import a module.
+        ///     Imports a module.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">The module type.</typeparam>
+        /// <returns>The module entity.</returns>
         public Entity Import<T>() where T : IFlecsModule, new()
         {
-            return Core.Module.Import<T>(this);
+            return Ecs.Import<T>(this);
         }
 
         /// <summary>
@@ -2731,7 +3057,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void SetPipeline<T>(T value) where T : Enum
         {
-            SetPipeline(EnumType<T>.Id(value, Handle));
+            SetPipeline(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2835,15 +3161,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates a snapshot.
-        /// </summary>
-        /// <returns></returns>
-        public Snapshot Snapshot()
-        {
-            return new Snapshot(Handle);
-        }
-
-        /// <summary>
         ///     Creates a timer.
         /// </summary>
         /// <returns></returns>
@@ -2889,7 +3206,7 @@ namespace Flecs.NET.Core
         /// <typeparam name="T"></typeparam>
         public void Timer<T>(T value) where T : Enum
         {
-            Timer(EnumType<T>.Id(value, Handle));
+            Timer(Type<T>.Id(Handle, value));
         }
 
         /// <summary>
@@ -2901,28 +3218,47 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Load plecs string.
+        ///     Run script.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public int PlecsFromStr(string name, string str)
+        /// <param name="name">The script name (typically the file).</param>
+        /// <param name="str">The script.</param>
+        /// <returns>Zero if success, non-zero otherwise.</returns>
+        public int ScriptRun(string name, string str)
         {
             using NativeString nativeName = (NativeString)name;
             using NativeString nativeStr = (NativeString)str;
 
-            return ecs_plecs_from_str(Handle, nativeName, nativeStr);
+            return ecs_script_run(Handle, nativeName, nativeStr);
         }
 
         /// <summary>
-        ///     Load plecs from file.
+        ///     Run script from file.
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public int PlecsFromFile(string fileName)
+        /// <param name="fileName">The script file name.</param>
+        /// <returns>Zero if success, non-zero if failed.</returns>
+        public int ScriptRunFile(string fileName)
         {
             using NativeString nativeFileName = (NativeString)fileName;
-            return ecs_plecs_from_file(Handle, nativeFileName);
+            return ecs_script_run_file(Handle, nativeFileName);
+        }
+
+        /// <summary>
+        ///     Creates a script builder.
+        /// </summary>
+        /// <returns>The created script builder.</returns>
+        public ScriptBuilder Script()
+        {
+            return new ScriptBuilder(Handle);
+        }
+
+        /// <summary>
+        ///     Creates a script builder with the provided entity name.
+        /// </summary>
+        /// <param name="name">The entity name.</param>
+        /// <returns>The created script builder.</returns>
+        public ScriptBuilder Script(string name)
+        {
+            return new ScriptBuilder(Handle, name);
         }
 
         /// <summary>
@@ -2939,9 +3275,9 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Convert value to string.
         /// </summary>
-        /// <param name="value"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <param name="value">The value to serialize.</param>
+        /// <typeparam name="T">The type of the value to serialize.</typeparam>
+        /// <returns>String with expression, or empty string if failed.</returns>
         public string ToExpr<T>(T* value) where T : unmanaged
         {
             return ToExpr(Type<T>.Id(Handle), value);
@@ -2950,9 +3286,9 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Covert value to string.
         /// </summary>
-        /// <param name="value"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <param name="value">The value to serialize.</param>
+        /// <typeparam name="T">The type of the value to serialize.</typeparam>
+        /// <returns>String with expression, or empty string if failed.</returns>
         public string ToExpr<T>(ref T value) where T : unmanaged
         {
             fixed (T* ptr = &value)
@@ -3235,98 +3571,145 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates a filter builder.
+        ///     Creates an alert builder.
         /// </summary>
-        /// <returns></returns>
-        public FilterBuilder FilterBuilder(string? name = null)
+        /// <returns>An alert builder.</returns>
+        public AlertBuilder AlertBuilder()
         {
-            return new FilterBuilder(Handle, name);
-        }
-
-        /// <summary>
-        ///     Creates a filter.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Filter Filter(string? name = null)
-        {
-            return FilterBuilder(name).Build();
-        }
-
-        /// <summary>
-        ///     Creates a rule builder.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public RuleBuilder RuleBuilder(string? name = null)
-        {
-            return new RuleBuilder(Handle, name);
-        }
-
-        /// <summary>
-        ///     Creates a rule builder.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Rule Rule(string? name = null)
-        {
-            return RuleBuilder(name).Build();
+            return new AlertBuilder(Handle);
         }
 
         /// <summary>
         ///     Creates an alert builder.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public AlertBuilder AlertBuilder(string? name = null)
+        /// <param name="name">The alert name.</param>
+        /// <returns>An alert builder.</returns>
+        public AlertBuilder AlertBuilder(string name)
         {
             return new AlertBuilder(Handle, name);
         }
 
         /// <summary>
+        ///     Creates an alert builder.
+        /// </summary>
+        /// <param name="entity">The alert entity.</param>
+        /// <returns>An alert builder.</returns>
+        public AlertBuilder AlertBuilder(ulong entity)
+        {
+            return new AlertBuilder(Handle, entity);
+        }
+
+        /// <summary>
         ///     Creates an alert.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Alert Alert(string? name = null)
+        /// <returns>An alert.</returns>
+        public Alert Alert()
+        {
+            return AlertBuilder().Build();
+        }
+
+        /// <summary>
+        ///     Creates an alert.
+        /// </summary>
+        /// <param name="name">The alert name.</param>
+        /// <returns>An alert.</returns>
+        public Alert Alert(string name)
         {
             return AlertBuilder(name).Build();
         }
 
         /// <summary>
+        ///     Creates an alert.
+        /// </summary>
+        /// <param name="entity">The alert entity.</param>
+        /// <returns>An alert.</returns>
+        public Alert Alert(ulong entity)
+        {
+            return AlertBuilder(entity).Build();
+        }
+
+        /// <summary>
         ///     Creates a query builder.
         /// </summary>
-        /// <returns></returns>
-        public QueryBuilder QueryBuilder(string? name = null)
+        /// <returns>A query builder.</returns>
+        public QueryBuilder QueryBuilder()
+        {
+            return new QueryBuilder(Handle);
+        }
+
+        /// <summary>
+        ///     Creates a query builder.
+        /// </summary>
+        /// <param name="name">The query name.</param>
+        /// <returns>A query builder.</returns>
+        public QueryBuilder QueryBuilder(string name)
         {
             return new QueryBuilder(Handle, name);
         }
 
         /// <summary>
+        ///     Creates a query builder.
+        /// </summary>
+        /// <param name="entity">The query entity.</param>
+        /// <returns>A query builder.</returns>
+        public QueryBuilder QueryBuilder(ulong entity)
+        {
+            return new QueryBuilder(Handle, entity);
+        }
+
+        /// <summary>
         ///     Creates a query.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Query Query(string? name = null)
+        /// <returns>A query.</returns>
+        public Query Query()
         {
-            return QueryBuilder(name).Build();
+            return QueryBuilder().Build();
+        }
+
+        /// <summary>
+        ///     Creates a query.
+        /// </summary>
+        /// <param name="name">The query name.</param>
+        /// <returns>A query.</returns>
+        public Query Query(string name)
+        {
+            return new Query(Handle, Lookup(name));
+        }
+
+        /// <summary>
+        ///     Creates a query.
+        /// </summary>
+        /// <param name="entity">The query entity.</param>
+        /// <returns>A query.</returns>
+        public Query Query(ulong entity)
+        {
+            return new Query(Handle, entity);
         }
 
         /// <summary>
         ///     Creates a pipeline builder.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public PipelineBuilder Pipeline(string? name = null)
+        /// <returns>A pipeline builder.</returns>
+        public PipelineBuilder Pipeline()
+        {
+            return new PipelineBuilder(Handle);
+        }
+
+        /// <summary>
+        ///     Creates a pipeline builder.
+        /// </summary>
+        /// <param name="name">The pipeline name.</param>
+        /// <returns>A pipeline builder.</returns>
+        public PipelineBuilder Pipeline(string name)
         {
             return new PipelineBuilder(Handle, name);
         }
 
         /// <summary>
-        ///     Creates a pipeline builder associated with the provided type.
+        ///     Creates a pipeline builder.
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <param name="entity">The pipeline entity.</param>
+        /// <returns>A pipeline builder.</returns>
         public PipelineBuilder Pipeline(ulong entity)
         {
             return new PipelineBuilder(Handle, entity);
@@ -3335,7 +3718,7 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates a pipeline builder associated with the provided type.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A pipeline builder.</returns>
         public PipelineBuilder Pipeline<T>()
         {
             return Pipeline(Type<T>.Id(Handle));
@@ -3344,9 +3727,18 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates an observer builder.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public ObserverBuilder Observer(string? name = null)
+        /// <returns>An observer builder.</returns>
+        public ObserverBuilder Observer()
+        {
+            return new ObserverBuilder(Handle);
+        }
+
+        /// <summary>
+        ///     Creates an observer builder.
+        /// </summary>
+        /// <param name="name">The observer name.</param>
+        /// <returns>An observer builder.</returns>
+        public ObserverBuilder Observer(string name)
         {
             return new ObserverBuilder(Handle, name);
         }
@@ -3354,8 +3746,8 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates an observer.
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <param name="entity">The observer entity.</param>
+        /// <returns>An observer.</returns>
         public Observer Observer(ulong entity)
         {
             return new Observer(Handle, entity);
@@ -3364,9 +3756,18 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Creates an observer builder.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public RoutineBuilder Routine(string? name = null)
+        /// <returns>A routine builder.</returns>
+        public RoutineBuilder Routine()
+        {
+            return new RoutineBuilder(Handle);
+        }
+
+        /// <summary>
+        ///     Creates an observer builder.
+        /// </summary>
+        /// <param name="name">The routine name.</param>
+        /// <returns>A routine builder.</returns>
+        public RoutineBuilder Routine(string name)
         {
             return new RoutineBuilder(Handle, name);
         }
@@ -3374,8 +3775,8 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Create routine.
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <param name="entity">The routine entity.</param>
+        /// <returns>A routine.</returns>
         public Routine Routine(ulong entity)
         {
             return new Routine(Handle, entity);
@@ -3391,7 +3792,7 @@ namespace Flecs.NET.Core
 
         private BindingContext.WorldContext* EnsureBindingContext()
         {
-            BindingContext.WorldContext* ptr = (BindingContext.WorldContext*)ecs_get_binding_ctx(Handle);
+            BindingContext.WorldContext* ptr = (BindingContext.WorldContext*)ecs_get_binding_ctx_fast(Handle);
 
             if (ptr != null)
                 return ptr;
@@ -3402,20 +3803,43 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Returns native pointer to world.
         /// </summary>
         /// <param name="world"></param>
         /// <returns></returns>
-        public static implicit operator ecs_world_t*(World world)
+        public static ecs_world_t* To(World world)
         {
             return world.Handle;
         }
 
         /// <summary>
+        ///     Returns world wrapper for native world pointer.
         /// </summary>
+        /// <param name="world"></param>
         /// <returns></returns>
-        public ecs_world_t* To()
+        public static World From(ecs_world_t* world)
         {
-            return Handle;
+            return new World(world);
+        }
+
+        /// <summary>
+        ///     Returns native pointer to world.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <returns></returns>
+        public static implicit operator ecs_world_t*(World world)
+        {
+            return To(world);
+        }
+
+        /// <summary>
+        ///     Returns world wrapper for native world pointer.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <returns></returns>
+        public static implicit operator World(ecs_world_t* world)
+        {
+            return From(world);
         }
 
         /// <summary>
@@ -3480,6 +3904,428 @@ namespace Flecs.NET.Core
         public Table Table()
         {
             return new Table(Handle);
+        }
+
+        /// <summary>
+        ///     Create new entity in table.
+        /// </summary>
+        /// <param name="table">The table to which to add the new entity.</param>
+        /// <returns>The new entity.</returns>
+        public Entity Entity(Table table)
+        {
+            return Entity(ecs_new_w_table(Handle, table));
+        }
+
+        /// <summary>
+        ///     Set current with id.
+        /// </summary>
+        /// <param name="with">The id.</param>
+        /// <returns>The previous id.</returns>
+        public Entity SetWith(ulong with)
+        {
+            return new Entity(Handle, ecs_set_with(Handle, with));
+        }
+
+        /// <summary>
+        ///     Get current with id.
+        /// </summary>
+        /// <returns>The last id provided to ecs_set_with().</returns>
+        public Entity GetWith()
+        {
+            return new Entity(Handle, ecs_get_with(Handle));
+        }
+
+        /// <summary>
+        ///     All entities created in function are created in scope. All operations
+        ///     called in function (such as lookup) are relative to scope.
+        /// </summary>
+        /// <param name="parent">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        public void Scope(ulong parent, Ecs.WorldCallback callback)
+        {
+            ulong prev = ecs_set_scope(Handle, parent);
+            callback(Handle);
+            ecs_set_scope(Handle, prev);
+        }
+
+        /// <summary>
+        ///     Same as Scope(parent, func), but with T as parent.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The entity to use as scope.</typeparam>
+        public void Scope<T>(Ecs.WorldCallback callback)
+        {
+            Scope(Type<T>.Id(Handle), callback);
+        }
+
+        /// <summary>
+        ///     Same as Scope(parent, func), but with enum as parent.
+        /// </summary>
+        /// <param name="value">The entity to use as scope.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The enum.</typeparam>
+        public void Scope<T>(T value, Ecs.WorldCallback callback) where T : Enum
+        {
+            Scope(Type<T>.Id(Handle, value), callback);
+        }
+
+        /// <summary>
+        ///     Defer all operations called in function. If the world is already in
+        ///     deferred mode, do nothing.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        public void Defer(Ecs.WorldCallback callback)
+        {
+            ecs_defer_begin(Handle);
+            callback(Handle);
+            ecs_defer_end(Handle);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with id.
+        /// </summary>
+        /// <param name="id">Id to be added to the created entities.</param>
+        /// <param name="callback">The callback.</param>
+        public void With(ulong id, Ecs.WorldCallback callback)
+        {
+            ulong prev = ecs_set_with(Handle, id);
+            callback(Handle);
+            ecs_set_with(Handle, prev);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="first">The first id.</param>
+        /// <param name="second">The second id.</param>
+        /// <param name="callback">The callback.</param>
+        public void With(ulong first, ulong second, Ecs.WorldCallback callback)
+        {
+            With(Ecs.Pair(first, second), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with type.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The component.</typeparam>
+        public void With<T>(Ecs.WorldCallback callback)
+        {
+            With(Type<T>.Id(Handle), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with enum.
+        /// </summary>
+        /// <param name="value">The enum constant.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The enum.</typeparam>
+        public void With<T>(T value, Ecs.WorldCallback callback) where T : Enum
+        {
+            With<T>(Type<T>.Id(Handle, value), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="second">The second id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first component.</typeparam>
+        public void With<TFirst>(ulong second, Ecs.WorldCallback callback)
+        {
+            With(Ecs.Pair<TFirst>(second, Handle), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first component.</typeparam>
+        /// <typeparam name="TSecond">The second component.</typeparam>
+        public void With<TFirst, TSecond>(Ecs.WorldCallback callback)
+        {
+            With(Ecs.Pair<TFirst, TSecond>(Handle), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="second">The second enum constant id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first component.</typeparam>
+        /// <typeparam name="TSecond">The second enum.</typeparam>
+        public void With<TFirst, TSecond>(TSecond second, Ecs.WorldCallback callback) where TSecond : Enum
+        {
+            With<TFirst>(Type<TSecond>.Id(Handle, second), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="first">The first enum constant.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TFirst">The first enum.</typeparam>
+        /// <typeparam name="TSecond">The second component.</typeparam>
+        public void With<TFirst, TSecond>(TFirst first, Ecs.WorldCallback callback) where TFirst : Enum
+        {
+            WithSecond<TSecond>(Type<TFirst>.Id(Handle, first), callback);
+        }
+
+        /// <summary>
+        ///     All entities created in function are created with pair.
+        /// </summary>
+        /// <param name="first">The first id.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="TSecond">The second component.</typeparam>
+        public void WithSecond<TSecond>(ulong first, Ecs.WorldCallback callback)
+        {
+            With(first, Type<TSecond>.Id(Handle), callback);
+        }
+
+        /// <summary>
+        ///     Lookup entity by name.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <returns>The entity if found, else 0.</returns>
+        public Entity Lookup(string path)
+        {
+            return Lookup(path, true);
+        }
+
+        /// <summary>
+        ///     Lookup entity by name.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <returns>The entity if found, else 0.</returns>
+        public Entity Lookup(string path, bool recursive)
+        {
+            if (string.IsNullOrEmpty(path))
+                return new Entity(Handle, 0);
+
+            using NativeString nativePath = (NativeString)path;
+
+            return new Entity(
+                Handle,
+                ecs_lookup_path_w_sep(Handle, 0, nativePath,
+                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Utils.Bool(recursive))
+            );
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, out Entity entity)
+        {
+            return TryLookup(path, Ecs.DefaultSeparator, Ecs.DefaultSeparator, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, bool recursive, out Entity entity)
+        {
+            return TryLookup(path, Ecs.DefaultSeparator, Ecs.DefaultSeparator, recursive, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, string separator, out Entity entity)
+        {
+            return TryLookup(path, separator, Ecs.DefaultSeparator, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="rootSeparator">The root separator.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, string separator, string rootSeparator, out Entity entity)
+        {
+            return TryLookup(path, separator, rootSeparator, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="rootSeparator">The root separator.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, string separator, string rootSeparator, bool recursive, out Entity entity)
+        {
+            return (entity = Lookup(path, separator, rootSeparator, recursive)) != 0;
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, out ulong entity)
+        {
+            return TryLookup(path, Ecs.DefaultSeparator, Ecs.DefaultSeparator, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, bool recursive, out ulong entity)
+        {
+            return TryLookup(path, Ecs.DefaultSeparator, Ecs.DefaultSeparator, recursive, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, string separator, out ulong entity)
+        {
+            return TryLookup(path, separator, Ecs.DefaultSeparator, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="rootSeparator">The root separator.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, string separator, string rootSeparator, out ulong entity)
+        {
+            return TryLookup(path, separator, rootSeparator, true, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity from a path.
+        /// </summary>
+        /// <param name="path">The path to resolve.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="rootSeparator">The root separator.</param>
+        /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookup(string path, string separator, string rootSeparator, bool recursive, out ulong entity)
+        {
+            return (entity = Lookup(path, separator, rootSeparator, recursive)) != 0;
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="recursive">If looking up as path, recursively traverse up the tree.</param>
+        /// <returns>The entity if found, else 0.</returns>
+        public Entity LookupSymbol(string symbol, bool lookupAsPath = false, bool recursive = false)
+        {
+            if (string.IsNullOrEmpty(symbol))
+                return new Entity(Handle, 0);
+
+            using NativeString nativeSymbol = (NativeString)symbol;
+
+            return new Entity(
+                Handle,
+                ecs_lookup_symbol(Handle, nativeSymbol, Utils.Bool(lookupAsPath), Utils.Bool(recursive))
+            );
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, out Entity entity)
+        {
+            return TryLookupSymbol(symbol, false, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, bool lookupAsPath, out Entity entity)
+        {
+            return TryLookupSymbol(symbol, lookupAsPath, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="recursive">If looking up as path, recursively traverse up the tree.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, bool lookupAsPath, bool recursive, out Entity entity)
+        {
+            return (entity = LookupSymbol(symbol, lookupAsPath, recursive)) != 0;
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, out ulong entity)
+        {
+            return TryLookupSymbol(symbol, false, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, bool lookupAsPath, out ulong entity)
+        {
+            return TryLookupSymbol(symbol, lookupAsPath, false, out entity);
+        }
+
+        /// <summary>
+        ///     Lookup an entity by its symbol name.
+        /// </summary>
+        /// <param name="symbol">The symbol.</param>
+        /// <param name="lookupAsPath">If not found as a symbol, lookup as path.</param>
+        /// <param name="recursive">If looking up as path, recursively traverse up the tree.</param>
+        /// <param name="entity">The entity if found, else 0.</param>
+        /// <returns>True if the entity was found, else false.</returns>
+        public bool TryLookupSymbol(string symbol, bool lookupAsPath, bool recursive, out ulong entity)
+        {
+            return (entity = LookupSymbol(symbol, lookupAsPath, recursive)) != 0;
         }
     }
 }

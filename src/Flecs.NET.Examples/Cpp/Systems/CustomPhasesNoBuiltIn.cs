@@ -27,15 +27,15 @@ public static class Cpp_Systems_CustomPhasesNoBuiltIn
         // Create 3 dummy systems.
         world.Routine("CollisionSystem")
             .Kind(collisions)
-            .Iter(Sys);
+            .Run(Sys);
 
         world.Routine("PhysicsSystem")
             .Kind(collisions)
-            .Iter(Sys);
+            .Run(Sys);
 
         world.Routine("GameSystem")
             .Kind(update)
-            .Iter(Sys);
+            .Run(Sys);
 
         // Run pipeline
         world.Progress();

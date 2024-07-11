@@ -7,11 +7,6 @@ namespace Flecs.NET.Tests.Cpp
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     public unsafe class TableTests
     {
-        public TableTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void Each()
         {
@@ -20,7 +15,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Add<Position>();
             Entity e2 = world.Entity().Add<Velocity>();
 
-            world.Filter<Position>()
+            world.Query<Position>()
                 .Each((Entity e, ref Position p) => { e2.Add<Mass>(); });
 
             Assert.True(e2.Has<Mass>());
@@ -34,7 +29,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Add<Position>();
             Entity e2 = world.Entity().Add<Velocity>();
 
-            world.Filter<Position>()
+            world.Query<Position>()
                 .Each((ref Position p) => { e2.Add<Mass>(); });
 
             Assert.True(e2.Has<Mass>());
@@ -48,8 +43,12 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Add<Position>();
             Entity e2 = world.Entity().Add<Velocity>();
 
-            world.Filter<Position>()
-                .Iter((Iter it, Field<Position> p) => { e2.Add<Mass>(); });
+            world.Query<Position>()
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                        e2.Add<Mass>();
+                });
 
             Assert.True(e2.Has<Mass>());
         }
@@ -62,8 +61,11 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Add<Position>();
             Entity e2 = world.Entity().Add<Velocity>();
 
-            world.Filter<Position>()
-                .Iter((Iter it) => { e2.Add<Mass>(); });
+            world.Query<Position>()
+                .Run((Iter it) => {
+                    while (it.Next())
+                        e2.Add<Mass>();
+                });
 
             Assert.True(e2.Has<Mass>());
         }
@@ -89,7 +91,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Add<Position>().Add<Velocity>();
             Entity e2 = world.Entity().Add<Position>();
 
-            e1.Ensure((ref Position p, ref Velocity v) => { e2.Add<Mass>(); });
+            e1.Insert((ref Position p, ref Velocity v) => { e2.Add<Mass>(); });
 
             Assert.True(e2.Has<Mass>());
         }

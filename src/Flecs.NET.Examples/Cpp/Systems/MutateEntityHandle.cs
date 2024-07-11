@@ -65,7 +65,7 @@ public static class Cpp_Systems_MutateEntityHandle
             .Add<Tag>();
 
         world.Entity("MyEntity")
-            .Set<Timeout>(new(toDelete, 3));
+            .Set(new Timeout(toDelete, 3));
 
         world.SetTargetFps(1);
 

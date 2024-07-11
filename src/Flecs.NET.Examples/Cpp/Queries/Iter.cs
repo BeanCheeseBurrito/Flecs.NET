@@ -12,51 +12,57 @@ public static class Cpp_Queries_Iter
         using World world = World.Create();
 
         // Create a query for Position, Velocity.
-        Query q = world.Query<Position, Velocity>();
+        using Query q = world.Query<Position, Velocity>();
 
         // Create a few test entities for a Position, Velocity query
         world.Entity("e1")
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(1, 2));
+            .Set(new Position(10, 20))
+            .Set(new Velocity(1, 2));
 
         world.Entity("e2")
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(3, 4));
+            .Set(new Position(10, 20))
+            .Set(new Velocity(3, 4));
 
         world.Entity("e3")
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(4, 5))
-            .Set<Mass>(new(50));
+            .Set(new Position(10, 20))
+            .Set(new Velocity(4, 5))
+            .Set(new Mass(50));
 
-        // The iter function provides a Iter object which contains all sorts
+        // The run function provides a Iter object which contains all sorts
         // of information on the entities currently being iterated.
         // The function passed to iter is by default called for each table the query
         // is matched with.
-        q.Iter((Iter it, Field<Position> p, Field<Velocity> v) =>
+        q.Run((Iter it) =>
         {
-            // Print the table & number of entities matched in current callback
-            Console.WriteLine($"Table [{it.Type()}]");
-            Console.WriteLine($" - Number of entities: {it.Count()}");
-
-            // Print information about the components being matched
-            for (int i = 1; i <= it.FieldCount(); i++)
+            while (it.Next())
             {
-                Console.WriteLine($" - Term {i}:");
-                Console.WriteLine($"   - Component: {it.Id(i)}");
-                Console.WriteLine($"   - Type size: {it.Size(i)}");
+                Field<Position> p = it.Field<Position>(0);
+                Field<Velocity> v = it.Field<Velocity>(1);
+
+                // Print the table & number of entities matched in current callback
+                Console.WriteLine($"Table [{it.Type()}]");
+                Console.WriteLine($" - Number of entities: {it.Count()}");
+
+                // Print information about the components being matched
+                for (int i = 0; i < it.FieldCount(); i++)
+                {
+                    Console.WriteLine($" - Term {i}:");
+                    Console.WriteLine($"   - Component: {it.Id(i)}");
+                    Console.WriteLine($"   - Type size: {it.Size(i)}");
+                }
+
+                Console.WriteLine();
+
+                // Iterate entities
+                foreach (int i in it)
+                {
+                    p[i].X += v[i].X;
+                    p[i].Y += v[i].Y;
+                    Console.WriteLine($" - {it.Entity(i)}: ({p[i].X}, {p[i].Y})");
+                }
+
+                Console.WriteLine();
             }
-
-            Console.WriteLine();
-
-            // Iterate entities
-            foreach (int i in it)
-            {
-                p[i].X += v[i].X;
-                p[i].Y += v[i].Y;
-                Console.WriteLine($" - {it.Entity(i)}: ({p[i].X}, {p[i].Y})");
-            }
-
-            Console.WriteLine();
         });
     }
 }

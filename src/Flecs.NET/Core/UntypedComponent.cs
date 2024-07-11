@@ -1,14 +1,14 @@
 using System;
 using System.Globalization;
 using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
     /// <summary>
     ///     An untyped component.
     /// </summary>
-    public unsafe struct UntypedComponent : IEquatable<UntypedComponent>
+    public unsafe partial struct UntypedComponent : IEquatable<UntypedComponent>
     {
         private Entity _entity;
 
@@ -80,7 +80,8 @@ namespace Flecs.NET.Core
 
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
-            desc.add[0] = Macros.Pair(EcsChildOf, Entity);
+            desc.parent = Entity;
+
             ulong id = ecs_entity_init(World, &desc);
             Ecs.Assert(id != 0, nameof(ECS_INTERNAL_ERROR));
 
@@ -164,12 +165,12 @@ namespace Flecs.NET.Core
 
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
-            desc.add[0] = Macros.Pair(EcsChildOf, Id);
+            desc.parent = Entity;
 
             ulong id = ecs_entity_init(World, &desc);
             Ecs.Assert(id != 0, nameof(ECS_INTERNAL_ERROR));
 
-            ecs_set_id(World, id, Macros.Pair(EcsConstant, FLECS_IDecs_i32_tID_), (IntPtr)sizeof(int), &value);
+            ecs_set_id(World, id, Ecs.Pair(EcsConstant, FLECS_IDecs_i32_tID_), (IntPtr)sizeof(int), &value);
             return ref this;
         }
 
@@ -200,12 +201,12 @@ namespace Flecs.NET.Core
 
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
-            desc.add[0] = Macros.Pair(EcsChildOf, Id);
+            desc.parent = Entity;
 
             ulong id = ecs_entity_init(World, &desc);
             Ecs.Assert(id != 0, nameof(ECS_INTERNAL_ERROR));
 
-            ecs_set_id(World, id, Macros.Pair(EcsConstant, FLECS_IDecs_u32_tID_), (IntPtr)sizeof(uint), &value);
+            ecs_set_id(World, id, Ecs.Pair(EcsConstant, FLECS_IDecs_u32_tID_), (IntPtr)sizeof(uint), &value);
             return ref this;
         }
 
@@ -447,6 +448,19 @@ namespace Flecs.NET.Core
         public override string ToString()
         {
             return Entity.ToString();
+        }
+    }
+
+    // Flecs.NET Extensions
+    public unsafe partial struct UntypedComponent
+    {
+        /// <summary>
+        ///      Get the type info for this component.
+        /// </summary>
+        /// <returns></returns>
+        public TypeInfo TypeInfo()
+        {
+            return new TypeInfo(ecs_get_type_info(World, Id));
         }
     }
 }

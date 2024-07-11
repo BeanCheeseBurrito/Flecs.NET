@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -16,18 +16,18 @@ namespace Flecs.NET.Core
             ///     Initializes metrics module.
             /// </summary>
             /// <param name="world"></param>
-            public readonly void InitModule(ref World world)
+            public readonly void InitModule(World world)
             {
                 world.Import<Units>();
 
                 FlecsMetricsImport(world);
 
-                world.Entity<Instance>("::flecs.metrics.Instance");
-                world.Entity<Metric>("::flecs.metrics.Metric");
-                world.Entity<Counter>("::flecs.metrics.Metric.Counter");
-                world.Entity<CounterId>("::flecs.metrics.Metric.CounterId");
-                world.Entity<CounterIncrement>("::flecs.metrics.Metric.CounterIncrement");
-                world.Entity<Gauge>("::flecs.metrics.Metric.Gauge");
+                world.Entity<Instance>(".flecs.metrics.Instance");
+                world.Entity<Metric>(".flecs.metrics.Metric");
+                world.Entity<Counter>(".flecs.metrics.Metric.Counter");
+                world.Entity<CounterId>(".flecs.metrics.Metric.CounterId");
+                world.Entity<CounterIncrement>(".flecs.metrics.Metric.CounterIncrement");
+                world.Entity<Gauge>(".flecs.metrics.Metric.Gauge");
             }
 
             /// <summary>

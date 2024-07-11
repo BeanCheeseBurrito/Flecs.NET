@@ -11,10 +11,6 @@
 // prefab. The reason for this is that an instantiated child is an exact copy
 // of the prefab child, and the prefab child only has an IsA relationship to the
 // nested prefab.
-//
-// This example shows how auto overriding (see the auto override example) can be
-// used to give instantiated children from a nested prefab a private copy of an
-// inherited component.
 
 using Flecs.NET.Core;
 
@@ -27,10 +23,9 @@ public static class Cpp_Prefabs_NestedPrefabs
     {
         using World world = World.Create();
 
-        // Create a Wheel prefab, make sure each instantiated wheel has a private
-        // copy of the TirePressure component.
+        // Create a Wheel prefab.
         Entity wheel = world.Prefab("Wheel")
-            .SetOverride<TirePressure>(new(32));
+            .Set(new TirePressure(32));
 
         // Create a Car prefab with four wheels. Note how we're using the scope
         // method, which has the same effect as adding the (ChildOf, Car) pair.

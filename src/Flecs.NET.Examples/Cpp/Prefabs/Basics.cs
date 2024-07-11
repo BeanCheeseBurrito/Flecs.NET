@@ -28,9 +28,14 @@ public static class Cpp_Prefabs_Basics
     {
         using World world = World.Create();
 
+        // Make Defense component inheritable. By default, components are copied from
+        // the instance to the prefab. An inherited component is only stored on the
+        // prefab, and is shared across all instances.
+        world.Component<Defense>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
         // Create a SpaceShip prefab with a Defense component.
         Entity spaceShip = world.Prefab("SpaceShip")
-            .Set<Defense>(new(50));
+            .Set(new Defense(50));
 
         // Create a prefab instance
         Entity inst = world.Entity("MySpaceship").IsA(spaceShip);
@@ -42,7 +47,7 @@ public static class Cpp_Prefabs_Basics
 
         // Because the component is shared, changing the value on the prefab will
         // also change the value for the instance:
-        spaceShip.Set<Defense>(new(100));
+        spaceShip.Set(new Defense(100));
         Console.WriteLine($"Defense after set: {dInstance.Value}");
 
         // Prefab components can be iterated like regular components:

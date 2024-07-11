@@ -2,24 +2,19 @@ using Flecs.NET.Core;
 using Namespace;
 using NamespaceLvl1.NamespaceLvl2;
 using Xunit;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Tests.Cpp
 {
     public class ModuleTests
     {
-        public ModuleTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void Import()
         {
             using World world = World.Create();
             Entity m = world.Import<SimpleModule>();
             Assert.True(m != 0);
-            Assert.Equal("::Namespace.SimpleModule", m.Path());
+            Assert.Equal(".Namespace.SimpleModule", m.Path());
             Assert.True(m.Has(Ecs.Module));
 
             Entity e = world.Entity()
@@ -62,7 +57,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity velocity = world.Lookup("Namespace.NestedModule.Velocity");
             Assert.True(velocity != 0);
 
-            Assert.Equal("::Namespace.NestedModule.Velocity", velocity.Path());
+            Assert.Equal(".Namespace.NestedModule.Velocity", velocity.Path());
         }
 
         [Fact]
@@ -133,11 +128,11 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity m = world.Import<NamedModule>();
 
-            Entity mLookup = world.Lookup("::my_scope.NamedModule");
+            Entity mLookup = world.Lookup(".my_scope.NamedModule");
             Assert.True(m != 0);
             Assert.True(m == mLookup);
 
-            Assert.True(world.Lookup("::Namespace.NamedModule") == 0);
+            Assert.True(world.Lookup(".Namespace.NamedModule") == 0);
         }
 
         [Fact]
@@ -146,12 +141,12 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity m = world.Import<ImplicitModule>();
-            Entity mLookup = world.Lookup("::Namespace.ImplicitModule");
+            Entity mLookup = world.Lookup(".Namespace.ImplicitModule");
             Assert.True(m != 0);
             Assert.True(m == mLookup);
 
             Component<Position> p = world.Component<Position>();
-            Entity pLookup = world.Lookup("::Namespace.ImplicitModule.Position");
+            Entity pLookup = world.Lookup(".Namespace.ImplicitModule.Position");
             Assert.True(p != 0);
             Assert.True((Entity)p == pLookup);
         }
@@ -162,13 +157,13 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity m = world.Import<NamedModuleInRoot>();
-            Entity mLookup = world.Lookup("::NamedModuleInRoot");
+            Entity mLookup = world.Lookup(".NamedModuleInRoot");
             Assert.True(m != 0);
             Assert.True(m == mLookup);
-            Assert.Equal("::NamedModuleInRoot", m.Path());
+            Assert.Equal(".NamedModuleInRoot", m.Path());
 
             Component<Position> p = world.Component<Position>();
-            Entity pLookup = world.Lookup("::NamedModuleInRoot.Position");
+            Entity pLookup = world.Lookup(".NamedModuleInRoot.Position");
             Assert.True(p != 0);
             Assert.True((Entity)p == pLookup);
         }
@@ -204,11 +199,11 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity m = world.Import<Module>();
             Assert.True(m != 0);
-            Assert.Equal("::Module", m.Path());
+            Assert.Equal(".Module", m.Path());
 
             Entity pos = m.Lookup("Position");
             Assert.True(pos != 0);
-            Assert.Equal("::Module.Position", pos.Path());
+            Assert.Equal(".Module.Position", pos.Path());
             Assert.True(pos == world.Id<Position>());
         }
 
@@ -217,11 +212,11 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World a = World.Create();
 
-            Entity m1 = a.Import<Ecs.Monitor>();
+            Entity m1 = a.Import<Ecs.Stats>();
             Entity u1 = a.Import<Ecs.Units>();
 
             using World b = World.Create();
-            Entity m2 = b.Import<Ecs.Monitor>();
+            Entity m2 = b.Import<Ecs.Stats>();
             Entity u2 = b.Import<Ecs.Units>();
 
             Assert.True(m1 == m2);
@@ -234,21 +229,21 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity m = world.Import<NestedModule>();
-            Assert.Equal("::Namespace.NestedModule", m.Path());
-            Assert.True(world.Lookup("::Namespace.NestedModule") == m);
+            Assert.Equal(".Namespace.NestedModule", m.Path());
+            Assert.True(world.Lookup(".Namespace.NestedModule") == m);
 
             Entity p = world.Entity("p");
             m.ChildOf(p);
-            Assert.Equal("::p.NestedModule", m.Path());
-            Assert.True(world.Lookup("::p.NestedModule") == m);
+            Assert.Equal(".p.NestedModule", m.Path());
+            Assert.True(world.Lookup(".p.NestedModule") == m);
 
-            Assert.True(world.Lookup("::Namespace.NestedModule") == 0);
+            Assert.True(world.Lookup(".Namespace.NestedModule") == 0);
 
-            Entity e = world.Entity("::Namespace.NestedModule");
+            Entity e = world.Entity(".Namespace.NestedModule");
             Assert.True(e != m);
 
-            Assert.Equal(1, world.FilterBuilder().Expr("(ChildOf, p.NestedModule)").Build().Count());
-            Assert.Equal(0, world.FilterBuilder().Expr("(ChildOf, Namespace.NestedModule)").Build().Count());
+            Assert.Equal(1, world.QueryBuilder().Expr("(ChildOf, p.NestedModule)").Build().Count());
+            Assert.Equal(0, world.QueryBuilder().Expr("(ChildOf, Namespace.NestedModule)").Build().Count());
         }
 
         [Fact]
@@ -257,9 +252,9 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity m = world.Import<ReparentModule>();
-            Assert.Equal("::parent.ReparentModule", m.Path());
+            Assert.Equal(".parent.ReparentModule", m.Path());
 
-            Entity other = world.Lookup("::Namespace.ReparentModule");
+            Entity other = world.Lookup(".Namespace.ReparentModule");
             Assert.True(other != 0);
             Assert.True(other != m);
         }
@@ -273,22 +268,22 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(current != 0);
             Assert.True(!current.Has(Ecs.Module));
             Assert.True(current.Has<EcsComponent>());
-            Assert.True(current.Path() == "::NamespaceLvl1.NamespaceLvl2.StructLvl1.StructLvl21");
+            Assert.True(current.Path() == ".NamespaceLvl1.NamespaceLvl2.StructLvl1.StructLvl21");
 
             current = current.Parent();
             Assert.True(current != 0);
             Assert.True(current.Has(Ecs.Module));
-            Assert.True(current.Path() == "::NamespaceLvl1.NamespaceLvl2.StructLvl1");
+            Assert.True(current.Path() == ".NamespaceLvl1.NamespaceLvl2.StructLvl1");
 
             current = current.Parent();
             Assert.True(current != 0);
             Assert.True(current.Has(Ecs.Module));
-            Assert.True(current.Path() == "::NamespaceLvl1.NamespaceLvl2");
+            Assert.True(current.Path() == ".NamespaceLvl1.NamespaceLvl2");
 
             current = current.Parent();
             Assert.True(current != 0);
             Assert.True(current.Has(Ecs.Module));
-            Assert.True(current.Path() == "::NamespaceLvl1");
+            Assert.True(current.Path() == ".NamespaceLvl1");
 
             current = current.Parent();
             Assert.True(current == 0);
@@ -299,26 +294,26 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity current = world.Entity<StructLvl1.StructLvl22>().Set<EcsComponent>(default);
+            Entity current = world.Entity<StructLvl1.StructLvl22>().Set(default(EcsComponent));
             Assert.True(current != 0);
             Assert.True(!current.Has(Ecs.Module));
             Assert.True(current.Has<EcsComponent>());
-            Assert.True(current.Path() == "::NamespaceLvl1.NamespaceLvl2.StructLvl1.StructLvl22");
+            Assert.True(current.Path() == ".NamespaceLvl1.NamespaceLvl2.StructLvl1.StructLvl22");
 
             current = current.Parent();
             Assert.True(current != 0);
             Assert.True(current.Has(Ecs.Module));
-            Assert.True(current.Path() == "::NamespaceLvl1.NamespaceLvl2.StructLvl1");
+            Assert.True(current.Path() == ".NamespaceLvl1.NamespaceLvl2.StructLvl1");
 
             current = current.Parent();
             Assert.True(current != 0);
             Assert.True(current.Has(Ecs.Module));
-            Assert.True(current.Path() == "::NamespaceLvl1.NamespaceLvl2");
+            Assert.True(current.Path() == ".NamespaceLvl1.NamespaceLvl2");
 
             current = current.Parent();
             Assert.True(current != 0);
             Assert.True(current.Has(Ecs.Module));
-            Assert.True(current.Path() == "::NamespaceLvl1");
+            Assert.True(current.Path() == ".NamespaceLvl1");
 
             current = current.Parent();
             Assert.True(current == 0);

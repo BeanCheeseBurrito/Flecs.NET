@@ -18,40 +18,43 @@ public static class Cpp_Queries_ChangeTracking
     {
         using World world = World.Create();
 
+        // Make Dirty inheritable so that queries can match it on prefabs.
+        world.Component<Dirty>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
         // Create a query that just reads a component. We'll use this query for
         // change tracking. Change tracking for a query is automatically enabled
         // when Query.Changed() is called.
         // Each query has its own private dirty state which is reset only when the
         // query is iterated.
-        Query qRead = world.QueryBuilder()
+        using Query qRead = world.QueryBuilder()
+            .Cached()
             .With<Position>().In()
             .Build();
 
         // Create a query that writes the component based on a Dirty state.
-        Query qWrite = world.QueryBuilder()
-            .With<Dirty>().Up().In() // Only match Dirty from prefab
-            .With<Position>()        // Instanced iteration is faster (see example)
-            .Instanced()
+        using Query qWrite = world.QueryBuilder<Dirty, Position>()
+            .TermAt(0).Up(Ecs.IsA).In() // Only match Dirty from prefab
+            .Instanced()                // Instanced iteration is faster (see example)
             .Build();
 
         // Create two prefabs with a Dirty component. We can use this to share a
         // single Dirty value for all entities in a table.
-        Entity p1 = world.Prefab("p1").Set<Dirty>(new(false));
-        Entity p2 = world.Prefab("p2").Set<Dirty>(new(true));
+        Entity p1 = world.Prefab("p1").Set(new Dirty(false));
+        Entity p2 = world.Prefab("p2").Set(new Dirty(true));
 
         // Create instances of p1 and p2. Because the entities have different
         // prefabs, they end up in different tables.
         world.Entity("e1").IsA(p1)
-            .Set<Position>(new(10, 20));
+            .Set(new Position(10, 20));
 
         world.Entity("e2").IsA(p1)
-            .Set<Position>(new(30, 40));
+            .Set(new Position(30, 40));
 
         world.Entity("e3").IsA(p2)
-            .Set<Position>(new(40, 50));
+            .Set(new Position(40, 50));
 
         world.Entity("e4").IsA(p2)
-            .Set<Position>(new(60, 70));
+            .Set(new Position(60, 70));
 
         // We can use the Changed() function on the query to check if any of the
         // tables it is matched with has changed. Since this is the first time that
@@ -60,13 +63,16 @@ public static class Cpp_Queries_ChangeTracking
         Console.WriteLine($"qRead.Changed(): {qRead.Changed()}");
 
         // The changed state will remain true until we have iterated each table.
-        qRead.Iter((Iter it) =>
+        qRead.Run((Iter it) =>
         {
-            // With the it.Changed() function we can check if the table we're
-            // currently iterating has changed since last iteration.
-            // Because this is the first time the query is iterated, all tables
-            // will show up as changed.
-            Console.WriteLine($"it.Changed() for table [{it.Type()}]: {it.Changed()}");
+            while (it.Next())
+            {
+                // With the it.Changed() function we can check if the table we're
+                // currently iterating has changed since last iteration.
+                // Because this is the first time the query is iterated, all tables
+                // will show up as changed.
+                Console.WriteLine($"it.Changed() for table [{it.Type()}]: {it.Changed()}");
+            }
         });
 
         // Now that we have iterated all tables, the dirty state is reset.
@@ -75,26 +81,36 @@ public static class Cpp_Queries_ChangeTracking
 
         // Iterate the write query. Because the Position term is InOut (default)
         // iterating the query will write to the dirty state of iterated tables.
-        qWrite.Iter((Iter it, Field<Dirty> dirty, Field<Position> p) =>
+        qWrite.Run((Iter it) =>
         {
-            Console.WriteLine($"Iterate table [{it.Type()}]");
-
-            // Because we enforced that Dirty is a shared component, we can check
-            // a single value for the entire table.
-            if (!dirty[0].Value)
+            while (it.Next())
             {
-                // If the dirty flag is false, skip the table. This way the table's
-                // dirty state is not updated by the query.
-                it.Skip();
-                Console.WriteLine($"it.Skip() for table [{it.Type()}]");
-                return;
-            }
+                Field<Dirty> dirty = it.Field<Dirty>(0);
+                Field<Position> p = it.Field<Position>(1);
 
-            // For all other tables the dirty state will be set.
-            foreach (int i in it)
-            {
-                p[i].X++;
-                p[i].Y++;
+                Console.WriteLine($"Iterate table [{it.Type()}]");
+
+                // Because we enforced that Dirty is a shared component, we can check
+                // a single value for the entire table.
+                if (!dirty[0].Value)
+                {
+                    // If the dirty flag is false, skip the table. This way the table's
+                    // dirty state is not updated by the query.
+                    it.Skip();
+
+                    Console.WriteLine($"it.Skip() for table [{it.Type()}]");
+
+                    // Cleanup iterator resources since iterator wasn't done yet.
+                    it.Fini();
+                    break;
+                }
+
+                // For all other tables the dirty state will be set.
+                foreach (int i in it)
+                {
+                    p[i].X++;
+                    p[i].Y++;
+                }
             }
         });
 
@@ -103,9 +119,10 @@ public static class Cpp_Queries_ChangeTracking
         Console.WriteLine($"qRead.Changed()): {qRead.Changed()}");
 
         // When we iterate the read query, we'll see that one table has changed.
-        qRead.Iter((Iter it) =>
+        qRead.Run((Iter it) =>
         {
-            Console.WriteLine($"it.Changed() for table [{it.Type()}]: {it.Changed()}");
+            while (it.Next())
+                Console.WriteLine($"it.Changed() for table [{it.Type()}]: {it.Changed()}");
         });
     }
 }

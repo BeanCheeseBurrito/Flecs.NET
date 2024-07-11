@@ -63,26 +63,32 @@ public static class Cpp_Queries_GroupIter
             .Add<Soldier>()
             .Add<Npc>();
 
-        Query q = world.QueryBuilder<Npc>()
+        using Query q = world.QueryBuilder<Npc>()
             .GroupBy<WorldCell>()
             .Build();
 
         // Iterate all tables
         Console.WriteLine("All tables:");
-        q.Iter((Iter it) =>
+        q.Run((Iter it) =>
         {
-            Entity group = it.World().Entity(it.GroupId());
-            Console.WriteLine($" - Group {group.Path()}: Table [{it.Table()}]");
+            while (it.Next())
+            {
+                Entity group = it.World().Entity(it.GroupId());
+                Console.WriteLine($" - Group {group.Path()}: Table [{it.Table()}]");
+            }
         });
 
         Console.WriteLine();
 
         // Only iterate entities in cell 10
         Console.WriteLine("Tables for cell 1_0:");
-        q.Iter().SetGroup<Cell10>().Iter((Iter it) =>
+        q.SetGroup<Cell10>().Run((Iter it) =>
         {
-            Entity group = it.World().Entity(it.GroupId());
-            Console.WriteLine($" - Group {group.Path()}: Table [{it.Table()}]");
+            while (it.Next())
+            {
+                Entity group = it.World().Entity(it.GroupId());
+                Console.WriteLine($" - Group {group.Path()}: Table [{it.Table()}]");
+            }
         });
     }
 }

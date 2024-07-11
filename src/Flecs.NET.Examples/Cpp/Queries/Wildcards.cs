@@ -17,8 +17,8 @@ public static class Cpp_Queries_Wildcards
         using World world = World.Create();
 
         // Create a query that matches edible components
-        Query q = world.QueryBuilder<Eats>()
-            .TermAt(1).Second(Ecs.Wildcard) // Change first argument to (Eats, *)
+        using Query q = world.QueryBuilder<Eats>()
+            .TermAt(0).Second(Ecs.Wildcard) // Change first argument to (Eats, *)
             .Build();
 
         // Create a few entities that match the query
@@ -34,7 +34,7 @@ public static class Cpp_Queries_Wildcards
         q.Each((Iter it, int i, ref Eats eats) =>
         {
             Entity e = it.Entity(i);
-            Entity food = it.Pair(1).Second();
+            Entity food = it.Pair(0).Second();
 
             Console.WriteLine($"{e} eats {eats.Amount} {food}");
         });

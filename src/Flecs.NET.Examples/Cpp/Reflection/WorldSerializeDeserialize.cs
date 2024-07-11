@@ -12,12 +12,12 @@ public static class Cpp_Reflection_WorldSerializeDeserialize
         worldA.Import<Move>();
 
         worldA.Entity("Entity 1")
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(1, -1));
+            .Set(new Position(10, 20))
+            .Set(new Velocity(1, -1));
 
         worldA.Entity("Entity 2")
-            .Set<Position>(new(30, 40))
-            .Set<Velocity>(new(-1, 1));
+            .Set(new Position(30, 40))
+            .Set(new Velocity(-1, 1));
 
         // Serialize world to JSON.
         string json = worldA.ToJson();
@@ -42,7 +42,7 @@ public static class Cpp_Reflection_WorldSerializeDeserialize
 // from the serialized data, and makes it easier to import across worlds.
 file struct Move : IFlecsModule
 {
-    public void InitModule(ref World world)
+    public void InitModule(World world)
     {
         world.Component<Position>()
             .Member<float>("X")

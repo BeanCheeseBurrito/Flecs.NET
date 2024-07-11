@@ -139,9 +139,9 @@ namespace Flecs.NET.Utilities
             if (IsFlecs)
             {
 #if NET5_0_OR_GREATER
-                ((delegate* unmanaged[Cdecl]<IntPtr, void>)Native.ecs_os_api.free_)(Data);
+                ((delegate* unmanaged<IntPtr, void>)flecs.ecs_os_api.free_)(Data);
 #else
-                Marshal.GetDelegateForFunctionPointer<Ecs.Free>(Native.ecs_os_api.free_)(Data);
+                Marshal.GetDelegateForFunctionPointer<Ecs.Free>(flecs.ecs_os_api.free_)(Data);
 #endif
                 return;
             }

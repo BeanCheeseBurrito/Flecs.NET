@@ -9,11 +9,11 @@ public static class Cpp_Queries_FindEntity
     {
         using World world = World.Create();
 
-        world.Entity("e1").Set<Position>(new(10, 20));
-        world.Entity("e2").Set<Position>(new(20, 30));
+        world.Entity("e1").Set(new Position(10, 20));
+        world.Entity("e2").Set(new Position(20, 30));
 
         // Create a simple query for component Position
-        Query q = world.Query<Position>();
+        using Query q = world.Query<Position>();
 
         // Find the entity for which Position.x is 20
         Entity e = q.Find((ref Position p) => p.X == 20);

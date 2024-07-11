@@ -3,28 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
     /// <summary>
     ///     Class for iterating over query results.
     /// </summary>
-    public readonly unsafe struct Iter : IEnumerable<int>, IEquatable<Iter>
+    public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposable
     {
+        private ecs_iter_t* _handle;
+
         /// <summary>
         ///     Reference to handle.
         /// </summary>
-        public ecs_iter_t* Handle { get; }
-
-        /// <summary>
-        /// </summary>
-        public int Begin { get; }
-
-        /// <summary>
-        /// </summary>
-        public int End { get; }
+        public ref ecs_iter_t* Handle => ref _handle;
 
         /// <summary>
         ///     Creates an iter wrapper using the provided handle.
@@ -32,9 +28,15 @@ namespace Flecs.NET.Core
         /// <param name="iter"></param>
         public Iter(ecs_iter_t* iter)
         {
-            Handle = iter;
-            Begin = 0;
-            End = iter->count;
+            _handle = iter;
+        }
+
+        /// <summary>
+        ///     Free iterator resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Fini();
         }
 
         /// <summary>
@@ -70,31 +72,34 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public World World()
         {
-            return new World(Handle->world, false);
+            return new World(Handle->world);
         }
 
         /// <summary>
-        ///     Returns count of iter.
+        ///     Returns the number of entities to iterate.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Number of entities to iterate.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Count()
         {
             return Handle->count;
         }
 
         /// <summary>
-        ///     Returns the delta time.
+        ///     Returns the time elapsed since last frame.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Time elapsed since last frame</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float DeltaTime()
         {
             return Handle->delta_time;
         }
 
         /// <summary>
-        ///     Returns the delta system time.
+        ///     Returns the time elapsed since last system invocation.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Time elapsed since last system invocation.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float DeltaSystemTime()
         {
             return Handle->delta_system_time;
@@ -115,7 +120,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Table()
         {
-            return new Table(Handle->world, Handle->table);
+            return new Table(Handle->real_world, Handle->table);
         }
 
         /// <summary>
@@ -124,7 +129,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Table Range()
         {
-            return new Table(Handle->world, Handle->table, Handle->offset, Handle->count);
+            return new Table(Handle->real_world, Handle->table, Handle->offset, Handle->count);
         }
 
         /// <summary>
@@ -203,6 +208,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool IsSelf(int index)
         {
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             return ecs_field_is_self(Handle, index) == 1;
         }
 
@@ -213,6 +219,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool IsSet(int index)
         {
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             return ecs_field_is_set(Handle, index) == 1;
         }
 
@@ -223,6 +230,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool IsReadonly(int index)
         {
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             return ecs_field_is_readonly(Handle, index) == 1;
         }
 
@@ -242,6 +250,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ulong Size(int index)
         {
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             return (ulong)ecs_field_size(Handle, index);
         }
 
@@ -252,6 +261,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Src(int index)
         {
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             return new Entity(Handle->world, ecs_field_src(Handle, index));
         }
 
@@ -262,6 +272,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Id(int index)
         {
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             return new Id(Handle->world, ecs_field_id(Handle, index));
         }
 
@@ -273,8 +284,9 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Id Pair(int index)
         {
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
             ulong id = ecs_field_id(Handle, index);
-            Ecs.Assert(Macros.EntityHasIdFlag(id, ECS_PAIR) != 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(Ecs.EntityHasIdFlag(id, ECS_PAIR) != 0, nameof(ECS_INVALID_PARAMETER));
             return new Id(Handle->world, id);
         }
 
@@ -285,7 +297,8 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public int ColumnIndex(int index)
         {
-            return ecs_field_column_index(Handle, index);
+            Ecs.Assert(index < Handle->field_count, "Field index out of range.");
+            return ecs_field_column(Handle, index);
         }
 
         /// <summary>
@@ -303,10 +316,9 @@ namespace Flecs.NET.Core
         /// <param name="index"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Field<T> Field<T>(int index)
         {
-            Ecs.Assert((Handle->flags & EcsIterCppEach) == 0,
-                "Cannot use .Field<T>(field) from .Each(), use .FieldAt<T>(field, index) instead.");
             return GetField<T>(index);
         }
 
@@ -317,21 +329,10 @@ namespace Flecs.NET.Core
         /// <param name="row"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref T FieldAt<T>(int index, int row)
         {
             return ref GetField<T>(index)[row];
-        }
-
-        /// <summary>
-        ///     Get managed ref to the first element in a field.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        [SuppressMessage("Usage", "CA1720")]
-        public ref T Single<T>(int index)
-        {
-            return ref GetField<T>(index)[0];
         }
 
         /// <summary>
@@ -344,22 +345,13 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Obtain the total number of tables the iterator will iterate over.
-        /// </summary>
-        /// <returns></returns>
-        public int TableCount()
-        {
-            return Handle->table_count;
-        }
-
-        /// <summary>
         ///     Check if the current table has changed since the last iteration.
         ///     Can only be used when iterating queries and/or systems.
         /// </summary>
         /// <returns></returns>
         public bool Changed()
         {
-            return ecs_query_changed(null, Handle) == 1;
+            return Utils.Bool(ecs_iter_changed(Handle));
         }
 
         /// <summary>
@@ -370,7 +362,7 @@ namespace Flecs.NET.Core
         /// </summary>
         public void Skip()
         {
-            ecs_query_skip(Handle);
+            ecs_iter_skip(Handle);
         }
 
         /// <summary>
@@ -400,45 +392,100 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity GetVar(string name)
         {
-            ecs_rule_iter_t* ruleIter = &Handle->priv.iter.rule;
-            ecs_rule_t* rule = ruleIter->rule;
+            ecs_query_iter_t* iter = &Handle->priv_.iter.query;
+            ecs_query_t* query = iter->query;
 
             using NativeString nativeName = (NativeString)name;
-            int varId = ecs_rule_find_var(rule, nativeName);
+            int varId = ecs_query_find_var(query, nativeName);
             Ecs.Assert(varId != -1, nameof(ECS_INVALID_PARAMETER));
 
             return new Entity(Handle->world, ecs_iter_get_var(Handle, varId));
         }
 
-        private Field<T> GetField<T>(int index)
+        /// <summary>
+        ///     Progress iterator.
+        /// </summary>
+        /// <returns>The result.</returns>
+        public bool Next()
         {
-            AssertFieldId<T>(Handle, index);
+            if ((Handle->flags & EcsIterIsValid) != 0 && Handle->table != null)
+                Ecs.TableUnlock(Handle->world, Handle->table);
 
+#if NET5_0_OR_GREATER
+            bool result = ((delegate*<ecs_iter_t*, byte>)Handle->next)(Handle) != 0;
+#else
+            bool result = Marshal.GetDelegateForFunctionPointer<Ecs.IterNextAction>(Handle->next)(Handle) != 0;
+#endif
+
+            Handle->flags |= EcsIterIsValid;
+
+            if (result && Handle->table != null)
+                Ecs.TableLock(Handle->world, Handle->table);
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Forward to Each callback.
+        /// </summary>
+        public void Each()
+        {
+            Callback();
+        }
+
+        /// <summary>
+        ///     Forward to callback.
+        /// </summary>
+        public void Callback()
+        {
+            Ecs.Assert(Handle->callback != default, "Iter/Each callback is not set.");
+#if NET5_0_OR_GREATER
+            ((delegate*<ecs_iter_t*, void>)Handle->callback)(Handle);
+#else
+            Marshal.GetDelegateForFunctionPointer<Ecs.IterAction>(Handle->callback)(Handle);
+#endif
+        }
+
+        /// <summary>
+        ///     Free iterator resources.
+        /// </summary>
+        public void Fini()
+        {
+            if (Handle == null)
+                return;
+
+            if ((Handle->flags & EcsIterIsValid) != 0 && Handle->table != null)
+                Ecs.TableUnlock(Handle->world, Handle->table);
+
+            ecs_iter_fini(Handle);
+            Handle = null;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal Field<T> GetField<T>(int index)
+        {
+            AssertField<T>(Handle, index);
             bool isShared = ecs_field_is_self(Handle, index) == 0;
-            int count = isShared ? 1 : Handle->count;
-
-            void* ptr = ecs_field_w_size(Handle, (IntPtr)Managed.ManagedSize<T>(), index);
-            return new Field<T>(ptr, count, isShared);
+            return new Field<T>(Handle->ptrs[index], isShared ? 1 : Handle->count, isShared);
         }
 
         [Conditional("DEBUG")]
-        internal static void AssertFieldId<T>(ecs_iter_t* iter, int index)
+        internal static void AssertField<T>(ecs_iter_t* iter, int index)
         {
-            Ecs.Assert(index > 0, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert((iter->flags & EcsIterIsValid) != 0, "Operation is invalid before calling .Next().");
+            Ecs.Assert(index >= 0 && index < iter->field_count, "Field index out of range.");
 
-            ulong termId = iter->ids[index - 1];
-            ulong typeId = Type<T>.Id(iter->world);
-
-            if (Macros.TypeMatchesId<T>(iter->world, termId))
+            if (Ecs.TypeIdIs<T>(iter->world, iter->ids[index]))
                 return;
 
-            Entity expected = new Entity(iter->world, termId);
-            Entity actual = new Entity(iter->world, typeId);
+            Entity expected = new Entity(iter->world, iter->ids[index]);
+            Entity provided = new Entity(iter->world, Type<T>.Id(iter->world));
 
             string iteratedName = iter->system == 0 ? "" : $"[Query Name]: {new Entity(iter->world, iter->system)}";
+            string fields = new Query(iter->world, iter->query).Str();
 
             Ecs.Error(
-                $"Type argument mismatch at term index {index}.\n[Expected Term]: {expected}\n[Provided Term]: {actual}\n{iteratedName}");
+                $"Type argument mismatch at term index {index}.\n[Fields]: {fields}\n[Expected Type]: {expected}\n[Provided Type]: {provided}\n{iteratedName}");
         }
 
         /// <summary>
@@ -513,6 +560,83 @@ namespace Flecs.NET.Core
         public static bool operator !=(Iter left, Iter right)
         {
             return !(left == right);
+        }
+    }
+
+    // Flecs.NET Extensions
+    public unsafe partial struct Iter
+    {
+        /// <summary>
+        ///     Returns the query being evaluated.
+        /// </summary>
+        /// <returns>The query.</returns>
+        public Query Query()
+        {
+            return new Query(Handle->world, Handle->query);
+        }
+
+        /// <summary>
+        ///     Get managed ref to the first element in a field.
+        /// </summary>
+        /// <param name="index">The index of the field in the iterator.</param>
+        /// <typeparam name="T">The field type.</typeparam>
+        /// <returns>Reference to first component of field.</returns>
+        [SuppressMessage("Usage", "CA1720")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref T Single<T>(int index)
+        {
+            return ref GetField<T>(index)[0];
+        }
+
+        /// <summary>
+        ///     Obtain span for a query field.
+        /// </summary>
+        /// <param name="index">The index of the field in the iterator.</param>
+        /// <typeparam name="T">The field type.</typeparam>
+        /// <returns>A span to the data of the field.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Span<T> Span<T>(int index) where T : unmanaged
+        {
+            return GetSpan<T>(index);
+        }
+
+        /// <summary>
+        ///     Obtain pointer to a query field.
+        /// </summary>
+        /// <param name="index">The index of the field in the iterator.</param>
+        /// <typeparam name="T">The field type.</typeparam>
+        /// <returns>A pointer to the data of the field.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public T* Pointer<T>(int index) where T : unmanaged
+        {
+            return GetPointer<T>(index);
+        }
+
+        /// <summary>
+        ///     Get pointer to field at row.
+        /// </summary>
+        /// <param name="index">The index of the field in the iterator.</param>
+        /// <param name="row">The row.</param>
+        /// <typeparam name="T">The field type.</typeparam>
+        /// <returns>A pointer to the data of the field.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public T* PointerAt<T>(int index, int row) where T : unmanaged
+        {
+            return &Pointer<T>(index)[row];
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal Span<T> GetSpan<T>(int index)
+        {
+            Field<T> field = GetField<T>(index);
+            return new Span<T>(field.Data, field.Length);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal T* GetPointer<T>(int index)
+        {
+            AssertField<T>(Handle, index);
+            return (T*)Handle->ptrs[index];
         }
     }
 

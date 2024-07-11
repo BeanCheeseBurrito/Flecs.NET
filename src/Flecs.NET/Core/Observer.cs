@@ -1,5 +1,5 @@
 using System;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -78,7 +78,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public void* Ctx()
         {
-            return ecs_observer_get_ctx(World, Entity);
+            return ecs_observer_get(World, Entity)->ctx;
         }
 
         /// <summary>
@@ -92,14 +92,12 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Returns the filter for the observer.
+        ///     Returns the query for the observer.
         /// </summary>
         /// <returns></returns>
-        public Filter Filter()
+        public Query Query()
         {
-            ref readonly EcsPoly poly = ref Entity.Get<EcsPoly>(EcsObserver);
-            ecs_observer_t* observer = (ecs_observer_t*)poly.poly;
-            return new Filter(World, &observer->filter);
+            return new Query(ecs_observer_get(World, Id)->query);
         }
 
         /// <summary>

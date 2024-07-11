@@ -1,6 +1,6 @@
 using System;
 using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
@@ -153,7 +153,7 @@ namespace Flecs.NET.Core
         {
             fixed (ecs_meta_cursor_t* cursor = &_cursor)
             {
-                return ecs_meta_set_bool(cursor, Macros.Bool(value));
+                return ecs_meta_set_bool(cursor, Utils.Bool(value));
             }
         }
 

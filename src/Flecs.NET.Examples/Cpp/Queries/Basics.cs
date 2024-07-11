@@ -12,20 +12,22 @@ public static class Cpp_Queries_Basics
 
         // Create a query for Position, Velocity. Queries are the fastest way to
         // iterate entities as they cache results.
-        Query q = world.Query<Position, Velocity>();
+        using Query q = world.QueryBuilder<Position, Velocity>()
+            .Cached()
+            .Build();
 
         // Create a few test entities for a Position, Velocity query
         world.Entity("e1")
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(1, 2 ));
+            .Set(new Position(10, 20))
+            .Set(new Velocity(1, 2 ));
 
         world.Entity("e2")
-            .Set<Position>(new(10, 20))
-            .Set<Velocity>(new(3, 4));
+            .Set(new Position(10, 20))
+            .Set(new Velocity(3, 4));
 
         // This entity will not match as it does not have Position, Velocity
         world.Entity("e3")
-            .Set<Position>(new(10, 20));
+            .Set(new Position(10, 20));
 
         // The next lines show the different ways in which a query can be iterated.
 
@@ -56,16 +58,21 @@ public static class Cpp_Queries_Basics
             Console.WriteLine($"{it.Entity(i)}: ({p.X}, {p.Y})");
         });
 
-        // Iter is a bit more verbose, but allows for more control over how entities
+        // Run is a bit more verbose, but allows for more control over how entities
         // are iterated as it provides multiple entities in the same callback.
-        q.Iter((Iter it, Field<Position> p, Field<Velocity> v) =>
+        q.Run((Iter it) =>
         {
-
-            foreach (int i in it)
+            while (it.Next())
             {
-                p[i].X += v[i].X;
-                p[i].Y += v[i].Y;
-                Console.WriteLine($"{it.Entity(i)}: ({p[i].X}, {p[i].Y})");
+                Field<Position> p = it.Field<Position>(0);
+                Field<Velocity> v = it.Field<Velocity>(1);
+
+                foreach (int i in it)
+                {
+                    p[i].X += v[i].X;
+                    p[i].Y += v[i].Y;
+                    Console.WriteLine($"{it.Entity(i)}: ({p[i].X}, {p[i].Y})");
+                }
             }
         });
     }

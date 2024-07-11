@@ -10,7 +10,7 @@ public static class Cpp_Systems_TargetFps
         // components which means it won't match any entities, but will still be ran
         // once for each call to ecs_progress.
         world.Routine()
-            .Iter((Iter it) =>
+            .Run((Iter it) =>
             {
                 Console.WriteLine($"Delta time: {it.DeltaTime()}");
             });

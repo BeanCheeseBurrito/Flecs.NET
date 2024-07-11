@@ -11,11 +11,11 @@ public static unsafe class Cpp_Queries_Sorting
         using World world = World.Create();
 
         // Create entities, set Position in random order
-        Entity e = world.Entity().Set<Position>(new(1, 0));
-        world.Entity().Set<Position>(new(6, 0));
-        world.Entity().Set<Position>(new(2, 0));
-        world.Entity().Set<Position>(new(5, 0));
-        world.Entity().Set<Position>(new(4, 0));
+        Entity e = world.Entity().Set(new Position(1, 0));
+        world.Entity().Set(new Position(6, 0));
+        world.Entity().Set(new Position(2, 0));
+        world.Entity().Set(new Position(5, 0));
+        world.Entity().Set(new Position(4, 0));
 
         // Create a sorted system
         Routine sys = world.Routine<Position>()
@@ -26,7 +26,7 @@ public static unsafe class Cpp_Queries_Sorting
             });
 
         // Create a sorted query
-        Query q = world.QueryBuilder<Position>()
+        using Query q = world.QueryBuilder<Position>()
             .OrderBy<Position>(ComparePosition)
             .Build();
 
@@ -35,14 +35,14 @@ public static unsafe class Cpp_Queries_Sorting
         PrintQuery(q);
 
         // Change the value of one entity, invalidating the order
-        e.Set<Position>(new(7, 0));
+        e.Set(new Position(7, 0));
 
         // Iterate query again, printed values are still ordered
         Console.WriteLine("\n-- Second iteration");
         PrintQuery(q);
 
         // Create new entity to show that data is also sorted for system
-        world.Entity().Set<Position>(new(3, 0 ));
+        world.Entity().Set(new Position(3, 0 ));
 
         // Run system, output will be sorted
         Console.WriteLine("\n-- System iteration");
@@ -54,7 +54,7 @@ public static unsafe class Cpp_Queries_Sorting
     {
         Position* pos1 = (Position*)p1;
         Position* pos2 = (Position*)p2;
-        return Macros.Bool(pos1->X > pos2->X) - Macros.Bool(pos1->X < pos2->X);
+        return Utils.Bool(pos1->X > pos2->X) - Utils.Bool(pos1->X < pos2->X);
     }
 
     // Iterate query, printed values will be ordered

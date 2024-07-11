@@ -1,16 +1,11 @@
 using Flecs.NET.Core;
 using Xunit;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Tests.Cpp
 {
     public unsafe class EventTests
     {
-        public EventTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         public void Event1IdEntity()
         {
@@ -24,7 +19,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term(id)
+                .With(id)
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -53,7 +48,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term(idA)
+                .With(idA)
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -62,7 +57,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term(idB)
+                .With(idB)
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -93,7 +88,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term(id)
+                .With(id)
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -123,7 +118,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term(idA)
+                .With(idA)
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -132,7 +127,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term(idB)
+                .With(idB)
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -160,7 +155,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event<Evt>()
-                .Term(id)
+                .With(id)
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -186,7 +181,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event<Evt>()
-                .Term<IdA>()
+                .With<IdA>()
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -212,7 +207,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event<Evt>()
-                .Term<IdA>()
+                .With<IdA>()
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -221,7 +216,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event<Evt>()
-                .Term<IdB>()
+                .With<IdB>()
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -250,12 +245,15 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term(id)
-                .Iter((Iter it) =>
+                .With(id)
+                .Run((Iter it) =>
                 {
-                    Assert.True(it.Entity(0) == e1);
-                    Assert.Equal(10, it.Param<EvtData>().Value);
-                    count++;
+                    while (it.Next())
+                    {
+                        Assert.True(it.Entity(0) == e1);
+                        Assert.Equal(10, it.Param<EvtData>().Value);
+                        count++;
+                    }
                 });
 
             EvtData data = new EvtData { Value = 10 };
@@ -281,12 +279,15 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event<EvtData>()
-                .Term(id)
-                .Iter((Iter it) =>
+                .With(id)
+                .Run((Iter it) =>
                 {
-                    Assert.True(it.Entity(0) == e1);
-                    Assert.Equal(10, it.Param<EvtData>().Value);
-                    count++;
+                    while (it.Next())
+                    {
+                        Assert.True(it.Entity(0) == e1);
+                        Assert.Equal(10, it.Param<EvtData>().Value);
+                        count++;
+                    }
                 });
 
             EvtData evtData = new EvtData { Value = 10 };
@@ -314,7 +315,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term(rel, obj)
+                .With(rel, obj)
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -342,7 +343,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term<IdA>(obj)
+                .With<IdA>(obj)
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -369,7 +370,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term<IdA, IdB>()
+                .With<IdA, IdB>()
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -396,7 +397,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term<Tag>()
+                .With<Tag>()
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -427,7 +428,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term<Tag>()
+                .With<Tag>()
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -459,7 +460,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event<Evt>()
-                .Term(Ecs.Any).Src(e1)
+                .With(Ecs.Any).Src(e1)
                 .Each((Entity e) =>
                 {
                     Assert.True(e == 0);
@@ -468,7 +469,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event<Evt>()
-                .Term(Ecs.Any).Src(e2)
+                .With(Ecs.Any).Src(e2)
                 .Each((Entity e) =>
                 {
                     Assert.True(e == 0);
@@ -683,7 +684,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event(evt)
-                .Term(idA)
+                .With(idA)
                 .Each((Entity e) =>
                 {
                     Assert.True(e == e1);
@@ -740,7 +741,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer()
                 .Event<Position>()
-                .Term(idA)
+                .With(idA)
                 .Each((Iter it, int i) =>
                 {
                     Assert.True(it.Entity(i) == e1);

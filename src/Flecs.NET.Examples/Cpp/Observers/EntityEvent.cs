@@ -48,7 +48,7 @@ public static class Cpp_Observers_EntityEvent
         widget.Emit<Click>();
 
         // Emit the Resize event.
-        widget.Emit<Resize>(new(100, 200));
+        widget.Emit(new Resize(100, 200));
     }
 }
 

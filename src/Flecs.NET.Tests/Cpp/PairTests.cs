@@ -1,16 +1,11 @@
 using Flecs.NET.Core;
 using Xunit;
-using static Flecs.NET.Bindings.Native;
+using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Tests.Cpp
 {
     public unsafe class PairTests
     {
-        public PairTests()
-        {
-            FlecsInternal.Reset();
-        }
-
         [Fact]
         private void AddComponentPair()
         {
@@ -127,7 +122,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity entity = world.Entity()
                 .Set<Pair, Position>(new Pair { Value = 10 });
 
-            Assert.True(Type<Pair>.RawId != Type<Position>.RawId);
+            Assert.True(world.Component<Pair>().Id != world.Component<Position>().Id);
 
             Assert.True(entity.Id != 0);
             Assert.True(entity.Has<Pair, Position>());
@@ -173,15 +168,18 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine()
                 .Expr("(Pair, *)")
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Field<Pair> tr = it.Field<Pair>(1);
-                    invokeCount++;
-
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        entityCount++;
-                        traitValue += (int)tr[i].Value;
+                        Field<Pair> tr = it.Field<Pair>(0);
+                        invokeCount++;
+
+                        foreach (int i in it)
+                        {
+                            entityCount++;
+                            traitValue += (int)tr[i].Value;
+                        }
                     }
                 });
 
@@ -207,15 +205,18 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine()
                 .Expr("(Pair, *)")
-                .Iter((Iter it) =>
+                .Run((Iter it) =>
                 {
-                    Field<Pair> tr = it.Field<Pair>(1);
-                    invokeCount++;
-
-                    foreach (int i in it)
+                    while (it.Next())
                     {
-                        entityCount++;
-                        traitValue += (int)tr[i].Value;
+                        Field<Pair> tr = it.Field<Pair>(0);
+                        invokeCount++;
+
+                        foreach (int i in it)
+                        {
+                            entityCount++;
+                            traitValue += (int)tr[i].Value;
+                        }
                     }
                 });
 
@@ -230,6 +231,8 @@ namespace Flecs.NET.Tests.Cpp
         private void OverridePair()
         {
             using World world = World.Create();
+
+            world.Component<Pair>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Entity @base = world.Entity()
                 .Set<Pair, Position>(new Pair { Value = 10 });
@@ -260,7 +263,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity pair = world.Entity();
+            Entity pair = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Entity @base = world.Entity()
                 .SetSecond(pair, new Position { X = 10, Y = 20 });
@@ -1012,6 +1015,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
+            world.Component<Tag>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
             Entity @base = world.Entity().Add<Tag>();
             Entity self = world.Entity().IsA(@base).Add<Tag>();
 
@@ -1024,6 +1029,8 @@ namespace Flecs.NET.Tests.Cpp
         private void GetObjectForTypeBase()
         {
             using World world = World.Create();
+
+            world.Component<Tag>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Entity @base = world.Entity().Add<Tag>();
             Entity self = world.Entity().IsA(@base);
@@ -1038,7 +1045,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity tag = world.Entity();
+            Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
             Entity @base = world.Entity().Add(tag);
             Entity self = world.Entity().IsA(@base).Add(tag);
 
@@ -1052,7 +1059,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity tag = world.Entity();
+            Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
             Entity @base = world.Entity().Add(tag);
             Entity self = world.Entity().IsA(@base);
 
@@ -1066,7 +1073,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity tag = world.Entity();
+            Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
             Entity @base = world.Entity();
             Entity self = world.Entity().IsA(@base);
 
@@ -1086,6 +1093,26 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(ptr != null);
             Assert.Equal(10, ptr->X);
             Assert.Equal(20, ptr->Y);
+        }
+
+
+        [Fact]
+        private void SymmetricWithChildOf()
+        {
+            using World world = World.Create();
+
+            world.Component<Likes>().Entity.Add(Ecs.Symmetric);
+
+            Entity idk = world.Entity("Idk");
+
+            Entity bob = world.Entity("Bob")
+                .ChildOf(idk);
+
+            Entity alice = world.Entity("Alice")
+                .ChildOf(idk)
+                .Add<Likes>(bob);
+
+            Assert.True(bob.Has<Likes>(alice));
         }
     }
 }
