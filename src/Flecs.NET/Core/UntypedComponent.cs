@@ -8,7 +8,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     An untyped component.
     /// </summary>
-    public unsafe struct UntypedComponent : IEquatable<UntypedComponent>
+    public unsafe partial struct UntypedComponent : IEquatable<UntypedComponent>
     {
         private Entity _entity;
 
@@ -448,6 +448,19 @@ namespace Flecs.NET.Core
         public override string ToString()
         {
             return Entity.ToString();
+        }
+    }
+
+    // Flecs.NET Extensions
+    public unsafe partial struct UntypedComponent
+    {
+        /// <summary>
+        ///      Get the type info for this component.
+        /// </summary>
+        /// <returns></returns>
+        public TypeInfo TypeInfo()
+        {
+            return new TypeInfo(ecs_get_type_info(World, Id));
         }
     }
 }

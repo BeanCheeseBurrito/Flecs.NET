@@ -393,6 +393,12 @@ namespace Flecs.NET.Core
     // Flecs.NET Extensions
     public unsafe partial struct Component<TComponent>
     {
+        /// <inheritdoc cref="Core.UntypedComponent.TypeInfo"/>
+        public TypeInfo TypeInfo()
+        {
+            return UntypedComponent.TypeInfo();
+        }
+
         private void GetHooksAndContext(out ecs_type_hooks_t hooks, out BindingContext.TypeHooksContext* context)
         {
             ecs_type_hooks_t* existingHooks = ecs_get_hooks_id(World, Id);
