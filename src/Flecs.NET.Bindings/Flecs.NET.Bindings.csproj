@@ -43,6 +43,7 @@
 
     <ItemGroup>
         <UnityArtifacts Include="Flecs.g.cs"/>
+        <UnityArtifacts Include="FlecsExtensions.g.cs"/>
     </ItemGroup>
 
     <Target Name="ExportUnityArtifacts" AfterTargets="Build" Condition="'$(FlecsExportUnityArtifacts)' == 'True' And '$(TargetFramework)' == 'netstandard2.1'">
