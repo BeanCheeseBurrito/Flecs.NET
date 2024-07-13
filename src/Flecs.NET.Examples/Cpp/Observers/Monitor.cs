@@ -21,7 +21,7 @@ public static class Cpp_Observers_Monitor
 
         // Create observer for custom event
         world.Observer<Position, Velocity>()
-            .Event(Ecs.MonitorId)
+            .Event(Ecs.Monitor)
             .Each((Iter it, int i) =>
             {
                 if (it.Event() == Ecs.OnAdd)

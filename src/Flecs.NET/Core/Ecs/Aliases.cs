@@ -206,7 +206,7 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Reference to <see cref="EcsMonitor"/>.
         /// </summary>
-        public static ref ulong MonitorId => ref EcsMonitor;
+        public static ref ulong Monitor => ref EcsMonitor;
 
         /// <summary>
         ///     Reference to <see cref="EcsSystem"/>.
