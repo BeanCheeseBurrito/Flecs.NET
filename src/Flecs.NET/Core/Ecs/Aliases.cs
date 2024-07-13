@@ -3,8 +3,6 @@ using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
 {
-    [SuppressMessage("Usage", "CA1708")]
-    [SuppressMessage("Usage", "CA1707")]
     public static partial class Ecs
     {
         // Enums
@@ -152,16 +150,20 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Reference to <see cref="ECS_PAIR"/>.
         /// </summary>
+        [SuppressMessage("Usage", "CA1708")]
         public static ref ulong PAIR => ref ECS_PAIR;
 
         /// <summary>
         ///     Reference to <see cref="ECS_AUTO_OVERRIDE"/>.
         /// </summary>
+        [SuppressMessage("Usage", "CA1707")]
+        [SuppressMessage("Usage", "CA1708")]
         public static ref ulong AUTO_OVERRIDE => ref ECS_AUTO_OVERRIDE;
 
         /// <summary>
         ///     Reference to <see cref="ECS_TOGGLE"/>.
         /// </summary>
+        [SuppressMessage("Usage", "CA1708")]
         public static ref ulong TOGGLE => ref ECS_TOGGLE;
 
         // Built-in tags
@@ -634,5 +636,40 @@ namespace Flecs.NET.Core
         ///     Reference to <see cref="EcsQuantity"/>.
         /// </summary>
         public static ref ulong Quantity => ref EcsQuantity;
+
+        /// <summary>
+        ///     Query must match prefabs.
+        /// </summary>
+        public const uint QueryMatchPrefab = EcsQueryMatchPrefab;
+
+        /// <summary>
+        ///     Query must match disabled entities.
+        /// </summary>
+        public const uint QueryMatchDisabled = EcsQueryMatchDisabled;
+
+        /// <summary>
+        ///     Query must match empty tables.
+        /// </summary>
+        public const uint QueryMatchEmptyTables = EcsQueryMatchEmptyTables;
+
+        /// <summary>
+        ///     Query won't provide component data.
+        /// </summary>
+        public const uint QueryNoData = EcsQueryNoData;
+
+        /// <summary>
+        ///     Query iteration is always instanced.
+        /// </summary>
+        public const uint QueryIsInstanced = EcsQueryIsInstanced;
+
+        /// <summary>
+        ///     Query may have unresolved entity identifiers.
+        /// </summary>
+        public const uint QueryAllowUnresolvedByName = EcsQueryAllowUnresolvedByName;
+
+        /// <summary>
+        ///     Query only returns whole tables (ignores toggle/member fields).
+        /// </summary>
+        public const uint QueryTableOnly = EcsQueryTableOnly;
     }
 }
