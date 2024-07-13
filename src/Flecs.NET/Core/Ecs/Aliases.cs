@@ -1,4 +1,5 @@
-using System.Diagnostics.CodeAnalysis;
+#pragma warning disable CA1707, CA1708
+
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
@@ -150,20 +151,16 @@ namespace Flecs.NET.Core
         /// <summary>
         ///     Reference to <see cref="ECS_PAIR"/>.
         /// </summary>
-        [SuppressMessage("Usage", "CA1708")]
         public static ref ulong PAIR => ref ECS_PAIR;
 
         /// <summary>
         ///     Reference to <see cref="ECS_AUTO_OVERRIDE"/>.
         /// </summary>
-        [SuppressMessage("Usage", "CA1707")]
-        [SuppressMessage("Usage", "CA1708")]
         public static ref ulong AUTO_OVERRIDE => ref ECS_AUTO_OVERRIDE;
 
         /// <summary>
         ///     Reference to <see cref="ECS_TOGGLE"/>.
         /// </summary>
-        [SuppressMessage("Usage", "CA1708")]
         public static ref ulong TOGGLE => ref ECS_TOGGLE;
 
         // Built-in tags
@@ -673,3 +670,5 @@ namespace Flecs.NET.Core
         public const uint QueryTableOnly = EcsQueryTableOnly;
     }
 }
+
+#pragma warning restore CA1707, CA1708
