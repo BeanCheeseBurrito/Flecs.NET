@@ -20,7 +20,7 @@ namespace Flecs.NET.Unity
         public static void Initialize()
         {
 #if UNITY_EDITOR
-            Native.BindgenInternal.DllFilePaths.InsertRange(0, EditorPackagePaths());
+            flecs.BindgenInternal.DllFilePaths.InsertRange(0, EditorPackagePaths());
 #else
             flecs.BindgenInternal.DllFilePaths.InsertRange(0, RuntimePackagePaths());
 #endif
