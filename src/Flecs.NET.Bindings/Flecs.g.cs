@@ -1138,6 +1138,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_set_ctx", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_set_ctx(ecs_world_t* world, void* ctx, System.IntPtr ctx_free);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_set_default_query_flags", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ecs_set_default_query_flags(ecs_world_t* world, uint flags);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_set_entity_range", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_set_entity_range(ecs_world_t* world, ulong id_start, ulong id_end);
 
@@ -11956,6 +11959,8 @@ namespace Flecs.NET.Bindings
         public const uint EcsOsApiLogWithTimeStamp = 4;
 
         public const uint EcsQueryAllowUnresolvedByName = 64;
+
+        public const uint EcsQueryCacheYieldEmptyTables = 134217728;
 
         public const uint EcsQueryHasCacheable = 8388608;
 

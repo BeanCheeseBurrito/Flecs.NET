@@ -5,6 +5,8 @@ using Flecs.NET.Core;
 using Flecs.NET.Utilities;
 using Xunit;
 
+using static Flecs.NET.Bindings.flecs;
+
 namespace Flecs.NET.Tests.Cpp
 {
     [SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Local")]
@@ -3175,6 +3177,133 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(e.Has<Position>());
             Assert.True(e.Has<Velocity>());
+        }
+
+        [Fact]
+        private void EmptyTablesEach()
+        {
+            using World world = World.Create();
+
+            world.Component<Position>();
+            world.Component<Velocity>();
+            world.Component<Tag>();
+
+            Entity e1 = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Entity e2 = world.Entity()
+                .Set(new Position(20, 30))
+                .Set(new Velocity(2, 3));
+
+            e2.Add<Tag>();
+            e2.Remove<Tag>();
+
+            using Query q = world.QueryBuilder<Position, Velocity>()
+                .QueryFlags(EcsQueryMatchEmptyTables)
+                .Build();
+
+            q.Each((ref Position p, ref Velocity v) =>
+            {
+                p.X += v.X;
+                p.Y += v.Y;
+            });
+
+            {
+                Position* p = e1.GetPtr<Position>();
+                Assert.Equal(11, p->X);
+                Assert.Equal(22, p->Y);
+            }
+            {
+                Position* p = e2.GetPtr<Position>();
+                Assert.Equal(22, p->X);
+                Assert.Equal(33, p->Y);
+            }
+        }
+
+        // TODO: Fix later
+        // [Fact]
+        // private void EmptyTablesEachWithEntity()
+        // {
+        //     using World world = World.Create();
+        //
+        //     world.Component<Position>();
+        //     world.Component<Velocity>();
+        //     world.Component<Tag>();
+        //
+        //     Entity e1 = world.Entity()
+        //         .Set(new Position(10, 20))
+        //         .Set(new Velocity(1, 2));
+        //
+        //     Entity e2 = world.Entity()
+        //         .Set(new Position(20, 30))
+        //         .Set(new Velocity(2, 3));
+        //
+        //     e2.Add<Tag>();
+        //     e2.Remove<Tag>();
+        //
+        //     using Query q = world.QueryBuilder<Position, Velocity>()
+        //         .QueryFlags(EcsQueryMatchEmptyTables)
+        //         .Build();
+        //
+        //     q.Each((Entity e, ref Position p, ref Velocity v) =>
+        //     {
+        //         p.X += v.X;
+        //         p.Y += v.Y;
+        //     });
+        //
+        //     {
+        //         Position* p = e1.GetPtr<Position>();
+        //         Assert.Equal(11, p->X);
+        //         Assert.Equal(22, p->Y);
+        //     }
+        //     {
+        //         Position* p = e2.GetPtr<Position>();
+        //         Assert.Equal(22, p->X);
+        //         Assert.Equal(33, p->Y);
+        //     }
+        // }
+
+        [Fact]
+        private void EmptyTablesEachWithIter()
+        {
+            using World world = World.Create();
+
+            world.Component<Position>();
+            world.Component<Velocity>();
+            world.Component<Tag>();
+
+            Entity e1 = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Entity e2 = world.Entity()
+                .Set(new Position(20, 30))
+                .Set(new Velocity(2, 3));
+
+            e2.Add<Tag>();
+            e2.Remove<Tag>();
+
+            using Query q = world.QueryBuilder<Position, Velocity>()
+                .QueryFlags(EcsQueryMatchEmptyTables)
+                .Build();
+
+            q.Each((Iter it, int i, ref Position p, ref Velocity v) =>
+            {
+                p.X += v.X;
+                p.Y += v.Y;
+            });
+
+            {
+                Position* p = e1.GetPtr<Position>();
+                Assert.Equal(11, p->X);
+                Assert.Equal(22, p->Y);
+            }
+            {
+                Position* p = e2.GetPtr<Position>();
+                Assert.Equal(22, p->X);
+                Assert.Equal(33, p->Y);
+            }
         }
     }
 }
