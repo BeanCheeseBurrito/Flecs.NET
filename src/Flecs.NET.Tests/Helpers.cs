@@ -192,11 +192,11 @@ namespace Namespace
         }
     }
 
-    public struct SimpleModule : IFlecsModule
+    public struct BasicModule : IFlecsModule
     {
         public void InitModule(World world)
         {
-            world.Module<SimpleModule>();
+            world.Module<BasicModule>();
             world.Import<NestedModule>();
             world.Component<Position>("Position");
         }

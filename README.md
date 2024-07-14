@@ -128,7 +128,7 @@ To run any of the example programs, use ``dotnet run``and set the "Example" prop
 
 **Example**:
 ```console
-dotnet run --project src/Flecs.NET.Examples --property:Example=Cpp_Entities_Basics
+dotnet run --project src/Flecs.NET.Examples --property:Example=Entities_Basics
 ```
 
 ## Building from source

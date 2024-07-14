@@ -12,9 +12,9 @@ namespace Flecs.NET.Tests.Cpp
         private void Import()
         {
             using World world = World.Create();
-            Entity m = world.Import<SimpleModule>();
+            Entity m = world.Import<Namespace.BasicModule>();
             Assert.True(m != 0);
-            Assert.Equal(".Namespace.SimpleModule", m.Path());
+            Assert.Equal(".Namespace.BasicModule", m.Path());
             Assert.True(m.Has(Ecs.Module));
 
             Entity e = world.Entity()
@@ -27,24 +27,24 @@ namespace Flecs.NET.Tests.Cpp
         private void LookupFromScope()
         {
             using World world = World.Create();
-            world.Import<SimpleModule>();
+            world.Import<Namespace.BasicModule>();
 
             Entity nsEntity = world.Lookup("Namespace");
             Assert.True(nsEntity != 0);
 
-            Entity moduleEntity = world.Lookup("Namespace.SimpleModule");
+            Entity moduleEntity = world.Lookup("Namespace.BasicModule");
             Assert.True(moduleEntity != 0);
 
-            Entity positionEntity = world.Lookup("Namespace.SimpleModule.Position");
+            Entity positionEntity = world.Lookup("Namespace.BasicModule.Position");
             Assert.True(positionEntity != 0);
 
-            Entity nestedModule = nsEntity.Lookup("SimpleModule");
+            Entity nestedModule = nsEntity.Lookup("BasicModule");
             Assert.True(moduleEntity == nestedModule);
 
             Entity modulePosition = moduleEntity.Lookup("Position");
             Assert.True(positionEntity == modulePosition);
 
-            Entity nsPosition = nsEntity.Lookup("SimpleModule.Position");
+            Entity nsPosition = nsEntity.Lookup("BasicModule.Position");
             Assert.True(positionEntity == nsPosition);
         }
 
@@ -52,7 +52,7 @@ namespace Flecs.NET.Tests.Cpp
         private void NestedModule()
         {
             using World world = World.Create();
-            world.Import<SimpleModule>();
+            world.Import<Namespace.BasicModule>();
 
             Entity velocity = world.Lookup("Namespace.NestedModule.Velocity");
             Assert.True(velocity != 0);
@@ -94,9 +94,9 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            world.Import<SimpleModule>();
+            world.Import<Namespace.BasicModule>();
 
-            Entity posComp = world.Lookup("Namespace.SimpleModule.Position");
+            Entity posComp = world.Lookup("Namespace.BasicModule.Position");
             Assert.True(posComp != 0);
 
             Component<Position> pos = world.Component<Position>();
@@ -173,10 +173,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity m = world.Import<SimpleModule>();
+            Entity m = world.Import<Namespace.BasicModule>();
             Assert.True(m != 0);
 
-            Entity e = world.Entity<SimpleModule>();
+            Entity e = world.Entity<Namespace.BasicModule>();
             Assert.True(m == e);
         }
 
@@ -185,10 +185,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity m = world.Import<SimpleModule>();
+            Entity m = world.Import<Namespace.BasicModule>();
             Assert.True(m != 0);
 
-            Component<SimpleModule> e = world.Component<SimpleModule>();
+            Component<Namespace.BasicModule> e = world.Component<Namespace.BasicModule>();
             Assert.True(m == (Entity)e);
         }
 

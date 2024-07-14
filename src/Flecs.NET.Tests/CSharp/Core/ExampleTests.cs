@@ -14,7 +14,7 @@ namespace Flecs.NET.Tests.CSharp.Core
     public class ExampleTests
     {
         public static IEnumerable<object[]> Examples => typeof(Example).Assembly.GetTypes()
-            .Where(type => type.Name != "Cpp_Explorer" && type.Name != "Playground")
+            .Where(type => type.Name != "Explorer" && type.Name != "Playground")
             .SelectMany(type => type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
             .Where(method => method.Name == "Main")
             .Select(method => new object[] { method.DeclaringType!.Name, method });
