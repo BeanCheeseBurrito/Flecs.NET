@@ -120,7 +120,7 @@ https://github.com/BeanCheeseBurrito/Flecs.NET.Unity.git
 > Only Windows, MacOS, and Linux builds on x64 Mono are supported. IL2CPP, web, and mobile support are planned for the future.
 
 > [!Caution]
-> The Unity package is incomplete and extremely unstable. Flecs.NET is not recommended to be used with the Unity game engine.
+> The Unity package is incomplete and will be dropped in a future version. Flecs.NET is not recommended to be used with the Unity game engine.
 
 ## Running examples
 
