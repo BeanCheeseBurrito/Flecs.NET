@@ -31,8 +31,7 @@ public static class Reflection_QueryToJson
         // Query for components.
         using Query query = world.Query<Position, Velocity>();
 
-        // Serialize query to JSON. Note that this works for any iterable object,
-        // including filters & rules.
+        // Serialize query to JSON. Note that this works for any iterable object.
         Console.WriteLine(query.Iter().ToJson());
         // {"ids":[["Position"], ["Velocity"]], "results":[{"ids":[["Position"], ["Velocity"]], "sources":[0, 0], "entities":["A", "B"], "values":[[{"X":10, "Y":20}, {"X":20, "Y":30}], [{"X":1, "Y":2}, {"X":2, "Y":3}]]}, {"ids":[["Position"], ["Velocity"]], "sources":[0, 0], "entities":["C", "D"], "values":[[{"X":30, "Y":40}, {"X":30, "Y":40}], [{"X":3, "Y":4}, {"X":4, "Y":5}]]}]}
     }

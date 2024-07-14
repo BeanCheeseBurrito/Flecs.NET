@@ -174,11 +174,11 @@ public static class GameMechanics_InventorySystem
     {
         World world = container.CsWorld();
 
-        using Query filter = world.QueryBuilder()
+        using Query query = world.QueryBuilder()
             .With<ContainedBy>(container)
             .Build();
 
-        filter.Each(func);
+        query.Each(func);
     }
 
     // Find item in inventory of specified kind

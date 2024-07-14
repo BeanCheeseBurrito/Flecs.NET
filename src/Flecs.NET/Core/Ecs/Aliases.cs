@@ -451,7 +451,7 @@ namespace Flecs.NET.Core
         /// </summary>
         public static ref ulong Union => ref EcsUnion;
 
-        // Built-in predicates for comparing entity ids in queries. Only supported by rules.
+        // Built-in predicates for comparing entity ids in queries.
 
         /// <summary>
         ///     Reference to <see cref="EcsPredEq"/>.

@@ -25,7 +25,7 @@ public static class Observers_EnqueueEvent
                 Console.WriteLine($" - {it.Event()}: {it.EventId()}: {it.Entity(i)}");
             });
 
-        // The observer filter can be matched against the entity, so make sure it
+        // The observer query can be matched against the entity, so make sure it
         // has the Position component before emitting the event. This does not
         // trigger the observer yet.
         Entity e = world.Entity("e")

@@ -60,7 +60,7 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Disposes the pipeline builder. This should be called if the rule builder
+        ///     Disposes the pipeline builder. This should be called if the pipeline builder
         ///     will be discarded and .Build() isn't called.
         /// </summary>
         public void Dispose()

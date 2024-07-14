@@ -28,9 +28,6 @@ public static class Queries_Variables
 
         // Here we're creating a query that in the query DSL would look like this:
         //   Eats($this, $food), Healthy($food)
-        //
-        // Rules are similar to queries, but support more advanced features. This
-        // example shows how the basics of how to use queries & variables.
         using Query q = world.QueryBuilder()
             // Identifiers that start with _ are query variables. Query variables
             // are like wildcards, but enforce that the entity substituted by the
