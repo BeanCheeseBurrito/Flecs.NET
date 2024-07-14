@@ -33,10 +33,9 @@ namespace Flecs.NET.Core
         ///     Creates a flecs world that is owned.
         /// </summary>
         /// <returns></returns>
-        public static World Create(bool overrideOsAbort = true)
+        public static World Create()
         {
-            if (overrideOsAbort)
-                Ecs.OverrideOsAbort();
+            Ecs.Os.OverrideOsApi();
 
             World w = new World(ecs_init());
             w.EnsureBindingContext();
@@ -49,12 +48,10 @@ namespace Flecs.NET.Core
         ///     Creates a flecs world from an <see cref="ecs_world_t"/> pointer that is not owned.
         /// </summary>
         /// <param name="world">A C world.</param>
-        /// <param name="overrideOsAbort"></param>
         /// <returns>A newly created world.</returns>
-        public static World Create(ecs_world_t* world, bool overrideOsAbort = true)
+        public static World Create(ecs_world_t* world)
         {
-            if (overrideOsAbort)
-                Ecs.OverrideOsAbort();
+            Ecs.Os.OverrideOsApi();
 
             World w = new World(world);
             w.EnsureBindingContext();
@@ -74,6 +71,8 @@ namespace Flecs.NET.Core
 
             for (int i = 0; i < args.Length; i++)
                 nativeStrings[i] = (NativeString)args[i];
+
+            Ecs.Os.OverrideOsApi();
 
             World w = new World(ecs_init_w_args(args.Length, (byte**)nativeStrings));
             w.EnsureBindingContext();

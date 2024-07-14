@@ -422,6 +422,18 @@ namespace Flecs.NET.Core
                 GroupBy.Dispose();
             }
         }
+
+        internal struct OsApiContext : IDisposable
+        {
+            public Callback Abort;
+            public Callback Log;
+
+            public void Dispose()
+            {
+                Abort.Dispose();
+                Log.Dispose();
+            }
+        }
     }
 
     [SuppressMessage("ReSharper", "StaticMemberInGenericType")]

@@ -150,5 +150,10 @@ namespace Flecs.NET.Core
         /// </summary>
         public delegate void RunPointerCallback(Iter it, delegate*<Iter, void> callback);
 #endif
+
+        /// <summary>
+        ///     Os api log callback.
+        /// </summary>
+        public delegate void OsApiLog(int level, byte* file, int line, byte* message);
     }
 }
