@@ -482,7 +482,7 @@ namespace Flecs.NET.Core
             Entity provided = new Entity(iter->world, Type<T>.Id(iter->world));
 
             string iteratedName = iter->system == 0 ? "" : $"[Query Name]: {new Entity(iter->world, iter->system)}";
-            string fields = new Query(iter->world, iter->query).Str();
+            string fields = new Query(iter->query).Str();
 
             Ecs.Error(
                 $"Type argument mismatch at term index {index}.\n[Fields]: {fields}\n[Expected Type]: {expected}\n[Provided Type]: {provided}\n{iteratedName}");
@@ -572,7 +572,7 @@ namespace Flecs.NET.Core
         /// <returns>The query.</returns>
         public Query Query()
         {
-            return new Query(Handle->world, Handle->query);
+            return new Query(Handle->query);
         }
 
         /// <summary>

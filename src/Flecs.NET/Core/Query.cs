@@ -11,13 +11,7 @@ namespace Flecs.NET.Core
     /// </summary>
     public unsafe partial struct Query : IIterable, IEquatable<Query>, IDisposable
     {
-        private ecs_world_t* _world;
         private ecs_query_t* _handle;
-
-        /// <summary>
-        ///     A reference to the world.
-        /// </summary>
-        public ref ecs_world_t* World => ref _world;
 
         /// <summary>
         ///     A reference to the handle.
@@ -30,18 +24,6 @@ namespace Flecs.NET.Core
         /// <param name="query">The query pointer.</param>
         public Query(ecs_query_t* query)
         {
-            _world = query->world;
-            _handle = query;
-        }
-
-        /// <summary>
-        ///     Creates a query from a world and handle.
-        /// </summary>
-        /// <param name="world">The world.</param>
-        /// <param name="query">The query pointer.</param>
-        public Query(ecs_world_t* world, ecs_query_t* query = null)
-        {
-            _world = world;
             _handle = query;
         }
 
@@ -60,8 +42,6 @@ namespace Flecs.NET.Core
         /// <param name="entity">The query entity.</param>
         public Query(Entity entity)
         {
-            _world = entity.World;
-
             if (entity != 0)
             {
                 EcsPoly* poly = entity.GetPtr<EcsPoly>(EcsQuery);
@@ -74,7 +54,7 @@ namespace Flecs.NET.Core
             }
 
             ecs_query_desc_t desc = default;
-            _handle = ecs_query_init(_world, &desc);
+            _handle = ecs_query_init(entity.World, &desc);
         }
 
         /// <summary>
@@ -94,7 +74,6 @@ namespace Flecs.NET.Core
                 return;
 
             ecs_query_fini(Handle);
-            World = null;
             Handle = null;
         }
 
@@ -104,7 +83,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Entity Entity()
         {
-            return new Entity(World, Handle->entity);
+            return new Entity(Handle->world, Handle->entity);
         }
 
         /// <summary>
@@ -154,7 +133,7 @@ namespace Flecs.NET.Core
         {
             for (int i = 0; i < Handle->term_count; i++)
             {
-                Term term = new Term(World, Handle->terms[i]);
+                Term term = new Term(Handle->world, Handle->terms[i]);
                 callback(ref term);
             }
         }
@@ -167,7 +146,7 @@ namespace Flecs.NET.Core
         public Term Term(int index)
         {
             Ecs.Assert(index < Handle->term_count, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
-            return new Term(World, Handle->terms[index]);
+            return new Term(Handle->world, Handle->terms[index]);
         }
 
         /// <summary>
@@ -394,6 +373,28 @@ namespace Flecs.NET.Core
         public static bool operator !=(Query left, Query right)
         {
             return !(left == right);
+        }
+    }
+
+    // Flecs.NET Extensions
+    public unsafe partial struct Query
+    {
+        /// <summary>
+        ///     Gets the query's world or stage.
+        /// </summary>
+        /// <returns></returns>
+        public World World()
+        {
+            return Handle->world;
+        }
+
+        /// <summary>
+        ///     Gets the query's actual world.
+        /// </summary>
+        /// <returns></returns>
+        public World RealWorld()
+        {
+            return Handle->real_world;
         }
     }
 

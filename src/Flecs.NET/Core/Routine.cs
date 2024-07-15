@@ -79,7 +79,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public Query Query()
         {
-            return new Query(World, ecs_system_get(World, Entity)->query);
+            return new Query(ecs_system_get(World, Entity)->query);
         }
 
         /// <summary>
