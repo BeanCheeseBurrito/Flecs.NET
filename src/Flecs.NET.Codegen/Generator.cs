@@ -581,6 +581,7 @@ namespace Flecs.NET.Codegen
                 string pointerArgs = ConcatString(i + 1, ", ", index => $"it.GetPointer<T{index}>({index})");
 
                 string fieldBody = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
                     Ecs.TableLock(iter->world, iter->table);
                     Iter it = new Iter(iter);
                     callback(it, {fieldArgs});
@@ -588,6 +589,7 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string spanBody = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
                     Ecs.TableLock(iter->world, iter->table);
                     Iter it = new Iter(iter);
                     callback(it, {spanArgs});
@@ -595,6 +597,7 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string pointerBody = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
                     Ecs.TableLock(iter->world, iter->table);
                     Iter it = new Iter(iter);
                     callback(it, {pointerArgs});
@@ -669,6 +672,8 @@ namespace Flecs.NET.Codegen
                     index => $"pointer{index} = &pointer{index}[stride{index}]");
 
                 string eachRef = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
+
                     {fieldAssertions}
                     {sizes}
                     {pointers}
@@ -686,6 +691,8 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string eachPointer = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
+
                     {fieldAssertions}
                     {sizes}
                     {pointers}
@@ -703,6 +710,7 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string eachEntityRef = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
                     Ecs.Assert(iter->count > 0, ""No entities returned, use Iter() or Each() without the entity argument instead."");
 
                     {fieldAssertions}
@@ -720,6 +728,7 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string eachEntityPointer = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
                     Ecs.Assert(iter->count > 0, ""No entities returned, use Iter() or Each() without the entity argument instead."");
 
                     {fieldAssertions}
@@ -737,6 +746,7 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string eachIterRef = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
                     {fieldAssertions}
                     {sizes}
                     {pointers}
@@ -754,6 +764,7 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string eachIterPointer = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
                     {fieldAssertions}
                     {sizes}
                     {pointers}
@@ -771,6 +782,7 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string findRef = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
                     {fieldAssertions}
                     {sizes}
                     {pointers}
@@ -798,6 +810,7 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string findPointer = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
                     {fieldAssertions}
                     {sizes}
                     {pointers}
@@ -825,6 +838,7 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string findEntityRef = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
                     Ecs.Assert(iter->count > 0, ""No entities returned, use Find() without the Entity argument instead."");
 
                     {fieldAssertions}
@@ -852,6 +866,7 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string findEntityPointer = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
                     Ecs.Assert(iter->count > 0, ""No entities returned, use Find() without the Entity argument instead."");
 
                     {fieldAssertions}
@@ -879,6 +894,8 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string findIterRef = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
+
                     {fieldAssertions}
                     {sizes}
                     {pointers}
@@ -906,6 +923,8 @@ namespace Flecs.NET.Codegen
                 ";
 
                 string findIterPointer = $@"
+                    Core.Iter.AssertFieldCount(iter, {i + 1});
+
                     {fieldAssertions}
                     {sizes}
                     {pointers}

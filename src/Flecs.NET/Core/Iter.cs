@@ -472,7 +472,6 @@ namespace Flecs.NET.Core
         [Conditional("DEBUG")]
         internal static void AssertField<T>(ecs_iter_t* iter, int index)
         {
-            Ecs.Assert((iter->flags & EcsIterIsValid) != 0, "Operation is invalid before calling .Next().");
             Ecs.Assert(index >= 0 && index < iter->field_count, "Field index out of range.");
 
             if (Ecs.TypeIdIs<T>(iter->world, iter->ids[index]))
@@ -481,11 +480,22 @@ namespace Flecs.NET.Core
             Entity expected = new Entity(iter->world, iter->ids[index]);
             Entity provided = new Entity(iter->world, Type<T>.Id(iter->world));
 
-            string iteratedName = iter->system == 0 ? "" : $"[Query Name]: {new Entity(iter->world, iter->system)}";
+            string query = iter->system == 0 ? "" : $"[Query Name]: {new Entity(iter->world, iter->system)}";
             string fields = new Query(iter->query).Str();
 
-            Ecs.Error(
-                $"Type argument mismatch at term index {index}.\n[Fields]: {fields}\n[Expected Type]: {expected}\n[Provided Type]: {provided}\n{iteratedName}");
+            Ecs.Error($"Type argument mismatch at term index {index}.\n[Fields]: {fields}\n[Expected Type]: {expected}\n[Provided Type]: {provided}\n{query}");
+        }
+
+        [Conditional("DEBUG")]
+        internal static void AssertFieldCount(ecs_iter_t* iter, int count)
+        {
+            if (iter->field_count >= count)
+                return;
+
+            string query = iter->system == 0 ? "" : $"[Query Name]: {new Entity(iter->world, iter->system)}";
+            string fields = new Query(iter->query).Str();
+
+            Ecs.Error($"Too many type arguments provided to query callback. Number of type arguments should be {iter->field_count} or less.\n[Fields]: {fields}\n{query}");
         }
 
         /// <summary>
