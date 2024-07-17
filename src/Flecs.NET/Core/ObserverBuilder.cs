@@ -133,6 +133,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Creates a routine with the provided Each callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created routine.</returns>
+        public Observer Each(Action callback)
+        {
+            return SetCallback(callback, BindingContext.ActionCallbackPointer).Build();
+        }
+
+        /// <summary>
         ///     Creates a observer with the provided Each callback.
         /// </summary>
         /// <param name="callback">The callback.</param>
@@ -150,6 +160,16 @@ namespace Flecs.NET.Core
         public Observer Each(Ecs.EachIterCallback callback)
         {
             return Instanced().SetCallback(callback, BindingContext.EachIterCallbackPointer).Build();
+        }
+
+        /// <summary>
+        ///     Creates a routine with the provided Run callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created routine.</returns>
+        public Observer Run(Action callback)
+        {
+            return SetCallback(callback, BindingContext.ActionCallbackPointer).Build();
         }
 
         /// <summary>
@@ -194,6 +214,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Creates a routine with the provided Each callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created routine.</returns>
+        public Observer Each(delegate*<void> callback)
+        {
+            return SetCallback((IntPtr)callback, BindingContext.ActionCallbackPointer).Build();
+        }
+
+        /// <summary>
         ///     Creates a observer with the provided Each callback.
         /// </summary>
         /// <param name="callback">The callback.</param>
@@ -211,6 +241,16 @@ namespace Flecs.NET.Core
         public Observer Each(delegate*<Iter, int, void> callback)
         {
             return Instanced().SetCallback((IntPtr)callback, BindingContext.EachIterCallbackPointer).Build();
+        }
+
+        /// <summary>
+        ///     Creates a routine with the provided Run callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created routine.</returns>
+        public Observer Run(delegate*<void> callback)
+        {
+            return SetCallback((IntPtr)callback, BindingContext.ActionCallbackPointer).Build();
         }
 
         /// <summary>

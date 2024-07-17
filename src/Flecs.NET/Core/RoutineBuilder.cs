@@ -235,6 +235,16 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="callback">The callback.</param>
         /// <returns>The created routine.</returns>
+        public Routine Each(Action callback)
+        {
+            return SetCallback(callback, BindingContext.ActionCallbackPointer).Build();
+        }
+
+        /// <summary>
+        ///     Creates a routine with the provided Each callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created routine.</returns>
         public Routine Each(Ecs.EachEntityCallback callback)
         {
             return Instanced().SetCallback(callback, BindingContext.EachEntityCallbackPointer).Build();
@@ -248,6 +258,16 @@ namespace Flecs.NET.Core
         public Routine Each(Ecs.EachIterCallback callback)
         {
             return Instanced().SetCallback(callback, BindingContext.EachIterCallbackPointer).Build();
+        }
+
+        /// <summary>
+        ///     Creates a routine with the provided Run callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created routine.</returns>
+        public Routine Run(Action callback)
+        {
+            return SetCallback(callback, BindingContext.ActionCallbackPointer).Build();
         }
 
         /// <summary>
@@ -296,6 +316,16 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="callback">The callback.</param>
         /// <returns>The created routine.</returns>
+        public Routine Each(delegate*<void> callback)
+        {
+            return SetCallback((IntPtr)callback, BindingContext.ActionCallbackPointer).Build();
+        }
+
+        /// <summary>
+        ///     Creates a routine with the provided Each callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created routine.</returns>
         public Routine Each(delegate*<Entity, void> callback)
         {
             return Instanced().SetCallback((IntPtr)callback, BindingContext.EachEntityCallbackPointer).Build();
@@ -309,6 +339,16 @@ namespace Flecs.NET.Core
         public Routine Each(delegate*<Iter, int, void> callback)
         {
             return Instanced().SetCallback((IntPtr)callback, BindingContext.EachIterCallbackPointer).Build();
+        }
+
+        /// <summary>
+        ///     Creates a routine with the provided Run callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created routine.</returns>
+        public Routine Run(delegate*<void> callback)
+        {
+            return SetCallback((IntPtr)callback, BindingContext.ActionCallbackPointer).Build();
         }
 
         /// <summary>
