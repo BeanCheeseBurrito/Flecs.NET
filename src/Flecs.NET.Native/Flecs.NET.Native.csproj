@@ -37,32 +37,32 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Vezel.Zig.Toolsets.linux-x64" Version="0.11.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'X64' And '$(FlecsNativeIsLinux)' == 'true'">
+        <PackageReference Include="Vezel.Zig.Toolsets.linux-x64" Version="0.13.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'X64' And '$(FlecsNativeIsLinux)' == 'true'">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="Vezel.Zig.Toolsets.osx-x64" Version="0.11.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'X64' And '$(FlecsNativeIsOsx)' == 'true'">
+        <PackageReference Include="Vezel.Zig.Toolsets.osx-x64" Version="0.13.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'X64' And '$(FlecsNativeIsOsx)' == 'true'">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="Vezel.Zig.Toolsets.win-x64" Version="0.11.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'X64' And '$(FlecsNativeIsWindows)' == 'true'">
+        <PackageReference Include="Vezel.Zig.Toolsets.win-x64" Version="0.13.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'X64' And '$(FlecsNativeIsWindows)' == 'true'">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="Vezel.Zig.Toolsets.linux-arm64" Version="0.11.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'Arm64' And '$(FlecsNativeIsLinux)' == 'true'">
+        <PackageReference Include="Vezel.Zig.Toolsets.linux-arm64" Version="0.13.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'Arm64' And '$(FlecsNativeIsLinux)' == 'true'">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="Vezel.Zig.Toolsets.osx-arm64" Version="0.11.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'Arm64' And '$(FlecsNativeIsOsx)' == 'true'">
+        <PackageReference Include="Vezel.Zig.Toolsets.osx-arm64" Version="0.13.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'Arm64' And '$(FlecsNativeIsOsx)' == 'true'">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="Vezel.Zig.Toolsets.win-arm64" Version="0.11.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'Arm64' And '$(FlecsNativeIsWindows)' == 'true'">
+        <PackageReference Include="Vezel.Zig.Toolsets.win-arm64" Version="0.13.0.1" Condition="'$(FlecsNativeProcessorArch)' == 'Arm64' And '$(FlecsNativeIsWindows)' == 'true'">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>

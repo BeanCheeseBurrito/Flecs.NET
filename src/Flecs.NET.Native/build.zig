@@ -1,18 +1,28 @@
 const std = @import("std");
-const Build = std.build;
+const Build = std.Build;
 
-pub const Options = struct {
-    soft_assert: bool = false,
-    ios_sdk_path: ?[]const u8 = null,
-    ios_simulator_sdk_path: ?[]const u8 = null,
-};
+pub const LibType = enum { Shared, Static };
 
-pub fn compileFlecs(options: Options, b: *Build, lib: *Build.Step.Compile) void {
-    lib.addCSourceFile(.{ .file = Build.LazyPath.relative("../../submodules/flecs/flecs.c"), .flags = &.{} });
+pub fn compileFlecs(options: anytype, b: *Build, lib_type: LibType) void {
+    const lib = switch (lib_type) {
+        .Shared => b.addSharedLibrary(.{
+            .name = "flecs",
+            .target = options.target,
+            .optimize = options.optimize,
+            .strip = options.optimize != .Debug,
+        }),
+        .Static => b.addStaticLibrary(.{
+            .name = "flecs",
+            .target = options.target,
+            .optimize = options.optimize,
+            .strip = options.optimize != .Debug,
+        }),
+    };
+
+    lib.addCSourceFile(.{ .file = b.path("../../submodules/flecs/flecs.c"), .flags = &.{} });
     lib.linkLibC();
-    lib.strip = lib.optimize != .Debug;
 
-    if (lib.optimize != .Debug) {
+    if (options.optimize != .Debug) {
         lib.defineCMacro("NDEBUG", null);
     }
 
@@ -20,14 +30,14 @@ pub fn compileFlecs(options: Options, b: *Build, lib: *Build.Step.Compile) void 
         lib.defineCMacro("FLECS_SOFT_ASSERT", null);
     }
 
-    switch (lib.target.getOsTag()) {
+    switch (options.target.result.os.tag) {
         .windows => {
-            lib.linkSystemLibraryName("ws2_32");
+            lib.linkSystemLibrary("ws2_32");
         },
         .ios => {
-            lib.addSystemIncludePath(.{ .path = "/usr/include" });
+            lib.addSystemIncludePath(b.path("/usr/include"));
 
-            if (lib.target.getAbi() == .simulator and options.ios_simulator_sdk_path != null) {
+            if (options.target.result.abi == .simulator and options.ios_simulator_sdk_path != null) {
                 b.sysroot = options.ios_simulator_sdk_path;
             } else if (options.ios_sdk_path != null) {
                 b.sysroot = options.ios_sdk_path;
@@ -42,11 +52,14 @@ pub fn compileFlecs(options: Options, b: *Build, lib: *Build.Step.Compile) void 
 }
 
 pub fn build(b: *Build) void {
-    const name = "flecs";
-    const target = b.standardTargetOptions(.{});
-    const optimize = b.standardOptimizeOption(.{});
-    const options = Options{ .soft_assert = b.option(bool, "soft-assert", "Compile with the FLECS_SOFT_ASSERT define.") orelse false, .ios_sdk_path = b.option([]const u8, "ios-sdk-path", "Path to an IOS SDK."), .ios_simulator_sdk_path = b.option([]const u8, "ios-simulator-sdk-path", "Path to an IOS simulator SDK.") };
+    const options = .{
+        .optimize = b.standardOptimizeOption(.{}),
+        .target = b.standardTargetOptions(.{}),
+        .soft_assert = b.option(bool, "soft-assert", "Compile with the FLECS_SOFT_ASSERT define.") orelse false,
+        .ios_sdk_path = b.option([]const u8, "ios-sdk-path", "Path to an IOS SDK."),
+        .ios_simulator_sdk_path = b.option([]const u8, "ios-simulator-sdk-path", "Path to an IOS simulator SDK."),
+    };
 
-    compileFlecs(options, b, b.addSharedLibrary(.{ .name = name, .target = target, .optimize = optimize }));
-    compileFlecs(options, b, b.addStaticLibrary(.{ .name = name, .target = target, .optimize = optimize }));
+    compileFlecs(options, b, LibType.Shared);
+    compileFlecs(options, b, LibType.Static);
 }
