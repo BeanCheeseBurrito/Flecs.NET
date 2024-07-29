@@ -133,7 +133,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Color>(Ecs.Wildcard));
             Assert.True(e.Table() == table);
 
-            e.Remove<Color>();
+            e.Remove<Color>(Ecs.Wildcard);
             Assert.True(!e.Has(Color.Red));
             Assert.True(!e.Has(Color.Green));
             Assert.True(!e.Has(Color.Blue));

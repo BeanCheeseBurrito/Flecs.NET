@@ -2047,9 +2047,6 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref Entity Remove<T>()
         {
-            if (typeof(T).IsEnum)
-                return ref Remove<T>(EcsWildcard);
-
             return ref Remove(Type<T>.Id(World));
         }
 
