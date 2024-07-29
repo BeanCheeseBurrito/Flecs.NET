@@ -34,17 +34,6 @@ pub fn compileFlecs(options: anytype, b: *Build, lib_type: LibType) void {
         .windows => {
             lib.linkSystemLibrary("ws2_32");
         },
-        .ios => {
-            lib.addIncludePath(.{ .cwd_relative = "/usr/include" });
-
-            if (options.target.result.abi == .simulator and options.ios_simulator_sdk_path != null) {
-                b.sysroot = options.ios_simulator_sdk_path;
-            } else if (options.ios_sdk_path != null) {
-                b.sysroot = options.ios_sdk_path;
-            } else {
-                @panic("A path to an IOS SDK needs to be provided when compiling for IOS.");
-            }
-        },
         else => {},
     }
 
@@ -56,8 +45,6 @@ pub fn build(b: *Build) void {
         .optimize = b.standardOptimizeOption(.{}),
         .target = b.standardTargetOptions(.{}),
         .soft_assert = b.option(bool, "soft-assert", "Compile with the FLECS_SOFT_ASSERT define.") orelse false,
-        .ios_sdk_path = b.option([]const u8, "ios-sdk-path", "Path to an IOS SDK."),
-        .ios_simulator_sdk_path = b.option([]const u8, "ios-simulator-sdk-path", "Path to an IOS simulator SDK."),
     };
 
     compileFlecs(options, b, LibType.Shared);
