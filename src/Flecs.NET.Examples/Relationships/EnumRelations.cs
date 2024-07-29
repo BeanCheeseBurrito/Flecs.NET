@@ -49,7 +49,7 @@ public static class Relationships_EnumRelations
         Console.WriteLine(tile.Type().Str());
 
         // Check if the entity has the Tile relationship and the Tile.Stone pair
-        Console.WriteLine(tile.Has<Tile>()); // True
+        Console.WriteLine(tile.Has<Tile>(Ecs.Wildcard)); // True
         Console.WriteLine(tile.Has(Tile.Stone)); // True
 
         // Get the current value of the enum
@@ -84,7 +84,7 @@ public static class Relationships_EnumRelations
 
         q2.Each((Iter it, int i) =>
         {
-            Entity tileConstant = it.Pair(1).Second();
+            Entity tileConstant = it.Pair(0).Second();
             Console.WriteLine(tileConstant.Path());
         });
 
@@ -103,8 +103,8 @@ public static class Relationships_EnumRelations
 // True
 // True
 // True
-// Tile.Stone
-// Tile.Grass
-// Tile.Sand
-// Tile.Stone
-// Tile.Sand
+// .Tile.Stone
+// .Tile.Grass
+// .Tile.Sand
+// .Tile.Stone
+// .Tile.Sand
