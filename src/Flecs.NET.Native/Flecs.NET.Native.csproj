@@ -134,25 +134,25 @@
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=Debug --prefix debug --prefix-lib-dir linux-x64        --prefix-exe-dir linux-x64        -Dtarget=x86_64-linux-gnu"/>
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=Debug --prefix debug --prefix-lib-dir win-x64          --prefix-exe-dir win-x64          -Dtarget=x86_64-windows-gnu"/>
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=Debug --prefix debug --prefix-lib-dir osx-x64          --prefix-exe-dir osx-x64          -Dtarget=x86_64-macos"/>
-        <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=Debug --prefix debug --prefix-lib-dir iossimulator-x64 --prefix-exe-dir iossimulator-x64 -Dtarget=x86_64-ios-simulator --sysroot $(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
+        <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=Debug --prefix debug --prefix-lib-dir iossimulator-x64 --prefix-exe-dir iossimulator-x64 -Dtarget=x86_64-ios-simulator --search-prefix $(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
 
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir linux-x64        --prefix-exe-dir linux-x64        -Dtarget=x86_64-linux-gnu"/>
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir win-x64          --prefix-exe-dir win-x64          -Dtarget=x86_64-windows-gnu"/>
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir osx-x64          --prefix-exe-dir osx-x64          -Dtarget=x86_64-macos"/>
-        <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir iossimulator-x64 --prefix-exe-dir iossimulator-x64 -Dtarget=x86_64-ios-simulator --sysroot $(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
+        <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir iossimulator-x64 --prefix-exe-dir iossimulator-x64 -Dtarget=x86_64-ios-simulator --search-prefix $(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
 
         <!--Arm64-->
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=Debug --prefix debug --prefix-lib-dir linux-arm64        --prefix-exe-dir linux-arm64        -Dtarget=aarch64-linux-gnu"/>
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=Debug --prefix debug --prefix-lib-dir win-arm64          --prefix-exe-dir win-arm64          -Dtarget=aarch64-windows-gnu"/>
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=Debug --prefix debug --prefix-lib-dir osx-arm64          --prefix-exe-dir osx-arm64          -Dtarget=aarch64-macos"/>
-        <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=Debug --prefix debug --prefix-lib-dir ios-arm64          --prefix-exe-dir ios-arm64          -Dtarget=aarch64-ios           --sysroot $(IosSdkPath)" Condition="'$(IosSdkPath)' != ''"/>
-        <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=Debug --prefix debug --prefix-lib-dir iossimulator-arm64 --prefix-exe-dir iossimulator-arm64 -Dtarget=aarch64-ios-simulator --sysroot $(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
+        <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=Debug --prefix debug --prefix-lib-dir ios-arm64          --prefix-exe-dir ios-arm64          -Dtarget=aarch64-ios           --search-prefix $(IosSdkPath)" Condition="'$(IosSdkPath)' != ''"/>
+        <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=Debug --prefix debug --prefix-lib-dir iossimulator-arm64 --prefix-exe-dir iossimulator-arm64 -Dtarget=aarch64-ios-simulator --search-prefix $(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
 
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir linux-arm64        --prefix-exe-dir linux-arm64        -Dtarget=aarch64-linux-gnu"/>
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir win-arm64          --prefix-exe-dir win-arm64          -Dtarget=aarch64-windows-gnu"/>
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir osx-arm64          --prefix-exe-dir osx-arm64          -Dtarget=aarch64-macos"/>
-        <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir ios-arm64          --prefix-exe-dir ios-arm64          -Dtarget=aarch64-ios           --sysroot $(IosSdkPath)" Condition="'$(IosSdkPath)' != ''"/>
-        <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir iossimulator-arm64 --prefix-exe-dir iossimulator-arm64 -Dtarget=aarch64-ios-simulator --sysroot $(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
+        <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir ios-arm64          --prefix-exe-dir ios-arm64          -Dtarget=aarch64-ios           --search-prefix $(IosSdkPath)" Condition="'$(IosSdkPath)' != ''"/>
+        <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir iossimulator-arm64 --prefix-exe-dir iossimulator-arm64 -Dtarget=aarch64-ios-simulator --search-prefix $(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
     </Target>
 
     <ItemGroup>
