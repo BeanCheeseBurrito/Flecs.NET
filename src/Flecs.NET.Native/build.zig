@@ -35,7 +35,13 @@ pub fn compileFlecs(options: anytype, b: *Build, lib_type: LibType) void {
             lib.linkSystemLibrary("ws2_32");
         },
         .ios => {
+            if (b.sysroot == null) {
+                @panic("A --sysroot path to an IOS SDK needs to be provided when compiling for IOS.");
+            }
+
+            lib.addSystemFrameworkPath(.{ .cwd_relative = b.pathJoin(&.{ b.sysroot.?, "/System/Library/Frameworks" }) });
             lib.addSystemIncludePath(.{ .cwd_relative = b.pathJoin(&.{ b.sysroot.?, "/usr/include" }) });
+            lib.addLibraryPath(.{ .cwd_relative = b.pathJoin(&.{ b.sysroot.?, "/usr/lib" }) });
         },
         else => {},
     }
