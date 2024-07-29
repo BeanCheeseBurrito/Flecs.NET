@@ -35,7 +35,7 @@ pub fn compileFlecs(options: anytype, b: *Build, lib_type: LibType) void {
             lib.linkSystemLibrary("ws2_32");
         },
         .ios => {
-            lib.addSystemIncludePath(.{ .cwd_relative = "/usr/include" });
+            lib.addIncludePath(.{ .cwd_relative = "/usr/include" });
 
             if (options.target.result.abi == .simulator and options.ios_simulator_sdk_path != null) {
                 b.sysroot = options.ios_simulator_sdk_path;
