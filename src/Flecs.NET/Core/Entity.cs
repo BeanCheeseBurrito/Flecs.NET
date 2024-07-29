@@ -1117,13 +1117,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public bool Has<T>()
         {
-            ulong typeId = Type<T>.Id(World);
-            bool result = Utils.Bool(ecs_has_id(World, Id, typeId));
-
-            if (result)
-                return result;
-
-            return typeof(T).IsEnum && Has(typeId, EcsWildcard);
+            return Utils.Bool(ecs_has_id(World, Id, Type<T>.Id(World)));
         }
 
         /// <summary>
