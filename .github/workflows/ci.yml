@@ -95,11 +95,11 @@ jobs:
       shell: bash
       run: |
         if [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
-          dotnet pack --no-build --property:FlecsVersionSuffix=$FlecsVersionSuffix -c Debug
-          dotnet pack --no-build --property:FlecsVersionSuffix=$FlecsVersionSuffix -c Release
+          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix -c Debug
+          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix -c Release
         else
-          dotnet pack --no-build --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:DebugType=embedded -c Debug
-          dotnet pack --no-build --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:DebugType=embedded -c Release
+          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:DebugType=embedded -c Debug
+          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:DebugType=embedded -c Release
         fi
 
     - name: Upload Artifacts
