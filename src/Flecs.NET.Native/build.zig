@@ -35,7 +35,7 @@ pub fn compileFlecs(options: anytype, b: *Build, lib_type: LibType) void {
             lib.linkSystemLibrary("ws2_32");
         },
         .ios => {
-            lib.addSystemIncludePath(.{ .cwd_relative = "/usr/include" });
+            lib.addSystemIncludePath(.{ .cwd_relative = b.pathJoin(&.{ b.sysroot.?, "/usr/include" }) });
         },
         else => {},
     }
