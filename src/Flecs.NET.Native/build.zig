@@ -19,14 +19,9 @@ pub fn compileFlecs(options: anytype, b: *Build, lib_type: LibType) void {
         }),
     };
 
-    lib.addCSourceFile(.{ .file = b.path("../../submodules/flecs/flecs.c"), .flags = &.{} });
     lib.linkLibC();
-
-    if (options.optimize == .Debug) {
-        lib.defineCMacro("FLECS_DEBUG", null);
-    } else {
-        lib.defineCMacro("FLECS_NDEBUG", null);
-    }
+    lib.addCSourceFile(.{ .file = b.path("../../submodules/flecs/flecs.c"), .flags = &.{} });
+    lib.defineCMacro(if (options.optimize == .Debug) "FLECS_DEBUG" else "FLECS_NDEBUG", null);
 
     if (options.soft_assert) {
         lib.defineCMacro("FLECS_SOFT_ASSERT", null);
