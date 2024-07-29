@@ -22,8 +22,10 @@ pub fn compileFlecs(options: anytype, b: *Build, lib_type: LibType) void {
     lib.addCSourceFile(.{ .file = b.path("../../submodules/flecs/flecs.c"), .flags = &.{} });
     lib.linkLibC();
 
-    if (options.optimize != .Debug) {
-        lib.defineCMacro("NDEBUG", null);
+    if (options.optimize == .Debug) {
+        lib.defineCMacro("FLECS_DEBUG", null);
+    } else {
+        lib.defineCMacro("FLECS_NDEBUG", null);
     }
 
     if (options.soft_assert) {
