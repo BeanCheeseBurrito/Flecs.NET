@@ -25,9 +25,10 @@ namespace Flecs.NET.Core
             Desc = new ecs_entity_to_json_desc_t()
             {
                 serialize_doc =        Utils.False,
-                serialize_full_paths = Utils.False,
+                serialize_full_paths = Utils.True,
                 serialize_inherited =  Utils.False,
                 serialize_values =     Utils.True,
+                serialize_builtin =    Utils.False,
                 serialize_type_info =  Utils.False,
                 serialize_alerts =     Utils.False,
                 serialize_refs =       0,
@@ -92,6 +93,18 @@ namespace Flecs.NET.Core
         public ref EntityToJsonDesc Values(bool value = true)
         {
             Desc.serialize_values = Utils.Bool(value);
+            return ref this;
+        }
+
+        /// <summary>
+        ///     Serialize builtin data as components (e.g. "name", "parent")
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref EntityToJsonDesc BuiltIn(bool value = true)
+        {
+            Desc.serialize_builtin = Utils.Bool(value);
             return ref this;
         }
 

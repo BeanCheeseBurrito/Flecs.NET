@@ -1094,5 +1094,121 @@ namespace Flecs.NET.Tests.Cpp
             e1.Emit(new MyEvent(10));
             world.DeferEnd();
         }
+
+        [Fact]
+        private void RegisterTwiceWithEach()
+        {
+            using World world = World.Create();
+
+            int count1 = 0;
+            int count2 = 0;
+
+            world.Observer<Position>("Test")
+                .Event(Ecs.OnSet)
+                .Each((ref Position _) =>
+                {
+                    count1++;
+                });
+
+            world.Entity().Set(new Position(10, 20));
+            Assert.Equal(1, count1);
+
+            world.Observer<Position>("Test")
+                .Event(Ecs.OnSet)
+                .Each((ref Position _) =>
+                {
+                    count2++;
+                });
+
+            world.Entity().Set(new Position(10, 20));
+            Assert.Equal(1, count2);
+        }
+
+        [Fact]
+        private void RegisterTwiceWithRun()
+        {
+            using World world = World.Create();
+
+            int count1 = 0;
+            int count2 = 0;
+
+            world.Observer<Position>("Test")
+                .Event(Ecs.OnSet)
+                .Run((Iter _) =>
+                {
+                    count1++;
+                });
+
+            world.Entity().Set(new Position(10, 20));
+            Assert.Equal(1, count1);
+
+            world.Observer<Position>("Test")
+                .Event(Ecs.OnSet)
+                .Run((Iter _) =>
+                {
+                    count2++;
+                });
+
+            world.Entity().Set(new Position(10, 20));
+            Assert.Equal(1, count2);
+        }
+
+        [Fact]
+        private void RegisterTwiceWithRunEach()
+        {
+            using World world = World.Create();
+
+            int count1 = 0;
+            int count2 = 0;
+
+            world.Observer<Position>("Test")
+                .Event(Ecs.OnSet)
+                .Run((Iter _) =>
+                {
+                    count1++;
+                });
+
+            world.Entity().Set(new Position(10, 20));
+            Assert.Equal(1, count1);
+
+            world.Observer<Position>("Test")
+                .Event(Ecs.OnSet)
+                .Each((ref Position _) =>
+                {
+                    count2++;
+                });
+
+            world.Entity().Set(new Position(10, 20));
+            Assert.Equal(1, count2);
+        }
+
+        [Fact]
+        private void RegisterTwiceWithEachRun()
+        {
+            using World world = World.Create();
+
+            int count1 = 0;
+            int count2 = 0;
+
+            world.Observer<Position>("Test")
+                .Event(Ecs.OnSet)
+                .Each((ref Position _) =>
+                {
+                    count1++;
+                });
+
+            world.Entity().Set(new Position(10, 20));
+            Assert.Equal(1, count1);
+
+            world.Observer<Position>("Test")
+                .Event(Ecs.OnSet)
+                .Run((Iter _) =>
+                {
+                    count2++;
+                });
+
+            world.Entity().Set(new Position(10, 20));
+            Assert.Equal(1, count2);
+        }
     }
 }

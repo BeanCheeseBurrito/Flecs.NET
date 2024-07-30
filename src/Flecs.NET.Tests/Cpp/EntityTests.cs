@@ -3013,6 +3013,25 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
+        private void DeferEnsure()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+
+            world.DeferBegin();
+            Position* p = e.EnsurePtr<Position>();
+            p->X = 10;
+            p->Y = 20;
+            world.DeferEnd();
+
+            p = e.GetMutPtr<Position>();
+            Assert.True(p != null);
+            Assert.Equal(10, p->X);
+            Assert.Equal(20, p->Y);
+        }
+
+        [Fact]
         private void WithAfterBuilderMethod()
         {
             using World world = World.Create();

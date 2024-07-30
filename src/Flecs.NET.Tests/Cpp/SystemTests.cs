@@ -2835,5 +2835,113 @@ namespace Flecs.NET.Tests.Cpp
             world.Progress();
             Assert.True(ranTest);
         }
+
+        [Fact]
+        private void RegisterTwiceWithEach()
+        {
+            using World world = World.Create();
+
+            int count1 = 0;
+            int count2 = 0;
+
+            Routine sys1 = world.Routine("Test")
+                .Each((Iter it, int i) =>
+                {
+                    count1++;
+                });
+
+            sys1.Run();
+            Assert.Equal(1, count1);
+
+            Routine sys2 = world.Routine("Test")
+                .Each((Iter it, int i) =>
+                {
+                    count2++;
+                });
+
+            sys2.Run();
+            Assert.Equal(1, count2);
+        }
+
+        [Fact]
+        private void RegisterTwiceWithRun()
+        {
+            using World world = World.Create();
+
+            int count1 = 0;
+            int count2 = 0;
+
+            Routine sys1 = world.Routine("Test")
+                .Run((Iter it) =>
+                {
+                    count1++;
+                });
+
+            sys1.Run();
+            Assert.Equal(1, count1);
+
+            Routine sys2 = world.Routine("Test")
+                .Run((Iter it) =>
+                {
+                    count2++;
+                });
+
+            sys2.Run();
+            Assert.Equal(1, count2);
+        }
+
+        [Fact]
+        private void RegisterTwiceWithRunEach()
+        {
+            using World world = World.Create();
+
+            int count1 = 0;
+            int count2 = 0;
+
+            Routine sys1 = world.Routine("Test")
+                .Run((Iter it) =>
+                {
+                    count1++;
+                });
+
+            sys1.Run();
+            Assert.Equal(1, count1);
+
+            Routine sys2 = world.Routine("Test")
+                .Each((Iter it, int i) =>
+                {
+                    count2++;
+                });
+
+            sys2.Run();
+            Assert.Equal(1, count2);
+        }
+
+        [Fact]
+        private void RegisterTwiceWithEachRun()
+        {
+            using World world = World.Create();
+
+            int count1 = 0;
+            int count2 = 0;
+
+            Routine sys1 = world.Routine("Test")
+                .Each((Iter it, int i) =>
+                {
+                    count1++;
+                });
+
+            sys1.Run();
+            Assert.Equal(1, count1);
+
+            Routine sys2 = world.Routine("Test")
+                .Run((Iter it) =>
+                {
+                    count2++;
+                });
+
+            sys2.Run();
+            Assert.Equal(1, count2);
+        }
     }
 }

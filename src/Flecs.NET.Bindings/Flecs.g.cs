@@ -3027,6 +3027,8 @@ namespace Flecs.NET.Bindings
 
             public byte serialize_values;
 
+            public byte serialize_builtin;
+
             public byte serialize_type_info;
 
             public byte serialize_alerts;
@@ -4495,9 +4497,9 @@ namespace Flecs.NET.Bindings
 
             public byte serialize_values;
 
-            public byte serialize_doc;
+            public byte serialize_builtin;
 
-            public byte serialize_var_labels;
+            public byte serialize_doc;
 
             public byte serialize_full_paths;
 
@@ -11827,7 +11829,7 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsEventNoOnSet = 65536;
 
-        public const uint EcsEventTableOnly = 262144;
+        public const uint EcsEventTableOnly = 1048576;
 
         public const int EcsFirstUserComponentId = 8;
 
@@ -11895,13 +11897,13 @@ namespace Flecs.NET.Bindings
 
         public const ulong EcsIsVariable = 288230376151711744;
 
-        public const uint EcsIterCacheSearch = 8192;
+        public const uint EcsIterCacheSearch = 32768;
 
-        public const uint EcsIterCppEach = 131072;
+        public const uint EcsIterCppEach = 524288;
 
-        public const uint EcsIterFixedInChangeComputed = 16384;
+        public const uint EcsIterFixedInChangeComputed = 65536;
 
-        public const uint EcsIterFixedInChanged = 32768;
+        public const uint EcsIterFixedInChanged = 131072;
 
         public const uint EcsIterHasCondSet = 64;
 
@@ -11921,19 +11923,19 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsIterProfile = 128;
 
-        public const uint EcsIterSkip = 65536;
+        public const uint EcsIterSkip = 262144;
 
-        public const uint EcsIterTableOnly = 262144;
+        public const uint EcsIterTableOnly = 1048576;
+
+        public const uint EcsIterTrivialCached = 16384;
 
         public const uint EcsIterTrivialSearch = 256;
 
         public const uint EcsIterTrivialSearchNoData = 512;
 
-        public const uint EcsIterTrivialSearchWildcard = 4096;
+        public const uint EcsIterTrivialTest = 2048;
 
-        public const uint EcsIterTrivialTest = 1024;
-
-        public const uint EcsIterTrivialTestWildcard = 2048;
+        public const uint EcsIterTrivialTestNoData = 4096;
 
         public const int EcsIterYield = -1;
 

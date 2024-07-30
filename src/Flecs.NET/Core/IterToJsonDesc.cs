@@ -26,8 +26,9 @@ namespace Flecs.NET.Core
             {
                 serialize_entity_ids =    Utils.False,
                 serialize_values =        Utils.True,
+                serialize_builtin =       Utils.False,
                 serialize_doc =           Utils.False,
-                serialize_full_paths =    Utils.False,
+                serialize_full_paths =    Utils.True,
                 serialize_fields =        Utils.True,
                 serialize_inherited =     Utils.False,
                 serialize_table =         Utils.False,
@@ -68,6 +69,18 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Serialize builtin data as components. (e.g. "name", "parent")
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref IterToJsonDesc BuiltIn(bool value = true)
+        {
+            Desc.serialize_builtin = Utils.Bool(value);
+            return ref this;
+        }
+
+        /// <summary>
         ///     Serialize doc attributes.
         /// </summary>
         /// <param name="value"></param>
@@ -76,18 +89,6 @@ namespace Flecs.NET.Core
         public ref IterToJsonDesc Doc(bool value = true)
         {
             Desc.serialize_doc = Utils.Bool(value);
-            return ref this;
-        }
-
-        /// <summary>
-        ///     Serialize doc names of matched variables.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref IterToJsonDesc VarLabels(bool value = true)
-        {
-            Desc.serialize_var_labels = Utils.Bool(value);
             return ref this;
         }
 

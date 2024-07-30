@@ -3126,6 +3126,23 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
+        private void RunWithIterFiniNoQuery()
+        {
+            using World world = World.Create();
+
+            using Query q = world.Query();
+
+            int count = 0;
+            q.Run((Iter it) =>
+            {
+                count++;
+                it.Fini();
+            });
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
         private void AddToMatchFromStagedQuery()
         {
             using World world = World.Create();
