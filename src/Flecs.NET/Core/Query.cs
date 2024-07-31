@@ -9,7 +9,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper around ecs_query_t.
     /// </summary>
-    public unsafe partial struct Query : IIterable, IEquatable<Query>, IDisposable
+    public unsafe partial struct Query : IIterator, IEquatable<Query>, IDisposable
     {
         private ecs_query_t* _handle;
 
@@ -195,94 +195,6 @@ namespace Flecs.NET.Core
         {
             return NativeString.GetStringAndFree(ecs_query_plan(Handle));
         }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        public void Iter(Ecs.IterCallback callback)
-        {
-            ecs_iter_t iter = GetIter();
-            while (GetNext(&iter))
-                Invoker.Iter(&iter, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        public void Each(Ecs.EachEntityCallback callback)
-        {
-            ecs_iter_t iter = GetIter();
-            while (GetNext(&iter))
-                Invoker.Each(&iter, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        public void Each(Ecs.EachIterCallback callback)
-        {
-            ecs_iter_t iter = GetIter();
-            while (GetNext(&iter))
-                Invoker.Each(&iter, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        public void Run(Ecs.RunCallback callback)
-        {
-            ecs_iter_t iter = GetIter();
-            Invoker.Run(&iter, callback);
-        }
-
-#if NET5_0_OR_GREATER
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        public void Iter(delegate*<Iter, void> callback)
-        {
-            ecs_iter_t iter = GetIter();
-            while (GetNext(&iter))
-                Invoker.Iter(&iter, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        public void Each(delegate*<Entity, void> callback)
-        {
-            ecs_iter_t iter = GetIter();
-            while (GetNext(&iter))
-                Invoker.Each(&iter, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        public void Each(delegate*<Iter, int, void> callback)
-        {
-            ecs_iter_t iter = GetIter();
-            while (GetNext(&iter))
-                Invoker.Each(&iter, callback);
-        }
-
-        /// <summary>
-        ///     Iterates the query using the provided callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        public void Run(delegate*<Iter, void> callback)
-        {
-            ecs_iter_t iter = GetIter();
-            Invoker.Run(&iter, callback);
-        }
-#endif
 
         /// <summary>
         ///     Converts a <see cref="Query"/> instance to an <see cref="ecs_query_t"/>*.
@@ -509,5 +421,59 @@ namespace Flecs.NET.Core
         {
             return Iter().SetGroup<T>();
         }
+    }
+
+    // IIterator Interface
+    public unsafe partial struct Query
+    {
+        /// <inheritdoc cref="IIterator.Iter(Ecs.IterCallback)"/>
+        public void Iter(Ecs.IterCallback callback)
+        {
+            IIterator.Iter(ref this, callback);
+        }
+
+        /// <inheritdoc cref="IIterator.Each(Ecs.EachEntityCallback)"/>
+        public void Each(Ecs.EachEntityCallback callback)
+        {
+            IIterator.Each(ref this, callback);
+        }
+
+        /// <inheritdoc cref="IIterator.Each(Ecs.EachIterCallback)"/>
+        public void Each(Ecs.EachIterCallback callback)
+        {
+            IIterator.Each(ref this, callback);
+        }
+
+        /// <inheritdoc cref="IIterator.Run(Ecs.RunCallback)"/>
+        public void Run(Ecs.RunCallback callback)
+        {
+            IIterator.Run(ref this, callback);
+        }
+
+#if NET5_0_OR_GREATER
+        /// <inheritdoc cref="IIterator.Iter(Ecs.IterCallback)"/>
+        public void Iter(delegate*<Iter, void> callback)
+        {
+            IIterator.Iter(ref this, callback);
+        }
+
+        /// <inheritdoc cref="IIterator.Each(Ecs.EachEntityCallback)"/>
+        public void Each(delegate*<Entity, void> callback)
+        {
+            IIterator.Each(ref this, callback);
+        }
+
+        /// <inheritdoc cref="IIterator.Each(Ecs.EachIterCallback)"/>
+        public void Each(delegate*<Iter, int, void> callback)
+        {
+            IIterator.Each(ref this, callback);
+        }
+
+        /// <inheritdoc cref="IIterator.Run(Ecs.RunCallback)"/>
+        public void Run(delegate*<Iter, void> callback)
+        {
+            IIterator.Run(ref this, callback);
+        }
+#endif
     }
 }
