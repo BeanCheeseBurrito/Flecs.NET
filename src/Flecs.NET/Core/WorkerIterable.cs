@@ -150,43 +150,43 @@ namespace Flecs.NET.Core
         }
 
         /// <inheritdoc cref="IIterable.SetVar(int, ulong)"/>
-        IterIterable IIterable.SetVar(int varId, ulong value)
+        public IterIterable SetVar(int varId, ulong value)
         {
             return Iter().SetVar(varId, value);
         }
 
         /// <inheritdoc cref="IIterable.SetVar(string, ulong)"/>
-        IterIterable IIterable.SetVar(string name, ulong value)
+        public IterIterable SetVar(string name, ulong value)
         {
             return Iter().SetVar(name, value);
         }
 
         /// <inheritdoc cref="IIterable.SetVar(string, ecs_table_t*)"/>
-        IterIterable IIterable.SetVar(string name, ecs_table_t* value)
+        public IterIterable SetVar(string name, ecs_table_t* value)
         {
             return Iter().SetVar(name, value);
         }
 
         /// <inheritdoc cref="IIterable.SetVar(string, ecs_table_range_t)"/>
-        IterIterable IIterable.SetVar(string name, ecs_table_range_t value)
+        public IterIterable SetVar(string name, ecs_table_range_t value)
         {
             return Iter().SetVar(name, value);
         }
 
         /// <inheritdoc cref="IIterable.SetVar(string, Table)"/>
-        IterIterable IIterable.SetVar(string name, Table value)
+        public IterIterable SetVar(string name, Table value)
         {
             return Iter().SetVar(name, value);
         }
 
         /// <inheritdoc cref="IIterable.SetGroup(ulong)"/>
-        IterIterable IIterable.SetGroup(ulong groupId)
+        public IterIterable SetGroup(ulong groupId)
         {
             return Iter().SetGroup(groupId);
         }
 
         /// <inheritdoc cref="IIterable.SetGroup{T}()"/>
-        IterIterable IIterable.SetGroup<T>()
+        public IterIterable SetGroup<T>()
         {
             return Iter().SetGroup<T>();
         }
