@@ -214,7 +214,7 @@ namespace Flecs.NET.Core
         public void Each(Ecs.EachEntityCallback callback)
         {
             ecs_iter_t iter = GetIter();
-            while (GetNextInstanced(&iter))
+            while (GetNext(&iter))
                 Invoker.Each(&iter, callback);
         }
 
@@ -225,7 +225,7 @@ namespace Flecs.NET.Core
         public void Each(Ecs.EachIterCallback callback)
         {
             ecs_iter_t iter = GetIter();
-            while (GetNextInstanced(&iter))
+            while (GetNext(&iter))
                 Invoker.Each(&iter, callback);
         }
 
@@ -258,7 +258,7 @@ namespace Flecs.NET.Core
         public void Each(delegate*<Entity, void> callback)
         {
             ecs_iter_t iter = GetIter();
-            while (GetNextInstanced(&iter))
+            while (GetNext(&iter))
                 Invoker.Each(&iter, callback);
         }
 
@@ -269,7 +269,7 @@ namespace Flecs.NET.Core
         public void Each(delegate*<Iter, int, void> callback)
         {
             ecs_iter_t iter = GetIter();
-            while (GetNextInstanced(&iter))
+            while (GetNext(&iter))
                 Invoker.Each(&iter, callback);
         }
 
@@ -418,13 +418,6 @@ namespace Flecs.NET.Core
         public bool GetNext(ecs_iter_t* it)
         {
             return Utils.Bool(ecs_query_next(it));
-        }
-
-        /// <inheritdoc cref="IIterable.GetNextInstanced"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool GetNextInstanced(ecs_iter_t* it)
-        {
-            return Utils.Bool(flecs_query_next_instanced(it));
         }
 
         /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.World)"/>

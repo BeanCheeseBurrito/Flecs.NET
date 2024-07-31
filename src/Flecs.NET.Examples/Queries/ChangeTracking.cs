@@ -2,9 +2,8 @@
 // is a cheap way of eliminating redundant work, as many entities can be skipped
 // with a single check.
 //
-// This example shows how to use change tracking in combination with a few other
-// techniques, like using prefabs to store a single dirty state for multiple
-// entities and instanced queries.
+// This example shows how to use change tracking in combination with using
+// prefabs to store a single dirty state for multiple entities.
 
 using Flecs.NET.Core;
 
@@ -34,7 +33,6 @@ public static class Queries_ChangeTracking
         // Create a query that writes the component based on a Dirty state.
         using Query qWrite = world.QueryBuilder<Dirty, Position>()
             .TermAt(0).Up(Ecs.IsA).In() // Only match Dirty from prefab
-            .Instanced()                // Instanced iteration is faster (see example)
             .Build();
 
         // Create two prefabs with a Dirty component. We can use this to share a

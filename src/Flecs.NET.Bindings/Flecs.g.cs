@@ -1714,9 +1714,6 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_poly_release_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int flecs_poly_release_(void* poly);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_query_next_instanced", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte flecs_query_next_instanced(ecs_iter_t* it);
-
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "flecs_resume_readonly", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void flecs_resume_readonly(ecs_world_t* world, ecs_suspend_readonly_state_t* state);
 
@@ -4436,8 +4433,6 @@ namespace Flecs.NET.Bindings
             public int offset;
 
             public int count;
-
-            public int instance_count;
 
             public uint flags;
 
@@ -11909,8 +11904,6 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsIterIgnoreThis = 16;
 
-        public const uint EcsIterIsInstanced = 4;
-
         public const uint EcsIterIsValid = 1;
 
         public const int EcsIterNext = 1;
@@ -11982,8 +11975,6 @@ namespace Flecs.NET.Bindings
         public const uint EcsQueryHasTableThisVar = 33554432;
 
         public const uint EcsQueryIsCacheable = 16777216;
-
-        public const uint EcsQueryIsInstanced = 32;
 
         public const uint EcsQueryIsTrivial = 4194304;
 

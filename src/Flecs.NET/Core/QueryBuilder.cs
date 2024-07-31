@@ -722,20 +722,6 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     When true, terms returned by an iterator may either contain 1 or N
-        ///     elements, where terms with N elements are owned, and terms with 1 element
-        ///     are shared, for example from a parent or base entity. When false, the
-        ///     iterator will at most return 1 element when the result contains both
-        ///     owned and shared terms.
-        /// </summary>
-        /// <returns></returns>
-        public ref QueryBuilder Instanced()
-        {
-            Desc.flags |= EcsQueryIsInstanced;
-            return ref this;
-        }
-
-        /// <summary>
         ///     Set query flags for advanced usage
         /// </summary>
         /// <param name="flags"></param>

@@ -247,7 +247,7 @@ namespace Flecs.NET.Core
         /// <returns>The created routine.</returns>
         public Routine Each(Ecs.EachEntityCallback callback)
         {
-            return Instanced().SetCallback(callback, BindingContext.EachEntityCallbackPointer).Build();
+            return SetCallback(callback, BindingContext.EachEntityCallbackPointer).Build();
         }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace Flecs.NET.Core
         /// <returns>The created routine.</returns>
         public Routine Each(Ecs.EachIterCallback callback)
         {
-            return Instanced().SetCallback(callback, BindingContext.EachIterCallbackPointer).Build();
+            return SetCallback(callback, BindingContext.EachIterCallbackPointer).Build();
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace Flecs.NET.Core
         /// <returns>The created routine.</returns>
         public Routine Each(delegate*<Entity, void> callback)
         {
-            return Instanced().SetCallback((IntPtr)callback, BindingContext.EachEntityCallbackPointer).Build();
+            return SetCallback((IntPtr)callback, BindingContext.EachEntityCallbackPointer).Build();
         }
 
         /// <summary>
@@ -338,7 +338,7 @@ namespace Flecs.NET.Core
         /// <returns>The created routine.</returns>
         public Routine Each(delegate*<Iter, int, void> callback)
         {
-            return Instanced().SetCallback((IntPtr)callback, BindingContext.EachIterCallbackPointer).Build();
+            return SetCallback((IntPtr)callback, BindingContext.EachIterCallbackPointer).Build();
         }
 
         /// <summary>
@@ -886,13 +886,6 @@ namespace Flecs.NET.Core
         public ref RoutineBuilder Filter()
         {
             QueryBuilder.Filter();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="QueryBuilder.Instanced()"/>
-        public ref RoutineBuilder Instanced()
-        {
-            QueryBuilder.Instanced();
             return ref this;
         }
 

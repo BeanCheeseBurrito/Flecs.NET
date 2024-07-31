@@ -149,7 +149,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Each(Ecs.EachEntityCallback callback)
         {
-            return Instanced().SetCallback(callback, BindingContext.EachEntityCallbackPointer).Build();
+            return SetCallback(callback, BindingContext.EachEntityCallbackPointer).Build();
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Each(Ecs.EachIterCallback callback)
         {
-            return Instanced().SetCallback(callback, BindingContext.EachIterCallbackPointer).Build();
+            return SetCallback(callback, BindingContext.EachIterCallbackPointer).Build();
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Each(delegate*<Entity, void> callback)
         {
-            return Instanced().SetCallback((IntPtr)callback, BindingContext.EachEntityCallbackPointer).Build();
+            return SetCallback((IntPtr)callback, BindingContext.EachEntityCallbackPointer).Build();
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Each(delegate*<Iter, int, void> callback)
         {
-            return Instanced().SetCallback((IntPtr)callback, BindingContext.EachIterCallbackPointer).Build();
+            return SetCallback((IntPtr)callback, BindingContext.EachIterCallbackPointer).Build();
         }
 
         /// <summary>
@@ -792,13 +792,6 @@ namespace Flecs.NET.Core
         public ref ObserverBuilder Filter()
         {
             QueryBuilder.Filter();
-            return ref this;
-        }
-
-        /// <inheritdoc cref="QueryBuilder.Instanced()"/>
-        public ref ObserverBuilder Instanced()
-        {
-            QueryBuilder.Instanced();
             return ref this;
         }
 

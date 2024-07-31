@@ -1698,7 +1698,6 @@ namespace Flecs.NET.Tests.Cpp
 
             using Query q = world.QueryBuilder<Self, Position, Velocity>()
                 .TermAt(2).Singleton()
-                .Instanced()
                 .Build();
 
             int count = 0;
@@ -1745,153 +1744,6 @@ namespace Flecs.NET.Tests.Cpp
 
         [Fact]
         private void InstancedQueryWithBaseEach()
-        {
-            using World world = World.Create();
-
-            Entity @base = world.Entity().Set(new Velocity(1, 2));
-
-            Entity e1 = world.Entity().IsA(@base).Set(new Position(10, 20));
-            e1.Set(new Self(e1));
-            Entity e2 = world.Entity().IsA(@base).Set(new Position(20, 30));
-            e2.Set(new Self(e2));
-            Entity e3 = world.Entity().IsA(@base).Set(new Position(30, 40));
-            e3.Set(new Self(e3));
-            Entity e4 = world.Entity().IsA(@base).Set(new Position(40, 50)).Add<Tag>();
-            e4.Set(new Self(e4));
-            Entity e5 = world.Entity().IsA(@base).Set(new Position(50, 60)).Add<Tag>();
-            e5.Set(new Self(e5));
-            Entity e6 = world.Entity().Set(new Position(60, 70)).Set(new Velocity(2, 3));
-            e6.Set(new Self(e6));
-            Entity e7 = world.Entity().Set(new Position(70, 80)).Set(new Velocity(4, 5));
-            e7.Set(new Self(e7));
-
-            using Query q = world.QueryBuilder<Self, Position, Velocity>()
-                .Instanced()
-                .Build();
-
-            int count = 0;
-            q.Each((Entity e, ref Self s, ref Position p, ref Velocity v) =>
-            {
-                Assert.True(e == s.Value);
-                p.X += v.X;
-                p.Y += v.Y;
-                count++;
-            });
-
-            Assert.Equal(7, count);
-
-            Assert.True(e1.Read((in Position p) =>
-            {
-                Assert.Equal(11, p.X);
-                Assert.Equal(22, p.Y);
-            }));
-
-            Assert.True(e2.Read((in Position p) =>
-            {
-                Assert.Equal(21, p.X);
-                Assert.Equal(32, p.Y);
-            }));
-
-            Assert.True(e3.Read((in Position p) =>
-            {
-                Assert.Equal(31, p.X);
-                Assert.Equal(42, p.Y);
-            }));
-
-            Assert.True(e4.Read((in Position p) =>
-            {
-                Assert.Equal(41, p.X);
-                Assert.Equal(52, p.Y);
-            }));
-
-            Assert.True(e5.Read((in Position p) =>
-            {
-                Assert.Equal(51, p.X);
-                Assert.Equal(62, p.Y);
-            }));
-
-            Assert.True(e6.Read((in Position p) =>
-            {
-                Assert.Equal(62, p.X);
-                Assert.Equal(73, p.Y);
-            }));
-
-            Assert.True(e7.Read((in Position p) =>
-            {
-                Assert.Equal(74, p.X);
-                Assert.Equal(85, p.Y);
-            }));
-        }
-
-        [Fact]
-        private void UninstancedQueryWithSingletonEach()
-        {
-            using World world = World.Create();
-
-            world.Set(new Velocity(1, 2));
-
-            Entity e1 = world.Entity().Set(new Position(10, 20));
-            e1.Set(new Self(e1));
-            Entity e2 = world.Entity().Set(new Position(20, 30));
-            e2.Set(new Self(e2));
-            Entity e3 = world.Entity().Set(new Position(30, 40));
-            e3.Set(new Self(e3));
-            Entity e4 = world.Entity().Set(new Position(40, 50));
-            e4.Set(new Self(e4));
-            Entity e5 = world.Entity().Set(new Position(50, 60));
-            e5.Set(new Self(e5));
-
-            e4.Add<Tag>();
-            e5.Add<Tag>();
-
-            using Query q = world.QueryBuilder<Self, Position, Velocity>()
-                .TermAt(2).Singleton()
-                .Build();
-
-            int count = 0;
-            q.Each((Entity e, ref Self s, ref Position p, ref Velocity v) =>
-            {
-                Assert.True(e == s.Value);
-                p.X += v.X;
-                p.Y += v.Y;
-                count++;
-            });
-
-            Assert.Equal(5, count);
-
-            Assert.True(e1.Read((in Position p) =>
-            {
-                Assert.Equal(11, p.X);
-                Assert.Equal(22, p.Y);
-            }));
-
-            Assert.True(e2.Read((in Position p) =>
-            {
-                Assert.Equal(21, p.X);
-                Assert.Equal(32, p.Y);
-            }));
-
-            Assert.True(e3.Read((in Position p) =>
-            {
-                Assert.Equal(31, p.X);
-                Assert.Equal(42, p.Y);
-            }));
-
-            Assert.True(e4.Read((in Position p) =>
-            {
-                Assert.Equal(41, p.X);
-                Assert.Equal(52, p.Y);
-            }));
-
-            Assert.True(e5.Read((in Position p) =>
-            {
-                Assert.Equal(51, p.X);
-                Assert.Equal(62, p.Y);
-            }));
-        }
-
-        [Fact]
-        private void UninstancedQueryWithBaseEach()
         {
             using World world = World.Create();
 
@@ -1992,7 +1844,6 @@ namespace Flecs.NET.Tests.Cpp
 
             using Query q = world.QueryBuilder<Self, Position, Velocity>()
                 .TermAt(2).Singleton()
-                .Instanced()
                 .Build();
 
             int count = 0;
@@ -2072,7 +1923,6 @@ namespace Flecs.NET.Tests.Cpp
             e7.Set(new Self(e7));
 
             using Query q = world.QueryBuilder<Self, Position, Velocity>()
-                .Instanced()
                 .Build();
 
             int count = 0;
@@ -2099,174 +1949,6 @@ namespace Flecs.NET.Tests.Cpp
                             p[i].Y += v[0].Y;
                         }
 
-                        Assert.True(it.Entity(i) == s[i].Value);
-                        count++;
-                    }
-                }
-            });
-
-            Assert.Equal(7, count);
-
-            Assert.True(e1.Read((in Position p) =>
-            {
-                Assert.Equal(11, p.X);
-                Assert.Equal(22, p.Y);
-            }));
-
-            Assert.True(e2.Read((in Position p) =>
-            {
-                Assert.Equal(21, p.X);
-                Assert.Equal(32, p.Y);
-            }));
-
-            Assert.True(e3.Read((in Position p) =>
-            {
-                Assert.Equal(31, p.X);
-                Assert.Equal(42, p.Y);
-            }));
-
-            Assert.True(e4.Read((in Position p) =>
-            {
-                Assert.Equal(41, p.X);
-                Assert.Equal(52, p.Y);
-            }));
-
-            Assert.True(e5.Read((in Position p) =>
-            {
-                Assert.Equal(51, p.X);
-                Assert.Equal(62, p.Y);
-            }));
-
-            Assert.True(e6.Read((in Position p) =>
-            {
-                Assert.Equal(62, p.X);
-                Assert.Equal(73, p.Y);
-            }));
-
-            Assert.True(e7.Read((in Position p) =>
-            {
-                Assert.Equal(74, p.X);
-                Assert.Equal(85, p.Y);
-            }));
-        }
-
-        [Fact]
-        private void UninstancedQueryWithSingletonIter()
-        {
-            using World world = World.Create();
-
-            world.Set(new Velocity(1, 2));
-
-            Entity e1 = world.Entity().Set(new Position(10, 20));
-            e1.Set(new Self(e1));
-            Entity e2 = world.Entity().Set(new Position(20, 30));
-            e2.Set(new Self(e2));
-            Entity e3 = world.Entity().Set(new Position(30, 40));
-            e3.Set(new Self(e3));
-            Entity e4 = world.Entity().Set(new Position(40, 50));
-            e4.Set(new Self(e4));
-            Entity e5 = world.Entity().Set(new Position(50, 60));
-            e5.Set(new Self(e5));
-
-            e4.Add<Tag>();
-            e5.Add<Tag>();
-
-            using Query q = world.QueryBuilder<Self, Position, Velocity>()
-                .TermAt(2).Singleton()
-                .Build();
-
-            int count = 0;
-            q.Run((Iter it) =>
-            {
-                while (it.Next())
-                {
-                    Field<Self> s = it.Field<Self>(0);
-                    Field<Position> p = it.Field<Position>(1);
-                    Field<Velocity> v = it.Field<Velocity>(2);
-
-                    Assert.True(it.Count() == 1);
-
-                    foreach (int i in it)
-                    {
-                        p[i].X += v[i].X;
-                        p[i].Y += v[i].Y;
-                        Assert.True(it.Entity(i) == s[i].Value);
-                        count++;
-                    }
-                }
-            });
-
-            Assert.Equal(5, count);
-
-            Assert.True(e1.Read((in Position p) =>
-            {
-                Assert.Equal(11, p.X);
-                Assert.Equal(22, p.Y);
-            }));
-
-            Assert.True(e2.Read((in Position p) =>
-            {
-                Assert.Equal(21, p.X);
-                Assert.Equal(32, p.Y);
-            }));
-
-            Assert.True(e3.Read((in Position p) =>
-            {
-                Assert.Equal(31, p.X);
-                Assert.Equal(42, p.Y);
-            }));
-
-            Assert.True(e4.Read((in Position p) =>
-            {
-                Assert.Equal(41, p.X);
-                Assert.Equal(52, p.Y);
-            }));
-
-            Assert.True(e5.Read((in Position p) =>
-            {
-                Assert.Equal(51, p.X);
-                Assert.Equal(62, p.Y);
-            }));
-        }
-
-        [Fact]
-        private void UninstancedQueryWithBaseIter()
-        {
-            using World world = World.Create();
-
-            Entity @base = world.Entity().Set(new Velocity(1, 2));
-
-            Entity e1 = world.Entity().IsA(@base).Set(new Position(10, 20));
-            e1.Set(new Self(e1));
-            Entity e2 = world.Entity().IsA(@base).Set(new Position(20, 30));
-            e2.Set(new Self(e2));
-            Entity e3 = world.Entity().IsA(@base).Set(new Position(30, 40));
-            e3.Set(new Self(e3));
-            Entity e4 = world.Entity().IsA(@base).Set(new Position(40, 50)).Add<Tag>();
-            e4.Set(new Self(e4));
-            Entity e5 = world.Entity().IsA(@base).Set(new Position(50, 60)).Add<Tag>();
-            e5.Set(new Self(e5));
-            Entity e6 = world.Entity().Set(new Position(60, 70)).Set(new Velocity(2, 3));
-            e6.Set(new Self(e6));
-            Entity e7 = world.Entity().Set(new Position(70, 80)).Set(new Velocity(4, 5));
-            e7.Set(new Self(e7));
-
-            using Query q = world.QueryBuilder<Self, Position, Velocity>()
-                .Build();
-
-            int count = 0;
-            q.Run((Iter it) =>
-            {
-                while (it.Next())
-                {
-                    Field<Self> s = it.Field<Self>(0);
-                    Field<Position> p = it.Field<Position>(1);
-                    Field<Velocity> v = it.Field<Velocity>(2);
-
-                    foreach (int i in it)
-                    {
-                        p[i].X += v[i].X;
-                        p[i].Y += v[i].Y;
                         Assert.True(it.Entity(i) == s[i].Value);
                         count++;
                     }
@@ -2789,7 +2471,7 @@ namespace Flecs.NET.Tests.Cpp
                     {
                         while (it1.Next())
                         {
-                            Assert.Equal(1, it1.Count());
+                            Assert.Equal(2, it1.Count());
                             count += it1.Count();
                         }
                     });
@@ -2826,7 +2508,7 @@ namespace Flecs.NET.Tests.Cpp
                 {
                     while (it1.Next())
                     {
-                        Assert.Equal(1, it1.Count());
+                        Assert.Equal(2, it1.Count());
                         count += it1.Count();
                     }
                 });
@@ -2864,7 +2546,7 @@ namespace Flecs.NET.Tests.Cpp
                     {
                         while (it1.Next())
                         {
-                            Assert.Equal(1, it1.Count());
+                            Assert.Equal(2, it1.Count());
                             count += it1.Count();
                         }
                     });

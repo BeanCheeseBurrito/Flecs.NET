@@ -21,13 +21,6 @@ namespace Flecs.NET.Core
         public bool GetNext(ecs_iter_t* it);
 
         /// <summary>
-        ///     Progress instanced iterator.
-        /// </summary>
-        /// <param name="it">The iterator.</param>
-        /// <returns>The result.</returns>
-        public bool GetNextInstanced(ecs_iter_t* it);
-
-        /// <summary>
         ///     Create an iterator object that can be modified before iterating.
         /// </summary>
         /// <returns>An iterable iter.</returns>

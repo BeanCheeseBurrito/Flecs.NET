@@ -709,13 +709,6 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-        /// <inheritdoc cref="QueryBuilder.Instanced()"/>
-        public ref AlertBuilder Instanced()
-        {
-            QueryBuilder.Instanced();
-            return ref this;
-        }
-
         /// <inheritdoc cref="Core.QueryBuilder.QueryFlags"/>
         public ref AlertBuilder QueryFlags(uint flags)
         {

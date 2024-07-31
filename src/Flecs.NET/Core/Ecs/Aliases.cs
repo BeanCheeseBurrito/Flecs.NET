@@ -655,11 +655,6 @@ namespace Flecs.NET.Core
         public const uint QueryNoData = EcsQueryNoData;
 
         /// <summary>
-        ///     Query iteration is always instanced.
-        /// </summary>
-        public const uint QueryIsInstanced = EcsQueryIsInstanced;
-
-        /// <summary>
         ///     Query may have unresolved entity identifiers.
         /// </summary>
         public const uint QueryAllowUnresolvedByName = EcsQueryAllowUnresolvedByName;

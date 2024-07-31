@@ -108,15 +108,15 @@ namespace Flecs.NET.Codegen
                 string refParams = ConcatString(i + 1, ", ", index => $"ref T{index}");
 
                 str.Append($@"
-                    {GenerateIterableCallbackFunctions(false, $"Iter<{typeParams}>", $"Ecs.IterFieldCallback<{typeParams}>", $"delegate*<Iter, {fieldParams}, void>", "GetNext")}
-                    {GenerateIterableCallbackFunctions(false, $"Iter<{typeParams}>", $"Ecs.IterSpanCallback<{typeParams}>", $"delegate*<Iter, {spanParams}, void>", "GetNext", typeConstraints)}
-                    {GenerateIterableCallbackFunctions(false, $"Iter<{typeParams}>", $"Ecs.IterPointerCallback<{typeParams}>", $"delegate*<Iter, {pointerParams}, void>", "GetNext", typeConstraints)}
-                    {GenerateIterableCallbackFunctions(true, $"Each<{typeParams}>", $"Ecs.EachRefCallback<{typeParams}>", $"delegate*<{refParams}, void>", "GetNextInstanced")} 
-                    {GenerateIterableCallbackFunctions(true, $"Each<{typeParams}>", $"Ecs.EachEntityRefCallback<{typeParams}>", $"delegate*<Entity, {refParams}, void>", "GetNextInstanced")} 
-                    {GenerateIterableCallbackFunctions(true, $"Each<{typeParams}>", $"Ecs.EachIterRefCallback<{typeParams}>", $"delegate*<Iter, int, {refParams}, void>", "GetNextInstanced")}
-                    {GenerateIterableCallbackFunctions(true, $"Each<{typeParams}>", $"Ecs.EachPointerCallback<{typeParams}>", $"delegate*<{pointerParams}, void>", "GetNextInstanced", typeConstraints)} 
-                    {GenerateIterableCallbackFunctions(true, $"Each<{typeParams}>", $"Ecs.EachEntityPointerCallback<{typeParams}>", $"delegate*<Entity, {pointerParams}, void>", "GetNextInstanced", typeConstraints)} 
-                    {GenerateIterableCallbackFunctions(true, $"Each<{typeParams}>", $"Ecs.EachIterPointerCallback<{typeParams}>", $"delegate*<Iter, int, {pointerParams}, void>", "GetNextInstanced", typeConstraints)}
+                    {GenerateIterableCallbackFunctions($"Iter<{typeParams}>", $"Ecs.IterFieldCallback<{typeParams}>", $"delegate*<Iter, {fieldParams}, void>")}
+                    {GenerateIterableCallbackFunctions($"Iter<{typeParams}>", $"Ecs.IterSpanCallback<{typeParams}>", $"delegate*<Iter, {spanParams}, void>", typeConstraints)}
+                    {GenerateIterableCallbackFunctions($"Iter<{typeParams}>", $"Ecs.IterPointerCallback<{typeParams}>", $"delegate*<Iter, {pointerParams}, void>", typeConstraints)}
+                    {GenerateIterableCallbackFunctions($"Each<{typeParams}>", $"Ecs.EachRefCallback<{typeParams}>", $"delegate*<{refParams}, void>")} 
+                    {GenerateIterableCallbackFunctions($"Each<{typeParams}>", $"Ecs.EachEntityRefCallback<{typeParams}>", $"delegate*<Entity, {refParams}, void>")} 
+                    {GenerateIterableCallbackFunctions($"Each<{typeParams}>", $"Ecs.EachIterRefCallback<{typeParams}>", $"delegate*<Iter, int, {refParams}, void>")}
+                    {GenerateIterableCallbackFunctions($"Each<{typeParams}>", $"Ecs.EachPointerCallback<{typeParams}>", $"delegate*<{pointerParams}, void>", typeConstraints)} 
+                    {GenerateIterableCallbackFunctions($"Each<{typeParams}>", $"Ecs.EachEntityPointerCallback<{typeParams}>", $"delegate*<Entity, {pointerParams}, void>", typeConstraints)} 
+                    {GenerateIterableCallbackFunctions($"Each<{typeParams}>", $"Ecs.EachIterPointerCallback<{typeParams}>", $"delegate*<Iter, int, {pointerParams}, void>", typeConstraints)}
                     {GenerateIterableFindCallbackFunctions(typeParams, $"Ecs.FindRefCallback<{typeParams}>", $"delegate*<{refParams}, bool>")}
                     {GenerateIterableFindCallbackFunctions(typeParams, $"Ecs.FindEntityRefCallback<{typeParams}>", $"delegate*<Entity, {refParams}, bool>")}
                     {GenerateIterableFindCallbackFunctions(typeParams, $"Ecs.FindIterRefCallback<{typeParams}>", $"delegate*<Iter, int, {refParams}, bool>")}
@@ -180,32 +180,32 @@ namespace Flecs.NET.Codegen
 
                     public {name} Each<{typeParams}>(Ecs.EachRefCallback<{typeParams}> callback) 
                     {{
-                        return Instanced().SetCallback(callback, BindingContext<{typeParams}>.EachRefCallbackPointer).Build();
+                        return SetCallback(callback, BindingContext<{typeParams}>.EachRefCallbackPointer).Build();
                     }}
 
                     public {name} Each<{typeParams}>(Ecs.EachEntityRefCallback<{typeParams}> callback) 
                     {{
-                        return Instanced().SetCallback(callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer).Build();
+                        return SetCallback(callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer).Build();
                     }}
 
                     public {name} Each<{typeParams}>(Ecs.EachIterRefCallback<{typeParams}> callback) 
                     {{
-                        return Instanced().SetCallback(callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer).Build();
+                        return SetCallback(callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer).Build();
                     }}
 
                     public {name} Each<{typeParams}>(Ecs.EachPointerCallback<{typeParams}> callback) {typeConstraints}
                     {{
-                        return Instanced().SetCallback(callback, BindingContext<{typeParams}>.EachPointerCallbackPointer).Build();
+                        return SetCallback(callback, BindingContext<{typeParams}>.EachPointerCallbackPointer).Build();
                     }}
 
                     public {name} Each<{typeParams}>(Ecs.EachEntityPointerCallback<{typeParams}> callback) {typeConstraints}
                     {{
-                        return Instanced().SetCallback(callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer).Build();
+                        return SetCallback(callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer).Build();
                     }}
 
                     public {name} Each<{typeParams}>(Ecs.EachIterPointerCallback<{typeParams}> callback) {typeConstraints}
                     {{
-                        return Instanced().SetCallback(callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer).Build();
+                        return SetCallback(callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer).Build();
                     }}
 
                 #if NET5_0_OR_GREATER
@@ -226,32 +226,32 @@ namespace Flecs.NET.Codegen
 
                     public {name} Each<{typeParams}>(delegate*<{refParams}, void> callback) 
                     {{
-                        return Instanced().SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer).Build();
+                        return SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachRefCallbackPointer).Build();
                     }}
 
                     public {name} Each<{typeParams}>(delegate*<Entity, {refParams}, void> callback) 
                     {{
-                        return Instanced().SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer).Build();
+                        return SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachEntityRefCallbackPointer).Build();
                     }}
 
                     public {name} Each<{typeParams}>(delegate*<Iter, int, {refParams}, void> callback) 
                     {{
-                        return Instanced().SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer).Build();
+                        return SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachIterRefCallbackPointer).Build();
                     }}
 
                     public {name} Each<{typeParams}>(delegate*<{pointerParams}, void> callback) {typeConstraints}
                     {{
-                        return Instanced().SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachPointerCallbackPointer).Build();
+                        return SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachPointerCallbackPointer).Build();
                     }}
 
                     public {name} Each<{typeParams}>(delegate*<Entity, {pointerParams}, void> callback) {typeConstraints}
                     {{
-                        return Instanced().SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer).Build();
+                        return SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachEntityPointerCallbackPointer).Build();
                     }}
 
                     public {name} Each<{typeParams}>(delegate*<Iter, int, {pointerParams}, void> callback) {typeConstraints}
                     {{
-                        return Instanced().SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer).Build();
+                        return SetCallback((IntPtr)callback, BindingContext<{typeParams}>.EachIterPointerCallbackPointer).Build();
                     }}
                 #endif
                 ");
@@ -1350,19 +1350,16 @@ namespace Flecs.NET.Codegen
         }
 
         private static string GenerateIterableCallbackFunctions(
-            bool instanced,
             string functionName,
             string delegateName,
             string functionPointerName,
-            string nextName,
             string typeConstraints = "")
         {
             return $@"
                 public void {functionName}({delegateName} callback) {typeConstraints}
                 {{
                     ecs_iter_t it = GetIter();
-                    {(instanced ? "it.flags |= EcsIterIsInstanced;" : "")}
-                    while ({nextName}(&it))
+                    while (GetNext(&it))
                         Invoker.{functionName}(&it, callback);
                 }}
 
@@ -1370,8 +1367,7 @@ namespace Flecs.NET.Codegen
                 public void {functionName}({functionPointerName} callback) {typeConstraints}
                 {{
                     ecs_iter_t it = GetIter();
-                    {(instanced ? "it.flags |= EcsIterIsInstanced;" : "")}
-                    while ({nextName}(&it))
+                    while (GetNext(&it))
                         Invoker.{functionName}(&it, callback);
                 }}
                 #endif
@@ -1382,11 +1378,9 @@ namespace Flecs.NET.Codegen
         {
             string methodBody = $@"
                 ecs_iter_t it = GetIter();
-                it.flags |= EcsIterIsInstanced;
 
                 Entity result = default;
-
-                while (result == 0 && GetNextInstanced(&it))
+                while (result == 0 && GetNext(&it))
                     result = Invoker.Find(&it, callback);
                 
                 if (result != 0)

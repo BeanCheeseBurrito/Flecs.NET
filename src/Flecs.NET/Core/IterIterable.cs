@@ -178,7 +178,7 @@ namespace Flecs.NET.Core
             fixed (ecs_iter_t* it = &_iter)
             {
                 int result = 0;
-                while (GetNextInstanced(it))
+                while (GetNext(it))
                     result += _iter.count;
                 return result;
             }
@@ -192,7 +192,7 @@ namespace Flecs.NET.Core
         {
             fixed (ecs_iter_t* it = &_iter)
             {
-                bool result = GetNextInstanced(it);
+                bool result = GetNext(it);
                 if (result)
                     ecs_iter_fini(it);
                 return result;
@@ -209,7 +209,7 @@ namespace Flecs.NET.Core
             {
                 Entity result = default;
 
-                if (GetNextInstanced(it) && it->count != 0)
+                if (GetNext(it) && it->count != 0)
                 {
                     result = new Entity(it->world, it->entities[0]);
                     ecs_iter_fini(it);
@@ -265,7 +265,7 @@ namespace Flecs.NET.Core
         public void Each(Ecs.EachEntityCallback callback)
         {
             ecs_iter_t iter = GetIter();
-            while (GetNextInstanced(&iter))
+            while (GetNext(&iter))
                 Invoker.Each(&iter, callback);
         }
 
@@ -276,7 +276,7 @@ namespace Flecs.NET.Core
         public void Each(Ecs.EachIterCallback callback)
         {
             ecs_iter_t iter = GetIter();
-            while (GetNextInstanced(&iter))
+            while (GetNext(&iter))
                 Invoker.Each(&iter, callback);
         }
 
@@ -309,7 +309,7 @@ namespace Flecs.NET.Core
         public void Each(delegate*<Entity, void> callback)
         {
             ecs_iter_t iter = GetIter();
-            while (GetNextInstanced(&iter))
+            while (GetNext(&iter))
                 Invoker.Each(&iter, callback);
         }
 
@@ -320,7 +320,7 @@ namespace Flecs.NET.Core
         public void Each(delegate*<Iter, int, void> callback)
         {
             ecs_iter_t iter = GetIter();
-            while (GetNextInstanced(&iter))
+            while (GetNext(&iter))
                 Invoker.Each(&iter, callback);
         }
 
@@ -409,19 +409,6 @@ namespace Flecs.NET.Core
             return _iterableType switch
             {
                 IterableType.Query => Utils.Bool(ecs_query_next(it)),
-                IterableType.Worker => Utils.Bool(ecs_worker_next(it)),
-                IterableType.Page => Utils.Bool(ecs_page_next(it)),
-                _ => throw new Ecs.ErrorException()
-            };
-        }
-
-        /// <inheritdoc cref="IIterable.GetNextInstanced"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool GetNextInstanced(ecs_iter_t* it)
-        {
-            return _iterableType switch
-            {
-                IterableType.Query => Utils.Bool(flecs_query_next_instanced(it)),
                 IterableType.Worker => Utils.Bool(ecs_worker_next(it)),
                 IterableType.Page => Utils.Bool(ecs_page_next(it)),
                 _ => throw new Ecs.ErrorException()
