@@ -79,10 +79,10 @@ namespace Flecs.NET.Core
         }
     }
 
-    // IIterable Interface
+    //IIterableBase Interface
     public unsafe partial struct WorkerIterable
     {
-        /// <inheritdoc cref="IIterable.GetIter"/>
+        /// <inheritdoc cref="IIterableBase.GetIter"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ecs_iter_t GetIter(ecs_world_t* world = null)
         {
@@ -90,13 +90,35 @@ namespace Flecs.NET.Core
                 return ecs_worker_iter(ptr, _index, _count);
         }
 
-        /// <inheritdoc cref="IIterable.GetNext"/>
+        /// <inheritdoc cref="IIterableBase.GetNext"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool GetNext(ecs_iter_t* it)
         {
             return Utils.Bool(ecs_worker_next(it));
         }
 
+        /// <inheritdoc cref="IIterableBase.Count()"/>
+        public int Count()
+        {
+            return Iter().Count();
+        }
+
+        /// <inheritdoc cref="IIterableBase.IsTrue()"/>
+        public bool IsTrue()
+        {
+            return Iter().IsTrue();
+        }
+
+        /// <inheritdoc cref="IIterableBase.First()"/>
+        public Entity First()
+        {
+            return Iter().First();
+        }
+    }
+
+    // IIterable Interface
+    public unsafe partial struct WorkerIterable
+    {
         /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.World)"/>
         public IterIterable Iter(World world = default)
         {
@@ -125,24 +147,6 @@ namespace Flecs.NET.Core
         public WorkerIterable Worker(int index, int count)
         {
             return new WorkerIterable(GetIter(), index, count);
-        }
-
-        /// <inheritdoc cref="IIterable.Count()"/>
-        int IIterable.Count()
-        {
-            return Iter().Count();
-        }
-
-        /// <inheritdoc cref="IIterable.IsTrue()"/>
-        bool IIterable.IsTrue()
-        {
-            return Iter().IsTrue();
-        }
-
-        /// <inheritdoc cref="IIterable.First()"/>
-        Entity IIterable.First()
-        {
-            return Iter().First();
         }
 
         /// <inheritdoc cref="IIterable.SetVar(int, ulong)"/>

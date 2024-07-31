@@ -8,7 +8,7 @@ namespace Flecs.NET.Core
     ///     Interface for iterator structs.
     /// </summary>
     [SuppressMessage("Naming", "CA1716:Identifiers should not match keywords")]
-    public unsafe interface IIterator : IIterable
+    public unsafe partial interface IIterator : IIterable
     {
         /// <summary>
         ///     Iterates the query using the provided callback.
@@ -59,7 +59,11 @@ namespace Flecs.NET.Core
         /// <param name="callback">The callback.</param>
         public void Run(delegate*<Iter, void> callback);
 #endif
+    }
 
+    // Iterators
+    public unsafe partial interface IIterator : IIterable
+    {
         internal static void Iter<T>(ref T iterable, Ecs.IterCallback callback) where T : unmanaged, IIterable
         {
             ecs_iter_t iter = iterable.GetIter();
