@@ -428,50 +428,50 @@ namespace Flecs.NET.Core
         /// <inheritdoc cref="IIterator.Iter(Ecs.IterCallback)"/>
         public void Iter(Ecs.IterCallback callback)
         {
-            IIterator.Iter(ref this, callback);
+            Invoker.Iter(ref this, callback);
         }
 
         /// <inheritdoc cref="IIterator.Each(Ecs.EachEntityCallback)"/>
         public void Each(Ecs.EachEntityCallback callback)
         {
-            IIterator.Each(ref this, callback);
+            Invoker.Each(ref this, callback);
         }
 
         /// <inheritdoc cref="IIterator.Each(Ecs.EachIterCallback)"/>
         public void Each(Ecs.EachIterCallback callback)
         {
-            IIterator.Each(ref this, callback);
+            Invoker.Each(ref this, callback);
         }
 
         /// <inheritdoc cref="IIterator.Run(Ecs.RunCallback)"/>
         public void Run(Ecs.RunCallback callback)
         {
-            IIterator.Run(ref this, callback);
+            Invoker.Run(ref this, callback);
         }
 
 #if NET5_0_OR_GREATER
         /// <inheritdoc cref="IIterator.Iter(Ecs.IterCallback)"/>
         public void Iter(delegate*<Iter, void> callback)
         {
-            IIterator.Iter(ref this, callback);
+            Invoker.Iter(ref this, callback);
         }
 
         /// <inheritdoc cref="IIterator.Each(Ecs.EachEntityCallback)"/>
         public void Each(delegate*<Entity, void> callback)
         {
-            IIterator.Each(ref this, callback);
+            Invoker.Each(ref this, callback);
         }
 
         /// <inheritdoc cref="IIterator.Each(Ecs.EachIterCallback)"/>
         public void Each(delegate*<Iter, int, void> callback)
         {
-            IIterator.Each(ref this, callback);
+            Invoker.Each(ref this, callback);
         }
 
         /// <inheritdoc cref="IIterator.Run(Ecs.RunCallback)"/>
         public void Run(delegate*<Iter, void> callback)
         {
-            IIterator.Run(ref this, callback);
+            Invoker.Run(ref this, callback);
         }
 #endif
     }
