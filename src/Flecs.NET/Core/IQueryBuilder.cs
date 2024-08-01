@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
@@ -7,6 +8,7 @@ namespace Flecs.NET.Core
     ///     Query builder interface.
     /// </summary>
     /// <typeparam name="TQueryBuilder"></typeparam>
+    [SuppressMessage("Naming", "CA1716:Identifiers should not match keywords")]
     public unsafe interface IQueryBuilder<TQueryBuilder>
     {
         /// <summary>
@@ -434,8 +436,10 @@ namespace Flecs.NET.Core
         /// <inheritdoc cref="QueryBuilder.GroupBy{T}(Ecs.GroupByCallback)"/>
         public ref TQueryBuilder GroupBy<T>(Ecs.GroupByCallback callback);
 
+        ///
         public ref TQueryBuilder GroupByCtx(void* ctx, Ecs.ContextFree contextFree);
 
+        ///
         public ref TQueryBuilder GroupByCtx(void* ctx);
 
         /// <inheritdoc cref="QueryBuilder.OnGroupCreate(Ecs.GroupCreateAction)"/>

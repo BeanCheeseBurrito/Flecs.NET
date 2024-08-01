@@ -7,6 +7,7 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A static class for holding callback invokers.
     /// </summary>
+    // Iter Invokers
     public static unsafe partial class Invoker
     {
         /// <summary>
@@ -218,6 +219,114 @@ namespace Flecs.NET.Core
         {
             iter->flags &= ~EcsIterIsValid;
             callback(new Iter(iter), &Callback);
+        }
+#endif
+    }
+
+    // Iterable Invokers
+    public static unsafe partial class Invoker
+    {
+        /// <summary>
+        ///     Iterates over iterable with the provided Iter callback.
+        /// </summary>
+        /// <param name="iterable">The iterable object.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The iterable type.</typeparam>
+        public static void Iter<T>(ref T iterable, Ecs.IterCallback callback) where T : unmanaged, IIterableBase
+        {
+            ecs_iter_t iter = iterable.GetIter();
+            while (iterable.GetNext(&iter))
+                Iter(&iter, callback);
+        }
+
+        /// <summary>
+        ///     Iterates over iterable with the provided Each callback.
+        /// </summary>
+        /// <param name="iterable">The iterable object.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The iterable type.</typeparam>
+        public static void Each<T>(ref T iterable, Ecs.EachEntityCallback callback) where T : unmanaged, IIterableBase
+        {
+            ecs_iter_t iter = iterable.GetIter();
+            while (iterable.GetNext(&iter))
+                Each(&iter, callback);
+        }
+
+        /// <summary>
+        ///     Iterates over iterable with the provided Each callback.
+        /// </summary>
+        /// <param name="iterable">The iterable object.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The iterable type.</typeparam>
+        public static void Each<T>(ref T iterable, Ecs.EachIterCallback callback) where T : unmanaged, IIterableBase
+        {
+            ecs_iter_t iter = iterable.GetIter();
+            while (iterable.GetNext(&iter))
+                Each(&iter, callback);
+        }
+
+        /// <summary>
+        ///     Iterates over iterable with the provided Run callback.
+        /// </summary>
+        /// <param name="iterable">The iterable object.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The iterable type.</typeparam>
+        public static void Run<T>(ref T iterable, Ecs.RunCallback callback) where T : unmanaged, IIterableBase
+        {
+            ecs_iter_t iter = iterable.GetIter();
+            Run(&iter, callback);
+        }
+
+#if NET5_0_OR_GREATER
+        /// <summary>
+        ///     Iterates over iterable with the provided Iter callback.
+        /// </summary>
+        /// <param name="iterable">The iterable object.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The iterable type.</typeparam>
+        public static void Iter<T>(ref T iterable, delegate*<Iter, void> callback) where T : unmanaged, IIterableBase
+        {
+            ecs_iter_t iter = iterable.GetIter();
+            while (iterable.GetNext(&iter))
+                Iter(&iter, callback);
+        }
+
+        /// <summary>
+        ///     Iterates over iterable with the provided Each callback.
+        /// </summary>
+        /// <param name="iterable">The iterable object.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The iterable type.</typeparam>
+        public static void Each<T>(ref T iterable, delegate*<Entity, void> callback) where T : unmanaged, IIterableBase
+        {
+            ecs_iter_t iter = iterable.GetIter();
+            while (iterable.GetNext(&iter))
+                Each(&iter, callback);
+        }
+
+        /// <summary>
+        ///     Iterates over iterable with the provided Each callback.
+        /// </summary>
+        /// <param name="iterable">The iterable object.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The iterable type.</typeparam>
+        public static void Each<T>(ref T iterable, delegate*<Iter, int, void> callback) where T : unmanaged, IIterableBase
+        {
+            ecs_iter_t iter = iterable.GetIter();
+            while (iterable.GetNext(&iter))
+                Each(&iter, callback);
+        }
+
+        /// <summary>
+        ///     Iterates over iterable with the provided Run callback.
+        /// </summary>
+        /// <param name="iterable">The iterable object.</param>
+        /// <param name="callback">The callback.</param>
+        /// <typeparam name="T">The iterable type.</typeparam>
+        public static void Run<T>(ref T iterable, delegate*<Iter, void> callback) where T : unmanaged, IIterableBase
+        {
+            ecs_iter_t iter = iterable.GetIter();
+            Run(&iter, callback);
         }
 #endif
     }
