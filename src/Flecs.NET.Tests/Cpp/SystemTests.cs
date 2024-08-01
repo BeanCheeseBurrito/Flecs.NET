@@ -1930,17 +1930,13 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine<Position>()
                 .MultiThreaded()
-                .Each((Entity e, ref Position p) =>
+                .Each((Entity e, Position* p) =>
                 {
-                    Position temp = p;
-
-                    q.Iter(e).Each((ref Velocity v) =>
+                    q.Iter(e).Each((Velocity* v) =>
                     {
-                        temp.X += v.X;
-                        temp.Y += v.Y;
+                        p->X += v->X;
+                        p->Y += v->Y;
                     });
-
-                    p = temp;
                 });
 
             world.Progress();
@@ -1965,17 +1961,13 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine<Position>()
                 .MultiThreaded()
-                .Each((Iter it, int i, ref Position p) =>
+                .Each((Iter it, int i, Position* p) =>
                 {
-                    Position temp = p;
-
-                    q.Iter(it).Each((ref Velocity v) =>
+                    q.Iter(it).Each((Velocity* v) =>
                     {
-                        temp.X += v.X;
-                        temp.Y += v.Y;
+                        p->X += v->X;
+                        p->Y += v->Y;
                     });
-
-                    p = temp;
                 });
 
             world.Progress();
@@ -2000,17 +1992,13 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine<Position>()
                 .MultiThreaded()
-                .Each((Iter it, int i, ref Position p) =>
+                .Each((Iter it, int i, Position* p) =>
                 {
-                    Position temp = p;
-
-                    q.Iter(it.World()).Each((ref Velocity v) =>
+                    q.Iter(it.World()).Each((Velocity* v) =>
                     {
-                        temp.X += v.X;
-                        temp.Y += v.Y;
+                        p->X += v->X;
+                        p->Y += v->Y;
                     });
-
-                    p = temp;
                 });
 
             world.Progress();
@@ -2035,10 +2023,8 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine<Position>()
                 .MultiThreaded()
-                .Each((Entity e, ref Position p) =>
+                .Each((Entity e, Position* p) =>
                 {
-                    Position temp = p;
-
                     q.Iter(e).Run((Iter it) =>
                     {
                         while (it.Next())
@@ -2047,13 +2033,11 @@ namespace Flecs.NET.Tests.Cpp
 
                             foreach (int i in it)
                             {
-                                temp.X += v[i].X;
-                                temp.Y += v[i].Y;
+                                p->X += v[i].X;
+                                p->Y += v[i].Y;
                             }
                         }
                     });
-
-                    p = temp;
                 });
 
             world.Progress();
@@ -2078,10 +2062,8 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine<Position>()
                 .MultiThreaded()
-                .Each((Iter it, int i, ref Position p) =>
+                .Each((Iter it, int i, Position* p) =>
                 {
-                    Position temp = p;
-
                     q.Iter(it).Run((Iter it) =>
                     {
                         while (it.Next())
@@ -2090,13 +2072,11 @@ namespace Flecs.NET.Tests.Cpp
 
                             foreach (int i in it)
                             {
-                                temp.X += v[i].X;
-                                temp.Y += v[i].Y;
+                                p->X += v[i].X;
+                                p->Y += v[i].Y;
                             }
                         }
                     });
-
-                    p = temp;
                 });
 
             world.Progress();
@@ -2121,10 +2101,8 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Routine<Position>()
                 .MultiThreaded()
-                .Each((Iter it, int i, ref Position p) =>
+                .Each((Iter it, int i, Position* p) =>
                 {
-                    Position temp = p;
-
                     q.Iter(it.World()).Run((Iter it) =>
                     {
                         while (it.Next())
@@ -2133,13 +2111,11 @@ namespace Flecs.NET.Tests.Cpp
 
                             foreach (int i in it)
                             {
-                                temp.X += v[i].X;
-                                temp.Y += v[i].Y;
+                                p->X += v[i].X;
+                                p->Y += v[i].Y;
                             }
                         }
                     });
-
-                    p = temp;
                 });
 
             world.Progress();
