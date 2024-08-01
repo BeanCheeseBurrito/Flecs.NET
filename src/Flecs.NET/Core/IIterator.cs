@@ -62,58 +62,58 @@ namespace Flecs.NET.Core
     }
 
     // Iterators
-    public unsafe partial interface IIterator : IIterable
+    public unsafe partial interface IIterator
     {
-        internal static void Iter<T>(ref T iterable, Ecs.IterCallback callback) where T : unmanaged, IIterable
+        internal static void Iter<T>(ref T iterable, Ecs.IterCallback callback) where T : unmanaged, IIterableBase
         {
             ecs_iter_t iter = iterable.GetIter();
             while (iterable.GetNext(&iter))
                 Invoker.Iter(&iter, callback);
         }
 
-        internal static void Each<T>(ref T iterable, Ecs.EachEntityCallback callback) where T : unmanaged, IIterable
+        internal static void Each<T>(ref T iterable, Ecs.EachEntityCallback callback) where T : unmanaged, IIterableBase
         {
             ecs_iter_t iter = iterable.GetIter();
             while (iterable.GetNext(&iter))
                 Invoker.Each(&iter, callback);
         }
 
-        internal static void Each<T>(ref T iterable, Ecs.EachIterCallback callback) where T : unmanaged, IIterable
+        internal static void Each<T>(ref T iterable, Ecs.EachIterCallback callback) where T : unmanaged, IIterableBase
         {
             ecs_iter_t iter = iterable.GetIter();
             while (iterable.GetNext(&iter))
                 Invoker.Each(&iter, callback);
         }
 
-        internal static void Run<T>(ref T iterable, Ecs.RunCallback callback) where T : unmanaged, IIterable
+        internal static void Run<T>(ref T iterable, Ecs.RunCallback callback) where T : unmanaged, IIterableBase
         {
             ecs_iter_t iter = iterable.GetIter();
             Invoker.Run(&iter, callback);
         }
 
 #if NET5_0_OR_GREATER
-        internal static void Iter<T>(ref T iterable, delegate*<Iter, void> callback) where T : unmanaged, IIterable
+        internal static void Iter<T>(ref T iterable, delegate*<Iter, void> callback) where T : unmanaged, IIterableBase
         {
             ecs_iter_t iter = iterable.GetIter();
             while (iterable.GetNext(&iter))
                 Invoker.Iter(&iter, callback);
         }
 
-        internal static void Each<T>(ref T iterable, delegate*<Entity, void> callback) where T : unmanaged, IIterable
+        internal static void Each<T>(ref T iterable, delegate*<Entity, void> callback) where T : unmanaged, IIterableBase
         {
             ecs_iter_t iter = iterable.GetIter();
             while (iterable.GetNext(&iter))
                 Invoker.Each(&iter, callback);
         }
 
-        internal static void Each<T>(ref T iterable, delegate*<Iter, int, void> callback) where T : unmanaged, IIterable
+        internal static void Each<T>(ref T iterable, delegate*<Iter, int, void> callback) where T : unmanaged, IIterableBase
         {
             ecs_iter_t iter = iterable.GetIter();
             while (iterable.GetNext(&iter))
                 Invoker.Each(&iter, callback);
         }
 
-        internal static void Run<T>(ref T iterable, delegate*<Iter, void> callback) where T : unmanaged, IIterable
+        internal static void Run<T>(ref T iterable, delegate*<Iter, void> callback) where T : unmanaged, IIterableBase
         {
             ecs_iter_t iter = iterable.GetIter();
             Invoker.Run(&iter, callback);

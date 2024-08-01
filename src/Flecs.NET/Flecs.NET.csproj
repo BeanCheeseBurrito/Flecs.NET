@@ -42,6 +42,15 @@
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+    </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0"/>
