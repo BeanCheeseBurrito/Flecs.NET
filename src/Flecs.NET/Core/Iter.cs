@@ -522,6 +522,46 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Converts a <see cref="Iter"/> instance to a <see cref="ecs_iter_t"/>*.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <returns></returns>
+        public static ecs_iter_t* To(Iter iter)
+        {
+            return iter.Handle;
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="ecs_iter_t"/>* instance to a <see cref="Iter"/>.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <returns></returns>
+        public static Iter From(ecs_iter_t* iter)
+        {
+            return new Iter(iter);
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="Iter"/> instance to a <see cref="ecs_iter_t"/>*.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <returns></returns>
+        public static implicit operator ecs_iter_t*(Iter iter)
+        {
+            return To(iter);
+        }
+
+        /// <summary>
+        ///     Converts a <see cref="ecs_iter_t"/>* instance to a <see cref="Iter"/>.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <returns></returns>
+        public static implicit operator Iter(ecs_iter_t* iter)
+        {
+            return From(iter);
+        }
+
+        /// <summary>
         ///     Checks if two <see cref="Iter"/> instances are equal.
         /// </summary>
         /// <param name="other"></param>
@@ -647,6 +687,12 @@ namespace Flecs.NET.Core
         {
             AssertField<T>(Handle, index);
             return (T*)Handle->ptrs[index];
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal int Step<T>(int index)
+        {
+            return (Handle->sources == null || Handle->sources[index] == 0) && (Handle->set_fields & (1 << index)) != 0 && !Type<T>.IsTag ? 1 : 0;
         }
     }
 
