@@ -524,7 +524,6 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-#if NET5_0_OR_GREATER
         /// <summary>
         ///     Registers a Ctor callback for this component.
         /// </summary>
@@ -632,7 +631,6 @@ namespace Flecs.NET.Core
 
             return ref this;
         }
-#endif
 
         /// <summary>
         ///     Registers an OnAdd callback for this component.
@@ -919,7 +917,6 @@ namespace Flecs.NET.Core
             return ref SetOnRemoveCallback(callback, BindingContext<TComponent>.OnRemoveEachIterPointerCallbackPointer);
         }
 
-#if NET5_0_OR_GREATER
         /// <summary>
         ///     Registers an OnAdd callback for this component.
         /// </summary>
@@ -1204,7 +1201,6 @@ namespace Flecs.NET.Core
             Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
             return ref SetOnRemoveCallback((IntPtr)callback, BindingContext<TComponent>.OnRemoveEachIterPointerCallbackPointer);
         }
-#endif
 
         private ref Component<TComponent> SetOnAddCallback<T>(T? callback, IntPtr invoker) where T : Delegate
         {
@@ -1278,7 +1274,6 @@ namespace Flecs.NET.Core
             return ref this;
         }
 
-#if NET5_0_OR_GREATER
         private ref Component<TComponent> SetOnAddCallback(IntPtr callback, IntPtr invoker)
         {
             GetHooksAndContext(out ecs_type_hooks_t hooks, out BindingContext.TypeHooksContext* context);
@@ -1350,6 +1345,5 @@ namespace Flecs.NET.Core
 
             return ref this;
         }
-#endif
     }
 }

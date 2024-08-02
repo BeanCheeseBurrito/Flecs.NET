@@ -2056,8 +2056,7 @@ namespace Flecs.NET.Tests.Cpp
             p[0].X++;
             p[0].Y++;
         }
-
-#if NET5_0_OR_GREATER
+        
         [Fact]
         private void QueryEachWithFuncPtr()
         {
@@ -2093,7 +2092,6 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(11, ptr->X);
             Assert.Equal(21, ptr->Y);
         }
-#endif
 
         [Fact]
         private void QueryEachWithFuncNoPtr()

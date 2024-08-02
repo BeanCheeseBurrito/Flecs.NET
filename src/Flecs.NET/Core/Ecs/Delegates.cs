@@ -144,12 +144,10 @@ namespace Flecs.NET.Core
         /// </summary>
         public delegate void RunDelegateCallback(Iter it, Action<Iter> callback);
 
-#if NET5_0_OR_GREATER
         /// <summary>
         ///     Run function pointer callback.
         /// </summary>
         public delegate void RunPointerCallback(Iter it, delegate*<Iter, void> callback);
-#endif
 
         /// <summary>
         ///     Os api log callback.

@@ -411,11 +411,7 @@ namespace Flecs.NET.Core
             if ((Handle->flags & EcsIterIsValid) != 0 && Handle->table != null)
                 Ecs.TableUnlock(Handle->world, Handle->table);
 
-#if NET5_0_OR_GREATER
             bool result = ((delegate*<ecs_iter_t*, byte>)Handle->next)(Handle) != 0;
-#else
-            bool result = Marshal.GetDelegateForFunctionPointer<Ecs.IterNextAction>(Handle->next)(Handle) != 0;
-#endif
 
             Handle->flags |= EcsIterIsValid;
 
@@ -439,11 +435,7 @@ namespace Flecs.NET.Core
         public void Callback()
         {
             Ecs.Assert(Handle->callback != default, "Iter/Each callback is not set.");
-#if NET5_0_OR_GREATER
             ((delegate*<ecs_iter_t*, void>)Handle->callback)(Handle);
-#else
-            Marshal.GetDelegateForFunctionPointer<Ecs.IterAction>(Handle->callback)(Handle);
-#endif
         }
 
         /// <summary>

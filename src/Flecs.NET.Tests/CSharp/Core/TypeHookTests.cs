@@ -87,7 +87,6 @@ namespace Flecs.NET.Tests.CSharp.Core
                     .OnRemove(OnRemove);
             }
 
-#if NET5_0_OR_GREATER
             public static void RegisterHookPointers(World world)
             {
                 ResetInvokes();
@@ -100,7 +99,6 @@ namespace Flecs.NET.Tests.CSharp.Core
                     .OnSet(&OnSet)
                     .OnRemove(&OnRemove);
             }
-#endif
         }
 
         public class Class
@@ -183,7 +181,6 @@ namespace Flecs.NET.Tests.CSharp.Core
                     .OnRemove(OnRemove);
             }
 
-#if NET5_0_OR_GREATER
             public static void RegisterHookPointers(World world)
             {
                 ResetInvokes();
@@ -196,7 +193,6 @@ namespace Flecs.NET.Tests.CSharp.Core
                     .OnSet(&OnSet)
                     .OnRemove(&OnRemove);
             }
-#endif
         }
 
         [Fact]
@@ -391,7 +387,6 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.Equal(0, Class.OnRemoveInvoked);
         }
 
-#if NET5_0_OR_GREATER
         [Fact]
         private void AddUnmanagedPointers()
         {
@@ -583,6 +578,5 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.Equal(1, Class.OnSetInvoked);
             Assert.Equal(0, Class.OnRemoveInvoked);
         }
-#endif
     }
 }

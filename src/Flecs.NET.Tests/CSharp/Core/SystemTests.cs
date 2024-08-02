@@ -841,7 +841,6 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-#if NET5_0_OR_GREATER
         [Fact]
         private void IterCallbackPointer()
         {
@@ -2558,6 +2557,5 @@ namespace Flecs.NET.Tests.CSharp.Core
                 p->Y += v->Y;
             }
         }
-#endif
     }
 }

@@ -126,7 +126,6 @@ namespace Flecs.NET.Core
             callback(new Entity(iter->world, ecs_field_src(iter, 0)), ref Managed.GetTypeRef<T>(iter->param));
         }
 
-#if NET5_0_OR_GREATER
         /// <summary>
         ///     Invokes an iter callback using a managed function pointer.
         /// </summary>
@@ -220,7 +219,6 @@ namespace Flecs.NET.Core
             iter->flags &= ~EcsIterIsValid;
             callback(new Iter(iter), &Callback);
         }
-#endif
     }
 
     // Iterable Invokers
@@ -277,7 +275,6 @@ namespace Flecs.NET.Core
             Run(&iter, callback);
         }
 
-#if NET5_0_OR_GREATER
         /// <summary>
         ///     Iterates over iterable with the provided Iter callback.
         /// </summary>
@@ -328,6 +325,15 @@ namespace Flecs.NET.Core
             ecs_iter_t iter = iterable.GetIter();
             Run(&iter, callback);
         }
-#endif
+
+        /// <summary>
+        ///     Invokes an entity observer using a delegate.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void Observe(ecs_iter_t* iter, delegate*<Entity, void> callback)
+        {
+            callback(new Entity(iter->world, ecs_field_src(iter, 0)));
+        }
     }
 }

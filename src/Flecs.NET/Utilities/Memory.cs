@@ -81,11 +81,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Free(void* data)
         {
-#if NET6_0_OR_GREATER
             NativeMemory.Free(data);
-#else
-            Marshal.FreeHGlobal((IntPtr)data);
-#endif
         }
 
         /// <summary>
@@ -96,12 +92,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void* Alloc(int byteCount)
         {
-#if NET6_0_OR_GREATER
-            void* pointer = NativeMemory.Alloc((nuint)byteCount);
-#else
-            void* pointer = (void*)Marshal.AllocHGlobal((IntPtr)byteCount);
-#endif
-            return pointer;
+            return NativeMemory.Alloc((nuint)byteCount);
         }
 
         /// <summary>
@@ -112,13 +103,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void* AllocZeroed(int byteCount)
         {
-#if NET6_0_OR_GREATER
-            void* pointer = NativeMemory.AllocZeroed((nuint)byteCount);
-#else
-            void* pointer = (void*)Marshal.AllocHGlobal((IntPtr)byteCount);
-            Unsafe.InitBlock(pointer, 0, (uint)byteCount);
-#endif
-            return pointer;
+            return NativeMemory.AllocZeroed((nuint)byteCount);;
         }
 
         /// <summary>
@@ -130,14 +115,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void* Realloc(void* data, int byteCount)
         {
-#if NET6_0_OR_GREATER
-            void* pointer = NativeMemory.Realloc(data, (nuint)byteCount);
-#else
-            void* pointer = data == null
-                ? Alloc(byteCount)
-                : (void*)Marshal.ReAllocHGlobal((IntPtr)data, (IntPtr)byteCount);
-#endif
-            return pointer;
+            return NativeMemory.Realloc(data, (nuint)byteCount);
         }
     }
 }
