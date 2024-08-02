@@ -6,9 +6,4 @@
         <Deterministic Condition="'$(GITHUB_ACTIONS)' == 'true' And '$(Deterministic)' == ''">true</Deterministic>
         <AllowedOutputExtensionsInPackageBuildOutputFolder Condition="'$(FlecsPackPdb)' == 'true'">$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
-
-    <PropertyGroup>
-        <UnityPackageRoot>$(MSBuildThisFileDirectory)..\upm</UnityPackageRoot>
-    </PropertyGroup>
-
 </Project>
