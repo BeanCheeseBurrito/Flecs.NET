@@ -294,7 +294,6 @@ namespace Flecs.NET.Core
             return ref SetRun(run, BindingContext.RunDelegateCallbackPointer);
         }
 
-#if NET5_0_OR_GREATER
         /// <summary>
         ///     Creates a routine with the provided Iter callback.
         /// </summary>
@@ -394,7 +393,6 @@ namespace Flecs.NET.Core
         {
             return ref SetRun(callback, BindingContext.RunPointerCallbackPointer);
         }
-#endif
 
         private ref RoutineBuilder SetCallback<T>(T callback, IntPtr invoker) where T : Delegate
         {
@@ -455,11 +453,7 @@ namespace Flecs.NET.Core
             if (Desc.run == IntPtr.Zero)
                 return;
 
-#if NET5_0_OR_GREATER
             ((delegate*<void*, void>)Desc.run_ctx_free)(Desc.run_ctx);
-#else
-            Marshal.GetDelegateForFunctionPointer<Ecs.ContextFree>(Desc.run_ctx_free)(Desc.run_ctx);
-#endif
         }
 
         private void FreeCallback()
@@ -467,11 +461,7 @@ namespace Flecs.NET.Core
             if (Desc.callback == IntPtr.Zero)
                 return;
 
-#if NET5_0_OR_GREATER
             ((delegate*<void*, void>)Desc.callback_ctx_free)(Desc.callback_ctx);
-#else
-            Marshal.GetDelegateForFunctionPointer<Ecs.ContextFree>(Desc.callback_ctx_free)(Desc.callback_ctx);
-#endif
         }
 
         /// <summary>

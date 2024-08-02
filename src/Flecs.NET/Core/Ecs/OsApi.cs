@@ -70,7 +70,6 @@ namespace Flecs.NET.Core
                 BindingContext.SetCallback(ref Context.Log, callback);
             }
 
-#if NET5_0_OR_GREATER
             /// <summary>
             ///     Sets os api abort callback.
             /// </summary>
@@ -88,7 +87,6 @@ namespace Flecs.NET.Core
             {
                 BindingContext.SetCallback(ref Context.Log, (IntPtr)callback);
             }
-#endif
         }
     }
 }

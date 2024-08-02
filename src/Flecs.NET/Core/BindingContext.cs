@@ -14,7 +14,7 @@ namespace Flecs.NET.Core
     {
         static BindingContext()
         {
-            AppDomain.CurrentDomain.ProcessExit += (object? sender, EventArgs e) =>
+            AppDomain.CurrentDomain.ProcessExit += (object? _, EventArgs _) =>
             {
                 Memory.Free(DefaultSeparator);
             };
@@ -22,7 +22,6 @@ namespace Flecs.NET.Core
 
         internal static readonly byte* DefaultSeparator = (byte*)Marshal.StringToHGlobalAnsi(Ecs.DefaultSeparator);
 
-#if NET5_0_OR_GREATER
         internal static readonly IntPtr ActionCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&ActionCallback;
         internal static readonly IntPtr IterCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&IterCallback;
         internal static readonly IntPtr EachEntityCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&EachEntityCallback;
@@ -41,171 +40,86 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr TypeHooksContextFreePointer = (IntPtr)(delegate* <void*, void>)&TypeHooksContextFree;
 
         internal static readonly IntPtr OsApiAbortPointer = (IntPtr)(delegate* <void>)&OsApiAbort;
-#else
-        private static readonly Ecs.IterAction ActionCallbackReference = ActionCallback;
-        private static readonly Ecs.IterAction IterCallbackReference = IterCallback;
-        private static readonly Ecs.IterAction EachEntityCallbackReference = EachEntityCallback;
-        private static readonly Ecs.IterAction EachIterCallbackReference = EachIterCallback;
-        private static readonly Ecs.IterAction ObserveCallbackReference = ObserveCallback;
-        private static readonly Ecs.IterAction RunCallbackReference = RunCallback;
-        private static readonly Ecs.IterAction RunDelegateCallbackReference = RunDelegateCallback;
-        private static readonly Ecs.GroupByAction GroupByCallbackReference = GroupByCallback;
-
-        private static readonly Ecs.ContextFree WorldContextFreeReference = WorldContextFree;
-        private static readonly Ecs.ContextFree IteratorContextFreeReference = IteratorContextFree;
-        private static readonly Ecs.ContextFree RunContextFreeReference = RunContextFree;
-        private static readonly Ecs.ContextFree QueryContextFreeReference = QueryContextFree;
-        private static readonly Ecs.ContextFree GroupByContextFreeReference = GroupByContextFree;
-        private static readonly Ecs.ContextFree TypeHooksContextFreeReference = TypeHooksContextFree;
-
-        private static readonly Action OsApiAbortReference = OsApiAbort;
-
-        internal static readonly IntPtr ActionCallbackPointer = Marshal.GetFunctionPointerForDelegate(ActionCallbackReference);
-        internal static readonly IntPtr IterCallbackPointer = Marshal.GetFunctionPointerForDelegate(IterCallbackReference);
-        internal static readonly IntPtr EachEntityCallbackPointer = Marshal.GetFunctionPointerForDelegate(EachEntityCallbackReference);
-        internal static readonly IntPtr EachIterCallbackPointer = Marshal.GetFunctionPointerForDelegate(EachIterCallbackReference);
-        internal static readonly IntPtr ObserveCallbackPointer = Marshal.GetFunctionPointerForDelegate(ObserveCallbackReference);
-        internal static readonly IntPtr RunCallbackPointer = Marshal.GetFunctionPointerForDelegate(RunCallbackReference);
-        internal static readonly IntPtr RunDelegateCallbackPointer = Marshal.GetFunctionPointerForDelegate(RunDelegateCallbackReference);
-        internal static readonly IntPtr GroupByCallbackPointer = Marshal.GetFunctionPointerForDelegate(GroupByCallbackReference);
-
-        internal static readonly IntPtr WorldContextFreePointer = Marshal.GetFunctionPointerForDelegate(WorldContextFreeReference);
-        internal static readonly IntPtr IteratorContextFreePointer = Marshal.GetFunctionPointerForDelegate(IteratorContextFreeReference);
-        internal static readonly IntPtr RunContextFreePointer = Marshal.GetFunctionPointerForDelegate(RunContextFreeReference);
-        internal static readonly IntPtr QueryContextFreePointer = Marshal.GetFunctionPointerForDelegate(QueryContextFreeReference);
-        internal static readonly IntPtr GroupByContextFreePointer = Marshal.GetFunctionPointerForDelegate(GroupByContextFreeReference);
-        internal static readonly IntPtr TypeHooksContextFreePointer = Marshal.GetFunctionPointerForDelegate(TypeHooksContextFreeReference);
-
-        internal static readonly IntPtr OsApiAbortPointer = Marshal.GetFunctionPointerForDelegate(OsApiAbortReference);
-#endif
 
         private static void ActionCallback(ecs_iter_t* iter)
         {
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
-#if NET5_0_OR_GREATER
             if (context->Callback.Pointer != default)
-            {
                 ((delegate*<void>)context->Callback.Pointer)();
-                return;
-            }
-#endif
-
-            Action callback = (Action)context->Callback.GcHandle.Target!;
-            callback();
+            else
+                ((Action)context->Callback.GcHandle.Target!)();
         }
 
         private static void IterCallback(ecs_iter_t* iter)
         {
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
-#if NET5_0_OR_GREATER
             if (context->Callback.Pointer != default)
-            {
                 Invoker.Iter(iter, (delegate*<Iter, void>)context->Callback.Pointer);
-                return;
-            }
-#endif
-
-            Ecs.IterCallback callback = (Ecs.IterCallback)context->Callback.GcHandle.Target!;
-            Invoker.Iter(iter, callback);
+            else
+                Invoker.Iter(iter, (Ecs.IterCallback)context->Callback.GcHandle.Target!);
         }
 
         private static void EachEntityCallback(ecs_iter_t* iter)
         {
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
-#if NET5_0_OR_GREATER
             if (context->Callback.Pointer != default)
-            {
                 Invoker.Each(iter, (delegate*<Entity, void>)context->Callback.Pointer);
-                return;
-            }
-#endif
-
-            Ecs.EachEntityCallback callback = (Ecs.EachEntityCallback)context->Callback.GcHandle.Target!;
-            Invoker.Each(iter, callback);
+            else
+                Invoker.Each(iter, (Ecs.EachEntityCallback)context->Callback.GcHandle.Target!);
         }
 
         private static void EachIterCallback(ecs_iter_t* iter)
         {
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
-#if NET5_0_OR_GREATER
             if (context->Callback.Pointer != default)
-            {
                 Invoker.Each(iter, (delegate*<Iter, int, void>)context->Callback.Pointer);
-                return;
-            }
-#endif
-
-            Ecs.EachIterCallback callback = (Ecs.EachIterCallback)context->Callback.GcHandle.Target!;
-            Invoker.Each(iter, callback);
+            else
+                Invoker.Each(iter, (Ecs.EachIterCallback)context->Callback.GcHandle.Target!);
         }
 
         private static void ObserveCallback(ecs_iter_t* iter)
         {
             IteratorContext* context = (IteratorContext*)iter->callback_ctx;
 
-#if NET5_0_OR_GREATER
             if (context->Callback.Pointer != default)
-            {
-                Invoker.Each(iter, (delegate*<Entity, void>)context->Callback.Pointer);
-                return;
-            }
-#endif
-
-            Ecs.EachEntityCallback callback = (Ecs.EachEntityCallback)context->Callback.GcHandle.Target!;
-            Invoker.Observe(iter, callback);
+                Invoker.Observe(iter, (delegate*<Entity, void>)context->Callback.Pointer);
+            else
+                Invoker.Observe(iter, (Ecs.EachEntityCallback)context->Callback.GcHandle.Target!);
         }
 
         private static void RunCallback(ecs_iter_t* iter)
         {
             RunContext* context = (RunContext*)iter->run_ctx;
 
-#if NET5_0_OR_GREATER
             if (context->Callback.Pointer != default)
-            {
                 Invoker.Run(iter, (delegate*<Iter, void>)context->Callback.Pointer);
-                return;
-            }
-#endif
-
-            Ecs.RunCallback callback = (Ecs.RunCallback)context->Callback.GcHandle.Target!;
-            Invoker.Run(iter, callback);
+            else
+                Invoker.Run(iter, (Ecs.RunCallback)context->Callback.GcHandle.Target!);
         }
 
         private static void RunDelegateCallback(ecs_iter_t* iter)
         {
             RunContext* context = (RunContext*)iter->run_ctx;
 
-#if NET5_0_OR_GREATER
             if (context->Callback.Pointer != default)
-            {
                 Invoker.Run(iter, (delegate*<Iter, Action<Iter>, void>)context->Callback.Pointer);
-                return;
-            }
-#endif
-
-            Ecs.RunDelegateCallback callback = (Ecs.RunDelegateCallback)context->Callback.GcHandle.Target!;
-            Invoker.Run(iter, callback);
+            else
+                Invoker.Run(iter, (Ecs.RunDelegateCallback)context->Callback.GcHandle.Target!);
         }
 
-#if NET5_0_OR_GREATER
         private static void RunPointerCallback(ecs_iter_t* iter)
         {
             RunContext* context = (RunContext*)iter->run_ctx;
 
             if (context->Callback.Pointer != default)
-            {
                 Invoker.Run(iter, (delegate*<Iter, delegate*<Iter, void>, void>)context->Callback.Pointer);
-                return;
-            }
-
-            Ecs.RunPointerCallback callback = (Ecs.RunPointerCallback)context->Callback.GcHandle.Target!;
-            Invoker.Run(iter, callback);
+            else
+                Invoker.Run(iter, (Ecs.RunPointerCallback)context->Callback.GcHandle.Target!);
         }
-#endif
 
         private static ulong GroupByCallback(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
         {
@@ -439,7 +353,6 @@ namespace Flecs.NET.Core
     [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
     internal static unsafe partial class BindingContext<T0>
     {
-#if NET5_0_OR_GREATER
         internal static readonly IntPtr EntityObserverEachRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEachRefCallback;
         internal static readonly IntPtr EntityObserverEachEntityRefCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&EntityObserverEachEntityRefCallback;
 
@@ -494,116 +407,6 @@ namespace Flecs.NET.Core
         internal static readonly IntPtr OnSetEachIterPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnSetEachIterPointerCallback;
         internal static readonly IntPtr OnRemoveEachIterPointerCallbackPointer = (IntPtr)(delegate* <ecs_iter_t*, void>)&OnRemoveEachIterPointerCallback;
 
-#else
-        private static readonly Ecs.IterAction EntityObserverEachRefCallbackReference = EntityObserverEachRefCallback;
-        private static readonly Ecs.IterAction EntityObserverEachEntityRefCallbackReference = EntityObserverEachEntityRefCallback;
-
-        private static readonly Ecs.CtorCallback UnmanagedCtorCallbackReference = UnmanagedCtorCallback;
-        private static readonly Ecs.DtorCallback UnmanagedDtorCallbackReference = UnmanagedDtorCallback;
-        private static readonly Ecs.MoveCallback UnmanagedMoveCallbackReference = UnmanagedMoveCallback;
-        private static readonly Ecs.CopyCallback UnmanagedCopyCallbackReference = UnmanagedCopyCallback;
-
-        private static readonly Ecs.CtorCallback ManagedCtorCallbackReference = ManagedCtorCallback;
-        private static readonly Ecs.DtorCallback ManagedDtorCallbackReference = ManagedDtorCallback;
-        private static readonly Ecs.MoveCallback ManagedMoveCallbackReference = ManagedMoveCallback;
-        private static readonly Ecs.CopyCallback ManagedCopyCallbackReference = ManagedCopyCallback;
-
-        private static readonly Ecs.CtorCallback DefaultManagedCtorCallbackReference = DefaultManagedCtorCallback;
-        private static readonly Ecs.DtorCallback DefaultManagedDtorCallbackReference = DefaultManagedDtorCallback;
-        private static readonly Ecs.MoveCallback DefaultManagedMoveCallbackReference = DefaultManagedMoveCallback;
-        private static readonly Ecs.CopyCallback DefaultManagedCopyCallbackReference = DefaultManagedCopyCallback;
-
-        private static readonly Ecs.IterAction OnAddIterFieldCallbackReference = OnAddIterFieldCallback;
-        private static readonly Ecs.IterAction OnSetIterFieldCallbackReference = OnSetIterFieldCallback;
-        private static readonly Ecs.IterAction OnRemoveIterFieldCallbackReference = OnRemoveIterFieldCallback;
-
-        private static readonly Ecs.IterAction OnAddIterSpanCallbackReference = OnAddIterSpanCallback;
-        private static readonly Ecs.IterAction OnSetIterSpanCallbackReference = OnSetIterSpanCallback;
-        private static readonly Ecs.IterAction OnRemoveIterSpanCallbackReference = OnRemoveIterSpanCallback;
-
-        private static readonly Ecs.IterAction OnAddIterPointerCallbackReference = OnAddIterPointerCallback;
-        private static readonly Ecs.IterAction OnSetIterPointerCallbackReference = OnSetIterPointerCallback;
-        private static readonly Ecs.IterAction OnRemoveIterPointerCallbackReference = OnRemoveIterPointerCallback;
-
-        private static readonly Ecs.IterAction OnAddEachRefCallbackReference = OnAddEachRefCallback;
-        private static readonly Ecs.IterAction OnSetEachRefCallbackReference = OnSetEachRefCallback;
-        private static readonly Ecs.IterAction OnRemoveEachRefCallbackReference = OnRemoveEachRefCallback;
-
-        private static readonly Ecs.IterAction OnAddEachEntityRefCallbackReference = OnAddEachEntityRefCallback;
-        private static readonly Ecs.IterAction OnSetEachEntityRefCallbackReference = OnSetEachEntityRefCallback;
-        private static readonly Ecs.IterAction OnRemoveEachEntityRefCallbackReference = OnRemoveEachEntityRefCallback;
-
-        private static readonly Ecs.IterAction OnAddEachIterRefCallbackReference = OnAddEachIterRefCallback;
-        private static readonly Ecs.IterAction OnSetEachIterRefCallbackReference = OnSetEachIterRefCallback;
-        private static readonly Ecs.IterAction OnRemoveEachIterRefCallbackReference = OnRemoveEachIterRefCallback;
-
-        private static readonly Ecs.IterAction OnAddEachPointerCallbackReference = OnAddEachPointerCallback;
-        private static readonly Ecs.IterAction OnSetEachPointerCallbackReference = OnSetEachPointerCallback;
-        private static readonly Ecs.IterAction OnRemoveEachPointerCallbackReference = OnRemoveEachPointerCallback;
-
-        private static readonly Ecs.IterAction OnAddEachEntityPointerCallbackReference = OnAddEachEntityPointerCallback;
-        private static readonly Ecs.IterAction OnSetEachEntityPointerCallbackReference = OnSetEachEntityPointerCallback;
-        private static readonly Ecs.IterAction OnRemoveEachEntityPointerCallbackReference = OnRemoveEachEntityPointerCallback;
-
-        private static readonly Ecs.IterAction OnAddEachIterPointerCallbackReference = OnAddEachIterPointerCallback;
-        private static readonly Ecs.IterAction OnSetEachIterPointerCallbackReference = OnSetEachIterPointerCallback;
-        private static readonly Ecs.IterAction OnRemoveEachIterPointerCallbackReference = OnRemoveEachIterPointerCallback;
-
-        internal static readonly IntPtr EntityObserverEachRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(EntityObserverEachRefCallbackReference);
-        internal static readonly IntPtr EntityObserverEachEntityRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(EntityObserverEachEntityRefCallbackReference);
-
-        internal static readonly IntPtr UnmanagedCtorCallbackPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedCtorCallbackReference);
-        internal static readonly IntPtr UnmanagedDtorCallbackPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedDtorCallbackReference);
-        internal static readonly IntPtr UnmanagedMoveCallbackPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedMoveCallbackReference);
-        internal static readonly IntPtr UnmanagedCopyCallbackPointer = Marshal.GetFunctionPointerForDelegate(UnmanagedCopyCallbackReference);
-
-        internal static readonly IntPtr ManagedCtorCallbackPointer = Marshal.GetFunctionPointerForDelegate(ManagedCtorCallbackReference);
-        internal static readonly IntPtr ManagedDtorCallbackPointer = Marshal.GetFunctionPointerForDelegate(ManagedDtorCallbackReference);
-        internal static readonly IntPtr ManagedMoveCallbackPointer = Marshal.GetFunctionPointerForDelegate(ManagedMoveCallbackReference);
-        internal static readonly IntPtr ManagedCopyCallbackPointer = Marshal.GetFunctionPointerForDelegate(ManagedCopyCallbackReference);
-
-        internal static readonly IntPtr DefaultManagedCtorCallbackPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedCtorCallbackReference);
-        internal static readonly IntPtr DefaultManagedDtorCallbackPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedDtorCallbackReference);
-        internal static readonly IntPtr DefaultManagedMoveCallbackPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedMoveCallbackReference);
-        internal static readonly IntPtr DefaultManagedCopyCallbackPointer = Marshal.GetFunctionPointerForDelegate(DefaultManagedCopyCallbackReference);
-
-        internal static readonly IntPtr OnAddIterFieldCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddIterFieldCallbackReference);
-        internal static readonly IntPtr OnSetIterFieldCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetIterFieldCallbackReference);
-        internal static readonly IntPtr OnRemoveIterFieldCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveIterFieldCallbackReference);
-
-        internal static readonly IntPtr OnAddIterSpanCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddIterSpanCallbackReference);
-        internal static readonly IntPtr OnSetIterSpanCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetIterSpanCallbackReference);
-        internal static readonly IntPtr OnRemoveIterSpanCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveIterSpanCallbackReference);
-
-        internal static readonly IntPtr OnAddIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddIterPointerCallbackReference);
-        internal static readonly IntPtr OnSetIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetIterPointerCallbackReference);
-        internal static readonly IntPtr OnRemoveIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveIterPointerCallbackReference);
-
-        internal static readonly IntPtr OnAddEachRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddEachRefCallbackReference);
-        internal static readonly IntPtr OnSetEachRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetEachRefCallbackReference);
-        internal static readonly IntPtr OnRemoveEachRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachRefCallbackReference);
-
-        internal static readonly IntPtr OnAddEachEntityRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddEachEntityRefCallbackReference);
-        internal static readonly IntPtr OnSetEachEntityRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetEachEntityRefCallbackReference);
-        internal static readonly IntPtr OnRemoveEachEntityRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachEntityRefCallbackReference);
-
-        internal static readonly IntPtr OnAddEachIterRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddEachIterRefCallbackReference);
-        internal static readonly IntPtr OnSetEachIterRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetEachIterRefCallbackReference);
-        internal static readonly IntPtr OnRemoveEachIterRefCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachIterRefCallbackReference);
-
-        internal static readonly IntPtr OnAddEachPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddEachPointerCallbackReference);
-        internal static readonly IntPtr OnSetEachPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetEachPointerCallbackReference);
-        internal static readonly IntPtr OnRemoveEachPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachPointerCallbackReference);
-
-        internal static readonly IntPtr OnAddEachEntityPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddEachEntityPointerCallbackReference);
-        internal static readonly IntPtr OnSetEachEntityPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetEachEntityPointerCallbackReference);
-        internal static readonly IntPtr OnRemoveEachEntityPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachEntityPointerCallbackReference);
-
-        internal static readonly IntPtr OnAddEachIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnAddEachIterPointerCallbackReference);
-        internal static readonly IntPtr OnSetEachIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnSetEachIterPointerCallbackReference);
-        internal static readonly IntPtr OnRemoveEachIterPointerCallbackPointer = Marshal.GetFunctionPointerForDelegate(OnRemoveEachIterPointerCallbackReference);
-#endif
-
         private static void EntityObserverEachRefCallback(ecs_iter_t* iter)
         {
             BindingContext.IteratorContext* context = (BindingContext.IteratorContext*)iter->callback_ctx;
@@ -627,11 +430,9 @@ namespace Flecs.NET.Core
 
             if (context->Ctor.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<ref T0, TypeInfo, void> callback = (delegate*<ref T0, TypeInfo, void>)context->Ctor.Pointer;
                 for (int i = 0; i < count; i++)
                     callback(ref data[i], new TypeInfo(typeInfoHandle));
-#endif
             }
             else
             {
@@ -650,11 +451,9 @@ namespace Flecs.NET.Core
 
             if (context->Dtor.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<ref T0, TypeInfo, void> callback = (delegate*<ref T0, TypeInfo, void>)context->Dtor.Pointer;
                 for (int i = 0; i < count; i++)
                     callback(ref data[i], new TypeInfo(typeInfoHandle));
-#endif
             }
             else
             {
@@ -674,11 +473,9 @@ namespace Flecs.NET.Core
 
             if (context->Move.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<ref T0, ref T0, TypeInfo, void> callback = (delegate*<ref T0, ref T0, TypeInfo, void>)context->Move.Pointer;
                 for (int i = 0; i < count; i++)
                     callback(ref dst[i], ref src[i], new TypeInfo(typeInfoHandle));
-#endif
             }
             else
             {
@@ -698,11 +495,9 @@ namespace Flecs.NET.Core
 
             if (context->Copy.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<ref T0, ref T0, TypeInfo, void> callback = (delegate*<ref T0, ref T0, TypeInfo, void>)context->Copy.Pointer;
                 for (int i = 0; i < count; i++)
                     callback(ref dst[i], ref src[i], new TypeInfo(typeInfoHandle));
-#endif
             }
             else
             {
@@ -721,7 +516,6 @@ namespace Flecs.NET.Core
 
             if (context->Ctor.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<ref T0, TypeInfo, void> callback = (delegate*<ref T0, TypeInfo, void>)context->Ctor.Pointer;
                 for (int i = 0; i < count; i++)
                 {
@@ -729,7 +523,6 @@ namespace Flecs.NET.Core
                     callback(ref box.Value!, new TypeInfo(typeInfoHandle));
                     handles[i] = GCHandle.Alloc(box);
                 }
-#endif
             }
             else
             {
@@ -752,7 +545,6 @@ namespace Flecs.NET.Core
 
             if (context->Dtor.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<ref T0, TypeInfo, void> callback = (delegate*<ref T0, TypeInfo, void>)context->Dtor.Pointer;
                 for (int i = 0; i < count; i++)
                 {
@@ -761,7 +553,6 @@ namespace Flecs.NET.Core
                     Managed.FreeGcHandle(handles[i]);
                     handles[i] = default;
                 }
-#endif
             }
             else
             {
@@ -786,7 +577,6 @@ namespace Flecs.NET.Core
 
             if (context->Move.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<ref T0, ref T0, TypeInfo, void> callback = (delegate*<ref T0, ref T0, TypeInfo, void>)context->Move.Pointer;
                 for (int i = 0; i < count; i++)
                 {
@@ -799,7 +589,6 @@ namespace Flecs.NET.Core
                     if (srcBox.ShouldFree)
                         Managed.FreeGcHandle(srcHandles[i]);
                 }
-#endif
             }
             else
             {
@@ -828,7 +617,6 @@ namespace Flecs.NET.Core
 
             if (context->Copy.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<ref T0, ref T0, TypeInfo, void> callback = (delegate*<ref T0, ref T0, TypeInfo, void>)context->Copy.Pointer;
                 for (int i = 0; i < count; i++)
                 {
@@ -841,7 +629,6 @@ namespace Flecs.NET.Core
                     if (srcBox.ShouldFree)
                         Managed.FreeGcHandle(srcHandles[i]);
                 }
-#endif
             }
             else
             {
@@ -921,12 +708,10 @@ namespace Flecs.NET.Core
 
             if (context->OnAdd.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, Field<T0>, void> callback = (delegate*<Iter, Field<T0>, void>)context->OnAdd.Pointer;
                 Iter it = new Iter(iter);
                 for (int i = 0; i < iter->count; i++)
                     callback(it, it.Field<T0>(0));
-#endif
             }
             else
             {
@@ -943,12 +728,10 @@ namespace Flecs.NET.Core
 
             if (context->OnAdd.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, Span<T0>, void> callback = (delegate*<Iter, Span<T0>, void>)context->OnAdd.Pointer;
                 Iter it = new Iter(iter);
                 for (int i = 0; i < iter->count; i++)
                     callback(it, it.GetSpan<T0>(0));
-#endif
             }
             else
             {
@@ -965,12 +748,10 @@ namespace Flecs.NET.Core
 
             if (context->OnAdd.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, T0*, void> callback = (delegate*<Iter, T0*, void>)context->OnAdd.Pointer;
                 Iter it = new Iter(iter);
                 for (int i = 0; i < iter->count; i++)
                     callback(it, it.GetPointer<T0>(0));
-#endif
             }
             else
             {
@@ -987,12 +768,10 @@ namespace Flecs.NET.Core
 
             if (context->OnAdd.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<ref T0, void> callback = (delegate*<ref T0, void>)context->OnAdd.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
-#endif
             }
             else
             {
@@ -1009,12 +788,10 @@ namespace Flecs.NET.Core
 
             if (context->OnAdd.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Entity, ref T0, void> callback = (delegate*<Entity, ref T0, void>)context->OnAdd.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
-#endif
             }
             else
             {
@@ -1031,12 +808,10 @@ namespace Flecs.NET.Core
 
             if (context->OnAdd.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, int, ref T0, void> callback = (delegate*<Iter, int, ref T0, void>)context->OnAdd.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
-#endif
             }
             else
             {
@@ -1053,12 +828,10 @@ namespace Flecs.NET.Core
 
             if (context->OnAdd.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<T0*, void> callback = (delegate*<T0*, void>)context->OnAdd.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(&pointer[i]);
-#endif
             }
             else
             {
@@ -1075,12 +848,10 @@ namespace Flecs.NET.Core
 
             if (context->OnAdd.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Entity, T0*, void> callback = (delegate*<Entity, T0*, void>)context->OnAdd.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
-#endif
             }
             else
             {
@@ -1097,12 +868,10 @@ namespace Flecs.NET.Core
 
             if (context->OnAdd.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, int, T0*, void> callback = (delegate*<Iter, int, T0*, void>)context->OnAdd.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(new Iter(iter), i, &pointer[i]);
-#endif
             }
             else
             {
@@ -1119,12 +888,10 @@ namespace Flecs.NET.Core
 
             if (context->OnSet.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, Field<T0>, void> callback = (delegate*<Iter, Field<T0>, void>)context->OnSet.Pointer;
                 Iter it = new Iter(iter);
                 for (int i = 0; i < iter->count; i++)
                     callback(it, it.Field<T0>(0));
-#endif
             }
             else
             {
@@ -1141,12 +908,10 @@ namespace Flecs.NET.Core
 
             if (context->OnSet.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, Span<T0>, void> callback = (delegate*<Iter, Span<T0>, void>)context->OnSet.Pointer;
                 Iter it = new Iter(iter);
                 for (int i = 0; i < iter->count; i++)
                     callback(it, it.GetSpan<T0>(0));
-#endif
             }
             else
             {
@@ -1163,12 +928,10 @@ namespace Flecs.NET.Core
 
             if (context->OnSet.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, T0*, void> callback = (delegate*<Iter, T0*, void>)context->OnSet.Pointer;
                 Iter it = new Iter(iter);
                 for (int i = 0; i < iter->count; i++)
                     callback(it, it.GetPointer<T0>(0));
-#endif
             }
             else
             {
@@ -1185,12 +948,10 @@ namespace Flecs.NET.Core
 
             if (context->OnSet.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<ref T0, void> callback = (delegate*<ref T0, void>)context->OnSet.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
-#endif
             }
             else
             {
@@ -1207,12 +968,10 @@ namespace Flecs.NET.Core
 
             if (context->OnSet.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Entity, ref T0, void> callback = (delegate*<Entity, ref T0, void>)context->OnSet.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
-#endif
             }
             else
             {
@@ -1229,12 +988,10 @@ namespace Flecs.NET.Core
 
             if (context->OnSet.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, int, ref T0, void> callback = (delegate*<Iter, int, ref T0, void>)context->OnSet.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
-#endif
             }
             else
             {
@@ -1251,12 +1008,10 @@ namespace Flecs.NET.Core
 
             if (context->OnSet.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<T0*, void> callback = (delegate*<T0*, void>)context->OnSet.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(&pointer[i]);
-#endif
             }
             else
             {
@@ -1273,12 +1028,10 @@ namespace Flecs.NET.Core
 
             if (context->OnSet.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Entity, T0*, void> callback = (delegate*<Entity, T0*, void>)context->OnSet.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
-#endif
             }
             else
             {
@@ -1295,12 +1048,10 @@ namespace Flecs.NET.Core
 
             if (context->OnSet.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, int, T0*, void> callback = (delegate*<Iter, int, T0*, void>)context->OnSet.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(new Iter(iter), i, &pointer[i]);
-#endif
             }
             else
             {
@@ -1317,12 +1068,10 @@ namespace Flecs.NET.Core
 
             if (context->OnRemove.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, Field<T0>, void> callback = (delegate*<Iter, Field<T0>, void>)context->OnRemove.Pointer;
                 Iter it = new Iter(iter);
                 for (int i = 0; i < iter->count; i++)
                     callback(it, it.Field<T0>(0));
-#endif
             }
             else
             {
@@ -1339,12 +1088,10 @@ namespace Flecs.NET.Core
 
             if (context->OnRemove.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, Span<T0>, void> callback = (delegate*<Iter, Span<T0>, void>)context->OnRemove.Pointer;
                 Iter it = new Iter(iter);
                 for (int i = 0; i < iter->count; i++)
                     callback(it, it.GetSpan<T0>(0));
-#endif
             }
             else
             {
@@ -1361,12 +1108,10 @@ namespace Flecs.NET.Core
 
             if (context->OnRemove.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, T0*, void> callback = (delegate*<Iter, T0*, void>)context->OnRemove.Pointer;
                 Iter it = new Iter(iter);
                 for (int i = 0; i < iter->count; i++)
                     callback(it, it.GetPointer<T0>(0));
-#endif
             }
             else
             {
@@ -1383,12 +1128,10 @@ namespace Flecs.NET.Core
 
             if (context->OnRemove.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<ref T0, void> callback = (delegate*<ref T0, void>)context->OnRemove.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(ref Managed.GetTypeRef<T0>(&pointer[i]));
-#endif
             }
             else
             {
@@ -1405,12 +1148,10 @@ namespace Flecs.NET.Core
 
             if (context->OnRemove.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Entity, ref T0, void> callback = (delegate*<Entity, ref T0, void>)context->OnRemove.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(new Entity(iter->world, iter->entities[i]), ref Managed.GetTypeRef<T0>(&pointer[i]));
-#endif
             }
             else
             {
@@ -1427,12 +1168,10 @@ namespace Flecs.NET.Core
 
             if (context->OnRemove.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, int, ref T0, void> callback = (delegate*<Iter, int, ref T0, void>)context->OnRemove.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(new Iter(iter), i, ref Managed.GetTypeRef<T0>(&pointer[i]));
-#endif
             }
             else
             {
@@ -1449,12 +1188,10 @@ namespace Flecs.NET.Core
 
             if (context->OnRemove.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<T0*, void> callback = (delegate*<T0*, void>)context->OnRemove.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(&pointer[i]);
-#endif
             }
             else
             {
@@ -1471,12 +1208,10 @@ namespace Flecs.NET.Core
 
             if (context->OnRemove.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Entity, T0*, void> callback = (delegate*<Entity, T0*, void>)context->OnRemove.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(new Entity(iter->world, iter->entities[i]), &pointer[i]);
-#endif
             }
             else
             {
@@ -1493,12 +1228,10 @@ namespace Flecs.NET.Core
 
             if (context->OnRemove.Pointer != default)
             {
-#if NET5_0_OR_GREATER
                 delegate*<Iter, int, T0*, void> callback = (delegate*<Iter, int, T0*, void>)context->OnRemove.Pointer;
                 T0* pointer = (T0*)iter->ptrs[0];
                 for (int i = 0; i < iter->count; i++)
                     callback(new Iter(iter), i, &pointer[i]);
-#endif
             }
             else
             {

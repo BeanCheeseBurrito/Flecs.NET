@@ -246,6 +246,16 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
+        ///     Locks an iter table.
+        /// </summary>
+        [Conditional("DEBUG")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void TableLock(ecs_iter_t* iter)
+        {
+            ecs_table_lock(iter->real_world, iter->table);
+        }
+
+        /// <summary>
         ///     Unlocks a table.
         /// </summary>
         /// <param name="world"></param>
@@ -255,6 +265,16 @@ namespace Flecs.NET.Core
         public static void TableUnlock(ecs_world_t* world, ecs_table_t* table)
         {
             ecs_table_unlock(world, table);
+        }
+
+        /// <summary>
+        ///     Unlocks an iter table.
+        /// </summary>
+        [Conditional("DEBUG")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void TableUnlock(ecs_iter_t* iter)
+        {
+            ecs_table_unlock(iter->real_world, iter->table);
         }
 
         /// <summary>

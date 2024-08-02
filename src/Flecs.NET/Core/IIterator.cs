@@ -34,7 +34,6 @@ namespace Flecs.NET.Core
         /// <param name="callback">The callback.</param>
         public void Run(Ecs.RunCallback callback);
 
-#if NET5_0_OR_GREATER
         /// <summary>
         ///     Iterates the query using the provided callback.
         /// </summary>
@@ -58,6 +57,5 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="callback">The callback.</param>
         public void Run(delegate*<Iter, void> callback);
-#endif
     }
 }

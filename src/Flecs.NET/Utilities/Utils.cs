@@ -84,11 +84,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullReadOnlyRef<T>(in T obj)
         {
-#if NET5_0_OR_GREATER
             return Unsafe.IsNullRef(ref Unsafe.AsRef(in obj));
-#else
-            return Unsafe.AsPointer(ref Unsafe.AsRef(obj)) == null;
-#endif
         }
 
         /// <summary>
@@ -99,11 +95,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void OsFree(IntPtr data)
         {
-#if NET5_0_OR_GREATER
             ((delegate* unmanaged<IntPtr, void>)ecs_os_api.free_)(data);
-#else
-            Marshal.GetDelegateForFunctionPointer<Ecs.Free>(ecs_os_api.free_)(data);
-#endif
         }
 
         /// <summary>

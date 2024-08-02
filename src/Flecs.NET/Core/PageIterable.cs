@@ -219,7 +219,6 @@ namespace Flecs.NET.Core
             Invoker.Run(ref this, callback);
         }
 
-#if NET5_0_OR_GREATER
         /// <inheritdoc cref="IIterator.Iter(Ecs.IterCallback)"/>
         public void Iter(delegate*<Iter, void> callback)
         {
@@ -243,6 +242,5 @@ namespace Flecs.NET.Core
         {
             Invoker.Run(ref this, callback);
         }
-#endif
     }
 }
