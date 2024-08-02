@@ -33,7 +33,7 @@
 
         <FlecsNativeProcessorArch>$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)</FlecsNativeProcessorArch>
 
-        <FlecsCompileOptions Condition="'$(FlecsSoftAssert)' == 'True' Or '$(FlecsExportUnityArtifacts)' == 'True'">$(FlecsCompileOptions)-Dsoft-assert=true</FlecsCompileOptions>
+        <FlecsCompileOptions Condition="'$(FlecsSoftAssert)' == 'True'">$(FlecsCompileOptions)-Dsoft-assert=true</FlecsCompileOptions>
     </PropertyGroup>
 
     <ItemGroup>
@@ -153,26 +153,6 @@
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir osx-arm64          --prefix-exe-dir osx-arm64          -Dtarget=aarch64-macos"/>
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir ios-arm64          --prefix-exe-dir ios-arm64          -Dtarget=aarch64-ios           --sysroot $(IosSdkPath)" Condition="'$(IosSdkPath)' != ''"/>
         <Exec Command="$(ZigExePath) build $(FlecsCompileOptions) -Doptimize=ReleaseFast --prefix release --prefix-lib-dir iossimulator-arm64 --prefix-exe-dir iossimulator-arm64 -Dtarget=aarch64-ios-simulator --sysroot $(IosSimulatorSdkPath)" Condition="'$(IosSimulatorSdkPath)' != ''"/>
-    </Target>
-
-    <ItemGroup>
-        <!--X64-->
-        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/linux-x64/libflecs.so" PackagePath="x64/libflecs-debug.so"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-x64/libflecs.dylib" PackagePath="x64/libflecs-debug.dylib"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/flecs.dll" PackagePath="x64/flecs-debug.dll"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/win-x64/flecs.pdb" PackagePath="x64/flecs-debug.pdb"/>
-
-        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/linux-x64/libflecs.so" PackagePath="x64/libflecs.so"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/osx-x64/libflecs.dylib" PackagePath="x64/libflecs.dylib"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/win-x64/flecs.dll" PackagePath="x64/flecs.dll"/>
-
-        <!--Arm64-->
-        <UnityArtifacts Condition="'$(Configuration)' == 'Debug'" Include="debug/osx-arm64/libflecs.dylib" PackagePath="arm64/libflecs-debug.dylib"/>
-        <UnityArtifacts Condition="'$(Configuration)' == 'Release'" Include="release/osx-arm64/libflecs.dylib" PackagePath="arm64/libflecs.dylib"/>
-    </ItemGroup>
-
-    <Target Name="ExportUnityArtifacts" AfterTargets="Build" DependsOnTargets="Compile Flecs" Condition="'$(FlecsExportUnityArtifacts)' == 'True' And '$(TargetFramework)' == 'netstandard2.1'">
-        <Copy SourceFiles="@(UnityArtifacts)" DestinationFiles="$(UnityPackageRoot)\$(AssemblyName)\$(Configuration)\%(PackagePath)"/>
     </Target>
 
 </Project>
