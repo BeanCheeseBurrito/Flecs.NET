@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
@@ -53,8 +54,8 @@ namespace Flecs.NET.Core
 
             ecs_entity_desc_t entityDesc = default;
             entityDesc.name = nativeName;
-            entityDesc.sep = BindingContext.DefaultSeparator;
-            entityDesc.root_sep = BindingContext.DefaultSeparator;
+            entityDesc.sep = Pointers.DefaultSeparator;
+            entityDesc.root_sep = Pointers.DefaultSeparator;
 
             Desc.entity = ecs_entity_init(world, &entityDesc);
         }
@@ -123,7 +124,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Iter(Action callback)
         {
-            return SetCallback(callback, BindingContext.ActionCallbackPointer).Build();
+            return SetCallback(callback, Pointers.ActionCallbackDelegate).Build();
         }
 
         /// <summary>
@@ -133,7 +134,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Iter(Ecs.IterCallback callback)
         {
-            return SetCallback(callback, BindingContext.IterCallbackPointer).Build();
+            return SetCallback(callback, Pointers.IterCallbackDelegate).Build();
         }
 
         /// <summary>
@@ -143,7 +144,7 @@ namespace Flecs.NET.Core
         /// <returns>The created routine.</returns>
         public Observer Each(Action callback)
         {
-            return SetCallback(callback, BindingContext.ActionCallbackPointer).Build();
+            return SetCallback(callback, Pointers.ActionCallbackDelegate).Build();
         }
 
         /// <summary>
@@ -153,7 +154,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Each(Ecs.EachEntityCallback callback)
         {
-            return SetCallback(callback, BindingContext.EachEntityCallbackPointer).Build();
+            return SetCallback(callback, Pointers.EachEntityCallbackDelegate).Build();
         }
 
         /// <summary>
@@ -163,7 +164,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Each(Ecs.EachIterCallback callback)
         {
-            return SetCallback(callback, BindingContext.EachIterCallbackPointer).Build();
+            return SetCallback(callback, Pointers.EachIterCallbackDelegate).Build();
         }
 
         /// <summary>
@@ -173,7 +174,7 @@ namespace Flecs.NET.Core
         /// <returns>The created routine.</returns>
         public Observer Run(Action callback)
         {
-            return SetCallback(callback, BindingContext.ActionCallbackPointer).Build();
+            return SetCallback(callback, Pointers.ActionCallbackDelegate).Build();
         }
 
         /// <summary>
@@ -183,7 +184,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Run(Ecs.RunCallback run)
         {
-            return SetRun(run, BindingContext.RunCallbackPointer).Build();
+            return SetRun(run, Pointers.RunCallbackDelegate).Build();
         }
 
         /// <summary>
@@ -193,7 +194,7 @@ namespace Flecs.NET.Core
         /// <returns>Reference to self.</returns>
         public ref ObserverBuilder Run(Ecs.RunDelegateCallback run)
         {
-            return ref SetRun(run, BindingContext.RunDelegateCallbackPointer);
+            return ref SetRun(run, Pointers.RunDelegateCallbackDelegate);
         }
 
         /// <summary>
@@ -203,7 +204,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Iter(delegate*<void> callback)
         {
-            return SetCallback((IntPtr)callback, BindingContext.ActionCallbackPointer).Build();
+            return SetCallback((IntPtr)callback, Pointers.ActionCallbackPointer).Build();
         }
 
         /// <summary>
@@ -213,7 +214,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Iter(delegate*<Iter, void> callback)
         {
-            return SetCallback((IntPtr)callback, BindingContext.IterCallbackPointer).Build();
+            return SetCallback((IntPtr)callback, Pointers.IterCallbackPointer).Build();
         }
 
         /// <summary>
@@ -223,7 +224,7 @@ namespace Flecs.NET.Core
         /// <returns>The created routine.</returns>
         public Observer Each(delegate*<void> callback)
         {
-            return SetCallback((IntPtr)callback, BindingContext.ActionCallbackPointer).Build();
+            return SetCallback((IntPtr)callback, Pointers.ActionCallbackPointer).Build();
         }
 
         /// <summary>
@@ -233,7 +234,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Each(delegate*<Entity, void> callback)
         {
-            return SetCallback((IntPtr)callback, BindingContext.EachEntityCallbackPointer).Build();
+            return SetCallback((IntPtr)callback, Pointers.EachEntityCallbackPointer).Build();
         }
 
         /// <summary>
@@ -243,7 +244,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Each(delegate*<Iter, int, void> callback)
         {
-            return SetCallback((IntPtr)callback, BindingContext.EachIterCallbackPointer).Build();
+            return SetCallback((IntPtr)callback, Pointers.EachIterCallbackPointer).Build();
         }
 
         /// <summary>
@@ -253,7 +254,7 @@ namespace Flecs.NET.Core
         /// <returns>The created routine.</returns>
         public Observer Run(delegate*<void> callback)
         {
-            return SetCallback((IntPtr)callback, BindingContext.ActionCallbackPointer).Build();
+            return SetCallback((IntPtr)callback, Pointers.ActionCallbackPointer).Build();
         }
 
         /// <summary>
@@ -263,7 +264,7 @@ namespace Flecs.NET.Core
         /// <returns>The created observer.</returns>
         public Observer Run(delegate*<Iter, void> callback)
         {
-            return SetRun((IntPtr)callback, BindingContext.RunCallbackPointer).Build();
+            return SetRun((IntPtr)callback, Pointers.RunCallbackPointer).Build();
         }
 
         /// <summary>
@@ -273,7 +274,7 @@ namespace Flecs.NET.Core
         /// <returns>Reference to self.</returns>
         public ref ObserverBuilder Run(delegate*<Iter, Action<Iter>, void> callback)
         {
-            return ref SetRun((IntPtr)callback, BindingContext.RunDelegateCallbackPointer);
+            return ref SetRun((IntPtr)callback, Pointers.RunDelegateCallbackPointer);
         }
 
         /// <summary>
@@ -283,7 +284,7 @@ namespace Flecs.NET.Core
         /// <returns>Reference to self.</returns>
         public ref ObserverBuilder Run(delegate*<Iter, delegate*<Iter, void>, void> callback)
         {
-            return ref SetRun((IntPtr)callback, BindingContext.RunPointerCallbackPointer);
+            return ref SetRun((IntPtr)callback, Pointers.RunPointerCallbackPointer);
         }
 
         /// <summary>
@@ -293,50 +294,50 @@ namespace Flecs.NET.Core
         /// <returns>Reference to self.</returns>
         public ref ObserverBuilder Run(Ecs.RunPointerCallback callback)
         {
-            return ref SetRun(callback, BindingContext.RunPointerCallbackPointer);
+            return ref SetRun(callback, Pointers.RunPointerCallbackPointer);
         }
 
         private ref ObserverBuilder SetCallback<T>(T callback, IntPtr invoker) where T : Delegate
         {
             FreeCallback();
-            BindingContext.IteratorContext context = default;
-            BindingContext.SetCallback(ref context.Callback, callback, false);
+            IteratorContext context = default;
+            Callback.Set(ref context.Callback, callback, false);
             Desc.callback = invoker;
             Desc.callback_ctx = Memory.Alloc(context);
-            Desc.callback_ctx_free = BindingContext.IteratorContextFreePointer;
+            Desc.callback_ctx_free = Pointers.IteratorContextFree;
             return ref this;
         }
 
         private ref ObserverBuilder SetCallback(IntPtr callback, IntPtr invoker)
         {
             FreeCallback();
-            BindingContext.IteratorContext context = default;
-            BindingContext.SetCallback(ref context.Callback, callback);
+            IteratorContext context = default;
+            Callback.Set(ref context.Callback, callback);
             Desc.callback = invoker;
             Desc.callback_ctx = Memory.Alloc(context);
-            Desc.callback_ctx_free = BindingContext.IteratorContextFreePointer;
+            Desc.callback_ctx_free = Pointers.IteratorContextFree;
             return ref this;
         }
 
         private ref ObserverBuilder SetRun<T>(T callback, IntPtr invoker) where T : Delegate
         {
             FreeRun();
-            BindingContext.RunContext context = default;
-            BindingContext.SetCallback(ref context.Callback, callback, false);
+            RunContext context = default;
+            Callback.Set(ref context.Callback, callback, false);
             Desc.run = invoker;
             Desc.run_ctx = Memory.Alloc(context);
-            Desc.run_ctx_free = BindingContext.RunContextFreePointer;
+            Desc.run_ctx_free = Pointers.RunContextFree;
             return ref this;
         }
 
         private ref ObserverBuilder SetRun(IntPtr callback, IntPtr invoker)
         {
             FreeRun();
-            BindingContext.RunContext context = default;
-            BindingContext.SetCallback(ref context.Callback, callback);
+            RunContext context = default;
+            Callback.Set(ref context.Callback, callback);
             Desc.run = invoker;
             Desc.run_ctx = Memory.Alloc(context);
-            Desc.run_ctx_free = BindingContext.RunContextFreePointer;
+            Desc.run_ctx_free = Pointers.RunContextFree;
             return ref this;
         }
 
@@ -344,7 +345,7 @@ namespace Flecs.NET.Core
         {
             Desc.query = QueryBuilder.Desc;
             Desc.query.binding_ctx = Memory.Alloc(QueryBuilder.Context);
-            Desc.query.binding_ctx_free = BindingContext.QueryContextFreePointer;
+            Desc.query.binding_ctx_free = Pointers.QueryContextFree;
 
             fixed (ecs_observer_desc_t* ptr = &Desc)
             {

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
@@ -13,7 +14,7 @@ namespace Flecs.NET.Core
     {
         private ecs_world_t* _handle;
 
-        private ref BindingContext.WorldContext WorldContext => ref *EnsureBindingContext();
+        private ref WorldContext WorldContext => ref *EnsureBindingContext();
 
         /// <summary>
         ///     The handle to the C world.
@@ -125,7 +126,7 @@ namespace Flecs.NET.Core
         /// <param name="ctx"></param>
         public void AtFini(Ecs.FiniAction action, void* ctx)
         {
-            BindingContext.SetCallback(ref WorldContext.AtFini, action);
+            Callback.Set(ref WorldContext.AtFini, action);
             ecs_atfini(Handle, WorldContext.AtFini.Pointer, ctx);
         }
 
@@ -302,7 +303,7 @@ namespace Flecs.NET.Core
         /// <param name="ctxFree"></param>
         public void SetCtx(void* ctx, Ecs.ContextFree? ctxFree = null)
         {
-            BindingContext.SetCallback(ref WorldContext.ContextFree, ctxFree);
+            Callback.Set(ref WorldContext.ContextFree, ctxFree);
             ecs_set_ctx(Handle, ctx, WorldContext.ContextFree.Pointer);
         }
 
@@ -1801,7 +1802,7 @@ namespace Flecs.NET.Core
             using NativeString nativeName = (NativeString)name;
 
             ulong entity = ecs_lookup_path_w_sep(Handle, 0, nativeName,
-                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Utils.True);
+                Pointers.DefaultSeparator, Pointers.DefaultSeparator, Utils.True);
 
             Ecs.Assert(entity != 0, nameof(ECS_INVALID_PARAMETER));
 
@@ -2352,7 +2353,7 @@ namespace Flecs.NET.Core
         /// <param name="ctx"></param>
         public void RunPostFrame(Ecs.FiniAction action, void* ctx)
         {
-            BindingContext.SetCallback(ref WorldContext.RunPostFrame, action);
+            Callback.Set(ref WorldContext.RunPostFrame, action);
             ecs_run_post_frame(Handle, WorldContext.RunPostFrame.Pointer, ctx);
         }
 
@@ -3014,7 +3015,7 @@ namespace Flecs.NET.Core
             {
                 using NativeString nativeName = (NativeString)name;
                 ecs_add_path_w_sep(Handle, result, 0, nativeName,
-                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator);
+                    Pointers.DefaultSeparator, Pointers.DefaultSeparator);
             }
 
             ecs_set_scope(Handle, result);
@@ -3789,15 +3790,15 @@ namespace Flecs.NET.Core
             Import<Ecs.Meta>();
         }
 
-        private BindingContext.WorldContext* EnsureBindingContext()
+        private WorldContext* EnsureBindingContext()
         {
-            BindingContext.WorldContext* ptr = (BindingContext.WorldContext*)ecs_get_binding_ctx_fast(Handle);
+            WorldContext* ptr = (WorldContext*)ecs_get_binding_ctx_fast(Handle);
 
             if (ptr != null)
                 return ptr;
 
-            ptr = Memory.AllocZeroed<BindingContext.WorldContext>(1);
-            ecs_set_binding_ctx(Handle, ptr, BindingContext.WorldContextFreePointer);
+            ptr = Memory.AllocZeroed<WorldContext>(1);
+            ecs_set_binding_ctx(Handle, ptr, Pointers.WorldContextFree);
             return ptr;
         }
 
@@ -4107,7 +4108,7 @@ namespace Flecs.NET.Core
             return new Entity(
                 Handle,
                 ecs_lookup_path_w_sep(Handle, 0, nativePath,
-                    BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Utils.Bool(recursive))
+                    Pointers.DefaultSeparator, Pointers.DefaultSeparator, Utils.Bool(recursive))
             );
         }
 

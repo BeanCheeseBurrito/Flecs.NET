@@ -1,4 +1,5 @@
 using System;
+using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
@@ -63,8 +64,8 @@ namespace Flecs.NET.Core
 
             ecs_entity_desc_t entityDesc = default;
             entityDesc.name = nativeName;
-            entityDesc.sep = BindingContext.DefaultSeparator;
-            entityDesc.root_sep = BindingContext.DefaultSeparator;
+            entityDesc.sep = Pointers.DefaultSeparator;
+            entityDesc.root_sep = Pointers.DefaultSeparator;
             Desc.entity = ecs_entity_init(world, &entityDesc);
         }
 
@@ -85,12 +86,12 @@ namespace Flecs.NET.Core
         {
             fixed (ecs_pipeline_desc_t* pipelineDesc = &Desc)
             {
-                BindingContext.QueryContext* queryContext = Memory.Alloc<BindingContext.QueryContext>(1);
+                QueryContext* queryContext = Memory.Alloc<QueryContext>(1);
                 queryContext[0] = QueryBuilder.Context;
 
                 pipelineDesc->query = QueryBuilder.Desc;
                 pipelineDesc->query.binding_ctx = queryContext;
-                pipelineDesc->query.binding_ctx_free = BindingContext.QueryContextFreePointer;
+                pipelineDesc->query.binding_ctx_free = Pointers.QueryContextFree;
 
                 Entity entity = new Entity(World, ecs_pipeline_init(World, pipelineDesc));
 
