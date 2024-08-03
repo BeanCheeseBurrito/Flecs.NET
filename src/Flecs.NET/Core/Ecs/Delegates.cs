@@ -75,6 +75,35 @@ namespace Flecs.NET.Core
         public delegate void EachIterCallback(Iter it, int i);
 
         /// <summary>
+        ///     Function signature that takes an <see cref="Entity"/> argument.
+        /// </summary>
+        public delegate void ObserveEntityCallback(Entity e);
+
+        /// <summary>
+        ///     Function signature that takes a ref T argument.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public delegate void ObserveRefCallback<T>(ref T component);
+
+        /// <summary>
+        ///     Function signature that takes a T* callback.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public delegate void ObservePointerCallback<T>(T* component);
+
+        /// <summary>
+        ///     Function signature that takes an <see cref="Entity"/> and a ref T argument.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public delegate void ObserveEntityRefCallback<T>(Entity e, ref T component);
+
+        /// <summary>
+        ///     Function signature that takes an <see cref="Entity"/> and a T* argument.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public delegate void ObserveEntityPointerCallback<T>(Entity e, T* component);
+
+        /// <summary>
         ///     Finish action.
         /// </summary>
         public delegate void FiniAction(ecs_world_t* world, void* ctx);
