@@ -2,6 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Flecs.NET.Core;
+using Flecs.NET.Core.BindingContext;
 
 namespace Flecs.NET.Utilities
 {
@@ -13,7 +14,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static void AllocGcHandle<T>(T* comp, out GCHandle handle)
         {
-            handle = GCHandle.Alloc(new BindingContext.Box<T>(*comp, true));
+            handle = GCHandle.Alloc(new Box<T>(*comp, true));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,7 +45,7 @@ namespace Flecs.NET.Utilities
                 return ref Unsafe.AsRef<T>(data);
 
             GCHandle handle = GCHandle.FromIntPtr(*(IntPtr*)data);
-            BindingContext.Box<T> box = (BindingContext.Box<T>)handle.Target!;
+            Box<T> box = (Box<T>)handle.Target!;
             return ref box.Value!;
         }
 
@@ -58,7 +59,7 @@ namespace Flecs.NET.Utilities
                 return ref ((T*)data)[index];
 
             GCHandle handle = GCHandle.FromIntPtr(((IntPtr*)data)[index]);
-            BindingContext.Box<T> box = (BindingContext.Box<T>)handle.Target!;
+            Box<T> box = (Box<T>)handle.Target!;
             return ref box.Value!;
         }
 
@@ -77,7 +78,7 @@ namespace Flecs.NET.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static ref T GetTypeRef<T>(GCHandle handle)
         {
-            BindingContext.Box<T> box = (BindingContext.Box<T>)handle.Target!;
+            Box<T> box = (Box<T>)handle.Target!;
             return ref box.Value!;
         }
     }

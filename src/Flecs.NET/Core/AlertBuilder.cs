@@ -1,4 +1,5 @@
 using System;
+using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
@@ -65,8 +66,8 @@ namespace Flecs.NET.Core
 
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
-            desc.sep = BindingContext.DefaultSeparator;
-            desc.root_sep = BindingContext.DefaultSeparator;
+            desc.sep = Pointers.DefaultSeparator;
+            desc.root_sep = Pointers.DefaultSeparator;
             Desc.entity = ecs_entity_init(World, &desc);
         }
 
@@ -87,12 +88,12 @@ namespace Flecs.NET.Core
         {
             fixed (ecs_alert_desc_t* alertDesc = &Desc)
             {
-                BindingContext.QueryContext* queryContext = Memory.Alloc<BindingContext.QueryContext>(1);
+                QueryContext* queryContext = Memory.Alloc<QueryContext>(1);
                 queryContext[0] = QueryBuilder.Context;
 
                 alertDesc->query = QueryBuilder.Desc;
                 alertDesc->query.binding_ctx = queryContext;
-                alertDesc->query.binding_ctx_free = BindingContext.QueryContextFreePointer;
+                alertDesc->query.binding_ctx_free = Pointers.QueryContextFree;
 
                 Entity entity = new Entity(World, ecs_alert_init(World, alertDesc));
 
@@ -258,7 +259,7 @@ namespace Flecs.NET.Core
 
             ulong id = Type<T>.Id(World);
             ulong memberId = ecs_lookup_path_w_sep(World, id, nativeMember,
-                BindingContext.DefaultSeparator, BindingContext.DefaultSeparator, Utils.False);
+                Pointers.DefaultSeparator, Pointers.DefaultSeparator, Utils.False);
 
             AlertVar(var);
 
