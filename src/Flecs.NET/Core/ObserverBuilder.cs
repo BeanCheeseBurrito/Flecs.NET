@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
@@ -14,7 +13,7 @@ namespace Flecs.NET.Core
         private ecs_world_t* _world;
         private ecs_observer_desc_t _desc;
         private QueryBuilder _queryBuilder;
-        internal int EventCount;
+        private int _eventCount;
 
         /// <summary>
         ///     A reference to the world.
@@ -39,7 +38,7 @@ namespace Flecs.NET.Core
         {
             _world = world;
             _desc = default;
-            EventCount = default;
+            _eventCount = default;
             _queryBuilder = new QueryBuilder(world);
         }
 
@@ -78,10 +77,10 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref ObserverBuilder Event(ulong @event)
         {
-            if (EventCount >= 8)
+            if (_eventCount >= 8)
                 Ecs.Error("Can't create an observer with more than 8 events.");
 
-            Desc.events[EventCount++] = @event;
+            Desc.events[_eventCount++] = @event;
             return ref this;
         }
 
@@ -118,73 +117,43 @@ namespace Flecs.NET.Core
         }
 
         /// <summary>
-        ///     Creates a observer with the provided Iter callback.
+        ///     Creates an observer with the provided Run callback.
         /// </summary>
         /// <param name="callback">The callback.</param>
         /// <returns>The created observer.</returns>
-        public Observer Iter(Action callback)
-        {
-            return SetCallback(callback, Pointers.ActionCallbackDelegate).Build();
-        }
-
-        /// <summary>
-        ///     Creates a observer with the provided Iter callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <returns>The created observer.</returns>
-        public Observer Iter(Ecs.IterCallback callback)
-        {
-            return SetCallback(callback, Pointers.IterCallbackDelegate).Build();
-        }
-
-        /// <summary>
-        ///     Creates a routine with the provided Each callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <returns>The created routine.</returns>
-        public Observer Each(Action callback)
-        {
-            return SetCallback(callback, Pointers.ActionCallbackDelegate).Build();
-        }
-
-        /// <summary>
-        ///     Creates a observer with the provided Each callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <returns>The created observer.</returns>
-        public Observer Each(Ecs.EachEntityCallback callback)
-        {
-            return SetCallback(callback, Pointers.EachEntityCallbackDelegate).Build();
-        }
-
-        /// <summary>
-        ///     Creates a observer with the provided Each callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <returns>The created observer.</returns>
-        public Observer Each(Ecs.EachIterCallback callback)
-        {
-            return SetCallback(callback, Pointers.EachIterCallbackDelegate).Build();
-        }
-
-        /// <summary>
-        ///     Creates a routine with the provided Run callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <returns>The created routine.</returns>
         public Observer Run(Action callback)
         {
             return SetCallback(callback, Pointers.ActionCallbackDelegate).Build();
         }
 
         /// <summary>
-        ///     Creates a observer with the provided Run callback.
+        ///     Creates an observer with the provided Run callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created observer.</returns>
+        public Observer Run(delegate*<void> callback)
+        {
+            return SetCallback((IntPtr)callback, Pointers.ActionCallbackPointer).Build();
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Run callback.
         /// </summary>
         /// <param name="run">The callback.</param>
         /// <returns>The created observer.</returns>
         public Observer Run(Ecs.RunCallback run)
         {
             return SetRun(run, Pointers.RunCallbackDelegate).Build();
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Run callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created observer.</returns>
+        public Observer Run(delegate*<Iter, void> callback)
+        {
+            return SetRun((IntPtr)callback, Pointers.RunCallbackPointer).Build();
         }
 
         /// <summary>
@@ -195,76 +164,6 @@ namespace Flecs.NET.Core
         public ref ObserverBuilder Run(Ecs.RunDelegateCallback run)
         {
             return ref SetRun(run, Pointers.RunDelegateCallbackDelegate);
-        }
-
-        /// <summary>
-        ///     Creates a observer with the provided Iter callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <returns>The created observer.</returns>
-        public Observer Iter(delegate*<void> callback)
-        {
-            return SetCallback((IntPtr)callback, Pointers.ActionCallbackPointer).Build();
-        }
-
-        /// <summary>
-        ///     Creates a observer with the provided Iter callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <returns>The created observer.</returns>
-        public Observer Iter(delegate*<Iter, void> callback)
-        {
-            return SetCallback((IntPtr)callback, Pointers.IterCallbackPointer).Build();
-        }
-
-        /// <summary>
-        ///     Creates a routine with the provided Each callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <returns>The created routine.</returns>
-        public Observer Each(delegate*<void> callback)
-        {
-            return SetCallback((IntPtr)callback, Pointers.ActionCallbackPointer).Build();
-        }
-
-        /// <summary>
-        ///     Creates a observer with the provided Each callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <returns>The created observer.</returns>
-        public Observer Each(delegate*<Entity, void> callback)
-        {
-            return SetCallback((IntPtr)callback, Pointers.EachEntityCallbackPointer).Build();
-        }
-
-        /// <summary>
-        ///     Creates a observer with the provided Each callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <returns>The created observer.</returns>
-        public Observer Each(delegate*<Iter, int, void> callback)
-        {
-            return SetCallback((IntPtr)callback, Pointers.EachIterCallbackPointer).Build();
-        }
-
-        /// <summary>
-        ///     Creates a routine with the provided Run callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <returns>The created routine.</returns>
-        public Observer Run(delegate*<void> callback)
-        {
-            return SetCallback((IntPtr)callback, Pointers.ActionCallbackPointer).Build();
-        }
-
-        /// <summary>
-        ///     Creates a observer with the provided Run callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        /// <returns>The created observer.</returns>
-        public Observer Run(delegate*<Iter, void> callback)
-        {
-            return SetRun((IntPtr)callback, Pointers.RunCallbackPointer).Build();
         }
 
         /// <summary>
@@ -282,9 +181,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="callback">The callback.</param>
         /// <returns>Reference to self.</returns>
-        public ref ObserverBuilder Run(delegate*<Iter, delegate*<Iter, void>, void> callback)
+        public ref ObserverBuilder Run(Ecs.RunPointerCallback callback)
         {
-            return ref SetRun((IntPtr)callback, Pointers.RunPointerCallbackPointer);
+            return ref SetRun(callback, Pointers.RunPointerCallbackDelegate);
         }
 
         /// <summary>
@@ -292,9 +191,109 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="callback">The callback.</param>
         /// <returns>Reference to self.</returns>
-        public ref ObserverBuilder Run(Ecs.RunPointerCallback callback)
+        public ref ObserverBuilder Run(delegate*<Iter, delegate*<Iter, void>, void> callback)
         {
-            return ref SetRun(callback, Pointers.RunPointerCallbackPointer);
+            return ref SetRun((IntPtr)callback, Pointers.RunPointerCallbackPointer);
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Iter callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created observer.</returns>
+        public Observer Iter(Action callback)
+        {
+            return SetCallback(callback, Pointers.ActionCallbackDelegate).Build();
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Iter callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created observer.</returns>
+        public Observer Iter(delegate*<void> callback)
+        {
+            return SetCallback((IntPtr)callback, Pointers.ActionCallbackPointer).Build();
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Iter callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created observer.</returns>
+        public Observer Iter(Ecs.IterCallback callback)
+        {
+            return SetCallback(callback, Pointers.IterCallbackDelegate).Build();
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Iter callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created observer.</returns>
+        public Observer Iter(delegate*<Iter, void> callback)
+        {
+            return SetCallback((IntPtr)callback, Pointers.IterCallbackPointer).Build();
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Each callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created observer.</returns>
+        public Observer Each(Action callback)
+        {
+            return SetCallback(callback, Pointers.ActionCallbackDelegate).Build();
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Each callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created observer.</returns>
+        public Observer Each(delegate*<void> callback)
+        {
+            return SetCallback((IntPtr)callback, Pointers.ActionCallbackPointer).Build();
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Each callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created observer.</returns>
+        public Observer Each(Ecs.EachEntityCallback callback)
+        {
+            return SetCallback(callback, Pointers.EachEntityCallbackDelegate).Build();
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Each callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created observer.</returns>
+        public Observer Each(delegate*<Entity, void> callback)
+        {
+            return SetCallback((IntPtr)callback, Pointers.EachEntityCallbackPointer).Build();
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Each callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created observer.</returns>
+        public Observer Each(Ecs.EachIterCallback callback)
+        {
+            return SetCallback(callback, Pointers.EachIterCallbackDelegate).Build();
+        }
+
+        /// <summary>
+        ///     Creates an observer with the provided Each callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>The created observer.</returns>
+        public Observer Each(delegate*<Iter, int, void> callback)
+        {
+            return SetCallback((IntPtr)callback, Pointers.EachIterCallbackPointer).Build();
         }
 
         private ref ObserverBuilder SetCallback<T>(T callback, IntPtr invoker) where T : Delegate
@@ -349,7 +348,7 @@ namespace Flecs.NET.Core
 
             fixed (ecs_observer_desc_t* ptr = &Desc)
             {
-                Ecs.Assert(EventCount != 0, "Observer cannot have zero events. Use ObserverBuilder.Event() to add events.");
+                Ecs.Assert(_eventCount != 0, "Observer cannot have zero events. Use ObserverBuilder.Event() to add events.");
                 Ecs.Assert(ptr->query.terms[0] != default || ptr->query.expr != null, "Observers require at least 1 term.");
                 return new Observer(World, ecs_observer_init(World, ptr));
             }
