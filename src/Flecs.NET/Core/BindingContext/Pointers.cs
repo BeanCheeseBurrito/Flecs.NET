@@ -72,7 +72,7 @@ internal static unsafe class Pointers
 ///     A static class for binding context pointers.
 /// </summary>
 [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
-internal static unsafe class Pointers<T0>
+internal static unsafe partial class Pointers<T0>
 {
     #region Observe Callback Handlers
 
