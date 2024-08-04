@@ -13801,10 +13801,11 @@ namespace Flecs.NET.Bindings
                 DllFilePaths = new System.Collections.Generic.List<string>
                 {
                     "flecs",
-                    "runtimes/linux-x64/native/flecs",
-                    "runtimes/linux-arm64/native/flecs",
-                    "runtimes/osx-x64/native/flecs",
-                    "runtimes/osx-arm64/native/flecs",
+                    "libflecs",
+                    "runtimes/linux-x64/native/libflecs",
+                    "runtimes/linux-arm64/native/libflecs",
+                    "runtimes/osx-x64/native/libflecs",
+                    "runtimes/osx-arm64/native/libflecs",
                     "runtimes/win-x64/native/flecs",
                     "runtimes/win-arm64/native/flecs"
                 };
@@ -13858,8 +13859,8 @@ namespace Flecs.NET.Bindings
 
             public static bool TryLoad(string path, out System.IntPtr handle)
             {
-#if NET5_0_OR_GREATER
-            return System.Runtime.InteropServices.NativeLibrary.TryLoad(path, out handle);
+#if NETCOREAPP3_0_OR_GREATER
+            return System.Runtime.InteropServices.NativeLibrary.TryLoad(path, System.Reflection.Assembly.GetExecutingAssembly(), null, out handle);
 #else
                 handle = System.IntPtr.Zero;
                 if (IsLinux)
@@ -13874,7 +13875,7 @@ namespace Flecs.NET.Bindings
 
             public static System.IntPtr GetExport(string symbol)
             {
-#if NET5_0_OR_GREATER
+#if NETCOREAPP3_0_OR_GREATER
             return System.Runtime.InteropServices.NativeLibrary.GetExport(LibraryHandle, symbol);
 #else
                 if (IsLinux)
@@ -13919,6 +13920,14 @@ namespace Flecs.NET.Bindings
 
             public static void ResolveLibrary()
             {
+                System.IntPtr handle = default;
+#if NETCOREAPP3_0_OR_GREATER
+            foreach (string dllFilePath in DllFilePaths)
+            {
+                if (TryLoad(dllFilePath, out handle))
+                    goto Return;
+            }
+#else
                 string fileExtension;
                 if (IsLinux)
                     fileExtension = ".so";
@@ -13928,12 +13937,12 @@ namespace Flecs.NET.Bindings
                     fileExtension = ".dll";
                 else
                     throw new System.InvalidOperationException("Can't determine native library file extension for the current system.");
-                System.IntPtr handle = default;
                 foreach (string dllFilePath in DllFilePaths)
                 {
                     string fileName = System.IO.Path.GetFileName(dllFilePath);
                     string parentDir = $"{dllFilePath}/..";
-                    string searchDir = System.IO.Path.IsPathRooted(dllFilePath) ? System.IO.Path.GetFullPath(parentDir) + "/" : System.IO.Path.GetFullPath(System.AppDomain.CurrentDomain.BaseDirectory + parentDir) + "/";
+                    string exeDir = System.IO.Path.GetFullPath(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!);
+                    string searchDir = System.IO.Path.IsPathRooted(dllFilePath) ? System.IO.Path.GetFullPath(parentDir) + "/" : System.IO.Path.GetFullPath($"{exeDir}/{parentDir}") + "/";
                     if (TryLoad($"{searchDir}{fileName}", out handle))
                         goto Return;
                     if (TryLoad($"{searchDir}{fileName}{fileExtension}", out handle))
@@ -13951,6 +13960,7 @@ namespace Flecs.NET.Bindings
                         goto Return;
                 }
 
+#endif
 #if NET7_0_OR_GREATER
                 handle = System.Runtime.InteropServices.NativeLibrary.GetMainProgramHandle();
 #else
