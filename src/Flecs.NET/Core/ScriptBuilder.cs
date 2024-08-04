@@ -1,4 +1,5 @@
 using System;
+using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
@@ -53,8 +54,8 @@ namespace Flecs.NET.Core
 
             ecs_entity_desc_t entityDesc = default;
             entityDesc.name = nativeName;
-            entityDesc.sep = BindingContext.DefaultSeparator;
-            entityDesc.root_sep = BindingContext.DefaultSeparator;
+            entityDesc.sep = Pointers.DefaultSeparator;
+            entityDesc.root_sep = Pointers.DefaultSeparator;
 
             Desc.entity = ecs_entity_init(world, &entityDesc);
         }

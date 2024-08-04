@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Flecs.NET.Collections;
+using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
@@ -40,7 +41,7 @@ namespace Flecs.NET.Core
 
         ref QueryBuilder IQueryBuilder<QueryBuilder>.QueryBuilder => ref this;
 
-        internal BindingContext.QueryContext Context;
+        internal QueryContext Context;
 
         /// <summary>
         ///     A reference to the world.
@@ -91,8 +92,8 @@ namespace Flecs.NET.Core
 
             ecs_entity_desc_t desc = default;
             desc.name = nativeName;
-            desc.sep = BindingContext.DefaultSeparator;
-            desc.root_sep = BindingContext.DefaultSeparator;
+            desc.sep = Pointers.DefaultSeparator;
+            desc.root_sep = Pointers.DefaultSeparator;
             Desc.entity = ecs_entity_init(World, &desc);
         }
 
@@ -1642,7 +1643,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder OrderBy(ulong component, Ecs.OrderByAction compare)
         {
-            BindingContext.SetCallback(ref Context.OrderByAction, compare);
+            Callback.Set(ref Context.OrderByAction, compare);
             Desc.order_by_callback = Context.OrderByAction.Pointer;
             Desc.order_by = component;
             return ref this;
@@ -1689,7 +1690,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByAction callback)
         {
-            BindingContext.SetCallback(ref Context.GroupByAction, callback);
+            Callback.Set(ref Context.GroupByAction, callback);
             Desc.group_by_callback = Context.GroupByAction.Pointer;
             Desc.group_by = component;
             return ref this;
@@ -1720,10 +1721,10 @@ namespace Flecs.NET.Core
             Context.GroupByAction.Dispose();
             Context.ContextFree.Dispose();
 
-            BindingContext.GroupByContext* context = Memory.AllocZeroed<BindingContext.GroupByContext>(1);
-            BindingContext.SetCallback(ref context->GroupBy, callback);
-            Desc.group_by_callback = BindingContext.GroupByCallbackPointer;
-            Desc.group_by_ctx_free = BindingContext.GroupByContextFreePointer;
+            GroupByContext* context = Memory.AllocZeroed<GroupByContext>(1);
+            Callback.Set(ref context->GroupBy, callback);
+            Desc.group_by_callback = Pointers.GroupByCallbackDelegate;
+            Desc.group_by_ctx_free = Pointers.GroupByContextFree;
             Desc.group_by_ctx = context;
             Desc.group_by = component;
 
@@ -1749,7 +1750,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder GroupByCtx(void* ctx, Ecs.ContextFree contextFree)
         {
-            BindingContext.SetCallback(ref Context.ContextFree, contextFree);
+            Callback.Set(ref Context.ContextFree, contextFree);
             Desc.group_by_ctx_free = Context.ContextFree.Pointer;
             Desc.group_by_ctx = ctx;
             return ref this;
@@ -1774,7 +1775,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder OnGroupCreate(Ecs.GroupCreateAction onGroupCreate)
         {
-            BindingContext.SetCallback(ref Context.GroupCreateAction, onGroupCreate);
+            Callback.Set(ref Context.GroupCreateAction, onGroupCreate);
             Desc.on_group_create = Context.GroupCreateAction.Pointer;
             return ref this;
         }
@@ -1786,7 +1787,7 @@ namespace Flecs.NET.Core
         /// <returns></returns>
         public ref QueryBuilder OnGroupDelete(Ecs.GroupDeleteAction onGroupDelete)
         {
-            BindingContext.SetCallback(ref Context.GroupDeleteAction, onGroupDelete);
+            Callback.Set(ref Context.GroupDeleteAction, onGroupDelete);
             Desc.on_group_delete = Context.GroupDeleteAction.Pointer;
             return ref this;
         }

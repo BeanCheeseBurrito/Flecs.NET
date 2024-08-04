@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Flecs.NET.Collections;
+using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
@@ -151,7 +152,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref ulong EnsureCacheIndex(ecs_world_t* world, int index)
         {
-            BindingContext.WorldContext* context = (BindingContext.WorldContext*)ecs_get_binding_ctx_fast(world);
+            WorldContext* context = (WorldContext*)ecs_get_binding_ctx_fast(world);
             Ecs.Assert(context != null, "World pointer must be created or passed into World.Create() to initialize binding context.");
             ref NativeList<ulong> cache = ref context->TypeCache;
             cache.EnsureCount(index + 1);
@@ -178,7 +179,7 @@ namespace Flecs.NET.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref ulong LookupCacheIndex(ecs_world_t* world, int index)
         {
-            BindingContext.WorldContext* context = (BindingContext.WorldContext*)ecs_get_binding_ctx_fast(world);
+            WorldContext* context = (WorldContext*)ecs_get_binding_ctx_fast(world);
             Ecs.Assert(context != null, "World pointer must be created or passed into World.Create() to initialize binding context.");
             ref NativeList<ulong> cache = ref context->TypeCache;
             return ref index >= cache.Count || cache.Data[index] == 0
@@ -280,8 +281,8 @@ namespace Flecs.NET.Core
             entityDesc.use_low_id = Utils.True;
             entityDesc.name = nativeName;
             entityDesc.symbol = nativeSymbol;
-            entityDesc.sep = BindingContext.DefaultSeparator;
-            entityDesc.root_sep = BindingContext.DefaultSeparator;
+            entityDesc.sep = Pointers.DefaultSeparator;
+            entityDesc.root_sep = Pointers.DefaultSeparator;
             ulong entity = ecs_entity_init(world, &entityDesc);
             Ecs.Assert(entity != 0, $"Failed to register entity for type '{FullName}'");
 
@@ -307,10 +308,10 @@ namespace Flecs.NET.Core
                 return component;
 
             ecs_type_hooks_t hooksDesc = default;
-            hooksDesc.ctor = BindingContext<T>.DefaultManagedCtorCallbackPointer;
-            hooksDesc.dtor = BindingContext<T>.DefaultManagedDtorCallbackPointer;
-            hooksDesc.move = BindingContext<T>.DefaultManagedMoveCallbackPointer;
-            hooksDesc.copy = BindingContext<T>.DefaultManagedCopyCallbackPointer;
+            hooksDesc.ctor = Pointers<T>.DefaultManagedCtorCallback;
+            hooksDesc.dtor = Pointers<T>.DefaultManagedDtorCallback;
+            hooksDesc.move = Pointers<T>.DefaultManagedMoveCallback;
+            hooksDesc.copy = Pointers<T>.DefaultManagedCopyCallback;
             ecs_set_hooks_id(world, component, &hooksDesc);
 
             return component;

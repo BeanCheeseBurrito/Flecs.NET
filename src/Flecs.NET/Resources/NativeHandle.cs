@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Flecs.NET.Core;
+using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 
 namespace Flecs.NET.Resources
@@ -32,7 +33,7 @@ namespace Flecs.NET.Resources
         /// <returns></returns>
         public static NativeHandle<T> Alloc()
         {
-            return new NativeHandle<T> { _handle = GCHandle.Alloc(new BindingContext.Box<T>()) };
+            return new NativeHandle<T> { _handle = GCHandle.Alloc(new Box<T>()) };
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace Flecs.NET.Resources
         /// <returns></returns>
         public static NativeHandle<T> Alloc(T obj)
         {
-            return new NativeHandle<T> { _handle = GCHandle.Alloc(new BindingContext.Box<T>(obj)) };
+            return new NativeHandle<T> { _handle = GCHandle.Alloc(new Box<T>(obj)) };
         }
 
         /// <summary>

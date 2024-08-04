@@ -1,4 +1,5 @@
 using System;
+using Flecs.NET.Core.BindingContext;
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core
@@ -10,9 +11,9 @@ namespace Flecs.NET.Core
         /// </summary>
         public static class Os
         {
-            internal static BindingContext.OsApiContext Context = new BindingContext.OsApiContext
+            internal static OsApiContext Context = new OsApiContext
             {
-                Abort = new BindingContext.Callback(BindingContext.OsApiAbortPointer, default)
+                Abort = new Callback(Pointers.OsApiAbort, default)
             };
 
             internal static bool IsOsApiOverridden { get; private set; }
@@ -40,7 +41,7 @@ namespace Flecs.NET.Core
             /// <param name="callback">The callback.</param>
             public static void SetAbort(Action callback)
             {
-                BindingContext.SetCallback(ref Context.Abort, callback, true);
+                Callback.Set(ref Context.Abort, callback, true);
             }
 
             /// <summary>
@@ -49,7 +50,7 @@ namespace Flecs.NET.Core
             /// <param name="callback">The callback.</param>
             public static void SetLog(OsApiLog callback)
             {
-                BindingContext.SetCallback(ref Context.Log, callback, true);
+                Callback.Set(ref Context.Log, callback, true);
             }
 
             /// <summary>
@@ -58,7 +59,7 @@ namespace Flecs.NET.Core
             /// <param name="callback">The callback.</param>
             public static void SetAbort(IntPtr callback)
             {
-                BindingContext.SetCallback(ref Context.Abort, callback);
+                Callback.Set(ref Context.Abort, callback);
             }
 
             /// <summary>
@@ -67,7 +68,7 @@ namespace Flecs.NET.Core
             /// <param name="callback">The callback.</param>
             public static void SetLog(IntPtr callback)
             {
-                BindingContext.SetCallback(ref Context.Log, callback);
+                Callback.Set(ref Context.Log, callback);
             }
 
             /// <summary>
@@ -76,7 +77,7 @@ namespace Flecs.NET.Core
             /// <param name="callback">The callback.</param>
             public static void SetAbort(delegate*<void> callback)
             {
-                BindingContext.SetCallback(ref Context.Abort, (IntPtr)callback);
+                Callback.Set(ref Context.Abort, (IntPtr)callback);
             }
 
             /// <summary>
@@ -85,7 +86,7 @@ namespace Flecs.NET.Core
             /// <param name="callback">The callback.</param>
             public static void SetLog(delegate*<int, byte*, int, byte*, void> callback)
             {
-                BindingContext.SetCallback(ref Context.Log, (IntPtr)callback);
+                Callback.Set(ref Context.Log, (IntPtr)callback);
             }
         }
     }

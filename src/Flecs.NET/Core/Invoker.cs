@@ -24,7 +24,6 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="iter"></param>
         /// <param name="callback"></param>
-        /// <exception cref="ArgumentNullException"></exception>
         public static void Iter(ecs_iter_t* iter, Ecs.IterCallback callback)
         {
             Ecs.TableLock(iter->world, iter->table);
@@ -97,7 +96,17 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="iter"></param>
         /// <param name="callback"></param>
-        public static void Observe(ecs_iter_t* iter, Ecs.EachEntityCallback callback)
+        public static void Observe(ecs_iter_t* iter, Ecs.ObserveEntityCallback callback)
+        {
+            callback(new Entity(iter->world, ecs_field_src(iter, 0)));
+        }
+
+        /// <summary>
+        ///     Invokes an entity observer using a pointer.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        public static void Observe(ecs_iter_t* iter, delegate*<Entity, void> callback)
         {
             callback(new Entity(iter->world, ecs_field_src(iter, 0)));
         }
@@ -108,7 +117,19 @@ namespace Flecs.NET.Core
         /// <param name="iter"></param>
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
-        public static void Observe<T>(ecs_iter_t* iter, Ecs.EachRefCallback<T> callback)
+        public static void Observe<T>(ecs_iter_t* iter, Ecs.ObserveRefCallback<T> callback)
+        {
+            Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
+            callback(ref Managed.GetTypeRef<T>(iter->param));
+        }
+
+        /// <summary>
+        ///     Invokes an entity observer using a pointer.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Observe<T>(ecs_iter_t* iter, delegate*<ref T, void> callback)
         {
             Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
             callback(ref Managed.GetTypeRef<T>(iter->param));
@@ -120,10 +141,70 @@ namespace Flecs.NET.Core
         /// <param name="iter"></param>
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
-        public static void Observe<T>(ecs_iter_t* iter, Ecs.EachEntityRefCallback<T> callback)
+        public static void Observe<T>(ecs_iter_t* iter, Ecs.ObservePointerCallback<T> callback)
+        {
+            Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
+            callback((T*)iter->param);
+        }
+
+        /// <summary>
+        ///     Invokes an entity observer using a pointer.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Observe<T>(ecs_iter_t* iter, delegate*<T*, void> callback)
+        {
+            Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
+            callback((T*)iter->param);
+        }
+
+        /// <summary>
+        ///     Invokes an entity observer using a delegate.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Observe<T>(ecs_iter_t* iter, Ecs.ObserveEntityRefCallback<T> callback)
         {
             Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
             callback(new Entity(iter->world, ecs_field_src(iter, 0)), ref Managed.GetTypeRef<T>(iter->param));
+        }
+
+        /// <summary>
+        ///     Invokes an entity observer using a pointer.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Observe<T>(ecs_iter_t* iter, delegate*<Entity, ref T, void> callback)
+        {
+            Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
+            callback(new Entity(iter->world, ecs_field_src(iter, 0)), ref Managed.GetTypeRef<T>(iter->param));
+        }
+
+        /// <summary>
+        ///     Invokes an entity observer using a delegate.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Observe<T>(ecs_iter_t* iter, Ecs.ObserveEntityPointerCallback<T> callback)
+        {
+            Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
+            callback(new Entity(iter->world, ecs_field_src(iter, 0)), (T*)iter->param);
+        }
+
+        /// <summary>
+        ///     Invokes an entity observer using a pointer.
+        /// </summary>
+        /// <param name="iter"></param>
+        /// <param name="callback"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Observe<T>(ecs_iter_t* iter, delegate*<Entity, T*, void> callback)
+        {
+            Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
+            callback(new Entity(iter->world, ecs_field_src(iter, 0)), (T*)iter->param);
         }
 
         /// <summary>
@@ -324,16 +405,6 @@ namespace Flecs.NET.Core
         {
             ecs_iter_t iter = iterable.GetIter();
             Run(&iter, callback);
-        }
-
-        /// <summary>
-        ///     Invokes an entity observer using a delegate.
-        /// </summary>
-        /// <param name="iter"></param>
-        /// <param name="callback"></param>
-        public static void Observe(ecs_iter_t* iter, delegate*<Entity, void> callback)
-        {
-            callback(new Entity(iter->world, ecs_field_src(iter, 0)));
         }
     }
 }
