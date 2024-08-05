@@ -7,15 +7,15 @@ using Flecs.NET.Codegen.Helpers;
 [SuppressMessage("Design", "CA1050:Declare types in namespaces")]
 public static class NodeBuilder
 {
-    public static string GenerateExtensions(int i, Type type)
+    public static string GenerateExtensions(int i, Type builderType, Type returnType)
     {
         IEnumerable<string> iterators = Generator.CallbacksIterAndEach.Select((Callback callback) => $$"""
             /// <summary>
-            ///     Creates <see cref="{{type}}"/> with the provided .{{Generator.GetInvokerName(callback)}} callback.
+            ///     Creates <see cref="{{returnType}}"/> with the provided .{{Generator.GetInvokerName(callback)}} callback.
             /// </summary>
             /// <param name="callback">The callback.</param>
             /// {{Generator.XmlTypeParameters[i]}}
-            public {{type}} {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>({{Generator.GetCallbackType(i, callback)}} callback) {{Generator.GetCallbackConstraints(i, callback)}}
+            public {{returnType}} {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>({{Generator.GetCallbackType(i, callback)}} callback) {{Generator.GetCallbackConstraints(i, callback)}}
             {
                 return SetCallback({{(Generator.GetCallbackIsDelegate(callback) ? string.Empty : "(IntPtr)")}}callback, Pointers<{{Generator.TypeParameters[i]}}>.{{callback}}).Build();
             }
@@ -27,7 +27,7 @@ public static class NodeBuilder
 
         namespace Flecs.NET.Core;
 
-        public unsafe partial struct {{type}}Builder
+        public unsafe partial struct {{builderType}}
         {
         {{string.Join(Separator.DoubleNewLine, iterators)}}
         }

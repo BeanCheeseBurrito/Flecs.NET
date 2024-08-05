@@ -13,7 +13,7 @@ public class Query : IIncrementalGenerator
         {
             for (int i = 0; i < Generator.GenericCount; i++)
             {
-                Generator.AddSource(postContext, $"Iterators/T{i + 1}.g.cs", Iterable.GenerateExtensions(i, nameof(Query)));
+                Generator.AddSource(postContext, $"Iterators/T{i + 1}.g.cs", Iterable.GenerateExtensions(i, Type.Query));
             }
         });
     }
