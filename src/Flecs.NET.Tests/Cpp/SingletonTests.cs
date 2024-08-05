@@ -209,7 +209,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Set(new Position(10, 20));
 
             int count = 0;
-            world.Read((in Position p) =>
+            world.Read((ref readonly Position p) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
