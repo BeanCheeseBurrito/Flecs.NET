@@ -20,7 +20,7 @@ public static class Entities_MultiSetGet
             });
 
         // Print values of Position and Mass component
-        bool found = e.Read((in Position p, in Mass m) =>
+        bool found = e.Read((ref readonly Position p, ref readonly Mass m) =>
         {
             Console.WriteLine($"Position: ({p.X}, {p.Y})");
             Console.WriteLine($"Mass: ({m.Value})");

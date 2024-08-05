@@ -686,6 +686,12 @@ namespace Flecs.NET.Core
         {
             return (Handle->sources == null || Handle->sources[index] == 0) && (Handle->set_fields & (1 << index)) != 0 && !Type<T>.IsTag ? 1 : 0;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal bool IsLinear()
+        {
+            return Handle->shared_fields == 0 && Handle->set_fields == (1 << Handle->field_count) - 1;
+        }
     }
 
     /// <summary>

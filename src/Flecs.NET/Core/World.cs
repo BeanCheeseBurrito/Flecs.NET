@@ -731,9 +731,9 @@ namespace Flecs.NET.Core
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public void Insert<T>(Ecs.InvokeInsertCallback<T> callback)
+        public void Insert<T>(Ecs.InsertRefCallback<T> callback)
         {
-            Invoker.InvokeEnsure(Handle, Type<T>.Id(Handle), callback);
+            Invoker.Insert(Handle, Type<T>.Id(Handle), callback);
         }
 
         /// <summary>
@@ -1361,9 +1361,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
-        public void Read<T>(Ecs.InvokeReadCallback<T> callback)
+        public void Read<T>(Ecs.ReadRefCallback<T> callback)
         {
-            Invoker.InvokeRead(Handle, Type<T>.Id(Handle), callback);
+            Invoker.Read(Handle, Type<T>.Id(Handle), callback);
         }
 
         /// <summary>
@@ -1371,9 +1371,9 @@ namespace Flecs.NET.Core
         /// </summary>
         /// <param name="callback"></param>
         /// <typeparam name="T"></typeparam>
-        public void Write<T>(Ecs.InvokeWriteCallback<T> callback)
+        public void Write<T>(Ecs.WriteRefCallback<T> callback)
         {
-            Invoker.InvokeWrite(Handle, Type<T>.Id(Handle), callback);
+            Invoker.Write(Handle, Type<T>.Id(Handle), callback);
         }
 
         /// <summary>

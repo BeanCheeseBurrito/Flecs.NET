@@ -78,7 +78,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Add<Position>().Add<Velocity>();
             Entity e2 = world.Entity().Add<Position>();
 
-            Assert.True(e1.Read((in Position p, in Velocity v) => { e2.Add<Mass>(); }));
+            Assert.True(e1.Read((ref readonly Position p, ref readonly Velocity v) => { e2.Add<Mass>(); }));
 
             Assert.True(e2.Has<Mass>());
         }
