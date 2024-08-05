@@ -8,7 +8,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     A wrapper around <see cref="ecs_system_desc_t"/>.
 /// </summary>
-public unsafe partial struct RoutineBuilder : IDisposable, IEquatable<RoutineBuilder>, IQueryBuilder<RoutineBuilder>
+public unsafe partial struct RoutineBuilder : IDisposable, IEquatable<RoutineBuilder>, IQueryBuilder<RoutineBuilder, Routine>
 {
     private ecs_world_t* _world;
     private ecs_system_desc_t _desc;
@@ -446,6 +446,11 @@ public unsafe partial struct RoutineBuilder : IDisposable, IEquatable<RoutineBui
 
         fixed (ecs_system_desc_t* ptr = &Desc)
             return new Routine(World, ecs_system_init(World, ptr));
+    }
+
+    Routine IQueryBuilder<RoutineBuilder, Routine>.Build()
+    {
+        return Build();
     }
 
     private void FreeRun()
