@@ -1,6 +1,3 @@
-#if !NET5_0_OR_GREATER
-using System.Runtime.InteropServices;
-#endif
 using System;
 using System.Runtime.CompilerServices;
 using Flecs.NET.Utilities;
@@ -11,7 +8,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     An iterator object that can be modified before iterating.
 /// </summary>
-public unsafe partial struct IterIterable : IIterator, IEquatable<IterIterable>
+public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
 {
     private ecs_iter_t _iter;
     private IterableType _iterableType;
@@ -349,6 +346,54 @@ public unsafe partial struct IterIterable
 // IIterable Interface
 public unsafe partial struct IterIterable
 {
+    /// <inheritdoc cref="IIterable.Run(Ecs.RunCallback)"/>
+    public void Run(Ecs.RunCallback callback)
+    {
+        Invoker.Run(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Run(Ecs.RunCallback)"/>
+    public void Run(delegate*<Iter, void> callback)
+    {
+        Invoker.Run(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Iter(Ecs.IterCallback)"/>
+    public void Iter(Ecs.IterCallback callback)
+    {
+        Invoker.Iter(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Iter(Ecs.IterCallback)"/>
+    public void Iter(delegate*<Iter, void> callback)
+    {
+        Invoker.Iter(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Each(Ecs.EachEntityCallback)"/>
+    public void Each(Ecs.EachEntityCallback callback)
+    {
+        Invoker.Each(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Each(Ecs.EachEntityCallback)"/>
+    public void Each(delegate*<Entity, void> callback)
+    {
+        Invoker.Each(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Each(Ecs.EachIterCallback)"/>
+    public void Each(Ecs.EachIterCallback callback)
+    {
+        Invoker.Each(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Each(Ecs.EachIterCallback)"/>
+    public void Each(delegate*<Iter, int, void> callback)
+    {
+        Invoker.Each(ref this, callback);
+    }
+
     /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.World)"/>
     public IterIterable Iter(World world = default)
     {
@@ -419,57 +464,5 @@ public unsafe partial struct IterIterable
     IterIterable IIterable.SetGroup<T>()
     {
         return Iter().SetGroup<T>();
-    }
-}
-
-// IIterator Interface
-public unsafe partial struct IterIterable
-{
-    /// <inheritdoc cref="IIterator.Iter(Ecs.IterCallback)"/>
-    public void Iter(Ecs.IterCallback callback)
-    {
-        Invoker.Iter(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Each(Ecs.EachEntityCallback)"/>
-    public void Each(Ecs.EachEntityCallback callback)
-    {
-        Invoker.Each(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Each(Ecs.EachIterCallback)"/>
-    public void Each(Ecs.EachIterCallback callback)
-    {
-        Invoker.Each(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Run(Ecs.RunCallback)"/>
-    public void Run(Ecs.RunCallback callback)
-    {
-        Invoker.Run(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Iter(Ecs.IterCallback)"/>
-    public void Iter(delegate*<Iter, void> callback)
-    {
-        Invoker.Iter(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Each(Ecs.EachEntityCallback)"/>
-    public void Each(delegate*<Entity, void> callback)
-    {
-        Invoker.Each(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Each(Ecs.EachIterCallback)"/>
-    public void Each(delegate*<Iter, int, void> callback)
-    {
-        Invoker.Each(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Run(Ecs.RunCallback)"/>
-    public void Run(delegate*<Iter, void> callback)
-    {
-        Invoker.Run(ref this, callback);
     }
 }

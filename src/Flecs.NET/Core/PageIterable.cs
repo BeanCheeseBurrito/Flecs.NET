@@ -8,7 +8,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///      An iterator that limits the returned entities with offset/limit.
 /// </summary>
-public partial struct PageIterable : IIterator, IEquatable<PageIterable>
+public partial struct PageIterable : IEquatable<PageIterable>, IIterable
 {
     private ecs_iter_t _iter;
     private readonly int _offset;
@@ -119,6 +119,54 @@ public unsafe partial struct PageIterable
 // IIterable Interface
 public unsafe partial struct PageIterable
 {
+    /// <inheritdoc cref="IIterable.Run(Ecs.RunCallback)"/>
+    public void Run(Ecs.RunCallback callback)
+    {
+        Invoker.Run(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Run(Ecs.RunCallback)"/>
+    public void Run(delegate*<Iter, void> callback)
+    {
+        Invoker.Run(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Iter(Ecs.IterCallback)"/>
+    public void Iter(Ecs.IterCallback callback)
+    {
+        Invoker.Iter(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Iter(Ecs.IterCallback)"/>
+    public void Iter(delegate*<Iter, void> callback)
+    {
+        Invoker.Iter(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Each(Ecs.EachEntityCallback)"/>
+    public void Each(Ecs.EachEntityCallback callback)
+    {
+        Invoker.Each(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Each(Ecs.EachEntityCallback)"/>
+    public void Each(delegate*<Entity, void> callback)
+    {
+        Invoker.Each(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Each(Ecs.EachIterCallback)"/>
+    public void Each(Ecs.EachIterCallback callback)
+    {
+        Invoker.Each(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Each(Ecs.EachIterCallback)"/>
+    public void Each(delegate*<Iter, int, void> callback)
+    {
+        Invoker.Each(ref this, callback);
+    }
+
     /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.World)"/>
     public IterIterable Iter(World world = default)
     {
@@ -189,57 +237,5 @@ public unsafe partial struct PageIterable
     public IterIterable SetGroup<T>()
     {
         return Iter().SetGroup<T>();
-    }
-}
-
-// IIterator Interface
-public unsafe partial struct PageIterable
-{
-    /// <inheritdoc cref="IIterator.Iter(Ecs.IterCallback)"/>
-    public void Iter(Ecs.IterCallback callback)
-    {
-        Invoker.Iter(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Each(Ecs.EachEntityCallback)"/>
-    public void Each(Ecs.EachEntityCallback callback)
-    {
-        Invoker.Each(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Each(Ecs.EachIterCallback)"/>
-    public void Each(Ecs.EachIterCallback callback)
-    {
-        Invoker.Each(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Run(Ecs.RunCallback)"/>
-    public void Run(Ecs.RunCallback callback)
-    {
-        Invoker.Run(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Iter(Ecs.IterCallback)"/>
-    public void Iter(delegate*<Iter, void> callback)
-    {
-        Invoker.Iter(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Each(Ecs.EachEntityCallback)"/>
-    public void Each(delegate*<Entity, void> callback)
-    {
-        Invoker.Each(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Each(Ecs.EachIterCallback)"/>
-    public void Each(delegate*<Iter, int, void> callback)
-    {
-        Invoker.Each(ref this, callback);
-    }
-
-    /// <inheritdoc cref="IIterator.Run(Ecs.RunCallback)"/>
-    public void Run(delegate*<Iter, void> callback)
-    {
-        Invoker.Run(ref this, callback);
     }
 }
