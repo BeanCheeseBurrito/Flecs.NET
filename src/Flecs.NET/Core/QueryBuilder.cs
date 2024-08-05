@@ -16,7 +16,6 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     private ecs_query_desc_t _desc;
     private int _termIndex;
     private int _termCount;
-    private int _exprCount;
     private TermIdType _termIdType;
     private ref ecs_term_t CurrentTerm => ref Desc.terms[_termIndex];
     private ref ecs_term_ref_t CurrentTermId
@@ -62,7 +61,6 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
         _desc = default;
         _termIndex = default;
         _termCount = default;
-        _exprCount = default;
         _termIdType = TermIdType.Src;
         Context = default;
     }
@@ -761,13 +759,12 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder Expr(string expr)
     {
-        Ecs.Assert(_exprCount == 0, "QueryBuilder.Expr() cannot be called more than once");
+        Ecs.Assert(Desc.expr == null, "QueryBuilder.Expr() cannot be called more than once");
 
         NativeString nativeExpr = (NativeString)expr;
         Context.Strings.Add(nativeExpr);
 
         Desc.expr = nativeExpr;
-        _exprCount++;
 
         return ref this;
     }
