@@ -11,10 +11,10 @@ public class ObserverBuilder : IIncrementalGenerator
     {
         context.RegisterPostInitializationOutput((IncrementalGeneratorPostInitializationContext postContext) =>
         {
-            Generator.AddSource(postContext, "QueryBuilder.g.cs", QueryBuilder.GenerateExtensions(nameof(ObserverBuilder)));
+            Generator.AddSource(postContext, "QueryBuilder.g.cs", QueryBuilder.GenerateExtensions(Type.ObserverBuilder));
 
             for (int i = 0; i < Generator.GenericCount; i++)
-                Generator.AddSource(postContext, $"NodeBuilder/T{i + 1}.g.cs", NodeBuilder.GenerateExtensions(i, Type.Observer));
+                Generator.AddSource(postContext, $"NodeBuilder/T{i + 1}.g.cs", NodeBuilder.GenerateExtensions(i, Type.ObserverBuilder, Type.Observer));
         });
     }
 }

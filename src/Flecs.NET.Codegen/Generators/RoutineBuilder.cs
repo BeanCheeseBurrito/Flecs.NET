@@ -11,10 +11,10 @@ public class RoutineBuilder : IIncrementalGenerator
     {
         context.RegisterPostInitializationOutput((IncrementalGeneratorPostInitializationContext postContext) =>
         {
-            Generator.AddSource(postContext, "QueryBuilder.g.cs", QueryBuilder.GenerateExtensions(nameof(RoutineBuilder)));
+            Generator.AddSource(postContext, "QueryBuilder.g.cs", QueryBuilder.GenerateExtensions(Type.RoutineBuilder));
 
             for (int i = 0; i < Generator.GenericCount; i++)
-                Generator.AddSource(postContext, $"NodeBuilder/T{i + 1}.g.cs", NodeBuilder.GenerateExtensions(i, Type.Routine));
+                Generator.AddSource(postContext, $"NodeBuilder/T{i + 1}.g.cs", NodeBuilder.GenerateExtensions(i, Type.RoutineBuilder, Type.Routine));
         });
     }
 }

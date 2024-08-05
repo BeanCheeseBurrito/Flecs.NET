@@ -11,7 +11,7 @@ public class PipelineBuilder : IIncrementalGenerator
     {
         context.RegisterPostInitializationOutput((IncrementalGeneratorPostInitializationContext postContext) =>
         {
-            Generator.AddSource(postContext, "QueryBuilder.g.cs", QueryBuilder.GenerateExtensions(nameof(PipelineBuilder)));
+            Generator.AddSource(postContext, "QueryBuilder.g.cs", QueryBuilder.GenerateExtensions(Type.PipelineBuilder));
         });
     }
 }
