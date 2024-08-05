@@ -8,7 +8,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     A wrapper around <see cref="ecs_observer_desc_t"/>.
 /// </summary>
-public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverBuilder>, IQueryBuilder<ObserverBuilder>
+public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverBuilder>, IQueryBuilder<ObserverBuilder, Observer>
 {
     private ecs_world_t* _world;
     private ecs_observer_desc_t _desc;
@@ -352,6 +352,11 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
             Ecs.Assert(ptr->query.terms[0] != default || ptr->query.expr != null, "Observers require at least 1 term.");
             return new Observer(World, ecs_observer_init(World, ptr));
         }
+    }
+
+    Observer IQueryBuilder<ObserverBuilder, Observer>.Build()
+    {
+        return Build();
     }
 
     private void FreeRun()

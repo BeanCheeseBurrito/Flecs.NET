@@ -10,7 +10,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     A wrapper around <see cref="ecs_query_desc_t"/>.
 /// </summary>
-public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQueryBuilder<QueryBuilder>
+public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQueryBuilder<QueryBuilder, Query>
 {
     private ecs_world_t* _world;
     private ecs_query_desc_t _desc;
@@ -37,7 +37,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
         }
     }
 
-    ref QueryBuilder IQueryBuilder<QueryBuilder>.QueryBuilder => ref this;
+    ref QueryBuilder IQueryBuilder<QueryBuilder, Query>.QueryBuilder => ref this;
 
     internal QueryContext Context;
 

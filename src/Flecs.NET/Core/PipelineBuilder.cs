@@ -8,7 +8,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     A wrapper around <see cref="ecs_pipeline_desc_t"/>.
 /// </summary>
-public unsafe partial struct PipelineBuilder : IDisposable, IEquatable<PipelineBuilder>, IQueryBuilder<PipelineBuilder>
+public unsafe partial struct PipelineBuilder : IDisposable, IEquatable<PipelineBuilder>, IQueryBuilder<PipelineBuilder, Pipeline>
 {
     private ecs_world_t* _world;
     private ecs_pipeline_desc_t _desc;
