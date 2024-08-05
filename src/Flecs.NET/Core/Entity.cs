@@ -10,19 +10,21 @@ namespace Flecs.NET.Core
     /// <summary>
     ///     A wrapper for working with entities.
     /// </summary>
-    public unsafe partial struct Entity : IEquatable<Entity>
+    public unsafe partial struct Entity : IEquatable<Entity>, IEntity
     {
         private Id _id;
+
+        /// <summary>
+        ///     Reference to world.
+        /// </summary>
+        public ref ecs_world_t* World => ref _id.World;
 
         /// <summary>
         ///     Reference to id.
         /// </summary>
         public ref Id Id => ref _id;
 
-        /// <summary>
-        ///     Reference to world.
-        /// </summary>
-        public ref ecs_world_t* World => ref _id.World;
+        ref Entity IEntity.Entity => ref this;
 
         /// <summary>
         ///     Returns a null entity.
