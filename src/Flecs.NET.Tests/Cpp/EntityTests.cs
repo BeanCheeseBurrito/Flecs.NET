@@ -1922,19 +1922,19 @@ namespace Flecs.NET.Tests.Cpp
             Entity e3 = world.Entity()
                 .Set(new Velocity(1, 2));
 
-            Assert.True(e1.Read((in Position p) =>
+            Assert.True(e1.Read((ref readonly Position p) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
             }));
 
-            Assert.True(e2.Read((in Position p) =>
+            Assert.True(e2.Read((ref readonly Position p) =>
             {
                 Assert.Equal(11, p.X);
                 Assert.Equal(22, p.Y);
             }));
 
-            Assert.False(e3.Read((in Position p) => { }));
+            Assert.False(e3.Read((ref readonly Position p) => { }));
         }
 
         [Fact]
@@ -1952,7 +1952,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e3 = world.Entity()
                 .Set(new Velocity(1, 2));
 
-            Assert.True(e1.Read((in Position p, in Velocity v) =>
+            Assert.True(e1.Read((ref readonly Position p, ref readonly Velocity v) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
@@ -1961,9 +1961,9 @@ namespace Flecs.NET.Tests.Cpp
                 Assert.Equal(2, v.Y);
             }));
 
-            Assert.False(e2.Read((in Position p, in Velocity v) => { }));
+            Assert.False(e2.Read((ref readonly Position p, ref readonly Velocity v) => { }));
 
-            Assert.False(e3.Read((in Position p, in Velocity v) => { }));
+            Assert.False(e3.Read((ref readonly Position p, ref readonly Velocity v) => { }));
         }
 
         [Fact]
@@ -2005,7 +2005,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(12, p->X);
             Assert.Equal(24, p->Y);
 
-            Assert.False(e3.Read((in Position _) => { }));
+            Assert.False(e3.Read((ref readonly Position _) => { }));
         }
 
         [Fact]
@@ -2037,9 +2037,9 @@ namespace Flecs.NET.Tests.Cpp
                 v.Y += 4;
             }));
 
-            Assert.False(e2.Read((in Position p, in Velocity v) => { }));
+            Assert.False(e2.Read((ref readonly Position p, ref readonly Velocity v) => { }));
 
-            Assert.False(e3.Read((in Position p, in Velocity v) => { }));
+            Assert.False(e3.Read((ref readonly Position p, ref readonly Velocity v) => { }));
 
             Position* p = e1.GetPtr<Position>();
             Assert.Equal(11, p->X);
@@ -2059,12 +2059,12 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            Assert.True(e.Read((in Position p) =>
+            Assert.True(e.Read((ref readonly Position p) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
 
-                Assert.True(e.Read((in Velocity v) =>
+                Assert.True(e.Read((ref readonly Velocity v) =>
                 {
                     Assert.Equal(1, v.X);
                     Assert.Equal(2, v.Y);
@@ -2167,7 +2167,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(e.Has<Position>());
 
-            e.Read((in Position p) =>
+            e.Read((ref readonly Position p) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
@@ -2196,7 +2196,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Position>());
             Assert.True(e.Has<Velocity>());
 
-            e.Read((in Position p, in Velocity v) =>
+            e.Read((ref readonly Position p, ref readonly Velocity v) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
@@ -2231,7 +2231,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Velocity>());
             Assert.True(e.Has<Mass>());
 
-            e.Read((in Position p, in Velocity v, in Mass m) =>
+            e.Read((ref readonly Position p, ref readonly Velocity v, ref readonly Mass m) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
@@ -2279,7 +2279,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, positionSet);
             Assert.Equal(1, velocitySet);
 
-            Assert.True(e.Read((in Position p, in Velocity v) =>
+            Assert.True(e.Read((ref readonly Position p, ref readonly Velocity v) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
@@ -2332,7 +2332,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, positionSet);
             Assert.Equal(1, velocitySet);
 
-            Assert.True(e.Read((in Position p, in Velocity v) =>
+            Assert.True(e.Read((ref readonly Position p, ref readonly Velocity v) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
@@ -2359,7 +2359,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Velocity>());
             Assert.True(e.Has<Mass>());
 
-            Assert.True(e.Read((in Position p, in Velocity v, in Mass m) =>
+            Assert.True(e.Read((ref readonly Position p, ref readonly Velocity v, ref readonly Mass m) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
@@ -2388,7 +2388,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Velocity>());
             Assert.True(e.Has<Mass>());
 
-            Assert.True(e.Read((in Position p, in Velocity v, in Mass m) =>
+            Assert.True(e.Read((ref readonly Position p, ref readonly Velocity v, ref readonly Mass m) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
@@ -2410,7 +2410,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity().Set(new Position(5, 10));
             Assert.True(e.Has<Position>());
 
-            Assert.True(e.Read((in Position p) =>
+            Assert.True(e.Read((ref readonly Position p) =>
             {
                 Assert.Equal(5, p.X);
                 Assert.Equal(10, p.Y);
@@ -2422,7 +2422,7 @@ namespace Flecs.NET.Tests.Cpp
                 v = new Velocity(1, 2);
             });
 
-            Assert.True(e.Read((in Position p, in Velocity v) =>
+            Assert.True(e.Read((ref readonly Position p, ref readonly Velocity v) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
@@ -2449,7 +2449,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Position>());
             Assert.True(e.Has<Velocity>());
 
-            Assert.True(e.Read((in Position p, in Velocity v) =>
+            Assert.True(e.Read((ref readonly Position p, ref readonly Velocity v) =>
             {
                 Assert.Equal(5, p.X);
                 Assert.Equal(10, p.Y);
@@ -2468,7 +2468,7 @@ namespace Flecs.NET.Tests.Cpp
                 v = new Velocity(3, 4);
             });
 
-            Assert.True(e.Read((in Position p, in Velocity v) =>
+            Assert.True(e.Read((ref readonly Position p, ref readonly Velocity v) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
@@ -2509,7 +2509,7 @@ namespace Flecs.NET.Tests.Cpp
             {
                 Assert.True(e.Has(tag));
 
-                Assert.True(e.Read((in Self s) => { Assert.True(s.Value == e); }));
+                Assert.True(e.Read((ref readonly Self s) => { Assert.True(s.Value == e); }));
 
                 count++;
             });
@@ -2544,7 +2544,7 @@ namespace Flecs.NET.Tests.Cpp
             {
                 Assert.True(e.Has<Likes>(bob));
 
-                Assert.True(e.Read((in Self s) => { Assert.True(s.Value == e); }));
+                Assert.True(e.Read((ref readonly Self s) => { Assert.True(s.Value == e); }));
 
                 count++;
             });
@@ -2581,7 +2581,7 @@ namespace Flecs.NET.Tests.Cpp
             {
                 Assert.True(e.Has(likes, bob));
 
-                Assert.True(e.Read((in Self s) => { Assert.True(s.Value == e); }));
+                Assert.True(e.Read((ref readonly Self s) => { Assert.True(s.Value == e); }));
 
                 count++;
             });
@@ -2673,7 +2673,7 @@ namespace Flecs.NET.Tests.Cpp
             {
                 Assert.True(e.Has(Ecs.ChildOf, parent));
 
-                Assert.True(e.Read((in Self s) => { Assert.True(s.Value == e); }));
+                Assert.True(e.Read((ref readonly Self s) => { Assert.True(s.Value == e); }));
 
                 count++;
             });
@@ -3046,19 +3046,19 @@ namespace Flecs.NET.Tests.Cpp
             Entity c = world.Entity().Set(new Position(50, 60))
                 .With(EcsIsA, () => { world.Entity("Z"); });
 
-            Assert.True(a.Read((in Position p) =>
+            Assert.True(a.Read((ref readonly Position p) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
             }));
 
-            Assert.True(b.Read((in Position p) =>
+            Assert.True(b.Read((ref readonly Position p) =>
             {
                 Assert.Equal(30, p.X);
                 Assert.Equal(40, p.Y);
             }));
 
-            Assert.True(c.Read((in Position p) =>
+            Assert.True(c.Read((ref readonly Position p) =>
             {
                 Assert.Equal(50, p.X);
                 Assert.Equal(60, p.Y);
@@ -3094,19 +3094,19 @@ namespace Flecs.NET.Tests.Cpp
                 .With(EcsIsA, () => { world.Entity("Z"); })
                 .Set(new Position(50, 60));
 
-            Assert.True(a.Read((in Position p) =>
+            Assert.True(a.Read((ref readonly Position p) =>
             {
                 Assert.Equal(10, p.X);
                 Assert.Equal(20, p.Y);
             }));
 
-            Assert.True(b.Read((in Position p) =>
+            Assert.True(b.Read((ref readonly Position p) =>
             {
                 Assert.Equal(30, p.X);
                 Assert.Equal(40, p.Y);
             }));
 
-            Assert.True(c.Read((in Position p) =>
+            Assert.True(c.Read((ref readonly Position p) =>
             {
                 Assert.Equal(50, p.X);
                 Assert.Equal(60, p.Y);
@@ -3818,7 +3818,7 @@ namespace Flecs.NET.Tests.Cpp
             World stage = world.GetStage(0);
 
             bool invoked = false;
-            e.Mut(stage).Read((in Position p) =>
+            e.Mut(stage).Read((ref readonly Position p) =>
             {
                 invoked = true;
                 Assert.Equal(10, p.X);

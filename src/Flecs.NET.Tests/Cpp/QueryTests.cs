@@ -1557,7 +1557,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal(1, count);
 
-            Assert.True(e.Read((in Position p, in Velocity v) =>
+            Assert.True(e.Read((ref readonly Position p, ref readonly Velocity v) =>
             {
                 Assert.Equal(2, p.X);
                 Assert.Equal(4, p.Y);
@@ -1711,31 +1711,31 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal(5, count);
 
-            Assert.True(e1.Read((in Position p) =>
+            Assert.True(e1.Read((ref readonly Position p) =>
             {
                 Assert.Equal(11, p.X);
                 Assert.Equal(22, p.Y);
             }));
 
-            Assert.True(e2.Read((in Position p) =>
+            Assert.True(e2.Read((ref readonly Position p) =>
             {
                 Assert.Equal(21, p.X);
                 Assert.Equal(32, p.Y);
             }));
 
-            Assert.True(e3.Read((in Position p) =>
+            Assert.True(e3.Read((ref readonly Position p) =>
             {
                 Assert.Equal(31, p.X);
                 Assert.Equal(42, p.Y);
             }));
 
-            Assert.True(e4.Read((in Position p) =>
+            Assert.True(e4.Read((ref readonly Position p) =>
             {
                 Assert.Equal(41, p.X);
                 Assert.Equal(52, p.Y);
             }));
 
-            Assert.True(e5.Read((in Position p) =>
+            Assert.True(e5.Read((ref readonly Position p) =>
             {
                 Assert.Equal(51, p.X);
                 Assert.Equal(62, p.Y);
@@ -1778,43 +1778,43 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal(7, count);
 
-            Assert.True(e1.Read((in Position p) =>
+            Assert.True(e1.Read((ref readonly Position p) =>
             {
                 Assert.Equal(11, p.X);
                 Assert.Equal(22, p.Y);
             }));
 
-            Assert.True(e2.Read((in Position p) =>
+            Assert.True(e2.Read((ref readonly Position p) =>
             {
                 Assert.Equal(21, p.X);
                 Assert.Equal(32, p.Y);
             }));
 
-            Assert.True(e3.Read((in Position p) =>
+            Assert.True(e3.Read((ref readonly Position p) =>
             {
                 Assert.Equal(31, p.X);
                 Assert.Equal(42, p.Y);
             }));
 
-            Assert.True(e4.Read((in Position p) =>
+            Assert.True(e4.Read((ref readonly Position p) =>
             {
                 Assert.Equal(41, p.X);
                 Assert.Equal(52, p.Y);
             }));
 
-            Assert.True(e5.Read((in Position p) =>
+            Assert.True(e5.Read((ref readonly Position p) =>
             {
                 Assert.Equal(51, p.X);
                 Assert.Equal(62, p.Y);
             }));
 
-            Assert.True(e6.Read((in Position p) =>
+            Assert.True(e6.Read((ref readonly Position p) =>
             {
                 Assert.Equal(62, p.X);
                 Assert.Equal(73, p.Y);
             }));
 
-            Assert.True(e7.Read((in Position p) =>
+            Assert.True(e7.Read((ref readonly Position p) =>
             {
                 Assert.Equal(74, p.X);
                 Assert.Equal(85, p.Y);
@@ -1869,31 +1869,31 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal(5, count);
 
-            Assert.True(e1.Read((in Position p) =>
+            Assert.True(e1.Read((ref readonly Position p) =>
             {
                 Assert.Equal(11, p.X);
                 Assert.Equal(22, p.Y);
             }));
 
-            Assert.True(e2.Read((in Position p) =>
+            Assert.True(e2.Read((ref readonly Position p) =>
             {
                 Assert.Equal(21, p.X);
                 Assert.Equal(32, p.Y);
             }));
 
-            Assert.True(e3.Read((in Position p) =>
+            Assert.True(e3.Read((ref readonly Position p) =>
             {
                 Assert.Equal(31, p.X);
                 Assert.Equal(42, p.Y);
             }));
 
-            Assert.True(e4.Read((in Position p) =>
+            Assert.True(e4.Read((ref readonly Position p) =>
             {
                 Assert.Equal(41, p.X);
                 Assert.Equal(52, p.Y);
             }));
 
-            Assert.True(e5.Read((in Position p) =>
+            Assert.True(e5.Read((ref readonly Position p) =>
             {
                 Assert.Equal(51, p.X);
                 Assert.Equal(62, p.Y);
@@ -1957,43 +1957,43 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal(7, count);
 
-            Assert.True(e1.Read((in Position p) =>
+            Assert.True(e1.Read((ref readonly Position p) =>
             {
                 Assert.Equal(11, p.X);
                 Assert.Equal(22, p.Y);
             }));
 
-            Assert.True(e2.Read((in Position p) =>
+            Assert.True(e2.Read((ref readonly Position p) =>
             {
                 Assert.Equal(21, p.X);
                 Assert.Equal(32, p.Y);
             }));
 
-            Assert.True(e3.Read((in Position p) =>
+            Assert.True(e3.Read((ref readonly Position p) =>
             {
                 Assert.Equal(31, p.X);
                 Assert.Equal(42, p.Y);
             }));
 
-            Assert.True(e4.Read((in Position p) =>
+            Assert.True(e4.Read((ref readonly Position p) =>
             {
                 Assert.Equal(41, p.X);
                 Assert.Equal(52, p.Y);
             }));
 
-            Assert.True(e5.Read((in Position p) =>
+            Assert.True(e5.Read((ref readonly Position p) =>
             {
                 Assert.Equal(51, p.X);
                 Assert.Equal(62, p.Y);
             }));
 
-            Assert.True(e6.Read((in Position p) =>
+            Assert.True(e6.Read((ref readonly Position p) =>
             {
                 Assert.Equal(62, p.X);
                 Assert.Equal(73, p.Y);
             }));
 
-            Assert.True(e7.Read((in Position p) =>
+            Assert.True(e7.Read((ref readonly Position p) =>
             {
                 Assert.Equal(74, p.X);
                 Assert.Equal(85, p.Y);
@@ -2056,7 +2056,7 @@ namespace Flecs.NET.Tests.Cpp
             p[0].X++;
             p[0].Y++;
         }
-        
+
         [Fact]
         private void QueryEachWithFuncPtr()
         {
