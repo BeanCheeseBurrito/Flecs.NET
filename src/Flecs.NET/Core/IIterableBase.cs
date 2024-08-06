@@ -19,22 +19,4 @@ public unsafe interface IIterableBase
     /// <param name="it">The iterator.</param>
     /// <returns>The result.</returns>
     public bool GetNext(ecs_iter_t* it);
-
-    /// <summary>
-    ///     Return number of entities matched by iterable.
-    /// </summary>
-    /// <returns>The result.</returns>
-    public int Count();
-
-    /// <summary>
-    ///     Return whether iterable has any matches.
-    /// </summary>
-    /// <returns>The result.</returns>
-    public bool IsTrue();
-
-    /// <summary>
-    ///     Return first entity matched by iterable.
-    /// </summary>
-    /// <returns>The result.</returns>
-    public Entity First();
 }

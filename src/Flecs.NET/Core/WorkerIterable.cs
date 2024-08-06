@@ -96,24 +96,6 @@ public unsafe partial struct WorkerIterable
     {
         return Utils.Bool(ecs_worker_next(it));
     }
-
-    /// <inheritdoc cref="IIterableBase.Count()"/>
-    public int Count()
-    {
-        return Iter().Count();
-    }
-
-    /// <inheritdoc cref="IIterableBase.IsTrue()"/>
-    public bool IsTrue()
-    {
-        return Iter().IsTrue();
-    }
-
-    /// <inheritdoc cref="IIterableBase.First()"/>
-    public Entity First()
-    {
-        return Iter().First();
-    }
 }
 
 // IIterable Interface
@@ -165,6 +147,24 @@ public unsafe partial struct WorkerIterable
     public void Each(delegate*<Iter, int, void> callback)
     {
         Invoker.Each(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Count()"/>
+    public int Count()
+    {
+        return Iter().Count();
+    }
+
+    /// <inheritdoc cref="IIterable.IsTrue()"/>
+    public bool IsTrue()
+    {
+        return Iter().IsTrue();
+    }
+
+    /// <inheritdoc cref="IIterable.First()"/>
+    public Entity First()
+    {
+        return Iter().First();
     }
 
     /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.World)"/>
