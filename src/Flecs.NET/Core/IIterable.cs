@@ -58,6 +58,24 @@ public unsafe interface IIterable : IIterableBase
     public void Run(delegate*<Iter, void> callback);
 
     /// <summary>
+    ///     Return number of entities matched by iterable.
+    /// </summary>
+    /// <returns>The result.</returns>
+    public int Count();
+
+    /// <summary>
+    ///     Return whether iterable has any matches.
+    /// </summary>
+    /// <returns>The result.</returns>
+    public bool IsTrue();
+
+    /// <summary>
+    ///     Return first entity matched by iterable.
+    /// </summary>
+    /// <returns>The result.</returns>
+    public Entity First();
+
+    /// <summary>
     ///     Create an iterator object that can be modified before iterating.
     /// </summary>
     /// <returns>An iterable iter.</returns>

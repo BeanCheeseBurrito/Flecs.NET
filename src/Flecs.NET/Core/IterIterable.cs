@@ -323,24 +323,6 @@ public unsafe partial struct IterIterable
             _ => throw new Ecs.ErrorException()
         };
     }
-
-    /// <inheritdoc cref="IIterableBase.Count()"/>
-    int IIterableBase.Count()
-    {
-        return Iter().Count();
-    }
-
-    /// <inheritdoc cref="IIterableBase.IsTrue()"/>
-    bool IIterableBase.IsTrue()
-    {
-        return Iter().IsTrue();
-    }
-
-    /// <inheritdoc cref="IIterableBase.First()"/>
-    Entity IIterableBase.First()
-    {
-        return Iter().First();
-    }
 }
 
 // IIterable Interface
@@ -392,6 +374,24 @@ public unsafe partial struct IterIterable
     public void Each(delegate*<Iter, int, void> callback)
     {
         Invoker.Each(ref this, callback);
+    }
+
+    /// <inheritdoc cref="IIterable.Count()"/>
+    int IIterable.Count()
+    {
+        return Iter().Count();
+    }
+
+    /// <inheritdoc cref="IIterable.IsTrue()"/>
+    bool IIterable.IsTrue()
+    {
+        return Iter().IsTrue();
+    }
+
+    /// <inheritdoc cref="IIterable.First()"/>
+    Entity IIterable.First()
+    {
+        return Iter().First();
     }
 
     /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.World)"/>
