@@ -12,7 +12,7 @@ public static partial class Ecs
     /// <summary>
     ///     Native Flecs namespace.
     /// </summary>
-    public static readonly string NativeNamespace = $"{nameof(Flecs)}.{nameof(NET)}.{nameof(Bindings)}.{nameof(flecs)}+";
+    public const string NativeNamespace = $"{nameof(Flecs)}.{nameof(NET)}.{nameof(Bindings)}.{nameof(flecs)}+";
 
     /// <summary>
     ///     Number that identifies a Flecs.NET binding context object.
