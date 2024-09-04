@@ -14,6 +14,12 @@ namespace Test
     }
 }
 
+public class ManagedComponent
+{
+    public string Value;
+    public ManagedComponent Nested;
+}
+
 public struct Position
 {
     public float X { get; set; }
