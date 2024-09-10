@@ -376,22 +376,16 @@ public unsafe partial struct IterIterable
         Invoker.Each(ref this, callback);
     }
 
-    /// <inheritdoc cref="IIterable.Count()"/>
-    int IIterable.Count()
+    /// <inheritdoc cref="IIterable.Page(int, int)"/>
+    public PageIterable Page(int offset, int limit)
     {
-        return Iter().Count();
+        return new PageIterable(GetIter(), offset, limit);
     }
 
-    /// <inheritdoc cref="IIterable.IsTrue()"/>
-    bool IIterable.IsTrue()
+    /// <inheritdoc cref="IIterable.Worker(int, int)"/>
+    public WorkerIterable Worker(int index, int count)
     {
-        return Iter().IsTrue();
-    }
-
-    /// <inheritdoc cref="IIterable.First()"/>
-    Entity IIterable.First()
-    {
-        return Iter().First();
+        return new WorkerIterable(GetIter(), index, count);
     }
 
     /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.World)"/>
@@ -410,18 +404,6 @@ public unsafe partial struct IterIterable
     public IterIterable Iter(Entity entity)
     {
         return Iter(entity.CsWorld());
-    }
-
-    /// <inheritdoc cref="IIterable.Page(int, int)"/>
-    public PageIterable Page(int offset, int limit)
-    {
-        return new PageIterable(GetIter(), offset, limit);
-    }
-
-    /// <inheritdoc cref="IIterable.Worker(int, int)"/>
-    public WorkerIterable Worker(int index, int count)
-    {
-        return new WorkerIterable(GetIter(), index, count);
     }
 
     /// <inheritdoc cref="IIterable.SetVar(int, ulong)"/>

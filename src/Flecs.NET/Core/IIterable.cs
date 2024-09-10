@@ -58,22 +58,20 @@ public unsafe interface IIterable : IIterableBase
     public void Run(delegate*<Iter, void> callback);
 
     /// <summary>
-    ///     Return number of entities matched by iterable.
+    ///     Create an iterator that limits the returned entities with offset/limit.
     /// </summary>
-    /// <returns>The result.</returns>
-    public int Count();
+    /// <param name="offset">The number of entities to skip.</param>
+    /// <param name="limit">The maximum number of entities to return.</param>
+    /// <returns>Iterable that can be iterated with Each/Iter.</returns>
+    public PageIterable Page(int offset, int limit);
 
     /// <summary>
-    ///     Return whether iterable has any matches.
+    ///     Create an iterator that divides the number of matched entities across a number of resources.
     /// </summary>
-    /// <returns>The result.</returns>
-    public bool IsTrue();
-
-    /// <summary>
-    ///     Return first entity matched by iterable.
-    /// </summary>
-    /// <returns>The result.</returns>
-    public Entity First();
+    /// <param name="index">The index of the current resource.</param>
+    /// <param name="count">The total number of resources to divide entities between.</param>
+    /// <returns>Iterable that can be iterated with Each/Iter.</returns>
+    public WorkerIterable Worker(int index, int count);
 
     /// <summary>
     ///     Create an iterator object that can be modified before iterating.
@@ -94,20 +92,22 @@ public unsafe interface IIterable : IIterableBase
     public IterIterable Iter(Entity entity);
 
     /// <summary>
-    ///     Create an iterator that limits the returned entities with offset/limit.
+    ///     Return number of entities matched by iterable.
     /// </summary>
-    /// <param name="offset">The number of entities to skip.</param>
-    /// <param name="limit">The maximum number of entities to return.</param>
-    /// <returns>Iterable that can be iterated with Each/Iter.</returns>
-    public PageIterable Page(int offset, int limit);
+    /// <returns>The result.</returns>
+    public int Count();
 
     /// <summary>
-    ///     Create an iterator that divides the number of matched entities across a number of resources.
+    ///     Return whether iterable has any matches.
     /// </summary>
-    /// <param name="index">The index of the current resource.</param>
-    /// <param name="count">The total number of resources to divide entities between.</param>
-    /// <returns>Iterable that can be iterated with Each/Iter.</returns>
-    public WorkerIterable Worker(int index, int count);
+    /// <returns>The result.</returns>
+    public bool IsTrue();
+
+    /// <summary>
+    ///     Return first entity matched by iterable.
+    /// </summary>
+    /// <returns>The result.</returns>
+    public Entity First();
 
     /// <summary>
     ///     Set value for iterator variable.
