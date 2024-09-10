@@ -37,7 +37,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
         }
     }
 
-    ref QueryBuilder IQueryBuilder<QueryBuilder, Query>.QueryBuilder => ref this;
+    ref QueryBuilder IQueryBuilderBase.QueryBuilder => ref this;
 
     internal QueryContext Context;
 
@@ -1807,13 +1807,9 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
 
     private void SetTermId(ulong id)
     {
-        if ((id & ECS_ID_FLAGS_MASK) != 0)
-        {
-            CurrentTerm = new ecs_term_t { id = id };
-            return;
-        }
-
-        CurrentTerm = new ecs_term_t { first = new ecs_term_ref_t { id = id } };
+        CurrentTerm = (id & ECS_ID_FLAGS_MASK) == 0
+            ? new ecs_term_t { first = new ecs_term_ref_t { id = id } }
+            : new ecs_term_t { id = id };
     }
 
     private void SetTermId(ulong first, ulong second)
