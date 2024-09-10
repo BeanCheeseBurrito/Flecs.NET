@@ -35,55 +35,55 @@ public unsafe partial struct World
     {
         return AlertBuilder<T0>(entity).Build();
     }
-
-    public QueryBuilder QueryBuilder<T0>()
+    
+    public QueryBuilder<T0> QueryBuilder<T0>()
     {
-        return new QueryBuilder(Handle).With<T0>();
+        return new QueryBuilder<T0>(Handle);
     }
 
-    public QueryBuilder QueryBuilder<T0>(string name)
+    public QueryBuilder<T0> QueryBuilder<T0>(string name)
     {
-        return new QueryBuilder(Handle, name).With<T0>();
+        return new QueryBuilder<T0>(Handle, name);
     }
 
-    public QueryBuilder QueryBuilder<T0>(ulong entity)
+    public QueryBuilder<T0> QueryBuilder<T0>(ulong entity)
     {
-        return new QueryBuilder(Handle, entity).With<T0>();
+        return new QueryBuilder<T0>(Handle, entity);
     }
 
-    public Query Query<T0>()
+    public Query<T0> Query<T0>()
     {
-        return QueryBuilder<T0>().Build();
+        return new QueryBuilder<T0>(Handle).Build();
     }
 
-    public Query Query<T0>(string name)
+    public Query<T0> Query<T0>(string name)
     {
-        return QueryBuilder<T0>(name).Build();
+        return new QueryBuilder<T0>(Handle, name).Build();
     }
 
-    public Query Query<T0>(ulong entity)
+    public Query<T0> Query<T0>(ulong entity)
     {
-        return QueryBuilder<T0>(entity).Build();
+        return new QueryBuilder<T0>(Handle, entity).Build();
     }
 
-    public RoutineBuilder Routine<T0>()
+    public RoutineBuilder<T0> Routine<T0>()
     {
-        return new RoutineBuilder(Handle).With<T0>();
+        return new RoutineBuilder<T0>(Handle);
     }
 
-    public RoutineBuilder Routine<T0>(string name)
+    public RoutineBuilder<T0> Routine<T0>(string name)
     {
-        return new RoutineBuilder(Handle, name).With<T0>();
+        return new RoutineBuilder<T0>(Handle, name);
     }
 
-    public ObserverBuilder Observer<T0>()
+    public ObserverBuilder<T0> Observer<T0>()
     {
-        return new ObserverBuilder(Handle).With<T0>();
+        return new ObserverBuilder<T0>(Handle);
     }
 
-    public ObserverBuilder Observer<T0>(string name)
+    public ObserverBuilder<T0> Observer<T0>(string name)
     {
-        return new ObserverBuilder(Handle, name).With<T0>();
+        return new ObserverBuilder<T0>(Handle, name);
     }
 }
 

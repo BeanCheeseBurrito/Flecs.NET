@@ -9,9 +9,9 @@ public unsafe partial struct World
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <typeparam name="T0">The T0 component type.</typeparam>
-    public void Each<T0>(Ecs.EachRefCallback<T0> callback) 
+    public void Each<T0>(Ecs.EachRefCallback<T0> callback)
     {
-        using Query query = Query<T0>();
+        using Query<T0> query = Query<T0>();
         query.Each(callback);   
     }
 
@@ -20,9 +20,9 @@ public unsafe partial struct World
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <typeparam name="T0">The T0 component type.</typeparam>
-    public void Each<T0>(Ecs.EachEntityRefCallback<T0> callback) 
+    public void Each<T0>(Ecs.EachEntityRefCallback<T0> callback)
     {
-        using Query query = Query<T0>();
+        using Query<T0> query = Query<T0>();
         query.Each(callback);   
     }
 
@@ -31,9 +31,9 @@ public unsafe partial struct World
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <typeparam name="T0">The T0 component type.</typeparam>
-    public void Each<T0>(Ecs.EachIterRefCallback<T0> callback) 
+    public void Each<T0>(Ecs.EachIterRefCallback<T0> callback)
     {
-        using Query query = Query<T0>();
+        using Query<T0> query = Query<T0>();
         query.Each(callback);   
     }
 
@@ -42,9 +42,9 @@ public unsafe partial struct World
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <typeparam name="T0">The T0 component type.</typeparam>
-    public void Each<T0>(delegate*<ref T0, void> callback) 
+    public void Each<T0>(delegate*<ref T0, void> callback)
     {
-        using Query query = Query<T0>();
+        using Query<T0> query = Query<T0>();
         query.Each(callback);   
     }
 
@@ -53,9 +53,9 @@ public unsafe partial struct World
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <typeparam name="T0">The T0 component type.</typeparam>
-    public void Each<T0>(delegate*<Entity, ref T0, void> callback) 
+    public void Each<T0>(delegate*<Entity, ref T0, void> callback)
     {
-        using Query query = Query<T0>();
+        using Query<T0> query = Query<T0>();
         query.Each(callback);   
     }
 
@@ -64,9 +64,9 @@ public unsafe partial struct World
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <typeparam name="T0">The T0 component type.</typeparam>
-    public void Each<T0>(delegate*<Iter, int, ref T0, void> callback) 
+    public void Each<T0>(delegate*<Iter, int, ref T0, void> callback)
     {
-        using Query query = Query<T0>();
+        using Query<T0> query = Query<T0>();
         query.Each(callback);   
     }
 
@@ -75,9 +75,9 @@ public unsafe partial struct World
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <typeparam name="T0">The T0 component type.</typeparam>
-    public void Each<T0>(Ecs.EachPointerCallback<T0> callback) where T0 : unmanaged
+    public void Each<T0>(Ecs.EachPointerCallback<T0> callback)
     {
-        using Query query = Query<T0>();
+        using Query<T0> query = Query<T0>();
         query.Each(callback);   
     }
 
@@ -86,9 +86,9 @@ public unsafe partial struct World
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <typeparam name="T0">The T0 component type.</typeparam>
-    public void Each<T0>(Ecs.EachEntityPointerCallback<T0> callback) where T0 : unmanaged
+    public void Each<T0>(Ecs.EachEntityPointerCallback<T0> callback)
     {
-        using Query query = Query<T0>();
+        using Query<T0> query = Query<T0>();
         query.Each(callback);   
     }
 
@@ -97,9 +97,9 @@ public unsafe partial struct World
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <typeparam name="T0">The T0 component type.</typeparam>
-    public void Each<T0>(Ecs.EachIterPointerCallback<T0> callback) where T0 : unmanaged
+    public void Each<T0>(Ecs.EachIterPointerCallback<T0> callback)
     {
-        using Query query = Query<T0>();
+        using Query<T0> query = Query<T0>();
         query.Each(callback);   
     }
 
@@ -108,9 +108,9 @@ public unsafe partial struct World
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <typeparam name="T0">The T0 component type.</typeparam>
-    public void Each<T0>(delegate*<T0*, void> callback) where T0 : unmanaged
+    public void Each<T0>(delegate*<T0*, void> callback)
     {
-        using Query query = Query<T0>();
+        using Query<T0> query = Query<T0>();
         query.Each(callback);   
     }
 
@@ -119,9 +119,9 @@ public unsafe partial struct World
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <typeparam name="T0">The T0 component type.</typeparam>
-    public void Each<T0>(delegate*<Entity, T0*, void> callback) where T0 : unmanaged
+    public void Each<T0>(delegate*<Entity, T0*, void> callback)
     {
-        using Query query = Query<T0>();
+        using Query<T0> query = Query<T0>();
         query.Each(callback);   
     }
 
@@ -130,9 +130,9 @@ public unsafe partial struct World
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <typeparam name="T0">The T0 component type.</typeparam>
-    public void Each<T0>(delegate*<Iter, int, T0*, void> callback) where T0 : unmanaged
+    public void Each<T0>(delegate*<Iter, int, T0*, void> callback)
     {
-        using Query query = Query<T0>();
+        using Query<T0> query = Query<T0>();
         query.Each(callback);   
     }
 }

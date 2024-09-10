@@ -35,55 +35,55 @@ public unsafe partial struct World
     {
         return AlertBuilder<T0, T1>(entity).Build();
     }
-
-    public QueryBuilder QueryBuilder<T0, T1>()
+    
+    public QueryBuilder<T0, T1> QueryBuilder<T0, T1>()
     {
-        return new QueryBuilder(Handle).With<T0>().With<T1>();
+        return new QueryBuilder<T0, T1>(Handle);
     }
 
-    public QueryBuilder QueryBuilder<T0, T1>(string name)
+    public QueryBuilder<T0, T1> QueryBuilder<T0, T1>(string name)
     {
-        return new QueryBuilder(Handle, name).With<T0>().With<T1>();
+        return new QueryBuilder<T0, T1>(Handle, name);
     }
 
-    public QueryBuilder QueryBuilder<T0, T1>(ulong entity)
+    public QueryBuilder<T0, T1> QueryBuilder<T0, T1>(ulong entity)
     {
-        return new QueryBuilder(Handle, entity).With<T0>().With<T1>();
+        return new QueryBuilder<T0, T1>(Handle, entity);
     }
 
-    public Query Query<T0, T1>()
+    public Query<T0, T1> Query<T0, T1>()
     {
-        return QueryBuilder<T0, T1>().Build();
+        return new QueryBuilder<T0, T1>(Handle).Build();
     }
 
-    public Query Query<T0, T1>(string name)
+    public Query<T0, T1> Query<T0, T1>(string name)
     {
-        return QueryBuilder<T0, T1>(name).Build();
+        return new QueryBuilder<T0, T1>(Handle, name).Build();
     }
 
-    public Query Query<T0, T1>(ulong entity)
+    public Query<T0, T1> Query<T0, T1>(ulong entity)
     {
-        return QueryBuilder<T0, T1>(entity).Build();
+        return new QueryBuilder<T0, T1>(Handle, entity).Build();
     }
 
-    public RoutineBuilder Routine<T0, T1>()
+    public RoutineBuilder<T0, T1> Routine<T0, T1>()
     {
-        return new RoutineBuilder(Handle).With<T0>().With<T1>();
+        return new RoutineBuilder<T0, T1>(Handle);
     }
 
-    public RoutineBuilder Routine<T0, T1>(string name)
+    public RoutineBuilder<T0, T1> Routine<T0, T1>(string name)
     {
-        return new RoutineBuilder(Handle, name).With<T0>().With<T1>();
+        return new RoutineBuilder<T0, T1>(Handle, name);
     }
 
-    public ObserverBuilder Observer<T0, T1>()
+    public ObserverBuilder<T0, T1> Observer<T0, T1>()
     {
-        return new ObserverBuilder(Handle).With<T0>().With<T1>();
+        return new ObserverBuilder<T0, T1>(Handle);
     }
 
-    public ObserverBuilder Observer<T0, T1>(string name)
+    public ObserverBuilder<T0, T1> Observer<T0, T1>(string name)
     {
-        return new ObserverBuilder(Handle, name).With<T0>().With<T1>();
+        return new ObserverBuilder<T0, T1>(Handle, name);
     }
 }
 

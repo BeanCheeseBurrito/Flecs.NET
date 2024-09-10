@@ -35,55 +35,55 @@ public unsafe partial struct World
     {
         return AlertBuilder<T0, T1, T2, T3, T4, T5>(entity).Build();
     }
-
-    public QueryBuilder QueryBuilder<T0, T1, T2, T3, T4, T5>()
+    
+    public QueryBuilder<T0, T1, T2, T3, T4, T5> QueryBuilder<T0, T1, T2, T3, T4, T5>()
     {
-        return new QueryBuilder(Handle).With<T0>().With<T1>().With<T2>().With<T3>().With<T4>().With<T5>();
+        return new QueryBuilder<T0, T1, T2, T3, T4, T5>(Handle);
     }
 
-    public QueryBuilder QueryBuilder<T0, T1, T2, T3, T4, T5>(string name)
+    public QueryBuilder<T0, T1, T2, T3, T4, T5> QueryBuilder<T0, T1, T2, T3, T4, T5>(string name)
     {
-        return new QueryBuilder(Handle, name).With<T0>().With<T1>().With<T2>().With<T3>().With<T4>().With<T5>();
+        return new QueryBuilder<T0, T1, T2, T3, T4, T5>(Handle, name);
     }
 
-    public QueryBuilder QueryBuilder<T0, T1, T2, T3, T4, T5>(ulong entity)
+    public QueryBuilder<T0, T1, T2, T3, T4, T5> QueryBuilder<T0, T1, T2, T3, T4, T5>(ulong entity)
     {
-        return new QueryBuilder(Handle, entity).With<T0>().With<T1>().With<T2>().With<T3>().With<T4>().With<T5>();
+        return new QueryBuilder<T0, T1, T2, T3, T4, T5>(Handle, entity);
     }
 
-    public Query Query<T0, T1, T2, T3, T4, T5>()
+    public Query<T0, T1, T2, T3, T4, T5> Query<T0, T1, T2, T3, T4, T5>()
     {
-        return QueryBuilder<T0, T1, T2, T3, T4, T5>().Build();
+        return new QueryBuilder<T0, T1, T2, T3, T4, T5>(Handle).Build();
     }
 
-    public Query Query<T0, T1, T2, T3, T4, T5>(string name)
+    public Query<T0, T1, T2, T3, T4, T5> Query<T0, T1, T2, T3, T4, T5>(string name)
     {
-        return QueryBuilder<T0, T1, T2, T3, T4, T5>(name).Build();
+        return new QueryBuilder<T0, T1, T2, T3, T4, T5>(Handle, name).Build();
     }
 
-    public Query Query<T0, T1, T2, T3, T4, T5>(ulong entity)
+    public Query<T0, T1, T2, T3, T4, T5> Query<T0, T1, T2, T3, T4, T5>(ulong entity)
     {
-        return QueryBuilder<T0, T1, T2, T3, T4, T5>(entity).Build();
+        return new QueryBuilder<T0, T1, T2, T3, T4, T5>(Handle, entity).Build();
     }
 
-    public RoutineBuilder Routine<T0, T1, T2, T3, T4, T5>()
+    public RoutineBuilder<T0, T1, T2, T3, T4, T5> Routine<T0, T1, T2, T3, T4, T5>()
     {
-        return new RoutineBuilder(Handle).With<T0>().With<T1>().With<T2>().With<T3>().With<T4>().With<T5>();
+        return new RoutineBuilder<T0, T1, T2, T3, T4, T5>(Handle);
     }
 
-    public RoutineBuilder Routine<T0, T1, T2, T3, T4, T5>(string name)
+    public RoutineBuilder<T0, T1, T2, T3, T4, T5> Routine<T0, T1, T2, T3, T4, T5>(string name)
     {
-        return new RoutineBuilder(Handle, name).With<T0>().With<T1>().With<T2>().With<T3>().With<T4>().With<T5>();
+        return new RoutineBuilder<T0, T1, T2, T3, T4, T5>(Handle, name);
     }
 
-    public ObserverBuilder Observer<T0, T1, T2, T3, T4, T5>()
+    public ObserverBuilder<T0, T1, T2, T3, T4, T5> Observer<T0, T1, T2, T3, T4, T5>()
     {
-        return new ObserverBuilder(Handle).With<T0>().With<T1>().With<T2>().With<T3>().With<T4>().With<T5>();
+        return new ObserverBuilder<T0, T1, T2, T3, T4, T5>(Handle);
     }
 
-    public ObserverBuilder Observer<T0, T1, T2, T3, T4, T5>(string name)
+    public ObserverBuilder<T0, T1, T2, T3, T4, T5> Observer<T0, T1, T2, T3, T4, T5>(string name)
     {
-        return new ObserverBuilder(Handle, name).With<T0>().With<T1>().With<T2>().With<T3>().With<T4>().With<T5>();
+        return new ObserverBuilder<T0, T1, T2, T3, T4, T5>(Handle, name);
     }
 }
 
