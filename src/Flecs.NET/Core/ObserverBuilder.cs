@@ -296,7 +296,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
         return SetCallback((IntPtr)callback, Pointers.EachIterCallbackPointer).Build();
     }
 
-    private ref ObserverBuilder SetCallback<T>(T callback, IntPtr invoker) where T : Delegate
+    internal ref ObserverBuilder SetCallback<T>(T callback, IntPtr invoker) where T : Delegate
     {
         FreeCallback();
         IteratorContext context = default;
@@ -307,7 +307,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
         return ref this;
     }
 
-    private ref ObserverBuilder SetCallback(IntPtr callback, IntPtr invoker)
+    internal ref ObserverBuilder SetCallback(IntPtr callback, IntPtr invoker)
     {
         FreeCallback();
         IteratorContext context = default;
@@ -318,7 +318,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
         return ref this;
     }
 
-    private ref ObserverBuilder SetRun<T>(T callback, IntPtr invoker) where T : Delegate
+    internal ref ObserverBuilder SetRun<T>(T callback, IntPtr invoker) where T : Delegate
     {
         FreeRun();
         RunContext context = default;
@@ -329,7 +329,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
         return ref this;
     }
 
-    private ref ObserverBuilder SetRun(IntPtr callback, IntPtr invoker)
+    internal ref ObserverBuilder SetRun(IntPtr callback, IntPtr invoker)
     {
         FreeRun();
         RunContext context = default;
@@ -340,7 +340,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
         return ref this;
     }
 
-    private Observer Build()
+    internal Observer Build()
     {
         Desc.query = QueryBuilder.Desc;
         Desc.query.binding_ctx = Memory.Alloc(QueryBuilder.Context);

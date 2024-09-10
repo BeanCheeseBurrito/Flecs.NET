@@ -116,12 +116,12 @@ public unsafe partial struct RoutineBuilder : IDisposable, IEquatable<RoutineBui
     /// <summary>
     ///     Specify in which phase the system should run.
     /// </summary>
-    /// <param name="enumMember"></param>
-    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="value"></param>
+    /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public ref RoutineBuilder Kind<TEnum>(TEnum enumMember) where TEnum : Enum
+    public ref RoutineBuilder Kind<T>(T value) where T : Enum
     {
-        return ref Kind(Type<TEnum>.Id(World, enumMember));
+        return ref Kind(Type<T>.Id(World, value));
     }
 
     /// <summary>
@@ -394,7 +394,7 @@ public unsafe partial struct RoutineBuilder : IDisposable, IEquatable<RoutineBui
         return SetCallback((IntPtr)callback, Pointers.EachIterCallbackPointer).Build();
     }
 
-    private ref RoutineBuilder SetCallback<T>(T callback, IntPtr invoker) where T : Delegate
+    internal ref RoutineBuilder SetCallback<T>(T callback, IntPtr invoker) where T : Delegate
     {
         FreeCallback();
         IteratorContext context = default;
@@ -405,7 +405,7 @@ public unsafe partial struct RoutineBuilder : IDisposable, IEquatable<RoutineBui
         return ref this;
     }
 
-    private ref RoutineBuilder SetCallback(IntPtr callback, IntPtr invoker)
+    internal ref RoutineBuilder SetCallback(IntPtr callback, IntPtr invoker)
     {
         FreeCallback();
         IteratorContext context = default;
@@ -416,7 +416,7 @@ public unsafe partial struct RoutineBuilder : IDisposable, IEquatable<RoutineBui
         return ref this;
     }
 
-    private ref RoutineBuilder SetRun<T>(T callback, IntPtr invoker) where T : Delegate
+    internal ref RoutineBuilder SetRun<T>(T callback, IntPtr invoker) where T : Delegate
     {
         FreeRun();
         RunContext context = default;
@@ -427,7 +427,7 @@ public unsafe partial struct RoutineBuilder : IDisposable, IEquatable<RoutineBui
         return ref this;
     }
 
-    private ref RoutineBuilder SetRun(IntPtr callback, IntPtr invoker)
+    internal ref RoutineBuilder SetRun(IntPtr callback, IntPtr invoker)
     {
         FreeRun();
         RunContext context = default;
@@ -438,7 +438,7 @@ public unsafe partial struct RoutineBuilder : IDisposable, IEquatable<RoutineBui
         return ref this;
     }
 
-    private Routine Build()
+    internal Routine Build()
     {
         Desc.query = QueryBuilder.Desc;
         Desc.query.binding_ctx = Memory.Alloc(QueryBuilder.Context);
