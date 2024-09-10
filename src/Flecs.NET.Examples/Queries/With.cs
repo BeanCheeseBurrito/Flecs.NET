@@ -17,7 +17,9 @@ public static class Queries_With
         // result does not become part of the function signatures of each and iter.
         // This is useful for things like tags, which because they don't have a
         // value are less useful to pass to the Each/Iter functions as argument.
-        using Query q = world.Query<Position, Npc>();
+        using Query<Position> q = world.QueryBuilder<Position>()
+            .With<Npc>()
+            .Build();
 
         // Create a few test entities for the Position, Npc query
         world.Entity("e1")

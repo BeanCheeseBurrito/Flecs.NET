@@ -4,7 +4,7 @@ using Flecs.NET.Utilities;
 // Components
 file record struct Position(float X, float Y);
 
-public static unsafe class Queries_Sorting
+file static unsafe class Queries_Sorting
 {
     public static void Main()
     {
@@ -18,7 +18,7 @@ public static unsafe class Queries_Sorting
         world.Entity().Set(new Position(4, 0));
 
         // Create a sorted system
-        Routine sys = world.Routine<Position>()
+        Routine<Position> sys = world.Routine<Position>()
             .OrderBy<Position>(ComparePosition)
             .Each((ref Position p) =>
             {
@@ -26,7 +26,7 @@ public static unsafe class Queries_Sorting
             });
 
         // Create a sorted query
-        using Query q = world.QueryBuilder<Position>()
+        using Query<Position> q = world.QueryBuilder<Position>()
             .OrderBy<Position>(ComparePosition)
             .Build();
 
@@ -58,7 +58,7 @@ public static unsafe class Queries_Sorting
     }
 
     // Iterate query, printed values will be ordered
-    private static void PrintQuery(Query q)
+    private static void PrintQuery(Query<Position> q)
     {
         q.Each((ref Position p) =>
         {

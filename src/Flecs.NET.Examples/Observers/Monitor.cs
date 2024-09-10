@@ -22,7 +22,7 @@ public static class Observers_Monitor
         // Create observer for custom event
         world.Observer<Position, Velocity>()
             .Event(Ecs.Monitor)
-            .Each((Iter it, int i) =>
+            .Each((Iter it, int i, ref Position _, ref Velocity _) =>
             {
                 if (it.Event() == Ecs.OnAdd)
                     Console.WriteLine($" - Enter: {it.EventId()}: {it.Entity(i)}");

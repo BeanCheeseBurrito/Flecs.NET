@@ -41,12 +41,17 @@ public static class Queries_Hierarchy
 
         // Create a hierarchical query to compute the global position from the
         // local position and the parent position.
-        using Query q = world.QueryBuilder()
-            .With<Position, Local>()  // Self local position
-            .With<Position, Global>() // Self global position
-            .With<Position, Global>() // Parent global position
+        using Query<Position, Position, Position> q = world.QueryBuilder<Position, Position, Position>()
+            // Modify terms from template to make sure the query selects the
+            // local, world and parent position components.
+            .TermAt(0).Second<Local>()  // Self local position
+            .TermAt(1).Second<Global>() // Self global position
+            .TermAt(2).Second<Global>() // Parent global position
+
+            .TermAt(2)              // Extend the 2nd query argument to select it from the parent
                 .Parent().Cascade() // Get from the parent, in breadth-first order (cascade)
-                .Optional() // Make term component optional so we also match the root (sun)
+                .Optional()         // Make term component optional, so we also match the root (sun)
+
             .Build();
 
         q.Each((ref Position selfLocal, ref Position selfGlobal, ref Position parentGlobal) =>

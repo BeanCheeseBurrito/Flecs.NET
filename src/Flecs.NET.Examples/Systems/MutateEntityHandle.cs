@@ -53,7 +53,8 @@ public static class Systems_MutateEntityHandle
             });
 
         // Observer that triggers when entity is actually deleted
-        world.Observer<Tag>()
+        world.Observer()
+            .With<Tag>()
             .Event(Ecs.OnRemove)
             .Each((Entity e) =>
             {

@@ -17,7 +17,7 @@ public static class Systems_CustomRunner
     {
         using World world = World.Create();
 
-        Routine routine = world.Routine<Position, Velocity>()
+        Routine<Position, Velocity> routine = world.Routine<Position, Velocity>()
             // Forward each result from the run callback to the each callback.
             .Run((Iter it, Action<Iter> callback) =>
             {

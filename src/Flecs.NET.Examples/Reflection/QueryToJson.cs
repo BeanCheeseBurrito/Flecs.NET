@@ -29,7 +29,7 @@ public static class Reflection_QueryToJson
         world.Entity("D").Set(new Position(30, 40)).Set(new Velocity(4, 5)).Set(new Mass(20));
 
         // Query for components.
-        using Query query = world.Query<Position, Velocity>();
+        using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
         // Serialize query to JSON. Note that this works for any iterable object.
         Console.WriteLine(query.Iter().ToJson());

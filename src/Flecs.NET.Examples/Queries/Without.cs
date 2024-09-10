@@ -20,7 +20,7 @@ public static class Queries_Without
         //
         // The without method is short for:
         //   .With<Npc>().Not()
-        using Query q = world.QueryBuilder<Position>()
+        using Query<Position> q = world.QueryBuilder<Position>()
             .Without<Npc>()
             .Build();
 

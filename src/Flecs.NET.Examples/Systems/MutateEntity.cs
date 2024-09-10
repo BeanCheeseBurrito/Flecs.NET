@@ -43,7 +43,7 @@ public static class Systems_MutateEntity
         // Observer that triggers when entity is actually deleted
         world.Observer<Timeout>()
             .Event(Ecs.OnRemove)
-            .Each((Entity e) =>
+            .Each((Entity e, ref Timeout _) =>
             {
                 Console.WriteLine($"Expired: {e} actually deleted");
             });
