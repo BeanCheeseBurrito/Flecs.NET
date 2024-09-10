@@ -1,11 +1,110 @@
 using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Codegen.Helpers;
+using Microsoft.CodeAnalysis;
 
+[Generator]
 [SuppressMessage("ReSharper", "CheckNamespace")]
 [SuppressMessage("Design", "CA1050:Declare types in namespaces")]
-public static class QueryBuilder
+public class QueryBuilder : IIncrementalGenerator
 {
-    public static string GenerateExtensions(Type type)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
+    {
+        context.RegisterPostInitializationOutput((IncrementalGeneratorPostInitializationContext postContext) =>
+        {
+            for (int i = 0; i < Generator.GenericCount; i++)
+            {
+                Generator.AddSource(postContext, $"QueryBuilder/T{i + 1}.g.cs", GenerateQueryBuilder(i));
+                Generator.AddSource(postContext, $"QueryBuilder.QueryBuilder/T{i+ 1}.g.cs", GenerateExtensions(Type.QueryBuilder, i));
+            }
+        });
+    }
+
+    private static string GenerateQueryBuilder(int i)
+    {
+        return $$"""
+        #nullable enable
+        
+        using static Flecs.NET.Bindings.flecs;
+        
+        namespace Flecs.NET.Core;
+        
+        /// <summary>
+        ///     A type-safe wrapper around <see cref="QueryBuilder"/> that takes {{i + 1}} type arguments.
+        /// </summary>
+        /// {{Generator.XmlTypeParameters[i]}}
+        public unsafe partial struct {{Generator.GetTypeName(Type.QueryBuilder, i)}} : IQueryBuilder<{{Generator.GetTypeName(Type.QueryBuilder, i)}}, {{Generator.GetTypeName(Type.Query, i)}}>
+        {
+            private QueryBuilder _queryBuilder;
+        
+            ref QueryBuilder IQueryBuilderBase.QueryBuilder => ref _queryBuilder;
+            
+            /// <inheritdoc cref="QueryBuilder.World"/>
+            public ref ecs_world_t* World => ref _queryBuilder.World;
+            
+            /// <inheritdoc cref="QueryBuilder.Desc"/>
+            public ref ecs_query_desc_t Desc => ref _queryBuilder.Desc;
+        
+            /// <inheritdoc cref="QueryBuilder(ecs_world_t*)"/>
+            public QueryBuilder(ecs_world_t* world)
+            {
+                {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                _queryBuilder = new QueryBuilder(world){{Generator.WithChain[i]}};
+            }
+        
+            /// <inheritdoc cref="QueryBuilder(ecs_world_t*, ulong)"/>
+            public QueryBuilder(ecs_world_t* world, ulong entity)
+            {
+                {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                _queryBuilder = new QueryBuilder(world, entity){{Generator.WithChain[i]}};
+            }
+        
+            /// <inheritdoc cref="QueryBuilder(ecs_world_t*, string)"/>
+            public QueryBuilder(ecs_world_t* world, string name)
+            {
+                {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                _queryBuilder = new QueryBuilder(world, name){{Generator.WithChain[i]}};
+            }
+        
+            /// <inheritdoc cref="QueryBuilder.Build()"/>
+            public {{Generator.GetTypeName(Type.Query, i)}} Build()
+            {
+                return new {{Generator.GetTypeName(Type.Query, i)}}(_queryBuilder.Build());
+            }
+            
+            /// <inheritdoc cref="QueryBuilder.Equals(QueryBuilder)"/>
+            public bool Equals({{Generator.GetTypeName(Type.QueryBuilder, i)}} other)
+            {
+                return _queryBuilder == other._queryBuilder;
+            }
+        
+            /// <inheritdoc cref="QueryBuilder.Equals(object)"/>
+            public override bool Equals(object? obj)
+            {
+                return obj is {{Generator.GetTypeName(Type.QueryBuilder, i)}}  other && Equals(other);
+            }
+        
+            /// <inheritdoc cref="QueryBuilder.GetHashCode()"/>
+            public override int GetHashCode()
+            {
+                return _queryBuilder.GetHashCode();
+            }
+        
+            /// <inheritdoc cref="QueryBuilder.op_Equality"/>
+            public static bool operator ==({{Generator.GetTypeName(Type.QueryBuilder, i)}} left, {{Generator.GetTypeName(Type.QueryBuilder, i)}} right)
+            {
+                return left.Equals(right);
+            }
+        
+            /// <inheritdoc cref="QueryBuilder.op_Inequality"/>
+            public static bool operator !=({{Generator.GetTypeName(Type.QueryBuilder, i)}} left, {{Generator.GetTypeName(Type.QueryBuilder, i)}} right)
+            {
+                return !(left == right);
+            }
+        }
+        """;
+    }
+
+    public static string GenerateExtensions(Type type, int i = -1)
     {
         return $$"""
         using System;
@@ -13,1013 +112,1013 @@ public static class QueryBuilder
         
         namespace Flecs.NET.Core;
         
-        public unsafe partial struct {{type}}
+        public unsafe partial struct {{Generator.GetTypeName(type, i)}}
         {
-            /// <inheritdoc cref="QueryBuilder.Self()"/>
-            public ref {{type}} Self()
+            /// <inheritdoc cref="Core.QueryBuilder.Self()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Self()
             {
-                QueryBuilder.Self();
+                Ecs.GetQueryBuilder(ref this).Self();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Id(ulong)"/>
-            public ref {{type}} Id(ulong id)
+            /// <inheritdoc cref="Core.QueryBuilder.Id(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Id(ulong id)
             {
-                QueryBuilder.Id(id);
+                Ecs.GetQueryBuilder(ref this).Id(id);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Entity(ulong)"/>
-            public ref {{type}} Entity(ulong entity)
+            /// <inheritdoc cref="Core.QueryBuilder.Entity(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Entity(ulong entity)
             {
-                QueryBuilder.Entity(entity);
+                Ecs.GetQueryBuilder(ref this).Entity(entity);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Name(string)"/>
-            public ref {{type}} Name(string name)
+            /// <inheritdoc cref="Core.QueryBuilder.Name(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Name(string name)
             {
-                QueryBuilder.Name(name);
+                Ecs.GetQueryBuilder(ref this).Name(name);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Var(string)"/>
-            public ref {{type}} Var(string name)
+            /// <inheritdoc cref="Core.QueryBuilder.Var(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Var(string name)
             {
-                QueryBuilder.Var(name);
+                Ecs.GetQueryBuilder(ref this).Var(name);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Term(ulong)"/>
-            public ref {{type}} Term(ulong id)
+            /// <inheritdoc cref="Core.QueryBuilder.Term(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Term(ulong id)
             {
-                QueryBuilder.Term(id);
+                Ecs.GetQueryBuilder(ref this).Term(id);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Src()"/>
-            public ref {{type}} Src()
+            /// <inheritdoc cref="Core.QueryBuilder.Src()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Src()
             {
-                QueryBuilder.Src();
+                Ecs.GetQueryBuilder(ref this).Src();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.First()"/>
-            public ref {{type}} First()
+            /// <inheritdoc cref="Core.QueryBuilder.First()"/>
+            public ref {{Generator.GetTypeName(type, i)}} First()
             {
-                QueryBuilder.First();
+                Ecs.GetQueryBuilder(ref this).First();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Second()"/>
-            public ref {{type}} Second()
+            /// <inheritdoc cref="Core.QueryBuilder.Second()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Second()
             {
-                QueryBuilder.Second();
+                Ecs.GetQueryBuilder(ref this).Second();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Src(ulong)"/>
-            public ref {{type}} Src(ulong srcId)
+            /// <inheritdoc cref="Core.QueryBuilder.Src(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Src(ulong srcId)
             {
-                QueryBuilder.Src(srcId);
+                Ecs.GetQueryBuilder(ref this).Src(srcId);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Src{T}()"/>
-            public ref {{type}} Src<T>()
+            /// <inheritdoc cref="Core.QueryBuilder.Src{T}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Src<T>()
             {
-                QueryBuilder.Src<T>();
+                Ecs.GetQueryBuilder(ref this).Src<T>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Src{T}(T)"/>
-            public ref {{type}} Src<T>(T value) where T : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Src{T}(T)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Src<T>(T value) where T : Enum
             {
-                QueryBuilder.Src(value);
+                Ecs.GetQueryBuilder(ref this).Src(value);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Src(string)"/>
-            public ref {{type}} Src(string name)
+            /// <inheritdoc cref="Core.QueryBuilder.Src(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Src(string name)
             {
-                QueryBuilder.Src(name);
+                Ecs.GetQueryBuilder(ref this).Src(name);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.First(ulong)"/>
-            public ref {{type}} First(ulong firstId)
+            /// <inheritdoc cref="Core.QueryBuilder.First(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} First(ulong firstId)
             {
-                QueryBuilder.First(firstId);
+                Ecs.GetQueryBuilder(ref this).First(firstId);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.First{T}()"/>
-            public ref {{type}} First<T>()
+            /// <inheritdoc cref="Core.QueryBuilder.First{T}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} First<T>()
             {
-                QueryBuilder.First<T>();
+                Ecs.GetQueryBuilder(ref this).First<T>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.First{T}(T)"/>
-            public ref {{type}} First<T>(T value) where T : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.First{T}(T)"/>
+            public ref {{Generator.GetTypeName(type, i)}} First<T>(T value) where T : Enum
             {
-                QueryBuilder.First(value);
+                Ecs.GetQueryBuilder(ref this).First(value);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.First(string)"/>
-            public ref {{type}} First(string name)
+            /// <inheritdoc cref="Core.QueryBuilder.First(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} First(string name)
             {
-                QueryBuilder.First(name);
+                Ecs.GetQueryBuilder(ref this).First(name);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Second(ulong)"/>
-            public ref {{type}} Second(ulong secondId)
+            /// <inheritdoc cref="Core.QueryBuilder.Second(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Second(ulong secondId)
             {
-                QueryBuilder.Second(secondId);
+                Ecs.GetQueryBuilder(ref this).Second(secondId);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Second{T}()"/>
-            public ref {{type}} Second<T>()
+            /// <inheritdoc cref="Core.QueryBuilder.Second{T}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Second<T>()
             {
-                QueryBuilder.Second<T>();
+                Ecs.GetQueryBuilder(ref this).Second<T>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Second{T}(T)"/>
-            public ref {{type}} Second<T>(T value) where T : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Second{T}(T)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Second<T>(T value) where T : Enum
             {
-                QueryBuilder.Second(value);
+                Ecs.GetQueryBuilder(ref this).Second(value);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Second(string)"/>
-            public ref {{type}} Second(string secondName)
+            /// <inheritdoc cref="Core.QueryBuilder.Second(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Second(string secondName)
             {
-                QueryBuilder.Second(secondName);
+                Ecs.GetQueryBuilder(ref this).Second(secondName);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Up(ulong)"/>
-            public ref {{type}} Up(ulong traverse = 0)
+            /// <inheritdoc cref="Core.QueryBuilder.Up(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Up(ulong traverse = 0)
             {
-                QueryBuilder.Up(traverse);
+                Ecs.GetQueryBuilder(ref this).Up(traverse);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Up{T}()"/>
-            public ref {{type}} Up<T>()
+            /// <inheritdoc cref="Core.QueryBuilder.Up{T}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Up<T>()
             {
-                QueryBuilder.Up<T>();
+                Ecs.GetQueryBuilder(ref this).Up<T>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Up{T}(T)"/>
-            public ref {{type}} Up<T>(T value) where T : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Up{T}(T)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Up<T>(T value) where T : Enum
             {
-                QueryBuilder.Up(value);
+                Ecs.GetQueryBuilder(ref this).Up(value);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Cascade(ulong)"/>
-            public ref {{type}} Cascade(ulong traverse = 0)
+            /// <inheritdoc cref="Core.QueryBuilder.Cascade(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Cascade(ulong traverse = 0)
             {
-                QueryBuilder.Cascade(traverse);
+                Ecs.GetQueryBuilder(ref this).Cascade(traverse);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Cascade{T}()"/>
-            public ref {{type}} Cascade<T>()
+            /// <inheritdoc cref="Core.QueryBuilder.Cascade{T}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Cascade<T>()
             {
-                QueryBuilder.Cascade<T>();
+                Ecs.GetQueryBuilder(ref this).Cascade<T>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Cascade{T}(T)"/>
-            public ref {{type}} Cascade<T>(T value) where T : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Cascade{T}(T)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Cascade<T>(T value) where T : Enum
             {
-                QueryBuilder.Cascade(value);
+                Ecs.GetQueryBuilder(ref this).Cascade(value);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Descend()"/>
-            public ref {{type}} Descend()
+            /// <inheritdoc cref="Core.QueryBuilder.Descend()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Descend()
             {
-                QueryBuilder.Descend();
+                Ecs.GetQueryBuilder(ref this).Descend();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Parent()"/>
-            public ref {{type}} Parent()
+            /// <inheritdoc cref="Core.QueryBuilder.Parent()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Parent()
             {
-                QueryBuilder.Parent();
+                Ecs.GetQueryBuilder(ref this).Parent();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Trav(ulong, uint)"/>
-            public ref {{type}} Trav(ulong traverse, uint flags = 0)
+            /// <inheritdoc cref="Core.QueryBuilder.Trav(ulong, uint)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Trav(ulong traverse, uint flags = 0)
             {
-                QueryBuilder.Trav(traverse, flags);
+                Ecs.GetQueryBuilder(ref this).Trav(traverse, flags);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Trav{T}(uint)"/>
-            public ref {{type}} Trav<T>(uint flags = 0)
+            /// <inheritdoc cref="Core.QueryBuilder.Trav{T}(uint)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Trav<T>(uint flags = 0)
             {
-                QueryBuilder.Trav<T>(flags);
+                Ecs.GetQueryBuilder(ref this).Trav<T>(flags);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Trav{T}(T, uint)"/>
-            public ref {{type}} Trav<T>(T value, uint flags = 0) where T : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Trav{T}(T, uint)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Trav<T>(T value, uint flags = 0) where T : Enum
             {
-                QueryBuilder.Trav(value, flags);
+                Ecs.GetQueryBuilder(ref this).Trav(value, flags);
                 return ref this;
             }
     
             /// <inheritdoc cref="Core.QueryBuilder.Flags"/>
-            public ref {{type}} Flags(ulong flags)
+            public ref {{Generator.GetTypeName(type, i)}} Flags(ulong flags)
             {
-                QueryBuilder.Flags(flags);
+                Ecs.GetQueryBuilder(ref this).Flags(flags);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.InOut(ecs_inout_kind_t)"/>
-            public ref {{type}} InOut(ecs_inout_kind_t inOut)
+            /// <inheritdoc cref="Core.QueryBuilder.InOut(ecs_inout_kind_t)"/>
+            public ref {{Generator.GetTypeName(type, i)}} InOut(ecs_inout_kind_t inOut)
             {
-                QueryBuilder.InOut(inOut);
+                Ecs.GetQueryBuilder(ref this).InOut(inOut);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.InOutStage(ecs_inout_kind_t)"/>
-            public ref {{type}} InOutStage(ecs_inout_kind_t inOut)
+            /// <inheritdoc cref="Core.QueryBuilder.InOutStage(ecs_inout_kind_t)"/>
+            public ref {{Generator.GetTypeName(type, i)}} InOutStage(ecs_inout_kind_t inOut)
             {
-                QueryBuilder.InOutStage(inOut);
+                Ecs.GetQueryBuilder(ref this).InOutStage(inOut);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write()"/>
-            public ref {{type}} Write()
+            /// <inheritdoc cref="Core.QueryBuilder.Write()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write()
             {
-                QueryBuilder.Write();
+                Ecs.GetQueryBuilder(ref this).Write();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read()"/>
-            public ref {{type}} Read()
+            /// <inheritdoc cref="Core.QueryBuilder.Read()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read()
             {
-                QueryBuilder.Read();
+                Ecs.GetQueryBuilder(ref this).Read();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.ReadWrite()"/>
-            public ref {{type}} ReadWrite()
+            /// <inheritdoc cref="Core.QueryBuilder.ReadWrite()"/>
+            public ref {{Generator.GetTypeName(type, i)}} ReadWrite()
             {
-                QueryBuilder.ReadWrite();
+                Ecs.GetQueryBuilder(ref this).ReadWrite();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.In()"/>
-            public ref {{type}} In()
+            /// <inheritdoc cref="Core.QueryBuilder.In()"/>
+            public ref {{Generator.GetTypeName(type, i)}} In()
             {
-                QueryBuilder.In();
+                Ecs.GetQueryBuilder(ref this).In();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Out()"/>
-            public ref {{type}} Out()
+            /// <inheritdoc cref="Core.QueryBuilder.Out()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Out()
             {
-                QueryBuilder.Out();
+                Ecs.GetQueryBuilder(ref this).Out();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.InOut()"/>
-            public ref {{type}} InOut()
+            /// <inheritdoc cref="Core.QueryBuilder.InOut()"/>
+            public ref {{Generator.GetTypeName(type, i)}} InOut()
             {
-                QueryBuilder.InOut();
+                Ecs.GetQueryBuilder(ref this).InOut();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.InOutNone()"/>
-            public ref {{type}} InOutNone()
+            /// <inheritdoc cref="Core.QueryBuilder.InOutNone()"/>
+            public ref {{Generator.GetTypeName(type, i)}} InOutNone()
             {
-                QueryBuilder.InOutNone();
+                Ecs.GetQueryBuilder(ref this).InOutNone();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Oper(ecs_oper_kind_t)"/>
-            public ref {{type}} Oper(ecs_oper_kind_t oper)
+            /// <inheritdoc cref="Core.QueryBuilder.Oper(ecs_oper_kind_t)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Oper(ecs_oper_kind_t oper)
             {
-                QueryBuilder.Oper(oper);
+                Ecs.GetQueryBuilder(ref this).Oper(oper);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.And()"/>
-            public ref {{type}} And()
+            /// <inheritdoc cref="Core.QueryBuilder.And()"/>
+            public ref {{Generator.GetTypeName(type, i)}} And()
             {
-                QueryBuilder.And();
+                Ecs.GetQueryBuilder(ref this).And();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Or()"/>
-            public ref {{type}} Or()
+            /// <inheritdoc cref="Core.QueryBuilder.Or()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Or()
             {
-                QueryBuilder.Or();
+                Ecs.GetQueryBuilder(ref this).Or();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Not()"/>
-            public ref {{type}} Not()
+            /// <inheritdoc cref="Core.QueryBuilder.Not()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Not()
             {
-                QueryBuilder.Not();
+                Ecs.GetQueryBuilder(ref this).Not();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Optional()"/>
-            public ref {{type}} Optional()
+            /// <inheritdoc cref="Core.QueryBuilder.Optional()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Optional()
             {
-                QueryBuilder.Optional();
+                Ecs.GetQueryBuilder(ref this).Optional();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.AndFrom()"/>
-            public ref {{type}} AndFrom()
+            /// <inheritdoc cref="Core.QueryBuilder.AndFrom()"/>
+            public ref {{Generator.GetTypeName(type, i)}} AndFrom()
             {
-                QueryBuilder.AndFrom();
+                Ecs.GetQueryBuilder(ref this).AndFrom();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.OrFrom()"/>
-            public ref {{type}} OrFrom()
+            /// <inheritdoc cref="Core.QueryBuilder.OrFrom()"/>
+            public ref {{Generator.GetTypeName(type, i)}} OrFrom()
             {
-                QueryBuilder.OrFrom();
+                Ecs.GetQueryBuilder(ref this).OrFrom();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.NotFrom()"/>
-            public ref {{type}} NotFrom()
+            /// <inheritdoc cref="Core.QueryBuilder.NotFrom()"/>
+            public ref {{Generator.GetTypeName(type, i)}} NotFrom()
             {
-                QueryBuilder.NotFrom();
+                Ecs.GetQueryBuilder(ref this).NotFrom();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Singleton()"/>
-            public ref {{type}} Singleton()
+            /// <inheritdoc cref="Core.QueryBuilder.Singleton()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Singleton()
             {
-                QueryBuilder.Singleton();
+                Ecs.GetQueryBuilder(ref this).Singleton();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Filter()"/>
-            public ref {{type}} Filter()
+            /// <inheritdoc cref="Core.QueryBuilder.Filter()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Filter()
             {
-                QueryBuilder.Filter();
+                Ecs.GetQueryBuilder(ref this).Filter();
                 return ref this;
             }
     
             /// <inheritdoc cref="Core.QueryBuilder.QueryFlags"/>
-            public ref {{type}} QueryFlags(uint flags)
+            public ref {{Generator.GetTypeName(type, i)}} QueryFlags(uint flags)
             {
-                QueryBuilder.QueryFlags(flags);
+                Ecs.GetQueryBuilder(ref this).QueryFlags(flags);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.CacheKind(ecs_query_cache_kind_t)"/>
-            public ref {{type}} CacheKind(ecs_query_cache_kind_t kind)
+            /// <inheritdoc cref="Core.QueryBuilder.CacheKind(ecs_query_cache_kind_t)"/>
+            public ref {{Generator.GetTypeName(type, i)}} CacheKind(ecs_query_cache_kind_t kind)
             {
-                QueryBuilder.CacheKind(kind);
+                Ecs.GetQueryBuilder(ref this).CacheKind(kind);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Cached()"/>
-            public ref {{type}} Cached()
+            /// <inheritdoc cref="Core.QueryBuilder.Cached()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Cached()
             {
-                QueryBuilder.Cached();
+                Ecs.GetQueryBuilder(ref this).Cached();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Expr(string)"/>
-            public ref {{type}} Expr(string expr)
+            /// <inheritdoc cref="Core.QueryBuilder.Expr(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Expr(string expr)
             {
-                QueryBuilder.Expr(expr);
+                Ecs.GetQueryBuilder(ref this).Expr(expr);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With(Core.Term)"/>
-            public ref {{type}} With(Term term)
+            /// <inheritdoc cref="Core.QueryBuilder.With(Core.Term)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With(Term term)
             {
-                QueryBuilder.With(term);
+                Ecs.GetQueryBuilder(ref this).With(term);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With(ulong)"/>
-            public ref {{type}} With(ulong id)
+            /// <inheritdoc cref="Core.QueryBuilder.With(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With(ulong id)
             {
-                QueryBuilder.With(id);
+                Ecs.GetQueryBuilder(ref this).With(id);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With(string)"/>
-            public ref {{type}} With(string name)
+            /// <inheritdoc cref="Core.QueryBuilder.With(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With(string name)
             {
-                QueryBuilder.With(name);
+                Ecs.GetQueryBuilder(ref this).With(name);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With(ulong, ulong)"/>
-            public ref {{type}} With(ulong first, ulong second)
+            /// <inheritdoc cref="Core.QueryBuilder.With(ulong, ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With(ulong first, ulong second)
             {
-                QueryBuilder.With(first, second);
+                Ecs.GetQueryBuilder(ref this).With(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With(ulong, string)"/>
-            public ref {{type}} With(ulong first, string second)
+            /// <inheritdoc cref="Core.QueryBuilder.With(ulong, string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With(ulong first, string second)
             {
-                QueryBuilder.With(first, second);
+                Ecs.GetQueryBuilder(ref this).With(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With(string, ulong)"/>
-            public ref {{type}} With(string first, ulong second)
+            /// <inheritdoc cref="Core.QueryBuilder.With(string, ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With(string first, ulong second)
             {
-                QueryBuilder.With(first, second);
+                Ecs.GetQueryBuilder(ref this).With(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With(string, string)"/>
-            public ref {{type}} With(string first, string second)
+            /// <inheritdoc cref="Core.QueryBuilder.With(string, string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With(string first, string second)
             {
-                QueryBuilder.With(first, second);
+                Ecs.GetQueryBuilder(ref this).With(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With{T}()"/>
-            public ref {{type}} With<T>()
+            /// <inheritdoc cref="Core.QueryBuilder.With{T}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} With<T>()
             {
-                QueryBuilder.With<T>();
+                Ecs.GetQueryBuilder(ref this).With<T>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With{T}(T)"/>
-            public ref {{type}} With<T>(T value) where T : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.With{T}(T)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With<T>(T value) where T : Enum
             {
-                QueryBuilder.With(value);
+                Ecs.GetQueryBuilder(ref this).With(value);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With{T1}(ulong)"/>
-            public ref {{type}} With<TFirst>(ulong second)
+            /// <inheritdoc cref="Core.QueryBuilder.With{T1}(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With<TFirst>(ulong second)
             {
-                QueryBuilder.With<TFirst>(second);
+                Ecs.GetQueryBuilder(ref this).With<TFirst>(second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With{T1}(string)"/>
-            public ref {{type}} With<TFirst>(string second)
+            /// <inheritdoc cref="Core.QueryBuilder.With{T1}(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With<TFirst>(string second)
             {
-                QueryBuilder.With<TFirst>(second);
+                Ecs.GetQueryBuilder(ref this).With<TFirst>(second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With{T1, T2}()"/>
-            public ref {{type}} With<TFirst, TSecond>()
+            /// <inheritdoc cref="Core.QueryBuilder.With{T1, T2}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} With<TFirst, TSecond>()
             {
-                QueryBuilder.With<TFirst, TSecond>();
+                Ecs.GetQueryBuilder(ref this).With<TFirst, TSecond>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With{T1, T2}(T2)"/>
-            public ref {{type}} With<TFirst, TSecond>(TSecond second) where TSecond : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.With{T1, T2}(T2)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With<TFirst, TSecond>(TSecond second) where TSecond : Enum
             {
-                QueryBuilder.With<TFirst, TSecond>(second);
+                Ecs.GetQueryBuilder(ref this).With<TFirst, TSecond>(second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With{T1, T2}(T1)"/>
-            public ref {{type}} With<TFirst, TSecond>(TFirst first) where TFirst : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.With{T1, T2}(T1)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With<TFirst, TSecond>(TFirst first) where TFirst : Enum
             {
-                QueryBuilder.With<TFirst, TSecond>(first);
+                Ecs.GetQueryBuilder(ref this).With<TFirst, TSecond>(first);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With{T1}(T1, string)"/>
-            public ref {{type}} With<TFirst>(TFirst first, string second) where TFirst : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.With{T1}(T1, string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With<TFirst>(TFirst first, string second) where TFirst : Enum
             {
-                QueryBuilder.With(first, second);
+                Ecs.GetQueryBuilder(ref this).With(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.With{T2}(string, T2)"/>
-            public ref {{type}} With<TSecond>(string first, TSecond second) where TSecond : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.With{T2}(string, T2)"/>
+            public ref {{Generator.GetTypeName(type, i)}} With<TSecond>(string first, TSecond second) where TSecond : Enum
             {
-                QueryBuilder.With(first, second);
+                Ecs.GetQueryBuilder(ref this).With(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.WithSecond{T2}(ulong)"/>
-            public ref {{type}} WithSecond<TSecond>(ulong first)
+            /// <inheritdoc cref="Core.QueryBuilder.WithSecond{T2}(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} WithSecond<TSecond>(ulong first)
             {
-                QueryBuilder.WithSecond<TSecond>(first);
+                Ecs.GetQueryBuilder(ref this).WithSecond<TSecond>(first);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.WithSecond{T2}(string)"/>
-            public ref {{type}} WithSecond<TSecond>(string first)
+            /// <inheritdoc cref="Core.QueryBuilder.WithSecond{T2}(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} WithSecond<TSecond>(string first)
             {
-                QueryBuilder.WithSecond<TSecond>(first);
+                Ecs.GetQueryBuilder(ref this).WithSecond<TSecond>(first);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without(Core.Term)"/>
-            public ref {{type}} Without(Term term)
+            /// <inheritdoc cref="Core.QueryBuilder.Without(Core.Term)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without(Term term)
             {
-                QueryBuilder.Without(term);
+                Ecs.GetQueryBuilder(ref this).Without(term);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without(ulong)"/>
-            public ref {{type}} Without(ulong id)
+            /// <inheritdoc cref="Core.QueryBuilder.Without(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without(ulong id)
             {
-                QueryBuilder.Without(id);
+                Ecs.GetQueryBuilder(ref this).Without(id);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without(string)"/>
-            public ref {{type}} Without(string name)
+            /// <inheritdoc cref="Core.QueryBuilder.Without(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without(string name)
             {
-                QueryBuilder.Without(name);
+                Ecs.GetQueryBuilder(ref this).Without(name);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without(ulong, ulong)"/>
-            public ref {{type}} Without(ulong first, ulong second)
+            /// <inheritdoc cref="Core.QueryBuilder.Without(ulong, ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without(ulong first, ulong second)
             {
-                QueryBuilder.Without(first, second);
+                Ecs.GetQueryBuilder(ref this).Without(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without(ulong, string)"/>
-            public ref {{type}} Without(ulong first, string second)
+            /// <inheritdoc cref="Core.QueryBuilder.Without(ulong, string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without(ulong first, string second)
             {
-                QueryBuilder.Without(first, second);
+                Ecs.GetQueryBuilder(ref this).Without(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without(string, ulong)"/>
-            public ref {{type}} Without(string first, ulong second)
+            /// <inheritdoc cref="Core.QueryBuilder.Without(string, ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without(string first, ulong second)
             {
-                QueryBuilder.Without(first, second);
+                Ecs.GetQueryBuilder(ref this).Without(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without(string, string)"/>
-            public ref {{type}} Without(string first, string second)
+            /// <inheritdoc cref="Core.QueryBuilder.Without(string, string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without(string first, string second)
             {
-                QueryBuilder.Without(first, second);
+                Ecs.GetQueryBuilder(ref this).Without(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without{T}()"/>
-            public ref {{type}} Without<T>()
+            /// <inheritdoc cref="Core.QueryBuilder.Without{T}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without<T>()
             {
-                QueryBuilder.Without<T>();
+                Ecs.GetQueryBuilder(ref this).Without<T>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without{T}(T)"/>
-            public ref {{type}} Without<T>(T value) where T : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Without{T}(T)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without<T>(T value) where T : Enum
             {
-                QueryBuilder.Without(value);
+                Ecs.GetQueryBuilder(ref this).Without(value);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without{T1}(ulong)"/>
-            public ref {{type}} Without<TFirst>(ulong second)
+            /// <inheritdoc cref="Core.QueryBuilder.Without{T1}(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without<TFirst>(ulong second)
             {
-                QueryBuilder.Without<TFirst>(second);
+                Ecs.GetQueryBuilder(ref this).Without<TFirst>(second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without{T1}(string)"/>
-            public ref {{type}} Without<TFirst>(string second)
+            /// <inheritdoc cref="Core.QueryBuilder.Without{T1}(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without<TFirst>(string second)
             {
-                QueryBuilder.Without<TFirst>(second);
+                Ecs.GetQueryBuilder(ref this).Without<TFirst>(second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without{T1, T2}()"/>
-            public ref {{type}} Without<TFirst, TSecond>()
+            /// <inheritdoc cref="Core.QueryBuilder.Without{T1, T2}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without<TFirst, TSecond>()
             {
-                QueryBuilder.Without<TFirst, TSecond>();
+                Ecs.GetQueryBuilder(ref this).Without<TFirst, TSecond>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without{T1, T2}(T2)"/>
-            public ref {{type}} Without<TFirst, TSecond>(TSecond second) where TSecond : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Without{T1, T2}(T2)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without<TFirst, TSecond>(TSecond second) where TSecond : Enum
             {
-                QueryBuilder.Without<TFirst, TSecond>(second);
+                Ecs.GetQueryBuilder(ref this).Without<TFirst, TSecond>(second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without{T1, T2}(T1)"/>
-            public ref {{type}} Without<TFirst, TSecond>(TFirst first) where TFirst : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Without{T1, T2}(T1)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without<TFirst, TSecond>(TFirst first) where TFirst : Enum
             {
-                QueryBuilder.Without<TFirst, TSecond>(first);
+                Ecs.GetQueryBuilder(ref this).Without<TFirst, TSecond>(first);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without{T1}(T1, string)"/>
-            public ref {{type}} Without<TFirst>(TFirst first, string second) where TFirst : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Without{T1}(T1, string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without<TFirst>(TFirst first, string second) where TFirst : Enum
             {
-                QueryBuilder.Without(first, second);
+                Ecs.GetQueryBuilder(ref this).Without(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Without{T2}(string, T2)"/>
-            public ref {{type}} Without<TSecond>(string first, TSecond second) where TSecond : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Without{T2}(string, T2)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Without<TSecond>(string first, TSecond second) where TSecond : Enum
             {
-                QueryBuilder.Without(first, second);
+                Ecs.GetQueryBuilder(ref this).Without(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.WithoutSecond{T2}(ulong)"/>
-            public ref {{type}} WithoutSecond<TSecond>(ulong first)
+            /// <inheritdoc cref="Core.QueryBuilder.WithoutSecond{T2}(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} WithoutSecond<TSecond>(ulong first)
             {
-                QueryBuilder.WithoutSecond<TSecond>(first);
+                Ecs.GetQueryBuilder(ref this).WithoutSecond<TSecond>(first);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.WithoutSecond{T2}(string)"/>
-            public ref {{type}} WithoutSecond<TSecond>(string first)
+            /// <inheritdoc cref="Core.QueryBuilder.WithoutSecond{T2}(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} WithoutSecond<TSecond>(string first)
             {
-                QueryBuilder.WithoutSecond<TSecond>(first);
+                Ecs.GetQueryBuilder(ref this).WithoutSecond<TSecond>(first);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write(Core.Term)"/>
-            public ref {{type}} Write(Term term)
+            /// <inheritdoc cref="Core.QueryBuilder.Write(Core.Term)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write(Term term)
             {
-                QueryBuilder.Write(term);
+                Ecs.GetQueryBuilder(ref this).Write(term);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write(ulong)"/>
-            public ref {{type}} Write(ulong id)
+            /// <inheritdoc cref="Core.QueryBuilder.Write(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write(ulong id)
             {
-                QueryBuilder.Write(id);
+                Ecs.GetQueryBuilder(ref this).Write(id);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write(string)"/>
-            public ref {{type}} Write(string name)
+            /// <inheritdoc cref="Core.QueryBuilder.Write(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write(string name)
             {
-                QueryBuilder.Write(name);
+                Ecs.GetQueryBuilder(ref this).Write(name);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write(ulong, ulong)"/>
-            public ref {{type}} Write(ulong first, ulong second)
+            /// <inheritdoc cref="Core.QueryBuilder.Write(ulong, ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write(ulong first, ulong second)
             {
-                QueryBuilder.Write(first, second);
+                Ecs.GetQueryBuilder(ref this).Write(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write(ulong, string)"/>
-            public ref {{type}} Write(ulong first, string second)
+            /// <inheritdoc cref="Core.QueryBuilder.Write(ulong, string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write(ulong first, string second)
             {
-                QueryBuilder.Write(first, second);
+                Ecs.GetQueryBuilder(ref this).Write(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write(string, ulong)"/>
-            public ref {{type}} Write(string first, ulong second)
+            /// <inheritdoc cref="Core.QueryBuilder.Write(string, ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write(string first, ulong second)
             {
-                QueryBuilder.Write(first, second);
+                Ecs.GetQueryBuilder(ref this).Write(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write(string, string)"/>
-            public ref {{type}} Write(string first, string second)
+            /// <inheritdoc cref="Core.QueryBuilder.Write(string, string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write(string first, string second)
             {
-                QueryBuilder.Write(first, second);
+                Ecs.GetQueryBuilder(ref this).Write(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write{T}()"/>
-            public ref {{type}} Write<T>()
+            /// <inheritdoc cref="Core.QueryBuilder.Write{T}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write<T>()
             {
-                QueryBuilder.Write<T>();
+                Ecs.GetQueryBuilder(ref this).Write<T>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write{T}(T)"/>
-            public ref {{type}} Write<T>(T value) where T : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Write{T}(T)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write<T>(T value) where T : Enum
             {
-                QueryBuilder.Write(value);
+                Ecs.GetQueryBuilder(ref this).Write(value);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write{T1}(ulong)"/>
-            public ref {{type}} Write<TFirst>(ulong second)
+            /// <inheritdoc cref="Core.QueryBuilder.Write{T1}(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write<TFirst>(ulong second)
             {
-                QueryBuilder.Write<TFirst>(second);
+                Ecs.GetQueryBuilder(ref this).Write<TFirst>(second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write{T1}(string)"/>
-            public ref {{type}} Write<TFirst>(string second)
+            /// <inheritdoc cref="Core.QueryBuilder.Write{T1}(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write<TFirst>(string second)
             {
-                QueryBuilder.Write<TFirst>(second);
+                Ecs.GetQueryBuilder(ref this).Write<TFirst>(second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write{T1, T2}()"/>
-            public ref {{type}} Write<TFirst, TSecond>()
+            /// <inheritdoc cref="Core.QueryBuilder.Write{T1, T2}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write<TFirst, TSecond>()
             {
-                QueryBuilder.Write<TFirst, TSecond>();
+                Ecs.GetQueryBuilder(ref this).Write<TFirst, TSecond>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write{T1, T2}(T2)"/>
-            public ref {{type}} Write<TFirst, TSecond>(TSecond second) where TSecond : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Write{T1, T2}(T2)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write<TFirst, TSecond>(TSecond second) where TSecond : Enum
             {
-                QueryBuilder.Write<TFirst, TSecond>(second);
+                Ecs.GetQueryBuilder(ref this).Write<TFirst, TSecond>(second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write{T1, T2}(T1)"/>
-            public ref {{type}} Write<TFirst, TSecond>(TFirst first) where TFirst : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Write{T1, T2}(T1)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write<TFirst, TSecond>(TFirst first) where TFirst : Enum
             {
-                QueryBuilder.Write<TFirst, TSecond>(first);
+                Ecs.GetQueryBuilder(ref this).Write<TFirst, TSecond>(first);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write{T1}(T1, string)"/>
-            public ref {{type}} Write<TFirst>(TFirst first, string second) where TFirst : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Write{T1}(T1, string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write<TFirst>(TFirst first, string second) where TFirst : Enum
             {
-                QueryBuilder.Write(first, second);
+                Ecs.GetQueryBuilder(ref this).Write(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Write{T2}(string, T2)"/>
-            public ref {{type}} Write<TSecond>(string first, TSecond second) where TSecond : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Write{T2}(string, T2)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Write<TSecond>(string first, TSecond second) where TSecond : Enum
             {
-                QueryBuilder.Write(first, second);
+                Ecs.GetQueryBuilder(ref this).Write(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.WriteSecond{T2}(ulong)"/>
-            public ref {{type}} WriteSecond<TSecond>(ulong first)
+            /// <inheritdoc cref="Core.QueryBuilder.WriteSecond{T2}(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} WriteSecond<TSecond>(ulong first)
             {
-                QueryBuilder.WriteSecond<TSecond>(first);
+                Ecs.GetQueryBuilder(ref this).WriteSecond<TSecond>(first);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.WriteSecond{T2}(string)"/>
-            public ref {{type}} WriteSecond<TSecond>(string first)
+            /// <inheritdoc cref="Core.QueryBuilder.WriteSecond{T2}(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} WriteSecond<TSecond>(string first)
             {
-                QueryBuilder.WriteSecond<TSecond>(first);
+                Ecs.GetQueryBuilder(ref this).WriteSecond<TSecond>(first);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read(Core.Term)"/>
-            public ref {{type}} Read(Term term)
+            /// <inheritdoc cref="Core.QueryBuilder.Read(Core.Term)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read(Term term)
             {
-                QueryBuilder.Read(term);
+                Ecs.GetQueryBuilder(ref this).Read(term);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read(ulong)"/>
-            public ref {{type}} Read(ulong id)
+            /// <inheritdoc cref="Core.QueryBuilder.Read(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read(ulong id)
             {
-                QueryBuilder.Read(id);
+                Ecs.GetQueryBuilder(ref this).Read(id);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read(string)"/>
-            public ref {{type}} Read(string name)
+            /// <inheritdoc cref="Core.QueryBuilder.Read(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read(string name)
             {
-                QueryBuilder.Read(name);
+                Ecs.GetQueryBuilder(ref this).Read(name);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read(ulong, ulong)"/>
-            public ref {{type}} Read(ulong first, ulong second)
+            /// <inheritdoc cref="Core.QueryBuilder.Read(ulong, ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read(ulong first, ulong second)
             {
-                QueryBuilder.Read(first, second);
+                Ecs.GetQueryBuilder(ref this).Read(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read(ulong, string)"/>
-            public ref {{type}} Read(ulong first, string second)
+            /// <inheritdoc cref="Core.QueryBuilder.Read(ulong, string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read(ulong first, string second)
             {
-                QueryBuilder.Read(first, second);
+                Ecs.GetQueryBuilder(ref this).Read(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read(string, ulong)"/>
-            public ref {{type}} Read(string first, ulong second)
+            /// <inheritdoc cref="Core.QueryBuilder.Read(string, ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read(string first, ulong second)
             {
-                QueryBuilder.Read(first, second);
+                Ecs.GetQueryBuilder(ref this).Read(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read(string, string)"/>
-            public ref {{type}} Read(string first, string second)
+            /// <inheritdoc cref="Core.QueryBuilder.Read(string, string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read(string first, string second)
             {
-                QueryBuilder.Read(first, second);
+                Ecs.GetQueryBuilder(ref this).Read(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read{T}()"/>
-            public ref {{type}} Read<T>()
+            /// <inheritdoc cref="Core.QueryBuilder.Read{T}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read<T>()
             {
-                QueryBuilder.Read<T>();
+                Ecs.GetQueryBuilder(ref this).Read<T>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read{T}(T)"/>
-            public ref {{type}} Read<T>(T value) where T : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Read{T}(T)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read<T>(T value) where T : Enum
             {
-                QueryBuilder.Read(value);
+                Ecs.GetQueryBuilder(ref this).Read(value);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read{T1}(ulong)"/>
-            public ref {{type}} Read<TFirst>(ulong second)
+            /// <inheritdoc cref="Core.QueryBuilder.Read{T1}(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read<TFirst>(ulong second)
             {
-                QueryBuilder.Read<TFirst>(second);
+                Ecs.GetQueryBuilder(ref this).Read<TFirst>(second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read{T1}(string)"/>
-            public ref {{type}} Read<TFirst>(string second)
+            /// <inheritdoc cref="Core.QueryBuilder.Read{T1}(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read<TFirst>(string second)
             {
-                QueryBuilder.Read<TFirst>(second);
+                Ecs.GetQueryBuilder(ref this).Read<TFirst>(second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read{T1, T2}()"/>
-            public ref {{type}} Read<TFirst, TSecond>()
+            /// <inheritdoc cref="Core.QueryBuilder.Read{T1, T2}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read<TFirst, TSecond>()
             {
-                QueryBuilder.Read<TFirst, TSecond>();
+                Ecs.GetQueryBuilder(ref this).Read<TFirst, TSecond>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read{T1, T2}(T2)"/>
-            public ref {{type}} Read<TFirst, TSecond>(TSecond second) where TSecond : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Read{T1, T2}(T2)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read<TFirst, TSecond>(TSecond second) where TSecond : Enum
             {
-                QueryBuilder.Read<TFirst, TSecond>(second);
+                Ecs.GetQueryBuilder(ref this).Read<TFirst, TSecond>(second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read{T1, T2}(T1)"/>
-            public ref {{type}} Read<TFirst, TSecond>(TFirst first) where TFirst : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Read{T1, T2}(T1)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read<TFirst, TSecond>(TFirst first) where TFirst : Enum
             {
-                QueryBuilder.Read<TFirst, TSecond>(first);
+                Ecs.GetQueryBuilder(ref this).Read<TFirst, TSecond>(first);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read{T1}(T1, string)"/>
-            public ref {{type}} Read<TFirst>(TFirst first, string second) where TFirst : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Read{T1}(T1, string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read<TFirst>(TFirst first, string second) where TFirst : Enum
             {
-                QueryBuilder.Read(first, second);
+                Ecs.GetQueryBuilder(ref this).Read(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Read{T2}(string, T2)"/>
-            public ref {{type}} Read<TSecond>(string first, TSecond second) where TSecond : Enum
+            /// <inheritdoc cref="Core.QueryBuilder.Read{T2}(string, T2)"/>
+            public ref {{Generator.GetTypeName(type, i)}} Read<TSecond>(string first, TSecond second) where TSecond : Enum
             {
-                QueryBuilder.Read(first, second);
+                Ecs.GetQueryBuilder(ref this).Read(first, second);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.ReadSecond{T2}(ulong)"/>
-            public ref {{type}} ReadSecond<TSecond>(ulong first)
+            /// <inheritdoc cref="Core.QueryBuilder.ReadSecond{T2}(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} ReadSecond<TSecond>(ulong first)
             {
-                QueryBuilder.ReadSecond<TSecond>(first);
+                Ecs.GetQueryBuilder(ref this).ReadSecond<TSecond>(first);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.ReadSecond{T2}(string)"/>
-            public ref {{type}} ReadSecond<TSecond>(string first)
+            /// <inheritdoc cref="Core.QueryBuilder.ReadSecond{T2}(string)"/>
+            public ref {{Generator.GetTypeName(type, i)}} ReadSecond<TSecond>(string first)
             {
-                QueryBuilder.ReadSecond<TSecond>(first);
+                Ecs.GetQueryBuilder(ref this).ReadSecond<TSecond>(first);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.ScopeOpen()"/>
-            public ref {{type}} ScopeOpen()
+            /// <inheritdoc cref="Core.QueryBuilder.ScopeOpen()"/>
+            public ref {{Generator.GetTypeName(type, i)}} ScopeOpen()
             {
-                QueryBuilder.ScopeOpen();
+                Ecs.GetQueryBuilder(ref this).ScopeOpen();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.ScopeClose()"/>
-            public ref {{type}} ScopeClose()
+            /// <inheritdoc cref="Core.QueryBuilder.ScopeClose()"/>
+            public ref {{Generator.GetTypeName(type, i)}} ScopeClose()
             {
-                QueryBuilder.ScopeClose();
+                Ecs.GetQueryBuilder(ref this).ScopeClose();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.Term()"/>
-            public ref {{type}} Term()
+            /// <inheritdoc cref="Core.QueryBuilder.Term()"/>
+            public ref {{Generator.GetTypeName(type, i)}} Term()
             {
-                QueryBuilder.Term();
+                Ecs.GetQueryBuilder(ref this).Term();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.TermAt(int)"/>
-            public ref {{type}} TermAt(int termIndex)
+            /// <inheritdoc cref="Core.QueryBuilder.TermAt(int)"/>
+            public ref {{Generator.GetTypeName(type, i)}} TermAt(int termIndex)
             {
-                QueryBuilder.TermAt(termIndex);
+                Ecs.GetQueryBuilder(ref this).TermAt(termIndex);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.OrderBy(ulong, Ecs.OrderByAction)"/>
-            public ref {{type}} OrderBy(ulong component, Ecs.OrderByAction compare)
+            /// <inheritdoc cref="Core.QueryBuilder.OrderBy(ulong, Ecs.OrderByAction)"/>
+            public ref {{Generator.GetTypeName(type, i)}} OrderBy(ulong component, Ecs.OrderByAction compare)
             {
-                QueryBuilder.OrderBy(component, compare);
+                Ecs.GetQueryBuilder(ref this).OrderBy(component, compare);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.OrderBy{T}(Ecs.OrderByAction)"/>
-            public ref {{type}} OrderBy<T>(Ecs.OrderByAction compare)
+            /// <inheritdoc cref="Core.QueryBuilder.OrderBy{T}(Ecs.OrderByAction)"/>
+            public ref {{Generator.GetTypeName(type, i)}} OrderBy<T>(Ecs.OrderByAction compare)
             {
-                QueryBuilder.OrderBy<T>(compare);
+                Ecs.GetQueryBuilder(ref this).OrderBy<T>(compare);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.GroupBy(ulong)"/>
-            public ref {{type}} GroupBy(ulong component)
+            /// <inheritdoc cref="Core.QueryBuilder.GroupBy(ulong)"/>
+            public ref {{Generator.GetTypeName(type, i)}} GroupBy(ulong component)
             {
-                QueryBuilder.GroupBy(component);
+                Ecs.GetQueryBuilder(ref this).GroupBy(component);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.GroupBy{T}()"/>
-            public ref {{type}} GroupBy<T>()
+            /// <inheritdoc cref="Core.QueryBuilder.GroupBy{T}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} GroupBy<T>()
             {
-                QueryBuilder.GroupBy<T>();
+                Ecs.GetQueryBuilder(ref this).GroupBy<T>();
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.GroupBy(ulong, Ecs.GroupByAction)"/>
-            public ref {{type}} GroupBy(ulong component, Ecs.GroupByAction callback)
+            /// <inheritdoc cref="Core.QueryBuilder.GroupBy(ulong, Ecs.GroupByAction)"/>
+            public ref {{Generator.GetTypeName(type, i)}} GroupBy(ulong component, Ecs.GroupByAction callback)
             {
-                QueryBuilder.GroupBy(component, callback);
+                Ecs.GetQueryBuilder(ref this).GroupBy(component, callback);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.GroupBy{T}(Ecs.GroupByAction)"/>
-            public ref {{type}} GroupBy<T>(Ecs.GroupByAction callback)
+            /// <inheritdoc cref="Core.QueryBuilder.GroupBy{T}(Ecs.GroupByAction)"/>
+            public ref {{Generator.GetTypeName(type, i)}} GroupBy<T>(Ecs.GroupByAction callback)
             {
-                QueryBuilder.GroupBy<T>(callback);
+                Ecs.GetQueryBuilder(ref this).GroupBy<T>(callback);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.GroupBy(ulong, Ecs.GroupByCallback)"/>
-            public ref {{type}} GroupBy(ulong component, Ecs.GroupByCallback callback)
+            /// <inheritdoc cref="Core.QueryBuilder.GroupBy(ulong, Ecs.GroupByCallback)"/>
+            public ref {{Generator.GetTypeName(type, i)}} GroupBy(ulong component, Ecs.GroupByCallback callback)
             {
-                QueryBuilder.GroupBy(component, callback);
+                Ecs.GetQueryBuilder(ref this).GroupBy(component, callback);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.GroupBy{T}(Ecs.GroupByCallback)"/>
-            public ref {{type}} GroupBy<T>(Ecs.GroupByCallback callback)
+            /// <inheritdoc cref="Core.QueryBuilder.GroupBy{T}(Ecs.GroupByCallback)"/>
+            public ref {{Generator.GetTypeName(type, i)}} GroupBy<T>(Ecs.GroupByCallback callback)
             {
-                QueryBuilder.GroupBy<T>(callback);
+                Ecs.GetQueryBuilder(ref this).GroupBy<T>(callback);
                 return ref this;
             }
     
             ///
-            public ref {{type}} GroupByCtx(void* ctx, Ecs.ContextFree contextFree)
+            public ref {{Generator.GetTypeName(type, i)}} GroupByCtx(void* ctx, Ecs.ContextFree contextFree)
             {
-                QueryBuilder.GroupByCtx(ctx, contextFree);
+                Ecs.GetQueryBuilder(ref this).GroupByCtx(ctx, contextFree);
                 return ref this;
             }
     
             ///
-            public ref {{type}} GroupByCtx(void* ctx)
+            public ref {{Generator.GetTypeName(type, i)}} GroupByCtx(void* ctx)
             {
-                QueryBuilder.GroupByCtx(ctx);
+                Ecs.GetQueryBuilder(ref this).GroupByCtx(ctx);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.OnGroupCreate(Ecs.GroupCreateAction)"/>
-            public ref {{type}} OnGroupCreate(Ecs.GroupCreateAction onGroupCreate)
+            /// <inheritdoc cref="Core.QueryBuilder.OnGroupCreate(Ecs.GroupCreateAction)"/>
+            public ref {{Generator.GetTypeName(type, i)}} OnGroupCreate(Ecs.GroupCreateAction onGroupCreate)
             {
-                QueryBuilder.OnGroupCreate(onGroupCreate);
+                Ecs.GetQueryBuilder(ref this).OnGroupCreate(onGroupCreate);
                 return ref this;
             }
     
-            /// <inheritdoc cref="QueryBuilder.OnGroupDelete(Ecs.GroupDeleteAction)"/>
-            public ref {{type}} OnGroupDelete(Ecs.GroupDeleteAction onGroupDelete)
+            /// <inheritdoc cref="Core.QueryBuilder.OnGroupDelete(Ecs.GroupDeleteAction)"/>
+            public ref {{Generator.GetTypeName(type, i)}} OnGroupDelete(Ecs.GroupDeleteAction onGroupDelete)
             {
-                QueryBuilder.OnGroupDelete(onGroupDelete);
+                Ecs.GetQueryBuilder(ref this).OnGroupDelete(onGroupDelete);
                 return ref this;
             }
         }

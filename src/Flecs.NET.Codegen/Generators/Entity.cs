@@ -14,7 +14,7 @@ public class Entity : IIncrementalGenerator
         context.RegisterPostInitializationOutput((IncrementalGeneratorPostInitializationContext postContext) =>
         {
             for (int i = 0; i < Generator.GenericCount; i++)
-                Generator.AddSource(postContext, $"ComponentCallbacks/T{i + 1}.g.cs", GenerateExtensions(i, Type.Entity));
+                Generator.AddSource(postContext, $"Entity.ComponentCallbacks/T{i + 1}.g.cs", GenerateExtensions(i, Type.Entity));
         });
     }
 
@@ -40,7 +40,7 @@ public class Entity : IIncrementalGenerator
             /// <param name="callback">The callback.</param>
             /// {{Generator.XmlTypeParameters}}
             /// <returns>True if the entity has the specified components.</returns>
-            public bool {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>({{Generator.GetCallbackType(i, callback)}} callback)
+            public bool {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>({{Generator.GetCallbackType(callback, i)}} callback)
             {
                 return Invoker.{{Generator.GetInvokerName(callback)}}(World, Id, callback);
             }
@@ -65,7 +65,7 @@ public class Entity : IIncrementalGenerator
             /// <param name="callback">The callback.</param>
             /// {{Generator.XmlTypeParameters}}
             /// <returns>Reference to self.</returns>
-            public ref {{type}} {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>({{Generator.GetCallbackType(i, callback)}} callback)
+            public ref {{type}} {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>({{Generator.GetCallbackType(callback, i)}} callback)
             {
                 Invoker.{{Generator.GetInvokerName(callback)}}(World, Id, callback);
                 return ref this;

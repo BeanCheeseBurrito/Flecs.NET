@@ -5,6 +5,7 @@ public enum Type
     Alert,
     AlertBuilder,
     Entity,
+    IIterable,
     IterIterable,
     Observer,
     ObserverBuilder,
@@ -15,5 +16,6 @@ public enum Type
     QueryBuilder,
     Routine,
     RoutineBuilder,
+    TypeHelper,
     WorkerIterable
 }

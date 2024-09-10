@@ -21,7 +21,7 @@ public class Invoker : IIncrementalGenerator
                 Generator.AddSource(postContext, $"Find/Iterator/T{i + 1}.g.cs", GenerateFindIteratorInvokers(i));
 
                 // Iterable Invokers
-                Generator.AddSource(postContext, $"Iter/Iterable/.T{i + 1}.g.cs", GenerateIterIterableInvokers(i));
+                Generator.AddSource(postContext, $"Iter/Iterable/T{i + 1}.g.cs", GenerateIterIterableInvokers(i));
                 Generator.AddSource(postContext, $"Each/Iterable/T{i + 1}.g.cs", GenerateEachIterableInvokers(i));
                 Generator.AddSource(postContext, $"Find/Iterable/T{i + 1}.g.cs", GenerateFindIterableInvokers(i));
 
@@ -40,7 +40,7 @@ public class Invoker : IIncrementalGenerator
             /// <param name="it">The iter object.</param>
             /// <param name="callback">The callback.</param>
             /// {{Generator.XmlTypeParameters[i]}}
-            public static void Iter<{{Generator.TypeParameters[i]}}>(Iter it, {{Generator.GetCallbackType(i, callback)}} callback)
+            public static void Iter<{{Generator.TypeParameters[i]}}>(Iter it, {{Generator.GetCallbackType(callback, i)}} callback)
             {
                 Ecs.TableLock(it);
                 callback(it, {{Generator.GetCallbackArguments(i, callback)}});
@@ -70,7 +70,7 @@ public class Invoker : IIncrementalGenerator
             /// <param name="it">The iter object.</param>
             /// <param name="callback">The callback.</param>
             /// {{Generator.XmlTypeParameters[i]}}
-            public static void Each<{{Generator.TypeParameters[i]}}>(Iter it, {{Generator.GetCallbackType(i, callback)}} callback)
+            public static void Each<{{Generator.TypeParameters[i]}}>(Iter it, {{Generator.GetCallbackType(callback, i)}} callback)
             {
                 {{Generator.GetCallbackCountVariable(callback)}}
                 
@@ -116,7 +116,7 @@ public class Invoker : IIncrementalGenerator
             /// <param name="it">The iter object.</param>
             /// <param name="callback">The callback.</param>
             /// {{Generator.XmlTypeParameters[i]}}
-            public static Entity Find<{{Generator.TypeParameters[i]}}>(Iter it, {{Generator.GetCallbackType(i, callback)}} callback)
+            public static Entity Find<{{Generator.TypeParameters[i]}}>(Iter it, {{Generator.GetCallbackType(callback, i)}} callback)
             {
                 {{Generator.GetCallbackCountVariable(callback)}}
                 
@@ -179,7 +179,7 @@ public class Invoker : IIncrementalGenerator
             /// <param name="callback">The callback.</param>
             /// <typeparam name="T">The iterable type.</typeparam>
             /// {{Generator.XmlTypeParameters[i]}}
-            public static void {{Generator.GetInvokerName(callback)}}<T, {{Generator.TypeParameters[i]}}>(ref T iterable, {{Generator.GetCallbackType(i, callback)}} callback)
+            public static void {{Generator.GetInvokerName(callback)}}<T, {{Generator.TypeParameters[i]}}>(ref T iterable, {{Generator.GetCallbackType(callback, i)}} callback)
                 where T : unmanaged, IIterableBase
             {
                 ecs_iter_t iter = iterable.GetIter();
@@ -211,7 +211,7 @@ public class Invoker : IIncrementalGenerator
             /// <param name="callback">The callback.</param>
             /// <typeparam name="T">The iterable type.</typeparam>
             /// {{Generator.XmlTypeParameters[i]}}
-            public static void {{Generator.GetInvokerName(callback)}}<T, {{Generator.TypeParameters[i]}}>(ref T iterable, {{Generator.GetCallbackType(i, callback)}} callback)
+            public static void {{Generator.GetInvokerName(callback)}}<T, {{Generator.TypeParameters[i]}}>(ref T iterable, {{Generator.GetCallbackType(callback, i)}} callback)
                 where T : unmanaged, IIterableBase
             {
                 ecs_iter_t iter = iterable.GetIter();
@@ -243,7 +243,7 @@ public class Invoker : IIncrementalGenerator
             /// <param name="callback">The callback.</param>
             /// <typeparam name="T">The iterable type.</typeparam>
             /// {{Generator.XmlTypeParameters[i]}}
-            public static Entity {{Generator.GetInvokerName(callback)}}<T, {{Generator.TypeParameters[i]}}>(ref T iterable, {{Generator.GetCallbackType(i, callback)}} callback)
+            public static Entity {{Generator.GetInvokerName(callback)}}<T, {{Generator.TypeParameters[i]}}>(ref T iterable, {{Generator.GetCallbackType(callback, i)}} callback)
                 where T : unmanaged, IIterableBase
             {
                 Entity result = default;
@@ -285,7 +285,7 @@ public class Invoker : IIncrementalGenerator
             /// <param name="callback">The callback.</param>
             /// {{Generator.XmlTypeParameters[i]}}
             /// <returns>True if the entity has the specified components.</returns>
-            public static bool {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>(ecs_world_t* world, ulong entity, {{Generator.GetCallbackType(i, callback)}} callback)
+            public static bool {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>(ecs_world_t* world, ulong entity, {{Generator.GetCallbackType(callback, i)}} callback)
             {
                 ecs_record_t* record = ecs_{{Generator.GetInvokerName(callback).ToLower()}}_begin(world, entity);
 
@@ -318,7 +318,7 @@ public class Invoker : IIncrementalGenerator
             /// <param name="callback">The callback.</param>
             /// {{Generator.XmlTypeParameters[i]}}
             /// <returns></returns>
-            public static bool Insert<{{Generator.TypeParameters[i]}}>(World world, ulong entity, {{Generator.GetCallbackType(i, callback)}} callback)
+            public static bool Insert<{{Generator.TypeParameters[i]}}>(World world, ulong entity, {{Generator.GetCallbackType(callback, i)}} callback)
             {
                 {{Generator.IdsArray[i]}}
                 void** pointers = stackalloc void*[{{i + 1}}];

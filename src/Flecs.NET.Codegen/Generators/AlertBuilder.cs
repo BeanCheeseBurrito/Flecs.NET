@@ -11,7 +11,7 @@ public class AlertBuilder : IIncrementalGenerator
     {
         context.RegisterPostInitializationOutput((IncrementalGeneratorPostInitializationContext postContext) =>
         {
-            Generator.AddSource(postContext, "QueryBuilder.g.cs", QueryBuilder.GenerateExtensions(Type.AlertBuilder));
+            Generator.AddSource(postContext, "AlertBuilder.QueryBuilder.g.cs", QueryBuilder.GenerateExtensions(Type.AlertBuilder));
         });
     }
 }

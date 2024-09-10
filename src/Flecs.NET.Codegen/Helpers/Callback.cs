@@ -2,12 +2,21 @@ namespace Flecs.NET.Codegen.Helpers;
 
 public enum Callback
 {
+    #region Run
+
+    RunCallbackDelegate,
+    RunCallbackPointer,
+
+    #endregion
+
     #region Iter
 
+    IterCallbackDelegate,
     IterFieldCallbackDelegate,
     IterSpanCallbackDelegate,
     IterPointerCallbackDelegate,
 
+    IterCallbackPointer,
     IterFieldCallbackPointer,
     IterSpanCallbackPointer,
     IterPointerCallbackPointer,
@@ -15,6 +24,12 @@ public enum Callback
     #endregion
 
     #region Each
+
+    EachEntityCallbackDelegate,
+    EachIterCallbackDelegate,
+
+    EachEntityCallbackPointer,
+    EachIterCallbackPointer,
 
     EachRefCallbackDelegate,
     EachEntityRefCallbackDelegate,

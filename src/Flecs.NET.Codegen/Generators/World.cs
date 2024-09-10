@@ -21,11 +21,8 @@ public class World : IIncrementalGenerator
         });
     }
 
-    private static string GenerateBuilders(int count)
+    private static string GenerateBuilders(int i)
     {
-        string typeParameters = Generator.TypeParameters[count];
-        string withChain = Generator.WithChain[count];
-
         return $$"""
         #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         
@@ -33,84 +30,84 @@ public class World : IIncrementalGenerator
         
         public unsafe partial struct World
         {
-            public AlertBuilder AlertBuilder<{{typeParameters}}>()
+            public {{Generator.GetTypeName(Type.AlertBuilder)}} {{Generator.GetTypeName(Type.AlertBuilder, i)}}()
             {
-                return new AlertBuilder(Handle){{withChain}};
+                return new AlertBuilder(Handle){{Generator.WithChain[i]}};
             }
 
-            public AlertBuilder AlertBuilder<{{typeParameters}}>(string name)
+            public {{Generator.GetTypeName(Type.AlertBuilder)}} {{Generator.GetTypeName(Type.AlertBuilder, i)}}(string name)
             {
-                return new AlertBuilder(Handle, name){{withChain}};
+                return new AlertBuilder(Handle, name){{Generator.WithChain[i]}};
             }
 
-            public AlertBuilder AlertBuilder<{{typeParameters}}>(ulong entity)
+            public {{Generator.GetTypeName(Type.AlertBuilder)}} {{Generator.GetTypeName(Type.AlertBuilder, i)}}(ulong entity)
             {
-                return new AlertBuilder(Handle, entity){{withChain}};
+                return new AlertBuilder(Handle, entity){{Generator.WithChain[i]}};
             }
 
-            public Alert Alert<{{typeParameters}}>()
+            public {{Generator.GetTypeName(Type.Alert)}} {{Generator.GetTypeName(Type.Alert, i)}}()
             {
-                return AlertBuilder<{{typeParameters}}>().Build();
+                return {{Generator.GetTypeName(Type.AlertBuilder, i)}}().Build();
             }
 
-            public Alert Alert<{{typeParameters}}>(string name)
+            public {{Generator.GetTypeName(Type.Alert)}} {{Generator.GetTypeName(Type.Alert, i)}}(string name)
             {
-                return AlertBuilder<{{typeParameters}}>(name).Build();
+                return {{Generator.GetTypeName(Type.AlertBuilder, i)}}(name).Build();
             }
 
-            public Alert Alert<{{typeParameters}}>(ulong entity)
+            public {{Generator.GetTypeName(Type.Alert)}} {{Generator.GetTypeName(Type.Alert, i)}}(ulong entity)
             {
-                return AlertBuilder<{{typeParameters}}>(entity).Build();
+                return {{Generator.GetTypeName(Type.AlertBuilder, i)}}(entity).Build();
+            }
+            
+            public {{Generator.GetTypeName(Type.QueryBuilder, i)}} {{Generator.GetTypeName(Type.QueryBuilder, i)}}()
+            {
+                return new {{Generator.GetTypeName(Type.QueryBuilder, i)}}(Handle);
             }
 
-            public QueryBuilder QueryBuilder<{{typeParameters}}>()
+            public {{Generator.GetTypeName(Type.QueryBuilder, i)}} {{Generator.GetTypeName(Type.QueryBuilder, i)}}(string name)
             {
-                return new QueryBuilder(Handle){{withChain}};
+                return new {{Generator.GetTypeName(Type.QueryBuilder, i)}}(Handle, name);
             }
 
-            public QueryBuilder QueryBuilder<{{typeParameters}}>(string name)
+            public {{Generator.GetTypeName(Type.QueryBuilder, i)}} {{Generator.GetTypeName(Type.QueryBuilder, i)}}(ulong entity)
             {
-                return new QueryBuilder(Handle, name){{withChain}};
+                return new {{Generator.GetTypeName(Type.QueryBuilder, i)}}(Handle, entity);
             }
 
-            public QueryBuilder QueryBuilder<{{typeParameters}}>(ulong entity)
+            public {{Generator.GetTypeName(Type.Query, i)}} {{Generator.GetTypeName(Type.Query, i)}}()
             {
-                return new QueryBuilder(Handle, entity){{withChain}};
+                return new {{Generator.GetTypeName(Type.QueryBuilder, i)}}(Handle).Build();
             }
 
-            public Query Query<{{typeParameters}}>()
+            public {{Generator.GetTypeName(Type.Query, i)}} {{Generator.GetTypeName(Type.Query, i)}}(string name)
             {
-                return QueryBuilder<{{typeParameters}}>().Build();
+                return new {{Generator.GetTypeName(Type.QueryBuilder, i)}}(Handle, name).Build();
             }
 
-            public Query Query<{{typeParameters}}>(string name)
+            public {{Generator.GetTypeName(Type.Query, i)}} {{Generator.GetTypeName(Type.Query, i)}}(ulong entity)
             {
-                return QueryBuilder<{{typeParameters}}>(name).Build();
+                return new {{Generator.GetTypeName(Type.QueryBuilder, i)}}(Handle, entity).Build();
             }
 
-            public Query Query<{{typeParameters}}>(ulong entity)
+            public {{Generator.GetTypeName(Type.RoutineBuilder, i)}} {{Generator.GetTypeName(Type.Routine, i)}}()
             {
-                return QueryBuilder<{{typeParameters}}>(entity).Build();
+                return new {{Generator.GetTypeName(Type.RoutineBuilder, i)}}(Handle);
             }
 
-            public RoutineBuilder Routine<{{typeParameters}}>()
+            public {{Generator.GetTypeName(Type.RoutineBuilder, i)}} {{Generator.GetTypeName(Type.Routine, i)}}(string name)
             {
-                return new RoutineBuilder(Handle){{withChain}};
+                return new {{Generator.GetTypeName(Type.RoutineBuilder, i)}}(Handle, name);
             }
 
-            public RoutineBuilder Routine<{{typeParameters}}>(string name)
+            public {{Generator.GetTypeName(Type.ObserverBuilder, i)}} {{Generator.GetTypeName(Type.Observer, i)}}()
             {
-                return new RoutineBuilder(Handle, name){{withChain}};
+                return new {{Generator.GetTypeName(Type.ObserverBuilder, i)}}(Handle);
             }
 
-            public ObserverBuilder Observer<{{typeParameters}}>()
+            public {{Generator.GetTypeName(Type.ObserverBuilder, i)}} {{Generator.GetTypeName(Type.Observer, i)}}(string name)
             {
-                return new ObserverBuilder(Handle){{withChain}};
-            }
-
-            public ObserverBuilder Observer<{{typeParameters}}>(string name)
-            {
-                return new ObserverBuilder(Handle, name){{withChain}};
+                return new {{Generator.GetTypeName(Type.ObserverBuilder, i)}}(Handle, name);
             }
         }
         
@@ -126,9 +123,9 @@ public class World : IIncrementalGenerator
             /// </summary>
             /// <param name="callback">The callback.</param>
             /// {{Generator.XmlTypeParameters[i]}}
-            public void {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>({{Generator.GetCallbackType(i, callback)}} callback) {{Generator.GetCallbackConstraints(i, callback)}}
+            public void {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>({{Generator.GetCallbackType(callback, i)}} callback)
             {
-                using Query query = Query<{{Generator.TypeParameters[i]}}>();
+                using Query<{{Generator.TypeParameters[i]}}> query = Query<{{Generator.TypeParameters[i]}}>();
                 query.{{Generator.GetInvokerName(callback)}}(callback);   
             }
         """);

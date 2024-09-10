@@ -7,17 +7,17 @@ using Flecs.NET.Codegen.Helpers;
 [SuppressMessage("Design", "CA1050:Declare types in namespaces")]
 public static class NodeBuilder
 {
-    public static string GenerateExtensions(int i, Type builderType, Type returnType)
+    public static string GenerateExtensions(Type builderType, Type returnType, int i)
     {
-        IEnumerable<string> iterators = Generator.CallbacksIterAndEach.Select((Callback callback) => $$"""
+        IEnumerable<string> iterators = Generator.CallbacksRunAndIterAndEach.Select((Callback callback) => $$"""
             /// <summary>
             ///     Creates <see cref="{{returnType}}"/> with the provided .{{Generator.GetInvokerName(callback)}} callback.
             /// </summary>
             /// <param name="callback">The callback.</param>
-            /// {{Generator.XmlTypeParameters[i]}}
-            public {{returnType}} {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>({{Generator.GetCallbackType(i, callback)}} callback) {{Generator.GetCallbackConstraints(i, callback)}}
+            public {{Generator.GetTypeName(returnType, i)}} {{Generator.GetInvokerName(callback)}}({{Generator.GetCallbackType(callback, i)}} callback)
             {
-                return SetCallback({{(Generator.GetCallbackIsDelegate(callback) ? string.Empty : "(IntPtr)")}}callback, Pointers<{{Generator.TypeParameters[i]}}>.{{callback}}).Build();
+                {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertReferenceTypes({{(Generator.GetCallbackIsUnmanaged(callback) ? "false" : "true")}});
+                return {{(Generator.GetCallbackIsRun(callback) ? "SetRun" : "SetCallback")}}({{(Generator.GetCallbackIsDelegate(callback) ? string.Empty : "(IntPtr)")}}callback, Pointers<{{Generator.TypeParameters[i]}}>.{{callback}}).Build();
             }
         """);
 
@@ -27,7 +27,7 @@ public static class NodeBuilder
 
         namespace Flecs.NET.Core;
 
-        public unsafe partial struct {{builderType}}
+        public unsafe partial struct {{Generator.GetTypeName(builderType, i)}}
         {
         {{string.Join(Separator.DoubleNewLine, iterators)}}
         }

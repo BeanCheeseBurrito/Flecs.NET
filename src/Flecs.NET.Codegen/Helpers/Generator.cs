@@ -57,6 +57,14 @@ public static class Generator
 
     #region Callback Delegates
 
+    public const string RunCallbackDelegate = "Ecs.RunCallback";
+
+    public const string IterCallbackDelegate = "Ecs.IterCallback";
+
+    public const string EachEntityCallbackDelegate = "Ecs.EachEntityCallback";
+
+    public const string EachIterCallbackDelegate = "Ecs.EachIterCallback";
+
     // Generates "Ecs.IterFieldCallback<T0, T1, T2, ...>"
     public static readonly string[] IterFieldCallbackDelegate = CacheStrings(i => $"Ecs.IterFieldCallback<{TypeParameters[i]}>");
 
@@ -114,6 +122,14 @@ public static class Generator
     #endregion
 
     #region Callback Function Pointers
+
+    public const string RunCallbackPointer = "delegate*<Iter, void>";
+
+    public const string IterCallbackPointer = "delegate*<Iter, void>";
+
+    public const string EachEntityCallbackPointer = "delegate*<Entity, void>";
+
+    public const string EachIterCallbackPointer = "delegate*<Iter, int, void>";
 
     // Generates "delegate*<Iter, Field<T0>, Field<T1>, Field<T2>, void>"
     public static readonly string[] IterFieldCallbackPointer = CacheStrings(i => $"delegate*<Iter, {FieldTypeParameters[i]}, void>");
@@ -248,6 +264,19 @@ public static class Generator
 
     #endregion
 
+    #region Type Helpers
+
+    // Generates "(Type<T0>.IsTag ? 1 << 0 : 0) | (Type<T1>.IsTag ? 1 << 1 : 0)..."
+    public static readonly string[] Tags = CacheJoinedStrings(Separator.BitwiseOr, i => $"(Type<T{i}>.IsTag ? 1 << {i} : 0)");
+
+    // Generates "(RuntimeHelpers.IsReferenceOrContainsReferences<T0>() ? 1 << 0 : 0) | (RuntimeHelpers.IsReferenceOrContainsReferences<T1>() ? 1 << 1 : 0)..."
+    public static readonly string[] ReferenceTypes = CacheJoinedStrings(Separator.BitwiseOr, i => $"(RuntimeHelpers.IsReferenceOrContainsReferences<T{i}>() ? 1 << {i} : 0)");
+
+    // Generates "Type<T0>.FullName, Type<T1>.Fullname..."
+    public static readonly string[] TypeFullNames = CacheJoinedStrings(Separator.Comma, i => $"Type<T{i}>.FullName");
+
+    #endregion
+
     #region Misc
 
     // Generates ".With<T0>.With<T1>().With<T2>()..."
@@ -267,6 +296,12 @@ public static class Generator
         Callback.IterFieldCallbackPointer,
         Callback.IterSpanCallbackPointer,
         Callback.IterPointerCallbackPointer
+    ];
+
+    public static readonly Callback[] CallbacksRun =
+    [
+        Callback.RunCallbackDelegate,
+        Callback.RunCallbackPointer,
     ];
 
     public static readonly Callback[] CallbacksEach =
@@ -320,21 +355,42 @@ public static class Generator
 
     public static readonly Callback[] CallbacksIterAndEach =
     [
-        .. CallbacksIter,
-        .. CallbacksEach
+        ..CallbacksIter,
+        ..CallbacksEach
     ];
 
-    public static readonly Callback[] CallbacksIterAndEachAndFind =
+    public static readonly Callback[] CallbacksRunAndIterAndEach =
     [
+        .. CallbacksRun,
+        .. CallbacksIterAndEach
+    ];
+
+    public static readonly Callback[] CallbacksRunAndIterAndEachAndFind =
+    [
+        .. CallbacksRun,
         .. CallbacksIter,
         .. CallbacksEach,
         .. CallbacksFind
     ];
 
-    public static string GetCallbackType(int i, Callback callback)
+    public static readonly string[][] GenericNames = typeof(Type).GetEnumNames()
+        .Select((str) => CacheStrings(i => $"{str}<{TypeParameters[i]}>"))
+        .ToArray();
+
+    public static string GetTypeName(Type type, int i = -1)
+    {
+        return i < 0
+            ? type.ToString()
+            : GenericNames[(int)type][i];
+    }
+
+    public static string GetCallbackType(Callback callback, int i)
     {
         return callback switch
         {
+            Callback.RunCallbackDelegate => RunCallbackDelegate,
+            Callback.RunCallbackPointer => RunCallbackPointer,
+
             Callback.IterFieldCallbackDelegate => IterFieldCallbackDelegate[i],
             Callback.IterSpanCallbackDelegate => IterSpanCallbackDelegate[i],
             Callback.IterPointerCallbackDelegate => IterPointerCallbackDelegate[i],
@@ -379,95 +435,12 @@ public static class Generator
         };
     }
 
-    public static string GetCallbackReturnType(Callback callback)
+    public static bool GetCallbackIsRun(Callback callback)
     {
         return callback switch
         {
-            Callback.IterFieldCallbackDelegate or
-            Callback.IterSpanCallbackDelegate or
-            Callback.IterPointerCallbackDelegate or
-            Callback.IterFieldCallbackPointer or
-            Callback.IterSpanCallbackPointer or
-            Callback.IterPointerCallbackPointer or
-
-            Callback.EachRefCallbackDelegate or
-            Callback.EachEntityRefCallbackDelegate or
-            Callback.EachIterRefCallbackDelegate or
-            Callback.EachPointerCallbackDelegate or
-            Callback.EachEntityPointerCallbackDelegate or
-            Callback.EachIterPointerCallbackDelegate or
-
-            Callback.EachRefCallbackPointer or
-            Callback.EachEntityRefCallbackPointer or
-            Callback.EachIterRefCallbackPointer or
-            Callback.EachPointerCallbackPointer or
-            Callback.EachEntityPointerCallbackPointer or
-            Callback.EachIterPointerCallbackPointer => "void",
-
-            Callback.FindRefCallbackDelegate or
-            Callback.FindEntityRefCallbackDelegate or
-            Callback.FindIterRefCallbackDelegate or
-            Callback.FindPointerCallbackDelegate or
-            Callback.FindEntityPointerCallbackDelegate or
-            Callback.FindIterPointerCallbackDelegate or
-
-            Callback.FindRefCallbackPointer or
-            Callback.FindEntityRefCallbackPointer or
-            Callback.FindIterRefCallbackPointer or
-            Callback.FindPointerCallbackPointer or
-            Callback.FindEntityPointerCallbackPointer or
-            Callback.FindIterPointerCallbackPointer => "bool",
-
-            _ => throw new ArgumentOutOfRangeException(nameof(callback), callback, null)
-        };
-    }
-
-    public static string GetCallbackConstraints(int i, Callback callback)
-    {
-        return callback switch
-        {
-            Callback.IterFieldCallbackDelegate or
-            Callback.IterFieldCallbackPointer or
-
-            Callback.EachRefCallbackDelegate or
-            Callback.EachEntityRefCallbackDelegate or
-            Callback.EachIterRefCallbackDelegate or
-
-            Callback.EachRefCallbackPointer or
-            Callback.EachEntityRefCallbackPointer or
-            Callback.EachIterRefCallbackPointer or
-
-            Callback.FindRefCallbackDelegate or
-            Callback.FindEntityRefCallbackDelegate or
-            Callback.FindIterRefCallbackDelegate or
-
-            Callback.FindRefCallbackPointer or
-            Callback.FindEntityRefCallbackPointer or
-            Callback.FindIterRefCallbackPointer => string.Empty,
-
-            Callback.IterSpanCallbackDelegate or
-            Callback.IterPointerCallbackDelegate or
-
-            Callback.IterSpanCallbackPointer or
-            Callback.IterPointerCallbackPointer or
-
-            Callback.EachPointerCallbackDelegate or
-            Callback.EachEntityPointerCallbackDelegate or
-            Callback.EachIterPointerCallbackDelegate  or
-
-            Callback.EachPointerCallbackPointer or
-            Callback.EachEntityPointerCallbackPointer or
-            Callback.EachIterPointerCallbackPointer or
-
-            Callback.FindPointerCallbackDelegate or
-            Callback.FindEntityPointerCallbackDelegate or
-            Callback.FindIterPointerCallbackDelegate or
-
-            Callback.FindPointerCallbackPointer or
-            Callback.FindEntityPointerCallbackPointer or
-            Callback.FindIterPointerCallbackPointer => TypeConstraints[i],
-
-            _ => throw new ArgumentOutOfRangeException(nameof(callback), callback, null)
+            Callback.RunCallbackDelegate or Callback.RunCallbackPointer => true,
+            _ => false
         };
     }
 
@@ -475,6 +448,8 @@ public static class Generator
     {
         return callback switch
         {
+            Callback.RunCallbackDelegate or
+
             Callback.IterFieldCallbackDelegate or
             Callback.IterSpanCallbackDelegate or
             Callback.IterPointerCallbackDelegate or
@@ -493,6 +468,8 @@ public static class Generator
             Callback.FindEntityPointerCallbackDelegate or
             Callback.FindIterPointerCallbackDelegate => true,
 
+            Callback.RunCallbackPointer or
+
             Callback.IterFieldCallbackPointer or
             Callback.IterSpanCallbackPointer or
             Callback.IterPointerCallbackPointer or
@@ -510,6 +487,58 @@ public static class Generator
             Callback.FindPointerCallbackPointer or
             Callback.FindEntityPointerCallbackPointer or
             Callback.FindIterPointerCallbackPointer => false,
+
+            _ => throw new ArgumentOutOfRangeException(nameof(callback), callback, null)
+        };
+    }
+
+    public static bool GetCallbackIsUnmanaged(Callback callback)
+    {
+        return callback switch
+        {
+            Callback.RunCallbackDelegate or
+            Callback.RunCallbackPointer or
+
+            Callback.IterFieldCallbackDelegate or
+            Callback.IterFieldCallbackPointer or
+
+            Callback.EachRefCallbackDelegate or
+            Callback.EachEntityRefCallbackDelegate or
+            Callback.EachIterRefCallbackDelegate or
+
+            Callback.EachRefCallbackPointer or
+            Callback.EachEntityRefCallbackPointer or
+            Callback.EachIterRefCallbackPointer or
+
+            Callback.FindRefCallbackDelegate or
+            Callback.FindEntityRefCallbackDelegate or
+            Callback.FindIterRefCallbackDelegate or
+
+            Callback.FindRefCallbackPointer or
+            Callback.FindEntityRefCallbackPointer or
+            Callback.FindIterRefCallbackPointer => false,
+
+            Callback.IterSpanCallbackDelegate or
+            Callback.IterPointerCallbackDelegate or
+
+            Callback.IterSpanCallbackPointer or
+            Callback.IterPointerCallbackPointer or
+
+            Callback.EachPointerCallbackDelegate or
+            Callback.EachEntityPointerCallbackDelegate or
+            Callback.EachIterPointerCallbackDelegate or
+
+            Callback.EachPointerCallbackPointer or
+            Callback.EachEntityPointerCallbackPointer or
+            Callback.EachIterPointerCallbackPointer or
+
+            Callback.FindPointerCallbackDelegate or
+            Callback.FindEntityPointerCallbackDelegate or
+            Callback.FindIterPointerCallbackDelegate or
+
+            Callback.FindPointerCallbackPointer or
+            Callback.FindEntityPointerCallbackPointer or
+            Callback.FindIterPointerCallbackPointer => true,
 
             _ => throw new ArgumentOutOfRangeException(nameof(callback), callback, null)
         };
@@ -595,13 +624,21 @@ public static class Generator
     {
         return callback switch
         {
+            Callback.RunCallbackDelegate or
+            Callback.RunCallbackPointer => "Run",
+
+            Callback.IterCallbackDelegate or
             Callback.IterFieldCallbackDelegate or
             Callback.IterSpanCallbackDelegate or
             Callback.IterPointerCallbackDelegate or
+
+            Callback.IterCallbackPointer or
             Callback.IterFieldCallbackPointer or
             Callback.IterSpanCallbackPointer or
             Callback.IterPointerCallbackPointer => "Iter",
 
+            Callback.EachEntityCallbackDelegate or
+            Callback.EachIterCallbackDelegate or
             Callback.EachRefCallbackDelegate or
             Callback.EachEntityRefCallbackDelegate or
             Callback.EachIterRefCallbackDelegate or
@@ -609,6 +646,8 @@ public static class Generator
             Callback.EachEntityPointerCallbackDelegate or
             Callback.EachIterPointerCallbackDelegate or
 
+            Callback.EachEntityCallbackPointer or
+            Callback.EachIterCallbackPointer or
             Callback.EachRefCallbackPointer or
             Callback.EachEntityRefCallbackPointer or
             Callback.EachIterRefCallbackPointer or
@@ -642,13 +681,21 @@ public static class Generator
     {
         return callback switch
         {
+            Callback.RunCallbackDelegate or
+            Callback.RunCallbackPointer or
+
+            Callback.IterCallbackDelegate or
             Callback.IterFieldCallbackDelegate or
             Callback.IterSpanCallbackDelegate or
             Callback.IterPointerCallbackDelegate or
+
+            Callback.IterCallbackPointer or
             Callback.IterFieldCallbackPointer or
             Callback.IterSpanCallbackPointer or
             Callback.IterPointerCallbackPointer or
 
+            Callback.EachEntityCallbackDelegate or
+            Callback.EachIterCallbackDelegate or
             Callback.EachRefCallbackDelegate or
             Callback.EachEntityRefCallbackDelegate or
             Callback.EachIterRefCallbackDelegate or
@@ -656,6 +703,8 @@ public static class Generator
             Callback.EachEntityPointerCallbackDelegate or
             Callback.EachIterPointerCallbackDelegate or
 
+            Callback.EachEntityCallbackPointer or
+            Callback.EachIterCallbackPointer or
             Callback.EachRefCallbackPointer or
             Callback.EachEntityRefCallbackPointer or
             Callback.EachIterRefCallbackPointer or
@@ -685,13 +734,21 @@ public static class Generator
     {
         return callback switch
         {
+            Callback.RunCallbackDelegate or
+            Callback.RunCallbackPointer or
+
+            Callback.IterCallbackDelegate or
             Callback.IterFieldCallbackDelegate or
             Callback.IterSpanCallbackDelegate or
             Callback.IterPointerCallbackDelegate or
+
+            Callback.IterCallbackPointer or
             Callback.IterFieldCallbackPointer or
             Callback.IterSpanCallbackPointer or
             Callback.IterPointerCallbackPointer or
 
+            Callback.EachEntityCallbackDelegate or
+            Callback.EachIterCallbackDelegate or
             Callback.EachRefCallbackDelegate or
             Callback.EachEntityRefCallbackDelegate or
             Callback.EachIterRefCallbackDelegate or
@@ -699,6 +756,8 @@ public static class Generator
             Callback.EachEntityPointerCallbackDelegate or
             Callback.EachIterPointerCallbackDelegate or
 
+            Callback.EachEntityCallbackPointer or
+            Callback.EachIterCallbackPointer or
             Callback.EachRefCallbackPointer or
             Callback.EachEntityRefCallbackPointer or
             Callback.EachIterRefCallbackPointer or
