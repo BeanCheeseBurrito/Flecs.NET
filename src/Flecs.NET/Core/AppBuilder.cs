@@ -201,7 +201,7 @@ public unsafe struct AppBuilder : IDisposable, IEquatable<AppBuilder>
     }
 
     /// <summary>
-    ///     Checks if two <see cref="AlertBuilder"/> instances are not equal.
+    ///     Checks if two <see cref="AppBuilder"/> instances are not equal.
     /// </summary>
     /// <param name="left"></param>
     /// <param name="right"></param>

@@ -13,9 +13,9 @@ namespace Flecs.NET.Core;
 public unsafe interface IQueryBuilder<TBuilder, TResult> : IQueryBuilderBase
 {
     /// <summary>
-    ///     Builds the query and returns the newly created <see cref="TResult"/> object.
+    ///     Builds the query and returns the newly created TResult object.
     /// </summary>
-    /// <returns>The created <see cref="TResult"/> object.</returns>
+    /// <returns>The created TResult object.</returns>
     public TResult Build();
 
     /// <inheritdoc cref="QueryBuilder.Self()"/>
