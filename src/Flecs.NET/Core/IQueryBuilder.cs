@@ -10,13 +10,8 @@ namespace Flecs.NET.Core;
 /// <typeparam name="TBuilder"></typeparam>
 /// <typeparam name="TResult"></typeparam>
 [SuppressMessage("Naming", "CA1716:Identifiers should not match keywords")]
-public unsafe interface IQueryBuilder<TBuilder, TResult>
+public unsafe interface IQueryBuilder<TBuilder, TResult> : IQueryBuilderBase
 {
-    /// <summary>
-    ///     A reference to the query builder.
-    /// </summary>
-    public ref QueryBuilder QueryBuilder { get; }
-
     /// <summary>
     ///     Builds the query and returns the newly created <see cref="TResult"/> object.
     /// </summary>

@@ -8,7 +8,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     A wrapper around <see cref="ecs_alert_desc_t"/>.
 /// </summary>
-public unsafe partial struct AlertBuilder : IDisposable, IEquatable<AlertBuilder>
+public unsafe partial struct AlertBuilder : IDisposable, IEquatable<AlertBuilder>, IQueryBuilderBase
 {
     private ecs_world_t* _world;
     private ecs_alert_desc_t _desc;
