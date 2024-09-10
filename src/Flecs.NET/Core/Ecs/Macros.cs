@@ -307,15 +307,12 @@ public static unsafe partial class Ecs
     public static bool TypeIdIs<T>(ecs_world_t* world, ulong id)
     {
         ulong typeId = Type<T>.Id(world);
+        return typeId == id || typeId == ecs_get_typeid(world, id);
+    }
 
-        if (typeId == id)
-            return true;
-
-        if (IsPair(id) && typeId == ecs_get_typeid(world, id))
-            return true;
-
-        return typeof(T) == typeof(ulong) &&
-               (ecs_id_is_tag(world, id) == Utils.True ||
-                ecs_id_is_wildcard(id) == Utils.True);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static ref QueryBuilder GetQueryBuilder<T>(ref T queryBuilder) where T : IQueryBuilderBase
+    {
+        return ref queryBuilder.QueryBuilder;
     }
 }
