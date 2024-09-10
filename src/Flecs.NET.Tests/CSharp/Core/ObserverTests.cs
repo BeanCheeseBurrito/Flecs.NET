@@ -15,7 +15,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Iter(Callback);
@@ -53,7 +55,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Iter<Position, Velocity>(Callback);
+                .Iter(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -85,7 +87,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Iter<Position, Velocity>(Callback);
+                .Iter(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -117,7 +119,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Iter<Position, Velocity>(Callback);
+                .Iter(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -146,7 +148,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Each(Callback);
@@ -178,7 +182,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Each(Callback);
@@ -215,7 +221,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -243,7 +249,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -271,7 +277,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -300,7 +306,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -329,7 +335,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -358,7 +364,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -422,7 +428,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
@@ -468,7 +476,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Iter<Position, Velocity>(Callback);
+                .Iter(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -507,7 +515,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Iter<Position, Velocity>(Callback);
+                .Iter(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -546,7 +554,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Iter<Position, Velocity>(Callback);
+                .Iter(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -581,7 +589,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
@@ -620,7 +630,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
@@ -665,7 +677,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -700,7 +712,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -735,7 +747,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -771,7 +783,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -807,7 +819,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -843,7 +855,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -875,7 +887,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Iter(&Callback);
@@ -913,7 +927,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Iter<Position, Velocity>(&Callback);
+                .Iter(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -945,7 +959,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Iter<Position, Velocity>(&Callback);
+                .Iter(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -977,7 +991,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Iter<Position, Velocity>(&Callback);
+                .Iter(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1006,7 +1020,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Each(&Callback);
@@ -1038,7 +1054,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Each(&Callback);
@@ -1075,7 +1093,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1103,7 +1121,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1131,7 +1149,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1160,7 +1178,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1189,7 +1207,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1218,7 +1236,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1282,7 +1300,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
@@ -1328,7 +1348,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Iter<Position, Velocity>(Callback);
+                .Iter(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1367,7 +1387,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Iter<Position, Velocity>(Callback);
+                .Iter(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1406,7 +1426,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Iter<Position, Velocity>(Callback);
+                .Iter(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1441,7 +1461,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
@@ -1480,7 +1502,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
@@ -1525,7 +1549,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1560,7 +1584,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1595,7 +1619,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1631,7 +1655,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1667,7 +1691,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1703,7 +1727,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Each<Position, Velocity>(Callback);
+                .Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1735,7 +1759,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
@@ -1781,7 +1807,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Iter<Position, Velocity>(&Callback);
+                .Iter(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1820,7 +1846,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Iter<Position, Velocity>(&Callback);
+                .Iter(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1859,7 +1885,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Iter<Position, Velocity>(&Callback);
+                .Iter(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -1894,7 +1920,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
@@ -1933,7 +1961,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
@@ -1978,7 +2008,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2013,7 +2043,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2048,7 +2078,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2084,7 +2114,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2120,7 +2150,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2156,7 +2186,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(Run)
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2188,7 +2218,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
@@ -2234,7 +2266,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Iter<Position, Velocity>(&Callback);
+                .Iter(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2273,7 +2305,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Iter<Position, Velocity>(&Callback);
+                .Iter(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2312,7 +2344,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Iter<Position, Velocity>(&Callback);
+                .Iter(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2347,7 +2379,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
@@ -2386,7 +2420,9 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Observer<Position, Velocity>()
+            world.Observer()
+                .With<Position>()
+                .With<Velocity>()
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
@@ -2431,7 +2467,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2466,7 +2502,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2501,7 +2537,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2537,7 +2573,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2573,7 +2609,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -2609,7 +2645,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Event(Ecs.OnSet)
                 .YieldExisting()
                 .Run(&Run)
-                .Each<Position, Velocity>(&Callback);
+                .Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 

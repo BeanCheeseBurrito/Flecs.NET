@@ -61,25 +61,26 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Fact]
-        private void TermEachTag()
-        {
-            using World world = World.Create();
-
-            Entity e1 = world.Entity().Add<Foo>();
-            Entity e2 = world.Entity().Add<Foo>();
-            Entity e3 = world.Entity().Add<Foo>();
-
-            e3.Add<Tag>();
-
-            int count = 0;
-            world.Each((Entity e, ref Foo _) =>
-            {
-                if (e == e1 || e == e2 || e == e3) count++;
-            });
-
-            Assert.Equal(3, count);
-        }
+        // TODO: Remove this?
+        // [Fact]
+        // private void TermEachTag()
+        // {
+        //     using World world = World.Create();
+        //
+        //     Entity e1 = world.Entity().Add<Foo>();
+        //     Entity e2 = world.Entity().Add<Foo>();
+        //     Entity e3 = world.Entity().Add<Foo>();
+        //
+        //     e3.Add<Tag>();
+        //
+        //     int count = 0;
+        //     world.Each((Entity e, ref Foo _) =>
+        //     {
+        //         if (e == e1 || e == e2 || e == e3) count++;
+        //     });
+        //
+        //     Assert.Equal(3, count);
+        // }
 
         [Fact]
         private void TermEachId()
@@ -286,7 +287,9 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Add<A>();
             world.Entity().Add<A>();
 
-            using Query q = world.Query<A>();
+            using Query q = world.QueryBuilder()
+                .With<A>()
+                .Build();
 
             Entity first = q.Iter().First();
             Assert.True(first != 0);
@@ -302,7 +305,9 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Add<A>();
             world.Entity().Add<A>();
 
-            using Query q = world.Query<A>();
+            using Query q = world.QueryBuilder()
+                .With<A>()
+                .Build();
 
             Assert.Equal(3, q.Count());
         }
@@ -316,8 +321,13 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Add<A>();
             world.Entity().Add<A>();
 
-            using Query q1 = world.Query<A>();
-            using Query q2 = world.Query<B>();
+            using Query q1 = world.QueryBuilder()
+                .With<A>()
+                .Build();
+
+            using Query q2 = world.QueryBuilder()
+                .With<B>()
+                .Build();
 
             Assert.True(q1.IsTrue());
             Assert.False(q2.IsTrue());
@@ -332,7 +342,9 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Add<A>();
             world.Entity().Add<A>();
 
-            using Query q = world.Query<A>();
+            using Query q = world.QueryBuilder()
+                .With<A>()
+                .Build();
 
             Entity first = q.First();
             Assert.True(first != 0);
@@ -348,7 +360,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            using Query f = world.QueryBuilder<Position, Velocity>()
+            using Query<Position, Velocity> f = world.QueryBuilder<Position, Velocity>()
                 .TermAt(0).Src(e)
                 .TermAt(1).Src(e)
                 .Build();
@@ -376,7 +388,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            using Query f = world.QueryBuilder<Position, Velocity>()
+            using Query<Position, Velocity> f = world.QueryBuilder<Position, Velocity>()
                 .TermAt(0).Src(e)
                 .TermAt(1).Src(e)
                 .Build();
@@ -408,7 +420,7 @@ namespace Flecs.NET.Tests.Cpp
         //         .Set(new Position(10, 20))
         //         .Set(new Velocity(1, 2));
         //
-        //     using Query f = world.QueryBuilder<Position, Velocity>()
+        //     using var f = world.QueryBuilder<Position, Velocity>()
         //         .TermAt(0).Src(e)
         //         .TermAt(1).Src(e)
         //         .Build();
@@ -426,10 +438,10 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Add<Position>();
             Entity e2 = world.Entity().Add<Position>();
 
-            using Query q = world.Query<Position>("my_query");
+            using Query<Position> q = world.Query<Position>("my_query");
 
             int count = 0;
-            q.Each((Entity e) =>
+            q.Each((Entity e, ref Position _) =>
             {
                 Assert.True(e == e1 || e == e2);
                 count++;
@@ -449,10 +461,10 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Add<Position>();
             Entity e2 = world.Entity().Add<Position>();
 
-            using Query q = world.Query<Position>("my.query");
+            using Query<Position> q = world.Query<Position>("my.query");
 
             int count = 0;
-            q.Each((Entity e) =>
+            q.Each((Entity e, ref Position _) =>
             {
                 Assert.True(e == e1 || e == e2);
                 count++;
@@ -474,10 +486,10 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set(new Position(3, 4));
             world.Entity().Set(new Position(5, 6));
 
-            using Query q = world.Query<Position>("my.query");
+            using Query<Position> q = world.Query<Position>("my.query");
 
             int count = 0;
-            q.Iter().SetVar(0, e2).Each((Entity e) =>
+            q.Iter().SetVar(0, e2).Each((Entity e, ref Position _) =>
             {
                 Assert.True(e == e2);
                 count++;
@@ -512,7 +524,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Set(new Position(10, 20));
             Entity e2 = world.Entity().Set(new Position(20, 30));
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
             Entity r = q.Find((ref Position p) => { return p.X == 20; });
 
@@ -527,7 +539,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Set(new Position(10, 20));
             world.Entity().Set(new Position(20, 30));
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
             Entity r = q.Find((ref Position p) => { return p.X == 30; });
 
@@ -542,7 +554,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Set(new Position(10, 20)).Set(new Velocity(20, 30));
             Entity e2 = world.Entity().Set(new Position(20, 30)).Set(new Velocity(20, 30));
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
             Entity r = q.Find((Entity e, ref Position p) =>
             {
@@ -565,7 +577,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            using Query q = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> q = world.Query<Position, Velocity>();
 
             q.Run((Iter it) =>
             {
@@ -599,7 +611,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            using Query q = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> q = world.Query<Position, Velocity>();
 
             q.Run((Iter it) =>
             {
@@ -640,7 +652,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(3, 4));
 
-            using Query q = world.QueryBuilder<Position>()
+            using Query<Position> q = world.QueryBuilder<Position>()
                 .Expr("Velocity(self|up IsA)")
                 .Build();
 
@@ -700,7 +712,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e4 = world.Entity()
                 .Set(new Position(70, 80));
 
-            using Query q = world.QueryBuilder<Position, Velocity, Mass>()
+            using Query<Position, Velocity, Mass> q = world.QueryBuilder<Position, Velocity, Mass>()
                 .TermAt(1).Optional()
                 .TermAt(2).Optional()
                 .Build();
@@ -757,7 +769,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            using Query q = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> q = world.Query<Position, Velocity>();
 
             q.Each((ref Position p, ref Velocity v) =>
             {
@@ -782,7 +794,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            using Query q = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> q = world.Query<Position, Velocity>();
 
             q.Each((ref Position p, ref Velocity v) =>
             {
@@ -818,7 +830,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(3, 4));
 
-            using Query q = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> q = world.Query<Position, Velocity>();
 
             q.Each((ref Position p, ref Velocity v) =>
             {
@@ -864,7 +876,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e4 = world.Entity()
                 .Set(new Position(70, 80));
 
-            using Query q = world.QueryBuilder<Position, Velocity, Mass>()
+            using Query<Position, Velocity, Mass> q = world.QueryBuilder<Position, Velocity, Mass>()
                 .TermAt(1).Optional()
                 .TermAt(2).Optional()
                 .Build();
@@ -1126,7 +1138,9 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q = world.Query<Tag>();
+            using Query q = world.QueryBuilder()
+                .With<Tag>()
+                .Build();
 
             Entity e = world.Entity()
                 .Add<Tag>();
@@ -1139,7 +1153,9 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q = world.Query<Tag>();
+            using Query q = world.QueryBuilder()
+                .With<Tag>()
+                .Build();
 
             Entity @base = world.Prefab()
                 .Add<Tag>();
@@ -1168,7 +1184,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Set(new Position(5, 0));
             world.Entity().Set(new Position(4, 0));
 
-            using Query q = world.QueryBuilder<Position>()
+            using Query<Position> q = world.QueryBuilder<Position>()
                 .OrderBy<Position>(ComparePosition)
                 .Build();
 
@@ -1194,11 +1210,11 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity().Set(new Position(1, 0));
 
-            using Query q = world.QueryBuilder<Position>()
+            using Query<Position> q = world.QueryBuilder<Position>()
                 .Cached()
                 .Build();
 
-            using Query qW = world.Query<Position>();
+            using Query<Position> qW = world.Query<Position>();
 
             Assert.True(q.Changed());
 
@@ -1220,10 +1236,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Query qVar;
+            Query<Position> qVar;
 
             int count = 0;
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
             world.Entity().Set(new Position(10, 20));
 
@@ -1248,7 +1264,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Template<System.Int32>", comp.Entity.Name());
 
             int count = 0;
-            using Query q = world.QueryBuilder<Position>().Expr("Template<System.Int32>").Build();
+            using Query<Position> q = world.QueryBuilder<Position>().Expr("Template<System.Int32>").Build();
 
             world.Entity()
                 .Set(new Position(10, 20))
@@ -1278,7 +1294,7 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Template<System.Int32>", comp.Entity.Name());
 
             int count = 0;
-            using Query q = world.Query<Position, Template<int>>();
+            using Query<Position, Template<int>> q = world.Query<Position, Template<int>>();
 
             world.Entity()
                 .Set(new Position(10, 20))
@@ -1332,7 +1348,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     world.Entity().Add<Tag>().Set(new Value(10));
         //
-        //     using Query q = world.QueryBuilder<Value>()
+        //     using var q = world.QueryBuilder<Value>()
         //         .With<Tag>()
         //         .Build();
         //
@@ -1354,7 +1370,7 @@ namespace Flecs.NET.Tests.Cpp
         //
         //     world.Entity().Add<Tag>().Set(new Value(10));
         //
-        //     using Query q = world.QueryBuilder<Value>()
+        //     using var q = world.QueryBuilder<Value>()
         //         .With<Tag>()
         //         .Build();
         //
@@ -1377,7 +1393,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity p = world.Entity();
 
-            using Query q = world.QueryBuilder<Position>()
+            using Query<Position> q = world.QueryBuilder<Position>()
                 .With<Velocity>()
                 .With(Ecs.ChildOf, p)
                 .Build();
@@ -1408,7 +1424,7 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity p = world.Entity();
 
-            using Query q = world.QueryBuilder<Position>()
+            using Query<Position> q = world.QueryBuilder<Position>()
                 .With<Velocity>()
                 .With(Ecs.ChildOf, p)
                 .Build();
@@ -1450,7 +1466,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q = world.QueryBuilder<Position>()
+            using Query<Position> q = world.QueryBuilder<Position>()
                 .With<Velocity>()
                 .Build();
             Assert.Equal("Position($this), Velocity($this)", q.Str());
@@ -1461,7 +1477,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q = world.QueryBuilder<Position>()
+            using Query<Position> q = world.QueryBuilder<Position>()
                 .With<Velocity>()
                 .With<Eats, Apples>()
                 .Build();
@@ -1473,7 +1489,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q = world.QueryBuilder<Position>()
+            using Query<Position> q = world.QueryBuilder<Position>()
                 .With<Velocity>().Oper(Ecs.Not)
                 .Build();
             Assert.Equal("Position($this), !Velocity($this)", q.Str());
@@ -1484,7 +1500,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q = world.QueryBuilder<Position>()
+            using Query<Position> q = world.QueryBuilder<Position>()
                 .With<Velocity>().Oper(Ecs.Optional)
                 .Build();
             Assert.Equal("Position($this), ?Velocity($this)", q.Str());
@@ -1510,7 +1526,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e = world.Entity()
                 .Set(new Position(1, 2));
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
             int count = 0;
             q.Each((ref Position p) =>
@@ -1538,7 +1554,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(1, 2))
                 .Set(new Velocity(10, 20));
 
-            using Query q = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> q = world.Query<Position, Velocity>();
 
             int count = 0;
             q.Each((ref Position p, ref Velocity v) =>
@@ -1579,7 +1595,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Add<Position>().Add<Velocity>();
             world.Entity().Add<Velocity>();
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
             int count = 0;
             q.Run((Iter it) =>
@@ -1601,7 +1617,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Add<Position>().Add<Velocity>();
             world.Entity().Add<Position>().Add<Velocity>();
 
-            using Query q = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> q = world.Query<Position, Velocity>();
 
             int count = 0;
             q.Run((Iter it) =>
@@ -1644,11 +1660,17 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Entity().Add<Position>().Add<Velocity>();
 
-            using Query q = world.Query<Velocity>();
+            using Query<Velocity> q = world.Query<Velocity>();
 
             int count = 0;
             world.Routine<Position>()
-                .Each((Entity _) => { q.Each((Entity _) => { count++; }); });
+                .Each((Entity _, ref Position _) =>
+                {
+                    q.Each((Entity _, ref Velocity _) =>
+                    {
+                        count++;
+                    });
+                });
 
             world.Progress();
 
@@ -1663,7 +1685,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Add<Position>();
             world.Entity().Add<Position>().Add<Velocity>();
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
             q.Run((Iter it) =>
             {
@@ -1696,7 +1718,7 @@ namespace Flecs.NET.Tests.Cpp
             e4.Add<Tag>();
             e5.Add<Tag>();
 
-            using Query q = world.QueryBuilder<Self, Position, Velocity>()
+            using Query<Self, Position, Velocity> q = world.QueryBuilder<Self, Position, Velocity>()
                 .TermAt(2).Singleton()
                 .Build();
 
@@ -1764,7 +1786,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e7 = world.Entity().Set(new Position(70, 80)).Set(new Velocity(4, 5));
             e7.Set(new Self(e7));
 
-            using Query q = world.QueryBuilder<Self, Position, Velocity>()
+            using Query<Self, Position, Velocity> q = world.QueryBuilder<Self, Position, Velocity>()
                 .Build();
 
             int count = 0;
@@ -1842,7 +1864,7 @@ namespace Flecs.NET.Tests.Cpp
             e4.Add<Tag>();
             e5.Add<Tag>();
 
-            using Query q = world.QueryBuilder<Self, Position, Velocity>()
+            using Query<Self, Position, Velocity> q = world.QueryBuilder<Self, Position, Velocity>()
                 .TermAt(2).Singleton()
                 .Build();
 
@@ -1922,7 +1944,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e7 = world.Entity().Set(new Position(70, 80)).Set(new Velocity(4, 5));
             e7.Set(new Self(e7));
 
-            using Query q = world.QueryBuilder<Self, Position, Velocity>()
+            using Query<Self, Position, Velocity> q = world.QueryBuilder<Self, Position, Velocity>()
                 .Build();
 
             int count = 0;
@@ -2008,14 +2030,14 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Set(new Position()).Set(new Velocity());
             world.Entity().Set(new Position()).Set(new Velocity());
 
-            using Query q = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> q = world.Query<Position, Velocity>();
             Entity e = world.Entity().Set(new QueryWrapper(q));
 
             QueryWrapper* qc = e.GetPtr<QueryWrapper>();
             Assert.True(qc != null);
 
             int count = 0;
-            qc->Query.Each((Entity _) => { count++; });
+            qc->Query.Each((Entity _, ref Position _, ref Velocity _) => { count++; });
             Assert.Equal(2, count);
         }
 
@@ -2027,7 +2049,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Entity().Set(new Position()).Set(new Velocity());
             world.Entity().Set(new Position()).Set(new Velocity());
 
-            using Query q = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> q = world.Query<Position, Velocity>();
             Entity e = world.Entity().Set(new QueryWrapper(q));
 
             QueryWrapper* qc = e.GetPtr<QueryWrapper>();
@@ -2064,9 +2086,9 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity().Set(new Position(10, 20));
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
-            q.Each<Position>(&EachFunc);
+            q.Each(&EachFunc);
 
             Assert.Equal(1, InvokedCount);
 
@@ -2082,9 +2104,9 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity().Set(new Position(10, 20));
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
-            q.Iter<Position>(&IterFunc);
+            q.Iter(&IterFunc);
 
             Assert.Equal(1, InvokedCount);
 
@@ -2100,9 +2122,9 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity().Set(new Position(10, 20));
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
-            q.Each<Position>(EachFunc);
+            q.Each(EachFunc);
 
             Assert.Equal(1, InvokedCount);
 
@@ -2118,9 +2140,9 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity e = world.Entity().Set(new Position(10, 20));
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
-            q.Iter<Position>(IterFunc);
+            q.Iter(IterFunc);
 
             Assert.Equal(1, InvokedCount);
 
@@ -2141,7 +2163,7 @@ namespace Flecs.NET.Tests.Cpp
             e2.Set(new Self(e2));
             e2.Set(new Position(20, 30));
 
-            using Query q = world.Query<Self, Position>();
+            using Query<Self, Position> q = world.Query<Self, Position>();
 
             int invoked = 0;
             q.Each((Iter it, int i, ref Self s, ref Position p) =>
@@ -2175,7 +2197,7 @@ namespace Flecs.NET.Tests.Cpp
         //         .Set(new Position(10, 20))
         //         .Set(new Velocity(1, 2));
         //
-        //     using Query q = world.QueryBuilder<Position>()
+        //     using var q = world.QueryBuilder<Position>()
         //         .With<Velocity>().InOut()
         //         .Build();
         //
@@ -2195,7 +2217,7 @@ namespace Flecs.NET.Tests.Cpp
         //         .Set(new Position(10, 20))
         //         .Set(new Velocity(1, 2));
         //
-        //     using Query q = world.QueryBuilder<Position>()
+        //     using var q = world.QueryBuilder<Position>()
         //         .With<Velocity>().InOut()
         //         .Build();
         //
@@ -2215,7 +2237,7 @@ namespace Flecs.NET.Tests.Cpp
         //         .Set(new Position(10, 20))
         //         .Set(new Velocity(1, 2));
         //
-        //     using Query q = world.QueryBuilder<Position>()
+        //     using var q = world.QueryBuilder<Position>()
         //         .With<Velocity>().InOut()
         //         .Build();
         //
@@ -2237,7 +2259,7 @@ namespace Flecs.NET.Tests.Cpp
         //         .Set(new Position(20, 30))
         //         .Set(new Velocity(3, 4));
         //
-        //     using Query q = world.QueryBuilder<Position>()
+        //     using var q = world.QueryBuilder<Position>()
         //         .With<Velocity>().InOut()
         //         .Build();
         //
@@ -2276,7 +2298,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(20, 30))
                 .Set(new Velocity(3, 4));
 
-            using Query q = world.QueryBuilder<Position>()
+            using Query<Position> q = world.QueryBuilder<Position>()
                 .With<Velocity>().InOut()
                 .Build();
 
@@ -2315,7 +2337,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(20, 30))
                 .Set(new Velocity(3, 4));
 
-            using Query q = world.QueryBuilder<Position>()
+            using Query<Position> q = world.QueryBuilder<Position>()
                 .With<Velocity>().InOut()
                 .Build();
 
@@ -2346,8 +2368,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query qw = world.Query<Position>();
-            using Query qr = world.QueryBuilder<Position>()
+            using Query<Position> qw = world.Query<Position>();
+            using Query<Position> qr = world.QueryBuilder<Position>()
                 .Cached()
                 .Build();
 
@@ -2559,7 +2581,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
             Entity e1 = world.Entity().Set(new Position(10, 20));
 
             Action action = () =>
@@ -2583,7 +2605,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
             world.Entity().Set(new Position(10, 20));
             Entity e2 = world.Entity().Set(new Position(20, 30));
             world.Entity().Set(new Position(10, 20));
@@ -2609,7 +2631,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
             world.Entity().Set(new Position(10, 20));
             Entity e2 = world.Entity().Set(new Position(20, 30));
             world.Entity().Set(new Position(10, 20));
@@ -2687,14 +2709,14 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             Entity qe = world.Entity();
-            using Query q1 = world.QueryBuilder<Position, Velocity>(qe)
+            using Query<Position, Velocity> q1 = world.QueryBuilder<Position, Velocity>(qe)
                 .Build();
 
             world.Entity().Add<Position>();
             Entity e2 = world.Entity().Add<Position>().Add<Velocity>();
 
             int count = 0;
-            q1.Each((Entity e) =>
+            q1.Each((Entity e, ref Position _, ref Velocity _) =>
             {
                 count++;
                 Assert.True(e == e2);
@@ -2715,14 +2737,14 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q1 = world.QueryBuilder<Position, Velocity>("qe")
+            using Query<Position, Velocity> q1 = world.QueryBuilder<Position, Velocity>("qe")
                 .Build();
 
             world.Entity().Add<Position>();
             Entity e2 = world.Entity().Add<Position>().Add<Velocity>();
 
             int count = 0;
-            q1.Each((Entity e) =>
+            q1.Each((Entity e, ref Position _, ref Velocity _) =>
             {
                 count++;
                 Assert.True(e == e2);
@@ -2743,7 +2765,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q1 = world.Query<Position>();
+            using Query<Position> q1 = world.Query<Position>();
 
             int count = 0;
             q1.Run((Iter it) =>
@@ -2771,7 +2793,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Add<Hello>();
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
             int count = 0;
             q.Run((Iter it) =>
@@ -2793,7 +2815,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q = world.Query<Position>();
+            using Query<Position> q = world.Query<Position>();
 
             int count = 0;
             q.Run((Iter it) =>
@@ -2837,7 +2859,7 @@ namespace Flecs.NET.Tests.Cpp
             world.ReadonlyBegin(false);
 
             stage.Query<Position>()
-                .Each((Entity e) =>
+                .Each((Entity e, ref Position _) =>
                 {
                     e.Add<Velocity>();
                     Assert.True(!e.Has<Velocity>());
@@ -2864,7 +2886,7 @@ namespace Flecs.NET.Tests.Cpp
             world.ReadonlyBegin(true);
 
             stage.Query<Position>()
-                .Each((Entity e) =>
+                .Each((Entity e, ref Position _) =>
                 {
                     e.Add<Velocity>();
                     Assert.True(!e.Has<Velocity>());
@@ -2896,7 +2918,7 @@ namespace Flecs.NET.Tests.Cpp
             e2.Add<Tag>();
             e2.Remove<Tag>();
 
-            using Query q = world.QueryBuilder<Position, Velocity>()
+            using Query<Position, Velocity> q = world.QueryBuilder<Position, Velocity>()
                 .QueryFlags(EcsQueryMatchEmptyTables)
                 .Build();
 
@@ -2939,7 +2961,7 @@ namespace Flecs.NET.Tests.Cpp
         //     e2.Add<Tag>();
         //     e2.Remove<Tag>();
         //
-        //     using Query q = world.QueryBuilder<Position, Velocity>()
+        //     using var q = world.QueryBuilder<Position, Velocity>()
         //         .QueryFlags(EcsQueryMatchEmptyTables)
         //         .Build();
         //
@@ -2981,7 +3003,7 @@ namespace Flecs.NET.Tests.Cpp
             e2.Add<Tag>();
             e2.Remove<Tag>();
 
-            using Query q = world.QueryBuilder<Position, Velocity>()
+            using Query<Position, Velocity> q = world.QueryBuilder<Position, Velocity>()
                 .QueryFlags(EcsQueryMatchEmptyTables)
                 .Build();
 

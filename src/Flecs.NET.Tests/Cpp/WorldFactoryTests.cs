@@ -59,7 +59,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Routine routine = world.Routine<Position, Velocity>()
+            Routine<Position, Velocity> routine = world.Routine<Position, Velocity>()
                 .Each((Entity e, ref Position p, ref Velocity v) =>
                 {
                     p.X += v.X;
@@ -84,7 +84,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Routine routine = world.Routine<Position, Velocity>("MySystem")
+            Routine<Position, Velocity> routine = world.Routine<Position, Velocity>("MySystem")
                 .Each((Entity e, ref Position p, ref Velocity v) =>
                 {
                     p.X += v.X;
@@ -115,10 +115,19 @@ namespace Flecs.NET.Tests.Cpp
 
             Routine routine = world.Routine("MySystem")
                 .Expr("Position, [in] Velocity")
-                .Each((Entity e, ref Position p, ref Velocity v) =>
+                .Run((Iter it) =>
                 {
-                    p.X += v.X;
-                    p.Y += v.Y;
+                    while (it.Next())
+                    {
+                        Field<Position> p = it.Field<Position>(0);
+                        Field<Velocity> v = it.Field<Velocity>(1);
+
+                        foreach (int i in it)
+                        {
+                            p[i].X += v[i].X;
+                            p[i].Y += v[i].Y;
+                        }
+                    }
                 });
 
             Assert.True(routine.Id != 0);
@@ -140,7 +149,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            using Query q = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> q = world.Query<Position, Velocity>();
 
             Entity e = world.Entity()
                 .Set(new Position { X = 10, Y = 20 })
@@ -171,10 +180,19 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position { X = 10, Y = 20 })
                 .Set(new Velocity { X = 1, Y = 2 });
 
-            q.Each((ref Position p, ref Velocity v) =>
+            q.Run((Iter it) =>
             {
-                p.X += v.X;
-                p.Y += v.Y;
+                while (it.Next())
+                {
+                   Field<Position> p = it.Field<Position>(0);
+                   Field<Velocity> v = it.Field<Velocity>(1);
+
+                    foreach (int i in it)
+                    {
+                        p[i].X += v[i].X;
+                        p[i].Y += v[i].Y;
+                    }
+                }
             });
 
             Position* p = e.GetPtr<Position>();

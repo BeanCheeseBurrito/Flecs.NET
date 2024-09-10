@@ -23,7 +23,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e5 = world.Entity();
             e5.Set(new Self(e5));
 
-            using Query q = world.Query<Self>();
+            using Query<Self> q = world.Query<Self>();
 
             int count = 0;
             q.Page(1, 3).Each((Entity e, ref Self self) =>
@@ -53,7 +53,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e5 = world.Entity();
             e5.Set(new Self(e5));
 
-            using Query q = world.Query<Self>();
+            using Query<Self> q = world.Query<Self>();
 
             int count = 0;
             q.Page(1, 3).Run((Iter it) =>
@@ -91,7 +91,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e5 = world.Entity();
             e5.Set(new Self(e5));
 
-            using Query q = world.Query<Self>();
+            using Query<Self> q = world.Query<Self>();
 
             int count = 0;
             q.Worker(0, 2).Each((Entity e, ref Self self) =>
@@ -133,7 +133,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e5 = world.Entity();
             e5.Set(new Self(e5));
 
-            using Query q = world.Query<Self>();
+            using Query<Self> q = world.Query<Self>();
 
             int count = 0;
             q.Worker(0, 2).Run((Iter it) =>

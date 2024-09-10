@@ -10,7 +10,10 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void IterCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query query = world.QueryBuilder()
+                .With<Position>()
+                .With<Velocity>()
+                .Build();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
@@ -43,13 +46,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void IterFieldCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Iter<Position, Velocity>(Callback);
+            query.Iter(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -73,13 +76,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void IterSpanCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Iter<Position, Velocity>(Callback);
+            query.Iter(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -103,13 +106,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void IterPointerCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Iter<Position, Velocity>(Callback);
+            query.Iter(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -133,7 +136,10 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachEntityCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query query = world.QueryBuilder()
+                .With<Position>()
+                .With<Velocity>()
+                .Build();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
@@ -163,7 +169,10 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachIterCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query query = world.QueryBuilder()
+                .With<Position>()
+                .With<Velocity>()
+                .Build();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
@@ -195,13 +204,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachRefCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Each<Position, Velocity>(Callback);
+            query.Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -221,13 +230,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachPointerCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Each<Position, Velocity>(Callback);
+            query.Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -247,13 +256,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachEntityRefCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Each<Position, Velocity>(Callback);
+            query.Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -274,13 +283,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachEntityPointerCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Each<Position, Velocity>(Callback);
+            query.Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -301,13 +310,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachIterRefCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Each<Position, Velocity>(Callback);
+            query.Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -328,13 +337,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachIterPointerCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Each<Position, Velocity>(Callback);
+            query.Each(Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -355,7 +364,7 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void RunCallbackDelegate()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
@@ -391,7 +400,10 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void IterCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query query = world.QueryBuilder()
+                .With<Position>()
+                .With<Velocity>()
+                .Build();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
@@ -424,13 +436,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void IterFieldCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Iter<Position, Velocity>(&Callback);
+            query.Iter(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -454,13 +466,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void IterSpanCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Iter<Position, Velocity>(&Callback);
+            query.Iter(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -484,13 +496,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void IterPointerCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Iter<Position, Velocity>(&Callback);
+            query.Iter(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -514,7 +526,10 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachEntityCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query query = world.QueryBuilder()
+                .With<Position>()
+                .With<Velocity>()
+                .Build();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
@@ -544,7 +559,10 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachIterCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query query = world.QueryBuilder()
+                .With<Position>()
+                .With<Velocity>()
+                .Build();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
@@ -576,13 +594,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachRefCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Each<Position, Velocity>(&Callback);
+            query.Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -602,13 +620,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachPointerCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Each<Position, Velocity>(&Callback);
+            query.Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -628,13 +646,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachEntityRefCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Each<Position, Velocity>(&Callback);
+            query.Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -655,13 +673,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachEntityPointerCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Each<Position, Velocity>(&Callback);
+            query.Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -682,13 +700,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachIterRefCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Each<Position, Velocity>(&Callback);
+            query.Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -709,13 +727,13 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void EachIterPointerCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            query.Each<Position, Velocity>(&Callback);
+            query.Each(&Callback);
 
             Assert.Equal(new Position(40, 60), e.Get<Position>());
 
@@ -736,7 +754,7 @@ namespace Flecs.NET.Tests.CSharp.Core
         private void RunCallbackPointer()
         {
             using World world = World.Create();
-            using Query query = world.Query<Position, Velocity>();
+            using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
             Entity e = world.Entity("e")
                 .Set(new Position(10, 20))
