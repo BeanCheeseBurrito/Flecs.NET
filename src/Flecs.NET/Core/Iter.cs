@@ -465,28 +465,27 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     {
         Ecs.Assert(index >= 0 && index < iter->field_count, "Field index out of range.");
 
+        if (ecs_id_is_tag(iter->world, iter->ids[index]) == Utils.True || ecs_id_is_wildcard(iter->ids[index]) == Utils.True)
+        {
+            Ecs.Error($$"""
+                Invalid type argument "{{new Entity(iter->world, iter->ids[index])}}" at field index {{index}}. Component data cannot be retrieved for tag types.
+                [Query Name]: {{new Entity(iter->world, iter->system)}}
+                [Query Fields]: {{new Query(iter->query).Str()}}
+                """
+            );
+        }
+
         if (Ecs.TypeIdIs<T>(iter->world, iter->ids[index]))
             return;
 
-        Entity expected = new Entity(iter->world, iter->ids[index]);
-        Entity provided = new Entity(iter->world, Type<T>.Id(iter->world));
-
-        string query = iter->system == 0 ? "" : $"[Query Name]: {new Entity(iter->world, iter->system)}";
-        string fields = new Query(iter->query).Str();
-
-        Ecs.Error($"Type argument mismatch at term index {index}.\n[Fields]: {fields}\n[Expected Type]: {expected}\n[Provided Type]: {provided}\n{query}");
-    }
-
-    [Conditional("DEBUG")]
-    internal static void AssertFieldCount(ecs_iter_t* iter, int count)
-    {
-        if (iter->field_count >= count)
-            return;
-
-        string query = iter->system == 0 ? "" : $"[Query Name]: {new Entity(iter->world, iter->system)}";
-        string fields = new Query(iter->query).Str();
-
-        Ecs.Error($"Too many type arguments provided to query callback. Number of type arguments should be {iter->field_count} or less.\n[Fields]: {fields}\n{query}");
+        Ecs.Error($$"""
+            Type argument mismatch at field index {{index}}.
+            [Query Name]: {{new Entity(iter->world, iter->system)}}
+            [Query Fields]: {{new Query(iter->query).Str()}}
+            [Expected Type]: {{new Entity(iter->world, iter->ids[index])}}
+            [Provided Type]: {{new Entity(iter->world, Type<T>.Id(iter->world))}}
+            """
+        );
     }
 
     /// <summary>
