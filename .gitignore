@@ -484,6 +484,7 @@ $RECYCLE.BIN/
 
 # Zig
 zig-cache/
+.zig-cache/
 src/Flecs.NET.Native/debug
 src/Flecs.NET.Native/release
 

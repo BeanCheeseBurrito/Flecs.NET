@@ -300,6 +300,10 @@ namespace Flecs.NET.Core
             world.SetWith(prevWith);
             world.SetScope(prevScope);
 
+            // Store the type in the component.
+            if (typeof(T) != typeof(Type))
+                RegisterDotnetType(world, world.Entity(component));
+
             if (typeof(T).IsEnum)
                 RegisterConstants(world, world.Entity(component));
 
@@ -363,6 +367,14 @@ namespace Flecs.NET.Core
             }
 
             return constants;
+        }
+
+        private static void RegisterDotnetType(World world, Entity type)
+        {
+            ecs_suspend_readonly_state_t state = default;
+            world = flecs_suspend_readonly(world, &state);
+            type.Set(typeof(T));
+            flecs_resume_readonly(world, &state);
         }
 
         private static void RegisterConstants(World world, Entity type)
