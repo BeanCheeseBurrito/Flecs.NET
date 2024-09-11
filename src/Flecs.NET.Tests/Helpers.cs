@@ -31,8 +31,8 @@ public record struct PositionInitialized(float X, float Y);
 
 public class ManagedComponent
 {
-    public string Value;
-    public ManagedComponent Nested;
+    public string Value = null!;
+    public ManagedComponent Nested = null!;
 }
 
 public struct Base;
