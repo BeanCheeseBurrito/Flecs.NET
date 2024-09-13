@@ -52,7 +52,7 @@ file struct Move : IFlecsModule
             .Member<float>("X")
             .Member<float>("Y");
 
-        world.Routine<Position, Velocity>("Move")
+        world.System<Position, Velocity>("Move")
             .Each((Entity e, ref Position p, ref Velocity v) =>
             {
                 p.X += v.X;

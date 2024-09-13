@@ -3754,32 +3754,32 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     }
 
     /// <summary>
-    ///     Creates an observer builder.
+    ///     Creates a system builder.
     /// </summary>
-    /// <returns>A routine builder.</returns>
-    public RoutineBuilder Routine()
+    /// <returns>A system builder.</returns>
+    public SystemBuilder System()
     {
-        return new RoutineBuilder(Handle);
+        return new SystemBuilder(Handle);
     }
 
     /// <summary>
-    ///     Creates an observer builder.
+    ///     Creates a system builder.
     /// </summary>
-    /// <param name="name">The routine name.</param>
-    /// <returns>A routine builder.</returns>
-    public RoutineBuilder Routine(string name)
+    /// <param name="name">The system name.</param>
+    /// <returns>A system builder.</returns>
+    public SystemBuilder System(string name)
     {
-        return new RoutineBuilder(Handle, name);
+        return new SystemBuilder(Handle, name);
     }
 
     /// <summary>
-    ///     Create routine.
+    ///     Create a system.
     /// </summary>
-    /// <param name="entity">The routine entity.</param>
-    /// <returns>A routine.</returns>
-    public Routine Routine(ulong entity)
+    /// <param name="entity">The system entity.</param>
+    /// <returns>A system.</returns>
+    public System_ System(ulong entity)
     {
-        return new Routine(Handle, entity);
+        return new System_(Handle, entity);
     }
 
     /// <summary>

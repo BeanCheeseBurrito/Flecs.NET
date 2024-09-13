@@ -9,7 +9,7 @@ public static class Systems_TargetFps
         // Create system that prints delta_time. This system doesn't query for any
         // components which means it won't match any entities, but will still be ran
         // once for each call to ecs_progress.
-        world.Routine()
+        world.System()
             .Run((Iter it) =>
             {
                 Console.WriteLine($"Delta time: {it.DeltaTime()}");

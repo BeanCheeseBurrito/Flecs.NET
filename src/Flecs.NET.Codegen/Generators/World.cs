@@ -90,14 +90,14 @@ public class World : IIncrementalGenerator
                 return new {{Generator.GetTypeName(Type.QueryBuilder, i)}}(Handle, entity).Build();
             }
 
-            public {{Generator.GetTypeName(Type.RoutineBuilder, i)}} {{Generator.GetTypeName(Type.Routine, i)}}()
+            public {{Generator.GetTypeName(Type.SystemBuilder, i)}} {{Generator.GetTypeName(Type.System, i)}}()
             {
-                return new {{Generator.GetTypeName(Type.RoutineBuilder, i)}}(Handle);
+                return new {{Generator.GetTypeName(Type.SystemBuilder, i)}}(Handle);
             }
 
-            public {{Generator.GetTypeName(Type.RoutineBuilder, i)}} {{Generator.GetTypeName(Type.Routine, i)}}(string name)
+            public {{Generator.GetTypeName(Type.SystemBuilder, i)}} {{Generator.GetTypeName(Type.System, i)}}(string name)
             {
-                return new {{Generator.GetTypeName(Type.RoutineBuilder, i)}}(Handle, name);
+                return new {{Generator.GetTypeName(Type.SystemBuilder, i)}}(Handle, name);
             }
 
             public {{Generator.GetTypeName(Type.ObserverBuilder, i)}} {{Generator.GetTypeName(Type.Observer, i)}}()

@@ -23,7 +23,7 @@ public static class Systems_SyncPoint
         // .InOutNone() for Position tells the scheduler that while we
         // want to match entities with Position, we're not interested in reading or
         // writing the component value.
-        world.Routine("SetVelocity")
+        world.System("SetVelocity")
             .With<Position>().InOutNone()
             .Write<Velocity>() // Velocity is written, but shouldn't be matched
             .Each((Entity e) =>
@@ -32,7 +32,7 @@ public static class Systems_SyncPoint
             });
 
         // This system reads Velocity, which causes the insertion of a sync point.
-        world.Routine<Position, Velocity>("Move")
+        world.System<Position, Velocity>("Move")
             .Each((ref Position p, ref Velocity v) =>
             {
                 p.X += v.X;
@@ -40,7 +40,7 @@ public static class Systems_SyncPoint
             });
 
         // Print resulting Position
-        world.Routine<Position>("PrintPosition")
+        world.System<Position>("PrintPosition")
             .Each((Entity e, ref Position p) =>
             {
                 Console.WriteLine($"{e} ({p.X}, {p.Y})");

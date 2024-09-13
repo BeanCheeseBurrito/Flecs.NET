@@ -8,11 +8,11 @@ public static class Systems_TimeInterval
     {
         using World world = World.Create();
 
-        world.Routine("Tick")
+        world.System("Tick")
             .Interval(1.0f)
             .Run(Tick);
 
-        world.Routine("FastTick")
+        world.System("FastTick")
             .Interval(0.5f)
             .Run(Tick);
 

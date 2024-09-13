@@ -22,7 +22,7 @@ public static unsafe class Systems_RunWithCallback
 
         // Calling .Run() with a single parameter will finish building the system and
         // use the custom runner to manually control the iteration of the entire system.
-        Routine<Position, Velocity> system1 = world.Routine<Position, Velocity>("System 1")
+        System<Position, Velocity> system1 = world.System<Position, Velocity>("System 1")
             .Run((Iter it) =>
             {
                 Console.WriteLine($"{it.System()} Running...");
@@ -42,8 +42,8 @@ public static unsafe class Systems_RunWithCallback
             });
 
         // Adding a second 'Action<Iter>' parameter will allow you to forward a callback to the custom runner.
-        Routine<Position, Velocity> system2 = world.Routine<Position, Velocity>("System 2")
-            // This returns the routine builder and requires .Iter() or .Each()
+        System<Position, Velocity> system2 = world.System<Position, Velocity>("System 2")
+            // This returns the system builder and requires .Iter() or .Each()
             // to be called afterwards to finish building the system.
             .Run((Iter it, Action<Iter> callback) =>
             {
@@ -61,7 +61,7 @@ public static unsafe class Systems_RunWithCallback
             });
 
         // Alternatively, a managed function pointer can be used instead of 'Action<Iter>'.
-        Routine<Position, Velocity> system3 = world.Routine<Position, Velocity>("System 3")
+        System<Position, Velocity> system3 = world.System<Position, Velocity>("System 3")
             .Run((Iter it, delegate*<Iter, void> callback) =>
             {
                 Console.WriteLine($"{it.System()} Running...");

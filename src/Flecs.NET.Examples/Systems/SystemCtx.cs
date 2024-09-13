@@ -17,7 +17,7 @@ file static unsafe class Systems_SystemCtx
 
         using Query<Position, Radius> qCollide = world.Query<Position, Radius>();
 
-        Routine<Position, Radius> routine = world.Routine<Position, Radius>("Collide")
+        System<Position, Radius> system = world.System<Position, Radius>("Collide")
             .Ctx(&qCollide)
             .Each((Iter it, int i, ref Position p, ref Radius r) =>
             {
@@ -56,7 +56,7 @@ file static unsafe class Systems_SystemCtx
         }
 
         // Run the system
-        routine.Run();
+        system.Run();
     }
 
     private static float Sqr(float value)

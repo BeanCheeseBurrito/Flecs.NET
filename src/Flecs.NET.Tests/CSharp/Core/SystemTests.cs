@@ -15,7 +15,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Iter(Callback)
@@ -51,7 +51,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Iter(Callback)
                 .Run();
 
@@ -82,7 +82,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Iter(Callback)
                 .Run();
 
@@ -113,7 +113,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Iter(Callback)
                 .Run();
 
@@ -144,7 +144,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Each(Callback)
@@ -177,7 +177,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Each(Callback)
@@ -212,7 +212,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each(Callback)
                 .Run();
 
@@ -239,7 +239,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each(Callback)
                 .Run();
 
@@ -266,7 +266,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each(Callback)
                 .Run();
 
@@ -294,7 +294,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each(Callback)
                 .Run();
 
@@ -322,7 +322,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each(Callback)
                 .Run();
 
@@ -350,7 +350,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each(Callback)
                 .Run();
 
@@ -378,7 +378,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Callback)
                 .Run();
 
@@ -415,7 +415,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Run(Run)
@@ -458,7 +458,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Iter(Callback)
                 .Run();
@@ -496,7 +496,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Iter(Callback)
                 .Run();
@@ -534,7 +534,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Iter(Callback)
                 .Run();
@@ -572,7 +572,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Run(Run)
@@ -612,7 +612,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Run(Run)
@@ -654,7 +654,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Each(Callback)
                 .Run();
@@ -688,7 +688,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Each(Callback)
                 .Run();
@@ -722,7 +722,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Each(Callback)
                 .Run();
@@ -757,7 +757,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Each(Callback)
                 .Run();
@@ -792,7 +792,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Each(Callback)
                 .Run();
@@ -827,7 +827,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Each(Callback)
                 .Run();
@@ -862,7 +862,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Iter(&Callback)
@@ -898,7 +898,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Iter(&Callback)
                 .Run();
 
@@ -929,7 +929,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Iter(&Callback)
                 .Run();
 
@@ -960,7 +960,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Iter(&Callback)
                 .Run();
 
@@ -991,7 +991,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Each(&Callback)
@@ -1024,7 +1024,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Each(&Callback)
@@ -1059,7 +1059,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each(&Callback)
                 .Run();
 
@@ -1086,7 +1086,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each(&Callback)
                 .Run();
 
@@ -1113,7 +1113,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each(&Callback)
                 .Run();
 
@@ -1141,7 +1141,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each(&Callback)
                 .Run();
 
@@ -1169,7 +1169,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each(&Callback)
                 .Run();
 
@@ -1197,7 +1197,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each(&Callback)
                 .Run();
 
@@ -1225,7 +1225,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Callback)
                 .Run();
 
@@ -1262,7 +1262,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Run(&Run)
@@ -1305,7 +1305,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Iter(Callback)
                 .Run();
@@ -1343,7 +1343,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Iter(Callback)
                 .Run();
@@ -1381,7 +1381,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Iter(Callback)
                 .Run();
@@ -1419,7 +1419,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Run(&Run)
@@ -1459,7 +1459,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Run(&Run)
@@ -1501,7 +1501,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Each(Callback)
                 .Run();
@@ -1535,7 +1535,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Each(Callback)
                 .Run();
@@ -1569,7 +1569,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Each(Callback)
                 .Run();
@@ -1604,7 +1604,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Each(Callback)
                 .Run();
@@ -1639,7 +1639,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Each(Callback)
                 .Run();
@@ -1674,7 +1674,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Each(Callback)
                 .Run();
@@ -1709,7 +1709,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Run(Run)
@@ -1752,7 +1752,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Iter(&Callback)
                 .Run();
@@ -1790,7 +1790,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Iter(&Callback)
                 .Run();
@@ -1828,7 +1828,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Iter(&Callback)
                 .Run();
@@ -1866,7 +1866,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Run(Run)
@@ -1906,7 +1906,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Run(Run)
@@ -1948,7 +1948,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Each(&Callback)
                 .Run();
@@ -1982,7 +1982,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Each(&Callback)
                 .Run();
@@ -2016,7 +2016,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Each(&Callback)
                 .Run();
@@ -2051,7 +2051,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Each(&Callback)
                 .Run();
@@ -2086,7 +2086,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Each(&Callback)
                 .Run();
@@ -2121,7 +2121,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(Run)
                 .Each(&Callback)
                 .Run();
@@ -2156,7 +2156,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Run(&Run)
@@ -2199,7 +2199,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Iter(&Callback)
                 .Run();
@@ -2237,7 +2237,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Iter(&Callback)
                 .Run();
@@ -2275,7 +2275,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Iter(&Callback)
                 .Run();
@@ -2313,7 +2313,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Run(&Run)
@@ -2353,7 +2353,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine()
+            world.System()
                 .With<Position>()
                 .With<Velocity>()
                 .Run(&Run)
@@ -2395,7 +2395,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Each(&Callback)
                 .Run();
@@ -2429,7 +2429,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Each(&Callback)
                 .Run();
@@ -2463,7 +2463,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Each(&Callback)
                 .Run();
@@ -2498,7 +2498,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Each(&Callback)
                 .Run();
@@ -2533,7 +2533,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Each(&Callback)
                 .Run();
@@ -2568,7 +2568,7 @@ namespace Flecs.NET.Tests.CSharp.Core
                 .Set(new Position(10, 20))
                 .Set(new Velocity(30, 40));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run(&Run)
                 .Each(&Callback)
                 .Run();

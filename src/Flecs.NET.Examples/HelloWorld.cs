@@ -15,8 +15,7 @@ public static class HelloWorld
         using World world = World.Create();
 
         // Register a system
-        // In C# we call them routines to prevent conflicts with the System namespace
-        world.Routine<Position, Velocity>()
+        world.System<Position, Velocity>()
             .Each((ref Position p, ref Velocity v) =>
             {
                 p.X += v.X;

@@ -32,7 +32,7 @@ public static class Systems_Immediate
         // System that assigns plates to waiter. By making this system immediate,
         // plate assignments are assigned directly (not deferred) to waiters, which
         // ensures that we won't assign plates to the same waiter more than once.
-        world.Routine()
+        world.System()
             .With<Plate>()
             .Without<Waiter>(Ecs.Wildcard)
             .Immediate()

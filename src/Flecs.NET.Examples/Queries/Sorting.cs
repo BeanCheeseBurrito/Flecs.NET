@@ -18,7 +18,7 @@ file static unsafe class Queries_Sorting
         world.Entity().Set(new Position(4, 0));
 
         // Create a sorted system
-        Routine<Position> sys = world.Routine<Position>()
+        System<Position> sys = world.System<Position>()
             .OrderBy<Position>(ComparePosition)
             .Each((ref Position p) =>
             {

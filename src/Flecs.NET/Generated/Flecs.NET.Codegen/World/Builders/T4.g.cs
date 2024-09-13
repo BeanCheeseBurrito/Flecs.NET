@@ -66,14 +66,14 @@ public unsafe partial struct World
         return new QueryBuilder<T0, T1, T2, T3>(Handle, entity).Build();
     }
 
-    public RoutineBuilder<T0, T1, T2, T3> Routine<T0, T1, T2, T3>()
+    public SystemBuilder<T0, T1, T2, T3> System<T0, T1, T2, T3>()
     {
-        return new RoutineBuilder<T0, T1, T2, T3>(Handle);
+        return new SystemBuilder<T0, T1, T2, T3>(Handle);
     }
 
-    public RoutineBuilder<T0, T1, T2, T3> Routine<T0, T1, T2, T3>(string name)
+    public SystemBuilder<T0, T1, T2, T3> System<T0, T1, T2, T3>(string name)
     {
-        return new RoutineBuilder<T0, T1, T2, T3>(Handle, name);
+        return new SystemBuilder<T0, T1, T2, T3>(Handle, name);
     }
 
     public ObserverBuilder<T0, T1, T2, T3> Observer<T0, T1, T2, T3>()

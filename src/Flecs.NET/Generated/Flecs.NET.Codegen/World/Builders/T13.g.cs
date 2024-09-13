@@ -66,14 +66,14 @@ public unsafe partial struct World
         return new QueryBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Handle, entity).Build();
     }
 
-    public RoutineBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Routine<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
+    public SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> System<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()
     {
-        return new RoutineBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Handle);
+        return new SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Handle);
     }
 
-    public RoutineBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Routine<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(string name)
+    public SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> System<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(string name)
     {
-        return new RoutineBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Handle, name);
+        return new SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Handle, name);
     }
 
     public ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Observer<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>()

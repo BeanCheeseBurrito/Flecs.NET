@@ -121,7 +121,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Set(new Position(10, 20));
 
-            world.Routine()
+            world.System()
                 .Expr("[inout] Position($)")
                 .Run((Iter it) =>
                 {

@@ -2072,7 +2072,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            Routine<RelData, Velocity> s = world.Routine<RelData, Velocity>()
+            System<RelData, Velocity> s = world.System<RelData, Velocity>()
                 .TermAt(0).Second(Ecs.Wildcard)
                 .TermAt(1).Singleton()
                 .Run((Iter it) =>

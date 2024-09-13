@@ -16,7 +16,7 @@ public static class Systems_MutateEntityHandle
         using World world = World.Create();
 
         // System that deletes an entity after a timeout expires
-        world.Routine<Timeout>()
+        world.System<Timeout>()
             .Each((Iter it, int i, ref Timeout t) =>
             {
                 t.Value -= it.DeltaTime();
@@ -46,7 +46,7 @@ public static class Systems_MutateEntityHandle
             });
 
         // System that prints remaining expiry time
-        world.Routine<Timeout>()
+        world.System<Timeout>()
             .Each((ref Timeout t) =>
             {
                 Console.WriteLine($"PrintExpire: {t.ToDelete} has {t.Value:0.00} seconds left");

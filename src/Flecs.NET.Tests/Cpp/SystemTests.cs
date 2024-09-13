@@ -24,7 +24,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -60,7 +60,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -106,7 +106,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(3, 4));
 
-            world.Routine<Position>().Expr("Velocity(self|up IsA)")
+            world.System<Position>().Expr("Velocity(self|up IsA)")
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -162,7 +162,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e4 = world.Entity()
                 .Set(new Position(70, 80));
 
-            world.Routine<Position, Velocity, Mass>()
+            world.System<Position, Velocity, Mass>()
                 .TermAt(1).Optional()
                 .TermAt(2).Optional()
                 .Run((Iter it) =>
@@ -216,7 +216,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each((Entity e, ref Position p, ref Velocity v) =>
                 {
                     p.X += v.X;
@@ -239,7 +239,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each((Entity e, ref Position p, ref Velocity v) =>
                 {
                     p.X += v.X;
@@ -269,7 +269,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(3, 4));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Each((Entity e, ref Position p, ref Velocity v) =>
                 {
                     p.X += v.X;
@@ -309,7 +309,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e4 = world.Entity()
                 .Set(new Position(70, 80));
 
-            world.Routine<Position, Velocity, Mass>()
+            world.System<Position, Velocity, Mass>()
                 .TermAt(1).Optional()
                 .TermAt(2).Optional()
                 .Each((Entity e, ref Position p, ref Velocity v, ref Mass m) =>
@@ -354,7 +354,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            world.Routine().Expr("Position, Velocity")
+            world.System().Expr("Position, Velocity")
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -390,7 +390,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            world.Routine().Expr("Position, [in] Velocity")
+            world.System().Expr("Position, [in] Velocity")
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -436,7 +436,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(3, 4));
 
-            world.Routine().Expr("Position, [in] Velocity(self|up IsA)")
+            world.System().Expr("Position, [in] Velocity(self|up IsA)")
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -492,7 +492,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e4 = world.Entity()
                 .Set(new Position(70, 80));
 
-            world.Routine().Expr("Position, ?Velocity, ?Mass")
+            world.System().Expr("Position, ?Velocity, ?Mass")
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -542,11 +542,11 @@ namespace Flecs.NET.Tests.Cpp
 
             string name = "Hello";
 
-            Routine<Position> system1 = world.Routine<Position>(name)
+            System<Position> system1 = world.System<Position>(name)
                 .Run((Iter it) => { while (it.Next()) { } });
 
             name = "World";
-            Routine<Position> system2 = world.Routine<Position>(name)
+            System<Position> system2 = world.System<Position>(name)
                 .Run((Iter it) => { while (it.Next()) { } });
 
             Assert.True(system1.Id != system2.Id);
@@ -557,7 +557,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Routine<Position> system1 = world.Routine<Position>("foo.bar")
+            System<Position> system1 = world.System<Position>("foo.bar")
                 .Run((Iter it) => { while (it.Next()) { } });
 
             Assert.Equal("bar", system1.Entity.Name());
@@ -578,7 +578,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Routine()
+            world.System()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -597,7 +597,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int invoked = 0;
 
-            world.Routine()
+            world.System()
                 .With<MyTag>()
                 .Run((Iter it) =>
                 {
@@ -620,7 +620,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int invoked = 0;
 
-            world.Routine()
+            world.System()
                 .With<MyTag>()
                 .Each((Entity _) => { invoked++; });
 
@@ -637,7 +637,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Routine sys = world.Routine()
+            System_ sys = world.System()
                 .Kind(0)
                 .Interval(1.0f)
                 .Run((Iter it) => { });
@@ -665,7 +665,7 @@ namespace Flecs.NET.Tests.Cpp
             float lastVal = 0;
             int count = 0;
 
-            Routine<Position> sys = world.Routine<Position>()
+            System<Position> sys = world.System<Position>()
                 .OrderBy<Position>((ulong e1, void* p1, ulong e2, void* p2) =>
                 {
                     Position* pos1 = (Position*)p1;
@@ -700,7 +700,7 @@ namespace Flecs.NET.Tests.Cpp
             float lastVal = 0;
             int count = 0;
 
-            Routine<Position> sys = world.Routine<Position>()
+            System<Position> sys = world.System<Position>()
                 .OrderBy(pos, (ulong e1, void* p1, ulong e2, void* p2) =>
                 {
                     Position* pos1 = (Position*)p1;
@@ -733,7 +733,7 @@ namespace Flecs.NET.Tests.Cpp
             float lastVal = 0;
             int count = 0;
 
-            Routine<Position> sys = world.Routine<Position>()
+            System<Position> sys = world.System<Position>()
                 .OrderBy<Position>((ulong e1, void* p1, ulong e2, void* p2) =>
                 {
                     Position* pos1 = (Position*)p1;
@@ -768,7 +768,7 @@ namespace Flecs.NET.Tests.Cpp
             float lastVal = 0;
             int count = 0;
 
-            Routine<Position> sys = world.Routine<Position>()
+            System<Position> sys = world.System<Position>()
                 .OrderBy(pos, (ulong e1, void* p1, ulong e2, void* p2) =>
                 {
                     Position* pos1 = (Position*)p1;
@@ -798,7 +798,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            Routine<Position> sys = world.Routine<Position>()
+            System<Position> sys = world.System<Position>()
                 .Each((Entity _, ref Position _) => { });
 
             Query<Position> q = sys.Query();
@@ -828,7 +828,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set(new Position(1, 0));
             Entity e3 = world.Entity().Set(new Position(2, 0));
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .Each((Entity e, ref Position p) =>
                 {
                     e.Add<Velocity>();
@@ -851,7 +851,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set(new Position(1, 0));
             Entity e3 = world.Entity().Set(new Position(2, 0));
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .Each((Entity e, ref Position p) =>
                 {
                     e.Destruct();
@@ -874,7 +874,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set(new EntityWrapper(world.Entity()));
             Entity e3 = world.Entity().Set(new EntityWrapper(world.Entity()));
 
-            world.Routine<EntityWrapper>()
+            world.System<EntityWrapper>()
                 .Each((Entity e, ref EntityWrapper c) => { c.Value.Mut(e).Add<Position>(); });
 
             world.Progress();
@@ -893,7 +893,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set(new Position(0, 0));
             Entity e3 = world.Entity().Set(new Position(0, 0));
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .Each((Entity e, ref Position p) =>
                 {
                     e.Set(new EntityWrapper(
@@ -921,7 +921,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set(new Position(1, 0));
             Entity e3 = world.Entity().Set(new Position(2, 0));
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -952,7 +952,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set(new Position(1, 0));
             Entity e3 = world.Entity().Set(new Position(2, 0));
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -983,7 +983,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set(new EntityWrapper(world.Entity()));
             Entity e3 = world.Entity().Set(new EntityWrapper(world.Entity()));
 
-            world.Routine<EntityWrapper>()
+            world.System<EntityWrapper>()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -1011,7 +1011,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Set(new Position(0, 0));
             Entity e3 = world.Entity().Set(new Position(0, 0));
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -1050,7 +1050,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -1090,7 +1090,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Routine<EntityWrapper>()
+            world.System<EntityWrapper>()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -1136,14 +1136,14 @@ namespace Flecs.NET.Tests.Cpp
                 l2BMult = 4,
                 frameCount = 0;
 
-            Routine root = world.Routine("root")
+            System_ root = world.System("root")
                 .Run((Iter it) =>
                 {
                     while (it.Next())
                         rootCount++;
                 });
 
-            Routine l1A = world.Routine("l1_a")
+            System_ l1A = world.System("l1_a")
                 .Rate(root, 1)
                 .Run((Iter it) =>
                 {
@@ -1151,7 +1151,7 @@ namespace Flecs.NET.Tests.Cpp
                         l1ACount++;
                 });
 
-            Routine l1B = world.Routine("l1_b")
+            System_ l1B = world.System("l1_b")
                 .Rate(root, 2)
                 .Run((Iter it) =>
                 {
@@ -1159,7 +1159,7 @@ namespace Flecs.NET.Tests.Cpp
                         l1BCount++;
                 });
 
-            world.Routine("l1_c")
+            world.System("l1_c")
                 .Rate(root, 3)
                 .Run((Iter it) =>
                 {
@@ -1167,7 +1167,7 @@ namespace Flecs.NET.Tests.Cpp
                         l1CCount++;
                 });
 
-            world.Routine("l2_a")
+            world.System("l2_a")
                 .Rate(l1A, 2)
                 .Run((Iter it) =>
                 {
@@ -1175,7 +1175,7 @@ namespace Flecs.NET.Tests.Cpp
                         l2ACount++;
                 });
 
-            world.Routine("l2_b")
+            world.System("l2_b")
                 .Rate(l1B, 2)
                 .Run((Iter it) =>
                 {
@@ -1210,12 +1210,12 @@ namespace Flecs.NET.Tests.Cpp
                 l2Mult = 6,
                 frameCount = 0;
 
-            Routine root = world.Routine("root")
+            System_ root = world.System("root")
                 .Run((Iter it) => {
                     while (it.Next())
                         rootCount++; });
 
-            Routine l1 = world.Routine("l1")
+            System_ l1 = world.System("l1")
                 .Rate(root, 2)
                 .Run((Iter it) =>
                 {
@@ -1223,7 +1223,7 @@ namespace Flecs.NET.Tests.Cpp
                         l1Count++;
                 });
 
-            world.Routine("l2")
+            world.System("l2")
                 .Rate(l1, 3)
                 .Run((Iter it) =>
                 {
@@ -1268,7 +1268,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add<Tag>().Set(new Value(20));
             Entity e3 = world.Entity().Add<Tag>().Set(new Value(30));
 
-            Routine<Value> s = world.Routine<Value>()
+            System<Value> s = world.System<Value>()
                 .With<Tag>()
                 .Each((Entity e, ref Value v) =>
                 {
@@ -1300,7 +1300,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e2 = world.Entity().Add<Tag>().Set(new Value(20));
             Entity e3 = world.Entity().Add<Tag>().Set(new Value(30));
 
-            Routine<Value> s = world.Routine<Value>()
+            System<Value> s = world.System<Value>()
                 .With<Tag>()
                 .Run((Iter it) =>
                 {
@@ -1349,7 +1349,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Routine()
+            world.System()
                 .Kind(postFrame)
                 .Run((Iter it) =>
                 {
@@ -1361,7 +1361,7 @@ namespace Flecs.NET.Tests.Cpp
                 })
                 .Entity.Add(tag);
 
-            world.Routine()
+            world.System()
                 .Kind(onFrame)
                 .Run((Iter it) =>
                 {
@@ -1373,7 +1373,7 @@ namespace Flecs.NET.Tests.Cpp
                 })
                 .Entity.Add(tag);
 
-            world.Routine()
+            world.System()
                 .Kind(preFrame)
                 .Run((Iter it) =>
                 {
@@ -1408,7 +1408,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Routine()
+            world.System()
                 .Kind(tag)
                 .Run((Iter it) =>
                 {
@@ -1419,7 +1419,7 @@ namespace Flecs.NET.Tests.Cpp
                     }
                 });
 
-            world.Routine()
+            world.System()
                 .Kind(tag)
                 .Run((Iter it) =>
                 {
@@ -1430,7 +1430,7 @@ namespace Flecs.NET.Tests.Cpp
                     }
                 });
 
-            world.Routine()
+            world.System()
                 .Kind(tag)
                 .Run((Iter it) =>
                 {
@@ -1473,7 +1473,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            Routine<Self, Position, Velocity> s = world.Routine<Self, Position, Velocity>()
+            System<Self, Position, Velocity> s = world.System<Self, Position, Velocity>()
                 .TermAt(2).Singleton()
                 .Each((Entity e, ref Self s, ref Position p, ref Velocity v) =>
                 {
@@ -1541,7 +1541,7 @@ namespace Flecs.NET.Tests.Cpp
             e7.Set(new Self(e7));
 
             int count = 0;
-            Routine<Self, Position, Velocity> s = world.Routine<Self, Position, Velocity>()
+            System<Self, Position, Velocity> s = world.System<Self, Position, Velocity>()
                 .Each((Entity e, ref Self s, ref Position p, ref Velocity v) =>
                 {
                     Assert.True(e == s.Value);
@@ -1620,7 +1620,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            Routine<Self, Position, Velocity> s = world.Routine<Self, Position, Velocity>()
+            System<Self, Position, Velocity> s = world.System<Self, Position, Velocity>()
                 .TermAt(2).Singleton()
                 .Run((Iter it) =>
                 {
@@ -1701,7 +1701,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            Routine<Self, Position, Velocity> s = world.Routine<Self, Position, Velocity>()
+            System<Self, Position, Velocity> s = world.System<Self, Position, Velocity>()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
@@ -1788,7 +1788,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            Routine s = world.Routine()
+            System_ s = world.System()
                 .With<Position>()
                 .Each((Entity e) =>
                 {
@@ -1825,7 +1825,7 @@ namespace Flecs.NET.Tests.Cpp
             int s1Count = 0;
             int s2Count = 0;
 
-            world.Routine()
+            world.System()
                 .With<Tag>()
                 .Kind<Second>()
                 .Each((Entity e) =>
@@ -1836,7 +1836,7 @@ namespace Flecs.NET.Tests.Cpp
                     s1Count++;
                 });
 
-            world.Routine()
+            world.System()
                 .With<Tag>()
                 .Kind<First>()
                 .Each((Entity e) =>
@@ -1857,10 +1857,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Routine<Position> sysVar;
+            System<Position> sysVar;
 
             int count = 0;
-            Routine<Position> sys = world.Routine<Position>()
+            System<Position> sys = world.System<Position>()
                 .Each((Entity e, ref Position p) =>
                 {
                     Assert.Equal(10, p.X);
@@ -1884,14 +1884,14 @@ namespace Flecs.NET.Tests.Cpp
 
             int invoked = 0;
 
-            Entity sys = world.Routine()
+            Entity sys = world.System()
                 .Run((Iter it) =>
                 {
                     while (it.Next())
                         invoked++;
                 });
 
-            Routine sysFromId = world.Routine(sys);
+            System_ sysFromId = world.System(sys);
 
             sysFromId.Run();
             Assert.Equal(1, invoked);
@@ -1905,7 +1905,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Set(new Position(10, 20));
 
             int count = 0;
-            Routine<Position> sys = world.Routine<Position>()
+            System<Position> sys = world.System<Position>()
                 .Each((Iter it, int i, ref Position _) =>
                 {
                     Assert.True(it.Entity(i) == e1);
@@ -1932,7 +1932,7 @@ namespace Flecs.NET.Tests.Cpp
 
             using Query<Velocity> q = world.Query<Velocity>();
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .MultiThreaded()
                 .Each((Entity e, Position* p) =>
                 {
@@ -1963,7 +1963,7 @@ namespace Flecs.NET.Tests.Cpp
 
             using Query<Velocity> q = world.Query<Velocity>();
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .MultiThreaded()
                 .Each((Iter it, int i, Position* p) =>
                 {
@@ -1994,7 +1994,7 @@ namespace Flecs.NET.Tests.Cpp
 
             using Query<Velocity> q = world.Query<Velocity>();
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .MultiThreaded()
                 .Each((Iter it, int i, Position* p) =>
                 {
@@ -2025,7 +2025,7 @@ namespace Flecs.NET.Tests.Cpp
 
             using Query<Velocity> q = world.Query<Velocity>();
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .MultiThreaded()
                 .Each((Entity e, Position* p) =>
                 {
@@ -2064,7 +2064,7 @@ namespace Flecs.NET.Tests.Cpp
 
             using Query<Velocity> q = world.Query<Velocity>();
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .MultiThreaded()
                 .Each((Iter it, int i, Position* p) =>
                 {
@@ -2103,7 +2103,7 @@ namespace Flecs.NET.Tests.Cpp
 
             using Query<Velocity> q = world.Query<Velocity>();
 
-            world.Routine<Position>()
+            world.System<Position>()
                 .MultiThreaded()
                 .Each((Iter it, int i, Position* p) =>
                 {
@@ -2138,7 +2138,7 @@ namespace Flecs.NET.Tests.Cpp
                 .Set(new Position(10, 20))
                 .Set(new Velocity(1, 2));
 
-            world.Routine<Position, Velocity>()
+            world.System<Position, Velocity>()
                 .Run((Iter it, Action<Iter> callback) =>
                 {
                     while (it.Next())
@@ -2168,7 +2168,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int countA = 0, countB = 0;
 
-            world.Routine()
+            world.System()
                 .Kind(Ecs.OnStart)
                 .Run((Iter it) =>
                 {
@@ -2179,7 +2179,7 @@ namespace Flecs.NET.Tests.Cpp
                     }
                 });
 
-            world.Routine()
+            world.System()
                 .Kind(Ecs.OnUpdate)
                 .Run((Iter it) =>
                 {
@@ -2211,7 +2211,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int sysAInvoked = 0, sysBInvoked = 0;
 
-            world.Routine()
+            world.System()
                 .TickSource(t)
                 .Run((Iter it) =>
                 {
@@ -2219,7 +2219,7 @@ namespace Flecs.NET.Tests.Cpp
                         sysAInvoked++;
                 });
 
-            world.Routine()
+            world.System()
                 .TickSource(t)
                 .Run((Iter it) =>
                 {
@@ -2249,7 +2249,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int sysAInvoked = 0, sysBInvoked = 0;
 
-            world.Routine()
+            world.System()
                 .TickSource(t)
                 .Run((Iter it) =>
                 {
@@ -2257,7 +2257,7 @@ namespace Flecs.NET.Tests.Cpp
                         sysAInvoked++;
                 });
 
-            world.Routine()
+            world.System()
                 .TickSource(t)
                 .Run((Iter it) =>
                 {
@@ -2288,7 +2288,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int sysAInvoked = 0, sysBInvoked = 0;
 
-            world.Routine()
+            world.System()
                 .TickSource(t3)
                 .Run((Iter it) =>
                 {
@@ -2296,7 +2296,7 @@ namespace Flecs.NET.Tests.Cpp
                         sysAInvoked++;
                 });
 
-            world.Routine()
+            world.System()
                 .TickSource(t6)
                 .Run((Iter it) =>
                 {
@@ -2337,7 +2337,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Set(new Position(10, 20));
             Entity e2 = world.Entity().Set(new Position(20, 30));
 
-            Routine s = world.Routine()
+            System_ s = world.System()
                 .With<Position>()
                 .Each((Iter it, int index) =>
                 {
@@ -2368,7 +2368,7 @@ namespace Flecs.NET.Tests.Cpp
             Entity e1 = world.Entity().Set(new Position(10, 20));
             Entity e2 = world.Entity().Set(new Position(20, 30));
 
-            Routine s = world.Routine()
+            System_ s = world.System()
                 .With<Position>()
                 .Each((Iter it, int index) =>
                 {
@@ -2396,7 +2396,7 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Entity s1 = world.Routine()
+            Entity s1 = world.System()
                 .Interval(1.0f)
                 .Run((Iter it) => { while (it.Next()) { } });
 
@@ -2408,7 +2408,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.RandomizeTimers();
 
-            Entity s2 = world.Routine()
+            Entity s2 = world.System()
                 .Interval(1.0f)
                 .Run((Iter it) => { while (it.Next()) { } });
 
@@ -2434,7 +2434,7 @@ namespace Flecs.NET.Tests.Cpp
 
             int sysInvoked = 0;
 
-            world.Routine()
+            world.System()
                 .TickSource<Tag0>()
                 .Run((Iter it) =>
                 {
@@ -2461,7 +2461,7 @@ namespace Flecs.NET.Tests.Cpp
 
             bool ranTest = false;
 
-            world.Routine().Kind(PipelineStepEnum.CustomStep).Run((Iter it) =>
+            world.System().Kind(PipelineStepEnum.CustomStep).Run((Iter it) =>
             {
                 while (it.Next())
                     ranTest = true;
@@ -2481,7 +2481,7 @@ namespace Flecs.NET.Tests.Cpp
 
             bool ranTest = false;
 
-            world.Routine().Kind(PipelineStepEnum.CustomStep2).Run((Iter it) =>
+            world.System().Kind(PipelineStepEnum.CustomStep2).Run((Iter it) =>
             {
                 while (it.Next())
                     ranTest = true;
@@ -2499,7 +2499,7 @@ namespace Flecs.NET.Tests.Cpp
             int count1 = 0;
             int count2 = 0;
 
-            Routine sys1 = world.Routine("Test")
+            System_ sys1 = world.System("Test")
                 .Each((Iter it, int i) =>
                 {
                     count1++;
@@ -2508,7 +2508,7 @@ namespace Flecs.NET.Tests.Cpp
             sys1.Run();
             Assert.Equal(1, count1);
 
-            Routine sys2 = world.Routine("Test")
+            System_ sys2 = world.System("Test")
                 .Each((Iter it, int i) =>
                 {
                     count2++;
@@ -2526,7 +2526,7 @@ namespace Flecs.NET.Tests.Cpp
             int count1 = 0;
             int count2 = 0;
 
-            Routine sys1 = world.Routine("Test")
+            System_ sys1 = world.System("Test")
                 .Run((Iter it) =>
                 {
                     count1++;
@@ -2535,7 +2535,7 @@ namespace Flecs.NET.Tests.Cpp
             sys1.Run();
             Assert.Equal(1, count1);
 
-            Routine sys2 = world.Routine("Test")
+            System_ sys2 = world.System("Test")
                 .Run((Iter it) =>
                 {
                     count2++;
@@ -2553,7 +2553,7 @@ namespace Flecs.NET.Tests.Cpp
             int count1 = 0;
             int count2 = 0;
 
-            Routine sys1 = world.Routine("Test")
+            System_ sys1 = world.System("Test")
                 .Run((Iter it) =>
                 {
                     count1++;
@@ -2562,7 +2562,7 @@ namespace Flecs.NET.Tests.Cpp
             sys1.Run();
             Assert.Equal(1, count1);
 
-            Routine sys2 = world.Routine("Test")
+            System_ sys2 = world.System("Test")
                 .Each((Iter it, int i) =>
                 {
                     count2++;
@@ -2580,7 +2580,7 @@ namespace Flecs.NET.Tests.Cpp
             int count1 = 0;
             int count2 = 0;
 
-            Routine sys1 = world.Routine("Test")
+            System_ sys1 = world.System("Test")
                 .Each((Iter it, int i) =>
                 {
                     count1++;
@@ -2589,7 +2589,7 @@ namespace Flecs.NET.Tests.Cpp
             sys1.Run();
             Assert.Equal(1, count1);
 
-            Routine sys2 = world.Routine("Test")
+            System_ sys2 = world.System("Test")
                 .Run((Iter it) =>
                 {
                     count2++;

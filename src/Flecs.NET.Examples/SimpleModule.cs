@@ -10,7 +10,7 @@ public static class SimpleModule
         world.Import<Simple.Module>();
 
         // Create system that uses component from module
-        world.Routine<Simple.Position>("PrintPosition")
+        world.System<Simple.Position>("PrintPosition")
             .Each((ref Simple.Position p) =>
             {
                 Console.WriteLine($"p = ({p.X}, {p.Y}) (System)");
@@ -53,7 +53,7 @@ namespace Simple
             world.Component<Position>();
             world.Component<Velocity>();
 
-            world.Routine<Position, Velocity>("Move")
+            world.System<Position, Velocity>("Move")
                 .Each((ref Position p, ref Velocity v) =>
                 {
                     p.X += v.X;

@@ -1,5 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Flecs.NET.Codegen.Helpers;
 
+[SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores")]
+[SuppressMessage("ReSharper", "InconsistentNaming")]
 public enum Type
 {
     Alert,
@@ -14,8 +18,9 @@ public enum Type
     PipelineBuilder,
     Query,
     QueryBuilder,
-    Routine,
-    RoutineBuilder,
+    System,
+    System_,
+    SystemBuilder,
     TypeHelper,
     WorkerIterable
 }

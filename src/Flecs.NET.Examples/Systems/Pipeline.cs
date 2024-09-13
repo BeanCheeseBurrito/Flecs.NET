@@ -11,7 +11,7 @@ public static class Systems_Pipeline
         using World world = World.Create();
 
         // Create a system for moving an entity
-        world.Routine<Position, Velocity>()
+        world.System<Position, Velocity>()
             .Kind(Ecs.OnUpdate) // A phase orders a system in a pipeline
             .Each((ref Position p, ref Velocity v) =>
             {
@@ -20,7 +20,7 @@ public static class Systems_Pipeline
             });
 
         // Create a system for printing the entity position
-        world.Routine<Position>()
+        world.System<Position>()
             .Kind(Ecs.PostUpdate) // A phase orders a system in a pipeline
             .Each((Entity e, ref Position p) =>
             {

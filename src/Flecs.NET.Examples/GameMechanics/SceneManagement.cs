@@ -136,7 +136,7 @@ file static class GameMechanics_SceneManagement
     {
         // Will run every time regardless of the
         // current scene we're in.
-        world.Routine<Position>("Print Position")
+        world.System<Position>("Print Position")
             .Each((Entity e, ref Position p) =>
             {
                 Console.WriteLine($"{e}: ({p.X}, {p.Y})");
@@ -144,7 +144,7 @@ file static class GameMechanics_SceneManagement
 
         // Will only run when the game scene is
         // currently active.
-        world.Routine<Health>("Characters Lose Health")
+        world.System<Health>("Characters Lose Health")
             .Kind<GameScene>()
             .Each((ref Health h) =>
             {
@@ -157,7 +157,7 @@ file static class GameMechanics_SceneManagement
 
         // Will only run when the menu scene is
         // currently active.
-        world.Routine<Button>("Print Menu Button Text")
+        world.System<Button>("Print Menu Button Text")
             .Kind<MenuScene>()
             .Each((ref Button b) =>
             {

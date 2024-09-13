@@ -24,7 +24,7 @@ public static class Systems_SyncPointDelete
         // modified by the system, which forces the scheduler to insert a sync.
 
         // Basic move system.
-        world.Routine<Position, Velocity>("Move")
+        world.System<Position, Velocity>("Move")
             .Each((ref Position p, ref Velocity v) =>
             {
                 p.X += v.X;
@@ -33,7 +33,7 @@ public static class Systems_SyncPointDelete
 
         // Delete entities when p.X >= 3. Add wildcard annotation to indicate any
         // component could be written by the system.
-        world.Routine<Position>("DeleteEntity")
+        world.System<Position>("DeleteEntity")
             .Write(Ecs.Wildcard)
             .Each((Entity e, ref Position p) =>
             {
@@ -46,7 +46,7 @@ public static class Systems_SyncPointDelete
 
         // Print resulting Position. Note that this system will never print entities
         // that have been deleted by the previous system.
-        world.Routine<Position>("PrintPosition")
+        world.System<Position>("PrintPosition")
             .Each((Entity e, ref Position p) =>
             {
                 Console.WriteLine($"{e} ({p.X}, {p.Y})");

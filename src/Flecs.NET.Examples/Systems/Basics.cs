@@ -13,7 +13,7 @@ public static class Systems_Basics
         // Create a system for Position, Velocity. Systems are like queries (see
         // queries) with a function that can be ran or scheduled (see pipeline).
 
-        Routine<Position, Velocity> routine = world.Routine<Position, Velocity>()
+        System<Position, Velocity> system = world.System<Position, Velocity>()
             .Each((Entity e, ref Position p, ref Velocity v) =>
             {
                 p.X += v.X;
@@ -34,7 +34,7 @@ public static class Systems_Basics
             .Set(new Position { X = 10, Y = 20 });
 
         // Run the system
-        routine.Run();
+        system.Run();
     }
 }
 

@@ -1663,7 +1663,7 @@ namespace Flecs.NET.Tests.Cpp
             using Query<Velocity> q = world.Query<Velocity>();
 
             int count = 0;
-            world.Routine<Position>()
+            world.System<Position>()
                 .Each((Entity _, ref Position _) =>
                 {
                     q.Each((Entity _, ref Velocity _) =>
