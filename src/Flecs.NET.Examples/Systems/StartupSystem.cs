@@ -16,7 +16,7 @@ public static class Systems_StartupSystem
         using World world = World.Create();
 
         // Startup system
-        world.Routine("Startup")
+        world.System("Startup")
             .Kind(Ecs.OnStart)
             .Run((Iter it) =>
             {
@@ -24,7 +24,7 @@ public static class Systems_StartupSystem
             });
 
         // Regular system
-        world.Routine("Update")
+        world.System("Update")
             .Run((Iter it) =>
             {
                 Console.WriteLine(it.System().ToString());

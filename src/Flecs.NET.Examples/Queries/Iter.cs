@@ -12,7 +12,7 @@ public static class Queries_Iter
         using World world = World.Create();
 
         // Create a query for Position, Velocity.
-        using Query q = world.Query<Position, Velocity>();
+        using Query<Position, Velocity> q = world.Query<Position, Velocity>();
 
         // Create a few test entities for a Position, Velocity query
         world.Entity("e1")

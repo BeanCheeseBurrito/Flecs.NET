@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.1;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RootNamespace>Flecs.NET</RootNamespace>
@@ -42,9 +42,17 @@
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+    </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
-        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0"/>
 
         <ProjectReference Include="..\Flecs.NET.Bindings\Flecs.NET.Bindings.csproj"/>
         <ProjectReference Include="..\Flecs.NET.Native\Flecs.NET.Native.csproj"/>
@@ -54,14 +62,5 @@
     <ItemGroup>
         <Content Include="../../docs/icon.png" PackagePath="icon.png"/>
     </ItemGroup>
-
-    <ItemGroup>
-        <UnityArtifacts Include="$(BaseOutputPath)\$(Configuration)\$(TargetFramework)\$(AssemblyName).dll"/>
-        <UnityArtifacts Include="$(BaseOutputPath)\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml"/>
-    </ItemGroup>
-
-    <Target Name="ExportUnityArtifacts" AfterTargets="Build" Condition="'$(FlecsExportUnityArtifacts)' == 'True' And '$(TargetFramework)' == 'netstandard2.1'">
-        <Copy SourceFiles="@(UnityArtifacts)" DestinationFolder="$(UnityPackageRoot)\$(AssemblyName)\$(Configuration)"/>
-    </Target>
 
 </Project>

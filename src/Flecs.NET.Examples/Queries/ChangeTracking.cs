@@ -31,7 +31,7 @@ public static class Queries_ChangeTracking
             .Build();
 
         // Create a query that writes the component based on a Dirty state.
-        using Query qWrite = world.QueryBuilder<Dirty, Position>()
+        using Query<Dirty, Position> qWrite = world.QueryBuilder<Dirty, Position>()
             .TermAt(0).Up(Ecs.IsA).In() // Only match Dirty from prefab
             .Build();
 

@@ -43,7 +43,9 @@ public static class Queries_ComponentInheritance
         world.Entity("Builder2").Add<Builder>();
 
         // Create a query to find all ranged units
-        using Query q = world.Query<RangedUnit>();
+        using Query q = world.QueryBuilder()
+            .With<RangedUnit>()
+            .Build();
 
         // Iterate the query
         q.Each((Entity entity) => Console.WriteLine($"Unit {entity} found"));

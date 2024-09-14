@@ -39,7 +39,7 @@ public static unsafe class Queries_GroupByCallbacks
         int groupCounter = 0;
 
         // Grouped query
-        using Query q = world.QueryBuilder<Position>()
+        using Query<Position> q = world.QueryBuilder<Position>()
             .GroupBy<Group>()
             // Callback invoked when a new group is created
             .OnGroupCreate((

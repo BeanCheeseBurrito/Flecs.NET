@@ -10,7 +10,7 @@ public static class Systems_MutateEntity
         using World world = World.Create();
 
         // System that deletes an entity after a timeout expires
-        world.Routine<Timeout>()
+        world.System<Timeout>()
             .Each((Iter it, int i, ref Timeout t) =>
             {
                 t.Value -= it.DeltaTime();
@@ -34,7 +34,7 @@ public static class Systems_MutateEntity
             });
 
         // System that prints remaining expiry time
-        world.Routine<Timeout>()
+        world.System<Timeout>()
             .Each((Entity e, ref Timeout t) =>
             {
                 Console.WriteLine($"PrintExpire: {e} has {t.Value:0.00} seconds left");
@@ -43,7 +43,7 @@ public static class Systems_MutateEntity
         // Observer that triggers when entity is actually deleted
         world.Observer<Timeout>()
             .Event(Ecs.OnRemove)
-            .Each((Entity e) =>
+            .Each((Entity e, ref Timeout _) =>
             {
                 Console.WriteLine($"Expired: {e} actually deleted");
             });

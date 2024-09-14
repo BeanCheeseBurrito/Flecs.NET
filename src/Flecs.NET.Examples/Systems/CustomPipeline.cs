@@ -29,7 +29,7 @@ public static class Systems_CustomPipeline
         world.SetPipeline(pipeline);
 
         // Create system with Physics tag
-        world.Routine()
+        world.System()
             .Kind<Physics>()
             .Run((Iter it) =>
             {

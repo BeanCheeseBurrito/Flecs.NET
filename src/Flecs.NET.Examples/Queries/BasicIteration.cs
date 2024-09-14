@@ -16,7 +16,7 @@ public static unsafe class Queries_BasicIteration
             .Set(new Velocity(1, 1));
 
         // Create a query that matches entities with a Position and Velocity component.
-        using Query query = world.Query<Position, Velocity>();
+        using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
         // The .Each() function is called once for every individual entity matched.
         // The .Iter() function is called once for every archetype matched and allows for manual control over the iteration of entities.

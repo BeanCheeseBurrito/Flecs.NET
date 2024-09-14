@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netcoreapp3.1;net6;net7;net8</TargetFrameworks>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -12,7 +12,7 @@
 
     <ItemGroup>
         <ProjectReference Include="../Flecs.NET/Flecs.NET.csproj"/>
-        <ProjectReference Include="../Flecs.NET.Examples/Flecs.NET.Examples.csproj" Condition="'$(TargetFramework)' == 'net8'"/>
+        <ProjectReference Include="../Flecs.NET.Examples/Flecs.NET.Examples.csproj" Condition="'$(TargetFramework)' == 'net8.0'"/>
     </ItemGroup>
 
     <ItemGroup>

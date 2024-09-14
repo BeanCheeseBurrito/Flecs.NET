@@ -63,7 +63,8 @@ public static class Queries_GroupIter
             .Add<Soldier>()
             .Add<Npc>();
 
-        using Query q = world.QueryBuilder<Npc>()
+        using Query q = world.QueryBuilder()
+            .With<Npc>()
             .GroupBy<WorldCell>()
             .Build();
 

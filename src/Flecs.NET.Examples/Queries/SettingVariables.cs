@@ -73,7 +73,8 @@ public static class Queries_SettingVariables
         // The way to read how this query is evaluated is:
         // - find all entities with (Platoon, *), store * in _Platoon
         // - check if _Platoon has (Player, *), store * in _Player
-        using Query q = world.QueryBuilder<RangedUnit>()
+        using Query q = world.QueryBuilder()
+            .With<RangedUnit>()
             .With<Platoon>().Second("$platoon")
             .With<Player>("$player").Src("$platoon")
             .Build();

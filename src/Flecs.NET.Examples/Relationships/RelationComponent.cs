@@ -54,7 +54,7 @@ public static class Relationships_RelationComponent
 
         // When querying for a relationship component, add the pair type as template
         // argument to the builder:
-        using Query q = world.QueryBuilder<Requires>()
+        using Query<Requires> q = world.QueryBuilder<Requires>()
             .TermAt(0).Second<Gigawatts>() // Set second part of pair for first term
             .Build();
 

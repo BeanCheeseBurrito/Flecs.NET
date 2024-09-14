@@ -12,7 +12,7 @@ public static class Queries_Basics
 
         // Create a query for Position, Velocity. Queries are the fastest way to
         // iterate entities as they cache results.
-        using Query q = world.QueryBuilder<Position, Velocity>()
+        using Query<Position, Velocity> q = world.QueryBuilder<Position, Velocity>()
             .Cached()
             .Build();
 

@@ -12,17 +12,13 @@ BindingOptions bindingOptions = new()
     DllFilePaths =
     {
         "flecs",
-        "runtimes/linux-x64/native/flecs",
-        "runtimes/linux-arm64/native/flecs",
-        "runtimes/osx-x64/native/flecs",
-        "runtimes/osx-arm64/native/flecs",
+        "libflecs",
+        "runtimes/linux-x64/native/libflecs",
+        "runtimes/linux-arm64/native/libflecs",
+        "runtimes/osx-x64/native/libflecs",
+        "runtimes/osx-arm64/native/libflecs",
         "runtimes/win-x64/native/flecs",
         "runtimes/win-arm64/native/flecs"
-    },
-
-    RemappedDefineConstantsToDllImportPaths =
-    {
-        ("(UNITY_EDITOR || UNITY_STANDALONE) && !FLECS_UNITY_NDEBUG", "flecs-debug") // Unity specific define
     },
 
     SuppressedWarnings = { "CS8981" },

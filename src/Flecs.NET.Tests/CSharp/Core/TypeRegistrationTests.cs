@@ -265,7 +265,7 @@ namespace Flecs.NET.Tests.CSharp.Core
         {
             using World world = World.Create();
 
-            world.Routine()
+            world.System()
                 .Iter((Iter it) =>
                 {
                     Entity color = it.World().Component<Color>();

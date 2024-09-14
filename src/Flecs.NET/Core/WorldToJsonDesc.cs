@@ -3,98 +3,97 @@ using System.Runtime.CompilerServices;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
-namespace Flecs.NET.Core
+namespace Flecs.NET.Core;
+
+/// <summary>
+///     A wrapper around ecs_world_to_json_desc_t.
+/// </summary>
+public unsafe struct WorldToJsonDesc : IEquatable<WorldToJsonDesc>
 {
+    private ecs_world_to_json_desc_t _desc;
+
     /// <summary>
-    ///     A wrapper around ecs_world_to_json_desc_t.
+    ///     Reference to desc.
     /// </summary>
-    public unsafe struct WorldToJsonDesc : IEquatable<WorldToJsonDesc>
+    public ref ecs_world_to_json_desc_t Desc => ref _desc;
+
+    /// <summary>
+    ///     Default serialization configuration.
+    /// </summary>
+    public static WorldToJsonDesc Default => default;
+
+    /// <summary>
+    ///     Exclude flecs modules and contents.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ref WorldToJsonDesc BuiltIn(bool value = true)
     {
-        private ecs_world_to_json_desc_t _desc;
+        Desc.serialize_builtin = Utils.Bool(value);
+        return ref this;
+    }
 
-        /// <summary>
-        ///     Reference to desc.
-        /// </summary>
-        public ref ecs_world_to_json_desc_t Desc => ref _desc;
+    /// <summary>
+    ///     Exclude modules and contents.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ref WorldToJsonDesc Modules(bool value = true)
+    {
+        Desc.serialize_modules = Utils.Bool(value);
+        return ref this;
+    }
 
-        /// <summary>
-        ///     Default serialization configuration.
-        /// </summary>
-        public static WorldToJsonDesc Default => default;
+    /// <summary>
+    ///     Checks if two <see cref="WorldToJsonDesc"/> instances are equal.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public bool Equals(WorldToJsonDesc other)
+    {
+        return Desc == other.Desc;
+    }
 
-        /// <summary>
-        ///     Exclude flecs modules and contents.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref WorldToJsonDesc BuiltIn(bool value = true)
-        {
-            Desc.serialize_builtin = Utils.Bool(value);
-            return ref this;
-        }
+    /// <summary>
+    ///     Checks if two <see cref="WorldToJsonDesc"/> instances are equal.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public override bool Equals(object? obj)
+    {
+        return obj is WorldToJsonDesc other && Equals(other);
+    }
 
-        /// <summary>
-        ///     Exclude modules and contents.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref WorldToJsonDesc Modules(bool value = true)
-        {
-            Desc.serialize_modules = Utils.Bool(value);
-            return ref this;
-        }
+    /// <summary>
+    ///     Returns the hash code for the <see cref="WorldToJsonDesc"/>.
+    /// </summary>
+    /// <returns></returns>
+    public override int GetHashCode()
+    {
+        return Desc.GetHashCode();
+    }
 
-        /// <summary>
-        ///     Checks if two <see cref="WorldToJsonDesc"/> instances are equal.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(WorldToJsonDesc other)
-        {
-            return Desc == other.Desc;
-        }
+    /// <summary>
+    ///     Checks if two <see cref="WorldToJsonDesc"/> instances are equal.
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <returns></returns>
+    public static bool operator ==(WorldToJsonDesc left, WorldToJsonDesc right)
+    {
+        return left.Equals(right);
+    }
 
-        /// <summary>
-        ///     Checks if two <see cref="WorldToJsonDesc"/> instances are equal.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object? obj)
-        {
-            return obj is WorldToJsonDesc other && Equals(other);
-        }
-
-        /// <summary>
-        ///     Returns the hash code for the <see cref="WorldToJsonDesc"/>.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return Desc.GetHashCode();
-        }
-
-        /// <summary>
-        ///     Checks if two <see cref="WorldToJsonDesc"/> instances are equal.
-        /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
-        public static bool operator ==(WorldToJsonDesc left, WorldToJsonDesc right)
-        {
-            return left.Equals(right);
-        }
-
-        /// <summary>
-        ///     Checks if two <see cref="WorldToJsonDesc"/> instances are not equal.
-        /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
-        public static bool operator !=(WorldToJsonDesc left, WorldToJsonDesc right)
-        {
-            return !(left == right);
-        }
+    /// <summary>
+    ///     Checks if two <see cref="WorldToJsonDesc"/> instances are not equal.
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <returns></returns>
+    public static bool operator !=(WorldToJsonDesc left, WorldToJsonDesc right)
+    {
+        return !(left == right);
     }
 }

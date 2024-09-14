@@ -25,15 +25,15 @@ public static class Systems_CustomPhasesNoBuiltIn
             .DependsOn(physics);
 
         // Create 3 dummy systems.
-        world.Routine("CollisionSystem")
+        world.System("CollisionSystem")
             .Kind(collisions)
             .Run(Sys);
 
-        world.Routine("PhysicsSystem")
+        world.System("PhysicsSystem")
             .Kind(collisions)
             .Run(Sys);
 
-        world.Routine("GameSystem")
+        world.System("GameSystem")
             .Kind(update)
             .Run(Sys);
 

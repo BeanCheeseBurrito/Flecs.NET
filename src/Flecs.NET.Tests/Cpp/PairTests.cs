@@ -166,7 +166,7 @@ namespace Flecs.NET.Tests.Cpp
             int entityCount = 0;
             int traitValue = 0;
 
-            world.Routine()
+            world.System()
                 .Expr("(Pair, *)")
                 .Run((Iter it) =>
                 {
@@ -203,7 +203,7 @@ namespace Flecs.NET.Tests.Cpp
             int entityCount = 0;
             int traitValue = 0;
 
-            world.Routine()
+            world.System()
                 .Expr("(Pair, *)")
                 .Run((Iter it) =>
                 {

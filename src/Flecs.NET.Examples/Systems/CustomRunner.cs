@@ -17,7 +17,7 @@ public static class Systems_CustomRunner
     {
         using World world = World.Create();
 
-        Routine routine = world.Routine<Position, Velocity>()
+        System<Position, Velocity> system = world.System<Position, Velocity>()
             // Forward each result from the run callback to the each callback.
             .Run((Iter it, Action<Iter> callback) =>
             {
@@ -50,7 +50,7 @@ public static class Systems_CustomRunner
             .Set(new Position(10, 20));
 
         // Run the system
-        routine.Run();
+        system.Run();
     }
 }
 

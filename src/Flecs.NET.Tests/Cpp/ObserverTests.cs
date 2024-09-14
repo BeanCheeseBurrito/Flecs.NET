@@ -402,7 +402,8 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer<Tag0>()
+            world.Observer()
+                .With<Tag0>()
                 .Event(Ecs.OnAdd)
                 .YieldExisting()
                 .Each((Entity e) =>
@@ -431,7 +432,9 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            world.Observer<Tag0, Tag1>()
+            world.Observer()
+                .With<Tag0>()
+                .With<Tag1>()
                 .Event(Ecs.OnAdd)
                 .YieldExisting()
                 .Each((Entity e) =>
@@ -457,9 +460,10 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            observer = world.Observer<Tag0>()
+            observer = world.Observer()
+                .With<Tag0>()
                 .Event(Ecs.OnAdd)
-                .Each((Entity e) => { count++; });
+                .Each((Entity _) => { count++; });
 
             Assert.True(observer != 0);
 
@@ -473,9 +477,10 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            Observer observer = world.Observer<Tag0>()
+            Observer observer = world.Observer()
+                .With<Tag0>()
                 .Event(Ecs.OnAdd)
-                .Each((Entity e) => { });
+                .Each((Entity _) => { });
 
             ulong entity = observer;
 
@@ -528,7 +533,8 @@ namespace Flecs.NET.Tests.Cpp
 
             int invoked = 0;
 
-            world.Observer<MyTag>()
+            world.Observer()
+                .With<MyTag>()
                 .Event(Ecs.OnAdd)
                 .Run((Iter it) =>
                 {
@@ -549,7 +555,8 @@ namespace Flecs.NET.Tests.Cpp
 
             int invoked = 0;
 
-            world.Observer<MyTag>()
+            world.Observer()
+                .With<MyTag>()
                 .Event(Ecs.OnAdd)
                 .Run((Iter it) =>
                 {
@@ -570,9 +577,10 @@ namespace Flecs.NET.Tests.Cpp
 
             int invoked = 0;
 
-            world.Observer<MyTag>()
+            world.Observer()
+                .With<MyTag>()
                 .Event(Ecs.OnAdd)
-                .Each((Entity e) => { invoked++; });
+                .Each((Entity _) => { invoked++; });
 
             world.Entity()
                 .Add<MyTag>();
@@ -798,11 +806,11 @@ namespace Flecs.NET.Tests.Cpp
 
             int count = 0;
 
-            Observer observer = world.Observer<Position>()
+            Observer<Position> observer = world.Observer<Position>()
                 .Event(Ecs.OnSet)
-                .Each((Entity e, ref Position p) => { });
+                .Each((Entity _, ref Position _) => { });
 
-            Query query = observer.Query();
+            Query<Position> query = observer.Query();
 
             query.Run((Iter it) =>
             {
@@ -965,7 +973,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Observer<Position>()
                 .Event(Ecs.OnAdd)
                 .YieldExisting()
-                .Each((Entity e) => { e.Add<Velocity>(); });
+                .Each((Entity e, ref Position _) => { e.Add<Velocity>(); });
 
             Assert.True(e1.Has<Position>());
             Assert.True(e1.Has<Velocity>());
@@ -989,7 +997,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Observer<Position, Mass>()
                 .Event(Ecs.OnAdd)
                 .YieldExisting()
-                .Each((Entity e) => { e.Add<Velocity>(); });
+                .Each((Entity e, ref Position _, ref Mass _) => { e.Add<Velocity>(); });
 
             Assert.True(e1.Has<Position>());
             Assert.True(e1.Has<Mass>());

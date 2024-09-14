@@ -23,7 +23,7 @@ public static class Observers_CustomEvent
         // Create observer for custom event
         world.Observer<Position>()
             .Event<MyEvent>()
-            .Each((Iter it, int i) =>
+            .Each((Iter it, int i, ref Position _) =>
             {
                 Console.WriteLine($" - {it.Event()}: {it.EventId()}: {it.Entity(i)}");
             });
