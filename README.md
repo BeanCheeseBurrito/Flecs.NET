@@ -36,7 +36,7 @@ public record struct Velocity(float X, float Y);
 
 ## Overview
 **Flecs.NET - High-level C# port of the C++ wrapper**
-- Compatible with .NET Standard 2.1 and NativeAOT
+- Modern .NET 8
 - Near feature parity with the C++ API
 - Struct-based API with minimal GC interaction
 - Supports both unmanaged and managed types as components
