@@ -75,20 +75,12 @@ public class Invoker : IIncrementalGenerator
                 {{Generator.GetCallbackCountVariable(callback)}}
                 
                 {{Generator.IterPointerVariables[i]}}
+                {{Generator.IterStepVariables[i]}}
                     
                 Ecs.TableLock(it);
                     
-                if (it.IsLinear())
-                {
-                    for (int i = 0; i < count; i++)
-                        callback({{Generator.GetCallbackArguments(i, callback)}});
-                }
-                else
-                {
-                    {{Generator.IterStepVariables[i]}}
-                    for (int i = 0; i < count; i++)
-                        callback({{Generator.GetCallbackSteppedArguments(i, callback)}});
-                }
+                for (int i = 0; i < count; i++, {{Generator.IterPointerIncrements[i]}})
+                    callback({{Generator.GetCallbackSteppedArguments(i, callback)}});
                     
                 Ecs.TableUnlock(it);
             }
@@ -121,33 +113,19 @@ public class Invoker : IIncrementalGenerator
                 {{Generator.GetCallbackCountVariable(callback)}}
                 
                 {{Generator.IterPointerVariables[i]}}
+                {{Generator.IterStepVariables[i]}}
                     
                 Ecs.TableLock(it);
                 
                 Entity result = default;
                     
-                if (it.IsLinear())
+                for (int i = 0; i < count; i++, {{Generator.IterPointerIncrements[i]}})
                 {
-                    for (int i = 0; i < count; i++)
-                    {
-                        if (!callback({{Generator.GetCallbackArguments(i, callback)}}))
-                            continue;
-                            
-                        result = new Entity(it.Handle->world, it.Handle->entities[i]);
-                        break;
-                    }
-                }
-                else
-                {
-                    {{Generator.IterStepVariables[i]}}
-                    for (int i = 0; i < count; i++)
-                    {
-                        if (!callback({{Generator.GetCallbackSteppedArguments(i, callback)}}))
-                            continue;
-                            
-                        result = new Entity(it.Handle->world, it.Handle->entities[i]);
-                        break;
-                    }
+                    if (!callback({{Generator.GetCallbackSteppedArguments(i, callback)}}))
+                        continue;
+                        
+                    result = new Entity(it.Handle->world, it.Handle->entities[i]);
+                    break;
                 }
                     
                 Ecs.TableUnlock(it);

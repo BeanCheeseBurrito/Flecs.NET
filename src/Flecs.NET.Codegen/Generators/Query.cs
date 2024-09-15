@@ -35,7 +35,7 @@ public class Query : IIncrementalGenerator
         ///     A type-safe wrapper around <see cref="Query"/> that takes {{i + 1}} type arguments.
         /// </summary>
         /// {{Generator.XmlTypeParameters[i]}}
-        public unsafe partial struct Query<{{Generator.TypeParameters[i]}}> : IDisposable, IEquatable<Query<{{Generator.TypeParameters[i]}}>>
+        public unsafe partial struct {{Generator.GetTypeName(Type.Query, i)}} : IDisposable, IEquatable<{{Generator.GetTypeName(Type.Query, i)}}>
         {
             private Query _query;
         
@@ -199,6 +199,22 @@ public class Query : IIncrementalGenerator
             public static bool operator !=(Query<{{Generator.TypeParameters[i]}}> left, Query<{{Generator.TypeParameters[i]}}> right)
             {
                 return !(left == right);
+            }
+        }
+        
+        // Flecs.NET Extensions
+        public unsafe partial struct {{Generator.GetTypeName(Type.Query, i)}}
+        {
+            /// <inheritdoc cref="Query.World()"/>
+            public World World()
+            {
+                return _query.World();
+            }
+        
+            /// <inheritdoc cref="Query.RealWorld()"/>
+            public World RealWorld()
+            {
+                return _query.RealWorld();
             }
         }
         

@@ -6,26 +6,49 @@ namespace Flecs.NET.Tests.CSharp.Core
     public class EntityTests
     {
         [Fact]
-        public void AddManaged()
+        public void AddManagedClass()
         {
             using World world = World.Create();
             Entity entity = world.Entity();
 
-            entity.Add<string>();
-            Assert.True(entity.Has<string>());
+            entity.Add<ManagedClass>();
+            Assert.True(entity.Has<ManagedClass>());
         }
 
         [Fact]
-        public void SetManaged()
+        public void SetManagedClass()
         {
             using World world = World.Create();
             Entity entity = world.Entity();
 
-            entity.Set<string>("Text");
-            Assert.True(entity.Has<string>());
+            entity.Set(new ManagedClass(10));
+            Assert.True(entity.Has<ManagedClass>());
 
-            ref readonly string str = ref entity.Get<string>();
-            Assert.True(str == "Text");
+            ref readonly ManagedClass component = ref entity.Get<ManagedClass>();
+            Assert.True(component.Value == 10);
+        }
+
+        [Fact]
+        public void AddManagedStruct()
+        {
+            using World world = World.Create();
+            Entity entity = world.Entity();
+
+            entity.Add<ManagedStruct>();
+            Assert.True(entity.Has<ManagedStruct>());
+        }
+
+        [Fact]
+        public void SetManagedStruct()
+        {
+            using World world = World.Create();
+            Entity entity = world.Entity();
+
+            entity.Set(new ManagedStruct(10));
+            Assert.True(entity.Has<ManagedStruct>());
+
+            ref readonly ManagedStruct component = ref entity.Get<ManagedStruct>();
+            Assert.True(component.Value == 10);
         }
     }
 }

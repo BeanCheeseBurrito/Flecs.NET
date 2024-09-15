@@ -682,7 +682,7 @@ public unsafe partial struct Iter
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal int Step<T>(int index)
     {
-        return (Handle->sources == null || Handle->sources[index] == 0) && (Handle->set_fields & (1 << index)) != 0 && !Type<T>.IsTag ? 1 : 0;
+        return (Handle->sources == null || Handle->sources[index] == 0) && (Handle->set_fields & (1 << index)) != 0 && !Type<T>.IsTag ? Type<T>.Size : 0;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

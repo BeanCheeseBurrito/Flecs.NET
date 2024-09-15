@@ -785,5 +785,41 @@ namespace Flecs.NET.Tests.CSharp.Core
                 }
             }
         }
+
+        [Fact]
+        private void EachManagedClass()
+        {
+            using World world = World.Create();
+            using Query<ManagedClass> query = world.Query<ManagedClass>();
+
+            for (int i = 0; i < 5; i ++)
+                world.Entity().Set(new ManagedClass(10));
+
+            Assert.True(query.IsTrue());
+            Assert.Equal(5, query.Count());
+
+            query.Each(static (Iter _, int i, ref ManagedClass component) =>
+            {
+                Assert.Equal(10, component.Value);
+            });
+        }
+
+        [Fact]
+        private void EachManagedStruct()
+        {
+            using World world = World.Create();
+            using Query<ManagedStruct> query = world.Query<ManagedStruct>();
+
+            for (int i = 0; i < 5; i ++)
+                world.Entity().Set(new ManagedStruct(10));
+
+            Assert.True(query.IsTrue());
+            Assert.Equal(5, query.Count());
+
+            query.Each(static (Iter it, int i, ref ManagedStruct component) =>
+            {
+                Assert.Equal(10, component.Value);
+            });
+        }
     }
 }

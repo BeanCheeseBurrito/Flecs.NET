@@ -3780,11 +3780,11 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
         if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
         {
             Managed.AllocGcHandle(component, out GCHandle handle);
-            ecs_set_id(World, Id, id, (IntPtr)sizeof(T), &handle);
+            ecs_set_id(World, Id, id, sizeof(GCHandle), &handle);
         }
         else
         {
-            ecs_set_id(World, Id, id, (IntPtr)sizeof(T), component);
+            ecs_set_id(World, Id, id, sizeof(T), component);
         }
 
         return ref this;

@@ -29,11 +29,23 @@ public record struct Other(int Value);
 public record struct Singleton(int Value);
 public record struct PositionInitialized(float X, float Y);
 
+public record struct ManagedStruct(int Value)
+{
+    public object Dummy = null!;
+}
+
+public class ManagedClass(int value)
+{
+    public int Value = value;
+    public object Dummy = null!;
+}
+
 public class ManagedComponent
 {
     public string Value = null!;
     public ManagedComponent Nested = null!;
 }
+
 
 public struct Base;
 public struct Prefab;

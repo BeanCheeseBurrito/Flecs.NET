@@ -180,6 +180,22 @@ public unsafe partial struct Query<T0, T1, T2, T3, T4, T5> : IDisposable, IEquat
     }
 }
 
+// Flecs.NET Extensions
+public unsafe partial struct Query<T0, T1, T2, T3, T4, T5>
+{
+    /// <inheritdoc cref="Query.World()"/>
+    public World World()
+    {
+        return _query.World();
+    }
+
+    /// <inheritdoc cref="Query.RealWorld()"/>
+    public World RealWorld()
+    {
+        return _query.RealWorld();
+    }
+}
+
 // IIterableBase Interface
 public unsafe partial struct Query<T0, T1, T2, T3, T4, T5> : IIterableBase
 {

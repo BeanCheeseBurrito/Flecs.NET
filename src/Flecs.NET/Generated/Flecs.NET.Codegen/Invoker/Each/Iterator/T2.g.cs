@@ -17,21 +17,13 @@ public static unsafe partial class Invoker
     {
         int count = it.Handle->count == 0 && it.Handle->table == null ? 1 : it.Handle->count;
         
-        T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);
+        byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);
+        int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
             
         Ecs.TableLock(it);
             
-        if (it.IsLinear())
-        {
-            for (int i = 0; i < count; i++)
-                callback(ref Managed.GetTypeRef<T0>(&pointer0[i]), ref Managed.GetTypeRef<T1>(&pointer1[i]));
-        }
-        else
-        {
-            int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
-            for (int i = 0; i < count; i++)
-                callback(ref Managed.GetTypeRef<T0>(&pointer0[i * step0]), ref Managed.GetTypeRef<T1>(&pointer1[i * step1]));
-        }
+        for (int i = 0; i < count; i++, pointer0 = &pointer0[step0], pointer1 = &pointer1[step1])
+            callback(ref Managed.GetTypeRef<T0>(pointer0), ref Managed.GetTypeRef<T1>(pointer1));
             
         Ecs.TableUnlock(it);
     }
@@ -46,21 +38,13 @@ public static unsafe partial class Invoker
     {
         int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
         
-        T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);
+        byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);
+        int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
             
         Ecs.TableLock(it);
             
-        if (it.IsLinear())
-        {
-            for (int i = 0; i < count; i++)
-                callback(new Entity(it.Handle->world, it.Handle->entities[i]), ref Managed.GetTypeRef<T0>(&pointer0[i]), ref Managed.GetTypeRef<T1>(&pointer1[i]));
-        }
-        else
-        {
-            int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
-            for (int i = 0; i < count; i++)
-                callback(new Entity(it.Handle->world, it.Handle->entities[i]), ref Managed.GetTypeRef<T0>(&pointer0[i * step0]), ref Managed.GetTypeRef<T1>(&pointer1[i * step1]));
-        }
+        for (int i = 0; i < count; i++, pointer0 = &pointer0[step0], pointer1 = &pointer1[step1])
+            callback(new Entity(it.Handle->world, it.Handle->entities[i]), ref Managed.GetTypeRef<T0>(pointer0), ref Managed.GetTypeRef<T1>(pointer1));
             
         Ecs.TableUnlock(it);
     }
@@ -75,21 +59,13 @@ public static unsafe partial class Invoker
     {
         int count = it.Handle->count == 0 && it.Handle->table == null ? 1 : it.Handle->count;
         
-        T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);
+        byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);
+        int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
             
         Ecs.TableLock(it);
             
-        if (it.IsLinear())
-        {
-            for (int i = 0; i < count; i++)
-                callback(it, i, ref Managed.GetTypeRef<T0>(&pointer0[i]), ref Managed.GetTypeRef<T1>(&pointer1[i]));
-        }
-        else
-        {
-            int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
-            for (int i = 0; i < count; i++)
-                callback(it, i, ref Managed.GetTypeRef<T0>(&pointer0[i * step0]), ref Managed.GetTypeRef<T1>(&pointer1[i * step1]));
-        }
+        for (int i = 0; i < count; i++, pointer0 = &pointer0[step0], pointer1 = &pointer1[step1])
+            callback(it, i, ref Managed.GetTypeRef<T0>(pointer0), ref Managed.GetTypeRef<T1>(pointer1));
             
         Ecs.TableUnlock(it);
     }
@@ -104,21 +80,13 @@ public static unsafe partial class Invoker
     {
         int count = it.Handle->count == 0 && it.Handle->table == null ? 1 : it.Handle->count;
         
-        T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);
+        byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);
+        int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
             
         Ecs.TableLock(it);
             
-        if (it.IsLinear())
-        {
-            for (int i = 0; i < count; i++)
-                callback(ref Managed.GetTypeRef<T0>(&pointer0[i]), ref Managed.GetTypeRef<T1>(&pointer1[i]));
-        }
-        else
-        {
-            int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
-            for (int i = 0; i < count; i++)
-                callback(ref Managed.GetTypeRef<T0>(&pointer0[i * step0]), ref Managed.GetTypeRef<T1>(&pointer1[i * step1]));
-        }
+        for (int i = 0; i < count; i++, pointer0 = &pointer0[step0], pointer1 = &pointer1[step1])
+            callback(ref Managed.GetTypeRef<T0>(pointer0), ref Managed.GetTypeRef<T1>(pointer1));
             
         Ecs.TableUnlock(it);
     }
@@ -133,21 +101,13 @@ public static unsafe partial class Invoker
     {
         int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
         
-        T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);
+        byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);
+        int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
             
         Ecs.TableLock(it);
             
-        if (it.IsLinear())
-        {
-            for (int i = 0; i < count; i++)
-                callback(new Entity(it.Handle->world, it.Handle->entities[i]), ref Managed.GetTypeRef<T0>(&pointer0[i]), ref Managed.GetTypeRef<T1>(&pointer1[i]));
-        }
-        else
-        {
-            int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
-            for (int i = 0; i < count; i++)
-                callback(new Entity(it.Handle->world, it.Handle->entities[i]), ref Managed.GetTypeRef<T0>(&pointer0[i * step0]), ref Managed.GetTypeRef<T1>(&pointer1[i * step1]));
-        }
+        for (int i = 0; i < count; i++, pointer0 = &pointer0[step0], pointer1 = &pointer1[step1])
+            callback(new Entity(it.Handle->world, it.Handle->entities[i]), ref Managed.GetTypeRef<T0>(pointer0), ref Managed.GetTypeRef<T1>(pointer1));
             
         Ecs.TableUnlock(it);
     }
@@ -162,21 +122,13 @@ public static unsafe partial class Invoker
     {
         int count = it.Handle->count == 0 && it.Handle->table == null ? 1 : it.Handle->count;
         
-        T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);
+        byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);
+        int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
             
         Ecs.TableLock(it);
             
-        if (it.IsLinear())
-        {
-            for (int i = 0; i < count; i++)
-                callback(it, i, ref Managed.GetTypeRef<T0>(&pointer0[i]), ref Managed.GetTypeRef<T1>(&pointer1[i]));
-        }
-        else
-        {
-            int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
-            for (int i = 0; i < count; i++)
-                callback(it, i, ref Managed.GetTypeRef<T0>(&pointer0[i * step0]), ref Managed.GetTypeRef<T1>(&pointer1[i * step1]));
-        }
+        for (int i = 0; i < count; i++, pointer0 = &pointer0[step0], pointer1 = &pointer1[step1])
+            callback(it, i, ref Managed.GetTypeRef<T0>(pointer0), ref Managed.GetTypeRef<T1>(pointer1));
             
         Ecs.TableUnlock(it);
     }
@@ -191,21 +143,13 @@ public static unsafe partial class Invoker
     {
         int count = it.Handle->count == 0 && it.Handle->table == null ? 1 : it.Handle->count;
         
-        T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);
+        byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);
+        int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
             
         Ecs.TableLock(it);
             
-        if (it.IsLinear())
-        {
-            for (int i = 0; i < count; i++)
-                callback(&pointer0[i], &pointer1[i]);
-        }
-        else
-        {
-            int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
-            for (int i = 0; i < count; i++)
-                callback(&pointer0[i * step0], &pointer1[i * step1]);
-        }
+        for (int i = 0; i < count; i++, pointer0 = &pointer0[step0], pointer1 = &pointer1[step1])
+            callback((T0*)pointer0, (T1*)pointer1);
             
         Ecs.TableUnlock(it);
     }
@@ -220,21 +164,13 @@ public static unsafe partial class Invoker
     {
         int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
         
-        T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);
+        byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);
+        int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
             
         Ecs.TableLock(it);
             
-        if (it.IsLinear())
-        {
-            for (int i = 0; i < count; i++)
-                callback(new Entity(it.Handle->world, it.Handle->entities[i]), &pointer0[i], &pointer1[i]);
-        }
-        else
-        {
-            int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
-            for (int i = 0; i < count; i++)
-                callback(new Entity(it.Handle->world, it.Handle->entities[i]), &pointer0[i * step0], &pointer1[i * step1]);
-        }
+        for (int i = 0; i < count; i++, pointer0 = &pointer0[step0], pointer1 = &pointer1[step1])
+            callback(new Entity(it.Handle->world, it.Handle->entities[i]), (T0*)pointer0, (T1*)pointer1);
             
         Ecs.TableUnlock(it);
     }
@@ -249,21 +185,13 @@ public static unsafe partial class Invoker
     {
         int count = it.Handle->count == 0 && it.Handle->table == null ? 1 : it.Handle->count;
         
-        T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);
+        byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);
+        int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
             
         Ecs.TableLock(it);
             
-        if (it.IsLinear())
-        {
-            for (int i = 0; i < count; i++)
-                callback(it, i, &pointer0[i], &pointer1[i]);
-        }
-        else
-        {
-            int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
-            for (int i = 0; i < count; i++)
-                callback(it, i, &pointer0[i * step0], &pointer1[i * step1]);
-        }
+        for (int i = 0; i < count; i++, pointer0 = &pointer0[step0], pointer1 = &pointer1[step1])
+            callback(it, i, (T0*)pointer0, (T1*)pointer1);
             
         Ecs.TableUnlock(it);
     }
@@ -278,21 +206,13 @@ public static unsafe partial class Invoker
     {
         int count = it.Handle->count == 0 && it.Handle->table == null ? 1 : it.Handle->count;
         
-        T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);
+        byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);
+        int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
             
         Ecs.TableLock(it);
             
-        if (it.IsLinear())
-        {
-            for (int i = 0; i < count; i++)
-                callback(&pointer0[i], &pointer1[i]);
-        }
-        else
-        {
-            int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
-            for (int i = 0; i < count; i++)
-                callback(&pointer0[i * step0], &pointer1[i * step1]);
-        }
+        for (int i = 0; i < count; i++, pointer0 = &pointer0[step0], pointer1 = &pointer1[step1])
+            callback((T0*)pointer0, (T1*)pointer1);
             
         Ecs.TableUnlock(it);
     }
@@ -307,21 +227,13 @@ public static unsafe partial class Invoker
     {
         int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
         
-        T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);
+        byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);
+        int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
             
         Ecs.TableLock(it);
             
-        if (it.IsLinear())
-        {
-            for (int i = 0; i < count; i++)
-                callback(new Entity(it.Handle->world, it.Handle->entities[i]), &pointer0[i], &pointer1[i]);
-        }
-        else
-        {
-            int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
-            for (int i = 0; i < count; i++)
-                callback(new Entity(it.Handle->world, it.Handle->entities[i]), &pointer0[i * step0], &pointer1[i * step1]);
-        }
+        for (int i = 0; i < count; i++, pointer0 = &pointer0[step0], pointer1 = &pointer1[step1])
+            callback(new Entity(it.Handle->world, it.Handle->entities[i]), (T0*)pointer0, (T1*)pointer1);
             
         Ecs.TableUnlock(it);
     }
@@ -336,21 +248,13 @@ public static unsafe partial class Invoker
     {
         int count = it.Handle->count == 0 && it.Handle->table == null ? 1 : it.Handle->count;
         
-        T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);
+        byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);
+        int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
             
         Ecs.TableLock(it);
             
-        if (it.IsLinear())
-        {
-            for (int i = 0; i < count; i++)
-                callback(it, i, &pointer0[i], &pointer1[i]);
-        }
-        else
-        {
-            int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);
-            for (int i = 0; i < count; i++)
-                callback(it, i, &pointer0[i * step0], &pointer1[i * step1]);
-        }
+        for (int i = 0; i < count; i++, pointer0 = &pointer0[step0], pointer1 = &pointer1[step1])
+            callback(it, i, (T0*)pointer0, (T1*)pointer1);
             
         Ecs.TableUnlock(it);
     }

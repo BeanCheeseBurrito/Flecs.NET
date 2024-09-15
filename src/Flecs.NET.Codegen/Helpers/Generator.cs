@@ -178,13 +178,16 @@ public static class Generator
 
     #endregion
 
-    #region Invoker Variables
+    #region Invoker
 
-    // Generates "T0* pointer0 = it.GetPointer<T0>(0); T1* pointer1 = it.GetPointer<T1>(1);..."
-    public static readonly string[] IterPointerVariables = CacheJoinedStrings(Separator.Space, i => $"T{i}* pointer{i} = it.GetPointer<T{i}>({i});");
+    // Generates "byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);..."
+    public static readonly string[] IterPointerVariables = CacheJoinedStrings(Separator.Space, i => $"byte* pointer{i} = (byte*)it.GetPointer<T{i}>({i});");
 
     // Generates "int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);..."
     public static readonly string[] IterStepVariables = CacheJoinedStrings(Separator.Space, i => $"int step{i} = it.Step<T{i}>({i});");
+
+    // Generates "pointer0 = &pointer0[step0], pointer1 = &pointer1[step1]..."
+    public static readonly string[] IterPointerIncrements = CacheJoinedStrings(Separator.Comma, i => $"pointer{i} = &pointer{i}[step{i}]");
 
     #endregion
 
@@ -218,7 +221,7 @@ public static class Generator
     public static readonly string[] EachIterPointerArguments = CacheStrings(i => $"it, i, {EachPointerArguments[i]}");
 
     // Generates "ref Managed.GetTypeRef<T0>(&pointer0[i * step0]), ref Managed.GetTypeRef<T1>(&pointer1[i * step1]), ref Managed.GetTypeRef<T2>(&pointer2[i * step2])..."
-    public static readonly string[] EachRefSteppedArguments = CacheJoinedStrings(Separator.Comma, i => $"ref Managed.GetTypeRef<T{i}>(&pointer{i}[i * step{i}])");
+    public static readonly string[] EachRefSteppedArguments = CacheJoinedStrings(Separator.Comma, i => $"ref Managed.GetTypeRef<T{i}>(pointer{i})");
 
     // Generates "new Entity(it.Handle->world, it.Handle->entities[i]), ref Managed.GetTypeRef<T0>(&pointer0[i * step0]), ref Managed.GetTypeRef<T1>(&pointer1[i * step1]), ref Managed.GetTypeRef<T2>(&pointer2[i * step2])"
     public static readonly string[] EachEntityRefSteppedArguments = CacheStrings(i => $"new Entity(it.Handle->world, it.Handle->entities[i]), {EachRefSteppedArguments[i]}");
@@ -227,7 +230,7 @@ public static class Generator
     public static readonly string[] EachIterRefSteppedArguments = CacheStrings(i => $"it, i, {EachRefSteppedArguments[i]}");
 
     // Generates "&pointer0[i * step0], &pointer1[i * step1], &pointer2[i * step2]..."
-    public static readonly string[] EachPointerSteppedArguments = CacheJoinedStrings(Separator.Comma, i => $"&pointer{i}[i * step{i}]");
+    public static readonly string[] EachPointerSteppedArguments = CacheJoinedStrings(Separator.Comma, i => $"(T{i}*)pointer{i}");
 
     // Generates "new Entity(it.Handle->world, it.Handle->entities[i]), &pointer0[i * step0], &pointer1[i * step1], &pointer2[i * step2]..."
     public static readonly string[] EachEntityPointerSteppedArguments = CacheStrings(i => $"new Entity(it.Handle->world, it.Handle->entities[i]), {EachPointerSteppedArguments[i]}");

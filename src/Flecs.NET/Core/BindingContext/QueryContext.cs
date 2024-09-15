@@ -8,9 +8,10 @@ internal struct QueryContext : IDisposable
 {
     public Callback OrderByAction;
     public Callback GroupByAction;
-    public Callback ContextFree;
+    public Callback GroupByContextFree;
     public Callback GroupCreateAction;
     public Callback GroupDeleteAction;
+    public Callback ContextFree;
 
     public NativeList<NativeString> Strings;
 
@@ -18,9 +19,10 @@ internal struct QueryContext : IDisposable
     {
         OrderByAction.Dispose();
         GroupByAction.Dispose();
-        ContextFree.Dispose();
+        GroupByContextFree.Dispose();
         GroupCreateAction.Dispose();
         GroupDeleteAction.Dispose();
+        ContextFree.Dispose();
 
         if (Strings == default)
             return;

@@ -1715,7 +1715,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
             "Cannot set .GroupBy callback if group_by_ctx is already occupied.");
 
         Context.GroupByAction.Dispose();
-        Context.ContextFree.Dispose();
+        Context.GroupByContextFree.Dispose();
 
         GroupByContext* context = Memory.AllocZeroed<GroupByContext>(1);
         Callback.Set(ref context->GroupBy, callback);
@@ -1746,8 +1746,8 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder GroupByCtx(void* ctx, Ecs.ContextFree contextFree)
     {
-        Callback.Set(ref Context.ContextFree, contextFree);
-        Desc.group_by_ctx_free = Context.ContextFree.Pointer;
+        Callback.Set(ref Context.GroupByContextFree, contextFree);
+        Desc.group_by_ctx_free = Context.GroupByContextFree.Pointer;
         Desc.group_by_ctx = ctx;
         return ref this;
     }
