@@ -199,6 +199,9 @@ public unsafe partial struct Query<T0, T1, T2>
 // IIterableBase Interface
 public unsafe partial struct Query<T0, T1, T2> : IIterableBase
 {
+    /// <inheritdoc cref="IIterableBase.World"/>
+    ref ecs_world_t* IIterableBase.World => ref Ecs.GetIterableWorld(ref _query);
+
     /// <inheritdoc cref="Query.GetIter(ecs_world_t*)"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ecs_iter_t GetIter(ecs_world_t* world = null)
