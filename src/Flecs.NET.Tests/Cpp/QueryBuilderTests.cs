@@ -4147,6 +4147,36 @@ namespace Flecs.NET.Tests.Cpp
 
         [Theory]
         [MemberData(nameof(CacheKinds))]
+        private void WithPairNameComponentId(ecs_query_cache_kind_t cacheKind)
+        {
+            using World world = World.Create();
+
+            Entity likes = world.Entity("Likes");
+            Entity apples = world.Entity("Apples");
+            Entity pears = world.Entity("Pears");
+
+            using Query q =
+                world.QueryBuilder()
+                    .With<Position>()
+                    .With("Likes", apples)
+                    .CacheKind(cacheKind)
+                    .Build();
+
+            Entity e1 = world.Entity().Add<Position>().Add(likes, apples);
+            world.Entity().Add<Position>().Add(likes, pears);
+
+            int count = 0;
+            q.Each((Entity e) =>
+            {
+                count++;
+                Assert.True(e == e1);
+            });
+
+            Assert.Equal(1, count);
+        }
+
+        [Theory]
+        [MemberData(nameof(CacheKinds))]
         private void WithPairComponentName(ecs_query_cache_kind_t cacheKind)
         {
             using World world = World.Create();
@@ -4413,6 +4443,36 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Entity().Add<Position>().Add<Likes>(apples);
             Entity e2 = world.Entity().Add<Position>().Add<Likes>(pears);
+
+            int count = 0;
+            q.Each((Entity e) =>
+            {
+                count++;
+                Assert.True(e == e2);
+            });
+
+            Assert.Equal(1, count);
+        }
+
+        [Theory]
+        [MemberData(nameof(CacheKinds))]
+        private void WithoutPairNameComponentId(ecs_query_cache_kind_t cacheKind)
+        {
+            using World world = World.Create();
+
+            Entity likes = world.Entity("Likes");
+            Entity apples = world.Entity("Apples");
+            Entity pears = world.Entity("Pears");
+
+            using Query q =
+                world.QueryBuilder()
+                    .With<Position>()
+                    .Without("Likes", apples)
+                    .CacheKind(cacheKind)
+                    .Build();
+
+            world.Entity().Add<Position>().Add(likes, apples);
+            Entity e2 = world.Entity().Add<Position>().Add(likes, pears);
 
             int count = 0;
             q.Each((Entity e) =>

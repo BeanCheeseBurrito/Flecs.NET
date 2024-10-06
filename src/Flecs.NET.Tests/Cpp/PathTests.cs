@@ -230,5 +230,119 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(e != 0);
         }
+
+        [Fact]
+        private void IdFromStr0Entity()
+        {
+            using World world = World.Create();
+
+            Id id = world.Id("#0");
+            Assert.True(id == 0);
+        }
+
+        [Fact]
+        private void IdFromStrEntityFromStr()
+        {
+            using World world = World.Create();
+
+            Entity foo = world.Entity("foo");
+
+            Id id = world.Id("foo");
+            Assert.True(id != 0);
+            Assert.True(id == foo);
+        }
+
+        [Fact]
+        private void IdFromStrUnresolvedEntityFromStr()
+        {
+            using World world = World.Create();
+
+            Id id = world.Id("foo");
+            Assert.True(id == 0);
+        }
+
+        [Fact]
+        private void IdFromStrScopedEntityFromStr()
+        {
+            using World world = World.Create();
+
+            Entity foo = world.Entity("foo.bar");
+
+            Id id = world.Id("foo.bar");
+            Assert.True(id != 0);
+            Assert.True(id == foo);
+        }
+
+        [Fact]
+        private void IdFromStrTemplateEntityFromStr()
+        {
+            using World world = World.Create();
+
+            Entity foo = world.Entity("foo<bar>");
+
+            Id id = world.Id("foo<bar>");
+            Assert.True(id != 0);
+            Assert.True(id == foo);
+        }
+
+        [Fact]
+        private void IdFromStrPairFromStr()
+        {
+            using World world = World.Create();
+
+            Entity rel = world.Entity("Rel");
+            Entity tgt = world.Entity("Tgt");
+
+            Id id = world.Id("(Rel, Tgt)");
+            Assert.True(id != 0);
+            Assert.True(id == world.Pair(rel, tgt));
+        }
+
+        [Fact]
+        private void IdFromStrUnresolvedPairFromStr()
+        {
+            using World world = World.Create();
+
+            world.Entity("Rel");
+
+            Id id = world.Id("(Rel, Tgt)");
+            Assert.True(id == 0);
+        }
+
+        [Fact]
+        private void IdFromStrWildcardPairFromStr()
+        {
+            using World world = World.Create();
+
+            Entity rel = world.Entity("Rel");
+
+            Id id = world.Id("(Rel, *)");
+            Assert.True(id != 0);
+            Assert.True(id == world.Pair(rel, Ecs.Wildcard));
+        }
+
+        [Fact]
+        private void IdFromStrAnyPairFromStr()
+        {
+            using World world = World.Create();
+
+            Entity rel = world.Entity("Rel");
+
+            Id id = world.Id("(Rel, _)");
+            Assert.True(id != 0);
+            Assert.True(id == world.Pair(rel, Ecs.Any));
+        }
+
+        [Fact]
+        private void IdFromStrInvalidPair()
+        {
+            using World world = World.Create();
+
+            world.Entity("Rel");
+            world.Entity("Tgt");
+
+            Id id = world.Id("(Rel, Tgt");
+            Assert.True(id == 0);
+        }
     }
 }

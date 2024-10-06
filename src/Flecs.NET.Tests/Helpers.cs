@@ -28,6 +28,8 @@ public record struct Value(int Number);
 public record struct Other(int Value);
 public record struct Singleton(int Value);
 public record struct PositionInitialized(float X, float Y);
+public record struct ThisComp(int X);
+public record struct OtherComp(int X);
 
 public record ManagedComponent(int Value);
 public record struct UnmanagedComponent(int Value);
@@ -315,6 +317,41 @@ namespace NamespaceLvl1
         {
             public struct StructLvl21;
             public struct StructLvl22;
+        }
+    }
+}
+
+namespace NamespaceParent
+{
+    public record struct NamespaceType(float X);
+
+    public struct ShorterParent : IFlecsModule
+    {
+        public void InitModule(World world)
+        {
+            world.Module<ShorterParent>("Namespace.ShorterParent");
+            world.Component<NamespaceType>();
+        }
+    }
+
+    public struct LongerParent : IFlecsModule
+    {
+        public void InitModule(World world)
+        {
+            world.Module<LongerParent>("NamespaceParentNamespace.LongerParent");
+            world.Component<NamespaceType>();
+        }
+    }
+
+    namespace NamespaceChild
+    {
+        public struct Nested : IFlecsModule
+        {
+            public void InitModule(World world)
+            {
+                world.Module<Nested>("Namespace.Child.Nested");
+                world.Component<NamespaceType>();
+            }
         }
     }
 }
