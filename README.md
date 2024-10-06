@@ -107,21 +107,6 @@ For more up-to-date packages, development builds are available on the [GitLab pa
 > [!WARNING] 
 > Development feed packages may be deleted without warning to free up space.
 
-## Unity Package Manager
-The **Flecs.NET** [Unity Package](https://github.com/BeanCheeseBurrito/Flecs.NET.Unity.git) is hosted on github and can be downloaded using the URL below.
-- Open the package manager window ``Window > Package Manager``
-- Click the ``+`` icon
-- Click ``Add package from git URL...``
-- Enter the **Flecs.NET.Unity** git URL
-```console
-https://github.com/BeanCheeseBurrito/Flecs.NET.Unity.git
-```
-> [!NOTE]
-> Only Windows, MacOS, and Linux builds on x64 Mono are supported. IL2CPP, web, and mobile support are planned for the future.
-
-> [!Caution]
-> The Unity package is incomplete and will be dropped in a future version. Flecs.NET is not recommended to be used with the Unity game engine.
-
 ## Running examples
 
 To run any of the example programs, use ``dotnet run``and set the "Example" property to the example's path relative to the ``Flecs.NET.Examples`` project. Each level of the path must be separated by an underscore.
