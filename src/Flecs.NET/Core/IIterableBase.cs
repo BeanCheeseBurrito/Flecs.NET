@@ -8,6 +8,11 @@ namespace Flecs.NET.Core;
 public unsafe interface IIterableBase
 {
     /// <summary>
+    ///     Reference to the world.
+    /// </summary>
+    public ref ecs_world_t* World { get; }
+
+    /// <summary>
     ///     Iterate a query.
     /// </summary>
     /// <returns>An iterator.</returns>

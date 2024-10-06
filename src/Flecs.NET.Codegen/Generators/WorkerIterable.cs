@@ -85,6 +85,9 @@ public class WorkerIterable : IIncrementalGenerator
         // IIterableBase Interface
         public unsafe partial struct {{Generator.GetTypeName(Type.WorkerIterable, i)}} : IIterableBase
         {
+            /// <inheritdoc cref="WorkerIterable.World"/>
+            public ref ecs_world_t* World => ref _workerIterable.World;
+            
             /// <inheritdoc cref="WorkerIterable.GetIter(ecs_world_t*)"/>
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ecs_iter_t GetIter(ecs_world_t* world = null)

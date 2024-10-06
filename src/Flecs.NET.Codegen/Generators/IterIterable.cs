@@ -172,6 +172,9 @@ public class IterIterable : IIncrementalGenerator
         // IIterableBase Interface
         public unsafe partial struct {{Generator.GetTypeName(Type.IterIterable, i)}} : IIterableBase
         {
+            /// <inheritdoc cref="IterIterable.World"/>
+            public ref ecs_world_t* World => ref _iterIterable.World;
+            
             /// <inheritdoc cref="IterIterable.GetIter(ecs_world_t*)"/>
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ecs_iter_t GetIter(ecs_world_t* world = null)

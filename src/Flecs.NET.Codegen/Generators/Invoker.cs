@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -43,7 +44,7 @@ public class Invoker : IIncrementalGenerator
             public static void Iter<{{Generator.TypeParameters[i]}}>(Iter it, {{Generator.GetCallbackType(callback, i)}} callback)
             {
                 Ecs.TableLock(it);
-                callback(it, {{Generator.GetCallbackArguments(i, callback)}});
+                callback(it, {{Generator.GetCallbackArguments(callback, i)}});
                 Ecs.TableUnlock(it);
             }
         """);
@@ -74,19 +75,45 @@ public class Invoker : IIncrementalGenerator
             {
                 {{Generator.GetCallbackCountVariable(callback)}}
                 
-                {{Generator.IterPointerVariables[i]}}
-                {{Generator.IterStepVariables[i]}}
+                {{Generator.FieldDataVariables[i]}}
+                IterationTechnique flags = it.GetIterationTechnique({{i + 1}});
                     
                 Ecs.TableLock(it);
-                    
-                for (int i = 0; i < count; i++, {{Generator.IterPointerIncrements[i]}})
-                    callback({{Generator.GetCallbackSteppedArguments(i, callback)}});
+                
+                if ({{Generator.ContainsReferenceTypes[i]}})
+                {
+                    if (flags == IterationTechnique.None)
+                        {{IterationTechnique.Managed}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                    else if (flags == IterationTechnique.Shared)
+                        {{IterationTechnique.SharedManaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                    else if (flags == IterationTechnique.Sparse)
+                        {{IterationTechnique.SparseManaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                    else if (flags == (IterationTechnique.Sparse | IterationTechnique.Shared))
+                        {{IterationTechnique.SparseSharedManaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                }
+                else
+                {
+                   if (flags == IterationTechnique.None)
+                        {{IterationTechnique.Unmanaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                    else if (flags == IterationTechnique.Shared)
+                        {{IterationTechnique.SharedUnmanaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                    else if (flags == IterationTechnique.Sparse)
+                        {{IterationTechnique.SparseUnmanaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                    else if (flags == (IterationTechnique.Sparse | IterationTechnique.Shared))
+                        {{IterationTechnique.SparseSharedUnmanaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                }
                     
                 Ecs.TableUnlock(it);
+                
+                return;
+                
+        {{GenerateEachInvokerIterators(callback, i)}}
             }
         """);
 
         return $$"""
+        using System;
+        using System.Runtime.CompilerServices;
         using Flecs.NET.Utilities;
         using static Flecs.NET.Bindings.flecs;
 
@@ -112,29 +139,47 @@ public class Invoker : IIncrementalGenerator
             {
                 {{Generator.GetCallbackCountVariable(callback)}}
                 
-                {{Generator.IterPointerVariables[i]}}
-                {{Generator.IterStepVariables[i]}}
+                {{Generator.FieldDataVariables[i]}}
+                IterationTechnique flags = it.GetIterationTechnique({{i + 1}});
                     
                 Ecs.TableLock(it);
                 
                 Entity result = default;
-                    
-                for (int i = 0; i < count; i++, {{Generator.IterPointerIncrements[i]}})
+                
+                if ({{Generator.ContainsReferenceTypes[i]}})
                 {
-                    if (!callback({{Generator.GetCallbackSteppedArguments(i, callback)}}))
-                        continue;
-                        
-                    result = new Entity(it.Handle->world, it.Handle->entities[i]);
-                    break;
+                    if (flags == IterationTechnique.None)
+                        result = {{IterationTechnique.Managed}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                    else if (flags == IterationTechnique.Shared)
+                        result = {{IterationTechnique.SharedManaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                    else if (flags == IterationTechnique.Sparse)
+                        result = {{IterationTechnique.SparseManaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                    else if (flags == (IterationTechnique.Sparse | IterationTechnique.Shared))
+                        result = {{IterationTechnique.SparseSharedManaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                }
+                else
+                {
+                   if (flags == IterationTechnique.None)
+                        result = {{IterationTechnique.Unmanaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                    else if (flags == IterationTechnique.Shared)
+                        result = {{IterationTechnique.SharedUnmanaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                    else if (flags == IterationTechnique.Sparse)
+                        result = {{IterationTechnique.SparseUnmanaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
+                    else if (flags == (IterationTechnique.Sparse | IterationTechnique.Shared))
+                        result = {{IterationTechnique.SparseSharedUnmanaged}}(it, count, callback, {{Generator.FieldDataRefs[i]}});
                 }
                     
                 Ecs.TableUnlock(it);
                 
                 return result;
+                
+        {{GenerateFindInvokerIterators(callback, i)}}
             }
         """);
 
         return $$"""
+        using System;
+        using System.Runtime.CompilerServices;
         using Flecs.NET.Utilities;
         using static Flecs.NET.Bindings.flecs;
 
@@ -145,6 +190,39 @@ public class Invoker : IIncrementalGenerator
         {{string.Join(Separator.DoubleNewLine, invokers)}}
         }
         """;
+    }
+
+    private static string GenerateEachInvokerIterators(Callback callback, int i)
+    {
+        IEnumerable<string> invokerIterators = Enum.GetValues(typeof(IterationTechnique)).Cast<IterationTechnique>().Select((IterationTechnique iterationTechnique) => $$"""
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                static void {{iterationTechnique}}(Iter it, int count, {{Generator.GetCallbackType(callback, i)}} callback, {{Generator.FieldDataParameters[i]}})
+                {
+                    for (int i = 0; i < count; i++)
+                        callback({{Generator.GetCallbackArguments(callback, iterationTechnique, i)}});
+                }
+        """);
+
+        return string.Join(Separator.DoubleNewLine, invokerIterators);
+    }
+
+    private static string GenerateFindInvokerIterators(Callback callback, int i)
+    {
+        IEnumerable<string> invokerIterators = Enum.GetValues(typeof(IterationTechnique)).Cast<IterationTechnique>().Select((IterationTechnique iterationTechnique) => $$"""
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                static Entity {{iterationTechnique}}(Iter it, int count, {{Generator.GetCallbackType(callback, i)}} callback, {{Generator.FieldDataParameters[i]}})
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (callback({{Generator.GetCallbackArguments(callback, iterationTechnique, i)}}))
+                            return new Entity(it.Handle->world, it.Handle->entities[i]);
+                    }
+                        
+                    return default;
+                }
+        """);
+
+        return string.Join(Separator.DoubleNewLine, invokerIterators);
     }
 
     private static string GenerateIterIterableInvokers(int i)
@@ -279,7 +357,7 @@ public class Invoker : IIncrementalGenerator
                 bool hasComponents = Ecs.GetPointers<{{Generator.TypeParameters[i]}}>(world, entity, record, table, pointers);
 
                 if (hasComponents)
-                    callback({{Generator.GetCallbackArguments(i, callback)}});
+                    callback({{Generator.GetCallbackArguments(callback, i)}});
 
                 ecs_{{Generator.GetInvokerName(callback).ToLower()}}_end(record);
 
@@ -347,7 +425,7 @@ public class Invoker : IIncrementalGenerator
                     Ecs.EnsurePointers<{{Generator.TypeParameters[i]}}>(world, entity, pointers);
                 }
             
-                callback({{Generator.GetCallbackArguments(i, callback)}});
+                callback({{Generator.GetCallbackArguments(callback, i)}});
             
                 if (!world.IsDeferred())
                     Ecs.TableUnlock(world, table);

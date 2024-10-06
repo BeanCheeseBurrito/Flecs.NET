@@ -798,7 +798,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.True(query.IsTrue());
             Assert.Equal(5, query.Count());
 
-            query.Each(static (Iter _, int i, ref ManagedClass component) =>
+            query.Each(static (Iter _, int _, ref ManagedClass component) =>
             {
                 Assert.Equal(10, component.Value);
             });
@@ -816,9 +816,177 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.True(query.IsTrue());
             Assert.Equal(5, query.Count());
 
-            query.Each(static (Iter it, int i, ref ManagedStruct component) =>
+            query.Each(static (Iter _, int _, ref ManagedStruct component) =>
             {
                 Assert.Equal(10, component.Value);
+            });
+        }
+
+        [Fact]
+        private void EachSharedUnmanaged()
+        {
+            using World world = World.Create();
+
+            world.Component<SharedComponent>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
+            using Query<UnmanagedComponent, SharedComponent> query = world.Query<UnmanagedComponent, SharedComponent>();
+
+            Entity prefab = world.Prefab()
+                .Set(new UnmanagedComponent(10))
+                .Set(new SharedComponent(20));
+
+            for (int i = 0; i < 5; i++)
+                world.Entity().IsA(prefab);
+
+            Assert.True(query.IsTrue());
+            Assert.Equal(5, query.Count());
+
+            query.Each(static (Iter it, int _, ref UnmanagedComponent c1, ref SharedComponent c2) =>
+            {
+                Assert.Equal(IterationTechnique.Shared, it.GetIterationTechnique(2));
+                Assert.Equal(10, c1.Value);
+                Assert.Equal(20, c2.Value);
+            });
+        }
+
+        [Fact]
+        private void EachSharedManaged()
+        {
+            using World world = World.Create();
+
+            world.Component<SharedComponent>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
+            using Query<ManagedComponent, SharedComponent> query = world.Query<ManagedComponent, SharedComponent>();
+
+            Entity prefab = world.Prefab()
+                .Set(new ManagedComponent(10))
+                .Set(new SharedComponent(20));
+
+            for (int i = 0; i < 5; i++)
+                world.Entity().IsA(prefab);
+
+            Assert.True(query.IsTrue());
+            Assert.Equal(5, query.Count());
+
+            query.Each(static (Iter it, int _, ref ManagedComponent c1, ref SharedComponent c2) =>
+            {
+                Assert.Equal(IterationTechnique.Shared, it.GetIterationTechnique(2));
+                Assert.Equal(10, c1.Value);
+                Assert.Equal(20, c2.Value);
+            });
+        }
+
+        [Fact]
+        private void EachSparseUnmanaged()
+        {
+            using World world = World.Create();
+
+            world.Component<SparseComponent>().Entity.Add(Ecs.Sparse);
+
+            using Query<UnmanagedComponent, SparseComponent> query = world.Query<UnmanagedComponent, SparseComponent>();
+
+            Entity prefab = world.Prefab()
+                .Set(new UnmanagedComponent(10))
+                .Set(new SparseComponent(20));
+
+            for (int i = 0; i < 5; i++)
+                world.Entity().IsA(prefab);
+
+            Assert.True(query.IsTrue());
+            Assert.Equal(5, query.Count());
+
+            query.Each(static (Iter it, int _, ref UnmanagedComponent c1, ref SparseComponent c2) =>
+            {
+                Assert.Equal(IterationTechnique.Sparse, it.GetIterationTechnique(2));
+                Assert.Equal(10, c1.Value);
+                Assert.Equal(20, c2.Value);
+            });
+        }
+
+        [Fact]
+        private void EachSparseManaged()
+        {
+            using World world = World.Create();
+
+            world.Component<SparseComponent>().Entity.Add(Ecs.Sparse);
+
+            using Query<ManagedComponent, SparseComponent> query = world.Query<ManagedComponent, SparseComponent>();
+
+            Entity prefab = world.Prefab()
+                .Set(new ManagedComponent(10))
+                .Set(new SparseComponent(20));
+
+            for (int i = 0; i < 5; i++)
+                world.Entity().IsA(prefab);
+
+            Assert.True(query.IsTrue());
+            Assert.Equal(5, query.Count());
+
+            query.Each(static (Iter it, int _, ref ManagedComponent c1, ref SparseComponent c2) =>
+            {
+                Assert.Equal(IterationTechnique.Sparse, it.GetIterationTechnique(2));
+                Assert.Equal(10, c1.Value);
+                Assert.Equal(20, c2.Value);
+            });
+        }
+
+        [Fact]
+        private void EachSparseSharedUnmanaged()
+        {
+            using World world = World.Create();
+
+            world.Component<SparseComponent>().Entity.Add(Ecs.Sparse);
+            world.Component<SharedComponent>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
+            using Query<UnmanagedComponent, SparseComponent, SharedComponent> query = world.Query<UnmanagedComponent, SparseComponent, SharedComponent>();
+
+            Entity prefab = world.Prefab()
+                .Set(new UnmanagedComponent(10))
+                .Set(new SparseComponent(20))
+                .Set(new SharedComponent(30));
+
+            for (int i = 0; i < 5; i++)
+                world.Entity().IsA(prefab);
+
+            Assert.True(query.IsTrue());
+            Assert.Equal(5, query.Count());
+
+            query.Each(static (Iter it, int _, ref UnmanagedComponent c1, ref SparseComponent c2, ref SharedComponent c3) =>
+            {
+                Assert.Equal(IterationTechnique.Sparse | IterationTechnique.Shared, it.GetIterationTechnique(3));
+                Assert.Equal(10, c1.Value);
+                Assert.Equal(20, c2.Value);
+                Assert.Equal(30, c3.Value);
+            });
+        }
+
+        [Fact]
+        private void EachSparseSharedManaged()
+        {
+            using World world = World.Create();
+
+            world.Component<SparseComponent>().Entity.Add(Ecs.Sparse);
+            world.Component<SharedComponent>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
+            using Query<ManagedComponent, SparseComponent, SharedComponent> query = world.Query<ManagedComponent, SparseComponent, SharedComponent>();
+
+            Entity prefab = world.Prefab()
+                .Set(new ManagedComponent(10))
+                .Set(new SparseComponent(20))
+                .Set(new SharedComponent(30));
+
+            for (int i = 0; i < 5; i++)
+                world.Entity().IsA(prefab);
+
+            Assert.True(query.IsTrue());
+            Assert.Equal(5, query.Count());
+
+            query.Each(static (Iter it, int _, ref ManagedComponent c1, ref SparseComponent c2, ref SharedComponent c3) =>
+            {
+                Assert.Equal(IterationTechnique.Sparse | IterationTechnique.Shared, it.GetIterationTechnique(3));
+                Assert.Equal(10, c1.Value);
+                Assert.Equal(20, c2.Value);
+                Assert.Equal(30, c3.Value);
             });
         }
     }

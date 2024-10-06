@@ -299,6 +299,9 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
 // IIterableBase Interface
 public unsafe partial struct IterIterable
 {
+    /// <inheritdoc cref="IIterableBase.World"/>
+    public ref ecs_world_t* World => ref _iter.world;
+
     /// <inheritdoc cref="IIterableBase.GetIter"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ecs_iter_t GetIter(ecs_world_t* world = null)

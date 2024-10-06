@@ -42,6 +42,26 @@ public static unsafe class Utils
     }
 
     /// <summary>
+    ///     Checks if specific bit is set.
+    /// </summary>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsBitSet(int value, int index)
+    {
+        return (value & (1 << index)) != 0;
+    }
+
+    /// <summary>
+    ///     Checks if specific bit is set.
+    /// </summary>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsBitSet(uint value, int index)
+    {
+        return (value & (1 << index)) != 0;
+    }
+
+    /// <summary>
     ///     Gets the next power of 2 for the provided number.
     /// </summary>
     /// <param name="num"></param>
@@ -58,31 +78,6 @@ public static unsafe class Utils
         num++;
 
         return num;
-    }
-
-    /// <summary>
-    ///     Tests if 2 readonly refs point to the same object.
-    /// </summary>
-    /// <param name="a"></param>
-    /// <param name="b"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool AreSameReadOnlyRefs<T>(in T a, in T b)
-    {
-        return Unsafe.AreSame(ref Unsafe.AsRef(in a), ref Unsafe.AsRef(in b));
-    }
-
-    /// <summary>
-    ///     Tests if a readonly ref is null.
-    /// </summary>
-    /// <param name="obj"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsNullReadOnlyRef<T>(in T obj)
-    {
-        return Unsafe.IsNullRef(ref Unsafe.AsRef(in obj));
     }
 
     /// <summary>

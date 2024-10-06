@@ -63,6 +63,9 @@ public partial struct PageIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> 
 // IIterableBase Interface
 public unsafe partial struct PageIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : IIterableBase
 {
+    /// <inheritdoc cref="PageIterable.World"/>
+    public ref ecs_world_t* World => ref _pageIterable.World;
+
     /// <inheritdoc cref="PageIterable.GetIter(ecs_world_t*)"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ecs_iter_t GetIter(ecs_world_t* world = null)

@@ -871,6 +871,29 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
+        private void OnSetWithSetSetSparse()
+        {
+            using World world = World.Create();
+
+            world.Component<Position>().Entity.Add(Ecs.Sparse);
+
+            int count = 0;
+
+            world.Observer<Position>()
+                .Event(Ecs.OnSet)
+                .Each((Entity _, ref Position _) =>
+                {
+                    count++;
+                });
+
+            Entity e = world.Entity();
+            Assert.Equal(0, count);
+
+            e.Set(new Position(10, 20));
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
         private void OnAddSingleton()
         {
             using World world = World.Create();

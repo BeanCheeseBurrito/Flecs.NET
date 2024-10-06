@@ -103,6 +103,7 @@ public class IIterable : IIncrementalGenerator
             public {{Generator.GetInvokerReturnType(callback)}} {{Generator.GetInvokerName(callback)}}({{Generator.GetCallbackType(callback, i)}} callback)
             {
                 {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertReferenceTypes({{(Generator.GetCallbackIsUnmanaged(callback) ? "false" : "true")}});
+                {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertSparseTypes(Ecs.GetIterableWorld(ref this), {{(Generator.GetCallbackIsIter(callback) ? "false" : "true")}});
                 {{Generator.GetInvokerReturn(callback)}}Invoker.{{Generator.GetInvokerName(callback)}}(ref this, callback);
             }
         """);

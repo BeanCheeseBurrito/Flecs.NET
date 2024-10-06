@@ -12,46 +12,16 @@ public static class Generator
 
     #region Type Parameters
 
-    // Generates "T0, T1, T2, ..."
     public static readonly string[] TypeParameters = CacheJoinedStrings(Separator.Comma, i => $"T{i}");
-    // Generates "T0, T1, T2, ..."
-    public static readonly string[] TypeParametersUnderscored = CacheJoinedStrings(Separator.Comma, i => $"T_{i}");
-
-    // Generates "ref T0, ref T1, ref T2, ..."
     public static readonly string[] RefTypeParameters = CacheJoinedStrings(Separator.Comma, i => $"ref T{i}");
-
-    // Generates "Field<T0>, Field<T1>, Field<T2, ..."
     public static readonly string[] FieldTypeParameters = CacheJoinedStrings(Separator.Comma, i => $"Field<T{i}>");
-
-    // Generates "Span<T0>, Span<T1>, Span<T2, ..."
     public static readonly string[] SpanTypeParameters = CacheJoinedStrings(Separator.Comma, i => $"Span<T{i}>");
-
-    // Generates "T0*, T1*, T2*, ..."
     public static readonly string[] PointerTypeParameters = CacheJoinedStrings(Separator.Comma, i => $"T{i}*");
-
-    // Generates "T0 t0, T1 t1, T2 t2, ..."
-    public static readonly string[] Parameters = CacheJoinedStrings(Separator.Comma, i => $"T{i} t{i}");
-
-    // Generates "ref T0 t0, ref T1 t1, ref T2 t2, ..."
     public static readonly string[] RefParameters = CacheJoinedStrings(Separator.Comma, i => $"ref T{i} t{i}");
-
-    // Generates "Field<T0> t0, Field<T1> t1, Field<T2> t2, ..."
     public static readonly string[] FieldParameters = CacheJoinedStrings(Separator.Comma, i => $"Field<T{i}> t{i}");
-
-    // Generates "Span<T0> t0, Span<T1> t1, Span<T2> t2, ..."
     public static readonly string[] SpanParameters = CacheJoinedStrings(Separator.Comma, i => $"Span<T{i}> t{i}");
-
-    // Generates "T0* t0, T1* t1, T2* t2, ..."
     public static readonly string[] PointerParameters = CacheJoinedStrings(Separator.Comma, i => $"T{i}* t{i}");
-
-    // Generates "ref readonly t0, ref readonly T1 t1, ref readonly T2 t2, ..."
     public static readonly string[] RefReadOnlyParameters = CacheJoinedStrings(Separator.Comma, i => $"ref readonly T{i} t{i}");
-
-    // Generates "where T0 : unmanaged where T1 : unmanaged where T2 : unmanaged..."
-    public static readonly string[] TypeConstraints = CacheJoinedStrings(Separator.Space, i => $"where T{i} : unmanaged");
-
-    // Generates "where T0_ : unmanaged, T0 where T1_ : unmanaged, T1 where T2_ : unmanaged, T2..."
-    public static readonly string[] TypeConstraintsUnderScored = CacheJoinedStrings(Separator.Space, i => $"where T_{i} : unmanaged, T{i}");
 
     #endregion
 
@@ -59,64 +29,26 @@ public static class Generator
 
     public const string RunCallbackDelegate = "Ecs.RunCallback";
 
-    public const string IterCallbackDelegate = "Ecs.IterCallback";
-
-    public const string EachEntityCallbackDelegate = "Ecs.EachEntityCallback";
-
-    public const string EachIterCallbackDelegate = "Ecs.EachIterCallback";
-
-    // Generates "Ecs.IterFieldCallback<T0, T1, T2, ...>"
     public static readonly string[] IterFieldCallbackDelegate = CacheStrings(i => $"Ecs.IterFieldCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.IterSpanCallback<T0, T1, T2, ...>"
     public static readonly string[] IterSpanCallbackDelegate = CacheStrings(i => $"Ecs.IterSpanCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.IterPointerCallback<T0, T1, T2, ...>"
     public static readonly string[] IterPointerCallbackDelegate = CacheStrings(i => $"Ecs.IterPointerCallback<{TypeParameters[i]}>");
 
-    // Generates "Ecs.EachRefCallback<T0, T1, T2, ...>"
     public static readonly string[] EachRefCallbackDelegate = CacheStrings(i => $"Ecs.EachRefCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.EachEntityRefCallback<T0, T1, T2, ...>"
     public static readonly string[] EachEntityRefCallbackDelegate = CacheStrings(i => $"Ecs.EachEntityRefCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.EachIterRefCallback<T0, T1, T2, ...>"
     public static readonly string[] EachIterRefCallbackDelegate = CacheStrings(i => $"Ecs.EachIterRefCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.EachPointerCallback<T0, T1, T2, ...>"
     public static readonly string[] EachPointerCallbackDelegate = CacheStrings(i => $"Ecs.EachPointerCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.EachEntityPointerCallback<T0, T1, T2, ...>"
     public static readonly string[] EachEntityPointerCallbackDelegate = CacheStrings(i => $"Ecs.EachEntityPointerCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.EachIterPointerCallback<T0, T1, T2, ...>"
     public static readonly string[] EachIterPointerCallbackDelegate = CacheStrings(i => $"Ecs.EachIterPointerCallback<{TypeParameters[i]}>");
 
-    // Generates "Ecs.FindRefCallback<T0, T1, T2, ...>"
     public static readonly string[] FindRefCallbackDelegate = CacheStrings(i => $"Ecs.FindRefCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.FindEntityRefCallback<T0, T1, T2, ...>"
     public static readonly string[] FindEntityRefCallbackDelegate = CacheStrings(i => $"Ecs.FindEntityRefCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.FindIterRefCallback<T0, T1, T2, ...>"
     public static readonly string[] FindIterRefCallbackDelegate = CacheStrings(i => $"Ecs.FindIterRefCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.FindPointerCallback<T0, T1, T2, ...>"
     public static readonly string[] FindPointerCallbackDelegate = CacheStrings(i => $"Ecs.FindPointerCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.FindEntityPointerCallback<T0, T1, T2, ...>"
     public static readonly string[] FindEntityPointerCallbackDelegate = CacheStrings(i => $"Ecs.FindEntityPointerCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.FindIterPointerCallback<T0, T1, T2, ...>"
     public static readonly string[] FindIterPointerCallbackDelegate = CacheStrings(i => $"Ecs.FindIterPointerCallback<{TypeParameters[i]}>");
 
-    // Generates "Ecs.ReadRefCallback<T0, T1, T2, ...>"
     public static readonly string[] ReadRefCallbackDelegate = CacheStrings(i => $"Ecs.ReadRefCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.WriteRefCallback<T0, T1, T2, ...>"
     public static readonly string[] WriteRefCallbackDelegate = CacheStrings(i => $"Ecs.WriteRefCallback<{TypeParameters[i]}>");
-
-    // Generates "Ecs.InsertRefCallback<T0, T1, T2, ...>"
     public static readonly string[] InsertRefCallbackDelegate = CacheStrings(i => $"Ecs.InsertRefCallback<{TypeParameters[i]}>");
 
     #endregion
@@ -125,120 +57,40 @@ public static class Generator
 
     public const string RunCallbackPointer = "delegate*<Iter, void>";
 
-    public const string IterCallbackPointer = "delegate*<Iter, void>";
-
-    public const string EachEntityCallbackPointer = "delegate*<Entity, void>";
-
-    public const string EachIterCallbackPointer = "delegate*<Iter, int, void>";
-
-    // Generates "delegate*<Iter, Field<T0>, Field<T1>, Field<T2>, void>"
     public static readonly string[] IterFieldCallbackPointer = CacheStrings(i => $"delegate*<Iter, {FieldTypeParameters[i]}, void>");
-
-    // Generates "delegate*<Iter, Span<T0>, Span<T1>, Span<T2>, void>"
     public static readonly string[] IterSpanCallbackPointer = CacheStrings(i => $"delegate*<Iter, {SpanTypeParameters[i]}, void>");
-
-    // Generates "delegate*<Iter, T0*, T1*, T2*, void>"
     public static readonly string[] IterPointerCallbackPointer = CacheStrings(i => $"delegate*<Iter, {PointerTypeParameters[i]}, void>");
 
-    // Generates "delegate*<ref T0, ref T1, ref T2, void>"
     public static readonly string[] EachRefCallbackPointer = CacheStrings(i => $"delegate*<{RefTypeParameters[i]}, void>");
-
-    // Generates "delegate*<Entity, ref T0, ref T1, ref T2, void>"
     public static readonly string[] EachEntityRefCallbackPointer = CacheStrings(i => $"delegate*<Entity, {RefTypeParameters[i]}, void>");
-
-    // Generates "delegate*<Iter, int, ref T0, ref T1, ref T2, void>"
     public static readonly string[] EachIterRefCallbackPointer = CacheStrings(i => $"delegate*<Iter, int, {RefTypeParameters[i]}, void>");
-
-    // Generates "delegate*<T0*, T1*, T2*, void>"
     public static readonly string[] EachPointerCallbackPointer = CacheStrings(i => $"delegate*<{PointerTypeParameters[i]}, void>");
-
-    // Generates "delegate*<Entity, T0*, T1*, T2*, void>"
     public static readonly string[] EachEntityPointerCallbackPointer = CacheStrings(i => $"delegate*<Entity, {PointerTypeParameters[i]}, void>");
-
-    // Generates "delegate*<Iter, int, T0*, T1*, T2*, void>"
     public static readonly string[] EachIterPointerCallbackPointer = CacheStrings(i => $"delegate*<Iter, int, {PointerTypeParameters[i]}, void>");
 
-    // Generates "delegate*<ref T0, ref T1, ref T2, bool>"
     public static readonly string[] FindRefCallbackPointer = CacheStrings(i => $"delegate*<{RefTypeParameters[i]}, bool>");
-
-    // Generates "delegate*<Entity, ref T0, ref T1, ref T2, bool>"
     public static readonly string[] FindEntityRefCallbackPointer = CacheStrings(i => $"delegate*<Entity, {RefTypeParameters[i]}, bool>");
-
-    // Generates "delegate*<Iter, int, ref T0, ref T1, ref T2, bool>"
     public static readonly string[] FindIterRefCallbackPointer = CacheStrings(i => $"delegate*<Iter, int, {RefTypeParameters[i]}, bool>");
-
-    // Generates "delegate*<T0*, T1*, T2*, bool>"
     public static readonly string[] FindPointerCallbackPointer = CacheStrings(i => $"delegate*<{PointerTypeParameters[i]}, bool>");
-
-    // Generates "delegate*<Entity, T0*, T1*, T2*, bool>"
     public static readonly string[] FindEntityPointerCallbackPointer = CacheStrings(i => $"delegate*<Entity, {PointerTypeParameters[i]}, bool>");
-
-    // Generates "delegate*<Iter, int, T0*, T1*, T2*, bool>"
     public static readonly string[] FindIterPointerCallbackPointer = CacheStrings(i => $"delegate*<Iter, int, {PointerTypeParameters[i]}, bool>");
 
     #endregion
 
     #region Invoker
 
-    // Generates "byte* pointer0 = (byte*)it.GetPointer<T0>(0); byte* pointer1 = (byte*)it.GetPointer<T1>(1);..."
-    public static readonly string[] IterPointerVariables = CacheJoinedStrings(Separator.Space, i => $"byte* pointer{i} = (byte*)it.GetPointer<T{i}>({i});");
-
-    // Generates "int step0 = it.Step<T0>(0); int step1 = it.Step<T1>(1);..."
-    public static readonly string[] IterStepVariables = CacheJoinedStrings(Separator.Space, i => $"int step{i} = it.Step<T{i}>({i});");
-
-    // Generates "pointer0 = &pointer0[step0], pointer1 = &pointer1[step1]..."
-    public static readonly string[] IterPointerIncrements = CacheJoinedStrings(Separator.Comma, i => $"pointer{i} = &pointer{i}[step{i}]");
+    public static readonly string[] FieldDataVariables = CacheJoinedStrings(Separator.Space, i => $"FieldData<T{i}> field{i} = it.GetFieldData<T{i}>({i});");
+    public static readonly string[] FieldDataParameters = CacheJoinedStrings(Separator.Comma, i => $"ref FieldData<T{i}> field{i}");
+    public static readonly string[] FieldDataRefs = CacheJoinedStrings(Separator.Comma, i => $"ref field{i}");
 
     #endregion
 
     #region Invoker Callback Arguments
 
-    // Generates "it.Field<T0>(0), it.Field<T1>(1), it.Field<T2>(2)..."
     public static readonly string[] IterFieldArguments = CacheJoinedStrings(Separator.Comma, i => $"it.Field<T{i}>({i})");
-
-    // Generates "it.GetSpan<T0>(0), it.GetSpan<T1>(1), it.GetSpan<T2>(2)..."
     public static readonly string[] IterSpanArguments = CacheJoinedStrings(Separator.Comma, i => $"it.GetSpan<T{i}>({i})");
-
-    // Generates "it.GetPointer<T0>(0), it.GetPointer<T1>(1), it.GetPointer<T2>(2)..."
     public static readonly string[] IterPointerArguments = CacheJoinedStrings(Separator.Comma, i => $"it.GetPointer<T{i}>({i})");
 
-    // Generates "ref Managed.GetTypeRef<T0>(&pointer0[i]), ref Managed.GetTypeRef<T1>(&pointer1[i]), ref Managed.GetTypeRef<T2>(&pointer2[i])..."
-    public static readonly string[] EachRefArguments = CacheJoinedStrings(Separator.Comma, i => $"ref Managed.GetTypeRef<T{i}>(&pointer{i}[i])");
-
-    // Generates "new Entity(it.Handle->world, it.Handle->entities[i]), ref Managed.GetTypeRef<T0>(&pointer0[i]), ref Managed.GetTypeRef<T1>(&pointer1[i]), ref Managed.GetTypeRef<T2>(&pointer2[i])"
-    public static readonly string[] EachEntityRefArguments = CacheStrings(i => $"new Entity(it.Handle->world, it.Handle->entities[i]), {EachRefArguments[i]}");
-
-    // Generates "it, i, ref Managed.GetTypeRef<T0>(&pointer0[i]), ref Managed.GetTypeRef<T1>(&pointer1[i]), ref Managed.GetTypeRef<T2>(&pointer2[i])"
-    public static readonly string[] EachIterRefArguments = CacheStrings(i => $"it, i, {EachRefArguments[i]}");
-
-    // Generates "&pointer0[i], &pointer1[i], &pointer2[i]..."
-    public static readonly string[] EachPointerArguments = CacheJoinedStrings(Separator.Comma, i => $"&pointer{i}[i]");
-
-    // Generates "new Entity(it.Handle->world, it.Handle->entities[i]), pointer0[i], &pointer1[i], &pointer2[i]"
-    public static readonly string[] EachEntityPointerArguments = CacheStrings(i => $"new Entity(it.Handle->world, it.Handle->entities[i]), {EachPointerArguments[i]}");
-
-    // Generates "it, i, pointer0[i], &pointer1[i], &pointer2[i]"
-    public static readonly string[] EachIterPointerArguments = CacheStrings(i => $"it, i, {EachPointerArguments[i]}");
-
-    // Generates "ref Managed.GetTypeRef<T0>(&pointer0[i * step0]), ref Managed.GetTypeRef<T1>(&pointer1[i * step1]), ref Managed.GetTypeRef<T2>(&pointer2[i * step2])..."
-    public static readonly string[] EachRefSteppedArguments = CacheJoinedStrings(Separator.Comma, i => $"ref Managed.GetTypeRef<T{i}>(pointer{i})");
-
-    // Generates "new Entity(it.Handle->world, it.Handle->entities[i]), ref Managed.GetTypeRef<T0>(&pointer0[i * step0]), ref Managed.GetTypeRef<T1>(&pointer1[i * step1]), ref Managed.GetTypeRef<T2>(&pointer2[i * step2])"
-    public static readonly string[] EachEntityRefSteppedArguments = CacheStrings(i => $"new Entity(it.Handle->world, it.Handle->entities[i]), {EachRefSteppedArguments[i]}");
-
-    // Generates "it, i, ref Managed.GetTypeRef<T0>(&pointer0[i * step0]), ref Managed.GetTypeRef<T1>(&pointer1[i * step1]), ref Managed.GetTypeRef<T2>(&pointer2[i * step2])"
-    public static readonly string[] EachIterRefSteppedArguments = CacheStrings(i => $"it, i, {EachRefSteppedArguments[i]}");
-
-    // Generates "&pointer0[i * step0], &pointer1[i * step1], &pointer2[i * step2]..."
-    public static readonly string[] EachPointerSteppedArguments = CacheJoinedStrings(Separator.Comma, i => $"(T{i}*)pointer{i}");
-
-    // Generates "new Entity(it.Handle->world, it.Handle->entities[i]), &pointer0[i * step0], &pointer1[i * step1], &pointer2[i * step2]..."
-    public static readonly string[] EachEntityPointerSteppedArguments = CacheStrings(i => $"new Entity(it.Handle->world, it.Handle->entities[i]), {EachPointerSteppedArguments[i]}");
-
-    // Generates "it, i, &pointer0[i * step0], &pointer1[i * step1], &pointer2[i * step2]..."
-    public static readonly string[] EachIterPointerSteppedArguments = CacheStrings(i => $"it, i, {EachPointerSteppedArguments[i]}");
-
-    // Generates "ref Managed.GetTypeRef<T0>(&pointers[0]), ref Managed.GetTypeRef<T0>(&pointers[0])"
     public static readonly string[] ReadRefArguments = CacheJoinedStrings(Separator.Comma, i => $"ref Managed.GetTypeRef<T{i}>(pointers[{i}])");
     public static readonly string[] WriteRefArguments = ReadRefArguments;
     public static readonly string[] InsertRefArguments = ReadRefArguments;
@@ -247,45 +99,38 @@ public static class Generator
 
     #region Entity Component Callbacks
 
-    // Generates "Type<T0>.Id(world), Type<T1>.Id(world), Type<T2>.Id(world)..."
     public static readonly string[] TypeIdList = CacheJoinedStrings(Separator.Comma, i => $"Type<T{i}>.Id(world)");
 
-    // Generates "ecs_table_get_column_index(realWorld, table, ids[0]), ecs_table_get_column_index(realWorld, table, ids[1])..."
     public static readonly string[] ColumnList = CacheJoinedStrings(Separator.Comma, i => $"ecs_table_get_column_index(realWorld, table, ids[{i}])");
 
-    // Generates "ulong* ids = stackalloc ulong[] { Type<T0>.Id(world), Type<T1>.Id(world) };"
     public static readonly string[] IdsArray = CacheStrings(i => $"ulong* ids = stackalloc ulong[] {{ {TypeIdList[i]} }};");
 
-    // Generates "int* columns = stackalloc int[] { ecs_table_get_column_index(realWorld, table, ids[0]), ecs_table_get_column_index(realWorld, table, ids[1]) };"
     public static readonly string[] ColumnsArray = CacheStrings(i => $"int* columns = stackalloc int[] {{ {ColumnList[i]} }};");
 
-    // Generates "ptrs[0] = ecs_ensure_id(world, e, Type<T0>.Id(world)); ptrs[1] = ecs_ensure_id(world, e, Type<T1>.Id(world));"
     public static readonly string[] EnsurePointers = CacheJoinedStrings(Separator.Space, i => $"ptrs[{i}] = ecs_ensure_id(world, e, Type<T{i}>.Id(world));");
 
-    // Generates "ecs_modified_id(world, id, ids[0]); ecs_modified_id(world, id, ids[1]);..."
     public static readonly string[] ModifiedChain = CacheJoinedStrings(Separator.Space, i => $"ecs_modified_id(world, entity, ids[{i}]);");
 
     #endregion
 
     #region Type Helpers
 
-    // Generates "(Type<T0>.IsTag ? 1 << 0 : 0) | (Type<T1>.IsTag ? 1 << 1 : 0)..."
     public static readonly string[] Tags = CacheJoinedStrings(Separator.BitwiseOr, i => $"(Type<T{i}>.IsTag ? 1 << {i} : 0)");
 
-    // Generates "(RuntimeHelpers.IsReferenceOrContainsReferences<T0>() ? 1 << 0 : 0) | (RuntimeHelpers.IsReferenceOrContainsReferences<T1>() ? 1 << 1 : 0)..."
     public static readonly string[] ReferenceTypes = CacheJoinedStrings(Separator.BitwiseOr, i => $"(RuntimeHelpers.IsReferenceOrContainsReferences<T{i}>() ? 1 << {i} : 0)");
 
-    // Generates "Type<T0>.FullName, Type<T1>.Fullname..."
     public static readonly string[] TypeFullNames = CacheJoinedStrings(Separator.Comma, i => $"Type<T{i}>.FullName");
+
+    public static readonly string[] SparseBitField = CacheJoinedStrings(Separator.BitwiseOr, i => $"(ecs_has_id(world, Type<T{i}>.Id(world), Ecs.Sparse) == Utils.True ? 1 << {i} : 0)");
+
+    public static readonly string[] ContainsReferenceTypes = CacheJoinedStrings(Separator.Or, i => $"RuntimeHelpers.IsReferenceOrContainsReferences<T{i}>()");
 
     #endregion
 
     #region Misc
 
-    // Generates ".With<T0>.With<T1>().With<T2>()..."
     public static readonly string[] WithChain = CacheJoinedStrings(Separator.None, i => $".With<T{i}>()");
 
-    // Generates "<typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam>..."
     public static readonly string[] XmlTypeParameters = CacheJoinedStrings(Separator.Space, i => $"<typeparam name=\"T{i}\">The T{i} component type.</typeparam>");
 
     #endregion
@@ -547,36 +392,113 @@ public static class Generator
         };
     }
 
-    public static string GetCallbackArguments(int i, Callback callback)
+    public static bool GetCallbackIsIter(Callback callback)
     {
         return callback switch
         {
-            Callback.IterFieldCallbackDelegate or Callback.IterFieldCallbackPointer => IterFieldArguments[i],
-            Callback.IterSpanCallbackDelegate or Callback.IterSpanCallbackPointer => IterSpanArguments[i],
-            Callback.IterPointerCallbackDelegate or Callback.IterPointerCallbackPointer => IterPointerArguments[i],
-            Callback.EachRefCallbackDelegate or Callback.EachRefCallbackPointer or Callback.FindRefCallbackDelegate or Callback.FindRefCallbackPointer => EachRefArguments[i],
-            Callback.EachEntityRefCallbackDelegate or Callback.EachEntityRefCallbackPointer or Callback.FindEntityRefCallbackDelegate or Callback.FindEntityRefCallbackPointer => EachEntityRefArguments[i],
-            Callback.EachIterRefCallbackDelegate or Callback.EachIterRefCallbackPointer or Callback.FindIterRefCallbackDelegate or Callback.FindIterRefCallbackPointer => EachIterRefArguments[i],
-            Callback.EachPointerCallbackDelegate or Callback.EachPointerCallbackPointer or Callback.FindPointerCallbackDelegate or Callback.FindPointerCallbackPointer => EachPointerArguments[i],
-            Callback.EachEntityPointerCallbackDelegate or Callback.EachEntityPointerCallbackPointer or Callback.FindEntityPointerCallbackDelegate or Callback.FindEntityPointerCallbackPointer => EachEntityPointerArguments[i],
-            Callback.EachIterPointerCallbackDelegate or Callback.EachIterPointerCallbackPointer or Callback.FindIterPointerCallbackDelegate or Callback.FindIterPointerCallbackPointer => EachIterPointerArguments[i],
-            Callback.ReadRefCallbackDelegate or Callback.WriteRefCallbackDelegate or Callback.InsertRefCallbackDelegate => ReadRefArguments[i],
+            Callback.IterFieldCallbackDelegate or
+            Callback.IterFieldCallbackPointer or
+            Callback.IterSpanCallbackDelegate or
+            Callback.IterSpanCallbackPointer or
+            Callback.IterPointerCallbackDelegate or
+            Callback.IterPointerCallbackPointer => true,
+            _ => false
+        };
+    }
+
+    public static CallbackParameters GetCallbackParameters(Callback callback)
+    {
+        return callback switch
+        {
+            Callback.IterFieldCallbackDelegate or
+            Callback.IterFieldCallbackPointer => CallbackParameters.IterField,
+
+            Callback.IterSpanCallbackDelegate or
+            Callback.IterSpanCallbackPointer =>  CallbackParameters.IterSpan,
+
+            Callback.IterPointerCallbackDelegate or
+            Callback.IterPointerCallbackPointer =>  CallbackParameters.IterPointer,
+
+            Callback.EachRefCallbackDelegate or
+            Callback.EachRefCallbackPointer or
+            Callback.FindRefCallbackDelegate or
+            Callback.FindRefCallbackPointer => CallbackParameters.EachRef,
+
+            Callback.EachEntityRefCallbackDelegate or
+            Callback.EachEntityRefCallbackPointer or
+            Callback.FindEntityRefCallbackDelegate or
+            Callback.FindEntityRefCallbackPointer => CallbackParameters.EachEntityRef,
+
+            Callback.EachIterRefCallbackDelegate or
+            Callback.EachIterRefCallbackPointer or
+            Callback.FindIterRefCallbackDelegate or
+            Callback.FindIterRefCallbackPointer => CallbackParameters.EachIterRef,
+
+            Callback.EachPointerCallbackDelegate or
+            Callback.EachPointerCallbackPointer or
+            Callback.FindPointerCallbackDelegate or
+            Callback.FindPointerCallbackPointer => CallbackParameters.EachPointer,
+
+            Callback.EachEntityPointerCallbackDelegate or
+            Callback.EachEntityPointerCallbackPointer or
+            Callback.FindEntityPointerCallbackDelegate or
+            Callback.FindEntityPointerCallbackPointer => CallbackParameters.EachEntityPointer,
+
+            Callback.EachIterPointerCallbackDelegate or
+            Callback.EachIterPointerCallbackPointer or
+            Callback.FindIterPointerCallbackDelegate or
+            Callback.FindIterPointerCallbackPointer => CallbackParameters.EachIterPointer,
+
+            Callback.ReadRefCallbackDelegate or
+            Callback.WriteRefCallbackDelegate or
+            Callback.InsertRefCallbackDelegate => CallbackParameters.ReadRef,
+
             _ => throw new ArgumentOutOfRangeException(nameof(callback), callback, null)
         };
     }
 
-    public static string GetCallbackSteppedArguments(int i, Callback callback)
+    public static string GetCallbackArguments(Callback callback, int i)
     {
-        return callback switch
+        return GetCallbackParameters(callback) switch
         {
-            Callback.EachRefCallbackDelegate or Callback.EachRefCallbackPointer or Callback.FindRefCallbackDelegate or Callback.FindRefCallbackPointer => EachRefSteppedArguments[i],
-            Callback.EachEntityRefCallbackDelegate or Callback.EachEntityRefCallbackPointer or Callback.FindEntityRefCallbackDelegate or Callback.FindEntityRefCallbackPointer => EachEntityRefSteppedArguments[i],
-            Callback.EachIterRefCallbackDelegate or Callback.EachIterRefCallbackPointer or Callback.FindIterRefCallbackDelegate or Callback.FindIterRefCallbackPointer => EachIterRefSteppedArguments[i],
-            Callback.EachPointerCallbackDelegate or Callback.EachPointerCallbackPointer or Callback.FindPointerCallbackDelegate or Callback.FindPointerCallbackPointer => EachPointerSteppedArguments[i],
-            Callback.EachEntityPointerCallbackDelegate or Callback.EachEntityPointerCallbackPointer or Callback.FindEntityPointerCallbackDelegate or Callback.FindEntityPointerCallbackPointer => EachEntityPointerSteppedArguments[i],
-            Callback.EachIterPointerCallbackDelegate or Callback.EachIterPointerCallbackPointer or Callback.FindIterPointerCallbackDelegate or Callback.FindIterPointerCallbackPointer => EachIterPointerSteppedArguments[i],
-            _ => throw new ArgumentOutOfRangeException(nameof(callback), callback, null)
+            CallbackParameters.IterField => IterFieldArguments[i],
+            CallbackParameters.IterSpan => IterSpanArguments[i],
+            CallbackParameters.IterPointer => IterPointerArguments[i],
+            CallbackParameters.ReadRef => ReadRefArguments[i],
+            _ => throw new ArgumentOutOfRangeException(nameof(callback))
         };
+    }
+
+    public static string GetCallbackArguments(Callback parameters, IterationTechnique iterationTechnique, int i)
+    {
+        return GetCallbackParameters(parameters) switch
+        {
+            CallbackParameters.EachRef => $"{GetEachRefArguments(iterationTechnique, i)}",
+            CallbackParameters.EachPointer => $"{GetEachPointerArguments(iterationTechnique, i)}",
+            CallbackParameters.EachEntityRef => $"new Entity(it.Handle->world, it.Handle->entities[i]), {GetEachRefArguments(iterationTechnique, i)}",
+            CallbackParameters.EachEntityPointer => $"new Entity(it.Handle->world, it.Handle->entities[i]), {GetEachPointerArguments(iterationTechnique, i)}",
+            CallbackParameters.EachIterRef => $"it, i, {GetEachRefArguments(iterationTechnique, i)}",
+            CallbackParameters.EachIterPointer => $"it, i, {GetEachPointerArguments(iterationTechnique, i)}",
+            _ => throw new ArgumentOutOfRangeException(nameof(parameters), parameters, null)
+        };
+    }
+
+    public static readonly string[][] EachPointerArguments = typeof(IterationTechnique).GetEnumNames()
+        .Select((str) => CacheJoinedStrings(Separator.Comma, i => $"field{i}.Pointer{str}(i)"))
+        .ToArray();
+
+    public static readonly string[][] EachRefArguments = typeof(IterationTechnique).GetEnumNames()
+        .Select((str) => CacheJoinedStrings(Separator.Comma, i => $"ref field{i}.Ref{str}(i)"))
+        .ToArray();
+
+    public static string GetEachPointerArguments(IterationTechnique type, int i)
+    {
+        return EachPointerArguments[(int)type][i];
+    }
+
+    public static string GetEachRefArguments(IterationTechnique type, int i)
+    {
+        return EachRefArguments[(int)type][i];
     }
 
     public static string GetCallbackCountVariable(Callback callback)

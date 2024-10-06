@@ -14,6 +14,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Run(Ecs.RunCallback callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetRun(callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.RunCallbackDelegate).Build();
     }
 
@@ -24,6 +25,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Run(delegate*<Iter, void> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetRun((IntPtr)callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.RunCallbackPointer).Build();
     }
 
@@ -34,6 +36,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Iter(Ecs.IterFieldCallback<T0, T1, T2, T3, T4, T5, T6> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, false);
         return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.IterFieldCallbackDelegate).Build();
     }
 
@@ -44,6 +47,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Iter(Ecs.IterSpanCallback<T0, T1, T2, T3, T4, T5, T6> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, false);
         return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.IterSpanCallbackDelegate).Build();
     }
 
@@ -54,6 +58,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Iter(Ecs.IterPointerCallback<T0, T1, T2, T3, T4, T5, T6> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, false);
         return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.IterPointerCallbackDelegate).Build();
     }
 
@@ -64,6 +69,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Iter(delegate*<Iter, Field<T0>, Field<T1>, Field<T2>, Field<T3>, Field<T4>, Field<T5>, Field<T6>, void> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, false);
         return SetCallback((IntPtr)callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.IterFieldCallbackPointer).Build();
     }
 
@@ -74,6 +80,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Iter(delegate*<Iter, Span<T0>, Span<T1>, Span<T2>, Span<T3>, Span<T4>, Span<T5>, Span<T6>, void> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, false);
         return SetCallback((IntPtr)callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.IterSpanCallbackPointer).Build();
     }
 
@@ -84,6 +91,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Iter(delegate*<Iter, T0*, T1*, T2*, T3*, T4*, T5*, T6*, void> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, false);
         return SetCallback((IntPtr)callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.IterPointerCallbackPointer).Build();
     }
 
@@ -94,6 +102,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Each(Ecs.EachRefCallback<T0, T1, T2, T3, T4, T5, T6> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.EachRefCallbackDelegate).Build();
     }
 
@@ -104,6 +113,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Each(Ecs.EachEntityRefCallback<T0, T1, T2, T3, T4, T5, T6> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.EachEntityRefCallbackDelegate).Build();
     }
 
@@ -114,6 +124,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Each(Ecs.EachIterRefCallback<T0, T1, T2, T3, T4, T5, T6> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.EachIterRefCallbackDelegate).Build();
     }
 
@@ -124,6 +135,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Each(delegate*<ref T0, ref T1, ref T2, ref T3, ref T4, ref T5, ref T6, void> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetCallback((IntPtr)callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.EachRefCallbackPointer).Build();
     }
 
@@ -134,6 +146,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Each(delegate*<Entity, ref T0, ref T1, ref T2, ref T3, ref T4, ref T5, ref T6, void> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetCallback((IntPtr)callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.EachEntityRefCallbackPointer).Build();
     }
 
@@ -144,6 +157,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Each(delegate*<Iter, int, ref T0, ref T1, ref T2, ref T3, ref T4, ref T5, ref T6, void> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetCallback((IntPtr)callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.EachIterRefCallbackPointer).Build();
     }
 
@@ -154,6 +168,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Each(Ecs.EachPointerCallback<T0, T1, T2, T3, T4, T5, T6> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.EachPointerCallbackDelegate).Build();
     }
 
@@ -164,6 +179,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Each(Ecs.EachEntityPointerCallback<T0, T1, T2, T3, T4, T5, T6> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.EachEntityPointerCallbackDelegate).Build();
     }
 
@@ -174,6 +190,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Each(Ecs.EachIterPointerCallback<T0, T1, T2, T3, T4, T5, T6> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.EachIterPointerCallbackDelegate).Build();
     }
 
@@ -184,6 +201,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Each(delegate*<T0*, T1*, T2*, T3*, T4*, T5*, T6*, void> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetCallback((IntPtr)callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.EachPointerCallbackPointer).Build();
     }
 
@@ -194,6 +212,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Each(delegate*<Entity, T0*, T1*, T2*, T3*, T4*, T5*, T6*, void> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetCallback((IntPtr)callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.EachEntityPointerCallbackPointer).Build();
     }
 
@@ -204,6 +223,7 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6>
     public System<T0, T1, T2, T3, T4, T5, T6> Each(delegate*<Iter, int, T0*, T1*, T2*, T3*, T4*, T5*, T6*, void> callback)
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(World, true);
         return SetCallback((IntPtr)callback, Pointers<T0, T1, T2, T3, T4, T5, T6>.EachIterPointerCallbackPointer).Build();
     }
 }

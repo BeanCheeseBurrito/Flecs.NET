@@ -645,11 +645,6 @@ public static partial class Ecs
     public const uint QueryMatchEmptyTables = EcsQueryMatchEmptyTables;
 
     /// <summary>
-    ///     Query won't provide component data.
-    /// </summary>
-    public const uint QueryNoData = EcsQueryNoData;
-
-    /// <summary>
     ///     Query may have unresolved entity identifiers.
     /// </summary>
     public const uint QueryAllowUnresolvedByName = EcsQueryAllowUnresolvedByName;

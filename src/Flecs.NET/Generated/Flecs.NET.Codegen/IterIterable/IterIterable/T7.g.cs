@@ -150,6 +150,9 @@ public unsafe partial struct IterIterable<T0, T1, T2, T3, T4, T5, T6> : IEquatab
 // IIterableBase Interface
 public unsafe partial struct IterIterable<T0, T1, T2, T3, T4, T5, T6> : IIterableBase
 {
+    /// <inheritdoc cref="IterIterable.World"/>
+    public ref ecs_world_t* World => ref _iterIterable.World;
+    
     /// <inheritdoc cref="IterIterable.GetIter(ecs_world_t*)"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ecs_iter_t GetIter(ecs_world_t* world = null)

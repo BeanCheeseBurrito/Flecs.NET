@@ -22,11 +22,6 @@ public readonly unsafe struct Field<T> : IEquatable<Field<T>>
     public int Length { get; }
 
     /// <summary>
-    ///     Specifies if the field is shared.
-    /// </summary>
-    public bool IsShared { get; }
-
-    /// <summary>
     ///     Specifies if the field pointer is null.
     /// </summary>
     public bool IsNull => Data == null;
@@ -36,12 +31,10 @@ public readonly unsafe struct Field<T> : IEquatable<Field<T>>
     /// </summary>
     /// <param name="data"></param>
     /// <param name="length"></param>
-    /// <param name="isShared"></param>
-    public Field(void* data, int length, bool isShared = false)
+    public Field(void* data, int length)
     {
         Data = data;
         Length = length;
-        IsShared = isShared;
     }
 
     /// <summary>
@@ -53,8 +46,7 @@ public readonly unsafe struct Field<T> : IEquatable<Field<T>>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
-            Ecs.Assert(index < Length, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
-            Ecs.Assert(index == 0 || !IsShared, nameof(ECS_INVALID_PARAMETER));
+            Ecs.Assert(index >= 0 && index < Length, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
             Ecs.Assert(Data != null, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
             return ref Managed.GetTypeRef<T>(Data, index);
         }

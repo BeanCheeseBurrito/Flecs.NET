@@ -315,4 +315,10 @@ public static unsafe partial class Ecs
     {
         return ref queryBuilder.QueryBuilder;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static ref ecs_world_t* GetIterableWorld<T>(ref T obj) where T : IIterableBase
+    {
+        return ref obj.World;
+    }
 }

@@ -208,7 +208,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     public bool IsSelf(int index)
     {
         Ecs.Assert(index < Handle->field_count, "Field index out of range.");
-        return ecs_field_is_self(Handle, index) == 1;
+        return ecs_field_is_self(Handle, (byte)index) == 1;
     }
 
     /// <summary>
@@ -219,7 +219,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     public bool IsSet(int index)
     {
         Ecs.Assert(index < Handle->field_count, "Field index out of range.");
-        return ecs_field_is_set(Handle, index) == 1;
+        return ecs_field_is_set(Handle, (byte)index) == 1;
     }
 
     /// <summary>
@@ -230,7 +230,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     public bool IsReadonly(int index)
     {
         Ecs.Assert(index < Handle->field_count, "Field index out of range.");
-        return ecs_field_is_readonly(Handle, index) == 1;
+        return ecs_field_is_readonly(Handle, (byte)index) == 1;
     }
 
     /// <summary>
@@ -250,7 +250,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     public ulong Size(int index)
     {
         Ecs.Assert(index < Handle->field_count, "Field index out of range.");
-        return (ulong)ecs_field_size(Handle, index);
+        return (ulong)ecs_field_size(Handle, (byte)index);
     }
 
     /// <summary>
@@ -261,7 +261,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     public Entity Src(int index)
     {
         Ecs.Assert(index < Handle->field_count, "Field index out of range.");
-        return new Entity(Handle->world, ecs_field_src(Handle, index));
+        return new Entity(Handle->world, ecs_field_src(Handle, (byte)index));
     }
 
     /// <summary>
@@ -272,7 +272,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     public Id Id(int index)
     {
         Ecs.Assert(index < Handle->field_count, "Field index out of range.");
-        return new Id(Handle->world, ecs_field_id(Handle, index));
+        return new Id(Handle->world, ecs_field_id(Handle, (byte)index));
     }
 
     /// <summary>
@@ -284,7 +284,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     public Id Pair(int index)
     {
         Ecs.Assert(index < Handle->field_count, "Field index out of range.");
-        ulong id = ecs_field_id(Handle, index);
+        ulong id = ecs_field_id(Handle, (byte)index);
         Ecs.Assert(Ecs.EntityHasIdFlag(id, ECS_PAIR) != 0, nameof(ECS_INVALID_PARAMETER));
         return new Id(Handle->world, id);
     }
@@ -297,7 +297,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     public int ColumnIndex(int index)
     {
         Ecs.Assert(index < Handle->field_count, "Field index out of range.");
-        return ecs_field_column(Handle, index);
+        return ecs_field_column(Handle, (byte)index);
     }
 
     /// <summary>
@@ -331,7 +331,9 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref T FieldAt<T>(int index, int row)
     {
-        return ref GetField<T>(index)[row];
+        return ref Utils.IsBitSet(Handle->row_fields, index)
+            ? ref GetFieldAt<T>(index, row)[0]
+            : ref GetField<T>(index)[row];
     }
 
     /// <summary>
@@ -456,8 +458,18 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     internal Field<T> GetField<T>(int index)
     {
         AssertField<T>(Handle, index);
-        bool isShared = ecs_field_is_self(Handle, index) == 0;
-        return new Field<T>(Handle->ptrs[index], isShared ? 1 : Handle->count, isShared);
+
+        return new Field<T>(
+            ecs_field_w_size(Handle, Type<T>.Size, (byte)index),
+            ecs_field_is_self(Handle, (byte)index) == Utils.True ? Handle->count : 1
+        );
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal Field<T> GetFieldAt<T>(int index, int row)
+    {
+        AssertField<T>(Handle, index);
+        return new Field<T>(ecs_field_at_w_size(Handle, Type<T>.Size, (byte)index, row), 1);
     }
 
     [Conditional("DEBUG")]
@@ -676,19 +688,30 @@ public unsafe partial struct Iter
     internal T* GetPointer<T>(int index)
     {
         AssertField<T>(Handle, index);
-        return (T*)Handle->ptrs[index];
+        return (T*)ecs_field_w_size(Handle, Type<T>.Size, (byte)index);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal int Step<T>(int index)
+    internal FieldData<T> GetFieldData<T>(byte index)
     {
-        return (Handle->sources == null || Handle->sources[index] == 0) && (Handle->set_fields & (1 << index)) != 0 && !Type<T>.IsTag ? Type<T>.Size : 0;
+        AssertField<T>(Handle, index);
+        return new FieldData<T>(Handle, index);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal bool IsLinear()
+    internal IterationTechnique GetIterationTechnique(int fieldCount)
     {
-        return Handle->shared_fields == 0 && Handle->set_fields == (1 << Handle->field_count) - 1;
+        IterationTechnique flags = default;
+
+        int mask = (1 << fieldCount) - 1;
+
+        if ((Handle->row_fields & mask) != 0)
+            flags |= IterationTechnique.Sparse;
+
+        if (((Handle->ref_fields & mask) != 0 && Handle->ref_fields != Handle->row_fields) || (Handle->up_fields & mask) != 0 || (Handle->set_fields & mask) != mask)
+            flags |= IterationTechnique.Shared;
+
+        return flags;
     }
 }
 
