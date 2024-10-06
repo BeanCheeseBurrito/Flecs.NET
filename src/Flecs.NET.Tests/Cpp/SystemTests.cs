@@ -1197,6 +1197,28 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
+        private void SelfRateFilter()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            world.System<Position>("sys")
+                .Rate(2)
+                .Each((ref Position p) =>
+                {
+                    count++;
+                });
+
+            world.Entity().Set(new Position(1.0f, 2.0f));
+
+            for(int i = 0; i < 10; i++)
+                world.Progress();
+
+            Assert.Equal(5, count);
+        }
+
+        [Fact]
         private void UpdateRateFilter()
         {
             using World world = World.Create();
@@ -2597,6 +2619,24 @@ namespace Flecs.NET.Tests.Cpp
 
             sys2.Run();
             Assert.Equal(1, count2);
+        }
+
+        [Fact]
+        private void RunWith0SrcQuery()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+
+            world.System()
+                .Write<Position>()
+                .Run((Iter _) =>
+                {
+                    count++;
+                });
+
+            world.Progress();
+            Assert.Equal(1, count);
         }
     }
 }

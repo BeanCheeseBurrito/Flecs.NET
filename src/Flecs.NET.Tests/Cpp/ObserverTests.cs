@@ -16,7 +16,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<Position, Velocity>()
                 .Event(Ecs.OnAdd)
-                .Each((ref Position p, ref Velocity v) => { count++; });
+                .Each((ref Position _, ref Velocity _) => { count++; });
 
             Entity e = world.Entity();
             Assert.Equal(0, count);
@@ -145,7 +145,7 @@ namespace Flecs.NET.Tests.Cpp
                 .With<Tag7>()
                 .With<Tag8>()
                 .With<Tag9>()
-                .Each((Iter it, int i) =>
+                .Each((Iter it, int _) =>
                 {
                     Assert.Equal(1, it.Count());
                     Assert.Equal(e, it.Entity(0));
@@ -194,7 +194,7 @@ namespace Flecs.NET.Tests.Cpp
                 .With<Tag13>()
                 .With<Tag14>()
                 .With<Tag15>()
-                .Each((Iter it, int i) =>
+                .Each((Iter it, int _) =>
                 {
                     Assert.Equal(1, it.Count());
                     Assert.Equal(e, it.Entity(0));
@@ -497,7 +497,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<Position>()
                 .Event(Ecs.OnAdd)
-                .Each((Entity e, ref Position p) => { invoked++; });
+                .Each((Entity _, ref Position _) => { invoked++; });
 
             world.Entity()
                 .Add<Position>();
@@ -514,7 +514,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<Position>()
                 .Event(Ecs.OnRemove)
-                .Each((Entity e, ref Position p) => { invoked++; });
+                .Each((Entity _, ref Position _) => { invoked++; });
 
             Entity e = world.Entity()
                 .Add<Position>();
@@ -600,7 +600,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Observer()
                 .Expr("Tag")
                 .Event(Ecs.OnAdd)
-                .Each((Entity e) => { invoked++; });
+                .Each((Entity _) => { invoked++; });
 
             Entity e = world.Entity().Add<Tag>();
 
@@ -625,7 +625,7 @@ namespace Flecs.NET.Tests.Cpp
                 .With(tagA)
                 .With(tagB).Filter()
                 .Event(Ecs.OnAdd)
-                .Each((Entity e) => { invoked++; });
+                .Each((Entity _) => { invoked++; });
 
             Entity e = world.Entity();
             Assert.Equal(0, invoked);
@@ -663,7 +663,7 @@ namespace Flecs.NET.Tests.Cpp
                     while (it.Next())
                         each(it);
                 })
-                .Each((ref Position p) =>
+                .Each((ref Position _) =>
                 {
                     count++;
                 });
@@ -838,7 +838,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<Position>()
                 .Event(Ecs.OnSet)
-                .Each((Entity e, ref Position p) => { count++; });
+                .Each((Entity _, ref Position _) => { count++; });
 
             Entity e = world.Entity();
             Assert.Equal(0, count);
@@ -856,7 +856,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Observer<Position>()
                 .Event(Ecs.OnSet)
-                .Each((Entity e, ref Position p) => { count++; });
+                .Each((Entity _, ref Position _) => { count++; });
 
             Entity e = world.Entity();
             Assert.Equal(0, count);
@@ -978,7 +978,7 @@ namespace Flecs.NET.Tests.Cpp
             world.Observer()
                 .With<Position>(tgt).Singleton()
                 .Event(Ecs.OnSet)
-                .Each((Entity entity) => { count++; });
+                .Each((Entity _) => { count++; });
 
             world.Set(tgt, new Position { X = 10, Y = 20 });
             Assert.Equal(1, count);
@@ -1240,6 +1240,164 @@ namespace Flecs.NET.Tests.Cpp
 
             world.Entity().Set(new Position(10, 20));
             Assert.Equal(1, count2);
+        }
+
+        [Fact]
+        private void OtherTable()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+            Entity matched = default;
+
+            world.Observer<Velocity>()
+                .Event(Ecs.OnAdd)
+                .Each((Iter it, int row, ref Velocity _) =>
+                {
+                    Assert.True(it.Table().Has<Velocity>());
+                    Assert.True(!it.OtherTable().Has<Velocity>());
+                    matched = it.Entity(row);
+                    count++;
+                });
+
+            Entity e = world.Entity().Add<Position>().Add<Velocity>();
+            Assert.True(e == matched);
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void OtherTableWithPair()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+            Entity matched = default;
+
+            world.Observer()
+                .With<Likes, Apples>()
+                .Event(Ecs.OnAdd)
+                .Each((Iter it, int row) =>
+                {
+                    Assert.True((it.Table().Has<Likes, Apples>()));
+                    Assert.True((!it.OtherTable().Has<Likes, Apples>()));
+                    matched = it.Entity(row);
+                    count++;
+                });
+
+            Entity e = world.Entity().Add<Position>().Add<Likes, Apples>();
+            Assert.True(e == matched);
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void OtherTableWithPairWildcard()
+        {
+            using World world = World.Create();
+
+            int count = 0;
+            Entity matched = default;
+
+            world.Observer()
+                .With<Likes, Apples>()
+                .Event(Ecs.OnAdd)
+                .Each((Iter it, int row) =>
+                {
+                    Assert.True((it.Table().Has<Likes>(Ecs.Wildcard)));
+                    Assert.True((!it.OtherTable().Has<Likes>(Ecs.Wildcard)));
+                    matched = it.Entity(row);
+                    count++;
+                });
+
+            Entity e = world.Entity().Add<Position>().Add<Likes, Apples>();
+            Assert.True(e == matched);
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
+        private void OnAddInherited()
+        {
+            using World world = World.Create();
+
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
+            int count = 0;
+            Entity matched = default;
+
+            world.Observer<Position>()
+                .Event(Ecs.OnAdd)
+                .Each((Entity e, ref Position p) =>
+                {
+                    Assert.Equal(10, p.X);
+                    Assert.Equal(20, p.Y);
+                    count++;
+                    matched = e;
+                });
+
+            Entity p = world.Prefab().Set(new Position(10, 20));
+            Assert.Equal(0, count);
+
+            Entity i = world.Entity().IsA(p);
+            Assert.Equal(1, count);
+            Assert.True(i == matched);
+        }
+
+        [Fact]
+        private void OnSetInherited()
+        {
+            using World world = World.Create();
+
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
+            int count = 0;
+            Entity matched = default;
+
+            world.Observer<Position>()
+                .Event(Ecs.OnSet)
+                .Each((Entity e, ref Position p) =>
+                {
+                    Assert.Equal(10, p.X);
+                    Assert.Equal(20, p.Y);
+                    count++;
+                    matched = e;
+                });
+
+            Entity p = world.Prefab().Set(new Position(10, 20));
+            Assert.Equal(0, count);
+
+            Entity i = world.Entity().IsA(p);
+            Assert.Equal(1, count);
+            Assert.True(i == matched);
+        }
+
+        [Fact]
+        private void OnRemoveInherited()
+        {
+            using World world = World.Create();
+
+            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
+            int count = 0;
+            Entity matched = default;
+
+            world.Observer<Position>()
+                .Event(Ecs.OnRemove)
+                .Each((Entity e, ref Position p) =>
+                {
+                    Assert.Equal(10, p.X);
+                    Assert.Equal(20, p.Y);
+                    count++;
+                    matched = e;
+                });
+
+            Entity p = world.Prefab().Set(new Position(10, 20));
+            Assert.Equal(0, count);
+
+            Entity i = world.Entity().IsA(p);
+            Assert.Equal(0, count);
+
+            p.Remove<Position>();
+            Assert.Equal(1, count);
+            Assert.True(i == matched);
         }
     }
 }

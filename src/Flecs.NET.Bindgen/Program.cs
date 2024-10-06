@@ -40,7 +40,7 @@ BindingGenerator.Generate(bindingOptions);
 
 string GetFlecsHeaderPath([CallerFilePath] string filePath = "")
 {
-    return Path.GetFullPath(Path.Combine(filePath, "..", "..", "..", "submodules", "flecs", "flecs.h"));
+    return Path.GetFullPath(Path.Combine(filePath, "..", "..", "..", "submodules", "flecs", "distr", "flecs.h"));
 }
 
 string GetBindingsOutputPath([CallerFilePath] string filePath = "")

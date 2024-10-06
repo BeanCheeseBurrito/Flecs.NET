@@ -3083,5 +3083,72 @@ namespace Flecs.NET.Tests.Cpp
                 Assert.Equal(33, p->Y);
             }
         }
+
+        [Fact]
+        private void PairWithVariableSrc()
+        {
+            using World world = World.Create();
+
+            world.Component<RelData>();
+            world.Component<ThisComp>();
+            world.Component<OtherComp>();
+
+            Entity other = world.Entity()
+                .Set(new OtherComp(10));
+
+            for (int i = 0; i < 3; ++i)
+                world.Entity()
+                    .Set(new ThisComp(i))
+                    .Add<RelData>(other);
+
+            Query<RelData, ThisComp, OtherComp> q = world.QueryBuilder<RelData, ThisComp, OtherComp>()
+                .TermAt(0).Second("$other")
+                .TermAt(2).Src("$other")
+                .Build();
+
+            int isPresent = 0;
+            q.Each((ref RelData _, ref ThisComp thisComp, ref OtherComp otherComp) =>
+            {
+                isPresent |= 1 << thisComp.X;
+                Assert.Equal(10, otherComp.X);
+            });
+
+            Assert.Equal(7, isPresent);
+        }
+
+        [Fact]
+        private void PairWithVariableSrcNoRowFields()
+        {
+            using World world = World.Create();
+
+            world.Component<RelData>();
+            world.Component<ThisComp>();
+            world.Component<OtherComp>();
+
+            Entity other = world.Entity()
+                .Set(new OtherComp(0));
+
+            world.Entity()
+                .Set(new OtherComp(1));
+
+            for (int i = 0; i < 3; ++i)
+                world.Entity()
+                    .Set(new ThisComp(i))
+                    .Add<RelData>(other);
+
+            Query<RelData, ThisComp, OtherComp> q = world.QueryBuilder<RelData, ThisComp, OtherComp>()
+                .TermAt(0).Second("$other")
+                .TermAt(2).Src("$other")
+                .Build();
+
+            int isPresent = 0;
+            q.Each((ref RelData _, ref ThisComp thisComp, ref OtherComp otherComp) =>
+            {
+                isPresent |= 1 << thisComp.X;
+                Assert.Equal(0, otherComp.X);
+            });
+
+            Assert.Equal(7, isPresent);
+        }
     }
 }

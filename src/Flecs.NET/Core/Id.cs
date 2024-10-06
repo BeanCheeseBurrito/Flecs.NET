@@ -33,6 +33,18 @@ public unsafe struct Id : IEquatable<Id>
     }
 
     /// <summary>
+    ///     Creates an id with the provided world and string expression.
+    /// </summary>
+    /// <param name="world">The world.</param>
+    /// <param name="expr">The string expression.</param>
+    public Id(ecs_world_t* world, string expr)
+    {
+        using NativeString nativeExpr = (NativeString)expr;
+        _world = null;
+        _value = ecs_id_from_str(world, nativeExpr);
+    }
+
+    /// <summary>
     ///     Creates an id with the provided pair.
     /// </summary>
     /// <param name="first"></param>

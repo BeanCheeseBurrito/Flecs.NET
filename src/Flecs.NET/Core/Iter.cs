@@ -114,12 +114,21 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     }
 
     /// <summary>
-    ///     Returns table of the iter.
+    ///     Returns the table of the iter.
     /// </summary>
     /// <returns></returns>
     public Table Table()
     {
         return new Table(Handle->real_world, Handle->table);
+    }
+
+    /// <summary>
+    ///     Returns the other table of the iter.
+    /// </summary>
+    /// <returns></returns>
+    public Table OtherTable()
+    {
+        return new Table(Handle->real_world, Handle->other_table);
     }
 
     /// <summary>

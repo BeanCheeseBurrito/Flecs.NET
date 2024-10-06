@@ -84,7 +84,25 @@ public unsafe struct Ref<T> : IEquatable<Ref<T>>
     /// <returns></returns>
     public ref T TryGet()
     {
-        return ref Managed.GetTypeRef<T>(GetPtr());
+        if (World == null || _ref.entity == 0)
+            return ref Unsafe.NullRef<T>();
+
+        return ref Get();
+    }
+
+    /// <summary>
+    ///     Returns whether the reference is valid.
+    /// </summary>
+    /// <returns></returns>
+    public bool Has()
+    {
+        if (World == null || _ref.entity == 0)
+            return false;
+
+        fixed (ecs_ref_t* refPtr = &_ref)
+        {
+            return ecs_ref_get_id(World, refPtr, _ref.id) != null;
+        }
     }
 
     /// <summary>
@@ -94,6 +112,26 @@ public unsafe struct Ref<T> : IEquatable<Ref<T>>
     public Entity Entity()
     {
         return new Entity(World, _ref.entity);
+    }
+
+    /// <summary>
+    ///     Returns whether the reference is valid.
+    /// </summary>
+    /// <param name="reference">The ref object.</param>
+    /// <returns></returns>
+    public static bool ToBoolean(Ref<T> reference)
+    {
+        return reference.Has();
+    }
+
+    /// <summary>
+    ///     Returns whether the reference is valid.
+    /// </summary>
+    /// <param name="reference">The ref object.</param>
+    /// <returns></returns>
+    public static implicit operator bool(Ref<T> reference)
+    {
+        return ToBoolean(reference);
     }
 
     /// <summary>

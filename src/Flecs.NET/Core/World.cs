@@ -2386,6 +2386,16 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     }
 
     /// <summary>
+    ///     Get id from string expression.
+    /// </summary>
+    /// <param name="expr">The string expression.</param>
+    /// <returns></returns>
+    public Id Id(string expr)
+    {
+        return new Id(Handle, expr);
+    }
+
+    /// <summary>
     ///     Get id from id value.
     /// </summary>
     /// <param name="id"></param>
@@ -3009,16 +3019,38 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public Entity Module<TModule>(string name = "") where TModule : IFlecsModule, new()
     {
-        ulong result = Type<TModule>.Id(Handle);
+        Entity result = Entity(Type<TModule>.Id(Handle));
 
-        if (!string.IsNullOrEmpty(name))
+        if (string.IsNullOrEmpty(name))
+            return Entity(result);
+
+        using NativeString nativeName = (NativeString)name;
+
+        Entity prevParent = result.Parent();
+        ecs_add_path_w_sep(Handle, result, 0, nativeName, Pointers.DefaultSeparator, Pointers.DefaultSeparator);
+        Entity parent = result.Parent();
+
+        if (prevParent == parent)
+            return Entity(result);
+
+        if (parent != 0)
+            parent.Add(Ecs.Module);
+
+        // Module was reparented, cleanup old parent(s)
+        Entity current = prevParent;
+
+        do
         {
-            using NativeString nativeName = (NativeString)name;
-            ecs_add_path_w_sep(Handle, result, 0, nativeName,
-                Pointers.DefaultSeparator, Pointers.DefaultSeparator);
-        }
+            Entity next = current.Parent();
 
-        ecs_set_scope(Handle, result);
+            ecs_iter_t it = ecs_each_id(Handle, Pair(Ecs.ChildOf, current));
+
+            if (ecs_iter_is_true(&it) == Utils.False)
+                current.Destruct();
+
+            current = next;
+        } while (current != 0);
+
         return Entity(result);
     }
 

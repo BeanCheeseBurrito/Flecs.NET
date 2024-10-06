@@ -175,5 +175,45 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(p.TryGetPtr() == null);
         }
+
+        [Fact]
+        public void Has()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+
+            {
+                Ref<Position> p = e.GetRef<Position>();
+                Assert.True(!p.Has());
+            }
+
+            e.Set(new Position(10, 20));
+
+            {
+                Ref<Position> p = e.GetRef<Position>();
+                Assert.True(p.Has());
+            }
+        }
+
+        [Fact]
+        public void BoolOperator()
+        {
+            using World world = World.Create();
+
+            Entity e = world.Entity();
+
+            {
+                Ref<Position> p = e.GetRef<Position>();
+                Assert.True(!p);
+            }
+
+            e.Set(new Position(10, 20));
+
+            {
+                Ref<Position> p = e.GetRef<Position>();
+                Assert.True(p);
+            }
+        }
     }
 }

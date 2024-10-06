@@ -397,6 +397,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_id_flag_str", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_id_flag_str(ulong id_flags);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_id_from_str", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern ulong ecs_id_from_str(ecs_world_t* world, byte* expr);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_id_get_flags", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern uint ecs_id_get_flags(ecs_world_t* world, ulong id);
 
@@ -813,6 +816,12 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_os_memdup", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* ecs_os_memdup(void* src, int size);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_os_perf_trace_pop_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ecs_os_perf_trace_pop_(byte* file, System.IntPtr line, byte* name);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_os_perf_trace_push_", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ecs_os_perf_trace_push_(byte* file, System.IntPtr line, byte* name);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_os_set_api", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_os_set_api(ecs_os_api_t* os_api);
@@ -5556,6 +5565,10 @@ namespace Flecs.NET.Bindings
 
             public System.IntPtr module_to_etc_; // delegate*<byte*, byte*>
 
+            public System.IntPtr perf_trace_push_; // delegate*<byte*, ulong, byte*, void>
+
+            public System.IntPtr perf_trace_pop_; // delegate*<byte*, ulong, byte*, void>
+
             public int log_level_;
 
             public int log_indent_;
@@ -6414,6 +6427,8 @@ namespace Flecs.NET.Bindings
             public byte field_count;
 
             public uint fixed_fields;
+
+            public uint var_fields;
 
             public uint static_id_fields;
 
@@ -8104,6 +8119,8 @@ namespace Flecs.NET.Bindings
 
             public byte immediate;
 
+            public byte* name;
+
             public void* ctx;
 
             public void* callback_ctx;
@@ -8610,9 +8627,13 @@ namespace Flecs.NET.Bindings
 
             public void* binding_ctx;
 
+            public void* lifecycle_ctx;
+
             public System.IntPtr ctx_free; // delegate*<void*, void>
 
             public System.IntPtr binding_ctx_free; // delegate*<void*, void>
+
+            public System.IntPtr lifecycle_ctx_free; // delegate*<void*, void>
 
             public bool Equals(ecs_type_hooks_t other)
             {
@@ -9145,6 +9166,8 @@ namespace Flecs.NET.Bindings
             public long frame_count_total;
 
             public long merge_count_total;
+
+            public long eval_comp_monitors_total;
 
             public long rematch_count_total;
 
@@ -11896,7 +11919,7 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsIdCanToggle = 8192;
 
-        public const uint EcsIdEventMask = 66519040;
+        public const uint EcsIdEventMask = 33488896;
 
         public const uint EcsIdExclusive = 512;
 
@@ -11906,19 +11929,19 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsIdHasOnSet = 262144;
 
-        public const uint EcsIdHasOnTableCreate = 4194304;
+        public const uint EcsIdHasOnTableCreate = 2097152;
 
-        public const uint EcsIdHasOnTableDelete = 8388608;
+        public const uint EcsIdHasOnTableDelete = 4194304;
 
-        public const uint EcsIdHasOnTableEmpty = 2097152;
+        public const uint EcsIdHasOnTableEmpty = 1048576;
 
-        public const uint EcsIdHasOnTableFill = 1048576;
+        public const uint EcsIdHasOnTableFill = 524288;
 
-        public const uint EcsIdIsSparse = 16777216;
+        public const uint EcsIdIsSparse = 8388608;
 
         public const uint EcsIdIsTransitive = 16384;
 
-        public const uint EcsIdIsUnion = 33554432;
+        public const uint EcsIdIsUnion = 16777216;
 
         public const uint EcsIdMarkedForDelete = 1073741824;
 
@@ -12004,6 +12027,8 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsObserverIsParentDisabled = 16;
 
+        public const uint EcsObserverYieldOnDelete = 64;
+
         public const uint EcsOsApiHighResolutionTimer = 1;
 
         public const uint EcsOsApiLogWithColors = 2;
@@ -12016,31 +12041,33 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsQueryCacheYieldEmptyTables = 134217728;
 
-        public const uint EcsQueryHasCacheable = 8388608;
+        public const uint EcsQueryHasCacheable = 16777216;
 
-        public const uint EcsQueryHasCondSet = 32768;
+        public const uint EcsQueryHasCondSet = 65536;
 
-        public const uint EcsQueryHasMonitor = 2097152;
+        public const uint EcsQueryHasMonitor = 4194304;
 
-        public const uint EcsQueryHasNonThisOutTerms = 1048576;
+        public const uint EcsQueryHasNonThisOutTerms = 2097152;
 
-        public const uint EcsQueryHasOutTerms = 524288;
+        public const uint EcsQueryHasOutTerms = 1048576;
 
-        public const uint EcsQueryHasPred = 65536;
+        public const uint EcsQueryHasPred = 131072;
 
-        public const uint EcsQueryHasRefs = 262144;
+        public const uint EcsQueryHasRefs = 524288;
 
-        public const uint EcsQueryHasScopes = 131072;
+        public const uint EcsQueryHasScopes = 262144;
 
-        public const uint EcsQueryHasTableThisVar = 33554432;
+        public const uint EcsQueryHasTableThisVar = 67108864;
 
-        public const uint EcsQueryIsCacheable = 16777216;
+        public const uint EcsQueryIsCacheable = 33554432;
 
-        public const uint EcsQueryIsTrivial = 4194304;
+        public const uint EcsQueryIsTrivial = 8388608;
 
         public const uint EcsQueryMatchDisabled = 4;
 
         public const uint EcsQueryMatchEmptyTables = 8;
+
+        public const uint EcsQueryMatchNothing = 32768;
 
         public const uint EcsQueryMatchOnlySelf = 8192;
 
@@ -12055,6 +12082,10 @@ namespace Flecs.NET.Bindings
         public const uint EcsQueryTableOnly = 128;
 
         public const ulong EcsSelf = 9223372036854775808;
+
+        public const uint EcsTableAddEdgeFlags = 25231360;
+
+        public const uint EcsTableEdgeFlags = 25362432;
 
         public const uint EcsTableHasAddActions = 328712;
 
@@ -12084,13 +12115,13 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsTableHasOnSet = 262144;
 
-        public const uint EcsTableHasOnTableCreate = 4194304;
+        public const uint EcsTableHasOnTableCreate = 2097152;
 
-        public const uint EcsTableHasOnTableDelete = 8388608;
+        public const uint EcsTableHasOnTableDelete = 4194304;
 
-        public const uint EcsTableHasOnTableEmpty = 2097152;
+        public const uint EcsTableHasOnTableEmpty = 1048576;
 
-        public const uint EcsTableHasOnTableFill = 1048576;
+        public const uint EcsTableHasOnTableFill = 524288;
 
         public const uint EcsTableHasOverrides = 32768;
 
@@ -12098,15 +12129,15 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsTableHasRemoveActions = 133128;
 
-        public const uint EcsTableHasSparse = 16777216;
+        public const uint EcsTableHasSparse = 8388608;
 
         public const uint EcsTableHasToggle = 16384;
 
         public const uint EcsTableHasTraversable = 67108864;
 
-        public const uint EcsTableHasUnion = 33554432;
+        public const uint EcsTableHasUnion = 16777216;
 
-        public const uint EcsTableIsComplex = 16796672;
+        public const uint EcsTableIsComplex = 8408064;
 
         public const uint EcsTableIsDisabled = 256;
 
@@ -12115,6 +12146,8 @@ namespace Flecs.NET.Bindings
         public const uint EcsTableMarkedForDelete = 1073741824;
 
         public const uint EcsTableNotQueryable = 512;
+
+        public const uint EcsTableRemoveEdgeFlags = 25296896;
 
         public const uint EcsTermIdInherited = 16;
 
@@ -12153,6 +12186,8 @@ namespace Flecs.NET.Bindings
         public const ulong EcsUp = 4611686018427387904;
 
         public const uint EcsWorldFini = 16;
+
+        public const uint EcsWorldFrameInProgress = 256;
 
         public const uint EcsWorldInit = 4;
 
@@ -12706,8 +12741,6 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDecs_uptr_tID__Ptr;
 
-        private static void* FLECS_IDEcsAccelerationID__Ptr;
-
         private static void* FLECS_IDEcsAlertCriticalID__Ptr;
 
         private static void* FLECS_IDEcsAlertErrorID__Ptr;
@@ -12724,45 +12757,9 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDEcsAlertWarningID__Ptr;
 
-        private static void* FLECS_IDEcsAmountID__Ptr;
-
-        private static void* FLECS_IDEcsAmpereID__Ptr;
-
-        private static void* FLECS_IDEcsAngleID__Ptr;
-
         private static void* FLECS_IDEcsArrayID__Ptr;
 
-        private static void* FLECS_IDEcsAttoID__Ptr;
-
-        private static void* FLECS_IDEcsBarID__Ptr;
-
-        private static void* FLECS_IDEcsBelID__Ptr;
-
         private static void* FLECS_IDEcsBitmaskID__Ptr;
-
-        private static void* FLECS_IDEcsBitsID__Ptr;
-
-        private static void* FLECS_IDEcsBitsPerSecondID__Ptr;
-
-        private static void* FLECS_IDEcsBytesID__Ptr;
-
-        private static void* FLECS_IDEcsBytesPerSecondID__Ptr;
-
-        private static void* FLECS_IDEcsCandelaID__Ptr;
-
-        private static void* FLECS_IDEcsCelsiusID__Ptr;
-
-        private static void* FLECS_IDEcsCentiID__Ptr;
-
-        private static void* FLECS_IDEcsCentiMetersID__Ptr;
-
-        private static void* FLECS_IDEcsColorCssID__Ptr;
-
-        private static void* FLECS_IDEcsColorHslID__Ptr;
-
-        private static void* FLECS_IDEcsColorID__Ptr;
-
-        private static void* FLECS_IDEcsColorRgbID__Ptr;
 
         private static void* FLECS_IDEcsComponentID__Ptr;
 
@@ -12772,127 +12769,19 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDEcsCounterIncrementID__Ptr;
 
-        private static void* FLECS_IDEcsDataID__Ptr;
-
-        private static void* FLECS_IDEcsDataRateID__Ptr;
-
-        private static void* FLECS_IDEcsDateID__Ptr;
-
-        private static void* FLECS_IDEcsDaysID__Ptr;
-
-        private static void* FLECS_IDEcsDecaID__Ptr;
-
-        private static void* FLECS_IDEcsDeciBelID__Ptr;
-
-        private static void* FLECS_IDEcsDeciID__Ptr;
-
         private static void* FLECS_IDEcsDefaultChildComponentID__Ptr;
-
-        private static void* FLECS_IDEcsDegreesID__Ptr;
 
         private static void* FLECS_IDEcsDocDescriptionID__Ptr;
 
-        private static void* FLECS_IDEcsDurationID__Ptr;
-
-        private static void* FLECS_IDEcsElectricCurrentID__Ptr;
-
         private static void* FLECS_IDEcsEnumID__Ptr;
-
-        private static void* FLECS_IDEcsExaID__Ptr;
-
-        private static void* FLECS_IDEcsExbiID__Ptr;
-
-        private static void* FLECS_IDEcsFahrenheitID__Ptr;
-
-        private static void* FLECS_IDEcsFemtoID__Ptr;
-
-        private static void* FLECS_IDEcsForceID__Ptr;
-
-        private static void* FLECS_IDEcsFrequencyID__Ptr;
 
         private static void* FLECS_IDEcsGaugeID__Ptr;
 
-        private static void* FLECS_IDEcsGibiBytesID__Ptr;
-
-        private static void* FLECS_IDEcsGibiID__Ptr;
-
-        private static void* FLECS_IDEcsGigaBitsID__Ptr;
-
-        private static void* FLECS_IDEcsGigaBitsPerSecondID__Ptr;
-
-        private static void* FLECS_IDEcsGigaBytesID__Ptr;
-
-        private static void* FLECS_IDEcsGigaBytesPerSecondID__Ptr;
-
-        private static void* FLECS_IDEcsGigaHertzID__Ptr;
-
-        private static void* FLECS_IDEcsGigaID__Ptr;
-
-        private static void* FLECS_IDEcsGramsID__Ptr;
-
-        private static void* FLECS_IDEcsHectoID__Ptr;
-
-        private static void* FLECS_IDEcsHertzID__Ptr;
-
-        private static void* FLECS_IDEcsHoursID__Ptr;
-
         private static void* FLECS_IDEcsIdentifierID__Ptr;
-
-        private static void* FLECS_IDEcsKelvinID__Ptr;
-
-        private static void* FLECS_IDEcsKibiBytesID__Ptr;
-
-        private static void* FLECS_IDEcsKibiID__Ptr;
-
-        private static void* FLECS_IDEcsKiloBitsID__Ptr;
-
-        private static void* FLECS_IDEcsKiloBitsPerSecondID__Ptr;
-
-        private static void* FLECS_IDEcsKiloBytesID__Ptr;
-
-        private static void* FLECS_IDEcsKiloBytesPerSecondID__Ptr;
-
-        private static void* FLECS_IDEcsKiloGramsID__Ptr;
-
-        private static void* FLECS_IDEcsKiloHertzID__Ptr;
-
-        private static void* FLECS_IDEcsKiloID__Ptr;
-
-        private static void* FLECS_IDEcsKiloMetersID__Ptr;
-
-        private static void* FLECS_IDEcsKiloMetersPerHourID__Ptr;
-
-        private static void* FLECS_IDEcsKiloMetersPerSecondID__Ptr;
-
-        private static void* FLECS_IDEcsLengthID__Ptr;
-
-        private static void* FLECS_IDEcsLuminousIntensityID__Ptr;
-
-        private static void* FLECS_IDEcsMassID__Ptr;
-
-        private static void* FLECS_IDEcsMebiBytesID__Ptr;
-
-        private static void* FLECS_IDEcsMebiID__Ptr;
-
-        private static void* FLECS_IDEcsMegaBitsID__Ptr;
-
-        private static void* FLECS_IDEcsMegaBitsPerSecondID__Ptr;
-
-        private static void* FLECS_IDEcsMegaBytesID__Ptr;
-
-        private static void* FLECS_IDEcsMegaBytesPerSecondID__Ptr;
-
-        private static void* FLECS_IDEcsMegaHertzID__Ptr;
-
-        private static void* FLECS_IDEcsMegaID__Ptr;
 
         private static void* FLECS_IDEcsMemberID__Ptr;
 
         private static void* FLECS_IDEcsMemberRangesID__Ptr;
-
-        private static void* FLECS_IDEcsMetersID__Ptr;
-
-        private static void* FLECS_IDEcsMetersPerSecondID__Ptr;
 
         private static void* FLECS_IDEcsMetricID__Ptr;
 
@@ -12902,49 +12791,7 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDEcsMetricValueID__Ptr;
 
-        private static void* FLECS_IDEcsMicroID__Ptr;
-
-        private static void* FLECS_IDEcsMicroMetersID__Ptr;
-
-        private static void* FLECS_IDEcsMicroSecondsID__Ptr;
-
-        private static void* FLECS_IDEcsMilesID__Ptr;
-
-        private static void* FLECS_IDEcsMilesPerHourID__Ptr;
-
-        private static void* FLECS_IDEcsMilliID__Ptr;
-
-        private static void* FLECS_IDEcsMilliMetersID__Ptr;
-
-        private static void* FLECS_IDEcsMilliSecondsID__Ptr;
-
-        private static void* FLECS_IDEcsMinutesID__Ptr;
-
-        private static void* FLECS_IDEcsMoleID__Ptr;
-
-        private static void* FLECS_IDEcsNanoID__Ptr;
-
-        private static void* FLECS_IDEcsNanoMetersID__Ptr;
-
-        private static void* FLECS_IDEcsNanoSecondsID__Ptr;
-
-        private static void* FLECS_IDEcsNewtonID__Ptr;
-
         private static void* FLECS_IDEcsOpaqueID__Ptr;
-
-        private static void* FLECS_IDEcsPascalID__Ptr;
-
-        private static void* FLECS_IDEcsPebiID__Ptr;
-
-        private static void* FLECS_IDEcsPercentageID__Ptr;
-
-        private static void* FLECS_IDEcsPetaID__Ptr;
-
-        private static void* FLECS_IDEcsPicoID__Ptr;
-
-        private static void* FLECS_IDEcsPicoMetersID__Ptr;
-
-        private static void* FLECS_IDEcsPicoSecondsID__Ptr;
 
         private static void* FLECS_IDEcsPipelineID__Ptr;
 
@@ -12952,15 +12799,9 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDEcsPipelineStatsID__Ptr;
 
-        private static void* FLECS_IDEcsPixelsID__Ptr;
-
         private static void* FLECS_IDEcsPolyID__Ptr;
 
-        private static void* FLECS_IDEcsPressureID__Ptr;
-
         private static void* FLECS_IDEcsPrimitiveID__Ptr;
-
-        private static void* FLECS_IDEcsRadiansID__Ptr;
 
         private static void* FLECS_IDEcsRateFilterID__Ptr;
 
@@ -12968,23 +12809,11 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDEcsScriptID__Ptr;
 
-        private static void* FLECS_IDEcsSecondsID__Ptr;
-
-        private static void* FLECS_IDEcsSpeedID__Ptr;
-
         private static void* FLECS_IDEcsStructID__Ptr;
 
         private static void* FLECS_IDEcsSystemStatsID__Ptr;
 
-        private static void* FLECS_IDEcsTebiID__Ptr;
-
-        private static void* FLECS_IDEcsTemperatureID__Ptr;
-
-        private static void* FLECS_IDEcsTeraID__Ptr;
-
         private static void* FLECS_IDEcsTickSourceID__Ptr;
-
-        private static void* FLECS_IDEcsTimeID__Ptr;
 
         private static void* FLECS_IDEcsTimerID__Ptr;
 
@@ -12994,35 +12823,13 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDEcsUnitID__Ptr;
 
-        private static void* FLECS_IDEcsUnitPrefixesID__Ptr;
-
         private static void* FLECS_IDEcsUnitPrefixID__Ptr;
-
-        private static void* FLECS_IDEcsUriFileID__Ptr;
-
-        private static void* FLECS_IDEcsUriHyperlinkID__Ptr;
-
-        private static void* FLECS_IDEcsUriID__Ptr;
-
-        private static void* FLECS_IDEcsUriImageID__Ptr;
 
         private static void* FLECS_IDEcsVectorID__Ptr;
 
         private static void* FLECS_IDEcsWorldStatsID__Ptr;
 
         private static void* FLECS_IDEcsWorldSummaryID__Ptr;
-
-        private static void* FLECS_IDEcsYobiID__Ptr;
-
-        private static void* FLECS_IDEcsYoctoID__Ptr;
-
-        private static void* FLECS_IDEcsYottaID__Ptr;
-
-        private static void* FLECS_IDEcsZebiID__Ptr;
-
-        private static void* FLECS_IDEcsZeptoID__Ptr;
-
-        private static void* FLECS_IDEcsZettaID__Ptr;
 
         private static void* FLECS_IDFlecsAlertsID__Ptr;
 
@@ -13524,8 +13331,6 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong FLECS_IDecs_uptr_tID_ => ref *(ulong*)(FLECS_IDecs_uptr_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_uptr_tID_", out FLECS_IDecs_uptr_tID__Ptr) : FLECS_IDecs_uptr_tID__Ptr);
 
-        public static ref ulong FLECS_IDEcsAccelerationID_ => ref *(ulong*)(FLECS_IDEcsAccelerationID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAccelerationID_", out FLECS_IDEcsAccelerationID__Ptr) : FLECS_IDEcsAccelerationID__Ptr);
-
         public static ref ulong FLECS_IDEcsAlertCriticalID_ => ref *(ulong*)(FLECS_IDEcsAlertCriticalID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertCriticalID_", out FLECS_IDEcsAlertCriticalID__Ptr) : FLECS_IDEcsAlertCriticalID__Ptr);
 
         public static ref ulong FLECS_IDEcsAlertErrorID_ => ref *(ulong*)(FLECS_IDEcsAlertErrorID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertErrorID_", out FLECS_IDEcsAlertErrorID__Ptr) : FLECS_IDEcsAlertErrorID__Ptr);
@@ -13542,45 +13347,9 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong FLECS_IDEcsAlertWarningID_ => ref *(ulong*)(FLECS_IDEcsAlertWarningID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertWarningID_", out FLECS_IDEcsAlertWarningID__Ptr) : FLECS_IDEcsAlertWarningID__Ptr);
 
-        public static ref ulong FLECS_IDEcsAmountID_ => ref *(ulong*)(FLECS_IDEcsAmountID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAmountID_", out FLECS_IDEcsAmountID__Ptr) : FLECS_IDEcsAmountID__Ptr);
-
-        public static ref ulong FLECS_IDEcsAmpereID_ => ref *(ulong*)(FLECS_IDEcsAmpereID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAmpereID_", out FLECS_IDEcsAmpereID__Ptr) : FLECS_IDEcsAmpereID__Ptr);
-
-        public static ref ulong FLECS_IDEcsAngleID_ => ref *(ulong*)(FLECS_IDEcsAngleID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAngleID_", out FLECS_IDEcsAngleID__Ptr) : FLECS_IDEcsAngleID__Ptr);
-
         public static ref ulong FLECS_IDEcsArrayID_ => ref *(ulong*)(FLECS_IDEcsArrayID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsArrayID_", out FLECS_IDEcsArrayID__Ptr) : FLECS_IDEcsArrayID__Ptr);
 
-        public static ref ulong FLECS_IDEcsAttoID_ => ref *(ulong*)(FLECS_IDEcsAttoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAttoID_", out FLECS_IDEcsAttoID__Ptr) : FLECS_IDEcsAttoID__Ptr);
-
-        public static ref ulong FLECS_IDEcsBarID_ => ref *(ulong*)(FLECS_IDEcsBarID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBarID_", out FLECS_IDEcsBarID__Ptr) : FLECS_IDEcsBarID__Ptr);
-
-        public static ref ulong FLECS_IDEcsBelID_ => ref *(ulong*)(FLECS_IDEcsBelID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBelID_", out FLECS_IDEcsBelID__Ptr) : FLECS_IDEcsBelID__Ptr);
-
         public static ref ulong FLECS_IDEcsBitmaskID_ => ref *(ulong*)(FLECS_IDEcsBitmaskID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBitmaskID_", out FLECS_IDEcsBitmaskID__Ptr) : FLECS_IDEcsBitmaskID__Ptr);
-
-        public static ref ulong FLECS_IDEcsBitsID_ => ref *(ulong*)(FLECS_IDEcsBitsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBitsID_", out FLECS_IDEcsBitsID__Ptr) : FLECS_IDEcsBitsID__Ptr);
-
-        public static ref ulong FLECS_IDEcsBitsPerSecondID_ => ref *(ulong*)(FLECS_IDEcsBitsPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBitsPerSecondID_", out FLECS_IDEcsBitsPerSecondID__Ptr) : FLECS_IDEcsBitsPerSecondID__Ptr);
-
-        public static ref ulong FLECS_IDEcsBytesID_ => ref *(ulong*)(FLECS_IDEcsBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBytesID_", out FLECS_IDEcsBytesID__Ptr) : FLECS_IDEcsBytesID__Ptr);
-
-        public static ref ulong FLECS_IDEcsBytesPerSecondID_ => ref *(ulong*)(FLECS_IDEcsBytesPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBytesPerSecondID_", out FLECS_IDEcsBytesPerSecondID__Ptr) : FLECS_IDEcsBytesPerSecondID__Ptr);
-
-        public static ref ulong FLECS_IDEcsCandelaID_ => ref *(ulong*)(FLECS_IDEcsCandelaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCandelaID_", out FLECS_IDEcsCandelaID__Ptr) : FLECS_IDEcsCandelaID__Ptr);
-
-        public static ref ulong FLECS_IDEcsCelsiusID_ => ref *(ulong*)(FLECS_IDEcsCelsiusID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCelsiusID_", out FLECS_IDEcsCelsiusID__Ptr) : FLECS_IDEcsCelsiusID__Ptr);
-
-        public static ref ulong FLECS_IDEcsCentiID_ => ref *(ulong*)(FLECS_IDEcsCentiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCentiID_", out FLECS_IDEcsCentiID__Ptr) : FLECS_IDEcsCentiID__Ptr);
-
-        public static ref ulong FLECS_IDEcsCentiMetersID_ => ref *(ulong*)(FLECS_IDEcsCentiMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCentiMetersID_", out FLECS_IDEcsCentiMetersID__Ptr) : FLECS_IDEcsCentiMetersID__Ptr);
-
-        public static ref ulong FLECS_IDEcsColorCssID_ => ref *(ulong*)(FLECS_IDEcsColorCssID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsColorCssID_", out FLECS_IDEcsColorCssID__Ptr) : FLECS_IDEcsColorCssID__Ptr);
-
-        public static ref ulong FLECS_IDEcsColorHslID_ => ref *(ulong*)(FLECS_IDEcsColorHslID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsColorHslID_", out FLECS_IDEcsColorHslID__Ptr) : FLECS_IDEcsColorHslID__Ptr);
-
-        public static ref ulong FLECS_IDEcsColorID_ => ref *(ulong*)(FLECS_IDEcsColorID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsColorID_", out FLECS_IDEcsColorID__Ptr) : FLECS_IDEcsColorID__Ptr);
-
-        public static ref ulong FLECS_IDEcsColorRgbID_ => ref *(ulong*)(FLECS_IDEcsColorRgbID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsColorRgbID_", out FLECS_IDEcsColorRgbID__Ptr) : FLECS_IDEcsColorRgbID__Ptr);
 
         public static ref ulong FLECS_IDEcsComponentID_ => ref *(ulong*)(FLECS_IDEcsComponentID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsComponentID_", out FLECS_IDEcsComponentID__Ptr) : FLECS_IDEcsComponentID__Ptr);
 
@@ -13590,127 +13359,19 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong FLECS_IDEcsCounterIncrementID_ => ref *(ulong*)(FLECS_IDEcsCounterIncrementID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCounterIncrementID_", out FLECS_IDEcsCounterIncrementID__Ptr) : FLECS_IDEcsCounterIncrementID__Ptr);
 
-        public static ref ulong FLECS_IDEcsDataID_ => ref *(ulong*)(FLECS_IDEcsDataID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDataID_", out FLECS_IDEcsDataID__Ptr) : FLECS_IDEcsDataID__Ptr);
-
-        public static ref ulong FLECS_IDEcsDataRateID_ => ref *(ulong*)(FLECS_IDEcsDataRateID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDataRateID_", out FLECS_IDEcsDataRateID__Ptr) : FLECS_IDEcsDataRateID__Ptr);
-
-        public static ref ulong FLECS_IDEcsDateID_ => ref *(ulong*)(FLECS_IDEcsDateID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDateID_", out FLECS_IDEcsDateID__Ptr) : FLECS_IDEcsDateID__Ptr);
-
-        public static ref ulong FLECS_IDEcsDaysID_ => ref *(ulong*)(FLECS_IDEcsDaysID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDaysID_", out FLECS_IDEcsDaysID__Ptr) : FLECS_IDEcsDaysID__Ptr);
-
-        public static ref ulong FLECS_IDEcsDecaID_ => ref *(ulong*)(FLECS_IDEcsDecaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDecaID_", out FLECS_IDEcsDecaID__Ptr) : FLECS_IDEcsDecaID__Ptr);
-
-        public static ref ulong FLECS_IDEcsDeciBelID_ => ref *(ulong*)(FLECS_IDEcsDeciBelID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDeciBelID_", out FLECS_IDEcsDeciBelID__Ptr) : FLECS_IDEcsDeciBelID__Ptr);
-
-        public static ref ulong FLECS_IDEcsDeciID_ => ref *(ulong*)(FLECS_IDEcsDeciID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDeciID_", out FLECS_IDEcsDeciID__Ptr) : FLECS_IDEcsDeciID__Ptr);
-
         public static ref ulong FLECS_IDEcsDefaultChildComponentID_ => ref *(ulong*)(FLECS_IDEcsDefaultChildComponentID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDefaultChildComponentID_", out FLECS_IDEcsDefaultChildComponentID__Ptr) : FLECS_IDEcsDefaultChildComponentID__Ptr);
-
-        public static ref ulong FLECS_IDEcsDegreesID_ => ref *(ulong*)(FLECS_IDEcsDegreesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDegreesID_", out FLECS_IDEcsDegreesID__Ptr) : FLECS_IDEcsDegreesID__Ptr);
 
         public static ref ulong FLECS_IDEcsDocDescriptionID_ => ref *(ulong*)(FLECS_IDEcsDocDescriptionID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDocDescriptionID_", out FLECS_IDEcsDocDescriptionID__Ptr) : FLECS_IDEcsDocDescriptionID__Ptr);
 
-        public static ref ulong FLECS_IDEcsDurationID_ => ref *(ulong*)(FLECS_IDEcsDurationID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDurationID_", out FLECS_IDEcsDurationID__Ptr) : FLECS_IDEcsDurationID__Ptr);
-
-        public static ref ulong FLECS_IDEcsElectricCurrentID_ => ref *(ulong*)(FLECS_IDEcsElectricCurrentID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsElectricCurrentID_", out FLECS_IDEcsElectricCurrentID__Ptr) : FLECS_IDEcsElectricCurrentID__Ptr);
-
         public static ref ulong FLECS_IDEcsEnumID_ => ref *(ulong*)(FLECS_IDEcsEnumID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsEnumID_", out FLECS_IDEcsEnumID__Ptr) : FLECS_IDEcsEnumID__Ptr);
-
-        public static ref ulong FLECS_IDEcsExaID_ => ref *(ulong*)(FLECS_IDEcsExaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsExaID_", out FLECS_IDEcsExaID__Ptr) : FLECS_IDEcsExaID__Ptr);
-
-        public static ref ulong FLECS_IDEcsExbiID_ => ref *(ulong*)(FLECS_IDEcsExbiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsExbiID_", out FLECS_IDEcsExbiID__Ptr) : FLECS_IDEcsExbiID__Ptr);
-
-        public static ref ulong FLECS_IDEcsFahrenheitID_ => ref *(ulong*)(FLECS_IDEcsFahrenheitID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsFahrenheitID_", out FLECS_IDEcsFahrenheitID__Ptr) : FLECS_IDEcsFahrenheitID__Ptr);
-
-        public static ref ulong FLECS_IDEcsFemtoID_ => ref *(ulong*)(FLECS_IDEcsFemtoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsFemtoID_", out FLECS_IDEcsFemtoID__Ptr) : FLECS_IDEcsFemtoID__Ptr);
-
-        public static ref ulong FLECS_IDEcsForceID_ => ref *(ulong*)(FLECS_IDEcsForceID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsForceID_", out FLECS_IDEcsForceID__Ptr) : FLECS_IDEcsForceID__Ptr);
-
-        public static ref ulong FLECS_IDEcsFrequencyID_ => ref *(ulong*)(FLECS_IDEcsFrequencyID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsFrequencyID_", out FLECS_IDEcsFrequencyID__Ptr) : FLECS_IDEcsFrequencyID__Ptr);
 
         public static ref ulong FLECS_IDEcsGaugeID_ => ref *(ulong*)(FLECS_IDEcsGaugeID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGaugeID_", out FLECS_IDEcsGaugeID__Ptr) : FLECS_IDEcsGaugeID__Ptr);
 
-        public static ref ulong FLECS_IDEcsGibiBytesID_ => ref *(ulong*)(FLECS_IDEcsGibiBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGibiBytesID_", out FLECS_IDEcsGibiBytesID__Ptr) : FLECS_IDEcsGibiBytesID__Ptr);
-
-        public static ref ulong FLECS_IDEcsGibiID_ => ref *(ulong*)(FLECS_IDEcsGibiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGibiID_", out FLECS_IDEcsGibiID__Ptr) : FLECS_IDEcsGibiID__Ptr);
-
-        public static ref ulong FLECS_IDEcsGigaBitsID_ => ref *(ulong*)(FLECS_IDEcsGigaBitsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaBitsID_", out FLECS_IDEcsGigaBitsID__Ptr) : FLECS_IDEcsGigaBitsID__Ptr);
-
-        public static ref ulong FLECS_IDEcsGigaBitsPerSecondID_ => ref *(ulong*)(FLECS_IDEcsGigaBitsPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaBitsPerSecondID_", out FLECS_IDEcsGigaBitsPerSecondID__Ptr) : FLECS_IDEcsGigaBitsPerSecondID__Ptr);
-
-        public static ref ulong FLECS_IDEcsGigaBytesID_ => ref *(ulong*)(FLECS_IDEcsGigaBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaBytesID_", out FLECS_IDEcsGigaBytesID__Ptr) : FLECS_IDEcsGigaBytesID__Ptr);
-
-        public static ref ulong FLECS_IDEcsGigaBytesPerSecondID_ => ref *(ulong*)(FLECS_IDEcsGigaBytesPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaBytesPerSecondID_", out FLECS_IDEcsGigaBytesPerSecondID__Ptr) : FLECS_IDEcsGigaBytesPerSecondID__Ptr);
-
-        public static ref ulong FLECS_IDEcsGigaHertzID_ => ref *(ulong*)(FLECS_IDEcsGigaHertzID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaHertzID_", out FLECS_IDEcsGigaHertzID__Ptr) : FLECS_IDEcsGigaHertzID__Ptr);
-
-        public static ref ulong FLECS_IDEcsGigaID_ => ref *(ulong*)(FLECS_IDEcsGigaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGigaID_", out FLECS_IDEcsGigaID__Ptr) : FLECS_IDEcsGigaID__Ptr);
-
-        public static ref ulong FLECS_IDEcsGramsID_ => ref *(ulong*)(FLECS_IDEcsGramsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGramsID_", out FLECS_IDEcsGramsID__Ptr) : FLECS_IDEcsGramsID__Ptr);
-
-        public static ref ulong FLECS_IDEcsHectoID_ => ref *(ulong*)(FLECS_IDEcsHectoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsHectoID_", out FLECS_IDEcsHectoID__Ptr) : FLECS_IDEcsHectoID__Ptr);
-
-        public static ref ulong FLECS_IDEcsHertzID_ => ref *(ulong*)(FLECS_IDEcsHertzID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsHertzID_", out FLECS_IDEcsHertzID__Ptr) : FLECS_IDEcsHertzID__Ptr);
-
-        public static ref ulong FLECS_IDEcsHoursID_ => ref *(ulong*)(FLECS_IDEcsHoursID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsHoursID_", out FLECS_IDEcsHoursID__Ptr) : FLECS_IDEcsHoursID__Ptr);
-
         public static ref ulong FLECS_IDEcsIdentifierID_ => ref *(ulong*)(FLECS_IDEcsIdentifierID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsIdentifierID_", out FLECS_IDEcsIdentifierID__Ptr) : FLECS_IDEcsIdentifierID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKelvinID_ => ref *(ulong*)(FLECS_IDEcsKelvinID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKelvinID_", out FLECS_IDEcsKelvinID__Ptr) : FLECS_IDEcsKelvinID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKibiBytesID_ => ref *(ulong*)(FLECS_IDEcsKibiBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKibiBytesID_", out FLECS_IDEcsKibiBytesID__Ptr) : FLECS_IDEcsKibiBytesID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKibiID_ => ref *(ulong*)(FLECS_IDEcsKibiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKibiID_", out FLECS_IDEcsKibiID__Ptr) : FLECS_IDEcsKibiID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKiloBitsID_ => ref *(ulong*)(FLECS_IDEcsKiloBitsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloBitsID_", out FLECS_IDEcsKiloBitsID__Ptr) : FLECS_IDEcsKiloBitsID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKiloBitsPerSecondID_ => ref *(ulong*)(FLECS_IDEcsKiloBitsPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloBitsPerSecondID_", out FLECS_IDEcsKiloBitsPerSecondID__Ptr) : FLECS_IDEcsKiloBitsPerSecondID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKiloBytesID_ => ref *(ulong*)(FLECS_IDEcsKiloBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloBytesID_", out FLECS_IDEcsKiloBytesID__Ptr) : FLECS_IDEcsKiloBytesID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKiloBytesPerSecondID_ => ref *(ulong*)(FLECS_IDEcsKiloBytesPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloBytesPerSecondID_", out FLECS_IDEcsKiloBytesPerSecondID__Ptr) : FLECS_IDEcsKiloBytesPerSecondID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKiloGramsID_ => ref *(ulong*)(FLECS_IDEcsKiloGramsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloGramsID_", out FLECS_IDEcsKiloGramsID__Ptr) : FLECS_IDEcsKiloGramsID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKiloHertzID_ => ref *(ulong*)(FLECS_IDEcsKiloHertzID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloHertzID_", out FLECS_IDEcsKiloHertzID__Ptr) : FLECS_IDEcsKiloHertzID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKiloID_ => ref *(ulong*)(FLECS_IDEcsKiloID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloID_", out FLECS_IDEcsKiloID__Ptr) : FLECS_IDEcsKiloID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKiloMetersID_ => ref *(ulong*)(FLECS_IDEcsKiloMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloMetersID_", out FLECS_IDEcsKiloMetersID__Ptr) : FLECS_IDEcsKiloMetersID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKiloMetersPerHourID_ => ref *(ulong*)(FLECS_IDEcsKiloMetersPerHourID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloMetersPerHourID_", out FLECS_IDEcsKiloMetersPerHourID__Ptr) : FLECS_IDEcsKiloMetersPerHourID__Ptr);
-
-        public static ref ulong FLECS_IDEcsKiloMetersPerSecondID_ => ref *(ulong*)(FLECS_IDEcsKiloMetersPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsKiloMetersPerSecondID_", out FLECS_IDEcsKiloMetersPerSecondID__Ptr) : FLECS_IDEcsKiloMetersPerSecondID__Ptr);
-
-        public static ref ulong FLECS_IDEcsLengthID_ => ref *(ulong*)(FLECS_IDEcsLengthID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsLengthID_", out FLECS_IDEcsLengthID__Ptr) : FLECS_IDEcsLengthID__Ptr);
-
-        public static ref ulong FLECS_IDEcsLuminousIntensityID_ => ref *(ulong*)(FLECS_IDEcsLuminousIntensityID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsLuminousIntensityID_", out FLECS_IDEcsLuminousIntensityID__Ptr) : FLECS_IDEcsLuminousIntensityID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMassID_ => ref *(ulong*)(FLECS_IDEcsMassID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMassID_", out FLECS_IDEcsMassID__Ptr) : FLECS_IDEcsMassID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMebiBytesID_ => ref *(ulong*)(FLECS_IDEcsMebiBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMebiBytesID_", out FLECS_IDEcsMebiBytesID__Ptr) : FLECS_IDEcsMebiBytesID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMebiID_ => ref *(ulong*)(FLECS_IDEcsMebiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMebiID_", out FLECS_IDEcsMebiID__Ptr) : FLECS_IDEcsMebiID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMegaBitsID_ => ref *(ulong*)(FLECS_IDEcsMegaBitsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaBitsID_", out FLECS_IDEcsMegaBitsID__Ptr) : FLECS_IDEcsMegaBitsID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMegaBitsPerSecondID_ => ref *(ulong*)(FLECS_IDEcsMegaBitsPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaBitsPerSecondID_", out FLECS_IDEcsMegaBitsPerSecondID__Ptr) : FLECS_IDEcsMegaBitsPerSecondID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMegaBytesID_ => ref *(ulong*)(FLECS_IDEcsMegaBytesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaBytesID_", out FLECS_IDEcsMegaBytesID__Ptr) : FLECS_IDEcsMegaBytesID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMegaBytesPerSecondID_ => ref *(ulong*)(FLECS_IDEcsMegaBytesPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaBytesPerSecondID_", out FLECS_IDEcsMegaBytesPerSecondID__Ptr) : FLECS_IDEcsMegaBytesPerSecondID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMegaHertzID_ => ref *(ulong*)(FLECS_IDEcsMegaHertzID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaHertzID_", out FLECS_IDEcsMegaHertzID__Ptr) : FLECS_IDEcsMegaHertzID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMegaID_ => ref *(ulong*)(FLECS_IDEcsMegaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMegaID_", out FLECS_IDEcsMegaID__Ptr) : FLECS_IDEcsMegaID__Ptr);
 
         public static ref ulong FLECS_IDEcsMemberID_ => ref *(ulong*)(FLECS_IDEcsMemberID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMemberID_", out FLECS_IDEcsMemberID__Ptr) : FLECS_IDEcsMemberID__Ptr);
 
         public static ref ulong FLECS_IDEcsMemberRangesID_ => ref *(ulong*)(FLECS_IDEcsMemberRangesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMemberRangesID_", out FLECS_IDEcsMemberRangesID__Ptr) : FLECS_IDEcsMemberRangesID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMetersID_ => ref *(ulong*)(FLECS_IDEcsMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetersID_", out FLECS_IDEcsMetersID__Ptr) : FLECS_IDEcsMetersID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMetersPerSecondID_ => ref *(ulong*)(FLECS_IDEcsMetersPerSecondID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetersPerSecondID_", out FLECS_IDEcsMetersPerSecondID__Ptr) : FLECS_IDEcsMetersPerSecondID__Ptr);
 
         public static ref ulong FLECS_IDEcsMetricID_ => ref *(ulong*)(FLECS_IDEcsMetricID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricID_", out FLECS_IDEcsMetricID__Ptr) : FLECS_IDEcsMetricID__Ptr);
 
@@ -13720,49 +13381,7 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong FLECS_IDEcsMetricValueID_ => ref *(ulong*)(FLECS_IDEcsMetricValueID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricValueID_", out FLECS_IDEcsMetricValueID__Ptr) : FLECS_IDEcsMetricValueID__Ptr);
 
-        public static ref ulong FLECS_IDEcsMicroID_ => ref *(ulong*)(FLECS_IDEcsMicroID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMicroID_", out FLECS_IDEcsMicroID__Ptr) : FLECS_IDEcsMicroID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMicroMetersID_ => ref *(ulong*)(FLECS_IDEcsMicroMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMicroMetersID_", out FLECS_IDEcsMicroMetersID__Ptr) : FLECS_IDEcsMicroMetersID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMicroSecondsID_ => ref *(ulong*)(FLECS_IDEcsMicroSecondsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMicroSecondsID_", out FLECS_IDEcsMicroSecondsID__Ptr) : FLECS_IDEcsMicroSecondsID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMilesID_ => ref *(ulong*)(FLECS_IDEcsMilesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilesID_", out FLECS_IDEcsMilesID__Ptr) : FLECS_IDEcsMilesID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMilesPerHourID_ => ref *(ulong*)(FLECS_IDEcsMilesPerHourID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilesPerHourID_", out FLECS_IDEcsMilesPerHourID__Ptr) : FLECS_IDEcsMilesPerHourID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMilliID_ => ref *(ulong*)(FLECS_IDEcsMilliID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilliID_", out FLECS_IDEcsMilliID__Ptr) : FLECS_IDEcsMilliID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMilliMetersID_ => ref *(ulong*)(FLECS_IDEcsMilliMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilliMetersID_", out FLECS_IDEcsMilliMetersID__Ptr) : FLECS_IDEcsMilliMetersID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMilliSecondsID_ => ref *(ulong*)(FLECS_IDEcsMilliSecondsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMilliSecondsID_", out FLECS_IDEcsMilliSecondsID__Ptr) : FLECS_IDEcsMilliSecondsID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMinutesID_ => ref *(ulong*)(FLECS_IDEcsMinutesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMinutesID_", out FLECS_IDEcsMinutesID__Ptr) : FLECS_IDEcsMinutesID__Ptr);
-
-        public static ref ulong FLECS_IDEcsMoleID_ => ref *(ulong*)(FLECS_IDEcsMoleID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMoleID_", out FLECS_IDEcsMoleID__Ptr) : FLECS_IDEcsMoleID__Ptr);
-
-        public static ref ulong FLECS_IDEcsNanoID_ => ref *(ulong*)(FLECS_IDEcsNanoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsNanoID_", out FLECS_IDEcsNanoID__Ptr) : FLECS_IDEcsNanoID__Ptr);
-
-        public static ref ulong FLECS_IDEcsNanoMetersID_ => ref *(ulong*)(FLECS_IDEcsNanoMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsNanoMetersID_", out FLECS_IDEcsNanoMetersID__Ptr) : FLECS_IDEcsNanoMetersID__Ptr);
-
-        public static ref ulong FLECS_IDEcsNanoSecondsID_ => ref *(ulong*)(FLECS_IDEcsNanoSecondsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsNanoSecondsID_", out FLECS_IDEcsNanoSecondsID__Ptr) : FLECS_IDEcsNanoSecondsID__Ptr);
-
-        public static ref ulong FLECS_IDEcsNewtonID_ => ref *(ulong*)(FLECS_IDEcsNewtonID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsNewtonID_", out FLECS_IDEcsNewtonID__Ptr) : FLECS_IDEcsNewtonID__Ptr);
-
         public static ref ulong FLECS_IDEcsOpaqueID_ => ref *(ulong*)(FLECS_IDEcsOpaqueID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsOpaqueID_", out FLECS_IDEcsOpaqueID__Ptr) : FLECS_IDEcsOpaqueID__Ptr);
-
-        public static ref ulong FLECS_IDEcsPascalID_ => ref *(ulong*)(FLECS_IDEcsPascalID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPascalID_", out FLECS_IDEcsPascalID__Ptr) : FLECS_IDEcsPascalID__Ptr);
-
-        public static ref ulong FLECS_IDEcsPebiID_ => ref *(ulong*)(FLECS_IDEcsPebiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPebiID_", out FLECS_IDEcsPebiID__Ptr) : FLECS_IDEcsPebiID__Ptr);
-
-        public static ref ulong FLECS_IDEcsPercentageID_ => ref *(ulong*)(FLECS_IDEcsPercentageID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPercentageID_", out FLECS_IDEcsPercentageID__Ptr) : FLECS_IDEcsPercentageID__Ptr);
-
-        public static ref ulong FLECS_IDEcsPetaID_ => ref *(ulong*)(FLECS_IDEcsPetaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPetaID_", out FLECS_IDEcsPetaID__Ptr) : FLECS_IDEcsPetaID__Ptr);
-
-        public static ref ulong FLECS_IDEcsPicoID_ => ref *(ulong*)(FLECS_IDEcsPicoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPicoID_", out FLECS_IDEcsPicoID__Ptr) : FLECS_IDEcsPicoID__Ptr);
-
-        public static ref ulong FLECS_IDEcsPicoMetersID_ => ref *(ulong*)(FLECS_IDEcsPicoMetersID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPicoMetersID_", out FLECS_IDEcsPicoMetersID__Ptr) : FLECS_IDEcsPicoMetersID__Ptr);
-
-        public static ref ulong FLECS_IDEcsPicoSecondsID_ => ref *(ulong*)(FLECS_IDEcsPicoSecondsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPicoSecondsID_", out FLECS_IDEcsPicoSecondsID__Ptr) : FLECS_IDEcsPicoSecondsID__Ptr);
 
         public static ref ulong FLECS_IDEcsPipelineID_ => ref *(ulong*)(FLECS_IDEcsPipelineID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPipelineID_", out FLECS_IDEcsPipelineID__Ptr) : FLECS_IDEcsPipelineID__Ptr);
 
@@ -13770,15 +13389,9 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong FLECS_IDEcsPipelineStatsID_ => ref *(ulong*)(FLECS_IDEcsPipelineStatsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPipelineStatsID_", out FLECS_IDEcsPipelineStatsID__Ptr) : FLECS_IDEcsPipelineStatsID__Ptr);
 
-        public static ref ulong FLECS_IDEcsPixelsID_ => ref *(ulong*)(FLECS_IDEcsPixelsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPixelsID_", out FLECS_IDEcsPixelsID__Ptr) : FLECS_IDEcsPixelsID__Ptr);
-
         public static ref ulong FLECS_IDEcsPolyID_ => ref *(ulong*)(FLECS_IDEcsPolyID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPolyID_", out FLECS_IDEcsPolyID__Ptr) : FLECS_IDEcsPolyID__Ptr);
 
-        public static ref ulong FLECS_IDEcsPressureID_ => ref *(ulong*)(FLECS_IDEcsPressureID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPressureID_", out FLECS_IDEcsPressureID__Ptr) : FLECS_IDEcsPressureID__Ptr);
-
         public static ref ulong FLECS_IDEcsPrimitiveID_ => ref *(ulong*)(FLECS_IDEcsPrimitiveID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPrimitiveID_", out FLECS_IDEcsPrimitiveID__Ptr) : FLECS_IDEcsPrimitiveID__Ptr);
-
-        public static ref ulong FLECS_IDEcsRadiansID_ => ref *(ulong*)(FLECS_IDEcsRadiansID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsRadiansID_", out FLECS_IDEcsRadiansID__Ptr) : FLECS_IDEcsRadiansID__Ptr);
 
         public static ref ulong FLECS_IDEcsRateFilterID_ => ref *(ulong*)(FLECS_IDEcsRateFilterID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsRateFilterID_", out FLECS_IDEcsRateFilterID__Ptr) : FLECS_IDEcsRateFilterID__Ptr);
 
@@ -13786,23 +13399,11 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong FLECS_IDEcsScriptID_ => ref *(ulong*)(FLECS_IDEcsScriptID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsScriptID_", out FLECS_IDEcsScriptID__Ptr) : FLECS_IDEcsScriptID__Ptr);
 
-        public static ref ulong FLECS_IDEcsSecondsID_ => ref *(ulong*)(FLECS_IDEcsSecondsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsSecondsID_", out FLECS_IDEcsSecondsID__Ptr) : FLECS_IDEcsSecondsID__Ptr);
-
-        public static ref ulong FLECS_IDEcsSpeedID_ => ref *(ulong*)(FLECS_IDEcsSpeedID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsSpeedID_", out FLECS_IDEcsSpeedID__Ptr) : FLECS_IDEcsSpeedID__Ptr);
-
         public static ref ulong FLECS_IDEcsStructID_ => ref *(ulong*)(FLECS_IDEcsStructID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsStructID_", out FLECS_IDEcsStructID__Ptr) : FLECS_IDEcsStructID__Ptr);
 
         public static ref ulong FLECS_IDEcsSystemStatsID_ => ref *(ulong*)(FLECS_IDEcsSystemStatsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsSystemStatsID_", out FLECS_IDEcsSystemStatsID__Ptr) : FLECS_IDEcsSystemStatsID__Ptr);
 
-        public static ref ulong FLECS_IDEcsTebiID_ => ref *(ulong*)(FLECS_IDEcsTebiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTebiID_", out FLECS_IDEcsTebiID__Ptr) : FLECS_IDEcsTebiID__Ptr);
-
-        public static ref ulong FLECS_IDEcsTemperatureID_ => ref *(ulong*)(FLECS_IDEcsTemperatureID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTemperatureID_", out FLECS_IDEcsTemperatureID__Ptr) : FLECS_IDEcsTemperatureID__Ptr);
-
-        public static ref ulong FLECS_IDEcsTeraID_ => ref *(ulong*)(FLECS_IDEcsTeraID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTeraID_", out FLECS_IDEcsTeraID__Ptr) : FLECS_IDEcsTeraID__Ptr);
-
         public static ref ulong FLECS_IDEcsTickSourceID_ => ref *(ulong*)(FLECS_IDEcsTickSourceID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTickSourceID_", out FLECS_IDEcsTickSourceID__Ptr) : FLECS_IDEcsTickSourceID__Ptr);
-
-        public static ref ulong FLECS_IDEcsTimeID_ => ref *(ulong*)(FLECS_IDEcsTimeID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTimeID_", out FLECS_IDEcsTimeID__Ptr) : FLECS_IDEcsTimeID__Ptr);
 
         public static ref ulong FLECS_IDEcsTimerID_ => ref *(ulong*)(FLECS_IDEcsTimerID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTimerID_", out FLECS_IDEcsTimerID__Ptr) : FLECS_IDEcsTimerID__Ptr);
 
@@ -13812,35 +13413,13 @@ namespace Flecs.NET.Bindings
 
         public static ref ulong FLECS_IDEcsUnitID_ => ref *(ulong*)(FLECS_IDEcsUnitID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUnitID_", out FLECS_IDEcsUnitID__Ptr) : FLECS_IDEcsUnitID__Ptr);
 
-        public static ref ulong FLECS_IDEcsUnitPrefixesID_ => ref *(ulong*)(FLECS_IDEcsUnitPrefixesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUnitPrefixesID_", out FLECS_IDEcsUnitPrefixesID__Ptr) : FLECS_IDEcsUnitPrefixesID__Ptr);
-
         public static ref ulong FLECS_IDEcsUnitPrefixID_ => ref *(ulong*)(FLECS_IDEcsUnitPrefixID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUnitPrefixID_", out FLECS_IDEcsUnitPrefixID__Ptr) : FLECS_IDEcsUnitPrefixID__Ptr);
-
-        public static ref ulong FLECS_IDEcsUriFileID_ => ref *(ulong*)(FLECS_IDEcsUriFileID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUriFileID_", out FLECS_IDEcsUriFileID__Ptr) : FLECS_IDEcsUriFileID__Ptr);
-
-        public static ref ulong FLECS_IDEcsUriHyperlinkID_ => ref *(ulong*)(FLECS_IDEcsUriHyperlinkID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUriHyperlinkID_", out FLECS_IDEcsUriHyperlinkID__Ptr) : FLECS_IDEcsUriHyperlinkID__Ptr);
-
-        public static ref ulong FLECS_IDEcsUriID_ => ref *(ulong*)(FLECS_IDEcsUriID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUriID_", out FLECS_IDEcsUriID__Ptr) : FLECS_IDEcsUriID__Ptr);
-
-        public static ref ulong FLECS_IDEcsUriImageID_ => ref *(ulong*)(FLECS_IDEcsUriImageID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUriImageID_", out FLECS_IDEcsUriImageID__Ptr) : FLECS_IDEcsUriImageID__Ptr);
 
         public static ref ulong FLECS_IDEcsVectorID_ => ref *(ulong*)(FLECS_IDEcsVectorID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsVectorID_", out FLECS_IDEcsVectorID__Ptr) : FLECS_IDEcsVectorID__Ptr);
 
         public static ref ulong FLECS_IDEcsWorldStatsID_ => ref *(ulong*)(FLECS_IDEcsWorldStatsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsWorldStatsID_", out FLECS_IDEcsWorldStatsID__Ptr) : FLECS_IDEcsWorldStatsID__Ptr);
 
         public static ref ulong FLECS_IDEcsWorldSummaryID_ => ref *(ulong*)(FLECS_IDEcsWorldSummaryID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsWorldSummaryID_", out FLECS_IDEcsWorldSummaryID__Ptr) : FLECS_IDEcsWorldSummaryID__Ptr);
-
-        public static ref ulong FLECS_IDEcsYobiID_ => ref *(ulong*)(FLECS_IDEcsYobiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsYobiID_", out FLECS_IDEcsYobiID__Ptr) : FLECS_IDEcsYobiID__Ptr);
-
-        public static ref ulong FLECS_IDEcsYoctoID_ => ref *(ulong*)(FLECS_IDEcsYoctoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsYoctoID_", out FLECS_IDEcsYoctoID__Ptr) : FLECS_IDEcsYoctoID__Ptr);
-
-        public static ref ulong FLECS_IDEcsYottaID_ => ref *(ulong*)(FLECS_IDEcsYottaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsYottaID_", out FLECS_IDEcsYottaID__Ptr) : FLECS_IDEcsYottaID__Ptr);
-
-        public static ref ulong FLECS_IDEcsZebiID_ => ref *(ulong*)(FLECS_IDEcsZebiID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsZebiID_", out FLECS_IDEcsZebiID__Ptr) : FLECS_IDEcsZebiID__Ptr);
-
-        public static ref ulong FLECS_IDEcsZeptoID_ => ref *(ulong*)(FLECS_IDEcsZeptoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsZeptoID_", out FLECS_IDEcsZeptoID__Ptr) : FLECS_IDEcsZeptoID__Ptr);
-
-        public static ref ulong FLECS_IDEcsZettaID_ => ref *(ulong*)(FLECS_IDEcsZettaID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsZettaID_", out FLECS_IDEcsZettaID__Ptr) : FLECS_IDEcsZettaID__Ptr);
 
         public static ref ulong FLECS_IDFlecsAlertsID_ => ref *(ulong*)(FLECS_IDFlecsAlertsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDFlecsAlertsID_", out FLECS_IDFlecsAlertsID__Ptr) : FLECS_IDFlecsAlertsID__Ptr);
 

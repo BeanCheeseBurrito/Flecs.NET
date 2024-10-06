@@ -318,5 +318,64 @@ namespace Flecs.NET.Tests.Cpp
             current = current.Parent();
             Assert.True(current == 0);
         }
+
+        [Fact]
+        private void RenameNamespaceShorter()
+        {
+            using World world = World.Create();
+
+            Entity m = world.Import<NamespaceParent.ShorterParent>();
+            Assert.True(m.Has(Ecs.Module));
+            Assert.Equal(".Namespace.ShorterParent", m.Path());
+            Assert.True(world.Lookup(".NamespaceParent") == 0);
+            Assert.True(world.Lookup(".NamespaceParent.ShorterParent") == 0);
+            Assert.True(world.Lookup(".NamespaceParent.ShorterParent.NamespaceType") == 0);
+            Assert.True(world.Lookup(".Namespace.ShorterParent.NamespaceType") != 0);
+
+            Entity ns = world.Lookup(".Namespace");
+            Assert.True(ns != 0);
+            Assert.True(ns.Has(Ecs.Module));
+        }
+
+        [Fact]
+        private void RenameNamespaceLonger()
+        {
+            using World world = World.Create();
+
+            Entity m = world.Import<NamespaceParent.LongerParent>();
+            Assert.True(m.Has(Ecs.Module));
+            Assert.Equal(".NamespaceParentNamespace.LongerParent", m.Path());
+            Assert.True(world.Lookup(".NamespaceParent") == 0);
+            Assert.True(world.Lookup(".NamespaceParent.LongerParent") == 0);
+            Assert.True(world.Lookup(".NamespaceParent.LongerParent.NamespaceType") == 0);
+            Assert.True(world.Lookup(".NamespaceParentNamespace.LongerParent.NamespaceType") != 0);
+
+            Entity ns = world.Lookup(".NamespaceParentNamespace");
+            Assert.True(ns != 0);
+            Assert.True(ns.Has(Ecs.Module));
+        }
+
+        [Fact]
+        private void RenameNamespaceNested()
+        {
+            using World world = World.Create();
+
+            Entity m = world.Import<NamespaceParent.NamespaceChild.Nested>();
+            Assert.True(m.Has(Ecs.Module));
+            Assert.Equal(".Namespace.Child.Nested", m.Path());
+            Assert.True(world.Lookup(".Namespace.Child.Nested.NamespaceType") != 0);
+            Assert.True(world.Lookup(".NamespaceParent.NamespaceChild.Nested.NamespaceType") == 0);
+            Assert.True(world.Lookup(".NamespaceParent.NamespaceChild.Nested") == 0);
+            Assert.True(world.Lookup(".NamespaceParent.NamespaceChild") == 0);
+            Assert.True(world.Lookup(".NamespaceParent") == 0);
+
+            Entity ns = world.Lookup(".Namespace");
+            Assert.True(ns != 0);
+            Assert.True(ns.Has(Ecs.Module));
+
+            Entity nsChild = world.Lookup(".Namespace.Child");
+            Assert.True(nsChild != 0);
+            Assert.True(nsChild.Has(Ecs.Module));
+        }
     }
 }

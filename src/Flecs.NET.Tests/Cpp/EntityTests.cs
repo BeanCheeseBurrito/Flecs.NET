@@ -4653,5 +4653,45 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, v->X);
             Assert.Equal(2, v->Y);
         }
+
+        [Fact]
+        private void OverrideSparse()
+        {
+            using World world = World.Create();
+
+            world.Component<Velocity>().Entity.Add(Ecs.Sparse);
+
+            Entity @base = world.Entity().Set(new Velocity(1, 2));
+
+            Entity e = world.Entity().IsA(@base);
+
+            Assert.True(e.Has<Velocity>());
+            Assert.True(e.Owns<Velocity>());
+
+            Velocity* v = e.GetPtr<Velocity>();
+            Assert.Equal(1, v->X);
+            Assert.Equal(2, v->Y);
+        }
+
+        [Fact]
+        private void DeleteWithOverrideSparse()
+        {
+            using World world = World.Create();
+
+            world.Component<Velocity>().Entity.Add(Ecs.Sparse);
+
+            Entity @base = world.Entity().Set(new Velocity(1, 2));
+
+            Entity e = world.Entity().IsA(@base);
+
+            Assert.True(e.Has<Velocity>());
+            Assert.True(e.Owns<Velocity>());
+
+            Velocity* v = e.GetPtr<Velocity>();
+            Assert.Equal(1, v->X);
+            Assert.Equal(2, v->Y);
+
+            e.Destruct();
+        }
     }
 }
