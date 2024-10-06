@@ -566,7 +566,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void Action()
+        private void Run()
         {
             using World world = World.Create();
 
@@ -600,7 +600,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void ActionConst()
+        private void RunConst()
         {
             using World world = World.Create();
 
@@ -634,7 +634,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void ActionShared()
+        private void RunShared()
         {
             using World world = World.Create();
 
@@ -688,7 +688,7 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
-        private void ActionOptional()
+        private void RunOptional()
         {
             using World world = World.Create();
 
@@ -755,6 +755,40 @@ namespace Flecs.NET.Tests.Cpp
             p = e4.GetPtr<Position>();
             Assert.Equal(71, p->X);
             Assert.Equal(81, p->Y);
+        }
+
+        [Fact]
+        private void RunSparse()
+        {
+            using World world = World.Create();
+
+            world.Component<Position>().Entity.Add(Ecs.Sparse);
+            world.Component<Velocity>();
+
+            Entity entity = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Query<Position, Velocity> q = world.Query<Position, Velocity>();
+
+            q.Run((Iter it) =>
+            {
+                while (it.Next())
+                {
+                    Field<Velocity> v = it.Field<Velocity>(1);
+
+                    foreach (int i in it)
+                    {
+                        ref Position p = ref it.FieldAt<Position>(0, i);
+                        p.X += v[i].X;
+                        p.Y += v[i].Y;
+                    }
+                }
+            });
+
+            Position* p = entity.GetPtr<Position>();
+            Assert.Equal(11, p->X);
+            Assert.Equal(22, p->Y);
         }
 
         [Fact]
@@ -910,6 +944,31 @@ namespace Flecs.NET.Tests.Cpp
             p = e4.GetPtr<Position>();
             Assert.Equal(71, p->X);
             Assert.Equal(81, p->Y);
+        }
+
+        [Fact]
+        private void EachSparse()
+        {
+            using World world = World.Create();
+
+            world.Component<Position>().Entity.Add(Ecs.Sparse);
+            world.Component<Velocity>();
+
+            Entity entity = world.Entity()
+                .Set(new Position(10, 20))
+                .Set(new Velocity(1, 2));
+
+            Query<Position, Velocity> q = world.Query<Position, Velocity>();
+
+            q.Each((ref Position p, ref Velocity v) =>
+            {
+                p.X += v.X;
+                p.Y += v.Y;
+            });
+
+            Position* p = entity.GetPtr<Position>();
+            Assert.Equal(11, p->X);
+            Assert.Equal(22, p->Y);
         }
 
         [Fact]

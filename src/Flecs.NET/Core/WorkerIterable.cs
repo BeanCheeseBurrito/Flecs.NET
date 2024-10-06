@@ -82,6 +82,9 @@ public partial struct WorkerIterable : IEquatable<WorkerIterable>, IIterable
 //IIterableBase Interface
 public unsafe partial struct WorkerIterable
 {
+    /// <inheritdoc cref="IIterableBase.World"/>
+    public ref ecs_world_t* World => ref _iter.world;
+
     /// <inheritdoc cref="IIterableBase.GetIter"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ecs_iter_t GetIter(ecs_world_t* world = null)

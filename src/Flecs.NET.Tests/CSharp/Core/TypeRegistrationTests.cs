@@ -85,7 +85,7 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.True(green.Has(EcsConstant, Ecs.Wildcard));
             Assert.True(blue.Has(EcsConstant, Ecs.Wildcard));
         }
-        
+
         [Fact]
         private void ComponentStructReflection()
         {
@@ -97,14 +97,14 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.True(world.Entity(posComponent).Has<Type>());
             Assert.Equal(typeof(Position), world.Entity(posComponent).Get<Type>());
         }
-        
+
         [Fact]
         private void ComponentClassReflection()
         {
             using World world = World.Create();
 
             world.Component<ManagedComponent>();
-            Entity entity = world.Entity("Test").Set(new ManagedComponent());
+            Entity entity = world.Entity("Test").Set(new ManagedComponent(1));
             Id comp = entity.Table().Type().Get(0);
             Assert.True(world.Entity(comp).Has<Type>());
             Assert.Equal(typeof(ManagedComponent), world.Entity(comp).Get<Type>());

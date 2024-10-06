@@ -202,9 +202,6 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_entity_from_json", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_entity_from_json(ecs_world_t* world, ulong entity, byte* json, ecs_from_json_desc_t* desc);
 
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_entity_from_json_legacy", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_entity_from_json_legacy(ecs_world_t* world, ulong entity, byte* json, ecs_from_json_desc_t* desc);
-
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_entity_init", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_entity_init(ecs_world_t* world, ecs_entity_desc_t* desc);
 
@@ -223,32 +220,35 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_exists", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte ecs_exists(ecs_world_t* world, ulong entity);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_field_at_w_size", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void* ecs_field_at_w_size(ecs_iter_t* it, System.IntPtr size, byte index, int row);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_field_column", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern int ecs_field_column(ecs_iter_t* it, int index);
+        public static extern int ecs_field_column(ecs_iter_t* it, byte index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_field_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern ulong ecs_field_id(ecs_iter_t* it, int index);
+        public static extern ulong ecs_field_id(ecs_iter_t* it, byte index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_field_is_readonly", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_field_is_readonly(ecs_iter_t* it, int index);
+        public static extern byte ecs_field_is_readonly(ecs_iter_t* it, byte index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_field_is_self", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_field_is_self(ecs_iter_t* it, int index);
+        public static extern byte ecs_field_is_self(ecs_iter_t* it, byte index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_field_is_set", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_field_is_set(ecs_iter_t* it, int index);
+        public static extern byte ecs_field_is_set(ecs_iter_t* it, byte index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_field_is_writeonly", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte ecs_field_is_writeonly(ecs_iter_t* it, int index);
+        public static extern byte ecs_field_is_writeonly(ecs_iter_t* it, byte index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_field_size", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern System.IntPtr ecs_field_size(ecs_iter_t* it, int index);
+        public static extern System.IntPtr ecs_field_size(ecs_iter_t* it, byte index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_field_src", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern ulong ecs_field_src(ecs_iter_t* it, int index);
+        public static extern ulong ecs_field_src(ecs_iter_t* it, byte index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_field_w_size", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void* ecs_field_w_size(ecs_iter_t* it, System.IntPtr size, int index);
+        public static extern void* ecs_field_w_size(ecs_iter_t* it, System.IntPtr size, byte index);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_fini", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_fini(ecs_world_t* world);
@@ -1348,6 +1348,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_table_count", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_table_count(ecs_table_t* table);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_table_entities", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern ulong* ecs_table_entities(ecs_table_t* table);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_table_find", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ecs_table_t* ecs_table_find(ecs_world_t* world, ulong* ids, int id_count);
 
@@ -1383,6 +1386,9 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_table_remove_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ecs_table_t* ecs_table_remove_id(ecs_world_t* world, ecs_table_t* table, ulong id);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_table_size", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern int ecs_table_size(ecs_table_t* table);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_table_str", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_table_str(ecs_world_t* world, ecs_table_t* table);
@@ -1557,12 +1563,6 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_from_json_file", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_world_from_json_file(ecs_world_t* world, byte* filename, ecs_from_json_desc_t* desc);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_from_json_file_legacy", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_world_from_json_file_legacy(ecs_world_t* world, byte* filename, ecs_from_json_desc_t* desc);
-
-        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_from_json_legacy", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern byte* ecs_world_from_json_legacy(ecs_world_t* world, byte* json, ecs_from_json_desc_t* desc);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_stats_copy_last", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_world_stats_copy_last(ecs_world_stats_t* dst, ecs_world_stats_t* src);
@@ -2864,7 +2864,7 @@ namespace Flecs.NET.Bindings
 
             public int columns;
 
-            public void* ptrs;
+            public ecs_table_record_t* trs;
 
             public bool Equals(ecs_each_iter_t other)
             {
@@ -4370,8 +4370,6 @@ namespace Flecs.NET.Bindings
 
             public ulong* entities;
 
-            public void** ptrs;
-
             public int* sizes;
 
             public ecs_table_t* table;
@@ -4382,7 +4380,7 @@ namespace Flecs.NET.Bindings
 
             public ecs_var_t* variables;
 
-            public int* columns;
+            public ecs_table_record_t** trs;
 
             public ulong* sources;
 
@@ -4390,11 +4388,11 @@ namespace Flecs.NET.Bindings
 
             public ulong group_id;
 
-            public int field_count;
-
             public uint set_fields;
 
-            public uint shared_fields;
+            public uint ref_fields;
+
+            public uint row_fields;
 
             public uint up_fields;
 
@@ -4406,11 +4404,13 @@ namespace Flecs.NET.Bindings
 
             public int event_cur;
 
+            public byte field_count;
+
+            public byte term_index;
+
+            public byte variable_count;
+
             public ecs_query_t* query;
-
-            public int term_index;
-
-            public int variable_count;
 
             public byte** variable_names;
 
@@ -4719,6 +4719,8 @@ namespace Flecs.NET.Bindings
             public int offset;
 
             public ulong unit;
+
+            public byte use_offset;
 
             public ecs_member_value_range_t range;
 
@@ -5326,7 +5328,7 @@ namespace Flecs.NET.Bindings
 
             public int* last_event_id;
 
-            public int term_index_;
+            public byte term_index_;
 
             public uint flags_;
 
@@ -6405,7 +6407,7 @@ namespace Flecs.NET.Bindings
 
             public uint flags;
 
-            public short var_count;
+            public byte var_count;
 
             public byte term_count;
 
@@ -6420,6 +6422,8 @@ namespace Flecs.NET.Bindings
             public uint write_fields;
 
             public uint read_fields;
+
+            public uint row_fields;
 
             public uint shared_readonly_fields;
 
@@ -8162,46 +8166,50 @@ namespace Flecs.NET.Bindings
             }
         }
 
-        public partial struct ecs_table_cache_iter_t : System.IEquatable<ecs_table_cache_iter_t>
+        public partial struct ecs_table_cache_hdr_t : System.IEquatable<ecs_table_cache_hdr_t>
         {
-            public ecs_table_cache_hdr_t* cur;
+            public ecs_table_cache_t* cache;
+
+            public ecs_table_t* table;
+
+            public ecs_table_cache_hdr_t* prev;
 
             public ecs_table_cache_hdr_t* next;
 
-            public ecs_table_cache_hdr_t* next_list;
+            public byte empty;
 
-            public partial struct ecs_table_cache_hdr_t : System.IEquatable<ecs_table_cache_hdr_t>
+            public partial struct ecs_table_cache_t : System.IEquatable<ecs_table_cache_t>
             {
-                public bool Equals(ecs_table_cache_hdr_t other)
+                public bool Equals(ecs_table_cache_t other)
                 {
-                    fixed (ecs_table_cache_hdr_t* __self = &this)
+                    fixed (ecs_table_cache_t* __self = &this)
                     {
-                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_cache_hdr_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_table_cache_hdr_t)));
+                        return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_cache_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_table_cache_t)));
                     }
                 }
 
                 public override bool Equals(object? obj)
                 {
-                    return obj is ecs_table_cache_hdr_t other && Equals(other);
+                    return obj is ecs_table_cache_t other && Equals(other);
                 }
 
-                public static bool operator ==(ecs_table_cache_hdr_t left, ecs_table_cache_hdr_t right)
+                public static bool operator ==(ecs_table_cache_t left, ecs_table_cache_t right)
                 {
                     return left.Equals(right);
                 }
 
-                public static bool operator !=(ecs_table_cache_hdr_t left, ecs_table_cache_hdr_t right)
+                public static bool operator !=(ecs_table_cache_t left, ecs_table_cache_t right)
                 {
                     return !(left == right);
                 }
 
                 public override int GetHashCode()
                 {
-                    fixed (ecs_table_cache_hdr_t* __self = &this)
+                    fixed (ecs_table_cache_t* __self = &this)
                     {
 #if NET6_0_OR_GREATER
                     System.HashCode hash = new System.HashCode();
-                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_cache_hdr_t)));
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_cache_t)));
                     return hash.ToHashCode();
 #else
                         return base.GetHashCode();
@@ -8209,6 +8217,52 @@ namespace Flecs.NET.Bindings
                     }
                 }
             }
+
+            public bool Equals(ecs_table_cache_hdr_t other)
+            {
+                fixed (ecs_table_cache_hdr_t* __self = &this)
+                {
+                    return System.MemoryExtensions.SequenceEqual(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_cache_hdr_t)), new System.ReadOnlySpan<byte>((byte*)&other, sizeof(ecs_table_cache_hdr_t)));
+                }
+            }
+
+            public override bool Equals(object? obj)
+            {
+                return obj is ecs_table_cache_hdr_t other && Equals(other);
+            }
+
+            public static bool operator ==(ecs_table_cache_hdr_t left, ecs_table_cache_hdr_t right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(ecs_table_cache_hdr_t left, ecs_table_cache_hdr_t right)
+            {
+                return !(left == right);
+            }
+
+            public override int GetHashCode()
+            {
+                fixed (ecs_table_cache_hdr_t* __self = &this)
+                {
+#if NET6_0_OR_GREATER
+                    System.HashCode hash = new System.HashCode();
+                    hash.AddBytes(new System.ReadOnlySpan<byte>((byte*)__self, sizeof(ecs_table_cache_hdr_t)));
+                    return hash.ToHashCode();
+#else
+                    return base.GetHashCode();
+#endif
+                }
+            }
+        }
+
+        public partial struct ecs_table_cache_iter_t : System.IEquatable<ecs_table_cache_iter_t>
+        {
+            public ecs_table_cache_hdr_t* cur;
+
+            public ecs_table_cache_hdr_t* next;
+
+            public ecs_table_cache_hdr_t* next_list;
 
             public bool Equals(ecs_table_cache_iter_t other)
             {
@@ -8296,6 +8350,14 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_table_record_t : System.IEquatable<ecs_table_record_t>
         {
+            public ecs_table_cache_hdr_t hdr;
+
+            public short index;
+
+            public short count;
+
+            public short column;
+
             public bool Equals(ecs_table_record_t other)
             {
                 fixed (ecs_table_record_t* __self = &this)
@@ -8434,7 +8496,7 @@ namespace Flecs.NET.Bindings
 
             public short oper;
 
-            public short field_index;
+            public byte field_index;
 
             public ushort flags_;
 
@@ -10252,6 +10314,8 @@ namespace Flecs.NET.Bindings
 
             public int offset;
 
+            public byte use_offset;
+
             public bool Equals(EcsMember other)
             {
                 fixed (EcsMember* __self = &this)
@@ -11852,6 +11916,8 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsIdIsSparse = 16777216;
 
+        public const uint EcsIdIsTransitive = 16384;
+
         public const uint EcsIdIsUnion = 33554432;
 
         public const uint EcsIdMarkedForDelete = 1073741824;
@@ -11924,11 +11990,7 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsIterTrivialSearch = 256;
 
-        public const uint EcsIterTrivialSearchNoData = 512;
-
         public const uint EcsIterTrivialTest = 2048;
-
-        public const uint EcsIterTrivialTestNoData = 4096;
 
         public const int EcsIterYield = -1;
 
@@ -11970,8 +12032,6 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsQueryHasScopes = 131072;
 
-        public const uint EcsQueryHasSparseThis = 67108864;
-
         public const uint EcsQueryHasTableThisVar = 33554432;
 
         public const uint EcsQueryIsCacheable = 16777216;
@@ -11991,8 +12051,6 @@ namespace Flecs.NET.Bindings
         public const uint EcsQueryMatchThis = 2048;
 
         public const uint EcsQueryMatchWildcards = 16384;
-
-        public const uint EcsQueryNoData = 16;
 
         public const uint EcsQueryTableOnly = 128;
 
@@ -12082,8 +12140,6 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsTermMatchAnySrc = 2;
 
-        public const uint EcsTermNoData = 64;
-
         public const ulong EcsTermRefFlags = 18374686479671623680;
 
         public const uint EcsTermReflexive = 8;
@@ -12124,13 +12180,13 @@ namespace Flecs.NET.Bindings
 
         public const int flecs_iter_cache_all = 255;
 
-        public const uint flecs_iter_cache_columns = 2;
-
         public const uint flecs_iter_cache_ids = 1;
 
         public const uint flecs_iter_cache_ptrs = 8;
 
         public const uint flecs_iter_cache_sources = 4;
+
+        public const uint flecs_iter_cache_trs = 2;
 
         public const uint flecs_iter_cache_variables = 16;
 
@@ -12148,13 +12204,13 @@ namespace Flecs.NET.Bindings
 
         public const int FLECS_VARIABLE_COUNT_MAX = 64;
 
-        public const string FLECS_VERSION = "4.0.0";
+        public const string FLECS_VERSION = "4.0.1";
 
         public const int FLECS_VERSION_MAJOR = 4;
 
         public const int FLECS_VERSION_MINOR = 0;
 
-        public const int FLECS_VERSION_PATCH = 0;
+        public const int FLECS_VERSION_PATCH = 1;
 
         private static void* ECS_AUTO_OVERRIDE_Ptr;
 

@@ -7,6 +7,7 @@ public static class Separator
     public const string Space = " ";
     public const string NewLine = "\n";
     public const string DoubleNewLine = "\n\n";
+    public const string And = " && ";
     public const string Or = " || ";
     public const string BitwiseOr = " | ";
 }

@@ -40,8 +40,6 @@ public static unsafe partial class Invoker
     {
         Ecs.Assert(iter->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
 
-        iter->flags |= EcsIterCppEach;
-
         Ecs.TableLock(iter->world, iter->table);
 
         for (int i = 0; i < iter->count; i++)
@@ -57,8 +55,6 @@ public static unsafe partial class Invoker
     /// <param name="callback"></param>
     public static void Each(ecs_iter_t* iter, Ecs.EachIterCallback callback)
     {
-        iter->flags |= EcsIterCppEach;
-
         Ecs.TableLock(iter->world, iter->table);
 
         int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
@@ -228,8 +224,6 @@ public static unsafe partial class Invoker
     {
         Ecs.Assert(iter->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
 
-        iter->flags |= EcsIterCppEach;
-
         Ecs.TableLock(iter->world, iter->table);
 
         for (int i = 0; i < iter->count; i++)
@@ -245,8 +239,6 @@ public static unsafe partial class Invoker
     /// <param name="callback"></param>
     public static void Each(ecs_iter_t* iter, delegate*<Iter, int, void> callback)
     {
-        iter->flags |= EcsIterCppEach;
-
         Ecs.TableLock(iter->world, iter->table);
 
         int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
