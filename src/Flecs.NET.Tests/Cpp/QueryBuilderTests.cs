@@ -5,24 +5,24 @@ using Flecs.NET.Utilities;
 using Xunit;
 using static Flecs.NET.Bindings.flecs;
 
-namespace Flecs.NET.Tests.Cpp
-{
-    [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
-    [SuppressMessage("ReSharper", "AccessToModifiedClosure")]
-    [SuppressMessage("ReSharper", "VariableHidesOuterVariable")]
-    [SuppressMessage("Usage", "xUnit1026:Theory methods should use all of their parameters")]
-    public unsafe class QueryBuilderTests
-    {
-        public static IEnumerable<object[]> CacheKinds => new List<object[]>
-        {
-            new object[] { EcsQueryCacheDefault },
-            new object[] { EcsQueryCacheAuto }
-        };
+namespace Flecs.NET.Tests.Cpp;
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void BuilderAssignSameType(ecs_query_cache_kind_t cacheKind)
-        {
+[SuppressMessage("ReSharper", "AccessToDisposedClosure")]
+[SuppressMessage("ReSharper", "AccessToModifiedClosure")]
+[SuppressMessage("ReSharper", "VariableHidesOuterVariable")]
+[SuppressMessage("Usage", "xUnit1026:Theory methods should use all of their parameters")]
+public unsafe class QueryBuilderTests
+{
+    public static IEnumerable<object[]> CacheKinds => new List<object[]>
+    {
+        new object[] { EcsQueryCacheDefault },
+        new object[] { EcsQueryCacheAuto }
+    };
+
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void BuilderAssignSameType(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position, Velocity> q =
@@ -43,10 +43,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void BuilderAssignToEmpty(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void BuilderAssignToEmpty(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position, Velocity> q = world.QueryBuilder<Position, Velocity>()
@@ -66,10 +66,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void BuilderAssignFromEmpty(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void BuilderAssignFromEmpty(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -91,10 +91,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void BuilderBuild(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void BuilderBuild(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position, Velocity> q =
@@ -115,10 +115,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void BuilderBuildToAuto(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void BuilderBuildToAuto(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position, Velocity> q = world.QueryBuilder<Position, Velocity>()
@@ -138,10 +138,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void BuilderBuildNStatements(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void BuilderBuildNStatements(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             QueryBuilder qb = world.QueryBuilder();
@@ -163,10 +163,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void _1Type(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void _1Type(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position> q = world.QueryBuilder<Position>()
@@ -186,10 +186,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void _2Types(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void _2Types(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity()
@@ -217,10 +217,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IdTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IdTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity();
@@ -245,10 +245,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void TypeTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void TypeTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity()
@@ -271,10 +271,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IdPairTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IdPairTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -302,10 +302,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IdPairWildcardTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IdPairWildcardTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -341,10 +341,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void TypePairTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void TypePairTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity()
@@ -376,10 +376,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void PairTermWithVar(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void PairTermWithVar(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity()
@@ -417,10 +417,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void _2PairTermsWithVar(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void _2PairTermsWithVar(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity bob = world.Entity()
@@ -471,10 +471,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void SetVar(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void SetVar(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity();
@@ -508,10 +508,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void Set2Vars(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void Set2Vars(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity();
@@ -553,10 +553,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void SetVarByName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void SetVarByName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity();
@@ -585,10 +585,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void Set2VarsByName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void Set2VarsByName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity();
@@ -630,10 +630,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void SetVarOnQuery(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void SetVarOnQuery(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity();
@@ -666,10 +666,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void SetVarByNameOnQuery(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void SetVarByNameOnQuery(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity();
@@ -699,10 +699,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void SetTableVar(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void SetTableVar(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity().Add<Position>();
@@ -735,10 +735,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void SetRangeVar(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void SetRangeVar(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity().Add<Position>();
@@ -779,10 +779,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void SetTableVarChained(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void SetTableVarChained(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             /* var e1 = */
@@ -818,10 +818,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void SetRangeVarChained(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void SetRangeVarChained(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             /* var e1 = */
@@ -857,10 +857,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ExprWithVar(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ExprWithVar(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity("Rel");
@@ -886,10 +886,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void Add1Type(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void Add1Type(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -910,10 +910,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void Add2Types(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void Add2Types(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -935,10 +935,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void Add1TypeWith1Type(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void Add1TypeWith1Type(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position> q = world.QueryBuilder<Position>()
@@ -959,10 +959,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void Add2TypesWith1Type(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void Add2TypesWith1Type(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position> q = world.QueryBuilder<Position>()
@@ -984,10 +984,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void AddPair(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void AddPair(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -1012,10 +1012,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void AddNot(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void AddNot(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position> q = world.QueryBuilder<Position>()
@@ -1036,10 +1036,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void AddOr(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void AddOr(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -1062,10 +1062,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void AddOptional(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void AddOptional(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -1088,10 +1088,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void StringTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void StringTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -1114,10 +1114,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void SingletonTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void SingletonTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Set(new Other(10));
@@ -1159,10 +1159,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IsASupersetTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IsASupersetTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1203,10 +1203,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IsASelfSupersetTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IsASelfSupersetTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1260,10 +1260,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, ownedCount);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ChildOfSupersetTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ChildOfSupersetTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Self> q = world.QueryBuilder<Self>()
@@ -1302,10 +1302,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ChildOfSelfSupersetTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ChildOfSelfSupersetTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Self> q = world.QueryBuilder<Self>()
@@ -1357,10 +1357,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, ownedCount);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IsASupersetTermWithEach(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IsASupersetTermWithEach(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1391,10 +1391,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IsASelfSupersetTermWithEach(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IsASelfSupersetTermWithEach(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1429,10 +1429,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(5, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ChildOfSupersetTermWithEach(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ChildOfSupersetTermWithEach(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Self, Other> q = world.QueryBuilder<Self, Other>()
@@ -1461,10 +1461,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ChildOfSelfSupersetTermWithEach(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ChildOfSelfSupersetTermWithEach(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Self, Other> q = world.QueryBuilder<Self, Other>()
@@ -1497,10 +1497,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(5, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IsASupersetShortcut(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IsASupersetShortcut(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1531,10 +1531,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IsASupersetShortcutWithSelf(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IsASupersetShortcutWithSelf(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1569,10 +1569,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(5, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ChildOfSupersetShortcut(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ChildOfSupersetShortcut(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Self, Other> q = world.QueryBuilder<Self, Other>()
@@ -1601,10 +1601,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ChildOfSupersetShortcutWithSelf(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ChildOfSupersetShortcutWithSelf(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Self, Other> q = world.QueryBuilder<Self, Other>()
@@ -1637,10 +1637,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(5, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void Relation(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void Relation(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -1673,10 +1673,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void RelationWithObjectWildcard(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void RelationWithObjectWildcard(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -1714,10 +1714,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(4, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void RelationWithPredicateWildcard(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void RelationWithPredicateWildcard(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity bob = world.Entity();
@@ -1751,10 +1751,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void AddPairWithRelType(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void AddPairWithRelType(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity dislikes = world.Entity();
@@ -1787,10 +1787,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void TemplateTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void TemplateTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position> q = world.QueryBuilder<Position>()
@@ -1811,10 +1811,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ExplicitSubjectWithId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ExplicitSubjectWithId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position> q = world.QueryBuilder<Position>()
@@ -1835,10 +1835,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ExplicitSubjectWithType(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ExplicitSubjectWithType(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Set(new Position(10, 20));
@@ -1860,10 +1860,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ExplicitObjectWithId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ExplicitObjectWithId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -1888,10 +1888,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ExplicitObjectWithType(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ExplicitObjectWithType(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -1915,10 +1915,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ExplicitTerm(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ExplicitTerm(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -1939,10 +1939,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ExplicitTermWithType(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ExplicitTermWithType(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -1963,10 +1963,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ExplicitTermWithPairType(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ExplicitTermWithPairType(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -1987,10 +1987,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ExplicitTermWithId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ExplicitTermWithId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity();
@@ -2014,10 +2014,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ExplicitTermWithPairId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ExplicitTermWithPairId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -2042,10 +2042,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void _1TermToEmpty(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void _1TermToEmpty(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -2064,10 +2064,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(world.Pair(likes, apples), q.Term(1).Id());
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void _2SubsequentArgs(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void _2SubsequentArgs(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             int count = 0;
@@ -2089,10 +2089,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void OptionalTagIsSet(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void OptionalTagIsSet(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -2131,10 +2131,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void _10Terms(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void _10Terms(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query f = world.QueryBuilder()
@@ -2180,10 +2180,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void _16Terms(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void _16Terms(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query f = world.QueryBuilder()
@@ -2245,21 +2245,21 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        private static ulong GroupByFirstId(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
-        {
+    private static ulong GroupByFirstId(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
+    {
             ecs_type_t* type = ecs_table_get_type(table);
             return type->array[0];
         }
 
-        private static ulong GroupByFirstIdNegated(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
-        {
+    private static ulong GroupByFirstIdNegated(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
+    {
             return ~GroupByFirstId(world, table, id, ctx);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void GroupByRaw(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void GroupByRaw(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Tag0>();
@@ -2321,10 +2321,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void GroupByTemplate(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void GroupByTemplate(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Tag0>();
@@ -2386,16 +2386,16 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        private static ulong group_by_rel(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
-        {
+    private static ulong group_by_rel(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
+    {
             ulong match;
             return ecs_search(world, table, Ecs.Pair(id, EcsWildcard), &match) != -1 ? Ecs.PairSecond(match) : 0;
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void GroupByIterOne(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void GroupByIterOne(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -2436,10 +2436,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e5Found);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void GroupByIterOneTemplate(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void GroupByIterOneTemplate(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
 
@@ -2475,10 +2475,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e5Found);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void GroupByIterOneAllGroups(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void GroupByIterOneAllGroups(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -2548,10 +2548,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, e6Found);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void GroupByDefaultFuncWithId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void GroupByDefaultFuncWithId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -2612,10 +2612,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e3Found);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void GroupByDefaultFuncWithType(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void GroupByDefaultFuncWithType(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
 
@@ -2676,10 +2676,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e3Found);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void GroupByCallbacks(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void GroupByCallbacks(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity tgtA = world.Entity();
@@ -2769,10 +2769,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e3Found);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void SetGroupOnQuery(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void SetGroupOnQuery(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -2813,10 +2813,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e5Found);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void SetGroupTypeOnQuery(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void SetGroupTypeOnQuery(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity();
@@ -2853,10 +2853,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e5Found);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void CreateWithNoTemplateArgs(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void CreateWithNoTemplateArgs(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -2876,10 +2876,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void AnyWildcard(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void AnyWildcard(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -2905,10 +2905,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void Cascade(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void Cascade(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -2968,10 +2968,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void CascadeDesc(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void CascadeDesc(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -3031,10 +3031,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void CascadeWithRelationship(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void CascadeWithRelationship(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity();
@@ -3094,10 +3094,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void UpWithType(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void UpWithType(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
 
@@ -3139,10 +3139,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void CascadeWithType(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void CascadeWithType(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
 
@@ -3205,10 +3205,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void NamedQuery(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void NamedQuery(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity().Add<Position>();
@@ -3232,10 +3232,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("my_query", qe.Name());
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void TermWithWrite(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void TermWithWrite(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -3250,10 +3250,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void TermWithRead(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void TermWithRead(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -3268,10 +3268,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IterWithStage(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IterWithStage(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.SetStageCount(2);
@@ -3292,10 +3292,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void BuilderForceAssignOperator(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void BuilderForceAssignOperator(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity()
@@ -3318,8 +3318,8 @@ namespace Flecs.NET.Tests.Cpp
             });
         }
 
-        private static int QueryArg(Query<Self> q)
-        {
+    private static int QueryArg(Query<Self> q)
+    {
             int count = 0;
 
             q.Each((Entity e, ref Self s) =>
@@ -3331,10 +3331,10 @@ namespace Flecs.NET.Tests.Cpp
             return count;
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void QueryAsArg(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void QueryAsArg(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Self> f = world.QueryBuilder<Self>()
@@ -3353,8 +3353,8 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, QueryArg(f));
         }
 
-        private static int QueryMoveArg(Query<Self> q)
-        {
+    private static int QueryMoveArg(Query<Self> q)
+    {
             int count = 0;
 
             q.Each((Entity e, ref Self s) =>
@@ -3366,10 +3366,10 @@ namespace Flecs.NET.Tests.Cpp
             return count;
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void QueryAsMoveArg(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void QueryAsMoveArg(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -3384,15 +3384,15 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, QueryMoveArg(world.Query<Self>()));
         }
 
-        private static Query<Self> QueryReturn(World world)
-        {
+    private static Query<Self> QueryReturn(World world)
+    {
             return world.Query<Self>();
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void QueryAsReturn(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void QueryAsReturn(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -3417,10 +3417,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void QueryCopy(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void QueryCopy(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -3449,10 +3449,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WorldEachQuery1Component(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WorldEachQuery1Component(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -3475,10 +3475,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WorldEachQuery2Components(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WorldEachQuery2Components(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -3506,10 +3506,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WorldEachQuery1ComponentNoEntity(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WorldEachQuery1ComponentNoEntity(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Entity()
@@ -3534,10 +3534,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WorldEachQuery2ComponentsNoEntity(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WorldEachQuery2ComponentsNoEntity(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Entity()
@@ -3572,10 +3572,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void TermAfterArg(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void TermAfterArg(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity()
@@ -3606,10 +3606,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void NameArg(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void NameArg(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("Foo").Set(new Position(10, 20));
@@ -3635,72 +3635,72 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        // [Theory]
-        // [MemberData(nameof(CacheKinds))]
-        // private void ConstInTerm(ecs_query_cache_kind_t cacheKind)
-        // {
-        //     using World world = World.Create();
-        //
-        //     world.Entity().Set(new Position(10, 20));
-        //
-        //     using var f = world.QueryBuilder()
-        //         .With<Position>()
-        //         .CacheKind(cacheKind)
-        //         .Build();
-        //
-        //     int count = 0;
-        //     f.Run((Iter it) =>
-        //     {
-        //         Field<Position> p = it.Field<Position>(0);
-        //         Assert.True(it.IsReadonly(0));
-        //         foreach (int i in it)
-        //         {
-        //             count++;
-        //             Assert.Equal(10, p[i].X);
-        //             Assert.Equal(20, p[i].Y);
-        //         }
-        //     });
-        //
-        //     Assert.Equal(1, count);
-        // }
+    // [Theory]
+    // [MemberData(nameof(CacheKinds))]
+    // private void ConstInTerm(ecs_query_cache_kind_t cacheKind)
+    // {
+    //     using World world = World.Create();
+    //
+    //     world.Entity().Set(new Position(10, 20));
+    //
+    //     using var f = world.QueryBuilder()
+    //         .With<Position>()
+    //         .CacheKind(cacheKind)
+    //         .Build();
+    //
+    //     int count = 0;
+    //     f.Run((Iter it) =>
+    //     {
+    //         Field<Position> p = it.Field<Position>(0);
+    //         Assert.True(it.IsReadonly(0));
+    //         foreach (int i in it)
+    //         {
+    //             count++;
+    //             Assert.Equal(10, p[i].X);
+    //             Assert.Equal(20, p[i].Y);
+    //         }
+    //     });
+    //
+    //     Assert.Equal(1, count);
+    // }
 
-        // [Theory]
-        // [MemberData(nameof(CacheKinds))]
-        // private void ConstOptional(ecs_query_cache_kind_t cacheKind)
-        // {
-        //     using World world = World.Create();
-        //
-        //     world.Entity().Set(new Position(10, 20)).Add<Tag0>();
-        //     world.Entity().Add<Tag0>();
-        //
-        //     using var f = world.QueryBuilder<Tag0, Position>()
-        //         .CacheKind(cacheKind)
-        //         .Build();
-        //
-        //     int count = 0, setCount = 0;
-        //     f.Run((Iter it) =>
-        //     {
-        //         Assert.Equal(1, it.Count());
-        //         if (it.IsSet(1))
-        //         {
-        //             Field<Position> p = it.Field<Position>(1);
-        //             Assert.True(it.IsReadonly(1));
-        //             Assert.Equal(10, p[0].X);
-        //             Assert.Equal(20, p[0].Y);
-        //             setCount++;
-        //         }
-        //
-        //         count++;
-        //     });
-        //
-        //     Assert.Equal(2, count);
-        //     Assert.Equal(1, setCount);
-        // }
+    // [Theory]
+    // [MemberData(nameof(CacheKinds))]
+    // private void ConstOptional(ecs_query_cache_kind_t cacheKind)
+    // {
+    //     using World world = World.Create();
+    //
+    //     world.Entity().Set(new Position(10, 20)).Add<Tag0>();
+    //     world.Entity().Add<Tag0>();
+    //
+    //     using var f = world.QueryBuilder<Tag0, Position>()
+    //         .CacheKind(cacheKind)
+    //         .Build();
+    //
+    //     int count = 0, setCount = 0;
+    //     f.Run((Iter it) =>
+    //     {
+    //         Assert.Equal(1, it.Count());
+    //         if (it.IsSet(1))
+    //         {
+    //             Field<Position> p = it.Field<Position>(1);
+    //             Assert.True(it.IsReadonly(1));
+    //             Assert.Equal(10, p[0].X);
+    //             Assert.Equal(20, p[0].Y);
+    //             setCount++;
+    //         }
+    //
+    //         count++;
+    //     });
+    //
+    //     Assert.Equal(2, count);
+    //     Assert.Equal(1, setCount);
+    // }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void _2TermsWithExpr(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void _2TermsWithExpr(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity a = world.Entity("A");
@@ -3729,30 +3729,30 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        // [Theory]
-        // [MemberData(nameof(CacheKinds))]
-        // private void AssertOnUninitializedTerm(ecs_query_cache_kind_t cacheKind)
-        // {
-        //     // install_test_abort();
-        //
-        //     using World world = World.Create();
-        //
-        //     world.Entity("A");
-        //     world.Entity("B");
-        //
-        //     // test_expect_abort();
-        //
-        //      using var f = world.QueryBuilder()
-        //         .Term()
-        //         .Term()
-        //         .CacheKind(cacheKind)
-        //         .Build();
-        // }
+    // [Theory]
+    // [MemberData(nameof(CacheKinds))]
+    // private void AssertOnUninitializedTerm(ecs_query_cache_kind_t cacheKind)
+    // {
+    //     // install_test_abort();
+    //
+    //     using World world = World.Create();
+    //
+    //     world.Entity("A");
+    //     world.Entity("B");
+    //
+    //     // test_expect_abort();
+    //
+    //      using var f = world.QueryBuilder()
+    //         .Term()
+    //         .Term()
+    //         .CacheKind(cacheKind)
+    //         .Build();
+    // }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void OperatorShortcuts(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void OperatorShortcuts(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity a = world.Entity();
@@ -3809,10 +3809,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(Ecs.NotFrom, t.Oper());
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void InOutShortcuts(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void InOutShortcuts(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity a = world.Entity();
@@ -3845,10 +3845,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(Ecs.InOutNone, t.InOut());
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IterColumnWithConstAsArray(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IterColumnWithConstAsArray(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position> f = world.QueryBuilder<Position>()
@@ -3885,10 +3885,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(32, p->Y);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IterColumnWithConstAsPtr(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IterColumnWithConstAsPtr(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position> f = world.QueryBuilder<Position>()
@@ -3917,10 +3917,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IterColumnWithConstDeref(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IterColumnWithConstDeref(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position> f = world.QueryBuilder<Position>()
@@ -3950,10 +3950,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -3976,10 +3976,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Velocity>();
@@ -4004,10 +4004,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithComponent(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithComponent(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4030,10 +4030,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithPairId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithPairId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -4060,10 +4060,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithPairName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithPairName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity("Likes");
@@ -4090,10 +4090,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithPairComponents(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithPairComponents(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4116,10 +4116,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithPairComponentId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithPairComponentId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity();
@@ -4145,10 +4145,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithPairNameComponentId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithPairNameComponentId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity("Likes");
@@ -4175,10 +4175,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithPairComponentName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithPairComponentName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity("Apples");
@@ -4204,10 +4204,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithEnum(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithEnum(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4230,10 +4230,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithoutId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithoutId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4256,10 +4256,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithoutName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithoutName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Velocity>();
@@ -4284,10 +4284,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithoutComponent(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithoutComponent(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4310,10 +4310,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithoutPairId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithoutPairId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -4340,10 +4340,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithoutPairName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithoutPairName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity("Likes");
@@ -4370,10 +4370,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithoutPairComponents(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithoutPairComponents(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4396,10 +4396,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithoutPairComponentId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithoutPairComponentId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity();
@@ -4425,10 +4425,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithoutPairComponentName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithoutPairComponentName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity("Apples");
@@ -4454,10 +4454,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithoutPairNameComponentId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithoutPairNameComponentId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity("Likes");
@@ -4484,10 +4484,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithoutEnum(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithoutEnum(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4510,10 +4510,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WriteId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WriteId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4528,10 +4528,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WriteName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WriteName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -4548,10 +4548,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WriteComponent(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WriteComponent(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -4568,10 +4568,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WritePairId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WritePairId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -4590,10 +4590,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WritePairName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WritePairName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity("Likes");
@@ -4612,10 +4612,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WritePairComponents(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WritePairComponents(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4631,10 +4631,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WritePairComponentId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WritePairComponentId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity();
@@ -4652,10 +4652,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WritePairComponentName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WritePairComponentName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity("Apples");
@@ -4673,10 +4673,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WriteEnum(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WriteEnum(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4692,10 +4692,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ReadId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ReadId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4710,10 +4710,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ReadName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ReadName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -4730,10 +4730,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ReadComponent(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ReadComponent(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -4750,10 +4750,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ReadPairId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ReadPairId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -4772,10 +4772,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ReadPairName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ReadPairName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity("Likes");
@@ -4794,10 +4794,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ReadPairComponents(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ReadPairComponents(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4813,10 +4813,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ReadPairComponentId(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ReadPairComponentId(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity();
@@ -4834,10 +4834,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ReadPairComponentName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ReadPairComponentName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity apples = world.Entity("Apples");
@@ -4856,10 +4856,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void ReadEnum(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void ReadEnum(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q =
@@ -4875,10 +4875,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Term(1).GetSrc() == 0);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void AssignAfterInit(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void AssignAfterInit(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Query f;
@@ -4900,10 +4900,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithtInOut(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithtInOut(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query f = world.QueryBuilder()
@@ -4914,10 +4914,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(f.Term(0).InOut() == Ecs.InOutDefault);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithTInOut(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithTInOut(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query f = world.QueryBuilder()
@@ -4928,10 +4928,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(f.Term(0).InOut() == Ecs.InOutDefault);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithRTInOut(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithRTInOut(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query f = world.QueryBuilder()
@@ -4942,10 +4942,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(f.Term(0).InOut() == Ecs.InOutDefault);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithRtInOut(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithRtInOut(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query f = world.QueryBuilder()
@@ -4956,10 +4956,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(f.Term(0).InOut() == Ecs.InOutDefault);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WithrtInOut(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WithrtInOut(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query f = world.QueryBuilder()
@@ -4970,8 +4970,8 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(f.Term(0).InOut() == Ecs.InOutDefault);
         }
 
-        private static int FilterMoveArg(Query<Self> q)
-        {
+    private static int FilterMoveArg(Query<Self> q)
+    {
             int count = 0;
 
             q.Each((Entity e, ref Self s) =>
@@ -4983,10 +4983,10 @@ namespace Flecs.NET.Tests.Cpp
             return count;
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void FilterAsMoveArg(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void FilterAsMoveArg(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Self> f = world.QueryBuilder<Self>()
@@ -5005,17 +5005,17 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, FilterMoveArg(world.Query<Self>()));
         }
 
-        private static Query<Self> FilterReturn(World world, ecs_query_cache_kind_t cacheKind)
-        {
+    private static Query<Self> FilterReturn(World world, ecs_query_cache_kind_t cacheKind)
+    {
             return world.QueryBuilder<Self>()
                 .CacheKind(cacheKind)
                 .Build();
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void FilterAsReturn(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void FilterAsReturn(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -5040,10 +5040,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void FilterCopy(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void FilterCopy(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -5072,10 +5072,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WorldEachFilter1Component(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WorldEachFilter1Component(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -5098,10 +5098,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WorldEachFilter2Components(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WorldEachFilter2Components(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -5129,10 +5129,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WorldEachFilter1ComponentNoEntity(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WorldEachFilter1ComponentNoEntity(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Entity()
@@ -5157,10 +5157,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void WorldEachFilter2ComponentsNoEntity(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void WorldEachFilter2ComponentsNoEntity(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             world.Entity()
@@ -5195,10 +5195,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void VarSrcWithPrefixedName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void VarSrcWithPrefixedName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query r = world.QueryBuilder()
@@ -5221,10 +5221,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void VarFirstWithPrefixedName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void VarFirstWithPrefixedName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query r = world.QueryBuilder()
@@ -5250,10 +5250,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void VarSecondWithPrefixedName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void VarSecondWithPrefixedName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query r = world.QueryBuilder()
@@ -5279,10 +5279,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void TermWithSecondVarString(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void TermWithSecondVarString(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity foo = world.Entity();
@@ -5310,10 +5310,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void TermTypeWithSecondVarString(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void TermTypeWithSecondVarString(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query r = world.QueryBuilder()
@@ -5339,10 +5339,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void NamedRule(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void NamedRule(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity().Add<Position>();
@@ -5365,10 +5365,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("my_query", qe.Name());
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void NamedScopedRule(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void NamedScopedRule(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity().Add<Position>();
@@ -5392,10 +5392,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".my.query", qe.Path());
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void IsValid(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void IsValid(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query<Position> q1 = world.Query<Position>();
@@ -5409,10 +5409,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!q2);
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void UnresolvedByName(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void UnresolvedByName(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             using Query q = world.QueryBuilder()
@@ -5430,10 +5430,10 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(q.Iter().IsTrue());
         }
 
-        [Theory]
-        [MemberData(nameof(CacheKinds))]
-        private void Scope(ecs_query_cache_kind_t cacheKind)
-        {
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void Scope(ecs_query_cache_kind_t cacheKind)
+    {
             using World world = World.Create();
 
             Entity root = world.Entity();
@@ -5474,5 +5474,4 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal(3, count);
         }
-    }
 }

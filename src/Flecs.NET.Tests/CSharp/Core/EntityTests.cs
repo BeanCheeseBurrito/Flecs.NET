@@ -1,13 +1,13 @@
 using Flecs.NET.Core;
 using Xunit;
 
-namespace Flecs.NET.Tests.CSharp.Core
+namespace Flecs.NET.Tests.CSharp.Core;
+
+public class EntityTests
 {
-    public class EntityTests
+    [Fact]
+    public void AddManagedClass()
     {
-        [Fact]
-        public void AddManagedClass()
-        {
             using World world = World.Create();
             Entity entity = world.Entity();
 
@@ -15,9 +15,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.True(entity.Has<ManagedClass>());
         }
 
-        [Fact]
-        public void SetManagedClass()
-        {
+    [Fact]
+    public void SetManagedClass()
+    {
             using World world = World.Create();
             Entity entity = world.Entity();
 
@@ -28,9 +28,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.True(component.Value == 10);
         }
 
-        [Fact]
-        public void AddManagedStruct()
-        {
+    [Fact]
+    public void AddManagedStruct()
+    {
             using World world = World.Create();
             Entity entity = world.Entity();
 
@@ -38,9 +38,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.True(entity.Has<ManagedStruct>());
         }
 
-        [Fact]
-        public void SetManagedStruct()
-        {
+    [Fact]
+    public void SetManagedStruct()
+    {
             using World world = World.Create();
             Entity entity = world.Entity();
 
@@ -50,5 +50,4 @@ namespace Flecs.NET.Tests.CSharp.Core
             ref readonly ManagedStruct component = ref entity.Get<ManagedStruct>();
             Assert.True(component.Value == 10);
         }
-    }
 }

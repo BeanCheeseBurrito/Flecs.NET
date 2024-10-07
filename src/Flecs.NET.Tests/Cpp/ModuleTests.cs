@@ -4,13 +4,13 @@ using NamespaceLvl1.NamespaceLvl2;
 using Xunit;
 using static Flecs.NET.Bindings.flecs;
 
-namespace Flecs.NET.Tests.Cpp
+namespace Flecs.NET.Tests.Cpp;
+
+public class ModuleTests
 {
-    public class ModuleTests
+    [Fact]
+    private void Import()
     {
-        [Fact]
-        private void Import()
-        {
             using World world = World.Create();
             Entity m = world.Import<Namespace.BasicModule>();
             Assert.True(m != 0);
@@ -23,9 +23,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Position>());
         }
 
-        [Fact]
-        private void LookupFromScope()
-        {
+    [Fact]
+    private void LookupFromScope()
+    {
             using World world = World.Create();
             world.Import<Namespace.BasicModule>();
 
@@ -48,9 +48,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(positionEntity == nsPosition);
         }
 
-        [Fact]
-        private void NestedModule()
-        {
+    [Fact]
+    private void NestedModule()
+    {
             using World world = World.Create();
             world.Import<Namespace.BasicModule>();
 
@@ -60,9 +60,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".Namespace.NestedModule.Velocity", velocity.Path());
         }
 
-        [Fact]
-        private void NestedTypeModule()
-        {
+    [Fact]
+    private void NestedTypeModule()
+    {
             using World world = World.Create();
             world.Import<NestedTypeModule>();
 
@@ -89,9 +89,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, childOfCount);
         }
 
-        [Fact]
-        private void ComponentRedefinitionOutsideModule()
-        {
+    [Fact]
+    private void ComponentRedefinitionOutsideModule()
+    {
             using World world = World.Create();
 
             world.Import<Namespace.BasicModule>();
@@ -109,9 +109,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, childOfCount);
         }
 
-        [Fact]
-        private void ModuleTagOnNamespace()
-        {
+    [Fact]
+    private void ModuleTagOnNamespace()
+    {
             using World world = World.Create();
 
             Entity mid = world.Import<NestedModule>();
@@ -121,9 +121,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(namespaceId.Has(Ecs.Module));
         }
 
-        [Fact]
-        private void RegisterWithRootName()
-        {
+    [Fact]
+    private void RegisterWithRootName()
+    {
             using World world = World.Create();
 
             Entity m = world.Import<NamedModule>();
@@ -135,9 +135,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(world.Lookup(".Namespace.NamedModule") == 0);
         }
 
-        [Fact]
-        private void ImplicitModule()
-        {
+    [Fact]
+    private void ImplicitModule()
+    {
             using World world = World.Create();
 
             Entity m = world.Import<ImplicitModule>();
@@ -151,9 +151,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True((Entity)p == pLookup);
         }
 
-        [Fact]
-        private void ModuleInNamespaceWithRootName()
-        {
+    [Fact]
+    private void ModuleInNamespaceWithRootName()
+    {
             using World world = World.Create();
 
             Entity m = world.Import<NamedModuleInRoot>();
@@ -168,9 +168,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True((Entity)p == pLookup);
         }
 
-        [Fact]
-        private void ModuleAsEntity()
-        {
+    [Fact]
+    private void ModuleAsEntity()
+    {
             using World world = World.Create();
 
             Entity m = world.Import<Namespace.BasicModule>();
@@ -180,9 +180,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(m == e);
         }
 
-        [Fact]
-        private void ModuleAsComponent()
-        {
+    [Fact]
+    private void ModuleAsComponent()
+    {
             using World world = World.Create();
 
             Entity m = world.Import<Namespace.BasicModule>();
@@ -192,9 +192,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(m == (Entity)e);
         }
 
-        [Fact]
-        private void ModuleWithCoreName()
-        {
+    [Fact]
+    private void ModuleWithCoreName()
+    {
             using World world = World.Create();
 
             Entity m = world.Import<Module>();
@@ -207,9 +207,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(pos == world.Id<Position>());
         }
 
-        [Fact]
-        private void ImportAddonsTwoWorlds()
-        {
+    [Fact]
+    private void ImportAddonsTwoWorlds()
+    {
             using World a = World.Create();
 
             Entity m1 = a.Import<Ecs.Stats>();
@@ -223,9 +223,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(u1 == u2);
         }
 
-        [Fact]
-        private void LookupModuleAfterReparent()
-        {
+    [Fact]
+    private void LookupModuleAfterReparent()
+    {
             using World world = World.Create();
 
             Entity m = world.Import<NestedModule>();
@@ -246,9 +246,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(0, world.QueryBuilder().Expr("(ChildOf, Namespace.NestedModule)").Build().Count());
         }
 
-        [Fact]
-        private void ReparentModuleInCtor()
-        {
+    [Fact]
+    private void ReparentModuleInCtor()
+    {
             using World world = World.Create();
 
             Entity m = world.Import<ReparentModule>();
@@ -259,9 +259,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(other != m);
         }
 
-        [Fact]
-        private void ImplicitlyAddModuleToScopesComponent()
-        {
+    [Fact]
+    private void ImplicitlyAddModuleToScopesComponent()
+    {
             using World world = World.Create();
 
             Entity current = world.Component<StructLvl1.StructLvl21>();
@@ -289,9 +289,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(current == 0);
         }
 
-        [Fact]
-        private void ImplicitlyAddModuleToScopesEntity()
-        {
+    [Fact]
+    private void ImplicitlyAddModuleToScopesEntity()
+    {
             using World world = World.Create();
 
             Entity current = world.Entity<StructLvl1.StructLvl22>().Set(default(EcsComponent));
@@ -319,9 +319,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(current == 0);
         }
 
-        [Fact]
-        private void RenameNamespaceShorter()
-        {
+    [Fact]
+    private void RenameNamespaceShorter()
+    {
             using World world = World.Create();
 
             Entity m = world.Import<NamespaceParent.ShorterParent>();
@@ -337,9 +337,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(ns.Has(Ecs.Module));
         }
 
-        [Fact]
-        private void RenameNamespaceLonger()
-        {
+    [Fact]
+    private void RenameNamespaceLonger()
+    {
             using World world = World.Create();
 
             Entity m = world.Import<NamespaceParent.LongerParent>();
@@ -355,9 +355,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(ns.Has(Ecs.Module));
         }
 
-        [Fact]
-        private void RenameNamespaceNested()
-        {
+    [Fact]
+    private void RenameNamespaceNested()
+    {
             using World world = World.Create();
 
             Entity m = world.Import<NamespaceParent.NamespaceChild.Nested>();
@@ -377,5 +377,4 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(nsChild != 0);
             Assert.True(nsChild.Has(Ecs.Module));
         }
-    }
 }

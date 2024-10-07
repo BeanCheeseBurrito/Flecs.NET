@@ -4,25 +4,25 @@ using Flecs.NET.Core;
 using Xunit;
 using static Flecs.NET.Bindings.flecs;
 
-namespace Flecs.NET.Tests.Cpp
+namespace Flecs.NET.Tests.Cpp;
+
+[SuppressMessage("ReSharper", "UnusedParameter.Local")]
+[SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Local")]
+[SuppressMessage("ReSharper", "AccessToDisposedClosure")]
+public unsafe class EntityTests
 {
-    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
-    [SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Local")]
-    [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
-    public unsafe class EntityTests
+    [Fact]
+    public void New()
     {
-        [Fact]
-        public void New()
-        {
             using World world = World.Create();
 
             Entity entity = world.Entity();
             Assert.True(entity != 0);
         }
 
-        [Fact]
-        public void NewNamed()
-        {
+    [Fact]
+    public void NewNamed()
+    {
             using World world = World.Create();
 
             Entity entity = new Entity(world, "Foo");
@@ -30,9 +30,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Foo", entity.Name());
         }
 
-        [Fact]
-        public void NewNamedFromScope()
-        {
+    [Fact]
+    public void NewNamedFromScope()
+    {
             using World world = World.Create();
 
             Entity entity = new Entity(world, "Foo");
@@ -50,9 +50,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".Foo.Bar", child.Path());
         }
 
-        [Fact]
-        private void NewNestedNamedFromFromScope()
-        {
+    [Fact]
+    private void NewNestedNamedFromFromScope()
+    {
             using World world = World.Create();
 
             Entity entity = new Entity(world, "Foo");
@@ -70,9 +70,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".Foo.Bar.Hello", child.Path());
         }
 
-        [Fact]
-        private void NewNestedNamedFromNestedScope()
-        {
+    [Fact]
+    private void NewNestedNamedFromNestedScope()
+    {
             using World world = World.Create();
 
             Entity entity = new Entity(world, "Foo.Bar");
@@ -91,9 +91,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".Foo.Bar.Hello.World", child.Path());
         }
 
-        [Fact]
-        private void NewAdd()
-        {
+    [Fact]
+    private void NewAdd()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -105,9 +105,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Has<Position>());
         }
 
-        [Fact]
-        private void NewAdd2()
-        {
+    [Fact]
+    private void NewAdd2()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -122,9 +122,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Has<Velocity>());
         }
 
-        [Fact]
-        private void NewSet()
-        {
+    [Fact]
+    private void NewSet()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -140,9 +140,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void NewSet2()
-        {
+    [Fact]
+    private void NewSet2()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -165,9 +165,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, v->Y);
         }
 
-        [Fact]
-        private void Add()
-        {
+    [Fact]
+    private void Add()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -179,9 +179,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Has<Position>());
         }
 
-        [Fact]
-        private void Remove()
-        {
+    [Fact]
+    private void Remove()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -196,9 +196,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!entity.Has<Position>());
         }
 
-        [Fact]
-        private void Set()
-        {
+    [Fact]
+    private void Set()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -214,9 +214,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void Add2()
-        {
+    [Fact]
+    private void Add2()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -232,9 +232,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Has<Velocity>());
         }
 
-        [Fact]
-        private void AddEntity()
-        {
+    [Fact]
+    private void AddEntity()
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity();
@@ -247,9 +247,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Has(tag));
         }
 
-        [Fact]
-        private void AddChildOf()
-        {
+    [Fact]
+    private void AddChildOf()
+    {
             using World world = World.Create();
 
             Entity parent = world.Entity();
@@ -262,9 +262,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Has(EcsChildOf, parent));
         }
 
-        [Fact]
-        private void AddInstanceOf()
-        {
+    [Fact]
+    private void AddInstanceOf()
+    {
             using World world = World.Create();
 
             Entity @base = world.Entity();
@@ -277,9 +277,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity.Has(EcsIsA, @base));
         }
 
-        [Fact]
-        private void Remove2()
-        {
+    [Fact]
+    private void Remove2()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -301,9 +301,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!entity.Has<Velocity>());
         }
 
-        [Fact]
-        private void Set2()
-        {
+    [Fact]
+    private void Set2()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -326,9 +326,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, v->Y);
         }
 
-        [Fact]
-        private void RemoveEntity()
-        {
+    [Fact]
+    private void RemoveEntity()
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity();
@@ -344,9 +344,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!entity.Has(tag));
         }
 
-        [Fact]
-        private void RemoveChildOf()
-        {
+    [Fact]
+    private void RemoveChildOf()
+    {
             using World world = World.Create();
 
             Entity parent = world.Entity();
@@ -362,9 +362,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!entity.Has(EcsChildOf, parent));
         }
 
-        [Fact]
-        private void RemoveInstanceOf()
-        {
+    [Fact]
+    private void RemoveInstanceOf()
+    {
             using World world = World.Create();
 
             Entity @base = world.Entity();
@@ -380,9 +380,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!entity.Has(EcsIsA, @base));
         }
 
-        [Fact]
-        private void GetGeneric()
-        {
+    [Fact]
+    private void GetGeneric()
+    {
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
@@ -402,9 +402,9 @@ namespace Flecs.NET.Tests.Cpp
         }
 
 
-        [Fact]
-        private void EnsureGeneric()
-        {
+    [Fact]
+    private void EnsureGeneric()
+    {
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
@@ -432,9 +432,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(invoked);
         }
 
-        [Fact]
-        private void GetGenericWithId()
-        {
+    [Fact]
+    private void GetGenericWithId()
+    {
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
@@ -454,9 +454,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void GetGenericWithUlong()
-        {
+    [Fact]
+    private void GetGenericWithUlong()
+    {
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
@@ -477,9 +477,9 @@ namespace Flecs.NET.Tests.Cpp
         }
 
 
-        [Fact]
-        private void EnsureGenericWithId()
-        {
+    [Fact]
+    private void EnsureGenericWithId()
+    {
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
@@ -508,9 +508,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(invoked);
         }
 
-        [Fact]
-        private void EnsureGenericWithUlong()
-        {
+    [Fact]
+    private void EnsureGenericWithUlong()
+    {
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
@@ -539,9 +539,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(invoked);
         }
 
-        [Fact]
-        private void GetMutWithId()
-        {
+    [Fact]
+    private void GetMutWithId()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -558,9 +558,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void GetMutT()
-        {
+    [Fact]
+    private void GetMutT()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -577,9 +577,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void GetMutrt()
-        {
+    [Fact]
+    private void GetMutrt()
+    {
             using World world = World.Create();
 
             Entity tgt = world.Entity();
@@ -597,9 +597,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void GetMutRt()
-        {
+    [Fact]
+    private void GetMutRt()
+    {
             using World world = World.Create();
 
             Entity tgt = world.Entity();
@@ -617,9 +617,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void GetMutRT()
-        {
+    [Fact]
+    private void GetMutRT()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -636,9 +636,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void GetMutrT()
-        {
+    [Fact]
+    private void GetMutrT()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -656,9 +656,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void SetGeneric()
-        {
+    [Fact]
+    private void SetGeneric()
+    {
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
@@ -676,9 +676,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void SetGenericWithId()
-        {
+    [Fact]
+    private void SetGenericWithId()
+    {
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
@@ -697,9 +697,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void SetGenericWithUlong()
-        {
+    [Fact]
+    private void SetGenericWithUlong()
+    {
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
@@ -718,9 +718,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void SetGenericNoSize()
-        {
+    [Fact]
+    private void SetGenericNoSize()
+    {
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
@@ -738,9 +738,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void SetGenericNoSizeWithId()
-        {
+    [Fact]
+    private void SetGenericNoSizeWithId()
+    {
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
@@ -759,9 +759,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void SetGenericNoSizeWithUlong()
-        {
+    [Fact]
+    private void SetGenericNoSizeWithUlong()
+    {
             using World world = World.Create();
 
             Component<Position> position = world.Component<Position>();
@@ -780,9 +780,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void AddRole()
-        {
+    [Fact]
+    private void AddRole()
+    {
             using World world = World.Create();
 
             Entity entity = world.Entity();
@@ -792,9 +792,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True((entity & ECS_PAIR) != 0);
         }
 
-        [Fact]
-        private void RemoveRole()
-        {
+    [Fact]
+    private void RemoveRole()
+    {
             using World world = World.Create();
 
             Entity entity = world.Entity();
@@ -810,9 +810,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(entity == id);
         }
 
-        [Fact]
-        private void HasRole()
-        {
+    [Fact]
+    private void HasRole()
+    {
             using World world = World.Create();
 
             Entity entity = world.Entity();
@@ -826,9 +826,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!entity.Id.HasFlags(ECS_PAIR));
         }
 
-        [Fact]
-        private void PairRole()
-        {
+    [Fact]
+    private void PairRole()
+    {
             using World world = World.Create();
 
             Entity a = world.Entity();
@@ -846,9 +846,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(obj == b);
         }
 
-        [Fact]
-        private void EqualsTrue()
-        {
+    [Fact]
+    private void EqualsTrue()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -871,9 +871,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!(e1 >= e22));
         }
 
-        [Fact]
-        private void Compare0()
-        {
+    [Fact]
+    private void Compare0()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -891,9 +891,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e0 <= e02);
         }
 
-        [Fact]
-        private void CompareUlong()
-        {
+    [Fact]
+    private void CompareUlong()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -934,9 +934,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!(e1 > id1));
         }
 
-        [Fact]
-        private void CompareId()
-        {
+    [Fact]
+    private void CompareId()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -977,9 +977,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!(e1 > id1));
         }
 
-        [Fact]
-        private void CompareLiteral()
-        {
+    [Fact]
+    private void CompareLiteral()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity(500);
@@ -1017,9 +1017,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!(e1 > 500));
         }
 
-        [Fact]
-        private void GreaterThan()
-        {
+    [Fact]
+    private void GreaterThan()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -1029,9 +1029,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e2 >= e1);
         }
 
-        [Fact]
-        private void LessThan()
-        {
+    [Fact]
+    private void LessThan()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -1041,9 +1041,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e1 <= e2);
         }
 
-        [Fact]
-        private void Not0Or1()
-        {
+    [Fact]
+    private void Not0Or1()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -1054,9 +1054,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(id != 1);
         }
 
-        [Fact]
-        private void HasChildOf()
-        {
+    [Fact]
+    private void HasChildOf()
+    {
             using World world = World.Create();
 
             Entity parent = world.Entity();
@@ -1067,9 +1067,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(EcsChildOf, parent));
         }
 
-        [Fact]
-        private void HasInstanceOf()
-        {
+    [Fact]
+    private void HasInstanceOf()
+    {
             using World world = World.Create();
 
             Entity @base = world.Entity();
@@ -1080,9 +1080,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(EcsIsA, @base));
         }
 
-        [Fact]
-        private void HasInstanceOfIndirect()
-        {
+    [Fact]
+    private void HasInstanceOfIndirect()
+    {
             using World world = World.Create();
 
             Entity baseOfBase = world.Entity();
@@ -1096,9 +1096,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(EcsIsA, baseOfBase));
         }
 
-        [Fact]
-        private void NullString()
-        {
+    [Fact]
+    private void NullString()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -1106,9 +1106,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("", e.Name());
         }
 
-        [Fact]
-        private void SetName()
-        {
+    [Fact]
+    private void SetName()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -1118,9 +1118,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Foo", e.Name());
         }
 
-        [Fact]
-        private void ChangeName()
-        {
+    [Fact]
+    private void ChangeName()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("Bar");
@@ -1130,9 +1130,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Foo", e.Name());
         }
 
-        [Fact]
-        private void Delete()
-        {
+    [Fact]
+    private void Delete()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -1148,9 +1148,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e2 != e);
         }
 
-        [Fact]
-        private void Clear()
-        {
+    [Fact]
+    private void Clear()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -1166,9 +1166,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e2 > e);
         }
 
-        [Fact]
-        private void ForceOwned()
-        {
+    [Fact]
+    private void ForceOwned()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1188,9 +1188,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Owns<Velocity>());
         }
 
-        [Fact]
-        private void ForceOwned2()
-        {
+    [Fact]
+    private void ForceOwned2()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1211,9 +1211,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Owns<Velocity>());
         }
 
-        [Fact]
-        private void ForceOwnedNested()
-        {
+    [Fact]
+    private void ForceOwnedNested()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1236,9 +1236,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Owns<Velocity>());
         }
 
-        [Fact]
-        private void TagHasSizeZero()
-        {
+    [Fact]
+    private void TagHasSizeZero()
+    {
             using World world = World.Create();
 
             Component<MyTag> comp = world.Component<MyTag>();
@@ -1249,9 +1249,9 @@ namespace Flecs.NET.Tests.Cpp
         }
 
 
-        [Fact]
-        private void GetTarget()
-        {
+    [Fact]
+    private void GetTarget()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -1290,9 +1290,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(p == 0);
         }
 
-        [Fact]
-        private void GetParent()
-        {
+    [Fact]
+    private void GetParent()
+    {
             using World world = World.Create();
 
             Entity parent = world.Entity();
@@ -1302,9 +1302,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(child.Parent() == parent);
         }
 
-        [Fact]
-        private void IsComponentEnabled()
-        {
+    [Fact]
+    private void IsComponentEnabled()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.CanToggle);
@@ -1316,9 +1316,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Enabled<Velocity>());
         }
 
-        [Fact]
-        private void IsEnabledComponentEnabled()
-        {
+    [Fact]
+    private void IsEnabledComponentEnabled()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.CanToggle);
@@ -1330,9 +1330,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Enabled<Position>());
         }
 
-        [Fact]
-        private void IsDisabledComponentEnabled()
-        {
+    [Fact]
+    private void IsDisabledComponentEnabled()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.CanToggle);
@@ -1344,9 +1344,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Enabled<Position>());
         }
 
-        [Fact]
-        private void IsPairEnabled()
-        {
+    [Fact]
+    private void IsPairEnabled()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.CanToggle);
@@ -1358,9 +1358,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Enabled<Position, TgtB>());
         }
 
-        [Fact]
-        private void IsEnabledPairEnabled()
-        {
+    [Fact]
+    private void IsEnabledPairEnabled()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.CanToggle);
@@ -1372,9 +1372,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Enabled<Position, Tgt>());
         }
 
-        [Fact]
-        private void IsDisabledPairEnabled()
-        {
+    [Fact]
+    private void IsDisabledPairEnabled()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.CanToggle);
@@ -1386,9 +1386,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Enabled<Position, Tgt>());
         }
 
-        [Fact]
-        private void IsPairEnabledWithIds()
-        {
+    [Fact]
+    private void IsPairEnabledWithIds()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.CanToggle);
@@ -1404,9 +1404,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Enabled(rel, tgtB));
         }
 
-        [Fact]
-        private void IsEnabledPairEnabledWithIds()
-        {
+    [Fact]
+    private void IsEnabledPairEnabledWithIds()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity().Add(Ecs.CanToggle);
@@ -1419,9 +1419,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Enabled(rel, tgt));
         }
 
-        [Fact]
-        private void IsDisabledPairEnabledWithIds()
-        {
+    [Fact]
+    private void IsDisabledPairEnabledWithIds()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity().Add(Ecs.CanToggle);
@@ -1434,9 +1434,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Enabled(rel, tgt));
         }
 
-        [Fact]
-        private void IsPairEnabledWithTargetId()
-        {
+    [Fact]
+    private void IsPairEnabledWithTargetId()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.CanToggle);
@@ -1451,9 +1451,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Enabled<Position>(tgtB));
         }
 
-        [Fact]
-        private void IsEnabledPairEnabledWithTargetId()
-        {
+    [Fact]
+    private void IsEnabledPairEnabledWithTargetId()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.CanToggle);
@@ -1467,9 +1467,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Enabled<Position>(tgt));
         }
 
-        [Fact]
-        private void IsDisabledPairEnabledWithTargetId()
-        {
+    [Fact]
+    private void IsDisabledPairEnabledWithTargetId()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.CanToggle);
@@ -1483,9 +1483,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Enabled<Position>(tgt));
         }
 
-        [Fact]
-        private void GetTypes()
-        {
+    [Fact]
+    private void GetTypes()
+    {
             using World world = World.Create();
 
             Entity entity = world.Entity();
@@ -1498,9 +1498,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(0, type2.Count());
         }
 
-        [Fact]
-        private void GetNonEmptyType()
-        {
+    [Fact]
+    private void GetNonEmptyType()
+    {
             using World world = World.Create();
 
             Entity entity = world.Entity()
@@ -1516,9 +1516,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(type2.Get(0), world.Id<Position>());
         }
 
-        [Fact]
-        private void SetDeduced()
-        {
+    [Fact]
+    private void SetDeduced()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -1531,9 +1531,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void Override()
-        {
+    [Fact]
+    private void Override()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1548,9 +1548,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Owns<Position>());
         }
 
-        [Fact]
-        private void OverrideId()
-        {
+    [Fact]
+    private void OverrideId()
+    {
             using World world = World.Create();
 
             Entity tagA = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1570,9 +1570,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Owns(tagB));
         }
 
-        [Fact]
-        private void OverridePairWithTargetId()
-        {
+    [Fact]
+    private void OverridePairWithTargetId()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1593,9 +1593,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Owns<Position>(tgtB));
         }
 
-        [Fact]
-        private void OverridePairWithIds()
-        {
+    [Fact]
+    private void OverridePairWithIds()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1616,9 +1616,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Owns(rel, tgtB));
         }
 
-        [Fact]
-        private void OverridePair()
-        {
+    [Fact]
+    private void OverridePair()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1637,9 +1637,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Owns<Position, Tag1>());
         }
 
-        [Fact]
-        private void SetOverride()
-        {
+    [Fact]
+    private void SetOverride()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1663,9 +1663,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, pBase->Y);
         }
 
-        [Fact]
-        private void SetOverrideLValue()
-        {
+    [Fact]
+    private void SetOverrideLValue()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1691,9 +1691,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, pBase->Y);
         }
 
-        [Fact]
-        private void SetOverridePair()
-        {
+    [Fact]
+    private void SetOverridePair()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1717,9 +1717,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, pBase->Y);
         }
 
-        [Fact]
-        private void SetOverridePairWithTargetId()
-        {
+    [Fact]
+    private void SetOverridePairWithTargetId()
+    {
             using World world = World.Create();
 
             world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1745,9 +1745,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, pBase->Y);
         }
 
-        [Fact]
-        private void SetOverridePairWithRelTag()
-        {
+    [Fact]
+    private void SetOverridePairWithRelTag()
+    {
             using World world = World.Create();
 
             world.Component<Tgt>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1771,9 +1771,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, pBase->Y);
         }
 
-        [Fact]
-        private void ImplicitNameToChar()
-        {
+    [Fact]
+    private void ImplicitNameToChar()
+    {
             using World world = World.Create();
 
             Entity entity = new Entity(world, "Foo");
@@ -1783,9 +1783,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Foo", entity.Name());
         }
 
-        [Fact]
-        private void Path()
-        {
+    [Fact]
+    private void Path()
+    {
             using World world = World.Create();
             Entity parent = world.Entity("parent");
 
@@ -1794,9 +1794,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".parent.child", child.Path());
         }
 
-        [Fact]
-        private void PathFrom()
-        {
+    [Fact]
+    private void PathFrom()
+    {
             using World world = World.Create();
 
             Entity parent = world.Entity("parent");
@@ -1811,9 +1811,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("child.grandchild", grandchild.PathFrom(parent));
         }
 
-        [Fact]
-        private void PathFromType()
-        {
+    [Fact]
+    private void PathFromType()
+    {
             using World world = World.Create();
             Entity parent = world.Entity<Parent>();
 
@@ -1827,9 +1827,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("child.grandchild", grandchild.PathFrom<Parent>());
         }
 
-        [Fact]
-        private void PathCustomSep()
-        {
+    [Fact]
+    private void PathCustomSep()
+    {
             using World world = World.Create();
             Entity parent = world.Entity("parent");
 
@@ -1839,9 +1839,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("parent_child", child.Path("_", ""));
         }
 
-        [Fact]
-        private void PathFromCustomSep()
-        {
+    [Fact]
+    private void PathFromCustomSep()
+    {
             using World world = World.Create();
             Entity parent = world.Entity("parent");
 
@@ -1855,9 +1855,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("child_grandchild", grandchild.PathFrom(parent, "_"));
         }
 
-        [Fact]
-        private void PathFromTypeCustomSep()
-        {
+    [Fact]
+    private void PathFromTypeCustomSep()
+    {
             using World world = World.Create();
             Entity parent = world.Entity<Parent>();
 
@@ -1871,9 +1871,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("child_grandchild", grandchild.PathFrom<Parent>("_"));
         }
 
-        [Fact]
-        private void ImplicitPathToChar()
-        {
+    [Fact]
+    private void ImplicitPathToChar()
+    {
             using World world = World.Create();
 
             Entity entity = new Entity(world, "Foo.Bar");
@@ -1883,9 +1883,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".Foo.Bar", entity.Path());
         }
 
-        [Fact]
-        private void ImplicitTypeStringToChar()
-        {
+    [Fact]
+    private void ImplicitTypeStringToChar()
+    {
             using World world = World.Create();
 
             Entity entity = new Entity(world, "Foo");
@@ -1894,9 +1894,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("(Identifier,Name)", entity.Type().Str());
         }
 
-        [Fact]
-        private void SetTemplate()
-        {
+    [Fact]
+    private void SetTemplate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -1907,9 +1907,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void Get1ComponentWithCallback()
-        {
+    [Fact]
+    private void Get1ComponentWithCallback()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity()
@@ -1937,9 +1937,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e3.Read((ref readonly Position p) => { }));
         }
 
-        [Fact]
-        private void Get2ComponentWithCallback()
-        {
+    [Fact]
+    private void Get2ComponentWithCallback()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity()
@@ -1966,9 +1966,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e3.Read((ref readonly Position p, ref readonly Velocity v) => { }));
         }
 
-        [Fact]
-        private void Ensure1ComponentWithCallback()
-        {
+    [Fact]
+    private void Ensure1ComponentWithCallback()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity()
@@ -2008,9 +2008,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e3.Read((ref readonly Position _) => { }));
         }
 
-        [Fact]
-        private void Ensure2ComponentWithCallback()
-        {
+    [Fact]
+    private void Ensure2ComponentWithCallback()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity()
@@ -2050,9 +2050,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(6, v->Y);
         }
 
-        [Fact]
-        private void GetComponentWithCallbackNested()
-        {
+    [Fact]
+    private void GetComponentWithCallbackNested()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -2072,9 +2072,9 @@ namespace Flecs.NET.Tests.Cpp
             }));
         }
 
-        [Fact]
-        private void Set1ComponentWithCallback()
-        {
+    [Fact]
+    private void Set1ComponentWithCallback()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -2092,9 +2092,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void Set2ComponentsWithCallback()
-        {
+    [Fact]
+    private void Set2ComponentsWithCallback()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -2117,9 +2117,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, v->Y);
         }
 
-        [Fact]
-        private void Set3ComponentsWithCallback()
-        {
+    [Fact]
+    private void Set3ComponentsWithCallback()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -2147,9 +2147,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(50, m->Value);
         }
 
-        [Fact]
-        private void DeferSet1Component()
-        {
+    [Fact]
+    private void DeferSet1Component()
+    {
             using World world = World.Create();
 
             world.DeferBegin();
@@ -2174,9 +2174,9 @@ namespace Flecs.NET.Tests.Cpp
             });
         }
 
-        [Fact]
-        private void DeferSet2Components()
-        {
+    [Fact]
+    private void DeferSet2Components()
+    {
             using World world = World.Create();
 
             world.DeferBegin();
@@ -2206,9 +2206,9 @@ namespace Flecs.NET.Tests.Cpp
             });
         }
 
-        [Fact]
-        private void DeferSet3Components()
-        {
+    [Fact]
+    private void DeferSet3Components()
+    {
             using World world = World.Create();
 
             world.DeferBegin();
@@ -2243,9 +2243,9 @@ namespace Flecs.NET.Tests.Cpp
             });
         }
 
-        [Fact]
-        private void Set2WithOnSet()
-        {
+    [Fact]
+    private void Set2WithOnSet()
+    {
             using World world = World.Create();
 
             int positionSet = 0;
@@ -2289,9 +2289,9 @@ namespace Flecs.NET.Tests.Cpp
             }));
         }
 
-        [Fact]
-        private void DeferSet2WithOnSet()
-        {
+    [Fact]
+    private void DeferSet2WithOnSet()
+    {
             using World world = World.Create();
 
             int positionSet = 0;
@@ -2342,9 +2342,9 @@ namespace Flecs.NET.Tests.Cpp
             }));
         }
 
-        [Fact]
-        private void Set2AfterFluent()
-        {
+    [Fact]
+    private void Set2AfterFluent()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -2371,9 +2371,9 @@ namespace Flecs.NET.Tests.Cpp
             }));
         }
 
-        [Fact]
-        private void Set2BeforeFluent()
-        {
+    [Fact]
+    private void Set2BeforeFluent()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -2400,9 +2400,9 @@ namespace Flecs.NET.Tests.Cpp
             }));
         }
 
-        [Fact]
-        private void Set2AfterSet1()
-        {
+    [Fact]
+    private void Set2AfterSet1()
+    {
             using World world = World.Create();
 
             int called = 0;
@@ -2436,9 +2436,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, called);
         }
 
-        [Fact]
-        private void Set2AfterSet2()
-        {
+    [Fact]
+    private void Set2AfterSet2()
+    {
             using World world = World.Create();
 
             int called = 0;
@@ -2482,9 +2482,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, called);
         }
 
-        [Fact]
-        private void WithSelf()
-        {
+    [Fact]
+    private void WithSelf()
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity().With(() =>
@@ -2517,9 +2517,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Fact]
-        private void WithRelationTypeSelf()
-        {
+    [Fact]
+    private void WithRelationTypeSelf()
+    {
             using World world = World.Create();
 
             Entity bob = world.Entity().With<Likes>(() =>
@@ -2552,9 +2552,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Fact]
-        private void WithRelationSelf()
-        {
+    [Fact]
+    private void WithRelationSelf()
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -2589,9 +2589,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Fact]
-        private void WithSelfWithName()
-        {
+    [Fact]
+    private void WithSelfWithName()
+    {
             using World world = World.Create();
 
             Entity tier1 = world.Entity("Tier1").With(() =>
@@ -2606,9 +2606,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(tier2.Has(tier1));
         }
 
-        [Fact]
-        private void WithSelfNested()
-        {
+    [Fact]
+    private void WithSelfNested()
+    {
             using World world = World.Create();
 
             Entity tier1 = world.Entity("Tier1").With(() =>
@@ -2626,9 +2626,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(tier3.Has(tier2));
         }
 
-        [Fact]
-        private void WithScope()
-        {
+    [Fact]
+    private void WithScope()
+    {
             using World world = World.Create();
 
             Entity parent = world.Entity("P").Scope(() =>
@@ -2681,9 +2681,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Fact]
-        private void WithScopeNested()
-        {
+    [Fact]
+    private void WithScopeNested()
+    {
             using World world = World.Create();
 
             Entity parent = world.Entity("P").Scope(() =>
@@ -2713,9 +2713,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(gchild.Has(Ecs.ChildOf, child));
         }
 
-        [Fact]
-        private void WithScopeNestedSameNameAsParent()
-        {
+    [Fact]
+    private void WithScopeNestedSameNameAsParent()
+    {
             using World world = World.Create();
 
             Entity parent = world.Entity("P").Scope(() =>
@@ -2745,9 +2745,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(gchild.Has(Ecs.ChildOf, child));
         }
 
-        [Fact]
-        private void NoRecursiveLookup()
-        {
+    [Fact]
+    private void NoRecursiveLookup()
+    {
             using World world = World.Create();
 
             Entity p = world.Entity("P");
@@ -2759,9 +2759,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(c.Lookup("P") == 0);
         }
 
-        [Fact]
-        private void DeferNewWithName()
-        {
+    [Fact]
+    private void DeferNewWithName()
+    {
             using World world = World.Create();
 
             Entity e = default;
@@ -2776,9 +2776,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Foo", e.Name());
         }
 
-        [Fact]
-        private void DeferNewWithNestedName()
-        {
+    [Fact]
+    private void DeferNewWithNestedName()
+    {
             using World world = World.Create();
 
             Entity e = default;
@@ -2795,9 +2795,9 @@ namespace Flecs.NET.Tests.Cpp
         }
 
 
-        [Fact]
-        private void DeferNewWithScopeName()
-        {
+    [Fact]
+    private void DeferNewWithScopeName()
+    {
             using World world = World.Create();
 
             Entity e = default;
@@ -2817,9 +2817,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".Parent.Foo", e.Path());
         }
 
-        [Fact]
-        private void DeferNewWithScopeNestedName()
-        {
+    [Fact]
+    private void DeferNewWithScopeNestedName()
+    {
             using World world = World.Create();
 
             Entity e = default;
@@ -2839,9 +2839,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".Parent.Foo.Bar", e.Path());
         }
 
-        [Fact]
-        private void DeferNewWithDeferredScopeNestedName()
-        {
+    [Fact]
+    private void DeferNewWithDeferredScopeNestedName()
+    {
             using World world = World.Create();
 
             Entity e = default;
@@ -2865,9 +2865,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".Parent.Foo.Bar", e.Path());
         }
 
-        [Fact]
-        private void DeferNewWithScope()
-        {
+    [Fact]
+    private void DeferNewWithScope()
+    {
             using World world = World.Create();
 
             Entity e = default;
@@ -2885,9 +2885,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(EcsChildOf, parent));
         }
 
-        [Fact]
-        private void DeferNewWithWith()
-        {
+    [Fact]
+    private void DeferNewWithWith()
+    {
             using World world = World.Create();
 
             Entity e = default;
@@ -2906,9 +2906,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(tag));
         }
 
-        [Fact]
-        private void DeferNewWithNameScopeWith()
-        {
+    [Fact]
+    private void DeferNewWithNameScopeWith()
+    {
             using World world = World.Create();
 
             Entity e = default;
@@ -2936,9 +2936,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".Parent.Foo", e.Path());
         }
 
-        [Fact]
-        private void DeferNewWithNestedNameScopeWith()
-        {
+    [Fact]
+    private void DeferNewWithNestedNameScopeWith()
+    {
             using World world = World.Create();
 
             Entity e = default;
@@ -2966,9 +2966,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".Parent.Foo.Bar", e.Path());
         }
 
-        [Fact]
-        private void DeferWithWithImplicitComponent()
-        {
+    [Fact]
+    private void DeferWithWithImplicitComponent()
+    {
             using World world = World.Create();
 
             Entity e = default;
@@ -2986,9 +2986,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Tag>());
         }
 
-        [Fact]
-        private void DeferSuspendResume()
-        {
+    [Fact]
+    private void DeferSuspendResume()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -3012,9 +3012,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Tag1>());
         }
 
-        [Fact]
-        private void DeferEnsure()
-        {
+    [Fact]
+    private void DeferEnsure()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -3031,9 +3031,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void WithAfterBuilderMethod()
-        {
+    [Fact]
+    private void WithAfterBuilderMethod()
+    {
             using World world = World.Create();
 
             Entity a = world.Entity()
@@ -3077,9 +3077,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(z.Has(EcsIsA, c));
         }
 
-        [Fact]
-        private void WithBeforeBuilderMethod()
-        {
+    [Fact]
+    private void WithBeforeBuilderMethod()
+    {
             using World world = World.Create();
 
             Entity a = world.Entity()
@@ -3125,9 +3125,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(z.Has(EcsIsA, c));
         }
 
-        [Fact]
-        private void ScopeAfterBuilderMethod()
-        {
+    [Fact]
+    private void ScopeAfterBuilderMethod()
+    {
             using World world = World.Create();
 
             world.Entity("P")
@@ -3138,9 +3138,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(c != 0);
         }
 
-        [Fact]
-        private void ScopeBeforeBuilderMethod()
-        {
+    [Fact]
+    private void ScopeBeforeBuilderMethod()
+    {
             using World world = World.Create();
 
             world.Entity("P")
@@ -3152,9 +3152,9 @@ namespace Flecs.NET.Tests.Cpp
         }
 
 
-        [Fact]
-        private void EntityIdStr()
-        {
+    [Fact]
+    private void EntityIdStr()
+    {
             using World world = World.Create();
 
             Id id = world.Entity("Foo");
@@ -3162,9 +3162,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Foo", id.Str());
         }
 
-        [Fact]
-        private void PairIdStr()
-        {
+    [Fact]
+    private void PairIdStr()
+    {
             using World world = World.Create();
 
             Id id = world.Pair(world.Entity("Rel"), world.Entity("Obj"));
@@ -3172,9 +3172,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("(Rel,Obj)", id.Str());
         }
 
-        [Fact]
-        private void RoleIdStr()
-        {
+    [Fact]
+    private void RoleIdStr()
+    {
             using World world = World.Create();
 
             Id id = new Id(world, ECS_AUTO_OVERRIDE | world.Entity("Foo"));
@@ -3182,9 +3182,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("AUTO_OVERRIDE|Foo", id.Str());
         }
 
-        [Fact]
-        private void IdStrFromEntity()
-        {
+    [Fact]
+    private void IdStrFromEntity()
+    {
             using World world = World.Create();
 
             Entity id = world.Entity("Foo");
@@ -3192,16 +3192,16 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Foo", id.Str());
         }
 
-        [Fact]
-        private void NullEntity()
-        {
+    [Fact]
+    private void NullEntity()
+    {
             Entity e = Entity.Null();
             Assert.True(e.Id == 0);
         }
 
-        [Fact]
-        private void NullEntityWithWorld()
-        {
+    [Fact]
+    private void NullEntityWithWorld()
+    {
             using World world = World.Create();
 
             Entity e = Entity.Null(world);
@@ -3209,17 +3209,17 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.World == world);
         }
 
-        [Fact]
-        private void NullEntityWith0()
-        {
+    [Fact]
+    private void NullEntityWith0()
+    {
             Entity e = new Entity(0);
             Assert.True(e.Id == 0);
             Assert.True(e.World == null);
         }
 
-        [Fact]
-        private void NullENtityWithWorldWith0()
-        {
+    [Fact]
+    private void NullENtityWithWorldWith0()
+    {
             using World world = World.Create();
 
             Entity e = Entity.Null(world);
@@ -3227,9 +3227,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.World == world);
         }
 
-        [Fact]
-        private void IsWildcard()
-        {
+    [Fact]
+    private void IsWildcard()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -3250,9 +3250,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(p4.IsWildCard());
         }
 
-        [Fact]
-        private void HasUlong()
-        {
+    [Fact]
+    private void HasUlong()
+    {
             using World world = World.Create();
 
             ulong id1 = world.Entity();
@@ -3269,9 +3269,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e.Has(id2));
         }
 
-        [Fact]
-        private void HasPairUlong()
-        {
+    [Fact]
+    private void HasPairUlong()
+    {
             using World world = World.Create();
 
             ulong id1 = world.Entity();
@@ -3291,9 +3291,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e.Has(id1, id3));
         }
 
-        [Fact]
-        private void HasPairUlongWithType()
-        {
+    [Fact]
+    private void HasPairUlongWithType()
+    {
             using World world = World.Create();
 
             ulong id2 = world.Entity();
@@ -3310,9 +3310,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e.Has<Rel>(id3));
         }
 
-        [Fact]
-        private void HasId()
-        {
+    [Fact]
+    private void HasId()
+    {
             using World world = World.Create();
 
             Id id1 = world.Entity();
@@ -3329,9 +3329,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e.Has(id2));
         }
 
-        [Fact]
-        private void HasPairId()
-        {
+    [Fact]
+    private void HasPairId()
+    {
             using World world = World.Create();
 
             Id id1 = world.Entity();
@@ -3351,9 +3351,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e.Has(id1, id3));
         }
 
-        [Fact]
-        private void HasPairIdWithType()
-        {
+    [Fact]
+    private void HasPairIdWithType()
+    {
             using World world = World.Create();
 
             Id id2 = world.Entity();
@@ -3370,9 +3370,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e.Has<Rel>(id3));
         }
 
-        [Fact]
-        private void HasWildCardId()
-        {
+    [Fact]
+    private void HasWildCardId()
+    {
             using World world = World.Create();
 
             Id id = world.Entity();
@@ -3388,9 +3388,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e2.Has(Ecs.Wildcard));
         }
 
-        [Fact]
-        private void HasWildCardPairId()
-        {
+    [Fact]
+    private void HasWildCardPairId()
+    {
             using World world = World.Create();
 
             Id rel = world.Entity();
@@ -3418,9 +3418,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e2.Has(w2));
         }
 
-        [Fact]
-        private void OwnsUlong()
-        {
+    [Fact]
+    private void OwnsUlong()
+    {
             using World world = World.Create();
 
             ulong id1 = world.Entity();
@@ -3437,9 +3437,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e.Owns(id2));
         }
 
-        [Fact]
-        private void OwnsPairUlong()
-        {
+    [Fact]
+    private void OwnsPairUlong()
+    {
             using World world = World.Create();
 
             ulong id1 = world.Entity();
@@ -3459,9 +3459,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e.Owns(id1, id3));
         }
 
-        [Fact]
-        private void OwnsPairUlongWithType()
-        {
+    [Fact]
+    private void OwnsPairUlongWithType()
+    {
             using World world = World.Create();
 
             ulong id2 = world.Entity();
@@ -3478,9 +3478,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e.Owns<Rel>(id3));
         }
 
-        [Fact]
-        private void OwnsId()
-        {
+    [Fact]
+    private void OwnsId()
+    {
             using World world = World.Create();
 
             Id id1 = world.Entity();
@@ -3497,9 +3497,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e.Owns(id2));
         }
 
-        [Fact]
-        private void OwnsPairId()
-        {
+    [Fact]
+    private void OwnsPairId()
+    {
             using World world = World.Create();
 
             Id id1 = world.Entity();
@@ -3519,9 +3519,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e.Owns(id1, id3));
         }
 
-        [Fact]
-        private void OwnsWildCardId()
-        {
+    [Fact]
+    private void OwnsWildCardId()
+    {
             using World world = World.Create();
 
             Id id = world.Entity();
@@ -3537,9 +3537,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e2.Owns(Ecs.Wildcard));
         }
 
-        [Fact]
-        private void OwnsWildcardPair()
-        {
+    [Fact]
+    private void OwnsWildcardPair()
+    {
             using World world = World.Create();
 
             Id rel = world.Entity();
@@ -3567,9 +3567,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e2.Owns(w2));
         }
 
-        [Fact]
-        private void OwnsPairIdWithType()
-        {
+    [Fact]
+    private void OwnsPairIdWithType()
+    {
             using World world = World.Create();
 
             Id id2 = world.Entity();
@@ -3586,9 +3586,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.False(e.Owns<Rel>(id3));
         }
 
-        [Fact]
-        private void IdFromWorld()
-        {
+    [Fact]
+    private void IdFromWorld()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -3609,9 +3609,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(id2.IsWildCard());
         }
 
-        [Fact]
-        private void IdPairFromWorld()
-        {
+    [Fact]
+    private void IdPairFromWorld()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -3637,18 +3637,18 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(id2.IsWildCard());
         }
 
-        [Fact]
-        private void IdDefaultFromWorld()
-        {
+    [Fact]
+    private void IdDefaultFromWorld()
+    {
             using World world = World.Create();
 
             Id idDefault = world.Id();
             Assert.True(idDefault == 0);
         }
 
-        [Fact]
-        private void IsA()
-        {
+    [Fact]
+    private void IsA()
+    {
             using World world = World.Create();
 
             Entity @base = world.Entity();
@@ -3658,9 +3658,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(EcsIsA, @base));
         }
 
-        [Fact]
-        private void IsAWithType()
-        {
+    [Fact]
+    private void IsAWithType()
+    {
             using World world = World.Create();
 
             Entity @base = world.Entity<Prefab>();
@@ -3671,9 +3671,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.HasSecond<Prefab>(Ecs.IsA));
         }
 
-        [Fact]
-        private void ChildOf()
-        {
+    [Fact]
+    private void ChildOf()
+    {
             using World world = World.Create();
 
             Entity @base = world.Entity();
@@ -3683,9 +3683,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(Ecs.ChildOf, @base));
         }
 
-        [Fact]
-        private void ChildOfWithType()
-        {
+    [Fact]
+    private void ChildOfWithType()
+    {
             using World world = World.Create();
 
             Entity @base = world.Entity<Parent>();
@@ -3696,9 +3696,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.HasSecond<Parent>(EcsChildOf));
         }
 
-        [Fact]
-        private void SlotOf()
-        {
+    [Fact]
+    private void SlotOf()
+    {
             using World world = World.Create();
 
             Entity @base = world.Prefab();
@@ -3712,9 +3712,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(inst.Has(baseChild, Ecs.Wildcard));
         }
 
-        [Fact]
-        private void SlotOfWithType()
-        {
+    [Fact]
+    private void SlotOfWithType()
+    {
             using World world = World.Create();
 
             Entity @base = world.Prefab<Parent>();
@@ -3728,9 +3728,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(inst.Has(baseChild, Ecs.Wildcard));
         }
 
-        [Fact]
-        private void Slot()
-        {
+    [Fact]
+    private void Slot()
+    {
             using World world = World.Create();
 
             Entity @base = world.Prefab();
@@ -3743,9 +3743,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(inst.Has(baseChild, Ecs.Wildcard));
         }
 
-        [Fact]
-        private void IdGetEntity()
-        {
+    [Fact]
+    private void IdGetEntity()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -3755,9 +3755,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(id.Entity() == e);
         }
 
-        [Fact]
-        private void EachInStage()
-        {
+    [Fact]
+    private void EachInStage()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity().Add<Rel, Obj>();
@@ -3782,9 +3782,9 @@ namespace Flecs.NET.Tests.Cpp
             world.ReadonlyEnd();
         }
 
-        [Fact]
-        private void IterRecycledParent()
-        {
+    [Fact]
+    private void IterRecycledParent()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -3806,9 +3806,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        private void GetLambdaFromStage()
-        {
+    [Fact]
+    private void GetLambdaFromStage()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity().Set(new Position(10, 20));
@@ -3830,9 +3830,9 @@ namespace Flecs.NET.Tests.Cpp
         }
 
 
-        [Fact]
-        private void GetObjByTemplate()
-        {
+    [Fact]
+    private void GetObjByTemplate()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -3847,9 +3847,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(o2 == e1.Target<Rel>(1));
         }
 
-        [Fact]
-        private void CreateNamedTwiceDeferred()
-        {
+    [Fact]
+    private void CreateNamedTwiceDeferred()
+    {
             using World world = World.Create();
 
             world.DeferBegin();
@@ -3878,9 +3878,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(g1 == g2);
         }
 
-        [Fact]
-        private void Clone()
-        {
+    [Fact]
+    private void Clone()
+    {
             using World world = World.Create();
 
             PositionInitialized v = new PositionInitialized(10, 20);
@@ -3896,9 +3896,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.NotEqual(20, ptr->Y);
         }
 
-        [Fact]
-        private void CloneWithValue()
-        {
+    [Fact]
+    private void CloneWithValue()
+    {
             using World world = World.Create();
 
             PositionInitialized v = new PositionInitialized(10, 20);
@@ -3914,9 +3914,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void CloneToExisting()
-        {
+    [Fact]
+    private void CloneToExisting()
+    {
             using World world = World.Create();
 
             PositionInitialized v = new PositionInitialized(10, 20);
@@ -3935,9 +3935,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void SetDocName()
-        {
+    [Fact]
+    private void SetDocName()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("foo_bar")
@@ -3947,9 +3947,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Foo Bar", e.DocName());
         }
 
-        [Fact]
-        private void SetDocBrief()
-        {
+    [Fact]
+    private void SetDocBrief()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("foo_bar")
@@ -3959,9 +3959,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Foo Bar", e.DocBrief());
         }
 
-        [Fact]
-        private void SetDocDetail()
-        {
+    [Fact]
+    private void SetDocDetail()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("foo_bar")
@@ -3971,9 +3971,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Foo Bar", e.DocDetail());
         }
 
-        [Fact]
-        private void SetDocLink()
-        {
+    [Fact]
+    private void SetDocLink()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("foo_bar")
@@ -3983,9 +3983,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Foo Bar", e.DocLink());
         }
 
-        [Fact]
-        private void EntityWithRootName()
-        {
+    [Fact]
+    private void EntityWithRootName()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity(".foo");
@@ -3993,9 +3993,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".foo", e.Path());
         }
 
-        [Fact]
-        private void EntityWithRootNameFromScope()
-        {
+    [Fact]
+    private void EntityWithRootNameFromScope()
+    {
             using World world = World.Create();
 
             Entity p = world.Entity("parent");
@@ -4007,9 +4007,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(".foo", e.Path());
         }
 
-        [Fact]
-        private void EntityWithType()
-        {
+    [Fact]
+    private void EntityWithType()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity<EntityType>();
@@ -4021,9 +4021,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == e2);
         }
 
-        [Fact]
-        private void PrefabHierarchyWithTypes()
-        {
+    [Fact]
+    private void PrefabHierarchyWithTypes()
+    {
             using World world = World.Create();
 
             Entity turret = world.Prefab<Turret>();
@@ -4062,9 +4062,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("Railgun.Beam", railgunBeam.Symbol());
         }
 
-        [Fact]
-        private void PrefabHierarchyWithRootTypes()
-        {
+    [Fact]
+    private void PrefabHierarchyWithRootTypes()
+    {
             using World world = World.Create();
 
             Entity turret = world.Prefab<Turret>();
@@ -4087,9 +4087,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(instBase != 0);
         }
 
-        [Fact]
-        private void PrefabHierarchyWithChildOverride()
-        {
+    [Fact]
+    private void PrefabHierarchyWithChildOverride()
+    {
             using World world = World.Create();
 
             Entity t = world.Prefab<Turret>();
@@ -4110,9 +4110,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(ib.Has<Bar>());
         }
 
-        [Fact]
-        private void EntityWithNestedType()
-        {
+    [Fact]
+    private void EntityWithNestedType()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity<Parent.EntityType>();
@@ -4126,9 +4126,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == e2);
         }
 
-        [Fact]
-        private void EntityWithTypeDefer()
-        {
+    [Fact]
+    private void EntityWithTypeDefer()
+    {
             using World world = World.Create();
 
             world.DeferBegin();
@@ -4140,9 +4140,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(world.Id<Tag>() == e);
         }
 
-        [Fact]
-        private void AddIfTrueT()
-        {
+    [Fact]
+    private void AddIfTrueT()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -4151,9 +4151,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Tag>());
         }
 
-        [Fact]
-        private void AddIfFalseT()
-        {
+    [Fact]
+    private void AddIfFalseT()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -4167,9 +4167,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Has<Tag>());
         }
 
-        [Fact]
-        private void AddIfTrueId()
-        {
+    [Fact]
+    private void AddIfTrueId()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -4179,9 +4179,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(t));
         }
 
-        [Fact]
-        private void AddIfFalseId()
-        {
+    [Fact]
+    private void AddIfFalseId()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -4195,9 +4195,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Has(t));
         }
 
-        [Fact]
-        private void AddIfTrueRO()
-        {
+    [Fact]
+    private void AddIfTrueRO()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -4206,9 +4206,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Rel, Obj>());
         }
 
-        [Fact]
-        private void AddIfFalseRO()
-        {
+    [Fact]
+    private void AddIfFalseRO()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -4221,9 +4221,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Has<Rel, Obj>());
         }
 
-        [Fact]
-        private void AddIfTrueRo()
-        {
+    [Fact]
+    private void AddIfTrueRo()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -4233,9 +4233,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Rel>(o));
         }
 
-        [Fact]
-        private void AddIfFalseRo()
-        {
+    [Fact]
+    private void AddIfFalseRo()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -4249,9 +4249,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Has<Rel>(o));
         }
 
-        [Fact]
-        private void AddIfTruero()
-        {
+    [Fact]
+    private void AddIfTruero()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -4262,9 +4262,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(r, o));
         }
 
-        [Fact]
-        private void AddIfFalsero()
-        {
+    [Fact]
+    private void AddIfFalsero()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -4279,9 +4279,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Has(r, o));
         }
 
-        [Fact]
-        private void AddIfExclusivero()
-        {
+    [Fact]
+    private void AddIfExclusivero()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -4301,9 +4301,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Has(r, o2));
         }
 
-        [Fact]
-        private void AddIfExclusiveRo()
-        {
+    [Fact]
+    private void AddIfExclusiveRo()
+    {
             using World world = World.Create();
 
             world.Component<First>().Entity.Add(Ecs.Exclusive);
@@ -4324,9 +4324,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Has<First>(o2));
         }
 
-        [Fact]
-        private void AddIfExclusiveRO()
-        {
+    [Fact]
+    private void AddIfExclusiveRO()
+    {
             using World world = World.Create();
 
             world.Component<R>().Entity.Add(Ecs.Exclusive);
@@ -4345,9 +4345,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Has<R, O2>());
         }
 
-        [Fact]
-        private void AddIfPairWith0Object()
-        {
+    [Fact]
+    private void AddIfPairWith0Object()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -4362,9 +4362,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Has(r, Ecs.Wildcard));
         }
 
-        [Fact]
-        private void ChildrenWithCustomRelation()
-        {
+    [Fact]
+    private void ChildrenWithCustomRelation()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -4391,9 +4391,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(child2Found);
         }
 
-        [Fact]
-        private void ChildrenWithCustomRelationType()
-        {
+    [Fact]
+    private void ChildrenWithCustomRelationType()
+    {
             using World world = World.Create();
 
             Entity parent = world.Entity();
@@ -4418,9 +4418,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(child2Found);
         }
 
-        [Fact]
-        private void ChildrenWithThis()
-        {
+    [Fact]
+    private void ChildrenWithThis()
+    {
             using World world = World.Create();
 
             int count = 0;
@@ -4428,9 +4428,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(count == 0);
         }
 
-        [Fact]
-        private void ChildrenWithWildcard()
-        {
+    [Fact]
+    private void ChildrenWithWildcard()
+    {
             using World world = World.Create();
 
             int count = 0;
@@ -4438,9 +4438,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(count == 0);
         }
 
-        [Fact]
-        private void ChildrenWithAny()
-        {
+    [Fact]
+    private void ChildrenWithAny()
+    {
             using World world = World.Create();
 
             int count = 0;
@@ -4448,9 +4448,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(count == 0);
         }
 
-        [Fact]
-        private void GetDepth()
-        {
+    [Fact]
+    private void GetDepth()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -4464,9 +4464,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, e4.Depth(EcsChildOf));
         }
 
-        [Fact]
-        private void GetDepthWithType()
-        {
+    [Fact]
+    private void GetDepthWithType()
+    {
             using World world = World.Create();
 
             world.Component<Rel>().Entity.Add(EcsTraversable);
@@ -4482,9 +4482,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, e4.Depth<Rel>());
         }
 
-        [Fact]
-        private void SetAlias()
-        {
+    [Fact]
+    private void SetAlias()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("parent.child");
@@ -4494,9 +4494,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == world.Lookup("parent_child"));
         }
 
-        [Fact]
-        private void EntityLookupNotRecursive()
-        {
+    [Fact]
+    private void EntityLookupNotRecursive()
+    {
             using World world = World.Create();
 
             Entity child = default;
@@ -4512,9 +4512,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(child.Lookup("foo", true) == foo);
         }
 
-        [Fact]
-        private void WorldLookupNotRecursive()
-        {
+    [Fact]
+    private void WorldLookupNotRecursive()
+    {
             using World world = World.Create();
 
             Entity child = default;
@@ -4533,9 +4533,9 @@ namespace Flecs.NET.Tests.Cpp
             });
         }
 
-        [Fact]
-        private void WorldLookupCustomSep()
-        {
+    [Fact]
+    private void WorldLookupCustomSep()
+    {
             using World world = World.Create();
 
             Entity parent = world.Entity("parent");
@@ -4552,9 +4552,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(world.Lookup("parent::foo", "::") == foo);
         }
 
-        [Fact]
-        private void WorldLookupCustomRootSep()
-        {
+    [Fact]
+    private void WorldLookupCustomRootSep()
+    {
             using World world = World.Create();
 
             Entity parent = world.Entity("parent");
@@ -4571,9 +4571,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(world.Lookup("::parent::foo", "::", "::") == foo);
         }
 
-        [Fact]
-        private void DependsOn()
-        {
+    [Fact]
+    private void DependsOn()
+    {
             using World world = World.Create();
 
             Entity a = world.Entity();
@@ -4581,18 +4581,18 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(b.Has(Ecs.DependsOn, a));
         }
 
-        [Fact]
-        private void DependsOnType()
-        {
+    [Fact]
+    private void DependsOnType()
+    {
             using World world = World.Create();
 
             Entity b = world.Entity().DependsOn<Position>();
             Assert.True(b.Has(Ecs.DependsOn, world.Id<Position>()));
         }
 
-        [Fact]
-        private void SetSparse()
-        {
+    [Fact]
+    private void SetSparse()
+    {
             using World world = World.Create();
 
             world.Component<Velocity>().Entity.Add(Ecs.Sparse);
@@ -4606,9 +4606,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, v->Y);
         }
 
-        [Fact]
-        private void Insert1Sparse()
-        {
+    [Fact]
+    private void Insert1Sparse()
+    {
             using World world = World.Create();
 
             world.Component<Velocity>().Entity.Add(Ecs.Sparse);
@@ -4626,9 +4626,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, v->Y);
         }
 
-        [Fact]
-        private void Insert2With1Sparse()
-        {
+    [Fact]
+    private void Insert2With1Sparse()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -4654,9 +4654,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, v->Y);
         }
 
-        [Fact]
-        private void OverrideSparse()
-        {
+    [Fact]
+    private void OverrideSparse()
+    {
             using World world = World.Create();
 
             world.Component<Velocity>().Entity.Add(Ecs.Sparse);
@@ -4673,9 +4673,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, v->Y);
         }
 
-        [Fact]
-        private void DeleteWithOverrideSparse()
-        {
+    [Fact]
+    private void DeleteWithOverrideSparse()
+    {
             using World world = World.Create();
 
             world.Component<Velocity>().Entity.Add(Ecs.Sparse);
@@ -4693,5 +4693,4 @@ namespace Flecs.NET.Tests.Cpp
 
             e.Destruct();
         }
-    }
 }

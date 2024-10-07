@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Flecs.NET.Collections;
 using Xunit;
 
-namespace Flecs.NET.Tests.CSharp.Collections
+namespace Flecs.NET.Tests.CSharp.Collections;
+
+public unsafe class NativeListTests
 {
-    public unsafe class NativeListTests
+    [Fact]
+    public void CreateEmpty()
     {
-        [Fact]
-        public void CreateEmpty()
-        {
             NativeList<Position> list = new NativeList<Position>();
             Assert.True(list.IsNull);
             Assert.Equal(0, list.Capacity);
@@ -19,9 +19,9 @@ namespace Flecs.NET.Tests.CSharp.Collections
             Assert.True(list.IsNull);
         }
 
-        [Fact]
-        public void Create()
-        {
+    [Fact]
+    public void Create()
+    {
             NativeList<Position> list = new NativeList<Position>(16);
             Assert.False(list.IsNull);
             Assert.Equal(16, list.Capacity);
@@ -31,9 +31,9 @@ namespace Flecs.NET.Tests.CSharp.Collections
             Assert.True(list.IsNull);
         }
 
-        [Fact]
-        public void Add()
-        {
+    [Fact]
+    public void Add()
+    {
             NativeList<Position> list = new NativeList<Position>();
             Assert.True(list.IsNull);
             Assert.Equal(0, list.Capacity);
@@ -58,9 +58,9 @@ namespace Flecs.NET.Tests.CSharp.Collections
             Assert.True(list.IsNull);
         }
 
-        [Fact]
-        public void Get()
-        {
+    [Fact]
+    public void Get()
+    {
             using NativeList<Position> list = new NativeList<Position>
             {
                 new Position { X = 0 },
@@ -73,9 +73,9 @@ namespace Flecs.NET.Tests.CSharp.Collections
             Assert.Equal(new Position { X = 2 }, list[2]);
         }
 
-        [Fact]
-        public void Set()
-        {
+    [Fact]
+    public void Set()
+    {
             using NativeList<Position> list = new NativeList<Position>
             {
                 new Position { X = 0 },
@@ -96,9 +96,9 @@ namespace Flecs.NET.Tests.CSharp.Collections
             Assert.Equal(new Position { X = 2 + 10 }, list[2]);
         }
 
-        [Fact]
-        public void AddRangeSpan()
-        {
+    [Fact]
+    public void AddRangeSpan()
+    {
             using NativeList<int> list = new NativeList<int> { 1, 2 };
 
             Assert.Equal(2, list.Capacity);
@@ -114,9 +114,9 @@ namespace Flecs.NET.Tests.CSharp.Collections
                 Assert.Equal(i + 1, list[i]);
         }
 
-        [Fact]
-        public void AddRangeArray()
-        {
+    [Fact]
+    public void AddRangeArray()
+    {
             using NativeList<int> list = new NativeList<int> { 1, 2 };
 
             Assert.Equal(2, list.Capacity);
@@ -132,9 +132,9 @@ namespace Flecs.NET.Tests.CSharp.Collections
                 Assert.Equal(i + 1, list[i]);
         }
 
-        [Fact]
-        public void AddRangeEnumerable()
-        {
+    [Fact]
+    public void AddRangeEnumerable()
+    {
             using NativeList<int> list = new NativeList<int> { 1, 2 };
 
             Assert.Equal(2, list.Capacity);
@@ -150,9 +150,9 @@ namespace Flecs.NET.Tests.CSharp.Collections
                 Assert.Equal(i + 1, list[i]);
         }
 
-        [Fact]
-        public void Foreach()
-        {
+    [Fact]
+    public void Foreach()
+    {
             using NativeList<int> list = new NativeList<int> { 1, 2, 3 };
 
             int i = 0;
@@ -160,5 +160,4 @@ namespace Flecs.NET.Tests.CSharp.Collections
             foreach (int item in list)
                 Assert.Equal(++i, item);
         }
-    }
 }

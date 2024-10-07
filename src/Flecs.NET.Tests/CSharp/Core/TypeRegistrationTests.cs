@@ -4,46 +4,46 @@ using Xunit;
 
 using static Flecs.NET.Bindings.flecs;
 
-namespace Flecs.NET.Tests.CSharp.Core
+namespace Flecs.NET.Tests.CSharp.Core;
+
+public unsafe class TypeRegistrationTests
 {
-    public unsafe class TypeRegistrationTests
+    [Fact]
+    private void StructSize()
     {
-        [Fact]
-        private void StructSize()
-        {
             Assert.Equal(sizeof(Position), Type<Position>.Size);
         }
 
-        [Fact]
-        private void ClassSize()
-        {
+    [Fact]
+    private void ClassSize()
+    {
             Assert.Equal(sizeof(string), Type<string>.Size);
         }
 
-        [Fact]
-        private void EnumSize()
-        {
+    [Fact]
+    private void EnumSize()
+    {
             Assert.Equal(sizeof(Color), Type<Color>.Size);
         }
 
-        [Fact]
-        private void TagSize()
-        {
+    [Fact]
+    private void TagSize()
+    {
             Assert.Equal(0, Type<Tag>.Size);
         }
 
-        [Fact]
-        private void TypeStruct()
-        {
+    [Fact]
+    private void TypeStruct()
+    {
             using World world = World.Create();
 
             Entity position = world.Entity(Type<Position>.Id(world));
             Assert.Equal(".Position", position.Path());
         }
 
-        [Fact]
-        private void TypeStructScoped()
-        {
+    [Fact]
+    private void TypeStructScoped()
+    {
             using World world = World.Create();
 
             world.SetScope(world.Entity("Parent"));
@@ -52,11 +52,11 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.Equal(".Position", position.Path());
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        private void TypeEnum(bool scoped)
-        {
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    private void TypeEnum(bool scoped)
+    {
             using World world = World.Create();
 
             if (scoped)
@@ -86,9 +86,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.True(blue.Has(EcsConstant, Ecs.Wildcard));
         }
 
-        [Fact]
-        private void ComponentStructReflection()
-        {
+    [Fact]
+    private void ComponentStructReflection()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -98,9 +98,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.Equal(typeof(Position), world.Entity(posComponent).Get<Type>());
         }
 
-        [Fact]
-        private void ComponentClassReflection()
-        {
+    [Fact]
+    private void ComponentClassReflection()
+    {
             using World world = World.Create();
 
             world.Component<ManagedComponent>();
@@ -110,18 +110,18 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.Equal(typeof(ManagedComponent), world.Entity(comp).Get<Type>());
         }
 
-        [Fact]
-        private void ComponentStruct()
-        {
+    [Fact]
+    private void ComponentStruct()
+    {
             using World world = World.Create();
 
             Entity position = world.Component<Position>();
             Assert.Equal(".Position", position.Path());
         }
 
-        [Fact]
-        private void ComponentStructScoped()
-        {
+    [Fact]
+    private void ComponentStructScoped()
+    {
             using World world = World.Create();
 
             world.SetScope(world.Entity("Parent"));
@@ -130,9 +130,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.Equal(".Parent.Position", position.Path());
         }
 
-        [Fact]
-        private void ComponentEnum()
-        {
+    [Fact]
+    private void ComponentEnum()
+    {
             using World world = World.Create();
 
             Entity color = world.Component<Color>();
@@ -159,9 +159,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.True(blue.Has(EcsConstant, Ecs.Wildcard));
         }
 
-        [Fact]
-        private void ComponentEnumScoped()
-        {
+    [Fact]
+    private void ComponentEnumScoped()
+    {
             using World world = World.Create();
 
             world.SetScope(world.Entity("Parent"));
@@ -190,9 +190,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.True(blue.Has(EcsConstant, Ecs.Wildcard));
         }
 
-        [Fact]
-        private void MultiWorld()
-        {
+    [Fact]
+    private void MultiWorld()
+    {
             using World a = World.Create();
             using World b = World.Create();
             using World c = World.Create();
@@ -237,9 +237,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.Equal(tagIndex,      Type<Tag>.CacheIndex);
         }
 
-        [Fact]
-        private void TrimmedNames()
-        {
+    [Fact]
+    private void TrimmedNames()
+    {
             using World world = World.Create();
 
             world.SetScope<Child>();
@@ -260,9 +260,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.Equal(".Child.Position", position.Path());
         }
 
-        [Fact]
-        private void EnumInSystem()
-        {
+    [Fact]
+    private void EnumInSystem()
+    {
             using World world = World.Create();
 
             world.System()
@@ -277,5 +277,4 @@ namespace Flecs.NET.Tests.CSharp.Core
 
             world.Progress();
         }
-    }
 }

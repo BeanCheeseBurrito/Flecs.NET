@@ -2,13 +2,13 @@ using Flecs.NET.Core;
 using Xunit;
 using static Flecs.NET.Bindings.flecs;
 
-namespace Flecs.NET.Tests.Cpp
+namespace Flecs.NET.Tests.Cpp;
+
+public class DocTests
 {
-    public class DocTests
+    [Fact]
+    private void SetBrief()
     {
-        [Fact]
-        private void SetBrief()
-        {
             using World world = World.Create();
 
             Entity e = world.Entity("Foo");
@@ -20,9 +20,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("A brief description", e.DocBrief());
         }
 
-        [Fact]
-        private void SetName()
-        {
+    [Fact]
+    private void SetName()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("Foo");
@@ -34,9 +34,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("A name", e.DocName());
         }
 
-        [Fact]
-        private void SetLink()
-        {
+    [Fact]
+    private void SetLink()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("Foo");
@@ -48,9 +48,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("A link", e.DocLink());
         }
 
-        [Fact]
-        private void SetColor()
-        {
+    [Fact]
+    private void SetColor()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("Foo");
@@ -62,9 +62,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("A color", e.DocColor());
         }
 
-        [Fact]
-        private void GetNameNoDocName()
-        {
+    [Fact]
+    private void GetNameNoDocName()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("Foo");
@@ -73,5 +73,4 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal("Foo", e.DocName());
         }
-    }
 }

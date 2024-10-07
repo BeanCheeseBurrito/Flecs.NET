@@ -1,13 +1,13 @@
 using Flecs.NET.Core;
 using Xunit;
 
-namespace Flecs.NET.Tests.Cpp
+namespace Flecs.NET.Tests.Cpp;
+
+public unsafe class PathTests
 {
-    public unsafe class PathTests
+    [Fact]
+    private void Name()
     {
-        [Fact]
-        private void Name()
-        {
             using World world = World.Create();
 
             Entity e = new Entity(world, "foo");
@@ -20,9 +20,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == eWorld);
         }
 
-        [Fact]
-        private void PathDepth1()
-        {
+    [Fact]
+    private void PathDepth1()
+    {
             using World world = World.Create();
 
             Entity e = new Entity(world, "foo.bar");
@@ -39,9 +39,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == eWorld);
         }
 
-        [Fact]
-        private void PathDepth2()
-        {
+    [Fact]
+    private void PathDepth2()
+    {
             using World world = World.Create();
 
             Entity e = new Entity(world, "foo.bar.hello");
@@ -58,9 +58,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == eWorld);
         }
 
-        [Fact]
-        private void EntityLookupName()
-        {
+    [Fact]
+    private void EntityLookupName()
+    {
             using World world = World.Create();
 
             Entity parent = new Entity(world, "foo");
@@ -78,9 +78,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == parentE);
         }
 
-        [Fact]
-        private void EntityLookupDepth1()
-        {
+    [Fact]
+    private void EntityLookupDepth1()
+    {
             using World world = World.Create();
 
             Entity parent = new Entity(world, "foo");
@@ -98,9 +98,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == parentE);
         }
 
-        [Fact]
-        private void EntityLookupDepth2()
-        {
+    [Fact]
+    private void EntityLookupDepth2()
+    {
             using World world = World.Create();
 
             Entity parent = new Entity(world, "foo");
@@ -118,9 +118,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == parentE);
         }
 
-        [Fact]
-        private void AliasComponent()
-        {
+    [Fact]
+    private void AliasComponent()
+    {
             using World world = World.Create();
 
             Entity e = world.Use<Position>("MyPosition");
@@ -131,9 +131,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == c);
         }
 
-        [Fact]
-        private void AliasScopedComponent()
-        {
+    [Fact]
+    private void AliasScopedComponent()
+    {
             using World world = World.Create();
 
             Entity e = world.Use<Test.Foo>();
@@ -144,9 +144,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == c);
         }
 
-        [Fact]
-        private void AliasScopedComponentWithName()
-        {
+    [Fact]
+    private void AliasScopedComponentWithName()
+    {
             using World world = World.Create();
 
             Entity e = world.Use<Test.Foo>("FooAlias");
@@ -159,9 +159,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(f == 0);
         }
 
-        [Fact]
-        private void AliasEntity()
-        {
+    [Fact]
+    private void AliasEntity()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("Foo");
@@ -173,9 +173,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == a);
         }
 
-        [Fact]
-        private void AliasEntityByName()
-        {
+    [Fact]
+    private void AliasEntityByName()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("Foo");
@@ -187,9 +187,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == l);
         }
 
-        [Fact]
-        private void AliasEntityByScopedName()
-        {
+    [Fact]
+    private void AliasEntityByScopedName()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("Foo.Bar");
@@ -202,9 +202,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e == l);
         }
 
-        [Fact]
-        private void AliasEntityEmpty()
-        {
+    [Fact]
+    private void AliasEntityEmpty()
+    {
             using World world = World.Create();
 
             Entity parent = world.Entity("parent");
@@ -231,18 +231,18 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e != 0);
         }
 
-        [Fact]
-        private void IdFromStr0Entity()
-        {
+    [Fact]
+    private void IdFromStr0Entity()
+    {
             using World world = World.Create();
 
             Id id = world.Id("#0");
             Assert.True(id == 0);
         }
 
-        [Fact]
-        private void IdFromStrEntityFromStr()
-        {
+    [Fact]
+    private void IdFromStrEntityFromStr()
+    {
             using World world = World.Create();
 
             Entity foo = world.Entity("foo");
@@ -252,18 +252,18 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(id == foo);
         }
 
-        [Fact]
-        private void IdFromStrUnresolvedEntityFromStr()
-        {
+    [Fact]
+    private void IdFromStrUnresolvedEntityFromStr()
+    {
             using World world = World.Create();
 
             Id id = world.Id("foo");
             Assert.True(id == 0);
         }
 
-        [Fact]
-        private void IdFromStrScopedEntityFromStr()
-        {
+    [Fact]
+    private void IdFromStrScopedEntityFromStr()
+    {
             using World world = World.Create();
 
             Entity foo = world.Entity("foo.bar");
@@ -273,9 +273,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(id == foo);
         }
 
-        [Fact]
-        private void IdFromStrTemplateEntityFromStr()
-        {
+    [Fact]
+    private void IdFromStrTemplateEntityFromStr()
+    {
             using World world = World.Create();
 
             Entity foo = world.Entity("foo<bar>");
@@ -285,9 +285,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(id == foo);
         }
 
-        [Fact]
-        private void IdFromStrPairFromStr()
-        {
+    [Fact]
+    private void IdFromStrPairFromStr()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity("Rel");
@@ -298,9 +298,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(id == world.Pair(rel, tgt));
         }
 
-        [Fact]
-        private void IdFromStrUnresolvedPairFromStr()
-        {
+    [Fact]
+    private void IdFromStrUnresolvedPairFromStr()
+    {
             using World world = World.Create();
 
             world.Entity("Rel");
@@ -309,9 +309,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(id == 0);
         }
 
-        [Fact]
-        private void IdFromStrWildcardPairFromStr()
-        {
+    [Fact]
+    private void IdFromStrWildcardPairFromStr()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity("Rel");
@@ -321,9 +321,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(id == world.Pair(rel, Ecs.Wildcard));
         }
 
-        [Fact]
-        private void IdFromStrAnyPairFromStr()
-        {
+    [Fact]
+    private void IdFromStrAnyPairFromStr()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity("Rel");
@@ -333,9 +333,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(id == world.Pair(rel, Ecs.Any));
         }
 
-        [Fact]
-        private void IdFromStrInvalidPair()
-        {
+    [Fact]
+    private void IdFromStrInvalidPair()
+    {
             using World world = World.Create();
 
             world.Entity("Rel");
@@ -344,5 +344,4 @@ namespace Flecs.NET.Tests.Cpp
             Id id = world.Id("(Rel, Tgt");
             Assert.True(id == 0);
         }
-    }
 }

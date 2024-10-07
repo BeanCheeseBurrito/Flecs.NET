@@ -1,13 +1,13 @@
 using Flecs.NET.Core;
 using Xunit;
 
-namespace Flecs.NET.Tests.CSharp.Core
+namespace Flecs.NET.Tests.CSharp.Core;
+
+public class EventTests
 {
-    public class EventTests
+    [Fact]
+    public void EntityEmitEventWithManagedPayload()
     {
-        [Fact]
-        public void EntityEmitEventWithManagedPayload()
-        {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -29,9 +29,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EnqueueEntityEventWithManagedPayload()
-        {
+    [Fact]
+    public void EnqueueEntityEventWithManagedPayload()
+    {
             using World world = World.Create();
 
             int count = 0;
@@ -57,5 +57,4 @@ namespace Flecs.NET.Tests.CSharp.Core
 
             Assert.Equal(1, count);
         }
-    }
 }

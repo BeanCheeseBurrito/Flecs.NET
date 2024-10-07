@@ -2,13 +2,13 @@ using System;
 using Flecs.NET.Core;
 using Xunit;
 
-namespace Flecs.NET.Tests.CSharp.Core
+namespace Flecs.NET.Tests.CSharp.Core;
+
+public unsafe class SystemTests
 {
-    public unsafe class SystemTests
+    [Fact]
+    private void IterCallbackDelegate()
     {
-        [Fact]
-        private void IterCallbackDelegate()
-        {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -42,9 +42,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterFieldCallbackDelegate()
-        {
+    [Fact]
+    private void IterFieldCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -73,9 +73,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterSpanCallbackDelegate()
-        {
+    [Fact]
+    private void IterSpanCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -104,9 +104,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterPointerCallbackDelegate()
-        {
+    [Fact]
+    private void IterPointerCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -135,9 +135,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachEntityCallbackDelegate()
-        {
+    [Fact]
+    private void EachEntityCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -168,9 +168,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachIterCallbackDelegate()
-        {
+    [Fact]
+    private void EachIterCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -203,9 +203,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachRefCallbackDelegate()
-        {
+    [Fact]
+    private void EachRefCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -230,9 +230,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachPointerCallbackDelegate()
-        {
+    [Fact]
+    private void EachPointerCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -257,9 +257,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachEntityRefCallbackDelegate()
-        {
+    [Fact]
+    private void EachEntityRefCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -285,9 +285,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachEntityPointerCallbackDelegate()
-        {
+    [Fact]
+    private void EachEntityPointerCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -313,9 +313,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachIterRefCallbackDelegate()
-        {
+    [Fact]
+    private void EachIterRefCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -341,9 +341,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachIterPointerCallbackDelegate()
-        {
+    [Fact]
+    private void EachIterPointerCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -369,9 +369,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -406,9 +406,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithIterCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithIterCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -449,9 +449,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithIterFieldCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithIterFieldCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -487,9 +487,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithIterSpanCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithIterSpanCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -525,9 +525,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithIterPointerCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithIterPointerCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -563,9 +563,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachEntityCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachEntityCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -603,9 +603,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachIterCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachIterCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -645,9 +645,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachRefCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachRefCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -679,9 +679,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachPointerCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachPointerCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -713,9 +713,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachEntityRefCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachEntityRefCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -748,9 +748,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachEntityPointerCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachEntityPointerCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -783,9 +783,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachIterRefCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachIterRefCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -818,9 +818,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachIterPointerCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachIterPointerCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -853,9 +853,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterCallbackPointer()
-        {
+    [Fact]
+    private void IterCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -889,9 +889,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterFieldCallbackPointer()
-        {
+    [Fact]
+    private void IterFieldCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -920,9 +920,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterSpanCallbackPointer()
-        {
+    [Fact]
+    private void IterSpanCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -951,9 +951,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterPointerCallbackPointer()
-        {
+    [Fact]
+    private void IterPointerCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -982,9 +982,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachEntityCallbackPointer()
-        {
+    [Fact]
+    private void EachEntityCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1015,9 +1015,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachIterCallbackPointer()
-        {
+    [Fact]
+    private void EachIterCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1050,9 +1050,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachRefCallbackPointer()
-        {
+    [Fact]
+    private void EachRefCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1077,9 +1077,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachPointerCallbackPointer()
-        {
+    [Fact]
+    private void EachPointerCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1104,9 +1104,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachEntityRefCallbackPointer()
-        {
+    [Fact]
+    private void EachEntityRefCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1132,9 +1132,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachEntityPointerCallbackPointer()
-        {
+    [Fact]
+    private void EachEntityPointerCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1160,9 +1160,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachIterRefCallbackPointer()
-        {
+    [Fact]
+    private void EachIterRefCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1188,9 +1188,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachIterPointerCallbackPointer()
-        {
+    [Fact]
+    private void EachIterPointerCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1216,9 +1216,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1253,9 +1253,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithIterCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackPointerWithIterCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1296,9 +1296,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithIterFieldCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackPointerWithIterFieldCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1334,9 +1334,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithIterSpanCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackPointerWithIterSpanCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1372,9 +1372,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithIterPointerCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackPointerWithIterPointerCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1410,9 +1410,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachEntityCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachEntityCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1450,9 +1450,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachIterCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachIterCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1492,9 +1492,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachRefCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachRefCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1526,9 +1526,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachPointerCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachPointerCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1560,9 +1560,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachEntityRefCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachEntityRefCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1595,9 +1595,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachEntityPointerCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachEntityPointerCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1630,9 +1630,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachIterRefCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachIterRefCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1665,9 +1665,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachIterPointerCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachIterPointerCallbackDelegate()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1700,9 +1700,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithIterCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithIterCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1743,9 +1743,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithIterFieldCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithIterFieldCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1781,9 +1781,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithIterSpanCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithIterSpanCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1819,9 +1819,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithIterPointerCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithIterPointerCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1857,9 +1857,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachEntityCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachEntityCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1897,9 +1897,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachIterCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachIterCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1939,9 +1939,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachRefCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachRefCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -1973,9 +1973,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachPointerCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachPointerCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2007,9 +2007,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachEntityRefCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachEntityRefCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2042,9 +2042,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachEntityPointerCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachEntityPointerCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2077,9 +2077,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachIterRefCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachIterRefCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2112,9 +2112,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegateWithEachIterPointerCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackDelegateWithEachIterPointerCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2147,9 +2147,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithIterCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointerWithIterCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2190,9 +2190,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithIterFieldCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointerWithIterFieldCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2228,9 +2228,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithIterSpanCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointerWithIterSpanCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2266,9 +2266,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithIterPointerCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointerWithIterPointerCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2304,9 +2304,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachEntityCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachEntityCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2344,9 +2344,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachIterCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachIterCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2386,9 +2386,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachRefCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachRefCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2420,9 +2420,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachPointerCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachPointerCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2454,9 +2454,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachEntityRefCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachEntityRefCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2489,9 +2489,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachEntityPointerCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachEntityPointerCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2524,9 +2524,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachIterRefCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachIterRefCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2559,9 +2559,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointerWithEachIterPointerCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointerWithEachIterPointerCallbackPointer()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("e")
@@ -2593,5 +2593,4 @@ namespace Flecs.NET.Tests.CSharp.Core
                 p->Y += v->Y;
             }
         }
-    }
 }

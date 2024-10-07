@@ -1,13 +1,13 @@
 using Flecs.NET.Core;
 using Xunit;
 
-namespace Flecs.NET.Tests.Cpp
+namespace Flecs.NET.Tests.Cpp;
+
+public unsafe class SingletonTests
 {
-    public unsafe class SingletonTests
+    [Fact]
+    private void SetGetSingleton()
     {
-        [Fact]
-        private void SetGetSingleton()
-        {
             using World world = World.Create();
 
             world.Set(new Position(10, 20));
@@ -18,9 +18,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void EnsureSingleton()
-        {
+    [Fact]
+    private void EnsureSingleton()
+    {
             using World world = World.Create();
 
             Position* pMut = world.EnsurePtr<Position>();
@@ -33,9 +33,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void GetMutSingleton()
-        {
+    [Fact]
+    private void GetMutSingleton()
+    {
             using World world = World.Create();
 
             Position* p = world.GetMutPtr<Position>();
@@ -48,9 +48,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void ModifiedSingleton()
-        {
+    [Fact]
+    private void ModifiedSingleton()
+    {
             using World world = World.Create();
 
             int invoked = 0;
@@ -67,9 +67,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, invoked);
         }
 
-        [Fact]
-        private void AddSingleton()
-        {
+    [Fact]
+    private void AddSingleton()
+    {
             using World world = World.Create();
 
             int invoked = 0;
@@ -84,9 +84,9 @@ namespace Flecs.NET.Tests.Cpp
         }
 
 
-        [Fact]
-        private void RemoveSingleton()
-        {
+    [Fact]
+    private void RemoveSingleton()
+    {
             using World world = World.Create();
 
             int invoked = 0;
@@ -102,9 +102,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, invoked);
         }
 
-        [Fact]
-        private void HasSingleton()
-        {
+    [Fact]
+    private void HasSingleton()
+    {
             using World world = World.Create();
 
             Assert.True(!world.Has<Position>());
@@ -114,9 +114,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(world.Has<Position>());
         }
 
-        [Fact]
-        private void SingletonSystem()
-        {
+    [Fact]
+    private void SingletonSystem()
+    {
             using World world = World.Create();
 
             world.Set(new Position(10, 20));
@@ -144,9 +144,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(21, p->Y);
         }
 
-        [Fact]
-        private void GetSingleton()
-        {
+    [Fact]
+    private void GetSingleton()
+    {
             using World world = World.Create();
 
             world.Set(new Position(10, 20));
@@ -160,9 +160,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void TypeIdFromWorld()
-        {
+    [Fact]
+    private void TypeIdFromWorld()
+    {
             using World world = World.Create();
 
             world.Set(new Position(10, 20));
@@ -175,9 +175,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(s == world.Id<Position>());
         }
 
-        [Fact]
-        private void SetLambda()
-        {
+    [Fact]
+    private void SetLambda()
+    {
             using World world = World.Create();
 
             world.Insert((ref Position p) =>
@@ -201,9 +201,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(21, p->Y);
         }
 
-        [Fact]
-        private void GetLambda()
-        {
+    [Fact]
+    private void GetLambda()
+    {
             using World world = World.Create();
 
             world.Set(new Position(10, 20));
@@ -219,9 +219,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        private void GetWriteLambda()
-        {
+    [Fact]
+    private void GetWriteLambda()
+    {
             using World world = World.Create();
 
             world.Set(new Position(10, 20));
@@ -243,9 +243,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(21, p->Y);
         }
 
-        [Fact]
-        private void GetSetSingletonPairRT()
-        {
+    [Fact]
+    private void GetSetSingletonPairRT()
+    {
             using World world = World.Create();
 
             world.Set<Position, Tag>(new Position(10, 20));
@@ -256,9 +256,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void GetSetSingletonPairRt()
-        {
+    [Fact]
+    private void GetSetSingletonPairRt()
+    {
             using World world = World.Create();
 
             Entity tgt = world.Entity();
@@ -271,9 +271,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void AddRemoveSingletonPairRT()
-        {
+    [Fact]
+    private void AddRemoveSingletonPairRT()
+    {
             using World world = World.Create();
 
             world.Add<Position, Tag>();
@@ -282,9 +282,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!world.Has<Position, Tag>());
         }
 
-        [Fact]
-        private void AddRemoveSingletonPairRt()
-        {
+    [Fact]
+    private void AddRemoveSingletonPairRt()
+    {
             using World world = World.Create();
 
             Entity tgt = world.Entity();
@@ -295,9 +295,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!world.Has<Position>(tgt));
         }
 
-        [Fact]
-        private void AddRemoveSingletonPairrt()
-        {
+    [Fact]
+    private void AddRemoveSingletonPairrt()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -309,9 +309,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!world.Has(rel, tgt));
         }
 
-        [Fact]
-        private void GetTarget()
-        {
+    [Fact]
+    private void GetTarget()
+    {
             using World world = World.Create();
 
             Entity rel = world.Singleton<Tag>();
@@ -364,5 +364,4 @@ namespace Flecs.NET.Tests.Cpp
                 Assert.True(p == entities[i]);
             }
         }
-    }
 }

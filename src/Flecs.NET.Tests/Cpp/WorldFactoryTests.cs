@@ -1,22 +1,22 @@
 using Flecs.NET.Core;
 using Xunit;
 
-namespace Flecs.NET.Tests.Cpp
+namespace Flecs.NET.Tests.Cpp;
+
+public unsafe class WorldFactoryTests
 {
-    public unsafe class WorldFactoryTests
+    [Fact]
+    private void Entity()
     {
-        [Fact]
-        private void Entity()
-        {
             using World world = World.Create();
 
             Entity e = world.Entity();
             Assert.True(e.Id != 0);
         }
 
-        [Fact]
-        private void EntityWithName()
-        {
+    [Fact]
+    private void EntityWithName()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity("MyName");
@@ -24,18 +24,18 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("MyName", e.Name());
         }
 
-        [Fact]
-        private void EntityWithId()
-        {
+    [Fact]
+    private void EntityWithId()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity(100);
             Assert.True(e.Id == 100);
         }
 
-        [Fact]
-        private void Prefab()
-        {
+    [Fact]
+    private void Prefab()
+    {
             using World world = World.Create();
 
             Entity e = world.Prefab();
@@ -43,9 +43,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has(Ecs.Prefab));
         }
 
-        [Fact]
-        private void PrefabWithName()
-        {
+    [Fact]
+    private void PrefabWithName()
+    {
             using World world = World.Create();
 
             Entity e = world.Prefab("MyName");
@@ -54,9 +54,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("MyName", e.Name());
         }
 
-        [Fact]
-        private void System()
-        {
+    [Fact]
+    private void System()
+    {
             using World world = World.Create();
 
             System<Position, Velocity> system = world.System<Position, Velocity>()
@@ -79,9 +79,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(22, p->Y);
         }
 
-        [Fact]
-        private void SystemWithName()
-        {
+    [Fact]
+    private void SystemWithName()
+    {
             using World world = World.Create();
 
             System<Position, Velocity> system = world.System<Position, Velocity>("MySystem")
@@ -105,9 +105,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(22, p->Y);
         }
 
-        [Fact]
-        private void SystemWithExpr()
-        {
+    [Fact]
+    private void SystemWithExpr()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -144,9 +144,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(22, p->Y);
         }
 
-        [Fact]
-        private void Query()
-        {
+    [Fact]
+    private void Query()
+    {
             using World world = World.Create();
 
             using Query<Position, Velocity> q = world.Query<Position, Velocity>();
@@ -166,9 +166,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(22, p->Y);
         }
 
-        [Fact]
-        private void QueryWithExpr()
-        {
+    [Fact]
+    private void QueryWithExpr()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -200,9 +200,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(22, p->Y);
         }
 
-        [Fact]
-        private void Module()
-        {
+    [Fact]
+    private void Module()
+    {
             using World world = World.Create();
 
             world.Import<MyModule>();
@@ -210,5 +210,4 @@ namespace Flecs.NET.Tests.Cpp
             Entity p = world.Lookup("MyModule.Position");
             Assert.True(p.Id != 0);
         }
-    }
 }

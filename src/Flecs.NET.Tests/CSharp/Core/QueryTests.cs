@@ -2,13 +2,13 @@ using System;
 using Flecs.NET.Core;
 using Xunit;
 
-namespace Flecs.NET.Tests.CSharp.Core
+namespace Flecs.NET.Tests.CSharp.Core;
+
+public unsafe class QueryTests
 {
-    public unsafe class QueryTests
+    [Fact]
+    private void IterCallbackDelegate()
     {
-        [Fact]
-        private void IterCallbackDelegate()
-        {
             using World world = World.Create();
             using Query query = world.QueryBuilder()
                 .With<Position>()
@@ -42,9 +42,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterFieldCallbackDelegate()
-        {
+    [Fact]
+    private void IterFieldCallbackDelegate()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -72,9 +72,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterSpanCallbackDelegate()
-        {
+    [Fact]
+    private void IterSpanCallbackDelegate()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -102,9 +102,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterPointerCallbackDelegate()
-        {
+    [Fact]
+    private void IterPointerCallbackDelegate()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -132,9 +132,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachEntityCallbackDelegate()
-        {
+    [Fact]
+    private void EachEntityCallbackDelegate()
+    {
             using World world = World.Create();
             using Query query = world.QueryBuilder()
                 .With<Position>()
@@ -165,9 +165,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachIterCallbackDelegate()
-        {
+    [Fact]
+    private void EachIterCallbackDelegate()
+    {
             using World world = World.Create();
             using Query query = world.QueryBuilder()
                 .With<Position>()
@@ -200,9 +200,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachRefCallbackDelegate()
-        {
+    [Fact]
+    private void EachRefCallbackDelegate()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -226,9 +226,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachPointerCallbackDelegate()
-        {
+    [Fact]
+    private void EachPointerCallbackDelegate()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -252,9 +252,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachEntityRefCallbackDelegate()
-        {
+    [Fact]
+    private void EachEntityRefCallbackDelegate()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -279,9 +279,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachEntityPointerCallbackDelegate()
-        {
+    [Fact]
+    private void EachEntityPointerCallbackDelegate()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -306,9 +306,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachIterRefCallbackDelegate()
-        {
+    [Fact]
+    private void EachIterRefCallbackDelegate()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -333,9 +333,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachIterPointerCallbackDelegate()
-        {
+    [Fact]
+    private void EachIterPointerCallbackDelegate()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -360,9 +360,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackDelegate()
-        {
+    [Fact]
+    private void RunCallbackDelegate()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -396,9 +396,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterCallbackPointer()
-        {
+    [Fact]
+    private void IterCallbackPointer()
+    {
             using World world = World.Create();
             using Query query = world.QueryBuilder()
                 .With<Position>()
@@ -432,9 +432,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterFieldCallbackPointer()
-        {
+    [Fact]
+    private void IterFieldCallbackPointer()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -462,9 +462,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterSpanCallbackPointer()
-        {
+    [Fact]
+    private void IterSpanCallbackPointer()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -492,9 +492,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void IterPointerCallbackPointer()
-        {
+    [Fact]
+    private void IterPointerCallbackPointer()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -522,9 +522,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachEntityCallbackPointer()
-        {
+    [Fact]
+    private void EachEntityCallbackPointer()
+    {
             using World world = World.Create();
             using Query query = world.QueryBuilder()
                 .With<Position>()
@@ -555,9 +555,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachIterCallbackPointer()
-        {
+    [Fact]
+    private void EachIterCallbackPointer()
+    {
             using World world = World.Create();
             using Query query = world.QueryBuilder()
                 .With<Position>()
@@ -590,9 +590,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachRefCallbackPointer()
-        {
+    [Fact]
+    private void EachRefCallbackPointer()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -616,9 +616,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachPointerCallbackPointer()
-        {
+    [Fact]
+    private void EachPointerCallbackPointer()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -642,9 +642,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachEntityRefCallbackPointer()
-        {
+    [Fact]
+    private void EachEntityRefCallbackPointer()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -669,9 +669,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachEntityPointerCallbackPointer()
-        {
+    [Fact]
+    private void EachEntityPointerCallbackPointer()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -696,9 +696,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachIterRefCallbackPointer()
-        {
+    [Fact]
+    private void EachIterRefCallbackPointer()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -723,9 +723,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachIterPointerCallbackPointer()
-        {
+    [Fact]
+    private void EachIterPointerCallbackPointer()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -750,9 +750,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void RunCallbackPointer()
-        {
+    [Fact]
+    private void RunCallbackPointer()
+    {
             using World world = World.Create();
             using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
@@ -786,9 +786,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             }
         }
 
-        [Fact]
-        private void EachManagedClass()
-        {
+    [Fact]
+    private void EachManagedClass()
+    {
             using World world = World.Create();
             using Query<ManagedClass> query = world.Query<ManagedClass>();
 
@@ -804,9 +804,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             });
         }
 
-        [Fact]
-        private void EachManagedStruct()
-        {
+    [Fact]
+    private void EachManagedStruct()
+    {
             using World world = World.Create();
             using Query<ManagedStruct> query = world.Query<ManagedStruct>();
 
@@ -822,9 +822,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             });
         }
 
-        [Fact]
-        private void EachSharedUnmanaged()
-        {
+    [Fact]
+    private void EachSharedUnmanaged()
+    {
             using World world = World.Create();
 
             world.Component<SharedComponent>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -849,9 +849,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             });
         }
 
-        [Fact]
-        private void EachSharedManaged()
-        {
+    [Fact]
+    private void EachSharedManaged()
+    {
             using World world = World.Create();
 
             world.Component<SharedComponent>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -876,9 +876,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             });
         }
 
-        [Fact]
-        private void EachSparseUnmanaged()
-        {
+    [Fact]
+    private void EachSparseUnmanaged()
+    {
             using World world = World.Create();
 
             world.Component<SparseComponent>().Entity.Add(Ecs.Sparse);
@@ -903,9 +903,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             });
         }
 
-        [Fact]
-        private void EachSparseManaged()
-        {
+    [Fact]
+    private void EachSparseManaged()
+    {
             using World world = World.Create();
 
             world.Component<SparseComponent>().Entity.Add(Ecs.Sparse);
@@ -930,9 +930,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             });
         }
 
-        [Fact]
-        private void EachSparseSharedUnmanaged()
-        {
+    [Fact]
+    private void EachSparseSharedUnmanaged()
+    {
             using World world = World.Create();
 
             world.Component<SparseComponent>().Entity.Add(Ecs.Sparse);
@@ -960,9 +960,9 @@ namespace Flecs.NET.Tests.CSharp.Core
             });
         }
 
-        [Fact]
-        private void EachSparseSharedManaged()
-        {
+    [Fact]
+    private void EachSparseSharedManaged()
+    {
             using World world = World.Create();
 
             world.Component<SparseComponent>().Entity.Add(Ecs.Sparse);
@@ -989,5 +989,4 @@ namespace Flecs.NET.Tests.CSharp.Core
                 Assert.Equal(30, c3.Value);
             });
         }
-    }
 }

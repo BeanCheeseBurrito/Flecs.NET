@@ -2,14 +2,14 @@ using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Core;
 using Xunit;
 
-namespace Flecs.NET.Tests.CSharp.Core
+namespace Flecs.NET.Tests.CSharp.Core;
+
+[SuppressMessage("ReSharper", "AccessToModifiedClosure")]
+public class QueryBuilderTests
 {
-    [SuppressMessage("ReSharper", "AccessToModifiedClosure")]
-    public class QueryBuilderTests
+    [Fact]
+    private void GroupBy()
     {
-        [Fact]
-        private void GroupBy()
-        {
             using World world = World.Create();
 
             world.Component<Tag0>();
@@ -81,5 +81,4 @@ namespace Flecs.NET.Tests.CSharp.Core
                 return ~GroupByFirstId(world, table, id);
             }
         }
-    }
 }

@@ -2,13 +2,13 @@ using Flecs.NET.Core;
 using Xunit;
 using static Flecs.NET.Bindings.flecs;
 
-namespace Flecs.NET.Tests.Cpp
+namespace Flecs.NET.Tests.Cpp;
+
+public unsafe class PairTests
 {
-    public unsafe class PairTests
+    [Fact]
+    private void AddComponentPair()
     {
-        [Fact]
-        private void AddComponentPair()
-        {
             using World world = World.Create();
 
             Entity entity = world.Entity()
@@ -21,9 +21,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("(Pair,Position)", entity.Type().Str());
         }
 
-        [Fact]
-        private void AddTagPair()
-        {
+    [Fact]
+    private void AddTagPair()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -38,9 +38,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("(Pair,Position)", entity.Type().Str());
         }
 
-        [Fact]
-        private void AddTagPairToTag()
-        {
+    [Fact]
+    private void AddTagPairToTag()
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity("Tag");
@@ -54,9 +54,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal("(Pair,Tag)", entity.Type().Str());
         }
 
-        [Fact]
-        private void RemoveComponentPair()
-        {
+    [Fact]
+    private void RemoveComponentPair()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -75,9 +75,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!entity.Has<Position, Pair>());
         }
 
-        [Fact]
-        private void RemoveTagPair()
-        {
+    [Fact]
+    private void RemoveTagPair()
+    {
             using World world = World.Create();
 
             world.Component<Position>();
@@ -95,9 +95,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!entity.Has<Position>(pair));
         }
 
-        [Fact]
-        private void RemoveTagPairToTag()
-        {
+    [Fact]
+    private void RemoveTagPairToTag()
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity("Tag");
@@ -114,9 +114,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!entity.Has(tag, pair));
         }
 
-        [Fact]
-        private void SetComponentPair()
-        {
+    [Fact]
+    private void SetComponentPair()
+    {
             using World world = World.Create();
 
             Entity entity = world.Entity()
@@ -134,9 +134,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(10, t->Value);
         }
 
-        [Fact]
-        private void SetTagPair()
-        {
+    [Fact]
+    private void SetTagPair()
+    {
             using World world = World.Create();
 
             Entity pair = world.Entity("Pair");
@@ -154,9 +154,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void System1PairInstances()
-        {
+    [Fact]
+    private void System1PairInstances()
+    {
             using World world = World.Create();
 
             world.Entity()
@@ -190,9 +190,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(10, traitValue);
         }
 
-        [Fact]
-        private void System2PairInstances()
-        {
+    [Fact]
+    private void System2PairInstances()
+    {
             using World world = World.Create();
 
             world.Entity()
@@ -227,9 +227,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(30, traitValue);
         }
 
-        [Fact]
-        private void OverridePair()
-        {
+    [Fact]
+    private void OverridePair()
+    {
             using World world = World.Create();
 
             world.Component<Pair>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -258,9 +258,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(t == t2);
         }
 
-        [Fact]
-        private void OverrideTagPair()
-        {
+    [Fact]
+    private void OverrideTagPair()
+    {
             using World world = World.Create();
 
             Entity pair = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -292,9 +292,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(t == t2);
         }
 
-        [Fact]
-        private void EnsurePair()
-        {
+    [Fact]
+    private void EnsurePair()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity();
@@ -308,9 +308,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(10, t->Value);
         }
 
-        [Fact]
-        private void EnsurePairExisting()
-        {
+    [Fact]
+    private void EnsurePairExisting()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -326,9 +326,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(10, t->Value);
         }
 
-        [Fact]
-        private void EnsurePairTag()
-        {
+    [Fact]
+    private void EnsurePairTag()
+    {
             using World world = World.Create();
 
             Entity pair = world.Entity();
@@ -346,9 +346,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void EnsurePairTagExisting()
-        {
+    [Fact]
+    private void EnsurePairTagExisting()
+    {
             using World world = World.Create();
 
             Entity pair = world.Entity();
@@ -367,9 +367,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, p->Y);
         }
 
-        [Fact]
-        private void EnsureRTagO()
-        {
+    [Fact]
+    private void EnsureRTagO()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -388,9 +388,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(40, t->Y);
         }
 
-        [Fact]
-        private void GetRelationFromId()
-        {
+    [Fact]
+    private void GetRelationFromId()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -405,9 +405,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(pair.First().IsValid());
         }
 
-        [Fact]
-        private void GetSecondFromId()
-        {
+    [Fact]
+    private void GetSecondFromId()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -422,9 +422,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(pair.Second().IsValid());
         }
 
-        [Fact]
-        private void GetRecycledRelationFromId()
-        {
+    [Fact]
+    private void GetRecycledRelationFromId()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -449,9 +449,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(pair.First().IsValid());
         }
 
-        [Fact]
-        private void GetRecycledObjectFromId()
-        {
+    [Fact]
+    private void GetRecycledObjectFromId()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -476,9 +476,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(pair.Second().IsValid());
         }
 
-        [Fact]
-        private void GetRelObj()
-        {
+    [Fact]
+    private void GetRelObj()
+    {
             using World world = World.Create();
 
             Component<Position> rel = world.Component<Position>();
@@ -497,9 +497,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ((Position*)ptr)->Y);
         }
 
-        [Fact]
-        private void GetRelObjId()
-        {
+    [Fact]
+    private void GetRelObjId()
+    {
             using World world = World.Create();
 
             Id rel = world.Component<Position>();
@@ -518,9 +518,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ((Position*)ptr)->Y);
         }
 
-        [Fact]
-        private void GetRelObjUlong()
-        {
+    [Fact]
+    private void GetRelObjUlong()
+    {
             using World world = World.Create();
 
             ulong rel = world.Component<Position>();
@@ -539,9 +539,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ((Position*)ptr)->Y);
         }
 
-        [Fact]
-        private void GetRObj()
-        {
+    [Fact]
+    private void GetRObj()
+    {
             using World world = World.Create();
 
             Entity obj = world.Entity();
@@ -558,9 +558,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void GetRObjId()
-        {
+    [Fact]
+    private void GetRObjId()
+    {
             using World world = World.Create();
 
             Id obj = world.Entity();
@@ -577,9 +577,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void GetRObjUlong()
-        {
+    [Fact]
+    private void GetRObjUlong()
+    {
             using World world = World.Create();
 
             ulong obj = world.Entity();
@@ -596,9 +596,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void GetRelO()
-        {
+    [Fact]
+    private void GetRelO()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity().Set<Position, Tag>(new Position { X = 10, Y = 20 });
@@ -612,9 +612,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void GetRTagO()
-        {
+    [Fact]
+    private void GetRTagO()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity().Set<Tag, Position>(new Position { X = 10, Y = 20 });
@@ -628,9 +628,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void GetSecond()
-        {
+    [Fact]
+    private void GetSecond()
+    {
             using World world = World.Create();
 
             Entity rel = world.Entity();
@@ -647,9 +647,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void GetSecondId()
-        {
+    [Fact]
+    private void GetSecondId()
+    {
             using World world = World.Create();
 
             Id rel = world.Entity();
@@ -666,9 +666,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void GetSecondUlong()
-        {
+    [Fact]
+    private void GetSecondUlong()
+    {
             using World world = World.Create();
 
             ulong rel = world.Entity();
@@ -685,9 +685,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(20, ptr->Y);
         }
 
-        [Fact]
-        private void Each()
-        {
+    [Fact]
+    private void Each()
+    {
             using World world = World.Create();
 
             Entity p1 = world.Entity();
@@ -714,9 +714,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Fact]
-        private void EachPair()
-        {
+    [Fact]
+    private void EachPair()
+    {
             using World world = World.Create();
 
             Component<Pair> pair = world.Component<Pair>();
@@ -744,9 +744,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Fact]
-        private void EachPairByType()
-        {
+    [Fact]
+    private void EachPairByType()
+    {
             using World world = World.Create();
 
             Component<Position> pos = world.Component<Position>();
@@ -773,9 +773,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Fact]
-        private void EachPairWithIsA()
-        {
+    [Fact]
+    private void EachPairWithIsA()
+    {
             using World world = World.Create();
 
             Entity p1 = world.Entity();
@@ -802,9 +802,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Fact]
-        private void EachPairWithRecycledRel()
-        {
+    [Fact]
+    private void EachPairWithRecycledRel()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -838,9 +838,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Fact]
-        private void EachPairWithRecycledObj()
-        {
+    [Fact]
+    private void EachPairWithRecycledObj()
+    {
             using World world = World.Create();
 
             Component<Pair> pair = world.Component<Pair>();
@@ -875,9 +875,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Fact]
-        private void MatchPair()
-        {
+    [Fact]
+    private void MatchPair()
+    {
             using World world = World.Create();
 
             Entity eats = world.Entity();
@@ -905,9 +905,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        private void MatchPairObjWildcard()
-        {
+    [Fact]
+    private void MatchPairObjWildcard()
+    {
             using World world = World.Create();
 
             Entity eats = world.Entity();
@@ -935,9 +935,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Fact]
-        private void MatchPairRelWildcard()
-        {
+    [Fact]
+    private void MatchPairRelWildcard()
+    {
             using World world = World.Create();
 
             Entity eats = world.Entity();
@@ -965,9 +965,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        private void MatchPairBothWildcard()
-        {
+    [Fact]
+    private void MatchPairBothWildcard()
+    {
             using World world = World.Create();
 
             Entity eats = world.Entity();
@@ -990,9 +990,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Fact]
-        private void HasTagWithObject()
-        {
+    [Fact]
+    private void HasTagWithObject()
+    {
             using World world = World.Create();
 
             Entity bob = world.Entity();
@@ -1000,9 +1000,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Has<Likes>(bob));
         }
 
-        [Fact]
-        private void HasSecondTag()
-        {
+    [Fact]
+    private void HasSecondTag()
+    {
             using World world = World.Create();
 
             Entity likes = world.Entity();
@@ -1010,9 +1010,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.HasSecond<Bob>(likes));
         }
 
-        [Fact]
-        private void GetObjectForTypeSelf()
-        {
+    [Fact]
+    private void GetObjectForTypeSelf()
+    {
             using World world = World.Create();
 
             world.Component<Tag>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1025,9 +1025,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(obj == self);
         }
 
-        [Fact]
-        private void GetObjectForTypeBase()
-        {
+    [Fact]
+    private void GetObjectForTypeBase()
+    {
             using World world = World.Create();
 
             world.Component<Tag>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1040,9 +1040,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(obj == @base);
         }
 
-        [Fact]
-        private void GetObjectForIdSelf()
-        {
+    [Fact]
+    private void GetObjectForIdSelf()
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1054,9 +1054,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(obj == self);
         }
 
-        [Fact]
-        private void GetObjectForIdBase()
-        {
+    [Fact]
+    private void GetObjectForIdBase()
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1068,9 +1068,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(obj == @base);
         }
 
-        [Fact]
-        private void GetObjectForIdNotFound()
-        {
+    [Fact]
+    private void GetObjectForIdNotFound()
+    {
             using World world = World.Create();
 
             Entity tag = world.Entity().Add(Ecs.OnInstantiate, Ecs.Inherit);
@@ -1081,9 +1081,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(obj == 0);
         }
 
-        [Fact]
-        private void SetRelExistingValue()
-        {
+    [Fact]
+    private void SetRelExistingValue()
+    {
             using World world = World.Create();
 
             Position p = new Position { X = 10, Y = 20 };
@@ -1096,9 +1096,9 @@ namespace Flecs.NET.Tests.Cpp
         }
 
 
-        [Fact]
-        private void SymmetricWithChildOf()
-        {
+    [Fact]
+    private void SymmetricWithChildOf()
+    {
             using World world = World.Create();
 
             world.Component<Likes>().Entity.Add(Ecs.Symmetric);
@@ -1114,5 +1114,4 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.True(bob.Has<Likes>(alice));
         }
-    }
 }

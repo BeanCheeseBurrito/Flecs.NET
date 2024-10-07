@@ -1,13 +1,13 @@
 using Flecs.NET.Core;
 using Xunit;
 
-namespace Flecs.NET.Tests.Cpp
+namespace Flecs.NET.Tests.Cpp;
+
+public class UnionTests
 {
-    public class UnionTests
+    [Fact]
+    private void AddCase()
     {
-        [Fact]
-        private void AddCase()
-        {
             using World world = World.Create();
 
             Entity standing = world.Entity("Standing");
@@ -27,9 +27,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Has(movement, standing));
         }
 
-        [Fact]
-        private void GetCase()
-        {
+    [Fact]
+    private void GetCase()
+    {
             using World world = World.Create();
 
             Entity standing = world.Entity("Standing");
@@ -43,9 +43,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Target(movement) == standing);
         }
 
-        [Fact]
-        private void AddCaseWithType()
-        {
+    [Fact]
+    private void AddCaseWithType()
+    {
             using World world = World.Create();
 
             world.Component<Movement>().Entity.Add(Ecs.Union);
@@ -59,9 +59,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True((!e.Has<Movement, Standing>()));
         }
 
-        [Fact]
-        private void AddSwitchWithType()
-        {
+    [Fact]
+    private void AddSwitchWithType()
+    {
             using World world = World.Create();
 
             world.Component<Movement>().Entity.Add(Ecs.Union);
@@ -75,9 +75,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True((!e.Has<Movement, Standing>()));
         }
 
-        [Fact]
-        private void AddRemoveSwitchWithType()
-        {
+    [Fact]
+    private void AddRemoveSwitchWithType()
+    {
             using World world = World.Create();
 
             world.Component<Movement>().Entity.Add(Ecs.Union);
@@ -104,9 +104,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(e.Table() != table);
         }
 
-        [Fact]
-        private void SwitchEnumType()
-        {
+    [Fact]
+    private void SwitchEnumType()
+    {
             using World world = World.Create();
 
             world.Component<Color>().Entity.Add(Ecs.Union);
@@ -140,5 +140,4 @@ namespace Flecs.NET.Tests.Cpp
             Assert.True(!e.Has<Color>(Ecs.Wildcard));
             Assert.True(e.Table() != table);
         }
-    }
 }

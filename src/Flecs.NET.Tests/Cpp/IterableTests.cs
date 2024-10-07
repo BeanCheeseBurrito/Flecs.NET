@@ -2,14 +2,14 @@ using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Core;
 using Xunit;
 
-namespace Flecs.NET.Tests.Cpp
+namespace Flecs.NET.Tests.Cpp;
+
+[SuppressMessage("ReSharper", "AccessToModifiedClosure")]
+public class IterableTests
 {
-    [SuppressMessage("ReSharper", "AccessToModifiedClosure")]
-    public class IterableTests
+    [Fact]
+    private void PageEach()
     {
-        [Fact]
-        private void PageEach()
-        {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -37,9 +37,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Fact]
-        private void PageIter()
-        {
+    [Fact]
+    private void PageIter()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -75,9 +75,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(3, count);
         }
 
-        [Fact]
-        private void WorkerEach()
-        {
+    [Fact]
+    private void WorkerEach()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -117,9 +117,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Fact]
-        private void WorkerIter()
-        {
+    [Fact]
+    private void WorkerIter()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity();
@@ -171,5 +171,4 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal(2, count);
         }
-    }
 }

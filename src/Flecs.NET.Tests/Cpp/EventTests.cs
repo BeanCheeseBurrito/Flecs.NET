@@ -2,13 +2,13 @@ using Flecs.NET.Core;
 using Xunit;
 using static Flecs.NET.Bindings.flecs;
 
-namespace Flecs.NET.Tests.Cpp
+namespace Flecs.NET.Tests.Cpp;
+
+public unsafe class EventTests
 {
-    public unsafe class EventTests
+    [Fact]
+    public void Event1IdEntity()
     {
-        [Fact]
-        public void Event1IdEntity()
-        {
             using World world = World.Create();
 
             Entity evt = world.Entity();
@@ -34,9 +34,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void Event2IdsEntity()
-        {
+    [Fact]
+    public void Event2IdsEntity()
+    {
             using World world = World.Create();
 
             Entity evt = world.Entity();
@@ -73,9 +73,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Fact]
-        public void Event1IdTable()
-        {
+    [Fact]
+    public void Event1IdTable()
+    {
             using World world = World.Create();
 
             Entity evt = world.Entity();
@@ -103,9 +103,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void Event2IdsTable()
-        {
+    [Fact]
+    public void Event2IdsTable()
+    {
             using World world = World.Create();
 
             Entity evt = world.Entity();
@@ -143,9 +143,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Fact]
-        public void EventType()
-        {
+    [Fact]
+    public void EventType()
+    {
             using World world = World.Create();
 
             Entity id = world.Entity();
@@ -170,9 +170,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void Event1Component()
-        {
+    [Fact]
+    public void Event1Component()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity().Add<IdA>();
@@ -196,9 +196,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void Event2Components()
-        {
+    [Fact]
+    public void Event2Components()
+    {
             using World world = World.Create();
 
             Entity e1 = world.Entity().Add<IdA>().Add<IdB>();
@@ -232,9 +232,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(2, count);
         }
 
-        [Fact]
-        public void EventVoidContext()
-        {
+    [Fact]
+    public void EventVoidContext()
+    {
             using World world = World.Create();
 
             Entity evt = world.Entity();
@@ -267,9 +267,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EventTypedContext()
-        {
+    [Fact]
+    public void EventTypedContext()
+    {
             using World world = World.Create();
 
             Entity id = world.Entity();
@@ -301,9 +301,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void Event1IdPairRelIdObjIdEntity()
-        {
+    [Fact]
+    public void Event1IdPairRelIdObjIdEntity()
+    {
             using World world = World.Create();
 
             Entity evt = world.Entity();
@@ -330,9 +330,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void Event1IdPairRelObjIdEntity()
-        {
+    [Fact]
+    public void Event1IdPairRelObjIdEntity()
+    {
             using World world = World.Create();
 
             Entity evt = world.Entity();
@@ -358,9 +358,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void Event1IdPairRelObjEntity()
-        {
+    [Fact]
+    public void Event1IdPairRelObjEntity()
+    {
             using World world = World.Create();
 
             Entity evt = world.Entity();
@@ -385,9 +385,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EmitStagedFromWorld()
-        {
+    [Fact]
+    public void EmitStagedFromWorld()
+    {
             using World world = World.Create();
 
             Entity evt = world.Entity();
@@ -416,9 +416,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EmitStagedFromStage()
-        {
+    [Fact]
+    public void EmitStagedFromStage()
+    {
             using World world = World.Create();
 
             Entity evt = world.Entity();
@@ -447,9 +447,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EmitCustomForAny()
-        {
+    [Fact]
+    public void EmitCustomForAny()
+    {
             using World world = World.Create();
 
             int countA = 0;
@@ -493,9 +493,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, countB);
         }
 
-        [Fact]
-        public void EntityEmitEventId()
-        {
+    [Fact]
+    public void EntityEmitEventId()
+    {
             using World world = World.Create();
 
             Entity evt = world.Entity();
@@ -517,9 +517,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EntityEmitEventType()
-        {
+    [Fact]
+    public void EntityEmitEventType()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -539,9 +539,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EntityEmitEventWithPayload()
-        {
+    [Fact]
+    public void EntityEmitEventWithPayload()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -563,9 +563,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EntityEmitEventIdNoSrc()
-        {
+    [Fact]
+    public void EntityEmitEventIdNoSrc()
+    {
             using World world = World.Create();
 
             Entity evt = world.Entity();
@@ -583,9 +583,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EntityEmitEventTypeNoSrc()
-        {
+    [Fact]
+    public void EntityEmitEventTypeNoSrc()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -601,9 +601,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EntityEmitEventWithPayloadNoSrc()
-        {
+    [Fact]
+    public void EntityEmitEventWithPayloadNoSrc()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -624,9 +624,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EntityEmitEventWithPayloadDerivedEventType()
-        {
+    [Fact]
+    public void EntityEmitEventWithPayloadDerivedEventType()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -648,9 +648,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EntityEmitEventWithPayloadDerivedEventTypeNoSrc()
-        {
+    [Fact]
+    public void EntityEmitEventWithPayloadDerivedEventTypeNoSrc()
+    {
             using World world = World.Create();
 
             Entity e = world.Entity()
@@ -671,9 +671,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EnqueueEvent()
-        {
+    [Fact]
+    public void EnqueueEvent()
+    {
             using World world = World.Create();
 
             int count = 0;
@@ -705,9 +705,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EnqueueEntityEvent()
-        {
+    [Fact]
+    public void EnqueueEntityEvent()
+    {
             using World world = World.Create();
 
             int count = 0;
@@ -729,9 +729,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EnqueueEventWithPayload()
-        {
+    [Fact]
+    public void EnqueueEventWithPayload()
+    {
             using World world = World.Create();
 
             int count = 0;
@@ -767,9 +767,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        public void EnqueueEntityEventWithPayload()
-        {
+    [Fact]
+    public void EnqueueEntityEventWithPayload()
+    {
             using World world = World.Create();
 
             int count = 0;
@@ -795,9 +795,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        private void EnqueueEntityFromReaOnlyWorld()
-        {
+    [Fact]
+    private void EnqueueEntityFromReaOnlyWorld()
+    {
             using World world = World.Create();
 
             int count = 0;
@@ -822,9 +822,9 @@ namespace Flecs.NET.Tests.Cpp
             Assert.Equal(1, count);
         }
 
-        [Fact]
-        private void EnqueueEntityWithPayloadFromReadOnlyWorld()
-        {
+    [Fact]
+    private void EnqueueEntityWithPayloadFromReadOnlyWorld()
+    {
             using World world = World.Create();
 
             int count = 0;
@@ -849,5 +849,4 @@ namespace Flecs.NET.Tests.Cpp
 
             Assert.Equal(1, count);
         }
-    }
 }
