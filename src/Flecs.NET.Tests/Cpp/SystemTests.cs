@@ -543,11 +543,21 @@ namespace Flecs.NET.Tests.Cpp
             string name = "Hello";
 
             System<Position> system1 = world.System<Position>(name)
-                .Run((Iter it) => { while (it.Next()) { } });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                    {
+                    }
+                });
 
             name = "World";
             System<Position> system2 = world.System<Position>(name)
-                .Run((Iter it) => { while (it.Next()) { } });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                    {
+                    }
+                });
 
             Assert.True(system1.Id != system2.Id);
         }
@@ -558,7 +568,12 @@ namespace Flecs.NET.Tests.Cpp
             using World world = World.Create();
 
             System<Position> system1 = world.System<Position>("foo.bar")
-                .Run((Iter it) => { while (it.Next()) { } });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                    {
+                    }
+                });
 
             Assert.Equal("bar", system1.Entity.Name());
 
@@ -1205,14 +1220,11 @@ namespace Flecs.NET.Tests.Cpp
 
             world.System<Position>("sys")
                 .Rate(2)
-                .Each((ref Position p) =>
-                {
-                    count++;
-                });
+                .Each((ref Position p) => { count++; });
 
             world.Entity().Set(new Position(1.0f, 2.0f));
 
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
                 world.Progress();
 
             Assert.Equal(5, count);
@@ -1233,9 +1245,11 @@ namespace Flecs.NET.Tests.Cpp
                 frameCount = 0;
 
             System_ root = world.System("root")
-                .Run((Iter it) => {
+                .Run((Iter it) =>
+                {
                     while (it.Next())
-                        rootCount++; });
+                        rootCount++;
+                });
 
             System_ l1 = world.System("l1")
                 .Rate(root, 2)
@@ -2168,8 +2182,8 @@ namespace Flecs.NET.Tests.Cpp
                 })
                 .Each((ref Position p, ref Velocity v) =>
                 {
-                        p.X += v.X;
-                        p.Y += v.Y;
+                    p.X += v.X;
+                    p.Y += v.Y;
                 });
 
             world.Progress();
@@ -2420,7 +2434,12 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity s1 = world.System()
                 .Interval(1.0f)
-                .Run((Iter it) => { while (it.Next()) { } });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                    {
+                    }
+                });
 
             {
                 EcsTimer* t = s1.GetPtr<EcsTimer>();
@@ -2432,7 +2451,12 @@ namespace Flecs.NET.Tests.Cpp
 
             Entity s2 = world.System()
                 .Interval(1.0f)
-                .Run((Iter it) => { while (it.Next()) { } });
+                .Run((Iter it) =>
+                {
+                    while (it.Next())
+                    {
+                    }
+                });
 
             {
                 EcsTimer* t = s1.GetPtr<EcsTimer>();
@@ -2522,19 +2546,13 @@ namespace Flecs.NET.Tests.Cpp
             int count2 = 0;
 
             System_ sys1 = world.System("Test")
-                .Each((Iter it, int i) =>
-                {
-                    count1++;
-                });
+                .Each((Iter it, int i) => { count1++; });
 
             sys1.Run();
             Assert.Equal(1, count1);
 
             System_ sys2 = world.System("Test")
-                .Each((Iter it, int i) =>
-                {
-                    count2++;
-                });
+                .Each((Iter it, int i) => { count2++; });
 
             sys2.Run();
             Assert.Equal(1, count2);
@@ -2549,19 +2567,13 @@ namespace Flecs.NET.Tests.Cpp
             int count2 = 0;
 
             System_ sys1 = world.System("Test")
-                .Run((Iter it) =>
-                {
-                    count1++;
-                });
+                .Run((Iter it) => { count1++; });
 
             sys1.Run();
             Assert.Equal(1, count1);
 
             System_ sys2 = world.System("Test")
-                .Run((Iter it) =>
-                {
-                    count2++;
-                });
+                .Run((Iter it) => { count2++; });
 
             sys2.Run();
             Assert.Equal(1, count2);
@@ -2576,19 +2588,13 @@ namespace Flecs.NET.Tests.Cpp
             int count2 = 0;
 
             System_ sys1 = world.System("Test")
-                .Run((Iter it) =>
-                {
-                    count1++;
-                });
+                .Run((Iter it) => { count1++; });
 
             sys1.Run();
             Assert.Equal(1, count1);
 
             System_ sys2 = world.System("Test")
-                .Each((Iter it, int i) =>
-                {
-                    count2++;
-                });
+                .Each((Iter it, int i) => { count2++; });
 
             sys2.Run();
             Assert.Equal(1, count2);
@@ -2603,19 +2609,13 @@ namespace Flecs.NET.Tests.Cpp
             int count2 = 0;
 
             System_ sys1 = world.System("Test")
-                .Each((Iter it, int i) =>
-                {
-                    count1++;
-                });
+                .Each((Iter it, int i) => { count1++; });
 
             sys1.Run();
             Assert.Equal(1, count1);
 
             System_ sys2 = world.System("Test")
-                .Run((Iter it) =>
-                {
-                    count2++;
-                });
+                .Run((Iter it) => { count2++; });
 
             sys2.Run();
             Assert.Equal(1, count2);
@@ -2630,10 +2630,7 @@ namespace Flecs.NET.Tests.Cpp
 
             world.System()
                 .Write<Position>()
-                .Run((Iter _) =>
-                {
-                    count++;
-                });
+                .Run((Iter _) => { count++; });
 
             world.Progress();
             Assert.Equal(1, count);

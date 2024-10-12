@@ -23,9 +23,9 @@ public class ExampleTests
     [MemberData(nameof(Examples))]
     private void RunTest(string typeName, MethodInfo method)
     {
-            _ = typeName;
-            method.Invoke(null, method.GetParameters().Length == 0 ? null : [ Array.Empty<string>() ]);
-        }
+        _ = typeName;
+        method.Invoke(null, method.GetParameters().Length == 0 ? null : [Array.Empty<string>()]);
+    }
 }
 
 #endif

@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using Flecs.NET.Core;
 using Flecs.NET.Utilities;
 using Xunit;
-
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Tests.Cpp;
@@ -1392,6 +1391,7 @@ public unsafe class QueryTests
                 Assert.True(it.Id(0) == it.World().Id<Tag>());
                 Assert.True(it.Entity(0) == e);
             }
+
             count++;
         });
 
@@ -1723,13 +1723,7 @@ public unsafe class QueryTests
 
         int count = 0;
         world.System<Position>()
-            .Each((Entity _, ref Position _) =>
-            {
-                q.Each((Entity _, ref Velocity _) =>
-                {
-                    count++;
-                });
-            });
+            .Each((Entity _, ref Position _) => { q.Each((Entity _, ref Velocity _) => { count++; }); });
 
         world.Progress();
 
@@ -2436,7 +2430,12 @@ public unsafe class QueryTests
         world.Entity().Set(new Position(20, 30));
 
         Assert.True(qr.Changed());
-        qr.Run((Iter it) => { while (it.Next()) { } });
+        qr.Run((Iter it) =>
+        {
+            while (it.Next())
+            {
+            }
+        });
         Assert.False(qr.Changed());
 
         int count = 0, changeCount = 0;

@@ -8,53 +8,53 @@ public class EventTests
     [Fact]
     public void EntityEmitEventWithManagedPayload()
     {
-            using World world = World.Create();
+        using World world = World.Create();
 
-            Entity e = world.Entity()
-                .Add<Tag>();
+        Entity e = world.Entity()
+            .Add<Tag>();
 
-            int count = 0;
-            e.Observe((Entity src, ref string str) =>
-            {
-                count++;
-                Assert.True(src == e);
-                Assert.Equal("Test", str);
-            });
+        int count = 0;
+        e.Observe((Entity src, ref string str) =>
+        {
+            count++;
+            Assert.True(src == e);
+            Assert.Equal("Test", str);
+        });
 
-            Assert.Equal(0, count);
+        Assert.Equal(0, count);
 
-            string str = "Test";
-            e.Emit(ref str);
+        string str = "Test";
+        e.Emit(ref str);
 
-            Assert.Equal(1, count);
-        }
+        Assert.Equal(1, count);
+    }
 
     [Fact]
     public void EnqueueEntityEventWithManagedPayload()
     {
-            using World world = World.Create();
+        using World world = World.Create();
 
-            int count = 0;
+        int count = 0;
 
-            Entity id = world.Entity();
-            Entity entity = world.Entity().Add(id);
+        Entity id = world.Entity();
+        Entity entity = world.Entity().Add(id);
 
-            entity.Observe((ref string str) =>
-            {
-                Assert.Equal("Test", str);
-                count++;
-            });
+        entity.Observe((ref string str) =>
+        {
+            Assert.Equal("Test", str);
+            count++;
+        });
 
-            world.DeferBegin();
+        world.DeferBegin();
 
-            string str = "Test";
+        string str = "Test";
 
-            entity.Enqueue(ref str);
+        entity.Enqueue(ref str);
 
-            Assert.Equal(0, count);
+        Assert.Equal(0, count);
 
-            world.DeferEnd();
+        world.DeferEnd();
 
-            Assert.Equal(1, count);
-        }
+        Assert.Equal(1, count);
+    }
 }
