@@ -1539,7 +1539,6 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
         {
             if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
             {
-                // TODO: Get rid of GC handle here and just use raw pointer since the object is pinned.
                 Managed.AllocGcHandle(ptr, out GCHandle handle);
 
                 new World(World)
@@ -1547,6 +1546,8 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
                     .Entity(Id)
                     .Ctx(&handle)
                     .Emit();
+
+                handle.Free();
             }
             else
             {
@@ -3790,18 +3791,36 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
         return ref this;
     }
 
-    private ref Entity ObserveInternal<T>(ulong eventId, T callback, IntPtr bindingContextCallback)
-        where T : Delegate
+    private ref Entity ObserveInternal<T>(ulong eventId, T callback, nint invoker) where T : Delegate
     {
-        IteratorContext* observerContext = Memory.AllocZeroed<IteratorContext>(1);
-        Callback.Set(ref observerContext->Callback, callback, false);
+        IteratorContext* iteratorContext = Memory.AllocZeroed<IteratorContext>(1);
+        Callback.Set(ref iteratorContext->Callback, callback, invoker);
 
         ecs_observer_desc_t desc = default;
         desc.events[0] = eventId;
         desc.query.terms[0].id = EcsAny;
         desc.query.terms[0].src.id = Id;
-        desc.callback = bindingContextCallback;
-        desc.callback_ctx = observerContext;
+        desc.callback = Pointers.IteratorCallback;
+        desc.callback_ctx = iteratorContext;
+        desc.callback_ctx_free = Pointers.IteratorContextFree;
+
+        ulong observer = ecs_observer_init(World, &desc);
+        ecs_add_id(World, observer, Ecs.Pair(EcsChildOf, Id));
+
+        return ref this;
+    }
+
+    private ref Entity ObserveInternal<T>(ulong eventId, IntPtr callback, nint invoker) where T : Delegate
+    {
+        IteratorContext* iteratorContext = Memory.AllocZeroed<IteratorContext>(1);
+        Callback.Set(ref iteratorContext->Callback, callback, invoker);
+
+        ecs_observer_desc_t desc = default;
+        desc.events[0] = eventId;
+        desc.query.terms[0].id = EcsAny;
+        desc.query.terms[0].src.id = Id;
+        desc.callback = Pointers.IteratorCallback;
+        desc.callback_ctx = iteratorContext;
         desc.callback_ctx_free = Pointers.IteratorContextFree;
 
         ulong observer = ecs_observer_init(World, &desc);

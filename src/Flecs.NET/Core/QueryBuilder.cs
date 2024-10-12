@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
@@ -37,9 +38,10 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
         }
     }
 
-    ref QueryBuilder IQueryBuilderBase.QueryBuilder => ref this;
+    internal ref QueryContext QueryContext => ref *EnsureQueryContext();
+    internal ref GroupByContext GroupByContext => ref *EnsureGroupByContext();
 
-    internal QueryContext Context;
+    ref QueryBuilder IQueryBuilderBase.QueryBuilder => ref this;
 
     /// <summary>
     ///     A reference to the world.
@@ -62,7 +64,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
         _termIndex = default;
         _termCount = default;
         _termIdType = TermIdType.Src;
-        Context = default;
+        QueryContext = default;
     }
 
     /// <summary>
@@ -100,7 +102,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// </summary>
     public void Dispose()
     {
-        Context.Dispose();
+        QueryContext.Dispose();
     }
 
     /// <summary>
@@ -161,7 +163,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
         AssertTermId();
 
         NativeString nativeName = (NativeString)name;
-        Context.Strings.Add(nativeName);
+        QueryContext.Strings.Add(nativeName);
 
         CurrentTermId.id |= EcsIsEntity;
         CurrentTermId.name = nativeName;
@@ -179,7 +181,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
         AssertTermId();
 
         NativeString nativeName = (NativeString)name;
-        Context.Strings.Add(nativeName);
+        QueryContext.Strings.Add(nativeName);
 
         CurrentTermId.id |= EcsIsVariable;
         CurrentTermId.name = nativeName;
@@ -762,7 +764,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
         Ecs.Assert(Desc.expr == null, "QueryBuilder.Expr() cannot be called more than once");
 
         NativeString nativeExpr = (NativeString)expr;
-        Context.Strings.Add(nativeExpr);
+        QueryContext.Strings.Add(nativeExpr);
 
         Desc.expr = nativeExpr;
 
@@ -1663,12 +1665,12 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     ///     Sort the output of a query.
     /// </summary>
     /// <param name="component"></param>
-    /// <param name="compare"></param>
+    /// <param name="callback"></param>
     /// <returns></returns>
-    public ref QueryBuilder OrderBy(ulong component, Ecs.OrderByAction compare)
+    public ref QueryBuilder OrderBy(ulong component, Ecs.OrderByCallback callback)
     {
-        Callback.Set(ref Context.OrderByAction, compare);
-        Desc.order_by_callback = Context.OrderByAction.Pointer;
+        Callback.Set(ref QueryContext.OrderBy, callback, 0);
+        Desc.order_by_callback = Marshal.GetFunctionPointerForDelegate(callback);
         Desc.order_by = component;
         return ref this;
     }
@@ -1676,12 +1678,12 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <summary>
     ///     Sort the output of a query.
     /// </summary>
-    /// <param name="compare"></param>
+    /// <param name="callback"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public ref QueryBuilder OrderBy<T>(Ecs.OrderByAction compare)
+    public ref QueryBuilder OrderBy<T>(Ecs.OrderByCallback callback)
     {
-        return ref OrderBy(Type<T>.Id(World), compare);
+        return ref OrderBy(Type<T>.Id(World), callback);
     }
 
     /// <summary>
@@ -1712,46 +1714,11 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <param name="component"></param>
     /// <param name="callback"></param>
     /// <returns></returns>
-    public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByAction callback)
-    {
-        Callback.Set(ref Context.GroupByAction, callback);
-        Desc.group_by_callback = Context.GroupByAction.Pointer;
-        Desc.group_by = component;
-        return ref this;
-    }
-
-    /// <summary>
-    ///     Group and sort matched tables.
-    /// </summary>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public ref QueryBuilder GroupBy<T>(Ecs.GroupByAction callback)
-    {
-        return ref GroupBy(Type<T>.Id(World), callback);
-    }
-
-    /// <summary>
-    ///     Group and sort matched tables.
-    /// </summary>
-    /// <param name="component"></param>
-    /// <param name="callback"></param>
-    /// <returns></returns>
     public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByCallback callback)
     {
-        Ecs.Assert(Desc.group_by_ctx == null,
-            "Cannot set .GroupBy callback if group_by_ctx is already occupied.");
-
-        Context.GroupByAction.Dispose();
-        Context.GroupByContextFree.Dispose();
-
-        GroupByContext* context = Memory.AllocZeroed<GroupByContext>(1);
-        Callback.Set(ref context->GroupBy, callback);
-        Desc.group_by_callback = Pointers.GroupByCallbackDelegate;
-        Desc.group_by_ctx_free = Pointers.GroupByContextFree;
-        Desc.group_by_ctx = context;
+        Callback.Set(ref GroupByContext.GroupBy, callback, Pointers.GroupByCallbackDelegate);
+        Desc.group_by_callback = Pointers.GroupByCallback;
         Desc.group_by = component;
-
         return ref this;
     }
 
@@ -1767,53 +1734,73 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     }
 
     /// <summary>
-    ///     Specify context to be passed to group_by function.
+    ///     Specify callback to run when a group is created.
     /// </summary>
-    /// <param name="ctx"></param>
-    /// <param name="contextFree"></param>
+    /// <param name="callback">The callback.</param>
     /// <returns></returns>
-    public ref QueryBuilder GroupByCtx(void* ctx, Ecs.ContextFree contextFree)
+    public ref QueryBuilder OnGroupCreate(Ecs.GroupCreateCallback callback)
     {
-        Callback.Set(ref Context.GroupByContextFree, contextFree);
-        Desc.group_by_ctx_free = Context.GroupByContextFree.Pointer;
-        Desc.group_by_ctx = ctx;
+        Callback.Set(ref GroupByContext.GroupCreate, callback, Pointers.GroupCreateCallbackDelegate);
+        Desc.on_group_create = Pointers.GroupCreateCallback;
         return ref this;
     }
 
     /// <summary>
-    ///     Specify context to be passed to group_by function.
+    ///     Specify callback to run when a group is created.
     /// </summary>
-    /// <param name="ctx"></param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
     /// <returns></returns>
-    public ref QueryBuilder GroupByCtx(void* ctx)
+    public ref QueryBuilder OnGroupCreate<T>(Ecs.GroupCreateCallback<T> callback)
     {
-        Desc.group_by_ctx = ctx;
-        Desc.group_by_ctx_free = IntPtr.Zero;
+        Callback.Set(ref GroupByContext.GroupCreate, callback, Pointers<T>.GroupCreateCallbackDelegate);
+        Desc.on_group_create = Pointers.GroupCreateCallback;
         return ref this;
     }
 
     /// <summary>
-    ///     Specify on_group_create action.
+    ///     Specify callback to run when a group is deleted.
     /// </summary>
-    /// <param name="onGroupCreate"></param>
+    /// <param name="callback">The callback.</param>
     /// <returns></returns>
-    public ref QueryBuilder OnGroupCreate(Ecs.GroupCreateAction onGroupCreate)
+    public ref QueryBuilder OnGroupDelete(Ecs.GroupDeleteCallback callback)
     {
-        Callback.Set(ref Context.GroupCreateAction, onGroupCreate);
-        Desc.on_group_create = Context.GroupCreateAction.Pointer;
+        Callback.Set(ref GroupByContext.GroupDelete, callback, Pointers.GroupDeleteCallbackDelegate);
+        Desc.on_group_delete = Pointers.GroupDeleteCallback;
         return ref this;
     }
 
     /// <summary>
-    ///     Specify on_group_delete action.
+    ///     Specify callback to run when a group is deleted.
     /// </summary>
-    /// <param name="onGroupDelete"></param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
     /// <returns></returns>
-    public ref QueryBuilder OnGroupDelete(Ecs.GroupDeleteAction onGroupDelete)
+    public ref QueryBuilder OnGroupDelete<T>(Ecs.GroupDeleteCallback<T> callback)
     {
-        Callback.Set(ref Context.GroupDeleteAction, onGroupDelete);
-        Desc.on_group_delete = Context.GroupDeleteAction.Pointer;
+        Callback.Set(ref GroupByContext.GroupDelete, callback, Pointers<T>.GroupDeleteCallbackDelegate);
+        Desc.on_group_delete = Pointers.GroupDeleteCallback;
         return ref this;
+    }
+
+    private QueryContext* EnsureQueryContext()
+    {
+        if (_desc.binding_ctx != null)
+            return (QueryContext*)_desc.binding_ctx;
+
+        _desc.binding_ctx = Memory.AllocZeroed<QueryContext>(1);
+        _desc.binding_ctx_free = Pointers.QueryContextFree;
+        return (QueryContext*)_desc.binding_ctx;
+    }
+
+    private GroupByContext* EnsureGroupByContext()
+    {
+        if (_desc.group_by_ctx != null)
+            return (GroupByContext*)_desc.group_by_ctx;
+
+        _desc.group_by_ctx = Memory.AllocZeroed<GroupByContext>(1);
+        _desc.group_by_ctx_free = Pointers.GroupByContextFree;
+        return (GroupByContext*)_desc.group_by_ctx;
     }
 
     [Conditional("DEBUG")]

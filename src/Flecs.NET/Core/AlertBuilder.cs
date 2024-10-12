@@ -88,12 +88,7 @@ public unsafe partial struct AlertBuilder : IDisposable, IEquatable<AlertBuilder
     {
         fixed (ecs_alert_desc_t* alertDesc = &Desc)
         {
-            QueryContext* queryContext = Memory.Alloc<QueryContext>(1);
-            queryContext[0] = QueryBuilder.Context;
-
             alertDesc->query = QueryBuilder.Desc;
-            alertDesc->query.binding_ctx = queryContext;
-            alertDesc->query.binding_ctx_free = Pointers.QueryContextFree;
 
             Entity entity = new Entity(World, ecs_alert_init(World, alertDesc));
 
@@ -112,7 +107,7 @@ public unsafe partial struct AlertBuilder : IDisposable, IEquatable<AlertBuilder
     public ref AlertBuilder Message(string message)
     {
         NativeString nativeMessage = (NativeString)message;
-        QueryBuilder.Context.Strings.Add(nativeMessage);
+        QueryBuilder.QueryContext.Strings.Add(nativeMessage);
 
         Desc.message = nativeMessage;
         return ref this;
@@ -126,7 +121,7 @@ public unsafe partial struct AlertBuilder : IDisposable, IEquatable<AlertBuilder
     public ref AlertBuilder Brief(string brief)
     {
         NativeString nativeBrief = (NativeString)brief;
-        QueryBuilder.Context.Strings.Add(nativeBrief);
+        QueryBuilder.QueryContext.Strings.Add(nativeBrief);
 
         Desc.brief = nativeBrief;
         return ref this;
@@ -140,7 +135,7 @@ public unsafe partial struct AlertBuilder : IDisposable, IEquatable<AlertBuilder
     public ref AlertBuilder DocName(string docName)
     {
         NativeString nativeDocName = (NativeString)docName;
-        QueryBuilder.Context.Strings.Add(nativeDocName);
+        QueryBuilder.QueryContext.Strings.Add(nativeDocName);
 
         Desc.doc_name = nativeDocName;
         return ref this;
@@ -289,7 +284,7 @@ public unsafe partial struct AlertBuilder : IDisposable, IEquatable<AlertBuilder
             return ref this;
 
         NativeString nativeVar = (NativeString)var;
-        QueryBuilder.Context.Strings.Add(nativeVar);
+        QueryBuilder.QueryContext.Strings.Add(nativeVar);
         Desc.var = nativeVar;
 
         return ref this;

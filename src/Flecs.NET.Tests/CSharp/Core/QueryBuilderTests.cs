@@ -15,21 +15,21 @@ public class QueryBuilderTests
         world.Component<Tag0>();
         world.Component<Tag1>();
         world.Component<Tag2>();
-        world.Component<Tag23>();
+        world.Component<Tag3>();
 
         using Query q = world.QueryBuilder()
-            .With<Tag23>()
-            .GroupBy<Tag23>(GroupByFirstId)
+            .With<Tag3>()
+            .GroupBy<Tag3>(GroupByFirstId)
             .Build();
 
         using Query qReverse = world.QueryBuilder()
-            .With<Tag23>()
-            .GroupBy<Tag23>(GroupByFirstIdNegated)
+            .With<Tag3>()
+            .GroupBy<Tag3>(GroupByFirstIdNegated)
             .Build();
 
-        Entity e3 = world.Entity().Add<Tag23>().Add<Tag2>();
-        Entity e2 = world.Entity().Add<Tag23>().Add<Tag1>();
-        Entity e1 = world.Entity().Add<Tag23>().Add<Tag0>();
+        Entity e3 = world.Entity().Add<Tag3>().Add<Tag2>();
+        Entity e2 = world.Entity().Add<Tag3>().Add<Tag1>();
+        Entity e1 = world.Entity().Add<Tag3>().Add<Tag0>();
 
         int count = 0;
         q.Iter((Iter it) =>
@@ -70,13 +70,13 @@ public class QueryBuilderTests
 
         return;
 
-        static ulong GroupByFirstId(World world, Table table, Entity id)
+        static ulong GroupByFirstId(World world, Table table, ulong id)
         {
             Types type = table.Type();
             return type.Get(0);
         }
 
-        static ulong GroupByFirstIdNegated(World world, Table table, Entity id)
+        static ulong GroupByFirstIdNegated(World world, Table table, ulong id)
         {
             return ~GroupByFirstId(world, table, id);
         }

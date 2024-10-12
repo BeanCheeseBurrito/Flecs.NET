@@ -99,10 +99,10 @@ public class Query : IIncrementalGenerator
                 return _query.GroupInfo(groupId);
             }
         
-            /// <inheritdoc cref="Query.GroupCtx(ulong)"/>
-            public void* GroupCtx(ulong groupId)
+            /// <inheritdoc cref="Query.GroupCtx{T}(ulong)"/>
+            public ref T GroupCtx<T>(ulong group)
             {
-                return _query.GroupCtx(groupId);
+                return ref _query.GroupCtx<T>(group);
             }
         
             /// <inheritdoc cref="Query.EachTerm(Ecs.TermCallback)"/>

@@ -86,12 +86,7 @@ public unsafe partial struct PipelineBuilder : IDisposable, IEquatable<PipelineB
     {
         fixed (ecs_pipeline_desc_t* pipelineDesc = &Desc)
         {
-            QueryContext* queryContext = Memory.Alloc<QueryContext>(1);
-            queryContext[0] = QueryBuilder.Context;
-
             pipelineDesc->query = QueryBuilder.Desc;
-            pipelineDesc->query.binding_ctx = queryContext;
-            pipelineDesc->query.binding_ctx_free = Pointers.QueryContextFree;
 
             Entity entity = new Entity(World, ecs_pipeline_init(World, pipelineDesc));
 

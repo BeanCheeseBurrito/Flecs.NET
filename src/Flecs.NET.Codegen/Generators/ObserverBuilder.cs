@@ -147,25 +147,25 @@ public class ObserverBuilder : IIncrementalGenerator
                 return ref this;
             }
         
-            private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetCallback<T>(T callback, IntPtr invoker) where T : Delegate
+            private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetCallback<T>(T callback, nint invoker) where T : Delegate
             {
                 _observerBuilder.SetCallback(callback, invoker);
                 return ref this;
             }
         
-            private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetCallback(IntPtr callback, IntPtr invoker)
+            private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetCallback(nint callback, nint invoker)
             {
                 _observerBuilder.SetCallback(callback, invoker);
                 return ref this;
             }
         
-            private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetRun<T>(T callback, IntPtr invoker) where T : Delegate
+            private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetRun<T>(T callback, nint invoker) where T : Delegate
             {
                 _observerBuilder.SetRun(callback, invoker);
                 return ref this;
             }
         
-            private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetRun(IntPtr callback, IntPtr invoker)
+            private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetRun(nint callback, nint invoker)
             {
                 _observerBuilder.SetRun(callback, invoker);
                 return ref this;

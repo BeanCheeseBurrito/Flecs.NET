@@ -104,9 +104,14 @@ public static unsafe partial class Ecs
     public delegate void ObserveEntityPointerCallback<T>(Entity e, T* component);
 
     /// <summary>
-    ///     Finish action.
+    ///     World finish callback.
     /// </summary>
-    public delegate void FiniAction(ecs_world_t* world, void* ctx);
+    public delegate void WorldFinishCallback(World world);
+
+    /// <summary>
+    ///     Run post frame callback.
+    /// </summary>
+    public delegate void PostFrameCallback();
 
     /// <summary>
     ///     Free.
@@ -116,22 +121,27 @@ public static unsafe partial class Ecs
     /// <summary>
     ///     GroupBy action.
     /// </summary>
-    public delegate ulong GroupByAction(ecs_world_t* world, ecs_table_t* table, ulong groupId, void* ctx);
+    public delegate ulong GroupByCallback(World world, Table table, ulong group);
 
     /// <summary>
-    ///     GroupBy action.
+    ///     Group create callback.
     /// </summary>
-    public delegate ulong GroupByCallback(World world, Table table, Entity group);
+    public delegate void GroupCreateCallback(World world, ulong group);
 
     /// <summary>
-    ///     Group create action.
+    ///     Group create callback.
     /// </summary>
-    public delegate void* GroupCreateAction(ecs_world_t* world, ulong groupId, void* groupByCtx);
+    public delegate void GroupCreateCallback<T>(World world, ulong group, out T context);
 
     /// <summary>
     ///     Group delete action.
     /// </summary>
-    public delegate void GroupDeleteAction(ecs_world_t* world, ulong groupId, void* groupCtx, void* groupByCtx);
+    public delegate void GroupDeleteCallback(World world, ulong group);
+
+    /// <summary>
+    ///     Group delete action.
+    /// </summary>
+    public delegate void GroupDeleteCallback<T>(World world, ulong group, ref T context);
 
     /// <summary>
     ///     Iter action.
@@ -151,7 +161,7 @@ public static unsafe partial class Ecs
     /// <summary>
     ///     OrderBy action.
     /// </summary>
-    public delegate int OrderByAction(ulong e1, void* ptr1, ulong e2, void* ptr2);
+    public delegate int OrderByCallback(ulong e1, void* ptr1, ulong e2, void* ptr2);
 
     /// <summary>
     ///     A callback that takes a reference to a world.
@@ -181,5 +191,5 @@ public static unsafe partial class Ecs
     /// <summary>
     ///     Os api log callback.
     /// </summary>
-    public delegate void OsApiLog(int level, byte* file, int line, byte* message);
+    public delegate void LogCallback(int level, string file, int line, string message);
 }
