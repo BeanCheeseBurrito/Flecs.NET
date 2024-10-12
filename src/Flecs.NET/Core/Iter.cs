@@ -421,7 +421,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
         if ((Handle->flags & EcsIterIsValid) != 0 && Handle->table != null)
             Ecs.TableUnlock(Handle->world, Handle->table);
 
-        bool result = ((delegate*<ecs_iter_t*, byte>)Handle->next)(Handle) != 0;
+        bool result = ((delegate* unmanaged<ecs_iter_t*, byte>)Handle->next)(Handle) != 0;
 
         Handle->flags |= EcsIterIsValid;
 
@@ -445,7 +445,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     public void Callback()
     {
         Ecs.Assert(Handle->callback != default, "Iter/Each callback is not set.");
-        ((delegate*<ecs_iter_t*, void>)Handle->callback)(Handle);
+        ((delegate* unmanaged<ecs_iter_t*, void>)Handle->callback)(Handle);
     }
 
     /// <summary>

@@ -1052,17 +1052,17 @@ public class QueryBuilder : IIncrementalGenerator
                 return ref this;
             }
     
-            /// <inheritdoc cref="Core.QueryBuilder.OrderBy(ulong, Ecs.OrderByAction)"/>
-            public ref {{Generator.GetTypeName(type, i)}} OrderBy(ulong component, Ecs.OrderByAction compare)
+            /// <inheritdoc cref="Core.QueryBuilder.OrderBy(ulong, Ecs.OrderByCallback)"/>
+            public ref {{Generator.GetTypeName(type, i)}} OrderBy(ulong component, Ecs.OrderByCallback callback)
             {
-                Ecs.GetQueryBuilder(ref this).OrderBy(component, compare);
+                Ecs.GetQueryBuilder(ref this).OrderBy(component, callback);
                 return ref this;
             }
     
-            /// <inheritdoc cref="Core.QueryBuilder.OrderBy{T}(Ecs.OrderByAction)"/>
-            public ref {{Generator.GetTypeName(type, i)}} OrderBy<T>(Ecs.OrderByAction compare)
+            /// <inheritdoc cref="Core.QueryBuilder.OrderBy{T}(Ecs.OrderByCallback)"/>
+            public ref {{Generator.GetTypeName(type, i)}} OrderBy<T>(Ecs.OrderByCallback callback)
             {
-                Ecs.GetQueryBuilder(ref this).OrderBy<T>(compare);
+                Ecs.GetQueryBuilder(ref this).OrderBy<T>(callback);
                 return ref this;
             }
     
@@ -1080,20 +1080,6 @@ public class QueryBuilder : IIncrementalGenerator
                 return ref this;
             }
     
-            /// <inheritdoc cref="Core.QueryBuilder.GroupBy(ulong, Ecs.GroupByAction)"/>
-            public ref {{Generator.GetTypeName(type, i)}} GroupBy(ulong component, Ecs.GroupByAction callback)
-            {
-                Ecs.GetQueryBuilder(ref this).GroupBy(component, callback);
-                return ref this;
-            }
-    
-            /// <inheritdoc cref="Core.QueryBuilder.GroupBy{T}(Ecs.GroupByAction)"/>
-            public ref {{Generator.GetTypeName(type, i)}} GroupBy<T>(Ecs.GroupByAction callback)
-            {
-                Ecs.GetQueryBuilder(ref this).GroupBy<T>(callback);
-                return ref this;
-            }
-    
             /// <inheritdoc cref="Core.QueryBuilder.GroupBy(ulong, Ecs.GroupByCallback)"/>
             public ref {{Generator.GetTypeName(type, i)}} GroupBy(ulong component, Ecs.GroupByCallback callback)
             {
@@ -1108,31 +1094,31 @@ public class QueryBuilder : IIncrementalGenerator
                 return ref this;
             }
     
-            ///
-            public ref {{Generator.GetTypeName(type, i)}} GroupByCtx(void* ctx, Ecs.ContextFree contextFree)
+            /// <inheritdoc cref="Core.QueryBuilder.OnGroupCreate(Ecs.GroupCreateCallback)"/>
+            public ref {{Generator.GetTypeName(type, i)}} OnGroupCreate(Ecs.GroupCreateCallback callback)
             {
-                Ecs.GetQueryBuilder(ref this).GroupByCtx(ctx, contextFree);
+                Ecs.GetQueryBuilder(ref this).OnGroupCreate(callback);
+                return ref this;
+            }
+            
+            /// <inheritdoc cref="Core.QueryBuilder.OnGroupCreate{T}(Ecs.GroupCreateCallback{T})"/>
+            public ref {{Generator.GetTypeName(type, i)}} OnGroupCreate<T>(Ecs.GroupCreateCallback<T> callback)
+            {
+                Ecs.GetQueryBuilder(ref this).OnGroupCreate(callback);
                 return ref this;
             }
     
-            ///
-            public ref {{Generator.GetTypeName(type, i)}} GroupByCtx(void* ctx)
+            /// <inheritdoc cref="Core.QueryBuilder.OnGroupDelete(Ecs.GroupDeleteCallback)"/>
+            public ref {{Generator.GetTypeName(type, i)}} OnGroupDelete(Ecs.GroupDeleteCallback callback)
             {
-                Ecs.GetQueryBuilder(ref this).GroupByCtx(ctx);
+                Ecs.GetQueryBuilder(ref this).OnGroupDelete(callback);
                 return ref this;
             }
-    
-            /// <inheritdoc cref="Core.QueryBuilder.OnGroupCreate(Ecs.GroupCreateAction)"/>
-            public ref {{Generator.GetTypeName(type, i)}} OnGroupCreate(Ecs.GroupCreateAction onGroupCreate)
+            
+            /// <inheritdoc cref="Core.QueryBuilder.OnGroupDelete{T}(Ecs.GroupDeleteCallback{T})"/>
+            public ref {{Generator.GetTypeName(type, i)}} OnGroupDelete<T>(Ecs.GroupDeleteCallback<T> callback)
             {
-                Ecs.GetQueryBuilder(ref this).OnGroupCreate(onGroupCreate);
-                return ref this;
-            }
-    
-            /// <inheritdoc cref="Core.QueryBuilder.OnGroupDelete(Ecs.GroupDeleteAction)"/>
-            public ref {{Generator.GetTypeName(type, i)}} OnGroupDelete(Ecs.GroupDeleteAction onGroupDelete)
-            {
-                Ecs.GetQueryBuilder(ref this).OnGroupDelete(onGroupDelete);
+                Ecs.GetQueryBuilder(ref this).OnGroupDelete(callback);
                 return ref this;
             }
         }

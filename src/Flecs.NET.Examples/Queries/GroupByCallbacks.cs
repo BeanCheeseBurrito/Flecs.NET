@@ -41,32 +41,20 @@ public static unsafe class Queries_GroupByCallbacks
         // Grouped query
         using Query<Position> q = world.QueryBuilder<Position>()
             .GroupBy<Group>()
-            // Callback invoked when a new group is created
-            .OnGroupCreate((
-                flecs.ecs_world_t* world,
-                ulong id,            // id of the group that was created
-                void* groupByArg) => // group_by_ctx parameter in ecs_query_desc_t struct
+            // Callback invoked when a new group is created. Including the third "out T" parameter
+            // allows you to provide a user context.
+            .OnGroupCreate((World world, ulong id, out GroupCtx ctx) =>
             {
-                World w = new(world);
-                Console.WriteLine($"Group {w.Entity(id)} created");
+                Console.WriteLine($"Group {world.Entity(id)} created");
 
-                // Return data that will be associated with the group
-                GroupCtx* ctx = (GroupCtx*)NativeMemory.AllocZeroed((nuint)sizeof(GroupCtx));
-                ctx->Counter = ++groupCounter;
-                return ctx;
+                // Set data that will be associated with the group
+                ctx = new GroupCtx(++groupCounter);
             })
-            // Callback invoked when a group is deleted
-            .OnGroupDelete((
-                flecs.ecs_world_t* world,
-                ulong id, // id of the group that was deleted
-                void* ctx, // group context
-                void* groupByArg) => // group_by_ctx parameter in ecs_query_desc_t struct
+            // Callback invoked when a group is deleted. Including the third "ref T" parameter
+            // provides access to the user context object.
+            .OnGroupDelete((World world, ulong id, ref GroupCtx ctx) =>
             {
-                World w = new(world);
-                Console.WriteLine($"Group {w.Entity(id)} deleted");
-
-                // Free data associated with group
-                NativeMemory.Free(ctx);
+                Console.WriteLine($"Group {world.Entity(id)} deleted");
             })
             .Build();
 
@@ -109,10 +97,10 @@ public static unsafe class Queries_GroupByCallbacks
                 Field<Position> p = it.Field<Position>(0);
 
                 Entity group = it.World().Entity(it.GroupId());
-                GroupCtx* ctx = (GroupCtx*)q.GroupCtx(group);
+                ref GroupCtx ctx = ref it.Query().GroupCtx<GroupCtx>(group);
 
                 Console.WriteLine($" - Group {group.Path()}: table [{it.Table().Str()}]");
-                Console.WriteLine($"    Counter: {ctx->Counter}");
+                Console.WriteLine($"    Counter: {ctx.Counter}");
 
                 foreach (int i in it)
                     Console.WriteLine($"    ({p[i].X}, {p[i].Y})");

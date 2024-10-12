@@ -27,7 +27,7 @@ public class BindingContext : IIncrementalGenerator
             internal static void {{callback}}(ecs_iter_t* iter)
             {
                 {{(Generator.GetCallbackIsRun(callback) ? "RunContext" : "IteratorContext")}}* context = ({{(Generator.GetCallbackIsRun(callback) ? "RunContext" : "IteratorContext")}}*)iter->{{(Generator.GetCallbackIsRun(callback) ? "run_ctx" : "callback_ctx")}};
-                Invoker.{{Generator.GetInvokerName(callback)}}(iter, ({{Generator.GetCallbackType(callback, i)}}){{(Generator.GetCallbackIsDelegate(callback) ? "context->Callback.GcHandle.Target!" : "context->Callback.Pointer")}});
+                Invoker.{{Generator.GetInvokerName(callback)}}(iter, ({{Generator.GetCallbackType(callback, i)}}){{(Generator.GetCallbackIsDelegate(callback) ? "context->Callback.Delegate.Target!" : "context->Callback.Pointer")}});
             }
         """);
 
@@ -48,7 +48,7 @@ public class BindingContext : IIncrementalGenerator
     public static string GeneratePointers(int i)
     {
         IEnumerable<string> pointers = Generator.CallbacksRunAndIterAndEach.Select((Callback callback) => $$"""
-            internal static readonly IntPtr {{callback}} = (IntPtr)(delegate* <ecs_iter_t*, void>)&Functions<{{Generator.TypeParameters[i]}}>.{{callback}};
+            internal static readonly nint {{callback}} = (nint)(delegate* <ecs_iter_t*, void>)&Functions<{{Generator.TypeParameters[i]}}>.{{callback}};
         """);
 
         return $$"""

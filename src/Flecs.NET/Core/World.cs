@@ -122,21 +122,23 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <summary>
     ///     Register action to be executed when world is destroyed.
     /// </summary>
-    /// <param name="action"></param>
-    /// <param name="ctx"></param>
-    public void AtFini(Ecs.FiniAction action, void* ctx)
+    /// <param name="callback">The callback.</param>
+    public void AtFini(Ecs.WorldFinishCallback callback)
     {
-        Callback.Set(ref WorldContext.AtFini, action);
-        ecs_atfini(Handle, WorldContext.AtFini.Pointer, ctx);
+        WorldFinishContext* context = AllocateWorldFinishContext();
+        Callback.Set(ref context->Callback, callback, Pointers.WorldFinishCallbackDelegate);
+        ecs_atfini(Handle, Pointers.WorldFinishCallback, context);
     }
 
     /// <summary>
     ///     Register action to be executed when world is destroyed.
     /// </summary>
-    /// <param name="action"></param>
-    public void AtFini(Ecs.FiniAction action)
+    /// <param name="callback">The callback.</param>
+    public void AtFini(delegate*<World, void> callback)
     {
-        AtFini(action, null);
+        WorldFinishContext* context = AllocateWorldFinishContext();
+        Callback.Set(ref context->Callback, (IntPtr)callback, Pointers.WorldFinishCallbackPointer);
+        ecs_atfini(Handle, Pointers.WorldFinishCallback, context);
     }
 
     /// <summary>
@@ -296,25 +298,26 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
         return ecs_stage_is_readonly(Handle) == 1;
     }
 
-    /// <summary>
-    ///     Set world context.
-    /// </summary>
-    /// <param name="ctx"></param>
-    /// <param name="ctxFree"></param>
-    public void SetCtx(void* ctx, Ecs.ContextFree? ctxFree = null)
-    {
-        Callback.Set(ref WorldContext.ContextFree, ctxFree);
-        ecs_set_ctx(Handle, ctx, WorldContext.ContextFree.Pointer);
-    }
-
-    /// <summary>
-    ///     Get world context.
-    /// </summary>
-    /// <returns></returns>
-    public void* GetCtx()
-    {
-        return ecs_get_ctx(Handle);
-    }
+    // TODO: Add ctx functions
+    // /// <summary>
+    // ///     Set world context.
+    // /// </summary>
+    // /// <param name="ctx"></param>
+    // /// <param name="ctxFree"></param>
+    // public void SetCtx(void* ctx, Ecs.ContextFree? ctxFree = null)
+    // {
+    //     Callback.Set(ref WorldContext.ContextFree, ctxFree);
+    //     ecs_set_ctx(Handle, EnsureBindingContext(), Pointers.WorldContextFree);
+    // }
+    //
+    // /// <summary>
+    // ///     Get world context.
+    // /// </summary>
+    // /// <returns></returns>
+    // public void* GetCtx()
+    // {
+    //     return ecs_get_ctx(Handle);
+    // }
 
     /// <summary>
     ///     Preallocate memory for number of entities.
@@ -2349,12 +2352,23 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <summary>
     ///     Run callback after completing frame.
     /// </summary>
-    /// <param name="action"></param>
-    /// <param name="ctx"></param>
-    public void RunPostFrame(Ecs.FiniAction action, void* ctx)
+    /// <param name="callback">The callback.</param>
+    public void RunPostFrame(Ecs.PostFrameCallback callback)
     {
-        Callback.Set(ref WorldContext.RunPostFrame, action);
-        ecs_run_post_frame(Handle, WorldContext.RunPostFrame.Pointer, ctx);
+        PostFrameContext* postFrameContext = AllocatePostFrameContext();
+        Callback.Set(ref postFrameContext->Callback, callback, Pointers.PostFrameCallbackDelegate);
+        ecs_run_post_frame(Handle, Pointers.PostFrameCallback, postFrameContext);
+    }
+
+    /// <summary>
+    ///     Run callback after completing frame.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void RunPostFrame(delegate*<void> callback)
+    {
+        PostFrameContext* postFrameContext = AllocatePostFrameContext();
+        Callback.Set(ref postFrameContext->Callback, (nint)callback, Pointers.PostFrameCallbackPointer);
+        ecs_run_post_frame(Handle, Pointers.PostFrameCallback, postFrameContext);
     }
 
     /// <summary>
@@ -3832,6 +3846,20 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
         ptr = Memory.AllocZeroed<WorldContext>(1);
         ecs_set_binding_ctx(Handle, ptr, Pointers.WorldContextFree);
         return ptr;
+    }
+
+    private PostFrameContext* AllocatePostFrameContext()
+    {
+        PostFrameContext* context = Memory.Alloc<PostFrameContext>(1);
+        WorldContext.RunPostFrameContexts.Add((nint)context);
+        return context;
+    }
+
+    private WorldFinishContext* AllocateWorldFinishContext()
+    {
+        WorldFinishContext* context = Memory.Alloc<WorldFinishContext>(1);
+        WorldContext.WorldFinishContexts.Add((nint)context);
+        return context;
     }
 
     /// <summary>

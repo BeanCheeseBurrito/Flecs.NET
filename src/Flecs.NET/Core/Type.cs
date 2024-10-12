@@ -312,12 +312,22 @@ public static unsafe class Type<T>
         if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
             return component;
 
-        ecs_type_hooks_t hooksDesc = default;
-        hooksDesc.ctor = Pointers<T>.DefaultManagedCtorCallback;
-        hooksDesc.dtor = Pointers<T>.DefaultManagedDtorCallback;
-        hooksDesc.move = Pointers<T>.DefaultManagedMoveCallback;
-        hooksDesc.copy = Pointers<T>.DefaultManagedCopyCallback;
-        ecs_set_hooks_id(world, component, &hooksDesc);
+        // Set default hooks for managed components.
+        TypeHooksContext* hooksContext = Memory.Alloc(TypeHooksContext.Default);
+        hooksContext->Ctor.Invoker = Pointers<T>.DefaultManagedCtorCallback;
+        hooksContext->Dtor.Invoker = Pointers<T>.DefaultManagedDtorCallback;
+        hooksContext->Move.Invoker = Pointers<T>.DefaultManagedMoveCallback;
+        hooksContext->Copy.Invoker = Pointers<T>.DefaultManagedCopyCallback;
+
+        ecs_type_hooks_t hooks = default;
+        hooks.ctor = Pointers.CtorCallback;
+        hooks.dtor = Pointers.DtorCallback;
+        hooks.move = Pointers.MoveCallback;
+        hooks.copy = Pointers.CopyCallback;
+        hooks.binding_ctx = hooksContext;
+        hooks.binding_ctx_free = Pointers.TypeHooksContextFree;
+
+        ecs_set_hooks_id(world, component, &hooks);
 
         return component;
     }

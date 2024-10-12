@@ -196,25 +196,25 @@ public class SystemBuilder : IIncrementalGenerator
                 return ref this;
             }
         
-            internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetCallback<T>(T callback, IntPtr invoker) where T : Delegate
+            internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetCallback<T>(T callback, nint invoker) where T : Delegate
             {
                 _systemBuilder.SetCallback(callback, invoker);
                 return ref this;
             }
         
-            internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetCallback(IntPtr callback, IntPtr invoker)
+            internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetCallback(nint callback, nint invoker)
             {
                 _systemBuilder.SetCallback(callback, invoker);
                 return ref this;
             }
         
-            internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetRun<T>(T callback, IntPtr invoker) where T : Delegate
+            internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetRun<T>(T callback, nint invoker) where T : Delegate
             {
                 _systemBuilder.SetRun(callback, invoker);
                 return ref this;
             }
         
-            internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetRun(IntPtr callback, IntPtr invoker)
+            internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetRun(nint callback, nint invoker)
             {
                 _systemBuilder.SetRun(callback, invoker);
                 return ref this;

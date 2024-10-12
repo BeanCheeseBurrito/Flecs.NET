@@ -6,22 +6,14 @@ namespace Flecs.NET.Core.BindingContext;
 
 internal struct QueryContext : IDisposable
 {
-    public Callback OrderByAction;
-    public Callback GroupByAction;
-    public Callback GroupByContextFree;
-    public Callback GroupCreateAction;
-    public Callback GroupDeleteAction;
+    public Callback OrderBy;
     public Callback ContextFree;
 
     public NativeList<NativeString> Strings;
 
     public void Dispose()
     {
-        OrderByAction.Dispose();
-        GroupByAction.Dispose();
-        GroupByContextFree.Dispose();
-        GroupCreateAction.Dispose();
-        GroupDeleteAction.Dispose();
+        OrderBy.Dispose();
         ContextFree.Dispose();
 
         if (Strings == default)
