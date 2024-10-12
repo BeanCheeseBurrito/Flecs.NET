@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using Flecs.NET.Core;
 using Flecs.NET.Utilities;
 using Xunit;
@@ -2245,15 +2246,15 @@ public unsafe class QueryBuilderTests
         Assert.Equal(1, count);
     }
 
-    private static ulong GroupByFirstId(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
+    private static ulong GroupByFirstId(World world, Table table, ulong id)
     {
         ecs_type_t* type = ecs_table_get_type(table);
         return type->array[0];
     }
 
-    private static ulong GroupByFirstIdNegated(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
+    private static ulong GroupByFirstIdNegated(World world, Table table, ulong id)
     {
-        return ~GroupByFirstId(world, table, id, ctx);
+        return ~GroupByFirstId(world, table, id);
     }
 
     [Theory]
@@ -2386,7 +2387,7 @@ public unsafe class QueryBuilderTests
         Assert.Equal(3, count);
     }
 
-    private static ulong group_by_rel(ecs_world_t* world, ecs_table_t* table, ulong id, void* ctx)
+    private static ulong GroupByRel(World world, Table table, ulong id)
     {
         ulong match;
         return ecs_search(world, table, Ecs.Pair(id, EcsWildcard), &match) != -1 ? Ecs.PairSecond(match) : 0;
@@ -2414,7 +2415,7 @@ public unsafe class QueryBuilderTests
 
         using Query q = world.QueryBuilder()
             .With(rel, Ecs.Wildcard)
-            .GroupBy(rel, group_by_rel)
+            .GroupBy(rel, GroupByRel)
             .Build();
 
         bool e2Found = false;
@@ -2453,7 +2454,7 @@ public unsafe class QueryBuilderTests
 
         using Query q = world.QueryBuilder()
             .With<Rel>(Ecs.Wildcard)
-            .GroupBy<Rel>(group_by_rel)
+            .GroupBy<Rel>(GroupByRel)
             .Build();
 
         bool e2Found = false;
@@ -2497,7 +2498,7 @@ public unsafe class QueryBuilderTests
 
         using Query q = world.QueryBuilder()
             .With(rel, Ecs.Wildcard)
-            .GroupBy(rel, group_by_rel)
+            .GroupBy(rel, GroupByRel)
             .Build();
 
         int e1Found = 0;
@@ -2695,28 +2696,19 @@ public unsafe class QueryBuilderTests
         using Query q = world.QueryBuilder()
             .With<Rel>(Ecs.Wildcard)
             .GroupBy<Rel>()
-            .GroupByCtx(&groupByCtx[0])
-            .OnGroupCreate((ecs_world_t* world, ulong id, void* groupbyArg) =>
+            .OnGroupCreate((World world, ulong id, out ulong groupCtx) =>
             {
                 Assert.True(world != null);
                 Assert.True(id != 0);
-                Assert.True(groupbyArg != null);
-                Assert.True(groupbyArg == &groupByCtx[0]);
-                ulong* ctx = Memory.Alloc<ulong>(1);
-                *ctx = id;
-                return ctx;
+                groupCtx = id;
             })
-            .OnGroupDelete(
-                (ecs_world_t* world, ulong id, void* ctx, void* groupbyArg) =>
-                {
-                    Assert.True(world != null);
-                    Assert.True(id != 0);
-                    Assert.True(groupbyArg != null);
-                    Assert.True(groupbyArg == &groupByCtx[0]);
-                    Assert.True(ctx != null);
-                    Assert.Equal(id, *(ulong*)ctx);
-                    Memory.Free(ctx);
-                })
+            .OnGroupDelete((World world, ulong id, ref ulong groupCtx) =>
+            {
+                Assert.True(world != null);
+                Assert.True(id != 0);
+                Assert.False(Unsafe.IsNullRef(ref groupCtx));
+                Assert.Equal(id, groupCtx);
+            })
             .Build();
 
         bool e1Found = false;
@@ -2734,8 +2726,8 @@ public unsafe class QueryBuilderTests
                 Assert.True(e2Found);
                 Assert.True(e3Found);
                 e1Found = true;
-                ulong* ctx = (ulong*)q.GroupCtx(it.GroupId());
-                Assert.Equal(it.GroupId(), *ctx);
+                ref ulong ctx = ref it.Query().GroupCtx<ulong>(it.GroupId());
+                Assert.Equal(it.GroupId(), ctx);
             }
 
             if (e == e2)
@@ -2745,8 +2737,8 @@ public unsafe class QueryBuilderTests
                 Assert.True(!e2Found);
                 Assert.True(e3Found);
                 e2Found = true;
-                ulong* ctx = (ulong*)q.GroupCtx(it.GroupId());
-                Assert.Equal(it.GroupId(), *ctx);
+                ref ulong ctx = ref it.Query().GroupCtx<ulong>(it.GroupId());
+                Assert.Equal(it.GroupId(), ctx);
             }
 
             if (e == e3)
@@ -2756,8 +2748,8 @@ public unsafe class QueryBuilderTests
                 Assert.True(!e2Found);
                 Assert.True(!e3Found);
                 e3Found = true;
-                ulong* ctx = (ulong*)q.GroupCtx(it.GroupId());
-                Assert.Equal(it.GroupId(), *ctx);
+                ref ulong ctx = ref it.Query().GroupCtx<ulong>(it.GroupId());
+                Assert.Equal(it.GroupId(), ctx);
             }
 
             count++;
@@ -2791,7 +2783,7 @@ public unsafe class QueryBuilderTests
 
         using Query q = world.QueryBuilder()
             .With(rel, Ecs.Wildcard)
-            .GroupBy(rel, group_by_rel)
+            .GroupBy(rel, GroupByRel)
             .Build();
 
         bool e2Found = false;
@@ -2831,7 +2823,7 @@ public unsafe class QueryBuilderTests
 
         using Query q = world.QueryBuilder()
             .With<Rel>(Ecs.Wildcard)
-            .GroupBy<Rel>(group_by_rel)
+            .GroupBy<Rel>(GroupByRel)
             .Build();
 
         bool e2Found = false;

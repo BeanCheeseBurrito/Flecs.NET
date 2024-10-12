@@ -231,7 +231,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     /// <returns>The created system.</returns>
     public System_ Run(delegate*<void> callback)
     {
-        return SetCallback((IntPtr)callback, Pointers.ActionCallbackPointer).Build();
+        return SetCallback((nint)callback, Pointers.ActionCallbackPointer).Build();
     }
 
     /// <summary>
@@ -251,7 +251,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     /// <returns>The created system.</returns>
     public System_ Run(delegate*<Iter, void> callback)
     {
-        return SetRun((IntPtr)callback, Pointers.RunCallbackPointer).Build();
+        return SetRun((nint)callback, Pointers.RunCallbackPointer).Build();
     }
 
     /// <summary>
@@ -271,7 +271,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     /// <returns>Reference to self.</returns>
     public ref SystemBuilder Run(delegate*<Iter, Action<Iter>, void> callback)
     {
-        return ref SetRun((IntPtr)callback, Pointers.RunDelegateCallbackPointer);
+        return ref SetRun((nint)callback, Pointers.RunDelegateCallbackPointer);
     }
 
     /// <summary>
@@ -291,7 +291,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     /// <returns>Reference to self.</returns>
     public ref SystemBuilder Run(delegate*<Iter, delegate*<Iter, void>, void> callback)
     {
-        return ref SetRun((IntPtr)callback, Pointers.RunPointerCallbackPointer);
+        return ref SetRun((nint)callback, Pointers.RunPointerCallbackPointer);
     }
 
     /// <summary>
@@ -311,7 +311,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     /// <returns>The created system.</returns>
     public System_ Iter(delegate*<void> callback)
     {
-        return SetCallback((IntPtr)callback, Pointers.ActionCallbackPointer).Build();
+        return SetCallback((nint)callback, Pointers.ActionCallbackPointer).Build();
     }
 
     /// <summary>
@@ -331,7 +331,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     /// <returns>The created system.</returns>
     public System_ Iter(delegate*<Iter, void> callback)
     {
-        return SetCallback((IntPtr)callback, Pointers.IterCallbackPointer).Build();
+        return SetCallback((nint)callback, Pointers.IterCallbackPointer).Build();
     }
 
     /// <summary>
@@ -351,7 +351,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     /// <returns>The created system.</returns>
     public System_ Each(delegate*<void> callback)
     {
-        return SetCallback((IntPtr)callback, Pointers.ActionCallbackPointer).Build();
+        return SetCallback((nint)callback, Pointers.ActionCallbackPointer).Build();
     }
 
     /// <summary>
@@ -371,7 +371,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     /// <returns>The created system.</returns>
     public System_ Each(delegate*<Entity, void> callback)
     {
-        return SetCallback((IntPtr)callback, Pointers.EachEntityCallbackPointer).Build();
+        return SetCallback((nint)callback, Pointers.EachEntityCallbackPointer).Build();
     }
 
     /// <summary>
@@ -391,48 +391,49 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     /// <returns>The created system.</returns>
     public System_ Each(delegate*<Iter, int, void> callback)
     {
-        return SetCallback((IntPtr)callback, Pointers.EachIterCallbackPointer).Build();
+        return SetCallback((nint)callback, Pointers.EachIterCallbackPointer).Build();
     }
 
-    internal ref SystemBuilder SetCallback<T>(T callback, IntPtr invoker) where T : Delegate
+    internal ref SystemBuilder SetCallback<T>(T callback, nint invoker) where T : Delegate
     {
         FreeCallback();
         IteratorContext context = default;
-        Callback.Set(ref context.Callback, callback, false);
-        Desc.callback = invoker;
+        Callback.Set(ref context.Callback, callback, invoker);
+        Desc.callback = Pointers.IteratorCallback;
         Desc.callback_ctx = Memory.Alloc(context);
         Desc.callback_ctx_free = Pointers.IteratorContextFree;
         return ref this;
     }
 
-    internal ref SystemBuilder SetCallback(IntPtr callback, IntPtr invoker)
+    internal ref SystemBuilder SetCallback(nint callback, nint invoker)
     {
         FreeCallback();
         IteratorContext context = default;
-        Callback.Set(ref context.Callback, callback);
-        Desc.callback = invoker;
+        Callback.Set(ref context.Callback, callback, invoker);
+        Desc.callback = Pointers.IteratorCallback;
         Desc.callback_ctx = Memory.Alloc(context);
         Desc.callback_ctx_free = Pointers.IteratorContextFree;
+
         return ref this;
     }
 
-    internal ref SystemBuilder SetRun<T>(T callback, IntPtr invoker) where T : Delegate
+    internal ref SystemBuilder SetRun<T>(T callback, nint invoker) where T : Delegate
     {
         FreeRun();
         RunContext context = default;
-        Callback.Set(ref context.Callback, callback, false);
-        Desc.run = invoker;
+        Callback.Set(ref context.Callback, callback, invoker);
+        Desc.run = Pointers.RunCallback;
         Desc.run_ctx = Memory.Alloc(context);
         Desc.run_ctx_free = Pointers.RunContextFree;
         return ref this;
     }
 
-    internal ref SystemBuilder SetRun(IntPtr callback, IntPtr invoker)
+    internal ref SystemBuilder SetRun(nint callback, nint invoker)
     {
         FreeRun();
         RunContext context = default;
-        Callback.Set(ref context.Callback, callback);
-        Desc.run = invoker;
+        Callback.Set(ref context.Callback, callback, invoker);
+        Desc.run = Pointers.RunCallback;
         Desc.run_ctx = Memory.Alloc(context);
         Desc.run_ctx_free = Pointers.RunContextFree;
         return ref this;
@@ -441,8 +442,6 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     internal System_ Build()
     {
         Desc.query = QueryBuilder.Desc;
-        Desc.query.binding_ctx = Memory.Alloc(QueryBuilder.Context);
-        Desc.query.binding_ctx_free = Pointers.QueryContextFree;
 
         fixed (ecs_system_desc_t* ptr = &Desc)
             return new System_(World, ecs_system_init(World, ptr));
@@ -455,7 +454,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
 
     private void FreeRun()
     {
-        if (Desc.run == IntPtr.Zero)
+        if (Desc.run == default)
             return;
 
         ((delegate*<void*, void>)Desc.run_ctx_free)(Desc.run_ctx);
@@ -463,7 +462,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
 
     private void FreeCallback()
     {
-        if (Desc.callback == IntPtr.Zero)
+        if (Desc.callback == default)
             return;
 
         ((delegate*<void*, void>)Desc.callback_ctx_free)(Desc.callback_ctx);

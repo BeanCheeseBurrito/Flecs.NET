@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
@@ -116,12 +117,14 @@ public unsafe partial struct Query : IEquatable<Query>, IDisposable, IIterable
     /// <summary>
     ///     Get context for group.
     /// </summary>
-    /// <param name="groupId"></param>
+    /// <param name="group">The group id.</param>
     /// <returns></returns>
-    public void* GroupCtx(ulong groupId)
+    public ref T GroupCtx<T>(ulong group)
     {
-        ecs_query_group_info_t* groupInfo = GroupInfo(groupId);
-        return groupInfo == null ? null : groupInfo->ctx;
+        ecs_query_group_info_t* groupInfo = GroupInfo(group);
+        return ref groupInfo == null || groupInfo->ctx == null
+            ? ref Unsafe.NullRef<T>()
+            : ref ((UserContext*)groupInfo->ctx)->Get<T>();
     }
 
     /// <summary>

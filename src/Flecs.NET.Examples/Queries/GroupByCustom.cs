@@ -84,7 +84,7 @@ public static class Queries_GroupByCustom
         });
     }
 
-    private static ulong GroupByRelation(World world, Table table, Entity id)
+    private static ulong GroupByRelation(World world, Table table, ulong id)
     {
         if (table.Search(id, Ecs.Wildcard, out Id match) != -1)
             return match.Second();

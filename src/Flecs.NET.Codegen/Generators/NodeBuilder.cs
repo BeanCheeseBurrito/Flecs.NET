@@ -18,7 +18,7 @@ public static class NodeBuilder
             {
                 {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertReferenceTypes({{(Generator.GetCallbackIsUnmanaged(callback) ? "false" : "true")}});
                 {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertSparseTypes(World, {{(Generator.GetCallbackIsIter(callback) ? "false" : "true")}});
-                return {{(Generator.GetCallbackIsRun(callback) ? "SetRun" : "SetCallback")}}({{(Generator.GetCallbackIsDelegate(callback) ? string.Empty : "(IntPtr)")}}callback, Pointers<{{Generator.TypeParameters[i]}}>.{{callback}}).Build();
+                return {{(Generator.GetCallbackIsRun(callback) ? "SetRun" : "SetCallback")}}({{(Generator.GetCallbackIsDelegate(callback) ? string.Empty : "(nint)")}}callback, Pointers<{{Generator.TypeParameters[i]}}>.{{callback}}).Build();
             }
         """);
 

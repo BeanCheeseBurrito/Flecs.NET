@@ -4,46 +4,89 @@ using Flecs.NET.Utilities;
 
 namespace Flecs.NET.Core.BindingContext;
 
-internal struct Callback : IDisposable
+internal struct Callback : IDisposable, IEquatable<Callback>
 {
-    public IntPtr Pointer;
-    public GCHandle GcHandle;
+    /// <summary>
+    ///     Delegate of user callback.
+    /// </summary>
+    public GCHandle Delegate;
 
-    public Callback(IntPtr function, GCHandle gcHandle)
-    {
-        Pointer = function;
-        GcHandle = gcHandle;
-    }
+    /// <summary>
+    ///     Pointer of user callback.
+    /// </summary>
+    public nint Pointer;
+
+    /// <summary>
+    ///     Function used to invoke user callback.
+    /// </summary>
+    public nint Invoker;
 
     public void Dispose()
     {
-        Managed.FreeGcHandle(GcHandle);
+        Managed.FreeGcHandle(Delegate);
+        Invoker = default;
         Pointer = default;
-        GcHandle = default;
+        Delegate = default;
     }
 
-    internal static Callback Allocate<T>(T? callback, bool storePtr = true) where T : Delegate
+    internal void Set(nint callback, nint invoker)
     {
-        if (callback == null)
-            return default;
+        if (this != default)
+            Dispose();
 
-        IntPtr funcPtr = storePtr ? Marshal.GetFunctionPointerForDelegate(callback) : IntPtr.Zero;
-        return new Callback(funcPtr, GCHandle.Alloc(callback));
+        Invoker = invoker;
+        Pointer = callback;
     }
 
-    internal static void Set(ref Callback dest, IntPtr callback)
+    internal void Set<T>(T callback, nint invoker) where T : Delegate
     {
-        if (dest.GcHandle != default)
+        if (this != default)
+            Dispose();
+
+        Invoker = invoker;
+        Delegate = GCHandle.Alloc(callback);
+    }
+
+    internal static void Set(ref Callback dest, nint callback, nint invoker)
+    {
+        if (dest != default)
             dest.Dispose();
 
+        dest.Invoker = invoker;
         dest.Pointer = callback;
     }
 
-    internal static void Set<T>(ref Callback dest, T? callback, bool storePtr = true) where T : Delegate
+    internal static void Set<T>(ref Callback dest, T callback, nint invoker) where T : Delegate
     {
-        if (dest.GcHandle != default)
+        if (dest != default)
             dest.Dispose();
 
-        dest = Allocate(callback, storePtr);
+        dest.Invoker = invoker;
+        dest.Delegate = GCHandle.Alloc(callback);
+    }
+
+    public bool Equals(Callback other)
+    {
+        return Delegate.Equals(other.Delegate) && Pointer == other.Pointer && Invoker == other.Invoker;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is Callback other && Equals(other);
+    }
+
+    public static bool operator ==(Callback left, Callback right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(Callback left, Callback right)
+    {
+        return !(left == right);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Delegate, Pointer, Invoker);
     }
 }

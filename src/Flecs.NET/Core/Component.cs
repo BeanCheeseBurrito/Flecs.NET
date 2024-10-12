@@ -400,7 +400,7 @@ public unsafe partial struct Component<TComponent>
         return UntypedComponent.TypeInfo();
     }
 
-    private void GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context)
+    internal void GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context)
     {
         ecs_type_hooks_t* existingHooks = ecs_get_hooks_id(World, Id);
         hooks = existingHooks == null ? default : *existingHooks;
@@ -425,21 +425,10 @@ public unsafe partial struct Component<TComponent>
     public ref Component<TComponent> Ctor(Ecs.CtorCallback<TComponent> callback)
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.ctor == IntPtr.Zero ||
-            hooks.ctor == Pointers<TComponent>.DefaultManagedCtorCallback ||
-            hooks.ctor == Pointers<TComponent>.ManagedCtorCallbackDelegate ||
-            hooks.ctor == Pointers<TComponent>.ManagedCtorCallbackPointer ||
-            hooks.ctor == Pointers<TComponent>.UnmanagedCtorCallbackDelegate ||
-            hooks.ctor == Pointers<TComponent>.UnmanagedCtorCallbackPointer,
-            "Cannot register Ctor hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->Ctor, callback, false);
-
-        hooks.ctor = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
+        hooks.ctor = Pointers.CtorCallback;
+        context->Ctor.Set(callback, RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
             ? Pointers<TComponent>.ManagedCtorCallbackDelegate
-            : Pointers<TComponent>.UnmanagedCtorCallbackDelegate;
+            : Pointers<TComponent>.UnmanagedCtorCallbackDelegate);
 
         ecs_set_hooks_id(World, Id, &hooks);
 
@@ -454,21 +443,10 @@ public unsafe partial struct Component<TComponent>
     public ref Component<TComponent> Ctor(delegate*<ref TComponent, TypeInfo, void> callback)
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.ctor == IntPtr.Zero ||
-            hooks.ctor == Pointers<TComponent>.DefaultManagedCtorCallback ||
-            hooks.ctor == Pointers<TComponent>.ManagedCtorCallbackDelegate ||
-            hooks.ctor == Pointers<TComponent>.ManagedCtorCallbackPointer ||
-            hooks.ctor == Pointers<TComponent>.UnmanagedCtorCallbackDelegate ||
-            hooks.ctor == Pointers<TComponent>.UnmanagedCtorCallbackPointer,
-            "Cannot register Ctor hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->Ctor, (IntPtr)callback);
-
-        hooks.ctor = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
+        hooks.ctor = Pointers.CtorCallback;
+        context->Ctor.Set((nint)callback, RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
             ? Pointers<TComponent>.ManagedCtorCallbackPointer
-            : Pointers<TComponent>.UnmanagedCtorCallbackPointer;
+            : Pointers<TComponent>.UnmanagedCtorCallbackPointer);
 
         ecs_set_hooks_id(World, Id, &hooks);
 
@@ -483,21 +461,10 @@ public unsafe partial struct Component<TComponent>
     public ref Component<TComponent> Dtor(Ecs.DtorCallback<TComponent> callback)
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.dtor == IntPtr.Zero ||
-            hooks.dtor == Pointers<TComponent>.DefaultManagedDtorCallback ||
-            hooks.dtor == Pointers<TComponent>.ManagedDtorCallbackDelegate ||
-            hooks.dtor == Pointers<TComponent>.ManagedDtorCallbackPointer ||
-            hooks.dtor == Pointers<TComponent>.UnmanagedDtorCallbackDelegate ||
-            hooks.dtor == Pointers<TComponent>.UnmanagedDtorCallbackPointer,
-            "Cannot register Dtor hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->Dtor, callback, false);
-
-        hooks.dtor = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
+        hooks.dtor = Pointers.DtorCallback;
+        context->Dtor.Set(callback, RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
             ? Pointers<TComponent>.ManagedDtorCallbackDelegate
-            : Pointers<TComponent>.UnmanagedDtorCallbackDelegate;
+            : Pointers<TComponent>.UnmanagedDtorCallbackDelegate);
 
         ecs_set_hooks_id(World, Id, &hooks);
 
@@ -512,21 +479,10 @@ public unsafe partial struct Component<TComponent>
     public ref Component<TComponent> Dtor(delegate*<ref TComponent, TypeInfo, void> callback)
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.dtor == IntPtr.Zero ||
-            hooks.dtor == Pointers<TComponent>.DefaultManagedDtorCallback ||
-            hooks.dtor == Pointers<TComponent>.ManagedDtorCallbackDelegate ||
-            hooks.dtor == Pointers<TComponent>.ManagedDtorCallbackPointer ||
-            hooks.dtor == Pointers<TComponent>.UnmanagedDtorCallbackDelegate ||
-            hooks.dtor == Pointers<TComponent>.UnmanagedDtorCallbackPointer,
-            "Cannot register Dtor hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->Dtor, (IntPtr)callback);
-
-        hooks.dtor = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
+        hooks.dtor = Pointers.DtorCallback;
+        context->Dtor.Set((nint)callback, RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
             ? Pointers<TComponent>.ManagedDtorCallbackPointer
-            : Pointers<TComponent>.UnmanagedDtorCallbackPointer;
+            : Pointers<TComponent>.UnmanagedDtorCallbackPointer);
 
         ecs_set_hooks_id(World, Id, &hooks);
 
@@ -541,21 +497,10 @@ public unsafe partial struct Component<TComponent>
     public ref Component<TComponent> Move(Ecs.MoveCallback<TComponent> callback)
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.move == IntPtr.Zero ||
-            hooks.move == Pointers<TComponent>.DefaultManagedMoveCallback ||
-            hooks.move == Pointers<TComponent>.ManagedMoveCallbackDelegate ||
-            hooks.move == Pointers<TComponent>.ManagedMoveCallbackPointer ||
-            hooks.move == Pointers<TComponent>.UnmanagedMoveCallbackDelegate ||
-            hooks.move == Pointers<TComponent>.UnmanagedMoveCallbackPointer,
-            "Cannot register Move hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->Move, callback, false);
-
-        hooks.move = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
+        hooks.move = Pointers.MoveCallback;
+        context->Move.Set(callback, RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
             ? Pointers<TComponent>.ManagedMoveCallbackDelegate
-            : Pointers<TComponent>.UnmanagedMoveCallbackDelegate;
+            : Pointers<TComponent>.UnmanagedMoveCallbackDelegate);
 
         ecs_set_hooks_id(World, Id, &hooks);
 
@@ -570,21 +515,10 @@ public unsafe partial struct Component<TComponent>
     public ref Component<TComponent> Move(delegate*<ref TComponent, ref TComponent, TypeInfo, void> callback)
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.move == IntPtr.Zero ||
-            hooks.move == Pointers<TComponent>.DefaultManagedMoveCallback ||
-            hooks.move == Pointers<TComponent>.ManagedMoveCallbackDelegate ||
-            hooks.move == Pointers<TComponent>.ManagedMoveCallbackPointer ||
-            hooks.move == Pointers<TComponent>.UnmanagedMoveCallbackDelegate ||
-            hooks.move == Pointers<TComponent>.UnmanagedMoveCallbackPointer,
-            "Cannot register Move hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->Move, (IntPtr)callback);
-
-        hooks.move = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
+        hooks.move = Pointers.MoveCallback;
+        context->Move.Set((nint)callback, RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
             ? Pointers<TComponent>.ManagedMoveCallbackPointer
-            : Pointers<TComponent>.UnmanagedMoveCallbackPointer;
+            : Pointers<TComponent>.UnmanagedMoveCallbackPointer);
 
         ecs_set_hooks_id(World, Id, &hooks);
 
@@ -599,21 +533,10 @@ public unsafe partial struct Component<TComponent>
     public ref Component<TComponent> Copy(Ecs.CopyCallback<TComponent> callback)
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.copy == IntPtr.Zero ||
-            hooks.copy == Pointers<TComponent>.DefaultManagedCopyCallback ||
-            hooks.copy == Pointers<TComponent>.ManagedCopyCallbackDelegate ||
-            hooks.copy == Pointers<TComponent>.ManagedCopyCallbackPointer ||
-            hooks.copy == Pointers<TComponent>.UnmanagedCopyCallbackDelegate ||
-            hooks.copy == Pointers<TComponent>.UnmanagedCopyCallbackPointer,
-            "Cannot register Copy hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->Copy, callback, false);
-
-        hooks.copy = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
+        hooks.copy = Pointers.CopyCallback;
+        context->Copy.Set(callback, RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
             ? Pointers<TComponent>.ManagedCopyCallbackDelegate
-            : Pointers<TComponent>.UnmanagedCopyCallbackDelegate;
+            : Pointers<TComponent>.UnmanagedCopyCallbackDelegate);
 
         ecs_set_hooks_id(World, Id, &hooks);
 
@@ -628,21 +551,10 @@ public unsafe partial struct Component<TComponent>
     public ref Component<TComponent> Copy(delegate*<ref TComponent, ref TComponent, TypeInfo, void> callback)
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.copy == IntPtr.Zero ||
-            hooks.copy == Pointers<TComponent>.DefaultManagedCopyCallback ||
-            hooks.copy == Pointers<TComponent>.ManagedCopyCallbackDelegate ||
-            hooks.copy == Pointers<TComponent>.ManagedCopyCallbackPointer ||
-            hooks.copy == Pointers<TComponent>.UnmanagedCopyCallbackDelegate ||
-            hooks.copy == Pointers<TComponent>.UnmanagedCopyCallbackPointer,
-            "Cannot register Copy hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->Copy, (IntPtr)callback);
-
-        hooks.copy = RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
+        hooks.copy = Pointers.CopyCallback;
+        context->Copy.Set((nint)callback, RuntimeHelpers.IsReferenceOrContainsReferences<TComponent>()
             ? Pointers<TComponent>.ManagedCopyCallbackPointer
-            : Pointers<TComponent>.UnmanagedCopyCallbackPointer;
+            : Pointers<TComponent>.UnmanagedCopyCallbackPointer);
 
         ecs_set_hooks_id(World, Id, &hooks);
 
@@ -664,9 +576,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnAdd<T>(Ecs.IterSpanCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnAdd(Ecs.IterSpanCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, Pointers<TComponent>.OnAddIterSpanCallbackDelegate);
     }
 
@@ -675,9 +587,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnAdd<T>(Ecs.IterPointerCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnAdd(Ecs.IterPointerCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, Pointers<TComponent>.OnAddIterPointerCallbackDelegate);
     }
 
@@ -716,9 +628,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnAdd<T>(Ecs.EachPointerCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnAdd(Ecs.EachPointerCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, Pointers<TComponent>.OnAddEachPointerCallbackDelegate);
     }
 
@@ -727,9 +639,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnAdd<T>(Ecs.EachEntityPointerCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnAdd(Ecs.EachEntityPointerCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, Pointers<TComponent>.OnAddEachEntityPointerCallbackDelegate);
     }
 
@@ -738,9 +650,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnAdd<T>(Ecs.EachIterPointerCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnAdd(Ecs.EachIterPointerCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, Pointers<TComponent>.OnAddEachIterPointerCallbackDelegate);
     }
 
@@ -759,9 +671,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnSet<T>(Ecs.IterSpanCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnSet(Ecs.IterSpanCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, Pointers<TComponent>.OnSetIterSpanCallbackDelegate);
     }
 
@@ -770,9 +682,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnSet<T>(Ecs.IterPointerCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnSet(Ecs.IterPointerCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, Pointers<TComponent>.OnSetIterPointerCallbackDelegate);
     }
 
@@ -811,9 +723,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnSet<T>(Ecs.EachPointerCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnSet(Ecs.EachPointerCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, Pointers<TComponent>.OnSetEachPointerCallbackDelegate);
     }
 
@@ -822,9 +734,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnSet<T>(Ecs.EachEntityPointerCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnSet(Ecs.EachEntityPointerCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, Pointers<TComponent>.OnSetEachEntityPointerCallbackDelegate);
     }
 
@@ -833,9 +745,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnSet<T>(Ecs.EachIterPointerCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnSet(Ecs.EachIterPointerCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, Pointers<TComponent>.OnSetEachIterPointerCallbackDelegate);
     }
 
@@ -854,9 +766,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnRemove<T>(Ecs.IterSpanCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnRemove(Ecs.IterSpanCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, Pointers<TComponent>.OnRemoveIterSpanCallbackDelegate);
     }
 
@@ -865,9 +777,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnRemove<T>(Ecs.IterPointerCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnRemove(Ecs.IterPointerCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, Pointers<TComponent>.OnRemoveIterPointerCallbackDelegate);
     }
 
@@ -906,9 +818,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnRemove<T>(Ecs.EachPointerCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnRemove(Ecs.EachPointerCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, Pointers<TComponent>.OnRemoveEachPointerCallbackDelegate);
     }
 
@@ -917,9 +829,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnRemove<T>(Ecs.EachEntityPointerCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnRemove(Ecs.EachEntityPointerCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, Pointers<TComponent>.OnRemoveEachEntityPointerCallbackDelegate);
     }
 
@@ -928,9 +840,9 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnRemove<T>(Ecs.EachIterPointerCallback<T> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnRemove(Ecs.EachIterPointerCallback<TComponent> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, Pointers<TComponent>.OnRemoveEachIterPointerCallbackDelegate);
     }
 
@@ -941,7 +853,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(delegate*<Iter, Field<TComponent>, void> callback)
     {
-        return ref SetOnAddCallback((IntPtr)callback, Pointers<TComponent>.OnAddIterFieldCallbackPointer);
+        return ref SetOnAddCallback((nint)callback, Pointers<TComponent>.OnAddIterFieldCallbackPointer);
     }
 
     /// <summary>
@@ -949,10 +861,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnAdd<T>(delegate*<Iter, Span<T>, void> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnAdd(delegate*<Iter, Span<TComponent>, void> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnAddCallback((IntPtr)callback, Pointers<TComponent>.OnAddIterSpanCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnAddCallback((nint)callback, Pointers<TComponent>.OnAddIterSpanCallbackPointer);
     }
 
     /// <summary>
@@ -960,10 +872,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnAdd<T>(delegate*<Iter, T*, void> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnAdd(delegate*<Iter, TComponent*, void> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnAddCallback((IntPtr)callback, Pointers<TComponent>.OnAddIterPointerCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnAddCallback((nint)callback, Pointers<TComponent>.OnAddIterPointerCallbackPointer);
     }
 
     /// <summary>
@@ -973,7 +885,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(delegate*<ref TComponent, void> callback)
     {
-        return ref SetOnAddCallback((IntPtr)callback, Pointers<TComponent>.OnAddEachRefCallbackPointer);
+        return ref SetOnAddCallback((nint)callback, Pointers<TComponent>.OnAddEachRefCallbackPointer);
     }
 
     /// <summary>
@@ -983,7 +895,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(delegate*<Entity, ref TComponent, void> callback)
     {
-        return ref SetOnAddCallback((IntPtr)callback, Pointers<TComponent>.OnAddEachEntityRefCallbackPointer);
+        return ref SetOnAddCallback((nint)callback, Pointers<TComponent>.OnAddEachEntityRefCallbackPointer);
     }
 
     /// <summary>
@@ -993,7 +905,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(delegate*<Iter, int, ref TComponent, void> callback)
     {
-        return ref SetOnAddCallback((IntPtr)callback, Pointers<TComponent>.OnAddEachIterRefCallbackPointer);
+        return ref SetOnAddCallback((nint)callback, Pointers<TComponent>.OnAddEachIterRefCallbackPointer);
     }
 
     /// <summary>
@@ -1001,10 +913,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnAdd<T>(delegate*<T*, void>callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnAdd(delegate*<TComponent*, void>callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnAddCallback((IntPtr)callback, Pointers<TComponent>.OnAddEachPointerCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnAddCallback((nint)callback, Pointers<TComponent>.OnAddEachPointerCallbackPointer);
     }
 
     /// <summary>
@@ -1012,10 +924,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnAdd<T>(delegate*<Entity, T*, void> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnAdd(delegate*<Entity, TComponent*, void> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnAddCallback((IntPtr)callback, Pointers<TComponent>.OnAddEachEntityPointerCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnAddCallback((nint)callback, Pointers<TComponent>.OnAddEachEntityPointerCallbackPointer);
     }
 
     /// <summary>
@@ -1023,10 +935,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnAdd<T>(delegate*<Iter, int, T*, void> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnAdd(delegate*<Iter, int, TComponent*, void> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnAddCallback((IntPtr)callback, Pointers<TComponent>.OnAddEachIterPointerCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnAddCallback((nint)callback, Pointers<TComponent>.OnAddEachIterPointerCallbackPointer);
     }
 
     /// <summary>
@@ -1036,7 +948,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(delegate*<Iter, Field<TComponent>, void> callback)
     {
-        return ref SetOnSetCallback((IntPtr)callback, Pointers<TComponent>.OnSetIterFieldCallbackPointer);
+        return ref SetOnSetCallback((nint)callback, Pointers<TComponent>.OnSetIterFieldCallbackPointer);
     }
 
     /// <summary>
@@ -1044,10 +956,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnSet<T>(delegate*<Iter, Span<T>, void> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnSet(delegate*<Iter, Span<TComponent>, void> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnSetCallback((IntPtr)callback, Pointers<TComponent>.OnSetIterSpanCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnSetCallback((nint)callback, Pointers<TComponent>.OnSetIterSpanCallbackPointer);
     }
 
     /// <summary>
@@ -1055,10 +967,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnSet<T>(delegate*<Iter, T*, void> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnSet(delegate*<Iter, TComponent*, void> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnSetCallback((IntPtr)callback, Pointers<TComponent>.OnSetIterPointerCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnSetCallback((nint)callback, Pointers<TComponent>.OnSetIterPointerCallbackPointer);
     }
 
     /// <summary>
@@ -1068,7 +980,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(delegate*<ref TComponent, void> callback)
     {
-        return ref SetOnSetCallback((IntPtr)callback, Pointers<TComponent>.OnSetEachRefCallbackPointer);
+        return ref SetOnSetCallback((nint)callback, Pointers<TComponent>.OnSetEachRefCallbackPointer);
     }
 
     /// <summary>
@@ -1078,7 +990,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(delegate*<Entity, ref TComponent, void> callback)
     {
-        return ref SetOnSetCallback((IntPtr)callback, Pointers<TComponent>.OnSetEachEntityRefCallbackPointer);
+        return ref SetOnSetCallback((nint)callback, Pointers<TComponent>.OnSetEachEntityRefCallbackPointer);
     }
 
     /// <summary>
@@ -1088,7 +1000,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(delegate*<Iter, int, ref TComponent, void> callback)
     {
-        return ref SetOnSetCallback((IntPtr)callback, Pointers<TComponent>.OnSetEachIterRefCallbackPointer);
+        return ref SetOnSetCallback((nint)callback, Pointers<TComponent>.OnSetEachIterRefCallbackPointer);
     }
 
     /// <summary>
@@ -1096,10 +1008,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnSet<T>(delegate*<T*, void>callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnSet(delegate*<TComponent*, void>callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnSetCallback((IntPtr)callback, Pointers<TComponent>.OnSetEachPointerCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnSetCallback((nint)callback, Pointers<TComponent>.OnSetEachPointerCallbackPointer);
     }
 
     /// <summary>
@@ -1107,10 +1019,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnSet<T>(delegate*<Entity, T*, void> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnSet(delegate*<Entity, TComponent*, void> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnSetCallback((IntPtr)callback, Pointers<TComponent>.OnSetEachEntityPointerCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnSetCallback((nint)callback, Pointers<TComponent>.OnSetEachEntityPointerCallbackPointer);
     }
 
     /// <summary>
@@ -1118,10 +1030,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnSet<T>(delegate*<Iter, int, T*, void> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnSet(delegate*<Iter, int, TComponent*, void> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnSetCallback((IntPtr)callback, Pointers<TComponent>.OnSetEachIterPointerCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnSetCallback((nint)callback, Pointers<TComponent>.OnSetEachIterPointerCallbackPointer);
     }
 
     /// <summary>
@@ -1131,7 +1043,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(delegate*<Iter, Field<TComponent>, void> callback)
     {
-        return ref SetOnRemoveCallback((IntPtr)callback, Pointers<TComponent>.OnRemoveIterFieldCallbackPointer);
+        return ref SetOnRemoveCallback((nint)callback, Pointers<TComponent>.OnRemoveIterFieldCallbackPointer);
     }
 
     /// <summary>
@@ -1139,10 +1051,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnRemove<T>(delegate*<Iter, Span<T>, void> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnRemove(delegate*<Iter, Span<TComponent>, void> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnRemoveCallback((IntPtr)callback, Pointers<TComponent>.OnRemoveIterSpanCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnRemoveCallback((nint)callback, Pointers<TComponent>.OnRemoveIterSpanCallbackPointer);
     }
 
     /// <summary>
@@ -1150,10 +1062,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnRemove<T>(delegate*<Iter, T*, void> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnRemove(delegate*<Iter, TComponent*, void> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnRemoveCallback((IntPtr)callback, Pointers<TComponent>.OnRemoveIterPointerCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnRemoveCallback((nint)callback, Pointers<TComponent>.OnRemoveIterPointerCallbackPointer);
     }
 
     /// <summary>
@@ -1163,7 +1075,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(delegate*<ref TComponent, void> callback)
     {
-        return ref SetOnRemoveCallback((IntPtr)callback, Pointers<TComponent>.OnRemoveEachRefCallbackPointer);
+        return ref SetOnRemoveCallback((nint)callback, Pointers<TComponent>.OnRemoveEachRefCallbackPointer);
     }
 
     /// <summary>
@@ -1173,7 +1085,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(delegate*<Entity, ref TComponent, void> callback)
     {
-        return ref SetOnRemoveCallback((IntPtr)callback, Pointers<TComponent>.OnRemoveEachEntityRefCallbackPointer);
+        return ref SetOnRemoveCallback((nint)callback, Pointers<TComponent>.OnRemoveEachEntityRefCallbackPointer);
     }
 
     /// <summary>
@@ -1183,7 +1095,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(delegate*<Iter, int, ref TComponent, void> callback)
     {
-        return ref SetOnRemoveCallback((IntPtr)callback, Pointers<TComponent>.OnRemoveEachIterRefCallbackPointer);
+        return ref SetOnRemoveCallback((nint)callback, Pointers<TComponent>.OnRemoveEachIterRefCallbackPointer);
     }
 
     /// <summary>
@@ -1191,10 +1103,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnRemove<T>(delegate*<T*, void>callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnRemove(delegate*<TComponent*, void>callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnRemoveCallback((IntPtr)callback, Pointers<TComponent>.OnRemoveEachPointerCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnRemoveCallback((nint)callback, Pointers<TComponent>.OnRemoveEachPointerCallbackPointer);
     }
 
     /// <summary>
@@ -1202,10 +1114,10 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnRemove<T>(delegate*<Entity, T*, void> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnRemove(delegate*<Entity, TComponent*, void> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnRemoveCallback((IntPtr)callback, Pointers<TComponent>.OnRemoveEachEntityPointerCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnRemoveCallback((nint)callback, Pointers<TComponent>.OnRemoveEachEntityPointerCallbackPointer);
     }
 
     /// <summary>
@@ -1213,219 +1125,63 @@ public unsafe partial struct Component<TComponent>
     /// </summary>
     /// <param name="callback">The callback.</param>
     /// <returns>Reference to self.</returns>
-    public ref Component<TComponent> OnRemove<T>(delegate*<Iter, int, T*, void> callback) where T : unmanaged, TComponent
+    public ref Component<TComponent> OnRemove(delegate*<Iter, int, TComponent*, void> callback)
     {
-        Ecs.Assert(typeof(T) == typeof(TComponent), "T must match TComponent type.");
-        return ref SetOnRemoveCallback((IntPtr)callback, Pointers<TComponent>.OnRemoveEachIterPointerCallbackPointer);
+        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        return ref SetOnRemoveCallback((nint)callback, Pointers<TComponent>.OnRemoveEachIterPointerCallbackPointer);
     }
 
-    private ref Component<TComponent> SetOnAddCallback<T>(T? callback, IntPtr invoker) where T : Delegate
+    private ref Component<TComponent> SetOnAddCallback<T>(T callback, nint invoker) where T : Delegate
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.on_add == IntPtr.Zero ||
-
-            hooks.on_add == Pointers<TComponent>.OnAddIterFieldCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddIterSpanCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddIterPointerCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachRefCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachEntityRefCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachIterRefCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachPointerCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachEntityPointerCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachIterPointerCallbackDelegate ||
-
-            hooks.on_add == Pointers<TComponent>.OnAddIterFieldCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddIterSpanCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddIterPointerCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachRefCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachEntityRefCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachIterRefCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachPointerCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachEntityPointerCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachIterPointerCallbackPointer,
-            "Cannot register OnAdd hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->OnAdd, callback, false);
-        hooks.on_add = invoker;
+        hooks.on_add = Pointers.OnAddCallback;
+        context->OnAdd.Set(callback, invoker);
         ecs_set_hooks_id(World, Id, &hooks);
-
         return ref this;
     }
 
-    private ref Component<TComponent> SetOnSetCallback<T>(T? callback, IntPtr invoker) where T : Delegate
+    private ref Component<TComponent> SetOnSetCallback<T>(T callback, nint invoker) where T : Delegate
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.on_set == IntPtr.Zero ||
-
-            hooks.on_set == Pointers<TComponent>.OnSetIterFieldCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetIterSpanCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetIterPointerCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachRefCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachEntityRefCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachIterRefCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachPointerCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachEntityPointerCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachIterPointerCallbackDelegate ||
-
-            hooks.on_set == Pointers<TComponent>.OnSetIterFieldCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetIterSpanCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetIterPointerCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachRefCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachEntityRefCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachIterRefCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachPointerCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachEntityPointerCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachIterPointerCallbackPointer,
-            "Cannot register OnSet hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->OnSet, callback, false);
-        hooks.on_set = invoker;
+        hooks.on_set = Pointers.OnSetCallback;
+        context->OnSet.Set(callback, invoker);
         ecs_set_hooks_id(World, Id, &hooks);
-
         return ref this;
     }
 
-    private ref Component<TComponent> SetOnRemoveCallback<T>(T? callback, IntPtr invoker) where T : Delegate
+    private ref Component<TComponent> SetOnRemoveCallback<T>(T callback, nint invoker) where T : Delegate
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.on_remove == IntPtr.Zero ||
-
-            hooks.on_remove == Pointers<TComponent>.OnRemoveIterFieldCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveIterSpanCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveIterPointerCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachRefCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachEntityRefCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachIterRefCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachPointerCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachEntityPointerCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachIterPointerCallbackDelegate ||
-
-            hooks.on_remove == Pointers<TComponent>.OnRemoveIterFieldCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveIterSpanCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveIterPointerCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachRefCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachEntityRefCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachIterRefCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachPointerCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachEntityPointerCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachIterPointerCallbackPointer,
-            "Cannot register OnRemove hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->OnRemove, callback, false);
-        hooks.on_remove = invoker;
+        hooks.on_remove = Pointers.OnRemoveCallback;
+        context->OnRemove.Set(callback, invoker);
         ecs_set_hooks_id(World, Id, &hooks);
-
         return ref this;
     }
 
-    private ref Component<TComponent> SetOnAddCallback(IntPtr callback, IntPtr invoker)
+    private ref Component<TComponent> SetOnAddCallback(nint callback, nint invoker)
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.on_add == IntPtr.Zero ||
-
-            hooks.on_add == Pointers<TComponent>.OnAddIterFieldCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddIterSpanCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddIterPointerCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachRefCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachEntityRefCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachIterRefCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachPointerCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachEntityPointerCallbackDelegate ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachIterPointerCallbackDelegate ||
-
-            hooks.on_add == Pointers<TComponent>.OnAddIterFieldCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddIterSpanCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddIterPointerCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachRefCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachEntityRefCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachIterRefCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachPointerCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachEntityPointerCallbackPointer ||
-            hooks.on_add == Pointers<TComponent>.OnAddEachIterPointerCallbackPointer,
-            "Cannot register OnAdd hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->OnAdd, callback);
-        hooks.on_add = invoker;
+        hooks.on_add = Pointers.OnAddCallback;
+        context->OnAdd.Set(callback, invoker);
         ecs_set_hooks_id(World, Id, &hooks);
-
         return ref this;
     }
 
-    private ref Component<TComponent> SetOnSetCallback(IntPtr callback, IntPtr invoker)
+    private ref Component<TComponent> SetOnSetCallback(nint callback, nint invoker)
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.on_set == IntPtr.Zero ||
-
-            hooks.on_set == Pointers<TComponent>.OnSetIterFieldCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetIterSpanCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetIterPointerCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachRefCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachEntityRefCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachIterRefCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachPointerCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachEntityPointerCallbackDelegate ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachIterPointerCallbackDelegate ||
-
-            hooks.on_set == Pointers<TComponent>.OnSetIterFieldCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetIterSpanCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetIterPointerCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachRefCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachEntityRefCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachIterRefCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachPointerCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachEntityPointerCallbackPointer ||
-            hooks.on_set == Pointers<TComponent>.OnSetEachIterPointerCallbackPointer,
-            "Cannot register OnSet hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->OnSet, callback);
-        hooks.on_set = invoker;
+        hooks.on_set = Pointers.OnSetCallback;
+        context->OnSet.Set(callback, invoker);
         ecs_set_hooks_id(World, Id, &hooks);
-
         return ref this;
     }
 
-    private ref Component<TComponent> SetOnRemoveCallback(IntPtr callback, IntPtr invoker)
+    private ref Component<TComponent> SetOnRemoveCallback(nint callback, nint invoker)
     {
         GetHooksAndContext(out ecs_type_hooks_t hooks, out TypeHooksContext* context);
-
-        Ecs.Assert(
-            hooks.on_remove == IntPtr.Zero ||
-
-            hooks.on_remove == Pointers<TComponent>.OnRemoveIterFieldCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveIterSpanCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveIterPointerCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachRefCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachEntityRefCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachIterRefCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachPointerCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachEntityPointerCallbackDelegate ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachIterPointerCallbackDelegate ||
-
-            hooks.on_remove == Pointers<TComponent>.OnRemoveIterFieldCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveIterSpanCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveIterPointerCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachRefCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachEntityRefCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachIterRefCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachPointerCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachEntityPointerCallbackPointer ||
-            hooks.on_remove == Pointers<TComponent>.OnRemoveEachIterPointerCallbackPointer,
-            "Cannot register OnRemove hook because it is already registered by a non Flecs.NET application.");
-
-        Callback.Set(ref context->OnRemove, callback);
-        hooks.on_remove = invoker;
+        hooks.on_remove = Pointers.OnRemoveCallback;
+        context->OnRemove.Set(callback, invoker);
         ecs_set_hooks_id(World, Id, &hooks);
-
         return ref this;
     }
 }

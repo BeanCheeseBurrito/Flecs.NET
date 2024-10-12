@@ -99,6 +99,6 @@ public static unsafe class Utils
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void OsFree(void* data)
     {
-        OsFree((IntPtr)data);
+        OsFree((nint)data);
     }
 }

@@ -414,11 +414,11 @@ public unsafe interface IQueryBuilder<TBuilder, TResult> : IQueryBuilderBase
     /// <inheritdoc cref="QueryBuilder.TermAt(int)"/>
     public ref TBuilder TermAt(int termIndex);
 
-    /// <inheritdoc cref="QueryBuilder.OrderBy(ulong, Ecs.OrderByAction)"/>
-    public ref TBuilder OrderBy(ulong component, Ecs.OrderByAction compare);
+    /// <inheritdoc cref="QueryBuilder.OrderBy(ulong, Ecs.OrderByCallback)"/>
+    public ref TBuilder OrderBy(ulong component, Ecs.OrderByCallback callback);
 
-    /// <inheritdoc cref="QueryBuilder.OrderBy{T}(Ecs.OrderByAction)"/>
-    public ref TBuilder OrderBy<T>(Ecs.OrderByAction compare);
+    /// <inheritdoc cref="QueryBuilder.OrderBy{T}(Ecs.OrderByCallback)"/>
+    public ref TBuilder OrderBy<T>(Ecs.OrderByCallback callback);
 
     /// <inheritdoc cref="QueryBuilder.GroupBy(ulong)"/>
     public ref TBuilder GroupBy(ulong component);
@@ -426,27 +426,21 @@ public unsafe interface IQueryBuilder<TBuilder, TResult> : IQueryBuilderBase
     /// <inheritdoc cref="QueryBuilder.GroupBy{T}()"/>
     public ref TBuilder GroupBy<T>();
 
-    /// <inheritdoc cref="QueryBuilder.GroupBy(ulong, Ecs.GroupByAction)"/>
-    public ref TBuilder GroupBy(ulong component, Ecs.GroupByAction callback);
-
-    /// <inheritdoc cref="QueryBuilder.GroupBy{T}(Ecs.GroupByAction)"/>
-    public ref TBuilder GroupBy<T>(Ecs.GroupByAction callback);
-
     /// <inheritdoc cref="QueryBuilder.GroupBy(ulong, Ecs.GroupByCallback)"/>
     public ref TBuilder GroupBy(ulong component, Ecs.GroupByCallback callback);
 
     /// <inheritdoc cref="QueryBuilder.GroupBy{T}(Ecs.GroupByCallback)"/>
     public ref TBuilder GroupBy<T>(Ecs.GroupByCallback callback);
 
-    ///
-    public ref TBuilder GroupByCtx(void* ctx, Ecs.ContextFree contextFree);
+    /// <inheritdoc cref="QueryBuilder.OnGroupCreate(Ecs.GroupCreateCallback)"/>
+    public ref TBuilder OnGroupCreate(Ecs.GroupCreateCallback callback);
 
-    ///
-    public ref TBuilder GroupByCtx(void* ctx);
+    /// <inheritdoc cref="Core.QueryBuilder.OnGroupCreate{T}(Ecs.GroupCreateCallback{T})"/>
+    public ref TBuilder OnGroupCreate<T>(Ecs.GroupCreateCallback<T> callback);
 
-    /// <inheritdoc cref="QueryBuilder.OnGroupCreate(Ecs.GroupCreateAction)"/>
-    public ref TBuilder OnGroupCreate(Ecs.GroupCreateAction onGroupCreate);
+    /// <inheritdoc cref="QueryBuilder.OnGroupDelete(Ecs.GroupDeleteCallback)"/>
+    public ref TBuilder OnGroupDelete(Ecs.GroupDeleteCallback callback);
 
-    /// <inheritdoc cref="QueryBuilder.OnGroupDelete(Ecs.GroupDeleteAction)"/>
-    public ref TBuilder OnGroupDelete(Ecs.GroupDeleteAction onGroupDelete);
+    /// <inheritdoc cref="Core.QueryBuilder.OnGroupDelete{T}(Ecs.GroupDeleteCallback{T})"/>
+    public ref TBuilder OnGroupDelete<T>(Ecs.GroupDeleteCallback<T> callback);
 }

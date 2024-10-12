@@ -11,28 +11,46 @@ public static unsafe partial class Ecs
     /// </summary>
     public static class Os
     {
-        internal static OsApiContext Context = new OsApiContext
-        {
-            Abort = new Callback(Pointers.OsApiAbort, default)
-        };
+        private static bool _initialized;
 
-        internal static bool IsOsApiOverridden { get; private set; }
+        internal static OsApiContext Context;
 
         /// <summary>
-        ///     Override the default os api abort function to log C# stack traces.
+        ///     Determines whether the abort function can be overriden by Flecs.NET. If set to false,
+        ///     the abort function provided by flecs will be used. This should be set before the first call
+        ///     to World.Create();
+        /// </summary>
+        public static bool OverrideAbort { get; set; } = true;
+
+        /// <summary>
+        ///     Determines whether the log function can be overriden by Flecs.NET. If set to false,
+        ///     the log provided by flecs will be used. This should be set before the first call
+        ///     to World.Create();
+        /// </summary>
+        public static bool OverrideLog { get; set; } = true;
+
+        /// <summary>
+        ///     Override the default os api.
         /// </summary>
         internal static void OverrideOsApi()
         {
-            if (IsOsApiOverridden)
+            if (_initialized)
                 return;
 
-            ecs_set_os_api_impl();
             ecs_os_init();
 
-            ecs_os_api.abort_ = Context.Abort.Pointer == IntPtr.Zero ? ecs_os_api.abort_ : Context.Abort.Pointer;
-            ecs_os_api.log_ = Context.Log.Pointer == IntPtr.Zero ? ecs_os_api.log_ : Context.Log.Pointer;
+            if (OverrideAbort)
+            {
+                if (Context.Abort == default)
+                    SetAbort(&DefaultAbort);
 
-            IsOsApiOverridden = true;
+                ecs_os_api.abort_ = Pointers.AbortCallback;
+            }
+
+            if (OverrideLog)
+                ecs_os_api.log_ = Context.Log == default ? ecs_os_api.log_ : Pointers.LogCallback;
+
+            _initialized = true;
         }
 
         /// <summary>
@@ -41,34 +59,7 @@ public static unsafe partial class Ecs
         /// <param name="callback">The callback.</param>
         public static void SetAbort(Action callback)
         {
-            Callback.Set(ref Context.Abort, callback, true);
-        }
-
-        /// <summary>
-        ///     Sets the os api log callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        public static void SetLog(OsApiLog callback)
-        {
-            Callback.Set(ref Context.Log, callback, true);
-        }
-
-        /// <summary>
-        ///     Sets os api abort callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        public static void SetAbort(IntPtr callback)
-        {
-            Callback.Set(ref Context.Abort, callback);
-        }
-
-        /// <summary>
-        ///     Sets the os api log callback.
-        /// </summary>
-        /// <param name="callback">The callback.</param>
-        public static void SetLog(IntPtr callback)
-        {
-            Callback.Set(ref Context.Log, callback);
+            Callback.Set(ref Context.Abort, callback, Pointers.AbortCallbackDelegate);
         }
 
         /// <summary>
@@ -77,16 +68,30 @@ public static unsafe partial class Ecs
         /// <param name="callback">The callback.</param>
         public static void SetAbort(delegate*<void> callback)
         {
-            Callback.Set(ref Context.Abort, (IntPtr)callback);
+            Callback.Set(ref Context.Abort, (IntPtr)callback, Pointers.AbortCallbackPointer);
         }
 
         /// <summary>
         ///     Sets the os api log callback.
         /// </summary>
         /// <param name="callback">The callback.</param>
-        public static void SetLog(delegate*<int, byte*, int, byte*, void> callback)
+        public static void SetLog(LogCallback callback)
         {
-            Callback.Set(ref Context.Log, (IntPtr)callback);
+            Callback.Set(ref Context.Log, callback, Pointers.LogCallbackDelegate);
+        }
+
+        /// <summary>
+        ///     Sets the os api log callback.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        public static void SetLog(delegate*<int, string, int, string, void> callback)
+        {
+            Callback.Set(ref Context.Log, (IntPtr)callback, Pointers.LogCallbackPointer);
+        }
+
+        private static void DefaultAbort()
+        {
+            throw new NativeException("Application aborted from native code.");
         }
     }
 }
