@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -346,24 +347,12 @@ public static unsafe class Type<T>
         if (!IsEnum)
             return default;
 
-        Array values = typeof(T).GetEnumValues();
+        Array values = typeof(T).GetEnumValuesAsUnderlyingType();
         NativeArray<EnumMember> constants = new NativeArray<EnumMember>(values.Length);
 
         for (int i = 0; i < values.Length; i++)
         {
-            long value = UnderlyingType switch
-            {
-                IntegerType.SByte => (sbyte)values.GetValue(i)!,
-                IntegerType.Byte => (byte)values.GetValue(i)!,
-                IntegerType.Int16 => (short)values.GetValue(i)!,
-                IntegerType.UInt16 => (ushort)values.GetValue(i)!,
-                IntegerType.Int32 => (int)values.GetValue(i)!,
-                IntegerType.UInt32 => (uint)values.GetValue(i)!,
-                IntegerType.Int64 => (long)values.GetValue(i)!,
-                IntegerType.UInt64 => (long)(ulong)values.GetValue(i)!,
-                _ => throw new Ecs.ErrorException("Type is not an enum.")
-            };
-
+            long value = Convert.ToInt64(values.GetValue(i)!, CultureInfo.InvariantCulture);
             constants[i] = new EnumMember(value, Interlocked.Increment(ref Ecs.CacheIndexCount));
         }
 
