@@ -81,4 +81,57 @@ public class QueryBuilderTests
             return ~GroupByFirstId(world, table, id);
         }
     }
+
+
+    [Fact]
+    private void TermAt()
+    {
+        using World world = World.Create();
+        world.Component<Tag>();
+        world.Component<Position>();
+        world.Component<Velocity>();
+
+        world.QueryBuilder()
+            .With<Position>()
+            .TermAt<Position>(0)
+            .Build();
+
+        world.QueryBuilder()
+            .With<Tag, Position>()
+            .TermAt<Position>(0)
+            .Build();
+
+        world.QueryBuilder()
+            .With<Tag>().Second<Position>()
+            .TermAt<Position>(0)
+            .Build();
+
+        Assert.Throws<Ecs.AssertionException>(() =>
+        {
+            world.QueryBuilder()
+                .With<Tag>().Second<Position>()
+                .TermAt<Tag>(0)
+                .Build();
+        });
+
+        Assert.Throws<Ecs.AssertionException>(() =>
+        {
+            world.QueryBuilder()
+                .With<Velocity>().Second<Position>()
+                .TermAt<Position>(0)
+                .Build();
+        });
+
+        Assert.Throws<Ecs.AssertionException>(() =>
+        {
+            world.Component<Tag>().Entity.Add(Ecs.PairIsTag);
+
+            world.QueryBuilder()
+                .With<Tag, Position>()
+                .TermAt<Position>(0)
+                .Build();
+
+            world.Component<Tag>().Entity.Remove(Ecs.PairIsTag);
+        });
+    }
 }

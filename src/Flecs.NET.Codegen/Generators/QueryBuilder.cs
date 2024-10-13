@@ -1031,10 +1031,24 @@ public class QueryBuilder : IIncrementalGenerator
                 return ref this;
             }
     
+            /// <inheritdoc cref="Core.QueryBuilder.TermAt{T}()"/>
+            public ref {{Generator.GetTypeName(type, i)}} TermAt<T>()
+            {
+                Ecs.GetQueryBuilder(ref this).TermAt<T>();
+                return ref this;
+            }
+
             /// <inheritdoc cref="Core.QueryBuilder.TermAt(int)"/>
             public ref {{Generator.GetTypeName(type, i)}} TermAt(int termIndex)
             {
                 Ecs.GetQueryBuilder(ref this).TermAt(termIndex);
+                return ref this;
+            }
+
+            /// <inheritdoc cref="Core.QueryBuilder.TermAt{T}(int)"/>
+            public ref {{Generator.GetTypeName(type, i)}} TermAt<T>(int termIndex)
+            {
+                Ecs.GetQueryBuilder(ref this).TermAt<T>(termIndex);
                 return ref this;
             }
     
