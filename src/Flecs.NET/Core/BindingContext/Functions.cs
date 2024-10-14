@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Flecs.NET.Utilities;
 
@@ -333,59 +334,6 @@ internal static unsafe class Functions
 
     #endregion
 
-    #region Type Hook Callbacks
-
-    [UnmanagedCallersOnly]
-    internal static void CtorCallback(void* data, int count, ecs_type_info_t* typeInfo)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        ((delegate*<void*, int, ecs_type_info_t*, void>)context->Ctor.Invoker)(data, count, typeInfo);
-    }
-
-    [UnmanagedCallersOnly]
-    internal static void DtorCallback(void* data, int count, ecs_type_info_t* typeInfo)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        ((delegate*<void*, int, ecs_type_info_t*, void>)context->Dtor.Invoker)(data, count, typeInfo);
-    }
-
-    [UnmanagedCallersOnly]
-    internal static void MoveCallback(void* dst, void* src, int count, ecs_type_info_t* typeInfo)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        ((delegate*<void*, void*, int, ecs_type_info_t*, void>)context->Move.Invoker)(dst, src, count, typeInfo);
-    }
-
-    [UnmanagedCallersOnly]
-    internal static void CopyCallback(void* dst, void* src, int count, ecs_type_info_t* typeInfo)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        ((delegate*<void*, void*, int, ecs_type_info_t*, void>)context->Copy.Invoker)(dst, src, count, typeInfo);
-    }
-
-    [UnmanagedCallersOnly]
-    internal static void OnAddCallback(ecs_iter_t* iter)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        ((delegate*<ecs_iter_t*, void>)context->OnAdd.Invoker)(iter);
-    }
-
-    [UnmanagedCallersOnly]
-    internal static void OnSetCallback(ecs_iter_t* iter)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        ((delegate*<ecs_iter_t*, void>)context->OnSet.Invoker)(iter);
-    }
-
-    [UnmanagedCallersOnly]
-    internal static void OnRemoveCallback(ecs_iter_t* iter)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        ((delegate*<ecs_iter_t*, void>)context->OnRemove.Invoker)(iter);
-    }
-
-    #endregion
-
     #region Post Frame Callbacks
 
     [UnmanagedCallersOnly]
@@ -432,7 +380,7 @@ internal static unsafe class Functions
 
     #endregion
 
-    #region Os Api
+    #region Os Api Callbacks
 
     [UnmanagedCallersOnly]
     internal static void AbortCallback()
@@ -467,575 +415,601 @@ internal static unsafe class Functions
     }
 
     #endregion
-}
 
-internal static unsafe partial class Functions<T0>
-{
-    internal static void DefaultManagedCtorCallback(GCHandle* data, int count, ecs_type_info_t* typeInfo)
+    #region Resource Hook Callbacks
+
+    [UnmanagedCallersOnly]
+    internal static void CtorCallback(void* data, int count, ecs_type_info_t* typeInfo)
     {
-        for (int i = 0; i < count; i++)
-            data[i] = GCHandle.Alloc(new Box<T0>());
+        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
+        ((delegate*<void*, int, ecs_type_info_t*, void>)context->Ctor.Invoker)(data, count, typeInfo);
     }
 
-    internal static void DefaultManagedDtorCallback(GCHandle* data, int count, ecs_type_info_t* typeInfo)
+    [UnmanagedCallersOnly]
+    internal static void DtorCallback(void* data, int count, ecs_type_info_t* typeInfo)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
+        ((delegate*<void*, int, ecs_type_info_t*, void>)context->Dtor.Invoker)(data, count, typeInfo);
+    }
+
+    [UnmanagedCallersOnly]
+    internal static void MoveCallback(void* dst, void* src, int count, ecs_type_info_t* typeInfo)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
+        ((delegate*<void*, void*, int, ecs_type_info_t*, void>)context->Move.Invoker)(dst, src, count, typeInfo);
+    }
+
+    [UnmanagedCallersOnly]
+    internal static void CopyCallback(void* dst, void* src, int count, ecs_type_info_t* typeInfo)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
+        ((delegate*<void*, void*, int, ecs_type_info_t*, void>)context->Copy.Invoker)(dst, src, count, typeInfo);
+    }
+
+    internal static void DefaultManagedCtorCallback<T>(GCHandle* data, int count, ecs_type_info_t* typeInfo)
+    {
+        for (int i = 0; i < count; i++)
+            data[i] = GCHandle.Alloc(new StrongBox<T>());
+    }
+
+    internal static void DefaultManagedDtorCallback<T>(GCHandle* data, int count, ecs_type_info_t* typeInfo)
+    {
+        for (int i = 0; i < count; i++)
+            data[i].Free();
+    }
+
+    internal static void DefaultManagedMoveCallback<T>(GCHandle* dst, GCHandle* src, int count, ecs_type_info_t* typeInfo)
     {
         for (int i = 0; i < count; i++)
         {
-            Managed.FreeGcHandle(data[i]);
-            data[i] = default;
-        }
-    }
-
-    internal static void DefaultManagedMoveCallback(GCHandle* dst, GCHandle* src, int count, ecs_type_info_t* typeInfo)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            Box<T0> dstBox = (Box<T0>)dst[i].Target!;
-            Box<T0> srcBox = (Box<T0>)src[i].Target!;
-
+            StrongBox<T> dstBox = (StrongBox<T>)dst[i].Target!;
+            StrongBox<T> srcBox = (StrongBox<T>)src[i].Target!;
             dstBox.Value = srcBox.Value!;
-
-            // Free the gc handle if it comes from a .Set call, otherwise let the Dtor hook handle it.
-            if (srcBox.ShouldFree)
-                Managed.FreeGcHandle(src[i]);
         }
     }
 
-    internal static void DefaultManagedCopyCallback(GCHandle* dst, GCHandle* src, int count, ecs_type_info_t* typeInfo)
+    internal static void DefaultManagedCopyCallback<T>(GCHandle* dst, GCHandle* src, int count, ecs_type_info_t* typeInfo)
     {
         for (int i = 0; i < count; i++)
         {
-            Box<T0> dstBox = (Box<T0>)dst[i].Target!;
-            Box<T0> srcBox = (Box<T0>)src[i].Target!;
-
+            StrongBox<T> dstBox = (StrongBox<T>)dst[i].Target!;
+            StrongBox<T> srcBox = (StrongBox<T>)src[i].Target!;
             dstBox.Value = srcBox.Value!;
-
-            // Free the gc handle if it comes from a .Set call, otherwise let the Dtor hook handle it.
-            if (srcBox.ShouldFree)
-                Managed.FreeGcHandle(src[i]);
         }
     }
 
-    internal static void UnmanagedCtorCallbackDelegate(T0* data, int count, ecs_type_info_t* typeInfo)
+    internal static void ManagedCtorCallbackDelegate<T>(GCHandle* data, int count, ecs_type_info_t* typeInfo)
     {
         TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        Ecs.CtorCallback<T0> callback = (Ecs.CtorCallback<T0>)context->Ctor.Delegate.Target!;
-
-        for (int i = 0; i < count; i++)
-            callback(ref data[i], new TypeInfo(typeInfo));
-    }
-
-    internal static void UnmanagedCtorCallbackPointer(T0* data, int count, ecs_type_info_t* typeInfo)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        delegate*<ref T0, TypeInfo, void> callback = (delegate*<ref T0, TypeInfo, void>)context->Ctor.Pointer;
-
-        for (int i = 0; i < count; i++)
-            callback(ref data[i], new TypeInfo(typeInfo));
-    }
-
-    internal static void UnmanagedDtorCallbackDelegate(T0* data, int count, ecs_type_info_t* typeInfo)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        Ecs.DtorCallback<T0> callback = (Ecs.DtorCallback<T0>)context->Dtor.Delegate.Target!;
-
-        for (int i = 0; i < count; i++)
-            callback(ref data[i], new TypeInfo(typeInfo));
-    }
-
-    internal static void UnmanagedDtorCallbackPointer(T0* data, int count, ecs_type_info_t* typeInfo)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        delegate*<ref T0, TypeInfo, void> callback = (delegate*<ref T0, TypeInfo, void>)context->Dtor.Pointer;
-
-        for (int i = 0; i < count; i++)
-            callback(ref data[i], new TypeInfo(typeInfo));
-    }
-
-    internal static void UnmanagedMoveCallbackDelegate(T0* dst, T0* src, int count, ecs_type_info_t* typeInfo)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        Ecs.MoveCallback<T0> callback = (Ecs.MoveCallback<T0>)context->Move.Delegate.Target!;
-
-        for (int i = 0; i < count; i++)
-            callback(ref dst[i], ref src[i], new TypeInfo(typeInfo));
-    }
-
-    internal static void UnmanagedMoveCallbackPointer(T0* dst, T0* src, int count, ecs_type_info_t* typeInfo)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        delegate*<ref T0, ref T0, TypeInfo, void> callback = (delegate*<ref T0, ref T0, TypeInfo, void>)context->Move.Pointer;
-
-        for (int i = 0; i < count; i++)
-            callback(ref dst[i], ref src[i], new TypeInfo(typeInfo));
-    }
-
-    internal static void UnmanagedCopyCallbackDelegate(T0* dst, T0* src, int count, ecs_type_info_t* typeInfo)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        Ecs.CopyCallback<T0> callback = (Ecs.CopyCallback<T0>)context->Copy.Delegate.Target!;
-
-        for (int i = 0; i < count; i++)
-            callback(ref dst[i], ref src[i], new TypeInfo(typeInfo));
-    }
-
-    internal static void UnmanagedCopyCallbackPointer(T0* dst, T0* src, int count, ecs_type_info_t* typeInfo)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        delegate*<ref T0, ref T0, TypeInfo, void> callback = (delegate*<ref T0, ref T0, TypeInfo, void>)context->Copy.Pointer;
-
-        for (int i = 0; i < count; i++)
-            callback(ref dst[i], ref src[i], new TypeInfo(typeInfo));
-    }
-
-    internal static void ManagedCtorCallbackDelegate(GCHandle* data, int count, ecs_type_info_t* typeInfo)
-    {
-        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        Ecs.CtorCallback<T0> callback = (Ecs.CtorCallback<T0>)context->Ctor.Delegate.Target!;
+        Ecs.CtorCallback<T> callback = (Ecs.CtorCallback<T>)context->Ctor.Delegate.Target!;
 
         for (int i = 0; i < count; i++)
         {
-            Box<T0> box = new();
+            StrongBox<T> box = new();
             callback(ref box.Value!, new TypeInfo(typeInfo));
             data[i] = GCHandle.Alloc(box);
         }
     }
 
-    internal static void ManagedCtorCallbackPointer(GCHandle* data, int count, ecs_type_info_t* typeInfo)
+    internal static void ManagedCtorCallbackPointer<T>(GCHandle* data, int count, ecs_type_info_t* typeInfo)
     {
         TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        delegate*<ref T0, TypeInfo, void> callback = (delegate*<ref T0, TypeInfo, void>)context->Ctor.Pointer;
+        delegate*<ref T, TypeInfo, void> callback = (delegate*<ref T, TypeInfo, void>)context->Ctor.Pointer;
 
         for (int i = 0; i < count; i++)
         {
-            Box<T0> box = new();
+            StrongBox<T> box = new();
             callback(ref box.Value!, new TypeInfo(typeInfo));
             data[i] = GCHandle.Alloc(box);
         }
     }
 
-    internal static void ManagedDtorCallbackDelegate(GCHandle* data, int count, ecs_type_info_t* typeInfo)
+    internal static void ManagedDtorCallbackDelegate<T>(GCHandle* data, int count, ecs_type_info_t* typeInfo)
     {
         TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        Ecs.DtorCallback<T0> callback = (Ecs.DtorCallback<T0>)context->Dtor.Delegate.Target!;
+        Ecs.DtorCallback<T> callback = (Ecs.DtorCallback<T>)context->Dtor.Delegate.Target!;
 
         for (int i = 0; i < count; i++)
         {
-            Box<T0> box = (Box<T0>)data[i].Target!;
+            StrongBox<T> box = (StrongBox<T>)data[i].Target!;
             callback(ref box.Value!, new TypeInfo(typeInfo));
-            Managed.FreeGcHandle(data[i]);
-            data[i] = default;
+            data[i].Free();
         }
     }
 
-    internal static void ManagedDtorCallbackPointer(GCHandle* data, int count, ecs_type_info_t* typeInfo)
+    internal static void ManagedDtorCallbackPointer<T>(GCHandle* data, int count, ecs_type_info_t* typeInfo)
     {
         TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        delegate*<ref T0, TypeInfo, void> callback = (delegate*<ref T0, TypeInfo, void>)context->Dtor.Pointer;
+        delegate*<ref T, TypeInfo, void> callback = (delegate*<ref T, TypeInfo, void>)context->Dtor.Pointer;
 
         for (int i = 0; i < count; i++)
         {
-            Box<T0> box = (Box<T0>)data[i].Target!;
+            StrongBox<T> box = (StrongBox<T>)data[i].Target!;
             callback(ref box.Value!, new TypeInfo(typeInfo));
-            Managed.FreeGcHandle(data[i]);
-            data[i] = default;
+            data[i].Free();
         }
     }
 
-    internal static void ManagedMoveCallbackDelegate(GCHandle* dst, GCHandle* src, int count, ecs_type_info_t* typeInfo)
+    internal static void ManagedMoveCallbackDelegate<T>(GCHandle* dst, GCHandle* src, int count, ecs_type_info_t* typeInfo)
     {
         TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        Ecs.MoveCallback<T0> callback = (Ecs.MoveCallback<T0>)context->Move.Delegate.Target!;
+        Ecs.MoveCallback<T> callback = (Ecs.MoveCallback<T>)context->Move.Delegate.Target!;
 
         for (int i = 0; i < count; i++)
         {
-            Box<T0> dstBox = (Box<T0>)dst[i].Target!;
-            Box<T0> srcBox = (Box<T0>)src[i].Target!;
-
+            StrongBox<T> dstBox = (StrongBox<T>)dst[i].Target!;
+            StrongBox<T> srcBox = (StrongBox<T>)src[i].Target!;
             callback(ref dstBox.Value!, ref srcBox.Value!, new TypeInfo(typeInfo));
-
-            // Free the gc handle if it comes from a .Set call, otherwise let the Dtor hook handle it.
-            if (srcBox.ShouldFree)
-                Managed.FreeGcHandle(src[i]);
         }
     }
 
-    internal static void ManagedMoveCallbackPointer(GCHandle* dst, GCHandle* src, int count, ecs_type_info_t* typeInfo)
+    internal static void ManagedMoveCallbackPointer<T>(GCHandle* dst, GCHandle* src, int count, ecs_type_info_t* typeInfo)
     {
         TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        delegate*<ref T0, ref T0, TypeInfo, void> callback = (delegate*<ref T0, ref T0, TypeInfo, void>)context->Move.Pointer;
+        delegate*<ref T, ref T, TypeInfo, void> callback = (delegate*<ref T, ref T, TypeInfo, void>)context->Move.Pointer;
 
         for (int i = 0; i < count; i++)
         {
-            Box<T0> dstBox = (Box<T0>)dst[i].Target!;
-            Box<T0> srcBox = (Box<T0>)src[i].Target!;
-
+            StrongBox<T> dstBox = (StrongBox<T>)dst[i].Target!;
+            StrongBox<T> srcBox = (StrongBox<T>)src[i].Target!;
             callback(ref dstBox.Value!, ref srcBox.Value!, new TypeInfo(typeInfo));
-
-            // Free the gc handle if it comes from a .Set call, otherwise let the Dtor hook handle it.
-            if (srcBox.ShouldFree)
-                Managed.FreeGcHandle(src[i]);
         }
     }
 
-    internal static void ManagedCopyCallbackDelegate(GCHandle* dst, GCHandle* src, int count, ecs_type_info_t* typeInfo)
+    internal static void ManagedCopyCallbackDelegate<T>(GCHandle* dst, GCHandle* src, int count, ecs_type_info_t* typeInfo)
     {
         TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        Ecs.CopyCallback<T0> callback = (Ecs.CopyCallback<T0>)context->Copy.Delegate.Target!;
+        Ecs.CopyCallback<T> callback = (Ecs.CopyCallback<T>)context->Copy.Delegate.Target!;
 
         for (int i = 0; i < count; i++)
         {
-            Box<T0> dstBox = (Box<T0>)dst[i].Target!;
-            Box<T0> srcBox = (Box<T0>)src[i].Target!;
-
+            StrongBox<T> dstBox = (StrongBox<T>)dst[i].Target!;
+            StrongBox<T> srcBox = (StrongBox<T>)src[i].Target!;
             callback(ref dstBox.Value!, ref srcBox.Value!, new TypeInfo(typeInfo));
-
-            // Free the gc handle if it comes from a .Set call, otherwise let the Dtor hook handle it.
-            if (srcBox.ShouldFree)
-                Managed.FreeGcHandle(src[i]);
         }
     }
 
-    internal static void ManagedCopyCallbackPointer(GCHandle* dst, GCHandle* src, int count, ecs_type_info_t* typeInfo)
+    internal static void ManagedCopyCallbackPointer<T>(GCHandle* dst, GCHandle* src, int count, ecs_type_info_t* typeInfo)
     {
         TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
-        delegate*<ref T0, ref T0, TypeInfo, void> callback = (delegate*<ref T0, ref T0, TypeInfo, void>)context->Copy.Pointer;
+        delegate*<ref T, ref T, TypeInfo, void> callback = (delegate*<ref T, ref T, TypeInfo, void>)context->Copy.Pointer;
 
         for (int i = 0; i < count; i++)
         {
-            Box<T0> dstBox = (Box<T0>)dst[i].Target!;
-            Box<T0> srcBox = (Box<T0>)src[i].Target!;
-
+            StrongBox<T> dstBox = (StrongBox<T>)dst[i].Target!;
+            StrongBox<T> srcBox = (StrongBox<T>)src[i].Target!;
             callback(ref dstBox.Value!, ref srcBox.Value!, new TypeInfo(typeInfo));
-
-            // Free the gc handle if it comes from a .Set call, otherwise let the Dtor hook handle it.
-            if (srcBox.ShouldFree)
-                Managed.FreeGcHandle(src[i]);
         }
     }
 
-    internal static void OnAddIterFieldCallbackDelegate(ecs_iter_t* iter)
+    internal static void UnmanagedCtorCallbackDelegate<T>(T* data, int count, ecs_type_info_t* typeInfo)
     {
-        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (Ecs.IterFieldCallback<T0>)context->OnAdd.Delegate.Target!);
+        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
+        Ecs.CtorCallback<T> callback = (Ecs.CtorCallback<T>)context->Ctor.Delegate.Target!;
+
+        for (int i = 0; i < count; i++)
+            callback(ref data[i], new TypeInfo(typeInfo));
     }
 
-    internal static void OnAddIterFieldCallbackPointer(ecs_iter_t* iter)
+    internal static void UnmanagedCtorCallbackPointer<T>(T* data, int count, ecs_type_info_t* typeInfo)
     {
-        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (delegate*<Iter, Field<T0>, void>)context->OnAdd.Pointer);
+        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
+        delegate*<ref T, TypeInfo, void> callback = (delegate*<ref T, TypeInfo, void>)context->Ctor.Pointer;
+
+        for (int i = 0; i < count; i++)
+            callback(ref data[i], new TypeInfo(typeInfo));
     }
 
-    internal static void OnAddIterSpanCallbackDelegate(ecs_iter_t* iter)
+    internal static void UnmanagedDtorCallbackDelegate<T>(T* data, int count, ecs_type_info_t* typeInfo)
     {
-        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (Ecs.IterSpanCallback<T0>)context->OnAdd.Delegate.Target!);
+        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
+        Ecs.DtorCallback<T> callback = (Ecs.DtorCallback<T>)context->Dtor.Delegate.Target!;
+
+        for (int i = 0; i < count; i++)
+            callback(ref data[i], new TypeInfo(typeInfo));
     }
 
-    internal static void OnAddIterSpanCallbackPointer(ecs_iter_t* iter)
+    internal static void UnmanagedDtorCallbackPointer<T>(T* data, int count, ecs_type_info_t* typeInfo)
     {
-        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (delegate*<Iter, Span<T0>, void>)context->OnAdd.Pointer);
+        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
+        delegate*<ref T, TypeInfo, void> callback = (delegate*<ref T, TypeInfo, void>)context->Dtor.Pointer;
+
+        for (int i = 0; i < count; i++)
+            callback(ref data[i], new TypeInfo(typeInfo));
     }
 
-    internal static void OnAddIterPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void UnmanagedMoveCallbackDelegate<T>(T* dst, T* src, int count, ecs_type_info_t* typeInfo)
     {
-        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (Ecs.IterPointerCallback<T0>)context->OnAdd.Delegate.Target!);
+        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
+        Ecs.MoveCallback<T> callback = (Ecs.MoveCallback<T>)context->Move.Delegate.Target!;
+
+        for (int i = 0; i < count; i++)
+            callback(ref dst[i], ref src[i], new TypeInfo(typeInfo));
     }
 
-    internal static void OnAddIterPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void UnmanagedMoveCallbackPointer<T>(T* dst, T* src, int count, ecs_type_info_t* typeInfo)
     {
-        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (delegate*<Iter, T0*, void>)context->OnAdd.Pointer);
+        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
+        delegate*<ref T, ref T, TypeInfo, void> callback = (delegate*<ref T, ref T, TypeInfo, void>)context->Move.Pointer;
+
+        for (int i = 0; i < count; i++)
+            callback(ref dst[i], ref src[i], new TypeInfo(typeInfo));
     }
 
-    internal static void OnAddEachRefCallbackDelegate(ecs_iter_t* iter)
+    internal static void UnmanagedCopyCallbackDelegate<T>(T* dst, T* src, int count, ecs_type_info_t* typeInfo)
     {
-        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachRefCallback<T0>)context->OnAdd.Delegate.Target!);
+        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
+        Ecs.CopyCallback<T> callback = (Ecs.CopyCallback<T>)context->Copy.Delegate.Target!;
 
+        for (int i = 0; i < count; i++)
+            callback(ref dst[i], ref src[i], new TypeInfo(typeInfo));
     }
 
-    internal static void OnAddEachRefCallbackPointer(ecs_iter_t* iter)
+    internal static void UnmanagedCopyCallbackPointer<T>(T* dst, T* src, int count, ecs_type_info_t* typeInfo)
     {
-        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<ref T0, void>)context->OnAdd.Pointer);
+        TypeHooksContext* context = (TypeHooksContext*)typeInfo->hooks.binding_ctx;
+        delegate*<ref T, ref T, TypeInfo, void> callback = (delegate*<ref T, ref T, TypeInfo, void>)context->Copy.Pointer;
+
+        for (int i = 0; i < count; i++)
+            callback(ref dst[i], ref src[i], new TypeInfo(typeInfo));
     }
 
-    internal static void OnAddEachEntityRefCallbackDelegate(ecs_iter_t* iter)
+    #endregion
+
+    #region OnAdd Hook Callbacks
+
+    [UnmanagedCallersOnly]
+    internal static void OnAddCallback(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachEntityRefCallback<T0>)context->OnAdd.Delegate.Target!);
+        ((delegate*<ecs_iter_t*, void>)context->OnAdd.Invoker)(iter);
     }
 
-    internal static void OnAddEachEntityRefCallbackPointer(ecs_iter_t* iter)
+    internal static void OnAddIterFieldCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<Entity, ref T0, void>)context->OnAdd.Pointer);
+        Invoker.Iter(iter, (Ecs.IterFieldCallback<T>)context->OnAdd.Delegate.Target!);
     }
 
-    internal static void OnAddEachIterRefCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnAddIterFieldCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachIterRefCallback<T0>)context->OnAdd.Delegate.Target!);
+        Invoker.Iter(iter, (delegate*<Iter, Field<T>, void>)context->OnAdd.Pointer);
     }
 
-    internal static void OnAddEachIterRefCallbackPointer(ecs_iter_t* iter)
+    internal static void OnAddIterSpanCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<Iter, int, ref T0, void>)context->OnAdd.Pointer);
+        Invoker.Iter(iter, (Ecs.IterSpanCallback<T>)context->OnAdd.Delegate.Target!);
     }
 
-    internal static void OnAddEachPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnAddIterSpanCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachPointerCallback<T0>)context->OnAdd.Delegate.Target!);
+        Invoker.Iter(iter, (delegate*<Iter, Span<T>, void>)context->OnAdd.Pointer);
     }
 
-    internal static void OnAddEachPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void OnAddIterPointerCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<T0*, void>)context->OnAdd.Pointer);
+        Invoker.Iter(iter, (Ecs.IterPointerCallback<T>)context->OnAdd.Delegate.Target!);
     }
 
-    internal static void OnAddEachEntityPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnAddIterPointerCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachEntityPointerCallback<T0>)context->OnAdd.Delegate.Target!);
+        Invoker.Iter(iter, (delegate*<Iter, T*, void>)context->OnAdd.Pointer);
     }
 
-    internal static void OnAddEachEntityPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void OnAddEachRefCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<Entity, T0*, void>)context->OnAdd.Pointer);
+        Invoker.Each(iter, (Ecs.EachRefCallback<T>)context->OnAdd.Delegate.Target!);
     }
 
-    internal static void OnAddEachIterPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnAddEachRefCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachIterPointerCallback<T0>)context->OnAdd.Delegate.Target!);
+        Invoker.Each(iter, (delegate*<ref T, void>)context->OnAdd.Pointer);
     }
 
-    internal static void OnAddEachIterPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void OnAddEachEntityRefCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<Iter, int, T0*, void>)context->OnAdd.Pointer);
+        Invoker.Each(iter, (Ecs.EachEntityRefCallback<T>)context->OnAdd.Delegate.Target!);
     }
 
-    internal static void OnSetIterFieldCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnAddEachEntityRefCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (Ecs.IterFieldCallback<T0>)context->OnSet.Delegate.Target!);
+        Invoker.Each(iter, (delegate*<Entity, ref T, void>)context->OnAdd.Pointer);
     }
 
-    internal static void OnSetIterFieldCallbackPointer(ecs_iter_t* iter)
+    internal static void OnAddEachIterRefCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (delegate*<Iter, Field<T0>, void>)context->OnSet.Pointer);
+        Invoker.Each(iter, (Ecs.EachIterRefCallback<T>)context->OnAdd.Delegate.Target!);
     }
 
-    internal static void OnSetIterSpanCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnAddEachIterRefCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (Ecs.IterSpanCallback<T0>)context->OnSet.Delegate.Target!);
+        Invoker.Each(iter, (delegate*<Iter, int, ref T, void>)context->OnAdd.Pointer);
     }
 
-    internal static void OnSetIterSpanCallbackPointer(ecs_iter_t* iter)
+    internal static void OnAddEachPointerCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (delegate*<Iter, Span<T0>, void>)context->OnSet.Pointer);
+        Invoker.Each(iter, (Ecs.EachPointerCallback<T>)context->OnAdd.Delegate.Target!);
     }
 
-    internal static void OnSetIterPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnAddEachPointerCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (Ecs.IterPointerCallback<T0>)context->OnSet.Delegate.Target!);
+        Invoker.Each(iter, (delegate*<T*, void>)context->OnAdd.Pointer);
     }
 
-    internal static void OnSetIterPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void OnAddEachEntityPointerCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (delegate*<Iter, T0*, void>)context->OnSet.Pointer);
+        Invoker.Each(iter, (Ecs.EachEntityPointerCallback<T>)context->OnAdd.Delegate.Target!);
     }
 
-    internal static void OnSetEachRefCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnAddEachEntityPointerCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachRefCallback<T0>)context->OnSet.Delegate.Target!);
+        Invoker.Each(iter, (delegate*<Entity, T*, void>)context->OnAdd.Pointer);
     }
 
-    internal static void OnSetEachRefCallbackPointer(ecs_iter_t* iter)
+    internal static void OnAddEachIterPointerCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<ref T0, void>)context->OnSet.Pointer);
+        Invoker.Each(iter, (Ecs.EachIterPointerCallback<T>)context->OnAdd.Delegate.Target!);
     }
 
-    internal static void OnSetEachEntityRefCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnAddEachIterPointerCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachEntityRefCallback<T0>)context->OnSet.Delegate.Target!);
+        Invoker.Each(iter, (delegate*<Iter, int, T*, void>)context->OnAdd.Pointer);
     }
 
-    internal static void OnSetEachEntityRefCallbackPointer(ecs_iter_t* iter)
+    #endregion
+
+    #region OnSet Hook Callbacks
+
+    [UnmanagedCallersOnly]
+    internal static void OnSetCallback(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<Entity, ref T0, void>)context->OnSet.Pointer);
+        ((delegate*<ecs_iter_t*, void>)context->OnSet.Invoker)(iter);
     }
 
-    internal static void OnSetEachIterRefCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnSetIterFieldCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachIterRefCallback<T0>)context->OnSet.Delegate.Target!);
+        Invoker.Iter(iter, (Ecs.IterFieldCallback<T>)context->OnSet.Delegate.Target!);
     }
 
-    internal static void OnSetEachIterRefCallbackPointer(ecs_iter_t* iter)
+    internal static void OnSetIterFieldCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<Iter, int, ref T0, void>)context->OnSet.Pointer);
+        Invoker.Iter(iter, (delegate*<Iter, Field<T>, void>)context->OnSet.Pointer);
     }
 
-    internal static void OnSetEachPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnSetIterSpanCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachPointerCallback<T0>)context->OnSet.Delegate.Target!);
+        Invoker.Iter(iter, (Ecs.IterSpanCallback<T>)context->OnSet.Delegate.Target!);
     }
 
-    internal static void OnSetEachPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void OnSetIterSpanCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<T0*, void>)context->OnSet.Pointer);
+        Invoker.Iter(iter, (delegate*<Iter, Span<T>, void>)context->OnSet.Pointer);
     }
 
-    internal static void OnSetEachEntityPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnSetIterPointerCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachEntityPointerCallback<T0>)context->OnSet.Delegate.Target!);
+        Invoker.Iter(iter, (Ecs.IterPointerCallback<T>)context->OnSet.Delegate.Target!);
     }
 
-    internal static void OnSetEachEntityPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void OnSetIterPointerCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<Entity, T0*, void>)context->OnSet.Pointer);
+        Invoker.Iter(iter, (delegate*<Iter, T*, void>)context->OnSet.Pointer);
     }
 
-    internal static void OnSetEachIterPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnSetEachRefCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachIterPointerCallback<T0>)context->OnSet.Delegate.Target!);
+        Invoker.Each(iter, (Ecs.EachRefCallback<T>)context->OnSet.Delegate.Target!);
     }
 
-    internal static void OnSetEachIterPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void OnSetEachRefCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<Iter, int, T0*, void>)context->OnSet.Pointer);
+        Invoker.Each(iter, (delegate*<ref T, void>)context->OnSet.Pointer);
     }
 
-    internal static void OnRemoveIterFieldCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnSetEachEntityRefCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (Ecs.IterFieldCallback<T0>)context->OnRemove.Delegate.Target!);
+        Invoker.Each(iter, (Ecs.EachEntityRefCallback<T>)context->OnSet.Delegate.Target!);
     }
 
-    internal static void OnRemoveIterFieldCallbackPointer(ecs_iter_t* iter)
+    internal static void OnSetEachEntityRefCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (delegate*<Iter, Field<T0>, void>)context->OnRemove.Pointer);
+        Invoker.Each(iter, (delegate*<Entity, ref T, void>)context->OnSet.Pointer);
     }
 
-    internal static void OnRemoveIterSpanCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnSetEachIterRefCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (Ecs.IterSpanCallback<T0>)context->OnRemove.Delegate.Target!);
+        Invoker.Each(iter, (Ecs.EachIterRefCallback<T>)context->OnSet.Delegate.Target!);
     }
 
-    internal static void OnRemoveIterSpanCallbackPointer(ecs_iter_t* iter)
+    internal static void OnSetEachIterRefCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (delegate*<Iter, Span<T0>, void>)context->OnRemove.Pointer);
+        Invoker.Each(iter, (delegate*<Iter, int, ref T, void>)context->OnSet.Pointer);
     }
 
-    internal static void OnRemoveIterPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnSetEachPointerCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (Ecs.IterPointerCallback<T0>)context->OnRemove.Delegate.Target!);
+        Invoker.Each(iter, (Ecs.EachPointerCallback<T>)context->OnSet.Delegate.Target!);
     }
 
-    internal static void OnRemoveIterPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void OnSetEachPointerCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Iter(iter, (delegate*<Iter, T0*, void>)context->OnRemove.Pointer);
+        Invoker.Each(iter, (delegate*<T*, void>)context->OnSet.Pointer);
     }
 
-    internal static void OnRemoveEachRefCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnSetEachEntityPointerCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachRefCallback<T0>)context->OnRemove.Delegate.Target!);
+        Invoker.Each(iter, (Ecs.EachEntityPointerCallback<T>)context->OnSet.Delegate.Target!);
     }
 
-    internal static void OnRemoveEachRefCallbackPointer(ecs_iter_t* iter)
+    internal static void OnSetEachEntityPointerCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<ref T0, void>)context->OnRemove.Pointer);
+        Invoker.Each(iter, (delegate*<Entity, T*, void>)context->OnSet.Pointer);
     }
 
-    internal static void OnRemoveEachEntityRefCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnSetEachIterPointerCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachEntityRefCallback<T0>)context->OnRemove.Delegate.Target!);
+        Invoker.Each(iter, (Ecs.EachIterPointerCallback<T>)context->OnSet.Delegate.Target!);
     }
 
-    internal static void OnRemoveEachEntityRefCallbackPointer(ecs_iter_t* iter)
+    internal static void OnSetEachIterPointerCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<Entity, ref T0, void>)context->OnRemove.Pointer);
+        Invoker.Each(iter, (delegate*<Iter, int, T*, void>)context->OnSet.Pointer);
     }
 
-    internal static void OnRemoveEachIterRefCallbackDelegate(ecs_iter_t* iter)
+    #endregion
+
+    #region OnRemove Hook Callbacks
+
+    [UnmanagedCallersOnly]
+    internal static void OnRemoveCallback(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachIterRefCallback<T0>)context->OnRemove.Delegate.Target!);
+        ((delegate*<ecs_iter_t*, void>)context->OnRemove.Invoker)(iter);
     }
 
-    internal static void OnRemoveEachIterRefCallbackPointer(ecs_iter_t* iter)
+    internal static void OnRemoveIterFieldCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<Iter, int, ref T0, void>)context->OnRemove.Pointer);
+        Invoker.Iter(iter, (Ecs.IterFieldCallback<T>)context->OnRemove.Delegate.Target!);
     }
 
-    internal static void OnRemoveEachPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnRemoveIterFieldCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachPointerCallback<T0>)context->OnRemove.Delegate.Target!);
+        Invoker.Iter(iter, (delegate*<Iter, Field<T>, void>)context->OnRemove.Pointer);
     }
 
-    internal static void OnRemoveEachPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void OnRemoveIterSpanCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<T0*, void>)context->OnRemove.Pointer);
+        Invoker.Iter(iter, (Ecs.IterSpanCallback<T>)context->OnRemove.Delegate.Target!);
     }
 
-    internal static void OnRemoveEachEntityPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnRemoveIterSpanCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachEntityPointerCallback<T0>)context->OnRemove.Delegate.Target!);
+        Invoker.Iter(iter, (delegate*<Iter, Span<T>, void>)context->OnRemove.Pointer);
     }
 
-    internal static void OnRemoveEachEntityPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void OnRemoveIterPointerCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<Entity, T0*, void>)context->OnRemove.Pointer);
+        Invoker.Iter(iter, (Ecs.IterPointerCallback<T>)context->OnRemove.Delegate.Target!);
     }
 
-    internal static void OnRemoveEachIterPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void OnRemoveIterPointerCallbackPointer<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (Ecs.EachIterPointerCallback<T0>)context->OnRemove.Delegate.Target!);
+        Invoker.Iter(iter, (delegate*<Iter, T*, void>)context->OnRemove.Pointer);
     }
 
-    internal static void OnRemoveEachIterPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void OnRemoveEachRefCallbackDelegate<T>(ecs_iter_t* iter)
     {
         TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
-        Invoker.Each(iter, (delegate*<Iter, int, T0*, void>)context->OnRemove.Pointer);
+        Invoker.Each(iter, (Ecs.EachRefCallback<T>)context->OnRemove.Delegate.Target!);
     }
+
+    internal static void OnRemoveEachRefCallbackPointer<T>(ecs_iter_t* iter)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
+        Invoker.Each(iter, (delegate*<ref T, void>)context->OnRemove.Pointer);
+    }
+
+    internal static void OnRemoveEachEntityRefCallbackDelegate<T>(ecs_iter_t* iter)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
+        Invoker.Each(iter, (Ecs.EachEntityRefCallback<T>)context->OnRemove.Delegate.Target!);
+    }
+
+    internal static void OnRemoveEachEntityRefCallbackPointer<T>(ecs_iter_t* iter)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
+        Invoker.Each(iter, (delegate*<Entity, ref T, void>)context->OnRemove.Pointer);
+    }
+
+    internal static void OnRemoveEachIterRefCallbackDelegate<T>(ecs_iter_t* iter)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
+        Invoker.Each(iter, (Ecs.EachIterRefCallback<T>)context->OnRemove.Delegate.Target!);
+    }
+
+    internal static void OnRemoveEachIterRefCallbackPointer<T>(ecs_iter_t* iter)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
+        Invoker.Each(iter, (delegate*<Iter, int, ref T, void>)context->OnRemove.Pointer);
+    }
+
+    internal static void OnRemoveEachPointerCallbackDelegate<T>(ecs_iter_t* iter)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
+        Invoker.Each(iter, (Ecs.EachPointerCallback<T>)context->OnRemove.Delegate.Target!);
+    }
+
+    internal static void OnRemoveEachPointerCallbackPointer<T>(ecs_iter_t* iter)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
+        Invoker.Each(iter, (delegate*<T*, void>)context->OnRemove.Pointer);
+    }
+
+    internal static void OnRemoveEachEntityPointerCallbackDelegate<T>(ecs_iter_t* iter)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
+        Invoker.Each(iter, (Ecs.EachEntityPointerCallback<T>)context->OnRemove.Delegate.Target!);
+    }
+
+    internal static void OnRemoveEachEntityPointerCallbackPointer<T>(ecs_iter_t* iter)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
+        Invoker.Each(iter, (delegate*<Entity, T*, void>)context->OnRemove.Pointer);
+    }
+
+    internal static void OnRemoveEachIterPointerCallbackDelegate<T>(ecs_iter_t* iter)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
+        Invoker.Each(iter, (Ecs.EachIterPointerCallback<T>)context->OnRemove.Delegate.Target!);
+    }
+
+    internal static void OnRemoveEachIterPointerCallbackPointer<T>(ecs_iter_t* iter)
+    {
+        TypeHooksContext* context = (TypeHooksContext*)iter->callback_ctx;
+        Invoker.Each(iter, (delegate*<Iter, int, T*, void>)context->OnRemove.Pointer);
+    }
+
+    #endregion
 }

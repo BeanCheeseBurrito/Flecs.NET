@@ -1,6 +1,6 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 
 namespace Flecs.NET.Resources;
@@ -32,7 +32,7 @@ public struct NativeHandle<T> : IDisposable, IEquatable<NativeHandle<T>>
     /// <returns></returns>
     public static NativeHandle<T> Alloc()
     {
-        return new NativeHandle<T> { _handle = GCHandle.Alloc(new Box<T>()) };
+        return new NativeHandle<T> { _handle = GCHandle.Alloc(new StrongBox<T>()) };
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public struct NativeHandle<T> : IDisposable, IEquatable<NativeHandle<T>>
     /// <returns></returns>
     public static NativeHandle<T> Alloc(T obj)
     {
-        return new NativeHandle<T> { _handle = GCHandle.Alloc(new Box<T>(obj)) };
+        return new NativeHandle<T> { _handle = GCHandle.Alloc(new StrongBox<T>(obj)) };
     }
 
     /// <summary>
