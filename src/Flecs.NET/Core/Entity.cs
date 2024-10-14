@@ -1547,7 +1547,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
                     .Ctx(&handle)
                     .Emit();
 
-                handle.Free();
+                Managed.FreeGcHandle(handle);
             }
             else
             {
@@ -1622,6 +1622,8 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
                     .Entity(Id)
                     .Ctx(&handle)
                     .Enqueue();
+
+                Managed.FreeGcHandle(handle);
             }
             else
             {
@@ -3782,6 +3784,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
         {
             Managed.AllocGcHandle(component, out GCHandle handle);
             ecs_set_id(World, Id, id, sizeof(GCHandle), &handle);
+            Managed.FreeGcHandle(handle);
         }
         else
         {

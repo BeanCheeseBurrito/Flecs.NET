@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Flecs.NET.Utilities;
 
@@ -23,7 +24,7 @@ internal unsafe struct UserContext : IDisposable, IEquatable<UserContext>
         if (dest != default)
             dest.Dispose();
 
-        dest.Object = GCHandle.Alloc(new Box<T>(value));
+        dest.Object = GCHandle.Alloc(new StrongBox<T>(value));
     }
 
     public static void Set<T>(ref UserContext dest, T value)
@@ -33,7 +34,7 @@ internal unsafe struct UserContext : IDisposable, IEquatable<UserContext>
 
     public static UserContext* Alloc<T>(ref T value)
     {
-        return Memory.Alloc(new UserContext { Object = GCHandle.Alloc(new Box<T>(value)) });
+        return Memory.Alloc(new UserContext { Object = GCHandle.Alloc(new StrongBox<T>(value)) });
     }
 
     public static UserContext* Alloc<T>(T value)

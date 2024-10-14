@@ -13,7 +13,7 @@ public static unsafe class Managed
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void AllocGcHandle<T>(T* comp, out GCHandle handle)
     {
-        handle = GCHandle.Alloc(new Box<T>(*comp, true));
+        handle = GCHandle.Alloc(new StrongBox<T>(*comp));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,7 +44,7 @@ public static unsafe class Managed
             return ref Unsafe.AsRef<T>(data);
 
         GCHandle handle = GCHandle.FromIntPtr(*(IntPtr*)data);
-        Box<T> box = (Box<T>)handle.Target!;
+        StrongBox<T> box = (StrongBox<T>)handle.Target!;
         return ref box.Value!;
     }
 
@@ -58,7 +58,7 @@ public static unsafe class Managed
             return ref ((T*)data)[index];
 
         GCHandle handle = GCHandle.FromIntPtr(((IntPtr*)data)[index]);
-        Box<T> box = (Box<T>)handle.Target!;
+        StrongBox<T> box = (StrongBox<T>)handle.Target!;
         return ref box.Value!;
     }
 
@@ -77,7 +77,7 @@ public static unsafe class Managed
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static ref T GetTypeRef<T>(GCHandle handle)
     {
-        Box<T> box = (Box<T>)handle.Target!;
+        StrongBox<T> box = (StrongBox<T>)handle.Target!;
         return ref box.Value!;
     }
 }
