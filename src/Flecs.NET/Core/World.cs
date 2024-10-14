@@ -126,7 +126,7 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     public void AtFini(Ecs.WorldFinishCallback callback)
     {
         WorldFinishContext* context = AllocateWorldFinishContext();
-        Callback.Set(ref context->Callback, callback, Pointers.WorldFinishCallbackDelegate);
+        context->Callback.Set(callback, Pointers.WorldFinishCallbackDelegate);
         ecs_atfini(Handle, Pointers.WorldFinishCallback, context);
     }
 
@@ -137,7 +137,7 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     public void AtFini(delegate*<World, void> callback)
     {
         WorldFinishContext* context = AllocateWorldFinishContext();
-        Callback.Set(ref context->Callback, (IntPtr)callback, Pointers.WorldFinishCallbackPointer);
+        context->Callback.Set((IntPtr)callback, Pointers.WorldFinishCallbackPointer);
         ecs_atfini(Handle, Pointers.WorldFinishCallback, context);
     }
 
@@ -2356,7 +2356,7 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     public void RunPostFrame(Ecs.PostFrameCallback callback)
     {
         PostFrameContext* postFrameContext = AllocatePostFrameContext();
-        Callback.Set(ref postFrameContext->Callback, callback, Pointers.PostFrameCallbackDelegate);
+        postFrameContext->Callback.Set(callback, Pointers.PostFrameCallbackDelegate);
         ecs_run_post_frame(Handle, Pointers.PostFrameCallback, postFrameContext);
     }
 
@@ -2367,7 +2367,7 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     public void RunPostFrame(delegate*<void> callback)
     {
         PostFrameContext* postFrameContext = AllocatePostFrameContext();
-        Callback.Set(ref postFrameContext->Callback, (nint)callback, Pointers.PostFrameCallbackPointer);
+        postFrameContext->Callback.Set((nint)callback, Pointers.PostFrameCallbackPointer);
         ecs_run_post_frame(Handle, Pointers.PostFrameCallback, postFrameContext);
     }
 

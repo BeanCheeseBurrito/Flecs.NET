@@ -398,7 +398,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     {
         FreeCallback();
         IteratorContext context = default;
-        Callback.Set(ref context.Callback, callback, invoker);
+        context.Callback.Set(callback, invoker);
         Desc.callback = Pointers.IteratorCallback;
         Desc.callback_ctx = Memory.Alloc(context);
         Desc.callback_ctx_free = Pointers.IteratorContextFree;
@@ -409,7 +409,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     {
         FreeCallback();
         IteratorContext context = default;
-        Callback.Set(ref context.Callback, callback, invoker);
+        context.Callback.Set(callback, invoker);
         Desc.callback = Pointers.IteratorCallback;
         Desc.callback_ctx = Memory.Alloc(context);
         Desc.callback_ctx_free = Pointers.IteratorContextFree;
@@ -421,7 +421,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     {
         FreeRun();
         RunContext context = default;
-        Callback.Set(ref context.Callback, callback, invoker);
+        context.Callback.Set(callback, invoker);
         Desc.run = Pointers.RunCallback;
         Desc.run_ctx = Memory.Alloc(context);
         Desc.run_ctx_free = Pointers.RunContextFree;
@@ -432,7 +432,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     {
         FreeRun();
         RunContext context = default;
-        Callback.Set(ref context.Callback, callback, invoker);
+        context.Callback.Set(callback, invoker);
         Desc.run = Pointers.RunCallback;
         Desc.run_ctx = Memory.Alloc(context);
         Desc.run_ctx_free = Pointers.RunContextFree;
