@@ -1641,7 +1641,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder OrderBy(ulong component, Ecs.OrderByCallback callback)
     {
-        Callback.Set(ref QueryContext.OrderBy, callback, 0);
+        QueryContext.OrderBy.Set(callback, 0);
         Desc.order_by_callback = Marshal.GetFunctionPointerForDelegate(callback);
         Desc.order_by = component;
         return ref this;
@@ -1688,7 +1688,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByCallback callback)
     {
-        Callback.Set(ref GroupByContext.GroupBy, callback, Pointers.GroupByCallbackDelegate);
+        GroupByContext.GroupBy.Set(callback, Pointers.GroupByCallbackDelegate);
         Desc.group_by_callback = Pointers.GroupByCallback;
         Desc.group_by = component;
         return ref this;
@@ -1712,7 +1712,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder OnGroupCreate(Ecs.GroupCreateCallback callback)
     {
-        Callback.Set(ref GroupByContext.GroupCreate, callback, Pointers.GroupCreateCallbackDelegate);
+        GroupByContext.GroupCreate.Set(callback, Pointers.GroupCreateCallbackDelegate);
         Desc.on_group_create = Pointers.GroupCreateCallback;
         return ref this;
     }
@@ -1725,7 +1725,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder OnGroupCreate<T>(Ecs.GroupCreateCallback<T> callback)
     {
-        Callback.Set(ref GroupByContext.GroupCreate, callback, Pointers<T>.GroupCreateCallbackDelegate);
+        GroupByContext.GroupCreate.Set(callback, Pointers<T>.GroupCreateCallbackDelegate);
         Desc.on_group_create = Pointers.GroupCreateCallback;
         return ref this;
     }
@@ -1737,7 +1737,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder OnGroupDelete(Ecs.GroupDeleteCallback callback)
     {
-        Callback.Set(ref GroupByContext.GroupDelete, callback, Pointers.GroupDeleteCallbackDelegate);
+        GroupByContext.GroupDelete.Set(callback, Pointers.GroupDeleteCallbackDelegate);
         Desc.on_group_delete = Pointers.GroupDeleteCallback;
         return ref this;
     }
@@ -1750,7 +1750,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder OnGroupDelete<T>(Ecs.GroupDeleteCallback<T> callback)
     {
-        Callback.Set(ref GroupByContext.GroupDelete, callback, Pointers<T>.GroupDeleteCallbackDelegate);
+        GroupByContext.GroupDelete.Set(callback, Pointers<T>.GroupDeleteCallbackDelegate);
         Desc.on_group_delete = Pointers.GroupDeleteCallback;
         return ref this;
     }

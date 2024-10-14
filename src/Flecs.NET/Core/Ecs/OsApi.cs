@@ -59,7 +59,7 @@ public static unsafe partial class Ecs
         /// <param name="callback">The callback.</param>
         public static void SetAbort(Action callback)
         {
-            Callback.Set(ref Context.Abort, callback, Pointers.AbortCallbackDelegate);
+            Context.Abort.Set(callback, Pointers.AbortCallbackDelegate);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ public static unsafe partial class Ecs
         /// <param name="callback">The callback.</param>
         public static void SetAbort(delegate*<void> callback)
         {
-            Callback.Set(ref Context.Abort, (IntPtr)callback, Pointers.AbortCallbackPointer);
+            Context.Abort.Set((IntPtr)callback, Pointers.AbortCallbackPointer);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ public static unsafe partial class Ecs
         /// <param name="callback">The callback.</param>
         public static void SetLog(LogCallback callback)
         {
-            Callback.Set(ref Context.Log, callback, Pointers.LogCallbackDelegate);
+            Context.Log.Set(callback, Pointers.LogCallbackDelegate);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ public static unsafe partial class Ecs
         /// <param name="callback">The callback.</param>
         public static void SetLog(delegate*<int, string, int, string, void> callback)
         {
-            Callback.Set(ref Context.Log, (IntPtr)callback, Pointers.LogCallbackPointer);
+            Context.Log.Set((IntPtr)callback, Pointers.LogCallbackPointer);
         }
 
         private static void DefaultAbort()

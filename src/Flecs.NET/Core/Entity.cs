@@ -3797,7 +3797,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
     private ref Entity ObserveInternal<T>(ulong eventId, T callback, nint invoker) where T : Delegate
     {
         IteratorContext* iteratorContext = Memory.AllocZeroed<IteratorContext>(1);
-        Callback.Set(ref iteratorContext->Callback, callback, invoker);
+        iteratorContext->Callback.Set(callback, invoker);
 
         ecs_observer_desc_t desc = default;
         desc.events[0] = eventId;
@@ -3816,7 +3816,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
     private ref Entity ObserveInternal<T>(ulong eventId, IntPtr callback, nint invoker) where T : Delegate
     {
         IteratorContext* iteratorContext = Memory.AllocZeroed<IteratorContext>(1);
-        Callback.Set(ref iteratorContext->Callback, callback, invoker);
+        iteratorContext->Callback.Set(callback, invoker);
 
         ecs_observer_desc_t desc = default;
         desc.events[0] = eventId;

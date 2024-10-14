@@ -47,24 +47,6 @@ internal struct Callback : IDisposable, IEquatable<Callback>
         Delegate = GCHandle.Alloc(callback);
     }
 
-    internal static void Set(ref Callback dest, nint callback, nint invoker)
-    {
-        if (dest != default)
-            dest.Dispose();
-
-        dest.Invoker = invoker;
-        dest.Pointer = callback;
-    }
-
-    internal static void Set<T>(ref Callback dest, T callback, nint invoker) where T : Delegate
-    {
-        if (dest != default)
-            dest.Dispose();
-
-        dest.Invoker = invoker;
-        dest.Delegate = GCHandle.Alloc(callback);
-    }
-
     public bool Equals(Callback other)
     {
         return Delegate.Equals(other.Delegate) && Pointer == other.Pointer && Invoker == other.Invoker;
