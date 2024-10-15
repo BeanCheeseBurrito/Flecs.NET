@@ -307,7 +307,7 @@ public static unsafe partial class Ecs
     public static bool TypeIdIs<T>(ecs_world_t* world, ulong id)
     {
         ulong typeId = Type<T>.Id(world);
-        return typeId == id || typeId == ecs_get_typeid(world, id);
+        return typeId == id || (id != 0 && typeId == ecs_get_typeid(world, id));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
