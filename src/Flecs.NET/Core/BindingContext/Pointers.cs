@@ -87,9 +87,9 @@ internal static unsafe class Pointers
 
     #region Post Frame Callbacks
 
-    internal static readonly nint PostFrameCallback = (nint)(delegate* unmanaged<void*, void>)&Functions.PostFrameCallback;
-    internal static readonly nint PostFrameCallbackDelegate = (nint)(delegate*<void*, void>)&Functions.PostFrameCallbackDelegate;
-    internal static readonly nint PostFrameCallbackPointer = (nint)(delegate*<void*, void>)&Functions.PostFrameCallbackPointer;
+    internal static readonly nint PostFrameCallback = (nint)(delegate* unmanaged<ecs_world_t*, void*, void>)&Functions.PostFrameCallback;
+    internal static readonly nint PostFrameCallbackDelegate = (nint)(delegate*<ecs_world_t*, void*, void>)&Functions.PostFrameCallbackDelegate;
+    internal static readonly nint PostFrameCallbackPointer = (nint)(delegate*<ecs_world_t*, void*, void>)&Functions.PostFrameCallbackPointer;
 
     #endregion
 

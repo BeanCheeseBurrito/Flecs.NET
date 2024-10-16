@@ -111,12 +111,7 @@ public static unsafe partial class Ecs
     /// <summary>
     ///     Run post frame callback.
     /// </summary>
-    public delegate void PostFrameCallback();
-
-    /// <summary>
-    ///     Free.
-    /// </summary>
-    public delegate void Free(IntPtr data);
+    public delegate void PostFrameCallback(World world);
 
     /// <summary>
     ///     GroupBy action.
