@@ -1614,6 +1614,23 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     }
 
     /// <summary>
+    ///     Sets the current term to the one with the provided type.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public ref QueryBuilder TermAt<T>()
+    {
+        for (int i = 0; i < _termCount; i++)
+        {
+            ecs_term_t term = _desc.terms[i];
+            if (Ecs.TypeIdIs<T>(World, term.id) || Ecs.TypeIdIs<T>(World, Ecs.Pair(term.first.id, term.second.id)))
+                return ref TermAt(i);
+        }
+        Ecs.Error("Term not found.");
+        return ref this;
+    }
+
+    /// <summary>
     ///     Sets the current term to the one at the provided index.
     /// </summary>
     /// <param name="termIndex"></param>
@@ -1629,6 +1646,17 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
             Ecs.Assert(ecs_term_is_initialized(ptr) == Utils.True, "Term is not initialized.");
 
         return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the current term to the one at the provided index and asserts that the type matches.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public ref QueryBuilder TermAt<T>(int termIndex)
+    {
+        Ecs.Assert(Ecs.TypeIdIs<T>(World, CurrentTerm.id) || Ecs.TypeIdIs<T>(World, Ecs.Pair(CurrentTerm.first.id, CurrentTerm.second.id)), "Term type does not match.");
+        return ref TermAt(termIndex);
     }
 
     /// <summary>
