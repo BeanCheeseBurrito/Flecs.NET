@@ -31,18 +31,14 @@ internal struct Callback : IDisposable, IEquatable<Callback>
 
     internal void Set(nint callback, nint invoker)
     {
-        if (this != default)
-            Dispose();
-
+        Dispose();
         Invoker = invoker;
         Pointer = callback;
     }
 
     internal void Set<T>(T callback, nint invoker) where T : Delegate
     {
-        if (this != default)
-            Dispose();
-
+        Dispose();
         Invoker = invoker;
         Delegate = GCHandle.Alloc(callback);
     }

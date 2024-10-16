@@ -337,22 +337,22 @@ internal static unsafe class Functions
     #region Post Frame Callbacks
 
     [UnmanagedCallersOnly]
-    internal static void PostFrameCallback(void* ctx)
+    internal static void PostFrameCallback(ecs_world_t* world, void* ctx)
     {
         PostFrameContext* context = (PostFrameContext*)ctx;
-        ((delegate*<void*, void>)context->Callback.Invoker)(ctx);
+        ((delegate*<ecs_world_t*, void*, void>)context->Callback.Invoker)(world, ctx);
     }
 
-    internal static void PostFrameCallbackDelegate(void* ctx)
+    internal static void PostFrameCallbackDelegate(ecs_world_t* world, void* ctx)
     {
         PostFrameContext* context = (PostFrameContext*)ctx;
-        ((Ecs.PostFrameCallback)context->Callback.Delegate.Target!)();
+        ((Ecs.PostFrameCallback)context->Callback.Delegate.Target!)(world);
     }
 
-    internal static void PostFrameCallbackPointer(void* ctx)
+    internal static void PostFrameCallbackPointer(ecs_world_t* world, void* ctx)
     {
         PostFrameContext* context = (PostFrameContext*)ctx;
-        ((delegate*<void>)context->Callback.Pointer)();
+        ((delegate*<World, void>)context->Callback.Pointer)(world);
     }
 
     #endregion
