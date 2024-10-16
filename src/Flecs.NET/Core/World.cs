@@ -2364,7 +2364,7 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     ///     Run callback after completing frame.
     /// </summary>
     /// <param name="callback">The callback.</param>
-    public void RunPostFrame(delegate*<void> callback)
+    public void RunPostFrame(delegate*<World, void> callback)
     {
         PostFrameContext* postFrameContext = AllocatePostFrameContext();
         postFrameContext->Callback.Set((nint)callback, Pointers.PostFrameCallbackPointer);
