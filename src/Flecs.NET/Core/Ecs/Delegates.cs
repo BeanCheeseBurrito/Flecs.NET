@@ -11,14 +11,10 @@ public static unsafe partial class Ecs
     public delegate int AppInitAction(ecs_world_t* world);
 
     /// <summary>
-    ///     Context free.
+    ///     Callback to be run before a user context object is released by flecs.
     /// </summary>
-    public delegate void ContextFree(void* ctx);
-
-    /// <summary>
-    ///     Ctor type hook callback.
-    /// </summary>
-    public delegate void CtorCallback(void* data, int count, ecs_type_info_t* typeInfo);
+    /// <typeparam name="T">The user context type.</typeparam>
+    public delegate void UserContextFinish<T>(ref T value);
 
     /// <summary>
     ///     Ctor type hook callback.
@@ -29,29 +25,14 @@ public static unsafe partial class Ecs
     /// <summary>
     ///     Dtor type hook callback.
     /// </summary>
-    public delegate void DtorCallback(void* data, int count, ecs_type_info_t* typeInfo);
-
-    /// <summary>
-    ///     Dtor type hook callback.
-    /// </summary>
     /// <typeparam name="T"></typeparam>
     public delegate void DtorCallback<T>(ref T data, TypeInfo typeInfo);
 
     /// <summary>
     ///     Move type hook callback.
     /// </summary>
-    public delegate void MoveCallback(void* dst, void* src, int count, ecs_type_info_t* typeInfo);
-
-    /// <summary>
-    ///     Move type hook callback.
-    /// </summary>
     /// <typeparam name="T"></typeparam>
     public delegate void MoveCallback<T>(ref T dst, ref T src, TypeInfo typeInfo);
-
-    /// <summary>
-    ///     Copy type hook callback.
-    /// </summary>
-    public delegate void CopyCallback(void* dst, void* src, int count, ecs_type_info_t* typeInfo);
 
     /// <summary>
     ///     Copy type hook callback.
@@ -114,9 +95,14 @@ public static unsafe partial class Ecs
     public delegate void PostFrameCallback(World world);
 
     /// <summary>
-    ///     GroupBy action.
+    ///     GroupBy Callback.
     /// </summary>
     public delegate ulong GroupByCallback(World world, Table table, ulong group);
+
+    /// <summary>
+    ///     GroupBy Callback.
+    /// </summary>
+    public delegate ulong GroupByCallback<T>(World world, Table table, ulong group, ref T groupByContext);
 
     /// <summary>
     ///     Group create callback.
@@ -126,7 +112,7 @@ public static unsafe partial class Ecs
     /// <summary>
     ///     Group create callback.
     /// </summary>
-    public delegate void GroupCreateCallback<T>(World world, ulong group, out T context);
+    public delegate void GroupCreateCallback<T>(World world, ulong group, out T groupContext);
 
     /// <summary>
     ///     Group delete action.
@@ -139,19 +125,9 @@ public static unsafe partial class Ecs
     public delegate void GroupDeleteCallback<T>(World world, ulong group, ref T context);
 
     /// <summary>
-    ///     Iter action.
-    /// </summary>
-    public delegate void IterAction(ecs_iter_t* it);
-
-    /// <summary>
     ///     Iter callback.
     /// </summary>
     public delegate void IterCallback(Iter it);
-
-    /// <summary>
-    ///     Iter next action.
-    /// </summary>
-    public delegate byte IterNextAction(ecs_iter_t* it);
 
     /// <summary>
     ///     OrderBy action.

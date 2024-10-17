@@ -56,6 +56,16 @@ internal static unsafe class Functions
         Memory.Free(context);
     }
 
+    internal static void UserContextFinishDelegate<T>(ref UserContext context)
+    {
+        ((Ecs.UserContextFinish<T>)context.Callback.Delegate.Target!)(ref context.Get<T>());
+    }
+
+    internal static void UserContextFinishPointer<T>(ref UserContext context)
+    {
+        ((delegate*<ref T, void>)context.Callback.Pointer)(ref context.Get<T>());
+    }
+
     #endregion
 
     #region Iterator Callbacks
@@ -234,14 +244,22 @@ internal static unsafe class Functions
 
     internal static ulong GroupByCallbackDelegate(ecs_world_t* world, ecs_table_t* table, ulong id, GroupByContext* context)
     {
-        Ecs.GroupByCallback callback = (Ecs.GroupByCallback)context->GroupBy.Delegate.Target!;
-        return callback(new World(world), new Table(world, table), id);
+        return ((Ecs.GroupByCallback)context->GroupBy.Delegate.Target!)(world, new Table(world, table), id);
     }
 
     internal static ulong GroupByCallbackPointer(ecs_world_t* world, ecs_table_t* table, ulong id, GroupByContext* context)
     {
-        delegate*<World, Table, ulong, ulong> callback = (delegate*<World, Table, ulong, ulong>)context->GroupBy.Pointer;
-        return callback(new World(world), new Table(world, table), id);
+        return ((delegate*<World, Table, ulong, ulong>)context->GroupBy.Pointer)(world, new Table(world, table), id);
+    }
+
+    internal static ulong GroupByCallbackDelegate<T>(ecs_world_t* world, ecs_table_t* table, ulong id, GroupByContext* context)
+    {
+        return ((Ecs.GroupByCallback<T>)context->GroupBy.Delegate.Target!)(world, new Table(world, table), id, ref context->GroupByUserContext.Get<T>());
+    }
+
+    internal static ulong GroupByCallbackPointer<T>(ecs_world_t* world, ecs_table_t* table, ulong id, GroupByContext* context)
+    {
+        return ((delegate*<World, Table, ulong, ref T, ulong>)context->GroupBy.Pointer)(world, new Table(world, table), id, ref context->GroupByUserContext.Get<T>());
     }
 
     #endregion
@@ -268,14 +286,14 @@ internal static unsafe class Functions
 
     internal static void* GroupCreateCallbackDelegate<T>(ecs_world_t* world, ulong id, GroupByContext* context)
     {
-        ((Ecs.GroupCreateCallback<T>)context->GroupCreate.Delegate.Target!)(world, id, out T userContext);
-        return UserContext.Alloc(ref userContext);
+        ((Ecs.GroupCreateCallback<T>)context->GroupCreate.Delegate.Target!)(world, id, out T groupContext);
+        return UserContext.Alloc(ref groupContext);
     }
 
     internal static void* GroupCreateCallbackPointer<T>(ecs_world_t* world, ulong id, GroupByContext* context)
     {
-        ((delegate*<World, ulong, out T, void>)context->GroupCreate.Pointer)(world, id, out T userContext);
-        return UserContext.Alloc(ref userContext);
+        ((delegate*<World, ulong, out T, void>)context->GroupCreate.Pointer)(world, id, out T groupContext);
+        return UserContext.Alloc(ref groupContext);
     }
 
     #endregion
