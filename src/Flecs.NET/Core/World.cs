@@ -298,26 +298,49 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
         return ecs_stage_is_readonly(Handle) == 1;
     }
 
-    // TODO: Add ctx functions
-    // /// <summary>
-    // ///     Set world context.
-    // /// </summary>
-    // /// <param name="ctx"></param>
-    // /// <param name="ctxFree"></param>
-    // public void SetCtx(void* ctx, Ecs.ContextFree? ctxFree = null)
-    // {
-    //     Callback.Set(ref WorldContext.ContextFree, ctxFree);
-    //     ecs_set_ctx(Handle, EnsureBindingContext(), Pointers.WorldContextFree);
-    // }
-    //
-    // /// <summary>
-    // ///     Get world context.
-    // /// </summary>
-    // /// <returns></returns>
-    // public void* GetCtx()
-    // {
-    //     return ecs_get_ctx(Handle);
-    // }
+    /// <summary>
+    ///     Sets the user context object for the world.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    public void SetCtx<T>(T value)
+    {
+        WorldContext.UserContext.Set(ref value);
+    }
+
+    /// <summary>
+    ///     Sets the user context object for the world. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    public void SetCtx<T>(T value, Ecs.UserContextFinish<T> callback)
+    {
+        WorldContext.UserContext.Set(ref value, callback);
+    }
+
+    /// <summary>
+    ///     Sets the user context object for the world. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    public void SetCtx<T>(T value, delegate*<ref T, void> callback)
+    {
+        WorldContext.UserContext.Set(ref value, callback);
+    }
+
+    /// <summary>
+    ///     Gets the user context object for the world.
+    /// </summary>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref T GetCtx<T>()
+    {
+        return ref WorldContext.UserContext.Get<T>();
+    }
 
     /// <summary>
     ///     Preallocate memory for number of entities.
