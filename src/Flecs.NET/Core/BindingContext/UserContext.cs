@@ -7,34 +7,66 @@ namespace Flecs.NET.Core.BindingContext;
 
 internal unsafe struct UserContext : IDisposable, IEquatable<UserContext>
 {
-    public GCHandle Object;
+    public GCHandle Object; // User context object
+    public Callback Callback; // User context finish callback
 
     public void Dispose()
     {
+        if (Callback != default)
+            ((delegate*<ref UserContext, void>)Callback.Invoker)(ref this);
+
         Managed.FreeGcHandle(Object);
+        Callback.Dispose();
+
+        Object = default;
+        Callback = default;
     }
 
     public ref T Get<T>()
     {
+        Ecs.Assert(Object.IsAllocated, "User context object is empty.");
+        Ecs.Assert(Object.Target is StrongBox<T>, "User context type does not match the given type argument 'T'.");
         return ref Managed.GetTypeRef<T>(Object);
     }
 
-    public static void Set<T>(ref UserContext dest, ref T value)
+    public void Set<T>(ref T value)
     {
-        if (dest != default)
-            dest.Dispose();
-
-        dest.Object = GCHandle.Alloc(new StrongBox<T>(value));
+        Dispose();
+        Object = GCHandle.Alloc(new StrongBox<T>(value));
     }
 
-    public static void Set<T>(ref UserContext dest, T value)
+    public void Set<T>(ref T value, Ecs.UserContextFinish<T> callback)
     {
-        Set(ref dest, ref value);
+        Dispose();
+        Object = GCHandle.Alloc(new StrongBox<T>(value));
+        Callback.Set(callback, Pointers<T>.UserContextFinishDelegate);
+    }
+
+    public void Set<T>(ref T value, delegate*<ref T, void> callback)
+    {
+        Dispose();
+        Object = GCHandle.Alloc(new StrongBox<T>(value));
+        Callback.Set((nint)callback, Pointers<T>.UserContextFinishPointer);
+    }
+
+    public void Set<T>(T value)
+    {
+        Set(ref value);
+    }
+
+    public void Set<T>(T value, Ecs.UserContextFinish<T> callback)
+    {
+        Set(ref value, callback);
+    }
+
+    public void Set<T>(T value, delegate*<ref T, void> callback)
+    {
+        Set(ref value, callback);
     }
 
     public static UserContext* Alloc<T>(ref T value)
     {
-        return Memory.Alloc(new UserContext { Object = GCHandle.Alloc(new StrongBox<T>(value)) });
+        return Memory.AllocZeroed(new UserContext { Object = GCHandle.Alloc(new StrongBox<T>(value)) });
     }
 
     public static UserContext* Alloc<T>(T value)

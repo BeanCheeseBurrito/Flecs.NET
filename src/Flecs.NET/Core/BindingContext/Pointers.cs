@@ -133,7 +133,17 @@ internal static unsafe class Pointers
 [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
 internal static unsafe partial class Pointers<T0>
 {
+    #region Context Free Callbacks
+
+    internal static readonly nint UserContextFinishDelegate = (nint)(delegate*<ref UserContext, void>)&Functions.UserContextFinishDelegate<T0>;
+    internal static readonly nint UserContextFinishPointer = (nint)(delegate*<ref UserContext, void>)&Functions.UserContextFinishPointer<T0>;
+
+    #endregion
+
     #region Group Callbacks
+
+    internal static readonly nint GroupByCallbackDelegate = (nint)(delegate*<ecs_world_t*, ecs_table_t*, ulong, GroupByContext*, ulong>)&Functions.GroupByCallbackDelegate<T0>;
+    internal static readonly nint GroupByCallbackPointer = (nint)(delegate*<ecs_world_t*, ecs_table_t*, ulong, GroupByContext*, ulong>)&Functions.GroupByCallbackPointer<T0>;
 
     internal static readonly nint GroupCreateCallbackDelegate = (nint)(delegate*<ecs_world_t*, ulong, GroupByContext*, void*>)&Functions.GroupCreateCallbackDelegate<T0>;
     internal static readonly nint GroupCreateCallbackPointer = (nint)(delegate*<ecs_world_t*, ulong, GroupByContext*, void*>)&Functions.GroupCreateCallbackPointer<T0>;

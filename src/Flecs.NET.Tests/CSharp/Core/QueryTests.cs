@@ -985,4 +985,32 @@ public unsafe class QueryTests
             Assert.Equal(30, c3.Value);
         });
     }
+
+    [Fact]
+    private void GroupByCtx()
+    {
+        using World world = World.Create();
+
+        Entity rel = world.Entity();
+
+        world.Entity()
+            .Add<Position>()
+            .Add(rel, world.Entity());
+
+        using Query query = world.QueryBuilder()
+            .With<Position>()
+            .GroupByCtx(10, static (ref int groupByCtx) =>
+            {
+                Assert.Equal(20, groupByCtx);
+            })
+            .GroupBy(rel, static (World _, Table _, ulong _, ref int groupByCtx) =>
+            {
+                Assert.Equal(10, groupByCtx);
+                groupByCtx = 20;
+                return 0;
+            })
+            .Build();
+
+        query.Each((Iter _, int _) => { });
+    }
 }
