@@ -1689,7 +1689,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <summary>
     ///     Group and sort matched tables.
     /// </summary>
-    /// <param name="component"></param>
+    /// <param name="component">The id to be used for grouping.</param>
     /// <returns></returns>
     public ref QueryBuilder GroupBy(ulong component)
     {
@@ -1701,18 +1701,8 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <summary>
     ///     Group and sort matched tables.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public ref QueryBuilder GroupBy<T>()
-    {
-        return ref GroupBy(Type<T>.Id(World));
-    }
-
-    /// <summary>
-    ///     Group and sort matched tables.
-    /// </summary>
-    /// <param name="component"></param>
-    /// <param name="callback"></param>
+    /// <param name="component">The id to be used for grouping.</param>
+    /// <param name="callback">The callback.</param>
     /// <returns></returns>
     public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByCallback callback)
     {
@@ -1725,12 +1715,87 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <summary>
     ///     Group and sort matched tables.
     /// </summary>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
+    /// <param name="component">The id to be used for grouping</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="TContext">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref QueryBuilder GroupBy<TContext>(ulong component, Ecs.GroupByCallback<TContext> callback)
+    {
+        GroupByContext.GroupBy.Set(callback, Pointers<TContext>.GroupByCallbackDelegate);
+        Desc.group_by_callback = Pointers.GroupByCallback;
+        Desc.group_by = component;
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Group and sort matched tables.
+    /// </summary>
+    /// <typeparam name="T">The component to be used for grouping.</typeparam>
+    /// <returns></returns>
+    public ref QueryBuilder GroupBy<T>()
+    {
+        return ref GroupBy(Type<T>.Id(World));
+    }
+
+    /// <summary>
+    ///     Group and sort matched tables.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The component to be used for grouping.</typeparam>
     /// <returns></returns>
     public ref QueryBuilder GroupBy<T>(Ecs.GroupByCallback callback)
     {
         return ref GroupBy(Type<T>.Id(World), callback);
+    }
+
+    /// <summary>
+    ///     Group and sort matched tables.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The component to be used for grouping.</typeparam>
+    /// <typeparam name="TContext">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref QueryBuilder GroupBy<T, TContext>(Ecs.GroupByCallback<TContext> callback)
+    {
+        return ref GroupBy(Type<T>.Id(World), callback);
+    }
+
+    /// <summary>
+    ///     Sets the group by user context object.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref QueryBuilder GroupByCtx<T>(T value)
+    {
+        GroupByContext.GroupByUserContext.Set(ref value);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the group by user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <returns></returns>
+    public ref QueryBuilder GroupByCtx<T>(T value, Ecs.UserContextFinish<T> callback)
+    {
+        GroupByContext.GroupByUserContext.Set(ref value, callback);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the group by user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <returns></returns>
+    public ref QueryBuilder GroupByCtx<T>(T value, delegate*<ref T, void> callback)
+    {
+        GroupByContext.GroupByUserContext.Set(ref value, callback);
+        return ref this;
     }
 
     /// <summary>

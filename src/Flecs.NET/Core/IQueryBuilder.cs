@@ -423,14 +423,29 @@ public unsafe interface IQueryBuilder<TBuilder, TResult> : IQueryBuilderBase
     /// <inheritdoc cref="QueryBuilder.GroupBy(ulong)"/>
     public ref TBuilder GroupBy(ulong component);
 
-    /// <inheritdoc cref="QueryBuilder.GroupBy{T}()"/>
-    public ref TBuilder GroupBy<T>();
-
     /// <inheritdoc cref="QueryBuilder.GroupBy(ulong, Ecs.GroupByCallback)"/>
     public ref TBuilder GroupBy(ulong component, Ecs.GroupByCallback callback);
 
+    /// <inheritdoc cref="QueryBuilder.GroupBy{TContext}(ulong, Ecs.GroupByCallback{TContext})"/>
+    public ref TBuilder GroupBy<TContext>(ulong component, Ecs.GroupByCallback<TContext> callback);
+
+    /// <inheritdoc cref="QueryBuilder.GroupBy{T}()"/>
+    public ref TBuilder GroupBy<T>();
+
     /// <inheritdoc cref="QueryBuilder.GroupBy{T}(Ecs.GroupByCallback)"/>
     public ref TBuilder GroupBy<T>(Ecs.GroupByCallback callback);
+
+    /// <inheritdoc cref="QueryBuilder.GroupBy{T, TContext}(Ecs.GroupByCallback{TContext})"/>
+    public ref TBuilder GroupBy<T, TContext>(Ecs.GroupByCallback<TContext> callback);
+
+    /// <inheritdoc cref="QueryBuilder.GroupByCtx{T}(T)"/>
+    public ref TBuilder GroupByCtx<T>(T value);
+
+    /// <inheritdoc cref="QueryBuilder.GroupByCtx{T}(T, Ecs.UserContextFinish{T})"/>
+    public ref TBuilder GroupByCtx<T>(T value, Ecs.UserContextFinish<T> callback);
+
+    /// <inheritdoc cref="QueryBuilder.GroupByCtx{T}(T, Ecs.UserContextFinish{T})"/>
+    public ref TBuilder GroupByCtx<T>(T value, delegate*<ref T, void> callback);
 
     /// <inheritdoc cref="QueryBuilder.OnGroupCreate(Ecs.GroupCreateCallback)"/>
     public ref TBuilder OnGroupCreate(Ecs.GroupCreateCallback callback);

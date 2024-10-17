@@ -1072,6 +1072,20 @@ public class QueryBuilder : IIncrementalGenerator
                 Ecs.GetQueryBuilder(ref this).GroupBy(component);
                 return ref this;
             }
+            
+            /// <inheritdoc cref="Core.QueryBuilder.GroupBy(ulong, Ecs.GroupByCallback)"/>
+            public ref {{Generator.GetTypeName(type, i)}} GroupBy(ulong component, Ecs.GroupByCallback callback)
+            {
+                Ecs.GetQueryBuilder(ref this).GroupBy(component, callback);
+                return ref this;
+            }
+            
+            /// <inheritdoc cref="Core.QueryBuilder.GroupBy{TContext}(ulong, Ecs.GroupByCallback{TContext})"/>
+            public ref {{Generator.GetTypeName(type, i)}} GroupBy<TContext>(ulong component, Ecs.GroupByCallback<TContext> callback)
+            {
+                Ecs.GetQueryBuilder(ref this).GroupBy(component, callback);
+                return ref this;
+            }
     
             /// <inheritdoc cref="Core.QueryBuilder.GroupBy{T}()"/>
             public ref {{Generator.GetTypeName(type, i)}} GroupBy<T>()
@@ -1080,17 +1094,38 @@ public class QueryBuilder : IIncrementalGenerator
                 return ref this;
             }
     
-            /// <inheritdoc cref="Core.QueryBuilder.GroupBy(ulong, Ecs.GroupByCallback)"/>
-            public ref {{Generator.GetTypeName(type, i)}} GroupBy(ulong component, Ecs.GroupByCallback callback)
-            {
-                Ecs.GetQueryBuilder(ref this).GroupBy(component, callback);
-                return ref this;
-            }
-    
             /// <inheritdoc cref="Core.QueryBuilder.GroupBy{T}(Ecs.GroupByCallback)"/>
             public ref {{Generator.GetTypeName(type, i)}} GroupBy<T>(Ecs.GroupByCallback callback)
             {
                 Ecs.GetQueryBuilder(ref this).GroupBy<T>(callback);
+                return ref this;
+            }
+            
+            /// <inheritdoc cref="Core.QueryBuilder.GroupBy{T, TContext}(Ecs.GroupByCallback{TContext})"/>
+            public ref {{Generator.GetTypeName(type, i)}} GroupBy<T, TContext>(Ecs.GroupByCallback<TContext> callback)
+            {
+                Ecs.GetQueryBuilder(ref this).GroupBy<T, TContext>(callback);
+                return ref this;
+            }
+            
+            /// <inheritdoc cref="Core.QueryBuilder.GroupByCtx{T}(T)"/>
+            public ref {{Generator.GetTypeName(type, i)}} GroupByCtx<T>(T value)
+            {
+                Ecs.GetQueryBuilder(ref this).GroupByCtx(value);
+                return ref this;
+            }
+            
+            /// <inheritdoc cref="Core.QueryBuilder.GroupByCtx{T}(T, Ecs.UserContextFinish{T})"/>
+            public ref {{Generator.GetTypeName(type, i)}} GroupByCtx<T>(T value, Ecs.UserContextFinish<T> callback)
+            {
+                Ecs.GetQueryBuilder(ref this).GroupByCtx(value, callback);
+                return ref this;
+            }
+            
+            /// <inheritdoc cref="Core.QueryBuilder.GroupByCtx{T}(T, Ecs.UserContextFinish{T})"/>
+            public ref {{Generator.GetTypeName(type, i)}} GroupByCtx<T>(T value, delegate*<ref T, void> callback)
+            {
+                Ecs.GetQueryBuilder(ref this).GroupByCtx(value, callback);
                 return ref this;
             }
     
