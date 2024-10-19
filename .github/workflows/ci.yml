@@ -20,103 +20,110 @@ on:
       nuget-registry:
         description: 'NuGet registry'
         required: true
-        default: 'GitLab'
+        default: 'GitHub'
         type: choice
         options:
-          - GitLab
+          - GitHub
           - NuGet
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
 
+    permissions:
+      packages: write
+
     strategy:
-        fail-fast: false
-        matrix:
-            os: [ubuntu-latest, macos-13, windows-latest]
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-13, windows-latest]
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: 'recursive'
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: |
-          3.1.x
-          5.0.x
-          6.0.x
-          7.0.x
-          8.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
 
-    - name: Set Version Suffix
-      shell: bash
-      run: |
-        if [ '${{ github.event.inputs.use-auto-generated-version }}' != 'false' ]; then
-          echo "FlecsVersionSuffix=-dev-$(date +'%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
-        fi
+      - name: Set Version Suffix
+        shell: bash
+        run: |
+          if [ '${{ github.event.inputs.use-auto-generated-version }}' != 'false' ]; then
+            echo "FlecsVersionSuffix=-dev-$(date +'%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
+          fi
 
-    - name: Setup Osx Environment
-      if: matrix.os == 'macos-13'
-      shell: bash
-      run: |
-        IOS_SDK=$(xcrun --sdk iphoneos --show-sdk-path)
-        IOS_SIMULATOR_SDK=$(xcrun --sdk iphonesimulator --show-sdk-path)
-        
-        echo "IOS_SDK=$IOS_SDK" >> $GITHUB_ENV
-        echo "IOS_SIMULATOR_SDK=$IOS_SIMULATOR_SDK" >> $GITHUB_ENV
+      - name: Setup Osx Environment
+        if: matrix.os == 'macos-13'
+        shell: bash
+        run: |
+          IOS_SDK=$(xcrun --sdk iphoneos --show-sdk-path)
+          IOS_SIMULATOR_SDK=$(xcrun --sdk iphonesimulator --show-sdk-path)
+          
+          echo "IOS_SDK=$IOS_SDK" >> $GITHUB_ENV
+          echo "IOS_SIMULATOR_SDK=$IOS_SIMULATOR_SDK" >> $GITHUB_ENV
 
-    - name: Restore Dependencies
-      shell: bash
-      run: dotnet restore
+      - name: Restore Dependencies
+        shell: bash
+        run: dotnet restore
 
-    - name: Generate Bindings
-      shell: bash
-      run: dotnet run --project src/Flecs.NET.Bindgen
+      - name: Generate Bindings
+        shell: bash
+        run: dotnet run --project src/Flecs.NET.Bindgen
 
-    - name: Build Projects
-      shell: bash
-      run: |
-        if [ '${{ matrix.os }}' == 'macos-13' ]; then
-          dotnet build -c Debug   --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
-          dotnet build -c Release --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
-        else
-          dotnet build -c Debug
-          dotnet build -c Release
-        fi
+      - name: Build Projects
+        shell: bash
+        run: |
+          if [ '${{ matrix.os }}' == 'macos-13' ]; then
+            dotnet build -c Debug   --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
+            dotnet build -c Release --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
+          else
+            dotnet build -c Debug
+            dotnet build -c Release
+          fi
 
-    - name: Run Tests
-      shell: bash
-      run: dotnet test --no-build
+      - name: Run Tests
+        shell: bash
+        run: dotnet test --no-build
 
-    - name: Pack Nuget Packages
-      shell: bash
-      run: |
-        if [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix -c Debug
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix -c Release
-        else
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:FlecsPackPdb=true -c Debug
-          dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:FlecsPackPdb=true -c Release
-        fi
+      - name: Pack Nuget Packages
+        shell: bash
+        run: |
+          if [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
+            dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix -c Debug
+            dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix -c Release
+          else
+            dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:FlecsPackPdb=true -c Debug
+            dotnet pack --property:FlecsVersionSuffix=$FlecsVersionSuffix --property:FlecsPackPdb=true -c Release
+          fi
 
-    - name: Upload Artifacts
-      if: matrix.os == 'macos-13'
-      uses: actions/upload-artifact@v3
-      with:
-        name: Nuget Packages
-        path: |
-          src/**/Flecs.NET.*.nupkg
-          src/**/Flecs.NET.*.snupkg
+      - name: Upload Artifacts
+        if: matrix.os == 'macos-13'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Nuget Packages
+          path: |
+            src/**/Flecs.NET.*.nupkg
+            src/**/Flecs.NET.*.snupkg
 
-    - name: Push NuGet Packages
-      if: matrix.os == 'macos-13' && github.event_name == 'workflow_dispatch' && github.event.inputs.push-packages == 'true'
-      shell: bash
-      run: |
-        if [ '${{ github.event.inputs.nuget-registry }}' == 'GitLab' ]; then
-          dotnet nuget push src/**/Flecs.NET.*.nupkg --api-key '${{ secrets.GITLAB_ACCESS_TOKEN }}' --source 'https://gitlab.com/api/v4/projects/51698729/packages/nuget/index.json'
-        elif [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
-          dotnet nuget push src/**/Flecs.NET.*.nupkg --api-key '${{ secrets.NUGET_ACCESS_TOKEN }}' --source 'https://api.nuget.org/v3/index.json'
-        fi
+      - name: Push NuGet Packages
+        if: >
+          matrix.os == 'macos-13' &&
+          github.repository_owner == 'BeanCheeseBurrito' &&
+          (
+            (github.event_name == 'workflow_dispatch' && github.event.inputs.push-packages == 'true') ||
+            (github.event_name == 'push' && github.ref == 'refs/heads/main')
+          )
+        shell: bash
+        run: |
+          if [ '${{ github.event_name }}' == 'workflow_dispatch' ]; then
+            if [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
+              dotnet nuget push src/**/Flecs.NET.*.nupkg --api-key '${{ secrets.NUGET_ACCESS_TOKEN }}' --source 'https://api.nuget.org/v3/index.json'
+            elif [ '${{ github.event.inputs.nuget-registry }}' == 'GitHub' ]; then
+              dotnet nuget push src/**/Flecs.NET.*.nupkg --api-key '${{ secrets.GITHUB_TOKEN }}' --source 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json'
+            fi
+          elif [ '${{ github.ref }}' == 'refs/heads/main' ]; then
+            dotnet nuget push src/**/Flecs.NET.*.nupkg --api-key '${{ secrets.GITHUB_TOKEN }}' --source 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json'
+          fi
