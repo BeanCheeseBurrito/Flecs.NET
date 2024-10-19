@@ -104,7 +104,7 @@ For more up-to-date packages, development builds are available on the [GitLab pa
 
 </Project>
 ```
-> [!WARNING] 
+> [!WARNING]
 > Development feed packages may be deleted without warning to free up space.
 
 ## Running examples
@@ -128,13 +128,6 @@ Run the following command on the solution to restore all project dependencies.
 ```console
 dotnet restore
 ```
-### Generate bindings
-Generate the binding code. Bindings are generated with [Bindgen.NET](https://github.com/BeanCheeseBurrito/Bindgen.NET).
-> [!NOTE]
-> The binding generator needs access to system headers on MacOS. Ensure that XCode is installed.
-```console
-dotnet run --project src/Flecs.NET.Bindgen
-```
 ### Build Flecs.NET
 Compile the wrapper and native libraries. The [zig](https://ziglang.org/learn/overview/#cross-compiling-is-a-first-class-use-case) compiler will automatically be downloaded and cached in your local nuget package folder. Native libraries will be cross-compiled for linux, macos, and windows.
 ```console
@@ -142,7 +135,7 @@ dotnet build
 ```
 
 ### Reference the project
-Reference the project and import the native libraries.
+Reference the project and import the native libraries. You should now be able to use **Flecs.NET** from your project.
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -160,6 +153,20 @@ Reference the project and import the native libraries.
 
 </Project>
 ```
+
+### Running the bindings generator
+Low-level bindings to the flecs C API are pre-generated and included in the [Flecs.NET.Bindings](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET.Bindings) project by default. If needed, you can run the following command to regenerate the bindings file.
+> [!NOTE]
+> The binding generator needs access to system headers on MacOS. Ensure that XCode is installed.
+```console
+dotnet run --project src/Flecs.NET.Bindgen
+```
+### Running the code generator
+**Flecs.NET** relies on code generation to avoid manual code duplication. If any changes are made to the [Flecs.NET.Codegen](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET.Codegen) project, you can run the following command to rerun the code generators. The generated files will be output to this [folder](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET/Generated).
+```console
+dotnet run --project src/Flecs.NET.Codegen
+```
+
 ## Contributing
 Feel free to open an issue or pull request. All contributions are welcome!
 
