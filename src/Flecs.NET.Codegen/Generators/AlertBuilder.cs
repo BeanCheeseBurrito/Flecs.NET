@@ -1,17 +1,11 @@
-using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Codegen.Helpers;
-using Microsoft.CodeAnalysis;
 
-[Generator]
-[SuppressMessage("ReSharper", "CheckNamespace")]
-[SuppressMessage("Design", "CA1050:Declare types in namespaces")]
-public class AlertBuilder : IIncrementalGenerator
+namespace Flecs.NET.Codegen.Generators;
+
+public class AlertBuilder : GeneratorBase
 {
-    public void Initialize(IncrementalGeneratorInitializationContext context)
+    public override void Generate()
     {
-        context.RegisterPostInitializationOutput((IncrementalGeneratorPostInitializationContext postContext) =>
-        {
-            Generator.AddSource(postContext, "AlertBuilder.QueryBuilder.g.cs", QueryBuilder.GenerateExtensions(Type.AlertBuilder));
-        });
+        AddSource("AlertBuilder.QueryBuilder.g.cs", QueryBuilder.GenerateExtensions(Type.AlertBuilder));
     }
 }
