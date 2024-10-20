@@ -125,6 +125,11 @@ To remove the GitHub feed from your NuGet package sources, run the following com
 ```bash
 dotnet nuget remove source "flecs.net"
 ```
+GitHub Actions workflows can be authenticated using the ``GITHUB_TOKEN`` secret.
+```yaml
+- name: Add GitHub source
+  run: dotnet nuget add source --name "flecs.net" --username "USERNAME" --password "${{ secrets.GITHUB_TOKEN }}" --store-password-in-clear-text "https://nuget.pkg.github.com/BeanCheeseBurrito/index.json"
+```
 > [!WARNING]
 > Development feed packages may be deleted without warning to free up space.
 
