@@ -48,7 +48,8 @@ public record struct Velocity(float X, float Y);
 - Fully blittable interface with no runtime marshalling
 
 **Flecs.NET.Native - Precompiled native libraries**
-- Provides both shared and static libraries for Windows, MacOS, and Linux
+- Provides both shared and static libraries for Windows, MacOS, Linux, iOS, and WASM
+- Static libraries are automatically linked for NativeAOT builds (`$(FlecsStaticPath)` available for manual linking for other targets)
 - Packaged with Zig for dependency free cross-compilation everywhere
 
 ## NuGet
@@ -171,8 +172,6 @@ Reference the project and import the native libraries. You should now be able to
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
-
-    <Import Project="PATH/Flecs.NET/src/Flecs.NET.Native/Flecs.NET.Native.targets" />
 
     <ItemGroup>
         <ProjectReference Include="PATH/Flecs.NET/src/Flecs.NET/Flecs.NET.csproj" />

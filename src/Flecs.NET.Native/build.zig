@@ -40,6 +40,16 @@ pub fn compileFlecs(options: anytype, b: *Build, lib_type: LibType) void {
             lib.addSystemIncludePath(.{ .cwd_relative = b.pathJoin(&.{ b.sysroot.?, "/usr/include" }) });
             lib.addLibraryPath(.{ .cwd_relative = b.pathJoin(&.{ b.sysroot.?, "/usr/lib" }) });
         },
+        .emscripten => {
+            if (b.sysroot == null) {
+                @panic("Pass '--sysroot \"$EMSDK/upstream/emscripten\"'");
+            }
+
+            const cache_include = b.pathJoin(&.{ b.sysroot.?, "cache", "sysroot", "include" });
+            var dir = std.fs.openDirAbsolute(cache_include, std.fs.Dir.OpenDirOptions{ .access_sub_paths = true, .no_follow = true }) catch @panic("No emscripten cache. Generate it!");
+            dir.close();
+            lib.addIncludePath(.{ .cwd_relative = cache_include });
+        },
         else => {},
     }
 
@@ -53,6 +63,9 @@ pub fn build(b: *Build) void {
         .soft_assert = b.option(bool, "soft-assert", "Compile with the FLECS_SOFT_ASSERT define.") orelse false,
     };
 
-    compileFlecs(options, b, LibType.Shared);
+    if (options.target.result.os.tag != .emscripten) {
+        compileFlecs(options, b, LibType.Shared);
+    }
+
     compileFlecs(options, b, LibType.Static);
 }

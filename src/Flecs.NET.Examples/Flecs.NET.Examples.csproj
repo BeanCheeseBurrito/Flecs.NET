@@ -14,8 +14,6 @@
         <DefineConstants>$(DefineConstants);$(Example)</DefineConstants>
     </PropertyGroup>
 
-    <Import Project="../Flecs.NET.Native/Flecs.NET.Native.targets"/>
-
     <ItemGroup>
         <ProjectReference Include="../Flecs.NET/Flecs.NET.csproj"/>
     </ItemGroup>
