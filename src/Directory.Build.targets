@@ -1,5 +1,0 @@
-<Project>
-    <PropertyGroup>
-        <Version>$(Version)$(FlecsVersionSuffix)</Version>
-    </PropertyGroup>
-</Project>

@@ -20,7 +20,7 @@
         <IsPackable>true</IsPackable>
         <IncludeContentInPack>true</IncludeContentInPack>
 
-        <Version>4.0.2</Version>
+        <VersionPrefix>4.0.2</VersionPrefix>
         <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Debug</Title>
         <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Release</Title>
         <Authors>BeanCheeseBurrito</Authors>
@@ -41,7 +41,7 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
 

@@ -100,8 +100,9 @@ dotnet nuget add source --name "flecs.net" --username "YOUR_GITHUB_USERNAME" --p
 You can now reference any package from the [GitHub feed](https://github.com/BeanCheeseBurrito?tab=packages&repo_name=Flecs.NET)!
 
 ```console
-dotnet add PROJECT package Flecs.NET.Release --version 4.0.2-dev-2024-10-20-03-23-34
+dotnet add PROJECT package Flecs.NET.Release --version *-build.*
 ```
+
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
 
@@ -111,7 +112,7 @@ dotnet add PROJECT package Flecs.NET.Release --version 4.0.2-dev-2024-10-20-03-2
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Flecs.NET.Debug" Version="4.0.2-dev-2024-10-20-03-23-34"/>
+        <PackageReference Include="Flecs.NET.Debug" Version="*-build.*"/>
     </ItemGroup>
 
 </Project>
