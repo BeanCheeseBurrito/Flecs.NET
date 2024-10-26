@@ -1,14 +1,7 @@
 <Project>
-    <PropertyGroup>
-        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'linux-x64'">$(FlecsStaticLibrary_linux-x64)</FlecsStaticLibrary>
-        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'osx-x64'">$(FlecsStaticLibrary_osx-x64)</FlecsStaticLibrary>
-        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'win-x64'">$(FlecsStaticLibrary_win-x64)</FlecsStaticLibrary>
-        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'iossimulator-x64'">$(FlecsStaticLibrary_iossimulator-x64)</FlecsStaticLibrary>
-
-        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">$(FlecsStaticLibrary_linux-arm64)</FlecsStaticLibrary>
-        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">$(FlecsStaticLibrary_osx-arm64)</FlecsStaticLibrary>
-        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'win-arm64'">$(FlecsStaticLibrary_win-arm64)</FlecsStaticLibrary>
-        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'ios-arm64'">$(FlecsStaticLibrary_ios-arm64</FlecsStaticLibrary>
-        <FlecsStaticLibrary Condition="'$(RuntimeIdentifier)' == 'iossimulator-arm64'">$(FlecsStaticLibrary_iossimulator-arm64)</FlecsStaticLibrary>
-    </PropertyGroup>
+  <ItemGroup Condition="'$(PublishAot)' == 'true'">
+    <DirectPInvoke Include="flecs"/>
+    <NativeLibrary Condition="'$(IsWindowsRuntime)' == 'true'" Include="$(FlecsStaticPath)flecs.lib"/>
+    <NativeLibrary Condition="'$(IsWindowsRuntime)' != 'true'" Include="$(FlecsStaticPath)libflecs.a"/>
+  </ItemGroup>
 </Project>

@@ -8,8 +8,6 @@
         <NoWarn>$(NoWarn);CS8618</NoWarn>
     </PropertyGroup>
 
-    <Import Project="../Flecs.NET.Native/Flecs.NET.Native.targets"/>
-
     <ItemGroup>
         <PackageReference Include="BenchmarkDotNet" Version="0.13.12"/>
         <ProjectReference Include="../Flecs.NET/Flecs.NET.csproj"/>

@@ -56,7 +56,7 @@ jobs:
             echo "FlecsVersionSuffix=build.$(git rev-list --count HEAD)" >> $GITHUB_ENV
           fi
 
-      - name: Setup Osx Environment
+      - name: Setup IOS SDK
         if: matrix.os == 'macos-13'
         shell: bash
         run: |
@@ -65,6 +65,12 @@ jobs:
 
           echo "IOS_SDK=$IOS_SDK" >> $GITHUB_ENV
           echo "IOS_SIMULATOR_SDK=$IOS_SIMULATOR_SDK" >> $GITHUB_ENV
+
+      - name: Setup Emscripten SDK
+        if: matrix.os == 'macos-13'
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          actions-cache-folder: 'emsdk-cache'
 
       - name: Restore Dependencies
         shell: bash
@@ -77,27 +83,52 @@ jobs:
       - name: Build Projects
         shell: bash
         run: |
-          if [ '${{ matrix.os }}' == 'macos-13' ]; then
-            dotnet build -c Debug   --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
-            dotnet build -c Release --property:IosSdkPath=$IOS_SDK --property:IosSimulatorSdkPath=$IOS_SIMULATOR_SDK
-          else
-            dotnet build -c Debug
-            dotnet build -c Release
-          fi
+          dotnet build -c Debug
+          dotnet build -c Release
+
+      - name: Build Natives
+        shell: bash
+        if: matrix.os == 'macos-13'
+        working-directory: src/Flecs.NET.Native
+        run: |
+          dotnet build -c Debug -r linux-x64
+          dotnet build -c Release -r linux-x64
+          dotnet build -c Debug -r linux-arm64
+          dotnet build -c Release -r linux-arm64
+
+          dotnet build -c Debug -r osx-x64
+          dotnet build -c Release -r osx-x64
+          dotnet build -c Debug -r osx-arm64
+          dotnet build -c Release -r osx-arm64
+
+          dotnet build -c Debug -r win-x64
+          dotnet build -c Release -r win-x64
+          dotnet build -c Debug -r win-arm64
+          dotnet build -c Release -r win-arm64
+
+          dotnet build -c Debug -r browser-wasm
+          dotnet build -c Release -r browser-wasm
+
+          dotnet build -c Debug -r iossimulator-x64
+          dotnet build -c Release -r iossimulator-x64
+          dotnet build -c Debug -r iossimulator-arm64
+          dotnet build -c Release -r iossimulator-arm64
+          dotnet build -c Debug -r ios-arm64
+          dotnet build -c Release -r ios-arm64
 
       - name: Run Tests
         shell: bash
-        run: dotnet test --no-build
+        run: dotnet test -p:SkipNatives=true
 
       - name: Pack Nuget Packages
         shell: bash
         run: |
           if [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
-            dotnet pack --property:VersionSuffix=$FlecsVersionSuffix -c Debug
-            dotnet pack --property:VersionSuffix=$FlecsVersionSuffix -c Release
+            dotnet pack --property:VersionSuffix=$FlecsVersionSuffix -p:SkipNatives=true -c Debug
+            dotnet pack --property:VersionSuffix=$FlecsVersionSuffix -p:SkipNatives=true -c Release
           else
-            dotnet pack --property:VersionSuffix=$FlecsVersionSuffix --property:FlecsPackPdb=true -c Debug
-            dotnet pack --property:VersionSuffix=$FlecsVersionSuffix --property:FlecsPackPdb=true -c Release
+            dotnet pack --property:VersionSuffix=$FlecsVersionSuffix --property:FlecsPackPdb=true -p:SkipNatives=true -c Debug
+            dotnet pack --property:VersionSuffix=$FlecsVersionSuffix --property:FlecsPackPdb=true -p:SkipNatives=true -c Release
           fi
 
       - name: Upload Artifacts

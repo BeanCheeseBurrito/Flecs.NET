@@ -8,8 +8,6 @@
         <NoWarn>$(NoWarn);xUnit2013;CS8500</NoWarn>
     </PropertyGroup>
 
-    <Import Project="../Flecs.NET.Native/Flecs.NET.Native.targets"/>
-
     <ItemGroup>
         <ProjectReference Include="../Flecs.NET/Flecs.NET.csproj"/>
         <ProjectReference Include="../Flecs.NET.Examples/Flecs.NET.Examples.csproj" Condition="'$(TargetFramework)' == 'net8.0'"/>
