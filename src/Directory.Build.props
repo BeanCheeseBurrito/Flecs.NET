@@ -1,5 +1,24 @@
 <Project>
     <PropertyGroup>
+        <VersionPrefix>4.0.2</VersionPrefix>
+        <Authors>BeanCheeseBurrito</Authors>
+        <Copyright>BeanCheeseBurrito</Copyright>
+        <PackageProjectUrl>https://github.com/BeanCheeseBurrito/Flecs.NET</PackageProjectUrl>
+        <PackageIconUrl>https://raw.githubusercontent.com/SanderMertens/flecs/master/docs/img/logo_small.png</PackageIconUrl>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/BeanCheeseBurrito/Flecs.NET</RepositoryUrl>
+        <RepositoryType>Github</RepositoryType>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+
+        <DebugType>portable</DebugType>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <IsPackable>false</IsPackable>
         <NoWarn>$(NoWarn);NETSDK1138</NoWarn>
         <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true' And '$(ContinuousIntegrationBuild)' == ''">true</ContinuousIntegrationBuild>

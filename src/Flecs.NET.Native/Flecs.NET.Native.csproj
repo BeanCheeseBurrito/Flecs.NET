@@ -17,16 +17,7 @@
     <PropertyGroup>
         <IsPackable>true</IsPackable>
 
-        <VersionPrefix>4.0.2</VersionPrefix>
-        <Authors>BeanCheeseBurrito</Authors>
-        <Copyright>BeanCheeseBurrito</Copyright>
         <Description>Native libraries for flecs</Description>
-        <PackageProjectUrl>https://github.com/BeanCheeseBurrito/Flecs.NET</PackageProjectUrl>
-        <PackageIconUrl>https://raw.githubusercontent.com/SanderMertens/flecs/master/docs/img/logo_small.png</PackageIconUrl>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryUrl>https://github.com/BeanCheeseBurrito/Flecs.NET</RepositoryUrl>
-        <RepositoryType>Github</RepositoryType>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -38,14 +29,12 @@
         <When Condition="'$(Configuration)' == 'Debug'">
             <PropertyGroup>
                 <PackageId>Flecs.NET.Native.Debug</PackageId>
-                <Title>$(PackageId)</Title>
                 <ZigConfiguration>Debug</ZigConfiguration>
             </PropertyGroup>
         </When>
         <When Condition="'$(Configuration)' == 'Release'">
             <PropertyGroup>
                 <PackageId>Flecs.NET.Native.Release</PackageId>
-                <Title>$(PackageId)</Title>
                 <ZigConfiguration>ReleaseFast</ZigConfiguration>
             </PropertyGroup>
         </When>

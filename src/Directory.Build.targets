@@ -1,0 +1,5 @@
+<Project>
+    <ItemGroup>
+        <Content Include="../../docs/icon.png" PackagePath="icon.png"/>
+    </ItemGroup>
+</Project>
