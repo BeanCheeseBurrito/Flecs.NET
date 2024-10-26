@@ -49,7 +49,7 @@ public record struct Velocity(float X, float Y);
 
 **Flecs.NET.Native - Precompiled native libraries**
 - Provides both shared and static libraries for Windows, MacOS, Linux, iOS, and WASM
-- Static libraries are automatically linked for NativeAOT builds (`$(FlecsStaticPath)` available for manual linking for other targets)
+- `$(FlecsStaticLibrary)` is provided for static linking in MSBuild projects
 - Packaged with Zig for dependency free cross-compilation everywhere
 
 ## NuGet
