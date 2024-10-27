@@ -10,31 +10,10 @@
         <IsPackable>true</IsPackable>
         <IncludeContentInPack>true</IncludeContentInPack>
 
-        <VersionPrefix>4.0.2</VersionPrefix>
-        <Title Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Bindings.Debug</Title>
-        <Title Condition="'$(Configuration)' == 'Release'">Flecs.NET.Bindings.Release</Title>
-        <Authors>BeanCheeseBurrito</Authors>
-        <Copyright>BeanCheeseBurrito</Copyright>
+        <PackageId Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Bindings.Debug</PackageId>
+        <PackageId Condition="'$(Configuration)' == 'Release'">Flecs.NET.Bindings.Release</PackageId>
         <Description>Raw C# bindings for flecs</Description>
-        <PackageId>$(Title)</PackageId>
-        <PackageProjectUrl>https://github.com/BeanCheeseBurrito/Flecs.NET</PackageProjectUrl>
-        <PackageIconUrl>https://raw.githubusercontent.com/SanderMertens/flecs/master/docs/img/logo_small.png</PackageIconUrl>
-        <PackageIcon>icon.png</PackageIcon>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryUrl>https://github.com/BeanCheeseBurrito/Flecs.NET</RepositoryUrl>
-        <RepositoryType>Github</RepositoryType>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-
-        <DebugType>portable</DebugType>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>
-
-    <ItemGroup>
-        <Content Include="../../docs/icon.png" PackagePath="icon.png"/>
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
