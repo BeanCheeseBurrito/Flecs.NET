@@ -175,7 +175,7 @@
 
     <!-- Enable soft asserts if configured -->
     <PropertyGroup>
-        <ZigArgs Condition="'$(FlecsSoftAssert)' == 'True'">$(ZigArgs)-Dsoft-assert=true</ZigArgs>
+        <ZigArgs Condition="'$(FlecsSoftAssert)' == 'True'">$(ZigArgs) -Dsoft-assert=true</ZigArgs>
     </PropertyGroup>
 
     <!-- Here we need host not target toolset to compile/cross-compile -->
