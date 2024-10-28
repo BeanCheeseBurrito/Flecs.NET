@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Bindgen.NET;
+
+var zigLibPath = args[0];
 
 BindingOptions bindingOptions = new()
 {
@@ -23,7 +25,7 @@ BindingOptions bindingOptions = new()
 
     SuppressedWarnings = { "CS8981" },
 
-    SystemIncludeDirectories = { Path.Combine(BuildConstants.ZigLibPath, "include") },
+    SystemIncludeDirectories = { Path.Combine(zigLibPath, "include") },
 
     InputFile = GetFlecsHeaderPath(),
     OutputFile = GetBindingsOutputPath(),
@@ -34,7 +36,7 @@ BindingOptions bindingOptions = new()
 };
 
 if (OperatingSystem.IsMacOS())
-    bindingOptions.SystemIncludeDirectories.Add(Path.Combine(BuildConstants.ZigLibPath, "libc", "include", "any-macos-any"));
+    bindingOptions.SystemIncludeDirectories.Add(Path.Combine(zigLibPath, "libc", "include", "any-macos-any"));
 
 BindingGenerator.Generate(bindingOptions);
 

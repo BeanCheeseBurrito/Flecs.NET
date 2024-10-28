@@ -76,10 +76,6 @@ jobs:
         shell: bash
         run: dotnet restore
 
-      - name: Generate Bindings
-        shell: bash
-        run: dotnet run --project src/Flecs.NET.Bindgen
-
       - name: Build Projects
         shell: bash
         run: |
@@ -92,28 +88,25 @@ jobs:
         working-directory: src/Flecs.NET.Native
         run: |
           dotnet build -c Debug -r linux-x64
-          dotnet build -c Release -r linux-x64
           dotnet build -c Debug -r linux-arm64
-          dotnet build -c Release -r linux-arm64
-
           dotnet build -c Debug -r osx-x64
-          dotnet build -c Release -r osx-x64
           dotnet build -c Debug -r osx-arm64
-          dotnet build -c Release -r osx-arm64
-
           dotnet build -c Debug -r win-x64
-          dotnet build -c Release -r win-x64
           dotnet build -c Debug -r win-arm64
-          dotnet build -c Release -r win-arm64
-
           dotnet build -c Debug -r browser-wasm
-          dotnet build -c Release -r browser-wasm
-
           dotnet build -c Debug -r iossimulator-x64
-          dotnet build -c Release -r iossimulator-x64
           dotnet build -c Debug -r iossimulator-arm64
-          dotnet build -c Release -r iossimulator-arm64
           dotnet build -c Debug -r ios-arm64
+
+          dotnet build -c Release -r linux-x64
+          dotnet build -c Release -r linux-arm64
+          dotnet build -c Release -r osx-x64
+          dotnet build -c Release -r osx-arm64
+          dotnet build -c Release -r win-x64
+          dotnet build -c Release -r win-arm64
+          dotnet build -c Release -r browser-wasm
+          dotnet build -c Release -r iossimulator-x64
+          dotnet build -c Release -r iossimulator-arm64
           dotnet build -c Release -r ios-arm64
 
       - name: Run Tests
@@ -124,11 +117,11 @@ jobs:
         shell: bash
         run: |
           if [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
-            dotnet pack --property:VersionSuffix=$FlecsVersionSuffix -p:SkipNatives=true -c Debug
-            dotnet pack --property:VersionSuffix=$FlecsVersionSuffix -p:SkipNatives=true -c Release
+            dotnet pack -p:VersionSuffix=$FlecsVersionSuffix -p:SkipNatives=true -p:SkipGen=true -c Debug
+            dotnet pack -p:VersionSuffix=$FlecsVersionSuffix -p:SkipNatives=true -p:SkipGen=true -c Release
           else
-            dotnet pack --property:VersionSuffix=$FlecsVersionSuffix --property:FlecsPackPdb=true -p:SkipNatives=true -c Debug
-            dotnet pack --property:VersionSuffix=$FlecsVersionSuffix --property:FlecsPackPdb=true -p:SkipNatives=true -c Release
+            dotnet pack -p:VersionSuffix=$FlecsVersionSuffix -p:FlecsPackPdb=true -p:SkipNatives=true -p:SkipGen=true -c Debug
+            dotnet pack -p:VersionSuffix=$FlecsVersionSuffix -p:FlecsPackPdb=true -p:SkipNatives=true -p:SkipGen=true -c Release
           fi
 
       - name: Upload Artifacts

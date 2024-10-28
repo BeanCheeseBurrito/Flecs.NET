@@ -19,16 +19,8 @@
         </PackageReference>
     </ItemGroup>
 
-    <!-- Store the location of the zig lib folder as a global variable that can be accessed in code. -->
-    <ItemGroup>
-        <Compile Include="$(IntermediateOutputPath)BuildConstants.cs"/>
-    </ItemGroup>
-
-    <Target Name="GenerateConstants" BeforeTargets="CoreCompile">
-        <WriteLinesToFile
-            File="$(IntermediateOutputPath)BuildConstants.cs"
-            Lines='public static class BuildConstants { public const string ZigLibPath = @"$(ZigLibPath)"%3B }'
-            Overwrite="true"/>
+    <Target Name="Generate" AfterTargets="Build" Condition="'$(SkipGen)' != 'true'">
+        <Exec Command="dotnet &quot;$(TargetDir)$(TargetFileName)&quot; &quot;$(ZigLibPath)&quot;" />
     </Target>
 
 </Project>

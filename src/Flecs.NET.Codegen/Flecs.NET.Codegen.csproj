@@ -14,4 +14,8 @@
         <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
     </PropertyGroup>
 
+    <Target Name="Generate" AfterTargets="Build" Condition="'$(SkipGen)' != 'true'">
+        <Exec Command="dotnet &quot;$(TargetDir)$(TargetFileName)&quot;" />
+    </Target>
+
 </Project>

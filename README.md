@@ -157,7 +157,7 @@ Run the following command on the solution to restore all project dependencies.
 dotnet restore
 ```
 ### Build Flecs.NET
-Compile the wrapper and native libraries. The [zig](https://ziglang.org/learn/overview/#cross-compiling-is-a-first-class-use-case) compiler will automatically be downloaded and cached in your local nuget package folder. Native libraries will be cross-compiled for linux, macos, and windows.
+Compile the wrapper, native libraries and generate necessary code. The [zig](https://ziglang.org/learn/overview/#cross-compiling-is-a-first-class-use-case) compiler will automatically be downloaded and cached in your local nuget package folder. Native libraries will be cross-compiled for linux, macos, and windows.
 ```console
 dotnet build
 ```
@@ -178,17 +178,6 @@ Reference the project and import the native libraries. You should now be able to
     </ItemGroup>
 
 </Project>
-```
-
-### Running the bindings generator
-Low-level bindings to the flecs C API are pre-generated and included in the [Flecs.NET.Bindings](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET.Bindings) project by default. If needed, you can run the following command to regenerate the bindings file.
-```console
-dotnet run --project src/Flecs.NET.Bindgen
-```
-### Running the code generator
-**Flecs.NET** relies on code generation to avoid manual code duplication. If any changes are made to the [Flecs.NET.Codegen](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET.Codegen) project, you can run the following command to rerun the code generators. The generated files will be output to this [folder](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET/Generated).
-```console
-dotnet run --project src/Flecs.NET.Codegen
 ```
 
 ## Contributing
