@@ -182,8 +182,6 @@ Reference the project and import the native libraries. You should now be able to
 
 ### Running the bindings generator
 Low-level bindings to the flecs C API are pre-generated and included in the [Flecs.NET.Bindings](https://github.com/BeanCheeseBurrito/Flecs.NET/tree/main/src/Flecs.NET.Bindings) project by default. If needed, you can run the following command to regenerate the bindings file.
-> [!NOTE]
-> The binding generator needs access to system headers on MacOS. Ensure that XCode is installed.
 ```console
 dotnet run --project src/Flecs.NET.Bindgen
 ```

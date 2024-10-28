@@ -13,6 +13,22 @@
 
     <ItemGroup>
         <PackageReference Include="Bindgen.NET" Version="0.1.14"/>
+        <PackageReference Include="Vezel.Zig.Toolsets.$(HostRuntime)" Version="0.13.0.1">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
+
+    <!-- Store the location of the zig lib folder as a global variable that can be accessed in code. -->
+    <ItemGroup>
+        <Compile Include="$(IntermediateOutputPath)BuildConstants.cs"/>
+    </ItemGroup>
+
+    <Target Name="GenerateConstants" BeforeTargets="CoreCompile">
+        <WriteLinesToFile
+            File="$(IntermediateOutputPath)BuildConstants.cs"
+            Lines='public static class BuildConstants { public const string ZigLibPath = @"$(ZigLibPath)"%3B }'
+            Overwrite="true"/>
+    </Target>
 
 </Project>

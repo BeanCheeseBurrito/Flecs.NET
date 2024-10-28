@@ -23,7 +23,7 @@ BindingOptions bindingOptions = new()
 
     SuppressedWarnings = { "CS8981" },
 
-    IncludeBuiltInClangHeaders = true,
+    SystemIncludeDirectories = { Path.Combine(BuildConstants.ZigLibPath, "include") },
 
     InputFile = GetFlecsHeaderPath(),
     OutputFile = GetBindingsOutputPath(),
@@ -34,9 +34,11 @@ BindingOptions bindingOptions = new()
 };
 
 if (OperatingSystem.IsMacOS())
-    bindingOptions.SystemIncludeDirectories.Add(GetMacOsHeaders());
+    bindingOptions.SystemIncludeDirectories.Add(Path.Combine(BuildConstants.ZigLibPath, "libc", "include", "any-macos-any"));
 
 BindingGenerator.Generate(bindingOptions);
+
+return;
 
 string GetFlecsHeaderPath([CallerFilePath] string filePath = "")
 {
@@ -46,29 +48,4 @@ string GetFlecsHeaderPath([CallerFilePath] string filePath = "")
 string GetBindingsOutputPath([CallerFilePath] string filePath = "")
 {
     return Path.GetFullPath(Path.Combine(filePath, "..", "..", "Flecs.NET.Bindings", "Flecs.g.cs"));
-}
-
-string GetMacOsHeaders()
-{
-    using Process process = new()
-    {
-        StartInfo = new ProcessStartInfo
-        {
-            FileName = "xcrun",
-            Arguments = "--sdk macosx --show-sdk-path",
-            RedirectStandardOutput = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        }
-    };
-
-    process.Start();
-    process.WaitForExit();
-
-    string path = process.StandardOutput.ReadToEnd().Trim();
-
-    if (!Directory.Exists(path))
-        throw new DirectoryNotFoundException("Couldn't find system headers. Install XCode.");
-
-    return path + "/usr/include";
 }
