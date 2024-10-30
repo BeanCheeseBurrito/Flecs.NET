@@ -9,28 +9,19 @@ BindingOptions bindingOptions = new()
 
     DllImportPath = "flecs",
 
-    DllFilePaths =
-    {
-        "flecs",
-        "libflecs",
-        "runtimes/linux-x64/native/libflecs",
-        "runtimes/linux-arm64/native/libflecs",
-        "runtimes/osx-x64/native/libflecs",
-        "runtimes/osx-arm64/native/libflecs",
-        "runtimes/win-x64/native/flecs",
-        "runtimes/win-arm64/native/flecs"
-    },
-
     SuppressedWarnings = { "CS8981" },
 
     SystemIncludeDirectories = { Path.Combine(BuildConstants.ZigLibPath, "include") },
 
     InputFile = GetFlecsHeaderPath(),
     OutputFile = GetBindingsOutputPath(),
+    NativeOutputFile = GetBindingsHelperOutputPath(),
 
     GenerateMacros = true,
     GenerateExternVariables = true,
-    GenerateStructEqualityFunctions = true
+    GenerateStructEqualityFunctions = true,
+
+    Ignored = {"FLECS_IDEcsPipelineQueryID_"}
 };
 
 if (OperatingSystem.IsMacOS())
@@ -42,10 +33,15 @@ return;
 
 string GetFlecsHeaderPath([CallerFilePath] string filePath = "")
 {
-    return Path.GetFullPath(Path.Combine(filePath, "..", "..", "..", "submodules", "flecs", "distr", "flecs.h"));
+    return Path.GetFullPath(Path.Combine(filePath, "..", "..", "..", "native", "flecs", "distr", "flecs.h"));
 }
 
 string GetBindingsOutputPath([CallerFilePath] string filePath = "")
 {
     return Path.GetFullPath(Path.Combine(filePath, "..", "..", "Flecs.NET.Bindings", "Flecs.g.cs"));
+}
+
+string GetBindingsHelperOutputPath([CallerFilePath] string filePath = "")
+{
+    return Path.GetFullPath(Path.Combine(filePath, "..", "..", "..", "native", "flecs_helpers.c"));
 }

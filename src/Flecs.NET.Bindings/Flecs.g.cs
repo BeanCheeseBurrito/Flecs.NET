@@ -2104,7 +2104,7 @@ namespace Flecs.NET.Bindings
 
             public ushort port;
 
-            public System.IntPtr init; // delegate*<ecs_world_t*, int>
+            public System.IntPtr init; // delegate* unmanaged<ecs_world_t*, int>
 
             public void* ctx;
 
@@ -3438,7 +3438,7 @@ namespace Flecs.NET.Bindings
 
             public byte* expr;
 
-            public System.IntPtr lookup_action; // delegate*<ecs_world_t*, byte*, void*, ulong>
+            public System.IntPtr lookup_action; // delegate* unmanaged<ecs_world_t*, byte*, void*, ulong>
 
             public void* lookup_ctx;
 
@@ -3530,9 +3530,9 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_hashmap_t : System.IEquatable<ecs_hashmap_t>
         {
-            public System.IntPtr hash; // delegate*<void*, ulong>
+            public System.IntPtr hash; // delegate* unmanaged<void*, ulong>
 
-            public System.IntPtr compare; // delegate*<void*, void*, int>
+            public System.IntPtr compare; // delegate* unmanaged<void*, void*, int>
 
             public int key_size;
 
@@ -4094,7 +4094,7 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_http_server_desc_t : System.IEquatable<ecs_http_server_desc_t>
         {
-            public System.IntPtr callback; // delegate*<ecs_http_request_t*, ecs_http_reply_t*, void*, byte>
+            public System.IntPtr callback; // delegate* unmanaged<ecs_http_request_t*, ecs_http_reply_t*, void*, byte>
 
             public void* ctx;
 
@@ -4449,11 +4449,11 @@ namespace Flecs.NET.Bindings
 
             public ecs_iter_private_t priv_;
 
-            public System.IntPtr next; // delegate*<ecs_iter_t*, byte>
+            public System.IntPtr next; // delegate* unmanaged<ecs_iter_t*, byte>
 
-            public System.IntPtr callback; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr callback; // delegate* unmanaged<ecs_iter_t*, void>
 
-            public System.IntPtr fini; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr fini; // delegate* unmanaged<ecs_iter_t*, void>
 
             public ecs_iter_t* chain_it;
 
@@ -4835,7 +4835,7 @@ namespace Flecs.NET.Bindings
 
             public byte is_primitive_scope;
 
-            public System.IntPtr lookup_action; // delegate*<ecs_world_t*, byte*, void*, ulong>
+            public System.IntPtr lookup_action; // delegate* unmanaged<ecs_world_t*, byte*, void*, ulong>
 
             public void* lookup_ctx;
 
@@ -5317,21 +5317,21 @@ namespace Flecs.NET.Bindings
 
             public byte yield_existing;
 
-            public System.IntPtr callback; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr callback; // delegate* unmanaged<ecs_iter_t*, void>
 
-            public System.IntPtr run; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr run; // delegate* unmanaged<ecs_iter_t*, void>
 
             public void* ctx;
 
-            public System.IntPtr ctx_free; // delegate*<void*, void>
+            public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
 
             public void* callback_ctx;
 
-            public System.IntPtr callback_ctx_free; // delegate*<void*, void>
+            public System.IntPtr callback_ctx_free; // delegate* unmanaged<void*, void>
 
             public void* run_ctx;
 
-            public System.IntPtr run_ctx_free; // delegate*<void*, void>
+            public System.IntPtr run_ctx_free; // delegate* unmanaged<void*, void>
 
             public void* observable;
 
@@ -5389,9 +5389,9 @@ namespace Flecs.NET.Bindings
 
             public int event_count;
 
-            public System.IntPtr callback; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr callback; // delegate* unmanaged<ecs_iter_t*, void>
 
-            public System.IntPtr run; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr run; // delegate* unmanaged<ecs_iter_t*, void>
 
             public void* ctx;
 
@@ -5399,11 +5399,11 @@ namespace Flecs.NET.Bindings
 
             public void* run_ctx;
 
-            public System.IntPtr ctx_free; // delegate*<void*, void>
+            public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
 
-            public System.IntPtr callback_ctx_free; // delegate*<void*, void>
+            public System.IntPtr callback_ctx_free; // delegate* unmanaged<void*, void>
 
-            public System.IntPtr run_ctx_free; // delegate*<void*, void>
+            public System.IntPtr run_ctx_free; // delegate* unmanaged<void*, void>
 
             public ecs_observable_t* observable;
 
@@ -5495,79 +5495,79 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_os_api_t : System.IEquatable<ecs_os_api_t>
         {
-            public System.IntPtr init_; // delegate*<void>
+            public System.IntPtr init_; // delegate* unmanaged<void>
 
-            public System.IntPtr fini_; // delegate*<void>
+            public System.IntPtr fini_; // delegate* unmanaged<void>
 
-            public System.IntPtr malloc_; // delegate*<int, void*>
+            public System.IntPtr malloc_; // delegate* unmanaged<int, void*>
 
-            public System.IntPtr realloc_; // delegate*<void*, int, void*>
+            public System.IntPtr realloc_; // delegate* unmanaged<void*, int, void*>
 
-            public System.IntPtr calloc_; // delegate*<int, void*>
+            public System.IntPtr calloc_; // delegate* unmanaged<int, void*>
 
-            public System.IntPtr free_; // delegate*<void*, void>
+            public System.IntPtr free_; // delegate* unmanaged<void*, void>
 
-            public System.IntPtr strdup_; // delegate*<byte*, byte*>
+            public System.IntPtr strdup_; // delegate* unmanaged<byte*, byte*>
 
-            public System.IntPtr thread_new_; // delegate*<System.IntPtr, void*, ulong>
+            public System.IntPtr thread_new_; // delegate* unmanaged<System.IntPtr, void*, ulong>
 
-            public System.IntPtr thread_join_; // delegate*<ulong, void*>
+            public System.IntPtr thread_join_; // delegate* unmanaged<ulong, void*>
 
-            public System.IntPtr thread_self_; // delegate*<ulong>
+            public System.IntPtr thread_self_; // delegate* unmanaged<ulong>
 
-            public System.IntPtr task_new_; // delegate*<System.IntPtr, void*, ulong>
+            public System.IntPtr task_new_; // delegate* unmanaged<System.IntPtr, void*, ulong>
 
-            public System.IntPtr task_join_; // delegate*<ulong, void*>
+            public System.IntPtr task_join_; // delegate* unmanaged<ulong, void*>
 
-            public System.IntPtr ainc_; // delegate*<int*, int>
+            public System.IntPtr ainc_; // delegate* unmanaged<int*, int>
 
-            public System.IntPtr adec_; // delegate*<int*, int>
+            public System.IntPtr adec_; // delegate* unmanaged<int*, int>
 
-            public System.IntPtr lainc_; // delegate*<long*, long>
+            public System.IntPtr lainc_; // delegate* unmanaged<long*, long>
 
-            public System.IntPtr ladec_; // delegate*<long*, long>
+            public System.IntPtr ladec_; // delegate* unmanaged<long*, long>
 
-            public System.IntPtr mutex_new_; // delegate*<ulong>
+            public System.IntPtr mutex_new_; // delegate* unmanaged<ulong>
 
-            public System.IntPtr mutex_free_; // delegate*<ulong, void>
+            public System.IntPtr mutex_free_; // delegate* unmanaged<ulong, void>
 
-            public System.IntPtr mutex_lock_; // delegate*<ulong, void>
+            public System.IntPtr mutex_lock_; // delegate* unmanaged<ulong, void>
 
-            public System.IntPtr mutex_unlock_; // delegate*<ulong, void>
+            public System.IntPtr mutex_unlock_; // delegate* unmanaged<ulong, void>
 
-            public System.IntPtr cond_new_; // delegate*<ulong>
+            public System.IntPtr cond_new_; // delegate* unmanaged<ulong>
 
-            public System.IntPtr cond_free_; // delegate*<ulong, void>
+            public System.IntPtr cond_free_; // delegate* unmanaged<ulong, void>
 
-            public System.IntPtr cond_signal_; // delegate*<ulong, void>
+            public System.IntPtr cond_signal_; // delegate* unmanaged<ulong, void>
 
-            public System.IntPtr cond_broadcast_; // delegate*<ulong, void>
+            public System.IntPtr cond_broadcast_; // delegate* unmanaged<ulong, void>
 
-            public System.IntPtr cond_wait_; // delegate*<ulong, ulong, void>
+            public System.IntPtr cond_wait_; // delegate* unmanaged<ulong, ulong, void>
 
-            public System.IntPtr sleep_; // delegate*<int, int, void>
+            public System.IntPtr sleep_; // delegate* unmanaged<int, int, void>
 
-            public System.IntPtr now_; // delegate*<ulong>
+            public System.IntPtr now_; // delegate* unmanaged<ulong>
 
-            public System.IntPtr get_time_; // delegate*<ecs_time_t*, void>
+            public System.IntPtr get_time_; // delegate* unmanaged<ecs_time_t*, void>
 
-            public System.IntPtr log_; // delegate*<int, byte*, int, byte*, void>
+            public System.IntPtr log_; // delegate* unmanaged<int, byte*, int, byte*, void>
 
-            public System.IntPtr abort_; // delegate*<void>
+            public System.IntPtr abort_; // delegate* unmanaged<void>
 
-            public System.IntPtr dlopen_; // delegate*<byte*, ulong>
+            public System.IntPtr dlopen_; // delegate* unmanaged<byte*, ulong>
 
-            public System.IntPtr dlproc_; // delegate*<ulong, byte*, System.IntPtr>
+            public System.IntPtr dlproc_; // delegate* unmanaged<ulong, byte*, System.IntPtr>
 
-            public System.IntPtr dlclose_; // delegate*<ulong, void>
+            public System.IntPtr dlclose_; // delegate* unmanaged<ulong, void>
 
-            public System.IntPtr module_to_dl_; // delegate*<byte*, byte*>
+            public System.IntPtr module_to_dl_; // delegate* unmanaged<byte*, byte*>
 
-            public System.IntPtr module_to_etc_; // delegate*<byte*, byte*>
+            public System.IntPtr module_to_etc_; // delegate* unmanaged<byte*, byte*>
 
-            public System.IntPtr perf_trace_push_; // delegate*<byte*, ulong, byte*, void>
+            public System.IntPtr perf_trace_push_; // delegate* unmanaged<byte*, ulong, byte*, void>
 
-            public System.IntPtr perf_trace_pop_; // delegate*<byte*, ulong, byte*, void>
+            public System.IntPtr perf_trace_pop_; // delegate* unmanaged<byte*, ulong, byte*, void>
 
             public int log_level_;
 
@@ -5907,31 +5907,31 @@ namespace Flecs.NET.Bindings
 
             public uint flags;
 
-            public System.IntPtr order_by_callback; // delegate*<ulong, void*, ulong, void*, int>
+            public System.IntPtr order_by_callback; // delegate* unmanaged<ulong, void*, ulong, void*, int>
 
-            public System.IntPtr order_by_table_callback; // delegate*<ecs_world_t*, ecs_table_t*, ulong*, void*, int, int, int, System.IntPtr, void>
+            public System.IntPtr order_by_table_callback; // delegate* unmanaged<ecs_world_t*, ecs_table_t*, ulong*, void*, int, int, int, System.IntPtr, void>
 
             public ulong order_by;
 
             public ulong group_by;
 
-            public System.IntPtr group_by_callback; // delegate*<ecs_world_t*, ecs_table_t*, ulong, void*, ulong>
+            public System.IntPtr group_by_callback; // delegate* unmanaged<ecs_world_t*, ecs_table_t*, ulong, void*, ulong>
 
-            public System.IntPtr on_group_create; // delegate*<ecs_world_t*, ulong, void*, void*>
+            public System.IntPtr on_group_create; // delegate* unmanaged<ecs_world_t*, ulong, void*, void*>
 
-            public System.IntPtr on_group_delete; // delegate*<ecs_world_t*, ulong, void*, void*, void>
+            public System.IntPtr on_group_delete; // delegate* unmanaged<ecs_world_t*, ulong, void*, void*, void>
 
             public void* group_by_ctx;
 
-            public System.IntPtr group_by_ctx_free; // delegate*<void*, void>
+            public System.IntPtr group_by_ctx_free; // delegate* unmanaged<void*, void>
 
             public void* ctx;
 
             public void* binding_ctx;
 
-            public System.IntPtr ctx_free; // delegate*<void*, void>
+            public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
 
-            public System.IntPtr binding_ctx_free; // delegate*<void*, void>
+            public System.IntPtr binding_ctx_free; // delegate* unmanaged<void*, void>
 
             public ulong entity;
 
@@ -6757,7 +6757,7 @@ namespace Flecs.NET.Bindings
 
             public byte* expr;
 
-            public System.IntPtr lookup_action; // delegate*<ecs_world_t*, byte*, void*, ulong>
+            public System.IntPtr lookup_action; // delegate* unmanaged<ecs_world_t*, byte*, void*, ulong>
 
             public void* lookup_ctx;
 
@@ -6989,9 +6989,9 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_serializer_t : System.IEquatable<ecs_serializer_t>
         {
-            public System.IntPtr value; // delegate*<ecs_serializer_t*, ulong, void*, int>
+            public System.IntPtr value; // delegate* unmanaged<ecs_serializer_t*, ulong, void*, int>
 
-            public System.IntPtr member; // delegate*<ecs_serializer_t*, byte*, int>
+            public System.IntPtr member; // delegate* unmanaged<ecs_serializer_t*, byte*, int>
 
             public ecs_world_t* world;
 
@@ -7987,21 +7987,21 @@ namespace Flecs.NET.Bindings
 
             public ecs_query_desc_t query;
 
-            public System.IntPtr callback; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr callback; // delegate* unmanaged<ecs_iter_t*, void>
 
-            public System.IntPtr run; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr run; // delegate* unmanaged<ecs_iter_t*, void>
 
             public void* ctx;
 
-            public System.IntPtr ctx_free; // delegate*<void*, void>
+            public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
 
             public void* callback_ctx;
 
-            public System.IntPtr callback_ctx_free; // delegate*<void*, void>
+            public System.IntPtr callback_ctx_free; // delegate* unmanaged<void*, void>
 
             public void* run_ctx;
 
-            public System.IntPtr run_ctx_free; // delegate*<void*, void>
+            public System.IntPtr run_ctx_free; // delegate* unmanaged<void*, void>
 
             public float interval;
 
@@ -8105,9 +8105,9 @@ namespace Flecs.NET.Bindings
         {
             public ecs_header_t hdr;
 
-            public System.IntPtr run; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr run; // delegate* unmanaged<ecs_iter_t*, void>
 
-            public System.IntPtr action; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr action; // delegate* unmanaged<ecs_iter_t*, void>
 
             public ecs_query_t* query;
 
@@ -8127,11 +8127,11 @@ namespace Flecs.NET.Bindings
 
             public void* run_ctx;
 
-            public System.IntPtr ctx_free; // delegate*<void*, void>
+            public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
 
-            public System.IntPtr callback_ctx_free; // delegate*<void*, void>
+            public System.IntPtr callback_ctx_free; // delegate* unmanaged<void*, void>
 
-            public System.IntPtr run_ctx_free; // delegate*<void*, void>
+            public System.IntPtr run_ctx_free; // delegate* unmanaged<void*, void>
 
             public float time_spent;
 
@@ -8143,7 +8143,7 @@ namespace Flecs.NET.Bindings
 
             public ulong entity;
 
-            public System.IntPtr dtor; // delegate*<void*, void>
+            public System.IntPtr dtor; // delegate* unmanaged<void*, void>
 
             public bool Equals(ecs_system_t other)
             {
@@ -8601,27 +8601,27 @@ namespace Flecs.NET.Bindings
 
         public partial struct ecs_type_hooks_t : System.IEquatable<ecs_type_hooks_t>
         {
-            public System.IntPtr ctor; // delegate*<void*, int, ecs_type_info_t*, void>
+            public System.IntPtr ctor; // delegate* unmanaged<void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr dtor; // delegate*<void*, int, ecs_type_info_t*, void>
+            public System.IntPtr dtor; // delegate* unmanaged<void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr copy; // delegate*<void*, void*, int, ecs_type_info_t*, void>
+            public System.IntPtr copy; // delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr move; // delegate*<void*, void*, int, ecs_type_info_t*, void>
+            public System.IntPtr move; // delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr copy_ctor; // delegate*<void*, void*, int, ecs_type_info_t*, void>
+            public System.IntPtr copy_ctor; // delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr move_ctor; // delegate*<void*, void*, int, ecs_type_info_t*, void>
+            public System.IntPtr move_ctor; // delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr ctor_move_dtor; // delegate*<void*, void*, int, ecs_type_info_t*, void>
+            public System.IntPtr ctor_move_dtor; // delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr move_dtor; // delegate*<void*, void*, int, ecs_type_info_t*, void>
+            public System.IntPtr move_dtor; // delegate* unmanaged<void*, void*, int, ecs_type_info_t*, void>
 
-            public System.IntPtr on_add; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr on_add; // delegate* unmanaged<ecs_iter_t*, void>
 
-            public System.IntPtr on_set; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr on_set; // delegate* unmanaged<ecs_iter_t*, void>
 
-            public System.IntPtr on_remove; // delegate*<ecs_iter_t*, void>
+            public System.IntPtr on_remove; // delegate* unmanaged<ecs_iter_t*, void>
 
             public void* ctx;
 
@@ -8629,11 +8629,11 @@ namespace Flecs.NET.Bindings
 
             public void* lifecycle_ctx;
 
-            public System.IntPtr ctx_free; // delegate*<void*, void>
+            public System.IntPtr ctx_free; // delegate* unmanaged<void*, void>
 
-            public System.IntPtr binding_ctx_free; // delegate*<void*, void>
+            public System.IntPtr binding_ctx_free; // delegate* unmanaged<void*, void>
 
-            public System.IntPtr lifecycle_ctx_free; // delegate*<void*, void>
+            public System.IntPtr lifecycle_ctx_free; // delegate* unmanaged<void*, void>
 
             public bool Equals(ecs_type_hooks_t other)
             {
@@ -10511,35 +10511,35 @@ namespace Flecs.NET.Bindings
         {
             public ulong as_type;
 
-            public System.IntPtr serialize; // delegate*<ecs_serializer_t*, void*, int>
+            public System.IntPtr serialize; // delegate* unmanaged<ecs_serializer_t*, void*, int>
 
-            public System.IntPtr assign_bool; // delegate*<void*, byte, void>
+            public System.IntPtr assign_bool; // delegate* unmanaged<void*, byte, void>
 
-            public System.IntPtr assign_char; // delegate*<void*, byte, void>
+            public System.IntPtr assign_char; // delegate* unmanaged<void*, byte, void>
 
-            public System.IntPtr assign_int; // delegate*<void*, long, void>
+            public System.IntPtr assign_int; // delegate* unmanaged<void*, long, void>
 
-            public System.IntPtr assign_uint; // delegate*<void*, ulong, void>
+            public System.IntPtr assign_uint; // delegate* unmanaged<void*, ulong, void>
 
-            public System.IntPtr assign_float; // delegate*<void*, double, void>
+            public System.IntPtr assign_float; // delegate* unmanaged<void*, double, void>
 
-            public System.IntPtr assign_string; // delegate*<void*, byte*, void>
+            public System.IntPtr assign_string; // delegate* unmanaged<void*, byte*, void>
 
-            public System.IntPtr assign_entity; // delegate*<void*, ecs_world_t*, ulong, void>
+            public System.IntPtr assign_entity; // delegate* unmanaged<void*, ecs_world_t*, ulong, void>
 
-            public System.IntPtr assign_id; // delegate*<void*, ecs_world_t*, ulong, void>
+            public System.IntPtr assign_id; // delegate* unmanaged<void*, ecs_world_t*, ulong, void>
 
-            public System.IntPtr assign_null; // delegate*<void*, void>
+            public System.IntPtr assign_null; // delegate* unmanaged<void*, void>
 
-            public System.IntPtr clear; // delegate*<void*, void>
+            public System.IntPtr clear; // delegate* unmanaged<void*, void>
 
-            public System.IntPtr ensure_element; // delegate*<void*, System.IntPtr, void*>
+            public System.IntPtr ensure_element; // delegate* unmanaged<void*, System.IntPtr, void*>
 
-            public System.IntPtr ensure_member; // delegate*<void*, byte*, void*>
+            public System.IntPtr ensure_member; // delegate* unmanaged<void*, byte*, void*>
 
-            public System.IntPtr count; // delegate*<void*, System.IntPtr>
+            public System.IntPtr count; // delegate* unmanaged<void*, System.IntPtr>
 
-            public System.IntPtr resize; // delegate*<void*, System.IntPtr, void>
+            public System.IntPtr resize; // delegate* unmanaged<void*, System.IntPtr, void>
 
             public bool Equals(EcsOpaque other)
             {
@@ -12247,6 +12247,888 @@ namespace Flecs.NET.Bindings
 
         public const int FLECS_VERSION_PATCH = 1;
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ECS_AUTO_OVERRIDE_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ECS_AUTO_OVERRIDE_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_block_allocator_alloc_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_block_allocator_alloc_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_block_allocator_free_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_block_allocator_free_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_http_busy_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_http_busy_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_http_request_handled_error_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_http_request_handled_error_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_http_request_handled_ok_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_http_request_handled_ok_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_http_request_invalid_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_http_request_invalid_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_http_request_not_handled_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_http_request_not_handled_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_http_request_preflight_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_http_request_preflight_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_http_request_received_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_http_request_received_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_http_send_error_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_http_send_error_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_http_send_ok_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_http_send_ok_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_os_api_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_os_api_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_os_api_calloc_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_os_api_calloc_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_os_api_free_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_os_api_free_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_os_api_malloc_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_os_api_malloc_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_os_api_realloc_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_os_api_realloc_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ECS_PAIR_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ECS_PAIR_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_stack_allocator_alloc_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_stack_allocator_alloc_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_stack_allocator_free_count_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ecs_stack_allocator_free_count_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ECS_TOGGLE_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* ECS_TOGGLE_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsAcceleration_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsAcceleration_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsAcyclic_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsAcyclic_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsAlertCritical_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsAlertCritical_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsAlertError_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsAlertError_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsAlertInfo_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsAlertInfo_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsAlertWarning_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsAlertWarning_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsAlias_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsAlias_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsAmount_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsAmount_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsAmpere_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsAmpere_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsAngle_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsAngle_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsAny_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsAny_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsAtto_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsAtto_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsBar_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsBar_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsBel_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsBel_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsBits_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsBits_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsBitsPerSecond_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsBitsPerSecond_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsBytes_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsBytes_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsBytesPerSecond_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsBytesPerSecond_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsCandela_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsCandela_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsCanToggle_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsCanToggle_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsCelsius_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsCelsius_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsCenti_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsCenti_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsCentiMeters_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsCentiMeters_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsChildOf_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsChildOf_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsColor_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsColor_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsColorCss_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsColorCss_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsColorHsl_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsColorHsl_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsColorRgb_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsColorRgb_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsConstant_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsConstant_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsCounter_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsCounter_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsCounterId_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsCounterId_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsCounterIncrement_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsCounterIncrement_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsData_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsData_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDataRate_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDataRate_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDate_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDate_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDays_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDays_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDeca_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDeca_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDeci_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDeci_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDeciBel_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDeciBel_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDegrees_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDegrees_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDelete_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDelete_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDependsOn_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDependsOn_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDisabled_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDisabled_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDocBrief_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDocBrief_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDocColor_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDocColor_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDocDetail_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDocDetail_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDocLink_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDocLink_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDontInherit_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDontInherit_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDuration_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDuration_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsElectricCurrent_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsElectricCurrent_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsEmpty_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsEmpty_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsExa_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsExa_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsExbi_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsExbi_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsExclusive_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsExclusive_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsFahrenheit_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsFahrenheit_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsFemto_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsFemto_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsFinal_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsFinal_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsFlecs_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsFlecs_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsFlecsCore_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsFlecsCore_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsForce_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsForce_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsFrequency_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsFrequency_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsGauge_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsGauge_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsGibi_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsGibi_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsGibiBytes_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsGibiBytes_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsGiga_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsGiga_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsGigaBits_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsGigaBits_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsGigaBitsPerSecond_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsGigaBitsPerSecond_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsGigaBytes_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsGigaBytes_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsGigaBytesPerSecond_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsGigaBytesPerSecond_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsGigaHertz_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsGigaHertz_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsGrams_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsGrams_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsHecto_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsHecto_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsHertz_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsHertz_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsHours_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsHours_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsInherit_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsInherit_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsIsA_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsIsA_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKelvin_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKelvin_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKibi_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKibi_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKibiBytes_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKibiBytes_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKilo_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKilo_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKiloBits_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKiloBits_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKiloBitsPerSecond_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKiloBitsPerSecond_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKiloBytes_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKiloBytes_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKiloBytesPerSecond_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKiloBytesPerSecond_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKiloGrams_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKiloGrams_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKiloHertz_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKiloHertz_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKiloMeters_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKiloMeters_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKiloMetersPerHour_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKiloMetersPerHour_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsKiloMetersPerSecond_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsKiloMetersPerSecond_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsLength_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsLength_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsLuminousIntensity_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsLuminousIntensity_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMass_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMass_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMebi_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMebi_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMebiBytes_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMebiBytes_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMega_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMega_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMegaBits_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMegaBits_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMegaBitsPerSecond_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMegaBitsPerSecond_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMegaBytes_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMegaBytes_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMegaBytesPerSecond_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMegaBytesPerSecond_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMegaHertz_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMegaHertz_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMeters_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMeters_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMetersPerSecond_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMetersPerSecond_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMetric_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMetric_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMetricInstance_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMetricInstance_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMicro_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMicro_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMicroMeters_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMicroMeters_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMicroSeconds_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMicroSeconds_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMiles_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMiles_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMilesPerHour_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMilesPerHour_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMilli_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMilli_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMilliMeters_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMilliMeters_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMilliSeconds_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMilliSeconds_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMinutes_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMinutes_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsModule_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsModule_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMole_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMole_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsMonitor_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsMonitor_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsName_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsName_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsNano_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsNano_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsNanoMeters_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsNanoMeters_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsNanoSeconds_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsNanoSeconds_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsNewton_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsNewton_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsNotQueryable_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsNotQueryable_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsObserver_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsObserver_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnAdd_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnAdd_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnDelete_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnDelete_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnDeleteTarget_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnDeleteTarget_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOneOf_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOneOf_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnInstantiate_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnInstantiate_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnLoad_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnLoad_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnRemove_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnRemove_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnSet_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnSet_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnStart_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnStart_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnStore_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnStore_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnTableCreate_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnTableCreate_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnTableDelete_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnTableDelete_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnTableEmpty_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnTableEmpty_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnTableFill_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnTableFill_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnUpdate_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnUpdate_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOnValidate_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOnValidate_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsOverride_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsOverride_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPairIsTag_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPairIsTag_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPanic_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPanic_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPascal_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPascal_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPebi_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPebi_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPercentage_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPercentage_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPeriod1d_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPeriod1d_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPeriod1h_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPeriod1h_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPeriod1m_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPeriod1m_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPeriod1s_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPeriod1s_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPeriod1w_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPeriod1w_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPeta_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPeta_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPhase_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPhase_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPico_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPico_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPicoMeters_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPicoMeters_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPicoSeconds_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPicoSeconds_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPixels_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPixels_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPostFrame_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPostFrame_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPostLoad_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPostLoad_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPostUpdate_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPostUpdate_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPredEq_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPredEq_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPredLookup_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPredLookup_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPredMatch_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPredMatch_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPrefab_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPrefab_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPreFrame_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPreFrame_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPressure_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPressure_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPreStore_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPreStore_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPreUpdate_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPreUpdate_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsPrivate_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsPrivate_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsQuantity_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsQuantity_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsQuery_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsQuery_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsRadians_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsRadians_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsReflexive_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsReflexive_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsRelationship_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsRelationship_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsRemove_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsRemove_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsScopeClose_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsScopeClose_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsScopeOpen_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsScopeOpen_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsSeconds_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsSeconds_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsSlotOf_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsSlotOf_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsSparse_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsSparse_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsSpeed_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsSpeed_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsSymbol_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsSymbol_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsSymmetric_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsSymmetric_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsSystem_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsSystem_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsTarget_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsTarget_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsTebi_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsTebi_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsTemperature_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsTemperature_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsTera_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsTera_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsThis_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsThis_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsTime_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsTime_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsTrait_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsTrait_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsTransitive_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsTransitive_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsTraversable_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsTraversable_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsUnion_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsUnion_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsUnitPrefixes_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsUnitPrefixes_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsUri_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsUri_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsUriFile_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsUriFile_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsUriHyperlink_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsUriHyperlink_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsUriImage_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsUriImage_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsVariable_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsVariable_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsWildcard_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsWildcard_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsWith_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsWith_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsWorld_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsWorld_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsYobi_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsYobi_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsYocto_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsYocto_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsYotta_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsYotta_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsZebi_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsZebi_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsZepto_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsZepto_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsZetta_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsZetta_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_bool_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_bool_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_byte_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_byte_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_char_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_char_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_entity_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_entity_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_f32_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_f32_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_f64_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_f64_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_i16_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_i16_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_i32_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_i32_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_i64_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_i64_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_i8_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_i8_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_id_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_id_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_iptr_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_iptr_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_string_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_string_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_u16_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_u16_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_u32_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_u32_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_u64_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_u64_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_u8_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_u8_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDecs_uptr_tID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDecs_uptr_tID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsAlertCriticalID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsAlertCriticalID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsAlertErrorID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsAlertErrorID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsAlertID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsAlertID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsAlertInfoID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsAlertInfoID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsAlertInstanceID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsAlertInstanceID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsAlertsActiveID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsAlertsActiveID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsAlertTimeoutID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsAlertTimeoutID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsAlertWarningID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsAlertWarningID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsArrayID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsArrayID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsBitmaskID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsBitmaskID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsComponentID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsComponentID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsCounterID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsCounterID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsCounterIdID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsCounterIdID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsCounterIncrementID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsCounterIncrementID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsDefaultChildComponentID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsDefaultChildComponentID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsDocDescriptionID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsDocDescriptionID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsEnumID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsEnumID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsGaugeID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsGaugeID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsIdentifierID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsIdentifierID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsMemberID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsMemberID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsMemberRangesID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsMemberRangesID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsMetricID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsMetricID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsMetricInstanceID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsMetricInstanceID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsMetricSourceID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsMetricSourceID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsMetricValueID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsMetricValueID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsOpaqueID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsOpaqueID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsPipelineID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsPipelineID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsPipelineStatsID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsPipelineStatsID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsPolyID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsPolyID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsPrimitiveID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsPrimitiveID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsRateFilterID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsRateFilterID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsRestID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsRestID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsScriptID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsScriptID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsStructID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsStructID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsSystemStatsID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsSystemStatsID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsTickSourceID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsTickSourceID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsTimerID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsTimerID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsTypeID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsTypeID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsTypeSerializerID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsTypeSerializerID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsUnitID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsUnitID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsUnitPrefixID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsUnitPrefixID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsVectorID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsVectorID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsWorldStatsID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsWorldStatsID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDEcsWorldSummaryID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDEcsWorldSummaryID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDFlecsAlertsID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDFlecsAlertsID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDFlecsMetricsID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDFlecsMetricsID__BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "FLECS_IDFlecsStatsID__BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* FLECS_IDFlecsStatsID__BindgenGetExtern();
+
         private static void* ECS_AUTO_OVERRIDE_Ptr;
 
         private static void* ecs_block_allocator_alloc_count_Ptr;
@@ -12795,8 +13677,6 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDEcsPipelineID__Ptr;
 
-        private static void* FLECS_IDEcsPipelineQueryID__Ptr;
-
         private static void* FLECS_IDEcsPipelineStatsID__Ptr;
 
         private static void* FLECS_IDEcsPolyID__Ptr;
@@ -12837,788 +13717,597 @@ namespace Flecs.NET.Bindings
 
         private static void* FLECS_IDFlecsStatsID__Ptr;
 
-        public static ref ulong ECS_AUTO_OVERRIDE => ref *(ulong*)(ECS_AUTO_OVERRIDE_Ptr == null ? BindgenInternal.LoadDllSymbol("ECS_AUTO_OVERRIDE", out ECS_AUTO_OVERRIDE_Ptr) : ECS_AUTO_OVERRIDE_Ptr);
+        public static ref ulong ECS_AUTO_OVERRIDE => ref *(ulong*)(ECS_AUTO_OVERRIDE_Ptr == null ? ECS_AUTO_OVERRIDE_Ptr = ECS_AUTO_OVERRIDE_BindgenGetExtern() : ECS_AUTO_OVERRIDE_Ptr);
 
-        public static ref long ecs_block_allocator_alloc_count => ref *(long*)(ecs_block_allocator_alloc_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_block_allocator_alloc_count", out ecs_block_allocator_alloc_count_Ptr) : ecs_block_allocator_alloc_count_Ptr);
+        public static ref long ecs_block_allocator_alloc_count => ref *(long*)(ecs_block_allocator_alloc_count_Ptr == null ? ecs_block_allocator_alloc_count_Ptr = ecs_block_allocator_alloc_count_BindgenGetExtern() : ecs_block_allocator_alloc_count_Ptr);
 
-        public static ref long ecs_block_allocator_free_count => ref *(long*)(ecs_block_allocator_free_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_block_allocator_free_count", out ecs_block_allocator_free_count_Ptr) : ecs_block_allocator_free_count_Ptr);
+        public static ref long ecs_block_allocator_free_count => ref *(long*)(ecs_block_allocator_free_count_Ptr == null ? ecs_block_allocator_free_count_Ptr = ecs_block_allocator_free_count_BindgenGetExtern() : ecs_block_allocator_free_count_Ptr);
 
-        public static ref long ecs_http_busy_count => ref *(long*)(ecs_http_busy_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_busy_count", out ecs_http_busy_count_Ptr) : ecs_http_busy_count_Ptr);
+        public static ref long ecs_http_busy_count => ref *(long*)(ecs_http_busy_count_Ptr == null ? ecs_http_busy_count_Ptr = ecs_http_busy_count_BindgenGetExtern() : ecs_http_busy_count_Ptr);
 
-        public static ref long ecs_http_request_handled_error_count => ref *(long*)(ecs_http_request_handled_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_request_handled_error_count", out ecs_http_request_handled_error_count_Ptr) : ecs_http_request_handled_error_count_Ptr);
+        public static ref long ecs_http_request_handled_error_count => ref *(long*)(ecs_http_request_handled_error_count_Ptr == null ? ecs_http_request_handled_error_count_Ptr = ecs_http_request_handled_error_count_BindgenGetExtern() : ecs_http_request_handled_error_count_Ptr);
 
-        public static ref long ecs_http_request_handled_ok_count => ref *(long*)(ecs_http_request_handled_ok_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_request_handled_ok_count", out ecs_http_request_handled_ok_count_Ptr) : ecs_http_request_handled_ok_count_Ptr);
+        public static ref long ecs_http_request_handled_ok_count => ref *(long*)(ecs_http_request_handled_ok_count_Ptr == null ? ecs_http_request_handled_ok_count_Ptr = ecs_http_request_handled_ok_count_BindgenGetExtern() : ecs_http_request_handled_ok_count_Ptr);
 
-        public static ref long ecs_http_request_invalid_count => ref *(long*)(ecs_http_request_invalid_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_request_invalid_count", out ecs_http_request_invalid_count_Ptr) : ecs_http_request_invalid_count_Ptr);
+        public static ref long ecs_http_request_invalid_count => ref *(long*)(ecs_http_request_invalid_count_Ptr == null ? ecs_http_request_invalid_count_Ptr = ecs_http_request_invalid_count_BindgenGetExtern() : ecs_http_request_invalid_count_Ptr);
 
-        public static ref long ecs_http_request_not_handled_count => ref *(long*)(ecs_http_request_not_handled_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_request_not_handled_count", out ecs_http_request_not_handled_count_Ptr) : ecs_http_request_not_handled_count_Ptr);
+        public static ref long ecs_http_request_not_handled_count => ref *(long*)(ecs_http_request_not_handled_count_Ptr == null ? ecs_http_request_not_handled_count_Ptr = ecs_http_request_not_handled_count_BindgenGetExtern() : ecs_http_request_not_handled_count_Ptr);
 
-        public static ref long ecs_http_request_preflight_count => ref *(long*)(ecs_http_request_preflight_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_request_preflight_count", out ecs_http_request_preflight_count_Ptr) : ecs_http_request_preflight_count_Ptr);
+        public static ref long ecs_http_request_preflight_count => ref *(long*)(ecs_http_request_preflight_count_Ptr == null ? ecs_http_request_preflight_count_Ptr = ecs_http_request_preflight_count_BindgenGetExtern() : ecs_http_request_preflight_count_Ptr);
 
-        public static ref long ecs_http_request_received_count => ref *(long*)(ecs_http_request_received_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_request_received_count", out ecs_http_request_received_count_Ptr) : ecs_http_request_received_count_Ptr);
+        public static ref long ecs_http_request_received_count => ref *(long*)(ecs_http_request_received_count_Ptr == null ? ecs_http_request_received_count_Ptr = ecs_http_request_received_count_BindgenGetExtern() : ecs_http_request_received_count_Ptr);
 
-        public static ref long ecs_http_send_error_count => ref *(long*)(ecs_http_send_error_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_send_error_count", out ecs_http_send_error_count_Ptr) : ecs_http_send_error_count_Ptr);
+        public static ref long ecs_http_send_error_count => ref *(long*)(ecs_http_send_error_count_Ptr == null ? ecs_http_send_error_count_Ptr = ecs_http_send_error_count_BindgenGetExtern() : ecs_http_send_error_count_Ptr);
 
-        public static ref long ecs_http_send_ok_count => ref *(long*)(ecs_http_send_ok_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_http_send_ok_count", out ecs_http_send_ok_count_Ptr) : ecs_http_send_ok_count_Ptr);
+        public static ref long ecs_http_send_ok_count => ref *(long*)(ecs_http_send_ok_count_Ptr == null ? ecs_http_send_ok_count_Ptr = ecs_http_send_ok_count_BindgenGetExtern() : ecs_http_send_ok_count_Ptr);
 
-        public static ref ecs_os_api_t ecs_os_api => ref *(ecs_os_api_t*)(ecs_os_api_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_os_api", out ecs_os_api_Ptr) : ecs_os_api_Ptr);
+        public static ref ecs_os_api_t ecs_os_api => ref *(ecs_os_api_t*)(ecs_os_api_Ptr == null ? ecs_os_api_Ptr = ecs_os_api_BindgenGetExtern() : ecs_os_api_Ptr);
 
-        public static ref long ecs_os_api_calloc_count => ref *(long*)(ecs_os_api_calloc_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_os_api_calloc_count", out ecs_os_api_calloc_count_Ptr) : ecs_os_api_calloc_count_Ptr);
+        public static ref long ecs_os_api_calloc_count => ref *(long*)(ecs_os_api_calloc_count_Ptr == null ? ecs_os_api_calloc_count_Ptr = ecs_os_api_calloc_count_BindgenGetExtern() : ecs_os_api_calloc_count_Ptr);
 
-        public static ref long ecs_os_api_free_count => ref *(long*)(ecs_os_api_free_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_os_api_free_count", out ecs_os_api_free_count_Ptr) : ecs_os_api_free_count_Ptr);
+        public static ref long ecs_os_api_free_count => ref *(long*)(ecs_os_api_free_count_Ptr == null ? ecs_os_api_free_count_Ptr = ecs_os_api_free_count_BindgenGetExtern() : ecs_os_api_free_count_Ptr);
 
-        public static ref long ecs_os_api_malloc_count => ref *(long*)(ecs_os_api_malloc_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_os_api_malloc_count", out ecs_os_api_malloc_count_Ptr) : ecs_os_api_malloc_count_Ptr);
+        public static ref long ecs_os_api_malloc_count => ref *(long*)(ecs_os_api_malloc_count_Ptr == null ? ecs_os_api_malloc_count_Ptr = ecs_os_api_malloc_count_BindgenGetExtern() : ecs_os_api_malloc_count_Ptr);
 
-        public static ref long ecs_os_api_realloc_count => ref *(long*)(ecs_os_api_realloc_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_os_api_realloc_count", out ecs_os_api_realloc_count_Ptr) : ecs_os_api_realloc_count_Ptr);
+        public static ref long ecs_os_api_realloc_count => ref *(long*)(ecs_os_api_realloc_count_Ptr == null ? ecs_os_api_realloc_count_Ptr = ecs_os_api_realloc_count_BindgenGetExtern() : ecs_os_api_realloc_count_Ptr);
 
-        public static ref ulong ECS_PAIR => ref *(ulong*)(ECS_PAIR_Ptr == null ? BindgenInternal.LoadDllSymbol("ECS_PAIR", out ECS_PAIR_Ptr) : ECS_PAIR_Ptr);
+        public static ref ulong ECS_PAIR => ref *(ulong*)(ECS_PAIR_Ptr == null ? ECS_PAIR_Ptr = ECS_PAIR_BindgenGetExtern() : ECS_PAIR_Ptr);
 
-        public static ref long ecs_stack_allocator_alloc_count => ref *(long*)(ecs_stack_allocator_alloc_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_stack_allocator_alloc_count", out ecs_stack_allocator_alloc_count_Ptr) : ecs_stack_allocator_alloc_count_Ptr);
+        public static ref long ecs_stack_allocator_alloc_count => ref *(long*)(ecs_stack_allocator_alloc_count_Ptr == null ? ecs_stack_allocator_alloc_count_Ptr = ecs_stack_allocator_alloc_count_BindgenGetExtern() : ecs_stack_allocator_alloc_count_Ptr);
 
-        public static ref long ecs_stack_allocator_free_count => ref *(long*)(ecs_stack_allocator_free_count_Ptr == null ? BindgenInternal.LoadDllSymbol("ecs_stack_allocator_free_count", out ecs_stack_allocator_free_count_Ptr) : ecs_stack_allocator_free_count_Ptr);
+        public static ref long ecs_stack_allocator_free_count => ref *(long*)(ecs_stack_allocator_free_count_Ptr == null ? ecs_stack_allocator_free_count_Ptr = ecs_stack_allocator_free_count_BindgenGetExtern() : ecs_stack_allocator_free_count_Ptr);
 
-        public static ref ulong ECS_TOGGLE => ref *(ulong*)(ECS_TOGGLE_Ptr == null ? BindgenInternal.LoadDllSymbol("ECS_TOGGLE", out ECS_TOGGLE_Ptr) : ECS_TOGGLE_Ptr);
+        public static ref ulong ECS_TOGGLE => ref *(ulong*)(ECS_TOGGLE_Ptr == null ? ECS_TOGGLE_Ptr = ECS_TOGGLE_BindgenGetExtern() : ECS_TOGGLE_Ptr);
 
-        public static ref ulong EcsAcceleration => ref *(ulong*)(EcsAcceleration_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAcceleration", out EcsAcceleration_Ptr) : EcsAcceleration_Ptr);
+        public static ref ulong EcsAcceleration => ref *(ulong*)(EcsAcceleration_Ptr == null ? EcsAcceleration_Ptr = EcsAcceleration_BindgenGetExtern() : EcsAcceleration_Ptr);
 
-        public static ref ulong EcsAcyclic => ref *(ulong*)(EcsAcyclic_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAcyclic", out EcsAcyclic_Ptr) : EcsAcyclic_Ptr);
+        public static ref ulong EcsAcyclic => ref *(ulong*)(EcsAcyclic_Ptr == null ? EcsAcyclic_Ptr = EcsAcyclic_BindgenGetExtern() : EcsAcyclic_Ptr);
 
-        public static ref ulong EcsAlertCritical => ref *(ulong*)(EcsAlertCritical_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAlertCritical", out EcsAlertCritical_Ptr) : EcsAlertCritical_Ptr);
+        public static ref ulong EcsAlertCritical => ref *(ulong*)(EcsAlertCritical_Ptr == null ? EcsAlertCritical_Ptr = EcsAlertCritical_BindgenGetExtern() : EcsAlertCritical_Ptr);
 
-        public static ref ulong EcsAlertError => ref *(ulong*)(EcsAlertError_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAlertError", out EcsAlertError_Ptr) : EcsAlertError_Ptr);
+        public static ref ulong EcsAlertError => ref *(ulong*)(EcsAlertError_Ptr == null ? EcsAlertError_Ptr = EcsAlertError_BindgenGetExtern() : EcsAlertError_Ptr);
 
-        public static ref ulong EcsAlertInfo => ref *(ulong*)(EcsAlertInfo_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAlertInfo", out EcsAlertInfo_Ptr) : EcsAlertInfo_Ptr);
+        public static ref ulong EcsAlertInfo => ref *(ulong*)(EcsAlertInfo_Ptr == null ? EcsAlertInfo_Ptr = EcsAlertInfo_BindgenGetExtern() : EcsAlertInfo_Ptr);
 
-        public static ref ulong EcsAlertWarning => ref *(ulong*)(EcsAlertWarning_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAlertWarning", out EcsAlertWarning_Ptr) : EcsAlertWarning_Ptr);
+        public static ref ulong EcsAlertWarning => ref *(ulong*)(EcsAlertWarning_Ptr == null ? EcsAlertWarning_Ptr = EcsAlertWarning_BindgenGetExtern() : EcsAlertWarning_Ptr);
 
-        public static ref ulong EcsAlias => ref *(ulong*)(EcsAlias_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAlias", out EcsAlias_Ptr) : EcsAlias_Ptr);
+        public static ref ulong EcsAlias => ref *(ulong*)(EcsAlias_Ptr == null ? EcsAlias_Ptr = EcsAlias_BindgenGetExtern() : EcsAlias_Ptr);
 
-        public static ref ulong EcsAmount => ref *(ulong*)(EcsAmount_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAmount", out EcsAmount_Ptr) : EcsAmount_Ptr);
+        public static ref ulong EcsAmount => ref *(ulong*)(EcsAmount_Ptr == null ? EcsAmount_Ptr = EcsAmount_BindgenGetExtern() : EcsAmount_Ptr);
 
-        public static ref ulong EcsAmpere => ref *(ulong*)(EcsAmpere_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAmpere", out EcsAmpere_Ptr) : EcsAmpere_Ptr);
+        public static ref ulong EcsAmpere => ref *(ulong*)(EcsAmpere_Ptr == null ? EcsAmpere_Ptr = EcsAmpere_BindgenGetExtern() : EcsAmpere_Ptr);
 
-        public static ref ulong EcsAngle => ref *(ulong*)(EcsAngle_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAngle", out EcsAngle_Ptr) : EcsAngle_Ptr);
+        public static ref ulong EcsAngle => ref *(ulong*)(EcsAngle_Ptr == null ? EcsAngle_Ptr = EcsAngle_BindgenGetExtern() : EcsAngle_Ptr);
 
-        public static ref ulong EcsAny => ref *(ulong*)(EcsAny_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAny", out EcsAny_Ptr) : EcsAny_Ptr);
+        public static ref ulong EcsAny => ref *(ulong*)(EcsAny_Ptr == null ? EcsAny_Ptr = EcsAny_BindgenGetExtern() : EcsAny_Ptr);
 
-        public static ref ulong EcsAtto => ref *(ulong*)(EcsAtto_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsAtto", out EcsAtto_Ptr) : EcsAtto_Ptr);
+        public static ref ulong EcsAtto => ref *(ulong*)(EcsAtto_Ptr == null ? EcsAtto_Ptr = EcsAtto_BindgenGetExtern() : EcsAtto_Ptr);
 
-        public static ref ulong EcsBar => ref *(ulong*)(EcsBar_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsBar", out EcsBar_Ptr) : EcsBar_Ptr);
+        public static ref ulong EcsBar => ref *(ulong*)(EcsBar_Ptr == null ? EcsBar_Ptr = EcsBar_BindgenGetExtern() : EcsBar_Ptr);
 
-        public static ref ulong EcsBel => ref *(ulong*)(EcsBel_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsBel", out EcsBel_Ptr) : EcsBel_Ptr);
+        public static ref ulong EcsBel => ref *(ulong*)(EcsBel_Ptr == null ? EcsBel_Ptr = EcsBel_BindgenGetExtern() : EcsBel_Ptr);
 
-        public static ref ulong EcsBits => ref *(ulong*)(EcsBits_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsBits", out EcsBits_Ptr) : EcsBits_Ptr);
+        public static ref ulong EcsBits => ref *(ulong*)(EcsBits_Ptr == null ? EcsBits_Ptr = EcsBits_BindgenGetExtern() : EcsBits_Ptr);
 
-        public static ref ulong EcsBitsPerSecond => ref *(ulong*)(EcsBitsPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsBitsPerSecond", out EcsBitsPerSecond_Ptr) : EcsBitsPerSecond_Ptr);
+        public static ref ulong EcsBitsPerSecond => ref *(ulong*)(EcsBitsPerSecond_Ptr == null ? EcsBitsPerSecond_Ptr = EcsBitsPerSecond_BindgenGetExtern() : EcsBitsPerSecond_Ptr);
 
-        public static ref ulong EcsBytes => ref *(ulong*)(EcsBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsBytes", out EcsBytes_Ptr) : EcsBytes_Ptr);
+        public static ref ulong EcsBytes => ref *(ulong*)(EcsBytes_Ptr == null ? EcsBytes_Ptr = EcsBytes_BindgenGetExtern() : EcsBytes_Ptr);
 
-        public static ref ulong EcsBytesPerSecond => ref *(ulong*)(EcsBytesPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsBytesPerSecond", out EcsBytesPerSecond_Ptr) : EcsBytesPerSecond_Ptr);
+        public static ref ulong EcsBytesPerSecond => ref *(ulong*)(EcsBytesPerSecond_Ptr == null ? EcsBytesPerSecond_Ptr = EcsBytesPerSecond_BindgenGetExtern() : EcsBytesPerSecond_Ptr);
 
-        public static ref ulong EcsCandela => ref *(ulong*)(EcsCandela_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCandela", out EcsCandela_Ptr) : EcsCandela_Ptr);
+        public static ref ulong EcsCandela => ref *(ulong*)(EcsCandela_Ptr == null ? EcsCandela_Ptr = EcsCandela_BindgenGetExtern() : EcsCandela_Ptr);
 
-        public static ref ulong EcsCanToggle => ref *(ulong*)(EcsCanToggle_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCanToggle", out EcsCanToggle_Ptr) : EcsCanToggle_Ptr);
+        public static ref ulong EcsCanToggle => ref *(ulong*)(EcsCanToggle_Ptr == null ? EcsCanToggle_Ptr = EcsCanToggle_BindgenGetExtern() : EcsCanToggle_Ptr);
 
-        public static ref ulong EcsCelsius => ref *(ulong*)(EcsCelsius_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCelsius", out EcsCelsius_Ptr) : EcsCelsius_Ptr);
+        public static ref ulong EcsCelsius => ref *(ulong*)(EcsCelsius_Ptr == null ? EcsCelsius_Ptr = EcsCelsius_BindgenGetExtern() : EcsCelsius_Ptr);
 
-        public static ref ulong EcsCenti => ref *(ulong*)(EcsCenti_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCenti", out EcsCenti_Ptr) : EcsCenti_Ptr);
+        public static ref ulong EcsCenti => ref *(ulong*)(EcsCenti_Ptr == null ? EcsCenti_Ptr = EcsCenti_BindgenGetExtern() : EcsCenti_Ptr);
 
-        public static ref ulong EcsCentiMeters => ref *(ulong*)(EcsCentiMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCentiMeters", out EcsCentiMeters_Ptr) : EcsCentiMeters_Ptr);
+        public static ref ulong EcsCentiMeters => ref *(ulong*)(EcsCentiMeters_Ptr == null ? EcsCentiMeters_Ptr = EcsCentiMeters_BindgenGetExtern() : EcsCentiMeters_Ptr);
 
-        public static ref ulong EcsChildOf => ref *(ulong*)(EcsChildOf_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsChildOf", out EcsChildOf_Ptr) : EcsChildOf_Ptr);
+        public static ref ulong EcsChildOf => ref *(ulong*)(EcsChildOf_Ptr == null ? EcsChildOf_Ptr = EcsChildOf_BindgenGetExtern() : EcsChildOf_Ptr);
 
-        public static ref ulong EcsColor => ref *(ulong*)(EcsColor_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsColor", out EcsColor_Ptr) : EcsColor_Ptr);
+        public static ref ulong EcsColor => ref *(ulong*)(EcsColor_Ptr == null ? EcsColor_Ptr = EcsColor_BindgenGetExtern() : EcsColor_Ptr);
 
-        public static ref ulong EcsColorCss => ref *(ulong*)(EcsColorCss_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsColorCss", out EcsColorCss_Ptr) : EcsColorCss_Ptr);
+        public static ref ulong EcsColorCss => ref *(ulong*)(EcsColorCss_Ptr == null ? EcsColorCss_Ptr = EcsColorCss_BindgenGetExtern() : EcsColorCss_Ptr);
 
-        public static ref ulong EcsColorHsl => ref *(ulong*)(EcsColorHsl_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsColorHsl", out EcsColorHsl_Ptr) : EcsColorHsl_Ptr);
+        public static ref ulong EcsColorHsl => ref *(ulong*)(EcsColorHsl_Ptr == null ? EcsColorHsl_Ptr = EcsColorHsl_BindgenGetExtern() : EcsColorHsl_Ptr);
 
-        public static ref ulong EcsColorRgb => ref *(ulong*)(EcsColorRgb_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsColorRgb", out EcsColorRgb_Ptr) : EcsColorRgb_Ptr);
+        public static ref ulong EcsColorRgb => ref *(ulong*)(EcsColorRgb_Ptr == null ? EcsColorRgb_Ptr = EcsColorRgb_BindgenGetExtern() : EcsColorRgb_Ptr);
 
-        public static ref ulong EcsConstant => ref *(ulong*)(EcsConstant_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsConstant", out EcsConstant_Ptr) : EcsConstant_Ptr);
+        public static ref ulong EcsConstant => ref *(ulong*)(EcsConstant_Ptr == null ? EcsConstant_Ptr = EcsConstant_BindgenGetExtern() : EcsConstant_Ptr);
 
-        public static ref ulong EcsCounter => ref *(ulong*)(EcsCounter_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCounter", out EcsCounter_Ptr) : EcsCounter_Ptr);
+        public static ref ulong EcsCounter => ref *(ulong*)(EcsCounter_Ptr == null ? EcsCounter_Ptr = EcsCounter_BindgenGetExtern() : EcsCounter_Ptr);
 
-        public static ref ulong EcsCounterId => ref *(ulong*)(EcsCounterId_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCounterId", out EcsCounterId_Ptr) : EcsCounterId_Ptr);
+        public static ref ulong EcsCounterId => ref *(ulong*)(EcsCounterId_Ptr == null ? EcsCounterId_Ptr = EcsCounterId_BindgenGetExtern() : EcsCounterId_Ptr);
 
-        public static ref ulong EcsCounterIncrement => ref *(ulong*)(EcsCounterIncrement_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsCounterIncrement", out EcsCounterIncrement_Ptr) : EcsCounterIncrement_Ptr);
+        public static ref ulong EcsCounterIncrement => ref *(ulong*)(EcsCounterIncrement_Ptr == null ? EcsCounterIncrement_Ptr = EcsCounterIncrement_BindgenGetExtern() : EcsCounterIncrement_Ptr);
 
-        public static ref ulong EcsData => ref *(ulong*)(EcsData_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsData", out EcsData_Ptr) : EcsData_Ptr);
+        public static ref ulong EcsData => ref *(ulong*)(EcsData_Ptr == null ? EcsData_Ptr = EcsData_BindgenGetExtern() : EcsData_Ptr);
 
-        public static ref ulong EcsDataRate => ref *(ulong*)(EcsDataRate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDataRate", out EcsDataRate_Ptr) : EcsDataRate_Ptr);
+        public static ref ulong EcsDataRate => ref *(ulong*)(EcsDataRate_Ptr == null ? EcsDataRate_Ptr = EcsDataRate_BindgenGetExtern() : EcsDataRate_Ptr);
 
-        public static ref ulong EcsDate => ref *(ulong*)(EcsDate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDate", out EcsDate_Ptr) : EcsDate_Ptr);
+        public static ref ulong EcsDate => ref *(ulong*)(EcsDate_Ptr == null ? EcsDate_Ptr = EcsDate_BindgenGetExtern() : EcsDate_Ptr);
 
-        public static ref ulong EcsDays => ref *(ulong*)(EcsDays_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDays", out EcsDays_Ptr) : EcsDays_Ptr);
+        public static ref ulong EcsDays => ref *(ulong*)(EcsDays_Ptr == null ? EcsDays_Ptr = EcsDays_BindgenGetExtern() : EcsDays_Ptr);
 
-        public static ref ulong EcsDeca => ref *(ulong*)(EcsDeca_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDeca", out EcsDeca_Ptr) : EcsDeca_Ptr);
+        public static ref ulong EcsDeca => ref *(ulong*)(EcsDeca_Ptr == null ? EcsDeca_Ptr = EcsDeca_BindgenGetExtern() : EcsDeca_Ptr);
 
-        public static ref ulong EcsDeci => ref *(ulong*)(EcsDeci_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDeci", out EcsDeci_Ptr) : EcsDeci_Ptr);
+        public static ref ulong EcsDeci => ref *(ulong*)(EcsDeci_Ptr == null ? EcsDeci_Ptr = EcsDeci_BindgenGetExtern() : EcsDeci_Ptr);
 
-        public static ref ulong EcsDeciBel => ref *(ulong*)(EcsDeciBel_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDeciBel", out EcsDeciBel_Ptr) : EcsDeciBel_Ptr);
+        public static ref ulong EcsDeciBel => ref *(ulong*)(EcsDeciBel_Ptr == null ? EcsDeciBel_Ptr = EcsDeciBel_BindgenGetExtern() : EcsDeciBel_Ptr);
 
-        public static ref ulong EcsDegrees => ref *(ulong*)(EcsDegrees_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDegrees", out EcsDegrees_Ptr) : EcsDegrees_Ptr);
+        public static ref ulong EcsDegrees => ref *(ulong*)(EcsDegrees_Ptr == null ? EcsDegrees_Ptr = EcsDegrees_BindgenGetExtern() : EcsDegrees_Ptr);
 
-        public static ref ulong EcsDelete => ref *(ulong*)(EcsDelete_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDelete", out EcsDelete_Ptr) : EcsDelete_Ptr);
+        public static ref ulong EcsDelete => ref *(ulong*)(EcsDelete_Ptr == null ? EcsDelete_Ptr = EcsDelete_BindgenGetExtern() : EcsDelete_Ptr);
 
-        public static ref ulong EcsDependsOn => ref *(ulong*)(EcsDependsOn_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDependsOn", out EcsDependsOn_Ptr) : EcsDependsOn_Ptr);
+        public static ref ulong EcsDependsOn => ref *(ulong*)(EcsDependsOn_Ptr == null ? EcsDependsOn_Ptr = EcsDependsOn_BindgenGetExtern() : EcsDependsOn_Ptr);
 
-        public static ref ulong EcsDisabled => ref *(ulong*)(EcsDisabled_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDisabled", out EcsDisabled_Ptr) : EcsDisabled_Ptr);
+        public static ref ulong EcsDisabled => ref *(ulong*)(EcsDisabled_Ptr == null ? EcsDisabled_Ptr = EcsDisabled_BindgenGetExtern() : EcsDisabled_Ptr);
 
-        public static ref ulong EcsDocBrief => ref *(ulong*)(EcsDocBrief_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDocBrief", out EcsDocBrief_Ptr) : EcsDocBrief_Ptr);
+        public static ref ulong EcsDocBrief => ref *(ulong*)(EcsDocBrief_Ptr == null ? EcsDocBrief_Ptr = EcsDocBrief_BindgenGetExtern() : EcsDocBrief_Ptr);
 
-        public static ref ulong EcsDocColor => ref *(ulong*)(EcsDocColor_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDocColor", out EcsDocColor_Ptr) : EcsDocColor_Ptr);
+        public static ref ulong EcsDocColor => ref *(ulong*)(EcsDocColor_Ptr == null ? EcsDocColor_Ptr = EcsDocColor_BindgenGetExtern() : EcsDocColor_Ptr);
 
-        public static ref ulong EcsDocDetail => ref *(ulong*)(EcsDocDetail_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDocDetail", out EcsDocDetail_Ptr) : EcsDocDetail_Ptr);
+        public static ref ulong EcsDocDetail => ref *(ulong*)(EcsDocDetail_Ptr == null ? EcsDocDetail_Ptr = EcsDocDetail_BindgenGetExtern() : EcsDocDetail_Ptr);
 
-        public static ref ulong EcsDocLink => ref *(ulong*)(EcsDocLink_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDocLink", out EcsDocLink_Ptr) : EcsDocLink_Ptr);
+        public static ref ulong EcsDocLink => ref *(ulong*)(EcsDocLink_Ptr == null ? EcsDocLink_Ptr = EcsDocLink_BindgenGetExtern() : EcsDocLink_Ptr);
 
-        public static ref ulong EcsDontInherit => ref *(ulong*)(EcsDontInherit_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDontInherit", out EcsDontInherit_Ptr) : EcsDontInherit_Ptr);
+        public static ref ulong EcsDontInherit => ref *(ulong*)(EcsDontInherit_Ptr == null ? EcsDontInherit_Ptr = EcsDontInherit_BindgenGetExtern() : EcsDontInherit_Ptr);
 
-        public static ref ulong EcsDuration => ref *(ulong*)(EcsDuration_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsDuration", out EcsDuration_Ptr) : EcsDuration_Ptr);
+        public static ref ulong EcsDuration => ref *(ulong*)(EcsDuration_Ptr == null ? EcsDuration_Ptr = EcsDuration_BindgenGetExtern() : EcsDuration_Ptr);
 
-        public static ref ulong EcsElectricCurrent => ref *(ulong*)(EcsElectricCurrent_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsElectricCurrent", out EcsElectricCurrent_Ptr) : EcsElectricCurrent_Ptr);
+        public static ref ulong EcsElectricCurrent => ref *(ulong*)(EcsElectricCurrent_Ptr == null ? EcsElectricCurrent_Ptr = EcsElectricCurrent_BindgenGetExtern() : EcsElectricCurrent_Ptr);
 
-        public static ref ulong EcsEmpty => ref *(ulong*)(EcsEmpty_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsEmpty", out EcsEmpty_Ptr) : EcsEmpty_Ptr);
+        public static ref ulong EcsEmpty => ref *(ulong*)(EcsEmpty_Ptr == null ? EcsEmpty_Ptr = EcsEmpty_BindgenGetExtern() : EcsEmpty_Ptr);
 
-        public static ref ulong EcsExa => ref *(ulong*)(EcsExa_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsExa", out EcsExa_Ptr) : EcsExa_Ptr);
+        public static ref ulong EcsExa => ref *(ulong*)(EcsExa_Ptr == null ? EcsExa_Ptr = EcsExa_BindgenGetExtern() : EcsExa_Ptr);
 
-        public static ref ulong EcsExbi => ref *(ulong*)(EcsExbi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsExbi", out EcsExbi_Ptr) : EcsExbi_Ptr);
+        public static ref ulong EcsExbi => ref *(ulong*)(EcsExbi_Ptr == null ? EcsExbi_Ptr = EcsExbi_BindgenGetExtern() : EcsExbi_Ptr);
 
-        public static ref ulong EcsExclusive => ref *(ulong*)(EcsExclusive_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsExclusive", out EcsExclusive_Ptr) : EcsExclusive_Ptr);
+        public static ref ulong EcsExclusive => ref *(ulong*)(EcsExclusive_Ptr == null ? EcsExclusive_Ptr = EcsExclusive_BindgenGetExtern() : EcsExclusive_Ptr);
 
-        public static ref ulong EcsFahrenheit => ref *(ulong*)(EcsFahrenheit_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFahrenheit", out EcsFahrenheit_Ptr) : EcsFahrenheit_Ptr);
+        public static ref ulong EcsFahrenheit => ref *(ulong*)(EcsFahrenheit_Ptr == null ? EcsFahrenheit_Ptr = EcsFahrenheit_BindgenGetExtern() : EcsFahrenheit_Ptr);
 
-        public static ref ulong EcsFemto => ref *(ulong*)(EcsFemto_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFemto", out EcsFemto_Ptr) : EcsFemto_Ptr);
+        public static ref ulong EcsFemto => ref *(ulong*)(EcsFemto_Ptr == null ? EcsFemto_Ptr = EcsFemto_BindgenGetExtern() : EcsFemto_Ptr);
 
-        public static ref ulong EcsFinal => ref *(ulong*)(EcsFinal_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFinal", out EcsFinal_Ptr) : EcsFinal_Ptr);
+        public static ref ulong EcsFinal => ref *(ulong*)(EcsFinal_Ptr == null ? EcsFinal_Ptr = EcsFinal_BindgenGetExtern() : EcsFinal_Ptr);
 
-        public static ref ulong EcsFlecs => ref *(ulong*)(EcsFlecs_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFlecs", out EcsFlecs_Ptr) : EcsFlecs_Ptr);
+        public static ref ulong EcsFlecs => ref *(ulong*)(EcsFlecs_Ptr == null ? EcsFlecs_Ptr = EcsFlecs_BindgenGetExtern() : EcsFlecs_Ptr);
 
-        public static ref ulong EcsFlecsCore => ref *(ulong*)(EcsFlecsCore_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFlecsCore", out EcsFlecsCore_Ptr) : EcsFlecsCore_Ptr);
+        public static ref ulong EcsFlecsCore => ref *(ulong*)(EcsFlecsCore_Ptr == null ? EcsFlecsCore_Ptr = EcsFlecsCore_BindgenGetExtern() : EcsFlecsCore_Ptr);
 
-        public static ref ulong EcsForce => ref *(ulong*)(EcsForce_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsForce", out EcsForce_Ptr) : EcsForce_Ptr);
+        public static ref ulong EcsForce => ref *(ulong*)(EcsForce_Ptr == null ? EcsForce_Ptr = EcsForce_BindgenGetExtern() : EcsForce_Ptr);
 
-        public static ref ulong EcsFrequency => ref *(ulong*)(EcsFrequency_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsFrequency", out EcsFrequency_Ptr) : EcsFrequency_Ptr);
+        public static ref ulong EcsFrequency => ref *(ulong*)(EcsFrequency_Ptr == null ? EcsFrequency_Ptr = EcsFrequency_BindgenGetExtern() : EcsFrequency_Ptr);
 
-        public static ref ulong EcsGauge => ref *(ulong*)(EcsGauge_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGauge", out EcsGauge_Ptr) : EcsGauge_Ptr);
+        public static ref ulong EcsGauge => ref *(ulong*)(EcsGauge_Ptr == null ? EcsGauge_Ptr = EcsGauge_BindgenGetExtern() : EcsGauge_Ptr);
 
-        public static ref ulong EcsGibi => ref *(ulong*)(EcsGibi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGibi", out EcsGibi_Ptr) : EcsGibi_Ptr);
+        public static ref ulong EcsGibi => ref *(ulong*)(EcsGibi_Ptr == null ? EcsGibi_Ptr = EcsGibi_BindgenGetExtern() : EcsGibi_Ptr);
 
-        public static ref ulong EcsGibiBytes => ref *(ulong*)(EcsGibiBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGibiBytes", out EcsGibiBytes_Ptr) : EcsGibiBytes_Ptr);
+        public static ref ulong EcsGibiBytes => ref *(ulong*)(EcsGibiBytes_Ptr == null ? EcsGibiBytes_Ptr = EcsGibiBytes_BindgenGetExtern() : EcsGibiBytes_Ptr);
 
-        public static ref ulong EcsGiga => ref *(ulong*)(EcsGiga_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGiga", out EcsGiga_Ptr) : EcsGiga_Ptr);
+        public static ref ulong EcsGiga => ref *(ulong*)(EcsGiga_Ptr == null ? EcsGiga_Ptr = EcsGiga_BindgenGetExtern() : EcsGiga_Ptr);
 
-        public static ref ulong EcsGigaBits => ref *(ulong*)(EcsGigaBits_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGigaBits", out EcsGigaBits_Ptr) : EcsGigaBits_Ptr);
+        public static ref ulong EcsGigaBits => ref *(ulong*)(EcsGigaBits_Ptr == null ? EcsGigaBits_Ptr = EcsGigaBits_BindgenGetExtern() : EcsGigaBits_Ptr);
 
-        public static ref ulong EcsGigaBitsPerSecond => ref *(ulong*)(EcsGigaBitsPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGigaBitsPerSecond", out EcsGigaBitsPerSecond_Ptr) : EcsGigaBitsPerSecond_Ptr);
+        public static ref ulong EcsGigaBitsPerSecond => ref *(ulong*)(EcsGigaBitsPerSecond_Ptr == null ? EcsGigaBitsPerSecond_Ptr = EcsGigaBitsPerSecond_BindgenGetExtern() : EcsGigaBitsPerSecond_Ptr);
 
-        public static ref ulong EcsGigaBytes => ref *(ulong*)(EcsGigaBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGigaBytes", out EcsGigaBytes_Ptr) : EcsGigaBytes_Ptr);
+        public static ref ulong EcsGigaBytes => ref *(ulong*)(EcsGigaBytes_Ptr == null ? EcsGigaBytes_Ptr = EcsGigaBytes_BindgenGetExtern() : EcsGigaBytes_Ptr);
 
-        public static ref ulong EcsGigaBytesPerSecond => ref *(ulong*)(EcsGigaBytesPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGigaBytesPerSecond", out EcsGigaBytesPerSecond_Ptr) : EcsGigaBytesPerSecond_Ptr);
+        public static ref ulong EcsGigaBytesPerSecond => ref *(ulong*)(EcsGigaBytesPerSecond_Ptr == null ? EcsGigaBytesPerSecond_Ptr = EcsGigaBytesPerSecond_BindgenGetExtern() : EcsGigaBytesPerSecond_Ptr);
 
-        public static ref ulong EcsGigaHertz => ref *(ulong*)(EcsGigaHertz_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGigaHertz", out EcsGigaHertz_Ptr) : EcsGigaHertz_Ptr);
+        public static ref ulong EcsGigaHertz => ref *(ulong*)(EcsGigaHertz_Ptr == null ? EcsGigaHertz_Ptr = EcsGigaHertz_BindgenGetExtern() : EcsGigaHertz_Ptr);
 
-        public static ref ulong EcsGrams => ref *(ulong*)(EcsGrams_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsGrams", out EcsGrams_Ptr) : EcsGrams_Ptr);
+        public static ref ulong EcsGrams => ref *(ulong*)(EcsGrams_Ptr == null ? EcsGrams_Ptr = EcsGrams_BindgenGetExtern() : EcsGrams_Ptr);
 
-        public static ref ulong EcsHecto => ref *(ulong*)(EcsHecto_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsHecto", out EcsHecto_Ptr) : EcsHecto_Ptr);
+        public static ref ulong EcsHecto => ref *(ulong*)(EcsHecto_Ptr == null ? EcsHecto_Ptr = EcsHecto_BindgenGetExtern() : EcsHecto_Ptr);
 
-        public static ref ulong EcsHertz => ref *(ulong*)(EcsHertz_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsHertz", out EcsHertz_Ptr) : EcsHertz_Ptr);
+        public static ref ulong EcsHertz => ref *(ulong*)(EcsHertz_Ptr == null ? EcsHertz_Ptr = EcsHertz_BindgenGetExtern() : EcsHertz_Ptr);
 
-        public static ref ulong EcsHours => ref *(ulong*)(EcsHours_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsHours", out EcsHours_Ptr) : EcsHours_Ptr);
+        public static ref ulong EcsHours => ref *(ulong*)(EcsHours_Ptr == null ? EcsHours_Ptr = EcsHours_BindgenGetExtern() : EcsHours_Ptr);
 
-        public static ref ulong EcsInherit => ref *(ulong*)(EcsInherit_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsInherit", out EcsInherit_Ptr) : EcsInherit_Ptr);
+        public static ref ulong EcsInherit => ref *(ulong*)(EcsInherit_Ptr == null ? EcsInherit_Ptr = EcsInherit_BindgenGetExtern() : EcsInherit_Ptr);
 
-        public static ref ulong EcsIsA => ref *(ulong*)(EcsIsA_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsIsA", out EcsIsA_Ptr) : EcsIsA_Ptr);
+        public static ref ulong EcsIsA => ref *(ulong*)(EcsIsA_Ptr == null ? EcsIsA_Ptr = EcsIsA_BindgenGetExtern() : EcsIsA_Ptr);
 
-        public static ref ulong EcsKelvin => ref *(ulong*)(EcsKelvin_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKelvin", out EcsKelvin_Ptr) : EcsKelvin_Ptr);
+        public static ref ulong EcsKelvin => ref *(ulong*)(EcsKelvin_Ptr == null ? EcsKelvin_Ptr = EcsKelvin_BindgenGetExtern() : EcsKelvin_Ptr);
 
-        public static ref ulong EcsKibi => ref *(ulong*)(EcsKibi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKibi", out EcsKibi_Ptr) : EcsKibi_Ptr);
+        public static ref ulong EcsKibi => ref *(ulong*)(EcsKibi_Ptr == null ? EcsKibi_Ptr = EcsKibi_BindgenGetExtern() : EcsKibi_Ptr);
 
-        public static ref ulong EcsKibiBytes => ref *(ulong*)(EcsKibiBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKibiBytes", out EcsKibiBytes_Ptr) : EcsKibiBytes_Ptr);
+        public static ref ulong EcsKibiBytes => ref *(ulong*)(EcsKibiBytes_Ptr == null ? EcsKibiBytes_Ptr = EcsKibiBytes_BindgenGetExtern() : EcsKibiBytes_Ptr);
 
-        public static ref ulong EcsKilo => ref *(ulong*)(EcsKilo_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKilo", out EcsKilo_Ptr) : EcsKilo_Ptr);
+        public static ref ulong EcsKilo => ref *(ulong*)(EcsKilo_Ptr == null ? EcsKilo_Ptr = EcsKilo_BindgenGetExtern() : EcsKilo_Ptr);
 
-        public static ref ulong EcsKiloBits => ref *(ulong*)(EcsKiloBits_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloBits", out EcsKiloBits_Ptr) : EcsKiloBits_Ptr);
+        public static ref ulong EcsKiloBits => ref *(ulong*)(EcsKiloBits_Ptr == null ? EcsKiloBits_Ptr = EcsKiloBits_BindgenGetExtern() : EcsKiloBits_Ptr);
 
-        public static ref ulong EcsKiloBitsPerSecond => ref *(ulong*)(EcsKiloBitsPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloBitsPerSecond", out EcsKiloBitsPerSecond_Ptr) : EcsKiloBitsPerSecond_Ptr);
+        public static ref ulong EcsKiloBitsPerSecond => ref *(ulong*)(EcsKiloBitsPerSecond_Ptr == null ? EcsKiloBitsPerSecond_Ptr = EcsKiloBitsPerSecond_BindgenGetExtern() : EcsKiloBitsPerSecond_Ptr);
 
-        public static ref ulong EcsKiloBytes => ref *(ulong*)(EcsKiloBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloBytes", out EcsKiloBytes_Ptr) : EcsKiloBytes_Ptr);
+        public static ref ulong EcsKiloBytes => ref *(ulong*)(EcsKiloBytes_Ptr == null ? EcsKiloBytes_Ptr = EcsKiloBytes_BindgenGetExtern() : EcsKiloBytes_Ptr);
 
-        public static ref ulong EcsKiloBytesPerSecond => ref *(ulong*)(EcsKiloBytesPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloBytesPerSecond", out EcsKiloBytesPerSecond_Ptr) : EcsKiloBytesPerSecond_Ptr);
+        public static ref ulong EcsKiloBytesPerSecond => ref *(ulong*)(EcsKiloBytesPerSecond_Ptr == null ? EcsKiloBytesPerSecond_Ptr = EcsKiloBytesPerSecond_BindgenGetExtern() : EcsKiloBytesPerSecond_Ptr);
 
-        public static ref ulong EcsKiloGrams => ref *(ulong*)(EcsKiloGrams_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloGrams", out EcsKiloGrams_Ptr) : EcsKiloGrams_Ptr);
+        public static ref ulong EcsKiloGrams => ref *(ulong*)(EcsKiloGrams_Ptr == null ? EcsKiloGrams_Ptr = EcsKiloGrams_BindgenGetExtern() : EcsKiloGrams_Ptr);
 
-        public static ref ulong EcsKiloHertz => ref *(ulong*)(EcsKiloHertz_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloHertz", out EcsKiloHertz_Ptr) : EcsKiloHertz_Ptr);
+        public static ref ulong EcsKiloHertz => ref *(ulong*)(EcsKiloHertz_Ptr == null ? EcsKiloHertz_Ptr = EcsKiloHertz_BindgenGetExtern() : EcsKiloHertz_Ptr);
 
-        public static ref ulong EcsKiloMeters => ref *(ulong*)(EcsKiloMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloMeters", out EcsKiloMeters_Ptr) : EcsKiloMeters_Ptr);
+        public static ref ulong EcsKiloMeters => ref *(ulong*)(EcsKiloMeters_Ptr == null ? EcsKiloMeters_Ptr = EcsKiloMeters_BindgenGetExtern() : EcsKiloMeters_Ptr);
 
-        public static ref ulong EcsKiloMetersPerHour => ref *(ulong*)(EcsKiloMetersPerHour_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloMetersPerHour", out EcsKiloMetersPerHour_Ptr) : EcsKiloMetersPerHour_Ptr);
+        public static ref ulong EcsKiloMetersPerHour => ref *(ulong*)(EcsKiloMetersPerHour_Ptr == null ? EcsKiloMetersPerHour_Ptr = EcsKiloMetersPerHour_BindgenGetExtern() : EcsKiloMetersPerHour_Ptr);
 
-        public static ref ulong EcsKiloMetersPerSecond => ref *(ulong*)(EcsKiloMetersPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsKiloMetersPerSecond", out EcsKiloMetersPerSecond_Ptr) : EcsKiloMetersPerSecond_Ptr);
+        public static ref ulong EcsKiloMetersPerSecond => ref *(ulong*)(EcsKiloMetersPerSecond_Ptr == null ? EcsKiloMetersPerSecond_Ptr = EcsKiloMetersPerSecond_BindgenGetExtern() : EcsKiloMetersPerSecond_Ptr);
 
-        public static ref ulong EcsLength => ref *(ulong*)(EcsLength_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsLength", out EcsLength_Ptr) : EcsLength_Ptr);
+        public static ref ulong EcsLength => ref *(ulong*)(EcsLength_Ptr == null ? EcsLength_Ptr = EcsLength_BindgenGetExtern() : EcsLength_Ptr);
 
-        public static ref ulong EcsLuminousIntensity => ref *(ulong*)(EcsLuminousIntensity_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsLuminousIntensity", out EcsLuminousIntensity_Ptr) : EcsLuminousIntensity_Ptr);
+        public static ref ulong EcsLuminousIntensity => ref *(ulong*)(EcsLuminousIntensity_Ptr == null ? EcsLuminousIntensity_Ptr = EcsLuminousIntensity_BindgenGetExtern() : EcsLuminousIntensity_Ptr);
 
-        public static ref ulong EcsMass => ref *(ulong*)(EcsMass_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMass", out EcsMass_Ptr) : EcsMass_Ptr);
+        public static ref ulong EcsMass => ref *(ulong*)(EcsMass_Ptr == null ? EcsMass_Ptr = EcsMass_BindgenGetExtern() : EcsMass_Ptr);
 
-        public static ref ulong EcsMebi => ref *(ulong*)(EcsMebi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMebi", out EcsMebi_Ptr) : EcsMebi_Ptr);
+        public static ref ulong EcsMebi => ref *(ulong*)(EcsMebi_Ptr == null ? EcsMebi_Ptr = EcsMebi_BindgenGetExtern() : EcsMebi_Ptr);
 
-        public static ref ulong EcsMebiBytes => ref *(ulong*)(EcsMebiBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMebiBytes", out EcsMebiBytes_Ptr) : EcsMebiBytes_Ptr);
+        public static ref ulong EcsMebiBytes => ref *(ulong*)(EcsMebiBytes_Ptr == null ? EcsMebiBytes_Ptr = EcsMebiBytes_BindgenGetExtern() : EcsMebiBytes_Ptr);
 
-        public static ref ulong EcsMega => ref *(ulong*)(EcsMega_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMega", out EcsMega_Ptr) : EcsMega_Ptr);
+        public static ref ulong EcsMega => ref *(ulong*)(EcsMega_Ptr == null ? EcsMega_Ptr = EcsMega_BindgenGetExtern() : EcsMega_Ptr);
 
-        public static ref ulong EcsMegaBits => ref *(ulong*)(EcsMegaBits_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMegaBits", out EcsMegaBits_Ptr) : EcsMegaBits_Ptr);
+        public static ref ulong EcsMegaBits => ref *(ulong*)(EcsMegaBits_Ptr == null ? EcsMegaBits_Ptr = EcsMegaBits_BindgenGetExtern() : EcsMegaBits_Ptr);
 
-        public static ref ulong EcsMegaBitsPerSecond => ref *(ulong*)(EcsMegaBitsPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMegaBitsPerSecond", out EcsMegaBitsPerSecond_Ptr) : EcsMegaBitsPerSecond_Ptr);
+        public static ref ulong EcsMegaBitsPerSecond => ref *(ulong*)(EcsMegaBitsPerSecond_Ptr == null ? EcsMegaBitsPerSecond_Ptr = EcsMegaBitsPerSecond_BindgenGetExtern() : EcsMegaBitsPerSecond_Ptr);
 
-        public static ref ulong EcsMegaBytes => ref *(ulong*)(EcsMegaBytes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMegaBytes", out EcsMegaBytes_Ptr) : EcsMegaBytes_Ptr);
+        public static ref ulong EcsMegaBytes => ref *(ulong*)(EcsMegaBytes_Ptr == null ? EcsMegaBytes_Ptr = EcsMegaBytes_BindgenGetExtern() : EcsMegaBytes_Ptr);
 
-        public static ref ulong EcsMegaBytesPerSecond => ref *(ulong*)(EcsMegaBytesPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMegaBytesPerSecond", out EcsMegaBytesPerSecond_Ptr) : EcsMegaBytesPerSecond_Ptr);
+        public static ref ulong EcsMegaBytesPerSecond => ref *(ulong*)(EcsMegaBytesPerSecond_Ptr == null ? EcsMegaBytesPerSecond_Ptr = EcsMegaBytesPerSecond_BindgenGetExtern() : EcsMegaBytesPerSecond_Ptr);
 
-        public static ref ulong EcsMegaHertz => ref *(ulong*)(EcsMegaHertz_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMegaHertz", out EcsMegaHertz_Ptr) : EcsMegaHertz_Ptr);
+        public static ref ulong EcsMegaHertz => ref *(ulong*)(EcsMegaHertz_Ptr == null ? EcsMegaHertz_Ptr = EcsMegaHertz_BindgenGetExtern() : EcsMegaHertz_Ptr);
 
-        public static ref ulong EcsMeters => ref *(ulong*)(EcsMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMeters", out EcsMeters_Ptr) : EcsMeters_Ptr);
+        public static ref ulong EcsMeters => ref *(ulong*)(EcsMeters_Ptr == null ? EcsMeters_Ptr = EcsMeters_BindgenGetExtern() : EcsMeters_Ptr);
 
-        public static ref ulong EcsMetersPerSecond => ref *(ulong*)(EcsMetersPerSecond_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMetersPerSecond", out EcsMetersPerSecond_Ptr) : EcsMetersPerSecond_Ptr);
+        public static ref ulong EcsMetersPerSecond => ref *(ulong*)(EcsMetersPerSecond_Ptr == null ? EcsMetersPerSecond_Ptr = EcsMetersPerSecond_BindgenGetExtern() : EcsMetersPerSecond_Ptr);
 
-        public static ref ulong EcsMetric => ref *(ulong*)(EcsMetric_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMetric", out EcsMetric_Ptr) : EcsMetric_Ptr);
+        public static ref ulong EcsMetric => ref *(ulong*)(EcsMetric_Ptr == null ? EcsMetric_Ptr = EcsMetric_BindgenGetExtern() : EcsMetric_Ptr);
 
-        public static ref ulong EcsMetricInstance => ref *(ulong*)(EcsMetricInstance_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMetricInstance", out EcsMetricInstance_Ptr) : EcsMetricInstance_Ptr);
+        public static ref ulong EcsMetricInstance => ref *(ulong*)(EcsMetricInstance_Ptr == null ? EcsMetricInstance_Ptr = EcsMetricInstance_BindgenGetExtern() : EcsMetricInstance_Ptr);
 
-        public static ref ulong EcsMicro => ref *(ulong*)(EcsMicro_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMicro", out EcsMicro_Ptr) : EcsMicro_Ptr);
+        public static ref ulong EcsMicro => ref *(ulong*)(EcsMicro_Ptr == null ? EcsMicro_Ptr = EcsMicro_BindgenGetExtern() : EcsMicro_Ptr);
 
-        public static ref ulong EcsMicroMeters => ref *(ulong*)(EcsMicroMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMicroMeters", out EcsMicroMeters_Ptr) : EcsMicroMeters_Ptr);
+        public static ref ulong EcsMicroMeters => ref *(ulong*)(EcsMicroMeters_Ptr == null ? EcsMicroMeters_Ptr = EcsMicroMeters_BindgenGetExtern() : EcsMicroMeters_Ptr);
 
-        public static ref ulong EcsMicroSeconds => ref *(ulong*)(EcsMicroSeconds_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMicroSeconds", out EcsMicroSeconds_Ptr) : EcsMicroSeconds_Ptr);
+        public static ref ulong EcsMicroSeconds => ref *(ulong*)(EcsMicroSeconds_Ptr == null ? EcsMicroSeconds_Ptr = EcsMicroSeconds_BindgenGetExtern() : EcsMicroSeconds_Ptr);
 
-        public static ref ulong EcsMiles => ref *(ulong*)(EcsMiles_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMiles", out EcsMiles_Ptr) : EcsMiles_Ptr);
+        public static ref ulong EcsMiles => ref *(ulong*)(EcsMiles_Ptr == null ? EcsMiles_Ptr = EcsMiles_BindgenGetExtern() : EcsMiles_Ptr);
 
-        public static ref ulong EcsMilesPerHour => ref *(ulong*)(EcsMilesPerHour_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMilesPerHour", out EcsMilesPerHour_Ptr) : EcsMilesPerHour_Ptr);
+        public static ref ulong EcsMilesPerHour => ref *(ulong*)(EcsMilesPerHour_Ptr == null ? EcsMilesPerHour_Ptr = EcsMilesPerHour_BindgenGetExtern() : EcsMilesPerHour_Ptr);
 
-        public static ref ulong EcsMilli => ref *(ulong*)(EcsMilli_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMilli", out EcsMilli_Ptr) : EcsMilli_Ptr);
+        public static ref ulong EcsMilli => ref *(ulong*)(EcsMilli_Ptr == null ? EcsMilli_Ptr = EcsMilli_BindgenGetExtern() : EcsMilli_Ptr);
 
-        public static ref ulong EcsMilliMeters => ref *(ulong*)(EcsMilliMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMilliMeters", out EcsMilliMeters_Ptr) : EcsMilliMeters_Ptr);
+        public static ref ulong EcsMilliMeters => ref *(ulong*)(EcsMilliMeters_Ptr == null ? EcsMilliMeters_Ptr = EcsMilliMeters_BindgenGetExtern() : EcsMilliMeters_Ptr);
 
-        public static ref ulong EcsMilliSeconds => ref *(ulong*)(EcsMilliSeconds_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMilliSeconds", out EcsMilliSeconds_Ptr) : EcsMilliSeconds_Ptr);
+        public static ref ulong EcsMilliSeconds => ref *(ulong*)(EcsMilliSeconds_Ptr == null ? EcsMilliSeconds_Ptr = EcsMilliSeconds_BindgenGetExtern() : EcsMilliSeconds_Ptr);
 
-        public static ref ulong EcsMinutes => ref *(ulong*)(EcsMinutes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMinutes", out EcsMinutes_Ptr) : EcsMinutes_Ptr);
+        public static ref ulong EcsMinutes => ref *(ulong*)(EcsMinutes_Ptr == null ? EcsMinutes_Ptr = EcsMinutes_BindgenGetExtern() : EcsMinutes_Ptr);
 
-        public static ref ulong EcsModule => ref *(ulong*)(EcsModule_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsModule", out EcsModule_Ptr) : EcsModule_Ptr);
+        public static ref ulong EcsModule => ref *(ulong*)(EcsModule_Ptr == null ? EcsModule_Ptr = EcsModule_BindgenGetExtern() : EcsModule_Ptr);
 
-        public static ref ulong EcsMole => ref *(ulong*)(EcsMole_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMole", out EcsMole_Ptr) : EcsMole_Ptr);
+        public static ref ulong EcsMole => ref *(ulong*)(EcsMole_Ptr == null ? EcsMole_Ptr = EcsMole_BindgenGetExtern() : EcsMole_Ptr);
 
-        public static ref ulong EcsMonitor => ref *(ulong*)(EcsMonitor_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsMonitor", out EcsMonitor_Ptr) : EcsMonitor_Ptr);
+        public static ref ulong EcsMonitor => ref *(ulong*)(EcsMonitor_Ptr == null ? EcsMonitor_Ptr = EcsMonitor_BindgenGetExtern() : EcsMonitor_Ptr);
 
-        public static ref ulong EcsName => ref *(ulong*)(EcsName_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsName", out EcsName_Ptr) : EcsName_Ptr);
+        public static ref ulong EcsName => ref *(ulong*)(EcsName_Ptr == null ? EcsName_Ptr = EcsName_BindgenGetExtern() : EcsName_Ptr);
 
-        public static ref ulong EcsNano => ref *(ulong*)(EcsNano_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsNano", out EcsNano_Ptr) : EcsNano_Ptr);
+        public static ref ulong EcsNano => ref *(ulong*)(EcsNano_Ptr == null ? EcsNano_Ptr = EcsNano_BindgenGetExtern() : EcsNano_Ptr);
 
-        public static ref ulong EcsNanoMeters => ref *(ulong*)(EcsNanoMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsNanoMeters", out EcsNanoMeters_Ptr) : EcsNanoMeters_Ptr);
+        public static ref ulong EcsNanoMeters => ref *(ulong*)(EcsNanoMeters_Ptr == null ? EcsNanoMeters_Ptr = EcsNanoMeters_BindgenGetExtern() : EcsNanoMeters_Ptr);
 
-        public static ref ulong EcsNanoSeconds => ref *(ulong*)(EcsNanoSeconds_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsNanoSeconds", out EcsNanoSeconds_Ptr) : EcsNanoSeconds_Ptr);
+        public static ref ulong EcsNanoSeconds => ref *(ulong*)(EcsNanoSeconds_Ptr == null ? EcsNanoSeconds_Ptr = EcsNanoSeconds_BindgenGetExtern() : EcsNanoSeconds_Ptr);
 
-        public static ref ulong EcsNewton => ref *(ulong*)(EcsNewton_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsNewton", out EcsNewton_Ptr) : EcsNewton_Ptr);
+        public static ref ulong EcsNewton => ref *(ulong*)(EcsNewton_Ptr == null ? EcsNewton_Ptr = EcsNewton_BindgenGetExtern() : EcsNewton_Ptr);
 
-        public static ref ulong EcsNotQueryable => ref *(ulong*)(EcsNotQueryable_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsNotQueryable", out EcsNotQueryable_Ptr) : EcsNotQueryable_Ptr);
+        public static ref ulong EcsNotQueryable => ref *(ulong*)(EcsNotQueryable_Ptr == null ? EcsNotQueryable_Ptr = EcsNotQueryable_BindgenGetExtern() : EcsNotQueryable_Ptr);
 
-        public static ref ulong EcsObserver => ref *(ulong*)(EcsObserver_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsObserver", out EcsObserver_Ptr) : EcsObserver_Ptr);
+        public static ref ulong EcsObserver => ref *(ulong*)(EcsObserver_Ptr == null ? EcsObserver_Ptr = EcsObserver_BindgenGetExtern() : EcsObserver_Ptr);
 
-        public static ref ulong EcsOnAdd => ref *(ulong*)(EcsOnAdd_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnAdd", out EcsOnAdd_Ptr) : EcsOnAdd_Ptr);
+        public static ref ulong EcsOnAdd => ref *(ulong*)(EcsOnAdd_Ptr == null ? EcsOnAdd_Ptr = EcsOnAdd_BindgenGetExtern() : EcsOnAdd_Ptr);
 
-        public static ref ulong EcsOnDelete => ref *(ulong*)(EcsOnDelete_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnDelete", out EcsOnDelete_Ptr) : EcsOnDelete_Ptr);
+        public static ref ulong EcsOnDelete => ref *(ulong*)(EcsOnDelete_Ptr == null ? EcsOnDelete_Ptr = EcsOnDelete_BindgenGetExtern() : EcsOnDelete_Ptr);
 
-        public static ref ulong EcsOnDeleteTarget => ref *(ulong*)(EcsOnDeleteTarget_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnDeleteTarget", out EcsOnDeleteTarget_Ptr) : EcsOnDeleteTarget_Ptr);
+        public static ref ulong EcsOnDeleteTarget => ref *(ulong*)(EcsOnDeleteTarget_Ptr == null ? EcsOnDeleteTarget_Ptr = EcsOnDeleteTarget_BindgenGetExtern() : EcsOnDeleteTarget_Ptr);
 
-        public static ref ulong EcsOneOf => ref *(ulong*)(EcsOneOf_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOneOf", out EcsOneOf_Ptr) : EcsOneOf_Ptr);
+        public static ref ulong EcsOneOf => ref *(ulong*)(EcsOneOf_Ptr == null ? EcsOneOf_Ptr = EcsOneOf_BindgenGetExtern() : EcsOneOf_Ptr);
 
-        public static ref ulong EcsOnInstantiate => ref *(ulong*)(EcsOnInstantiate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnInstantiate", out EcsOnInstantiate_Ptr) : EcsOnInstantiate_Ptr);
+        public static ref ulong EcsOnInstantiate => ref *(ulong*)(EcsOnInstantiate_Ptr == null ? EcsOnInstantiate_Ptr = EcsOnInstantiate_BindgenGetExtern() : EcsOnInstantiate_Ptr);
 
-        public static ref ulong EcsOnLoad => ref *(ulong*)(EcsOnLoad_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnLoad", out EcsOnLoad_Ptr) : EcsOnLoad_Ptr);
+        public static ref ulong EcsOnLoad => ref *(ulong*)(EcsOnLoad_Ptr == null ? EcsOnLoad_Ptr = EcsOnLoad_BindgenGetExtern() : EcsOnLoad_Ptr);
 
-        public static ref ulong EcsOnRemove => ref *(ulong*)(EcsOnRemove_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnRemove", out EcsOnRemove_Ptr) : EcsOnRemove_Ptr);
+        public static ref ulong EcsOnRemove => ref *(ulong*)(EcsOnRemove_Ptr == null ? EcsOnRemove_Ptr = EcsOnRemove_BindgenGetExtern() : EcsOnRemove_Ptr);
 
-        public static ref ulong EcsOnSet => ref *(ulong*)(EcsOnSet_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnSet", out EcsOnSet_Ptr) : EcsOnSet_Ptr);
+        public static ref ulong EcsOnSet => ref *(ulong*)(EcsOnSet_Ptr == null ? EcsOnSet_Ptr = EcsOnSet_BindgenGetExtern() : EcsOnSet_Ptr);
 
-        public static ref ulong EcsOnStart => ref *(ulong*)(EcsOnStart_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnStart", out EcsOnStart_Ptr) : EcsOnStart_Ptr);
+        public static ref ulong EcsOnStart => ref *(ulong*)(EcsOnStart_Ptr == null ? EcsOnStart_Ptr = EcsOnStart_BindgenGetExtern() : EcsOnStart_Ptr);
 
-        public static ref ulong EcsOnStore => ref *(ulong*)(EcsOnStore_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnStore", out EcsOnStore_Ptr) : EcsOnStore_Ptr);
+        public static ref ulong EcsOnStore => ref *(ulong*)(EcsOnStore_Ptr == null ? EcsOnStore_Ptr = EcsOnStore_BindgenGetExtern() : EcsOnStore_Ptr);
 
-        public static ref ulong EcsOnTableCreate => ref *(ulong*)(EcsOnTableCreate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnTableCreate", out EcsOnTableCreate_Ptr) : EcsOnTableCreate_Ptr);
+        public static ref ulong EcsOnTableCreate => ref *(ulong*)(EcsOnTableCreate_Ptr == null ? EcsOnTableCreate_Ptr = EcsOnTableCreate_BindgenGetExtern() : EcsOnTableCreate_Ptr);
 
-        public static ref ulong EcsOnTableDelete => ref *(ulong*)(EcsOnTableDelete_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnTableDelete", out EcsOnTableDelete_Ptr) : EcsOnTableDelete_Ptr);
+        public static ref ulong EcsOnTableDelete => ref *(ulong*)(EcsOnTableDelete_Ptr == null ? EcsOnTableDelete_Ptr = EcsOnTableDelete_BindgenGetExtern() : EcsOnTableDelete_Ptr);
 
-        public static ref ulong EcsOnTableEmpty => ref *(ulong*)(EcsOnTableEmpty_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnTableEmpty", out EcsOnTableEmpty_Ptr) : EcsOnTableEmpty_Ptr);
+        public static ref ulong EcsOnTableEmpty => ref *(ulong*)(EcsOnTableEmpty_Ptr == null ? EcsOnTableEmpty_Ptr = EcsOnTableEmpty_BindgenGetExtern() : EcsOnTableEmpty_Ptr);
 
-        public static ref ulong EcsOnTableFill => ref *(ulong*)(EcsOnTableFill_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnTableFill", out EcsOnTableFill_Ptr) : EcsOnTableFill_Ptr);
+        public static ref ulong EcsOnTableFill => ref *(ulong*)(EcsOnTableFill_Ptr == null ? EcsOnTableFill_Ptr = EcsOnTableFill_BindgenGetExtern() : EcsOnTableFill_Ptr);
 
-        public static ref ulong EcsOnUpdate => ref *(ulong*)(EcsOnUpdate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnUpdate", out EcsOnUpdate_Ptr) : EcsOnUpdate_Ptr);
+        public static ref ulong EcsOnUpdate => ref *(ulong*)(EcsOnUpdate_Ptr == null ? EcsOnUpdate_Ptr = EcsOnUpdate_BindgenGetExtern() : EcsOnUpdate_Ptr);
 
-        public static ref ulong EcsOnValidate => ref *(ulong*)(EcsOnValidate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOnValidate", out EcsOnValidate_Ptr) : EcsOnValidate_Ptr);
+        public static ref ulong EcsOnValidate => ref *(ulong*)(EcsOnValidate_Ptr == null ? EcsOnValidate_Ptr = EcsOnValidate_BindgenGetExtern() : EcsOnValidate_Ptr);
 
-        public static ref ulong EcsOverride => ref *(ulong*)(EcsOverride_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsOverride", out EcsOverride_Ptr) : EcsOverride_Ptr);
+        public static ref ulong EcsOverride => ref *(ulong*)(EcsOverride_Ptr == null ? EcsOverride_Ptr = EcsOverride_BindgenGetExtern() : EcsOverride_Ptr);
 
-        public static ref ulong EcsPairIsTag => ref *(ulong*)(EcsPairIsTag_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPairIsTag", out EcsPairIsTag_Ptr) : EcsPairIsTag_Ptr);
+        public static ref ulong EcsPairIsTag => ref *(ulong*)(EcsPairIsTag_Ptr == null ? EcsPairIsTag_Ptr = EcsPairIsTag_BindgenGetExtern() : EcsPairIsTag_Ptr);
 
-        public static ref ulong EcsPanic => ref *(ulong*)(EcsPanic_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPanic", out EcsPanic_Ptr) : EcsPanic_Ptr);
+        public static ref ulong EcsPanic => ref *(ulong*)(EcsPanic_Ptr == null ? EcsPanic_Ptr = EcsPanic_BindgenGetExtern() : EcsPanic_Ptr);
 
-        public static ref ulong EcsPascal => ref *(ulong*)(EcsPascal_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPascal", out EcsPascal_Ptr) : EcsPascal_Ptr);
+        public static ref ulong EcsPascal => ref *(ulong*)(EcsPascal_Ptr == null ? EcsPascal_Ptr = EcsPascal_BindgenGetExtern() : EcsPascal_Ptr);
 
-        public static ref ulong EcsPebi => ref *(ulong*)(EcsPebi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPebi", out EcsPebi_Ptr) : EcsPebi_Ptr);
+        public static ref ulong EcsPebi => ref *(ulong*)(EcsPebi_Ptr == null ? EcsPebi_Ptr = EcsPebi_BindgenGetExtern() : EcsPebi_Ptr);
 
-        public static ref ulong EcsPercentage => ref *(ulong*)(EcsPercentage_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPercentage", out EcsPercentage_Ptr) : EcsPercentage_Ptr);
+        public static ref ulong EcsPercentage => ref *(ulong*)(EcsPercentage_Ptr == null ? EcsPercentage_Ptr = EcsPercentage_BindgenGetExtern() : EcsPercentage_Ptr);
 
-        public static ref ulong EcsPeriod1d => ref *(ulong*)(EcsPeriod1d_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPeriod1d", out EcsPeriod1d_Ptr) : EcsPeriod1d_Ptr);
+        public static ref ulong EcsPeriod1d => ref *(ulong*)(EcsPeriod1d_Ptr == null ? EcsPeriod1d_Ptr = EcsPeriod1d_BindgenGetExtern() : EcsPeriod1d_Ptr);
 
-        public static ref ulong EcsPeriod1h => ref *(ulong*)(EcsPeriod1h_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPeriod1h", out EcsPeriod1h_Ptr) : EcsPeriod1h_Ptr);
+        public static ref ulong EcsPeriod1h => ref *(ulong*)(EcsPeriod1h_Ptr == null ? EcsPeriod1h_Ptr = EcsPeriod1h_BindgenGetExtern() : EcsPeriod1h_Ptr);
 
-        public static ref ulong EcsPeriod1m => ref *(ulong*)(EcsPeriod1m_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPeriod1m", out EcsPeriod1m_Ptr) : EcsPeriod1m_Ptr);
+        public static ref ulong EcsPeriod1m => ref *(ulong*)(EcsPeriod1m_Ptr == null ? EcsPeriod1m_Ptr = EcsPeriod1m_BindgenGetExtern() : EcsPeriod1m_Ptr);
 
-        public static ref ulong EcsPeriod1s => ref *(ulong*)(EcsPeriod1s_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPeriod1s", out EcsPeriod1s_Ptr) : EcsPeriod1s_Ptr);
+        public static ref ulong EcsPeriod1s => ref *(ulong*)(EcsPeriod1s_Ptr == null ? EcsPeriod1s_Ptr = EcsPeriod1s_BindgenGetExtern() : EcsPeriod1s_Ptr);
 
-        public static ref ulong EcsPeriod1w => ref *(ulong*)(EcsPeriod1w_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPeriod1w", out EcsPeriod1w_Ptr) : EcsPeriod1w_Ptr);
+        public static ref ulong EcsPeriod1w => ref *(ulong*)(EcsPeriod1w_Ptr == null ? EcsPeriod1w_Ptr = EcsPeriod1w_BindgenGetExtern() : EcsPeriod1w_Ptr);
 
-        public static ref ulong EcsPeta => ref *(ulong*)(EcsPeta_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPeta", out EcsPeta_Ptr) : EcsPeta_Ptr);
+        public static ref ulong EcsPeta => ref *(ulong*)(EcsPeta_Ptr == null ? EcsPeta_Ptr = EcsPeta_BindgenGetExtern() : EcsPeta_Ptr);
 
-        public static ref ulong EcsPhase => ref *(ulong*)(EcsPhase_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPhase", out EcsPhase_Ptr) : EcsPhase_Ptr);
+        public static ref ulong EcsPhase => ref *(ulong*)(EcsPhase_Ptr == null ? EcsPhase_Ptr = EcsPhase_BindgenGetExtern() : EcsPhase_Ptr);
 
-        public static ref ulong EcsPico => ref *(ulong*)(EcsPico_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPico", out EcsPico_Ptr) : EcsPico_Ptr);
+        public static ref ulong EcsPico => ref *(ulong*)(EcsPico_Ptr == null ? EcsPico_Ptr = EcsPico_BindgenGetExtern() : EcsPico_Ptr);
 
-        public static ref ulong EcsPicoMeters => ref *(ulong*)(EcsPicoMeters_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPicoMeters", out EcsPicoMeters_Ptr) : EcsPicoMeters_Ptr);
+        public static ref ulong EcsPicoMeters => ref *(ulong*)(EcsPicoMeters_Ptr == null ? EcsPicoMeters_Ptr = EcsPicoMeters_BindgenGetExtern() : EcsPicoMeters_Ptr);
 
-        public static ref ulong EcsPicoSeconds => ref *(ulong*)(EcsPicoSeconds_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPicoSeconds", out EcsPicoSeconds_Ptr) : EcsPicoSeconds_Ptr);
+        public static ref ulong EcsPicoSeconds => ref *(ulong*)(EcsPicoSeconds_Ptr == null ? EcsPicoSeconds_Ptr = EcsPicoSeconds_BindgenGetExtern() : EcsPicoSeconds_Ptr);
 
-        public static ref ulong EcsPixels => ref *(ulong*)(EcsPixels_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPixels", out EcsPixels_Ptr) : EcsPixels_Ptr);
+        public static ref ulong EcsPixels => ref *(ulong*)(EcsPixels_Ptr == null ? EcsPixels_Ptr = EcsPixels_BindgenGetExtern() : EcsPixels_Ptr);
 
-        public static ref ulong EcsPostFrame => ref *(ulong*)(EcsPostFrame_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPostFrame", out EcsPostFrame_Ptr) : EcsPostFrame_Ptr);
+        public static ref ulong EcsPostFrame => ref *(ulong*)(EcsPostFrame_Ptr == null ? EcsPostFrame_Ptr = EcsPostFrame_BindgenGetExtern() : EcsPostFrame_Ptr);
 
-        public static ref ulong EcsPostLoad => ref *(ulong*)(EcsPostLoad_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPostLoad", out EcsPostLoad_Ptr) : EcsPostLoad_Ptr);
+        public static ref ulong EcsPostLoad => ref *(ulong*)(EcsPostLoad_Ptr == null ? EcsPostLoad_Ptr = EcsPostLoad_BindgenGetExtern() : EcsPostLoad_Ptr);
 
-        public static ref ulong EcsPostUpdate => ref *(ulong*)(EcsPostUpdate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPostUpdate", out EcsPostUpdate_Ptr) : EcsPostUpdate_Ptr);
+        public static ref ulong EcsPostUpdate => ref *(ulong*)(EcsPostUpdate_Ptr == null ? EcsPostUpdate_Ptr = EcsPostUpdate_BindgenGetExtern() : EcsPostUpdate_Ptr);
 
-        public static ref ulong EcsPredEq => ref *(ulong*)(EcsPredEq_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPredEq", out EcsPredEq_Ptr) : EcsPredEq_Ptr);
+        public static ref ulong EcsPredEq => ref *(ulong*)(EcsPredEq_Ptr == null ? EcsPredEq_Ptr = EcsPredEq_BindgenGetExtern() : EcsPredEq_Ptr);
 
-        public static ref ulong EcsPredLookup => ref *(ulong*)(EcsPredLookup_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPredLookup", out EcsPredLookup_Ptr) : EcsPredLookup_Ptr);
+        public static ref ulong EcsPredLookup => ref *(ulong*)(EcsPredLookup_Ptr == null ? EcsPredLookup_Ptr = EcsPredLookup_BindgenGetExtern() : EcsPredLookup_Ptr);
 
-        public static ref ulong EcsPredMatch => ref *(ulong*)(EcsPredMatch_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPredMatch", out EcsPredMatch_Ptr) : EcsPredMatch_Ptr);
+        public static ref ulong EcsPredMatch => ref *(ulong*)(EcsPredMatch_Ptr == null ? EcsPredMatch_Ptr = EcsPredMatch_BindgenGetExtern() : EcsPredMatch_Ptr);
 
-        public static ref ulong EcsPrefab => ref *(ulong*)(EcsPrefab_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPrefab", out EcsPrefab_Ptr) : EcsPrefab_Ptr);
+        public static ref ulong EcsPrefab => ref *(ulong*)(EcsPrefab_Ptr == null ? EcsPrefab_Ptr = EcsPrefab_BindgenGetExtern() : EcsPrefab_Ptr);
 
-        public static ref ulong EcsPreFrame => ref *(ulong*)(EcsPreFrame_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPreFrame", out EcsPreFrame_Ptr) : EcsPreFrame_Ptr);
+        public static ref ulong EcsPreFrame => ref *(ulong*)(EcsPreFrame_Ptr == null ? EcsPreFrame_Ptr = EcsPreFrame_BindgenGetExtern() : EcsPreFrame_Ptr);
 
-        public static ref ulong EcsPressure => ref *(ulong*)(EcsPressure_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPressure", out EcsPressure_Ptr) : EcsPressure_Ptr);
+        public static ref ulong EcsPressure => ref *(ulong*)(EcsPressure_Ptr == null ? EcsPressure_Ptr = EcsPressure_BindgenGetExtern() : EcsPressure_Ptr);
 
-        public static ref ulong EcsPreStore => ref *(ulong*)(EcsPreStore_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPreStore", out EcsPreStore_Ptr) : EcsPreStore_Ptr);
+        public static ref ulong EcsPreStore => ref *(ulong*)(EcsPreStore_Ptr == null ? EcsPreStore_Ptr = EcsPreStore_BindgenGetExtern() : EcsPreStore_Ptr);
 
-        public static ref ulong EcsPreUpdate => ref *(ulong*)(EcsPreUpdate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPreUpdate", out EcsPreUpdate_Ptr) : EcsPreUpdate_Ptr);
+        public static ref ulong EcsPreUpdate => ref *(ulong*)(EcsPreUpdate_Ptr == null ? EcsPreUpdate_Ptr = EcsPreUpdate_BindgenGetExtern() : EcsPreUpdate_Ptr);
 
-        public static ref ulong EcsPrivate => ref *(ulong*)(EcsPrivate_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsPrivate", out EcsPrivate_Ptr) : EcsPrivate_Ptr);
+        public static ref ulong EcsPrivate => ref *(ulong*)(EcsPrivate_Ptr == null ? EcsPrivate_Ptr = EcsPrivate_BindgenGetExtern() : EcsPrivate_Ptr);
 
-        public static ref ulong EcsQuantity => ref *(ulong*)(EcsQuantity_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsQuantity", out EcsQuantity_Ptr) : EcsQuantity_Ptr);
+        public static ref ulong EcsQuantity => ref *(ulong*)(EcsQuantity_Ptr == null ? EcsQuantity_Ptr = EcsQuantity_BindgenGetExtern() : EcsQuantity_Ptr);
 
-        public static ref ulong EcsQuery => ref *(ulong*)(EcsQuery_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsQuery", out EcsQuery_Ptr) : EcsQuery_Ptr);
+        public static ref ulong EcsQuery => ref *(ulong*)(EcsQuery_Ptr == null ? EcsQuery_Ptr = EcsQuery_BindgenGetExtern() : EcsQuery_Ptr);
 
-        public static ref ulong EcsRadians => ref *(ulong*)(EcsRadians_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsRadians", out EcsRadians_Ptr) : EcsRadians_Ptr);
+        public static ref ulong EcsRadians => ref *(ulong*)(EcsRadians_Ptr == null ? EcsRadians_Ptr = EcsRadians_BindgenGetExtern() : EcsRadians_Ptr);
 
-        public static ref ulong EcsReflexive => ref *(ulong*)(EcsReflexive_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsReflexive", out EcsReflexive_Ptr) : EcsReflexive_Ptr);
+        public static ref ulong EcsReflexive => ref *(ulong*)(EcsReflexive_Ptr == null ? EcsReflexive_Ptr = EcsReflexive_BindgenGetExtern() : EcsReflexive_Ptr);
 
-        public static ref ulong EcsRelationship => ref *(ulong*)(EcsRelationship_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsRelationship", out EcsRelationship_Ptr) : EcsRelationship_Ptr);
+        public static ref ulong EcsRelationship => ref *(ulong*)(EcsRelationship_Ptr == null ? EcsRelationship_Ptr = EcsRelationship_BindgenGetExtern() : EcsRelationship_Ptr);
 
-        public static ref ulong EcsRemove => ref *(ulong*)(EcsRemove_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsRemove", out EcsRemove_Ptr) : EcsRemove_Ptr);
+        public static ref ulong EcsRemove => ref *(ulong*)(EcsRemove_Ptr == null ? EcsRemove_Ptr = EcsRemove_BindgenGetExtern() : EcsRemove_Ptr);
 
-        public static ref ulong EcsScopeClose => ref *(ulong*)(EcsScopeClose_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsScopeClose", out EcsScopeClose_Ptr) : EcsScopeClose_Ptr);
+        public static ref ulong EcsScopeClose => ref *(ulong*)(EcsScopeClose_Ptr == null ? EcsScopeClose_Ptr = EcsScopeClose_BindgenGetExtern() : EcsScopeClose_Ptr);
 
-        public static ref ulong EcsScopeOpen => ref *(ulong*)(EcsScopeOpen_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsScopeOpen", out EcsScopeOpen_Ptr) : EcsScopeOpen_Ptr);
+        public static ref ulong EcsScopeOpen => ref *(ulong*)(EcsScopeOpen_Ptr == null ? EcsScopeOpen_Ptr = EcsScopeOpen_BindgenGetExtern() : EcsScopeOpen_Ptr);
 
-        public static ref ulong EcsSeconds => ref *(ulong*)(EcsSeconds_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSeconds", out EcsSeconds_Ptr) : EcsSeconds_Ptr);
+        public static ref ulong EcsSeconds => ref *(ulong*)(EcsSeconds_Ptr == null ? EcsSeconds_Ptr = EcsSeconds_BindgenGetExtern() : EcsSeconds_Ptr);
 
-        public static ref ulong EcsSlotOf => ref *(ulong*)(EcsSlotOf_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSlotOf", out EcsSlotOf_Ptr) : EcsSlotOf_Ptr);
+        public static ref ulong EcsSlotOf => ref *(ulong*)(EcsSlotOf_Ptr == null ? EcsSlotOf_Ptr = EcsSlotOf_BindgenGetExtern() : EcsSlotOf_Ptr);
 
-        public static ref ulong EcsSparse => ref *(ulong*)(EcsSparse_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSparse", out EcsSparse_Ptr) : EcsSparse_Ptr);
+        public static ref ulong EcsSparse => ref *(ulong*)(EcsSparse_Ptr == null ? EcsSparse_Ptr = EcsSparse_BindgenGetExtern() : EcsSparse_Ptr);
 
-        public static ref ulong EcsSpeed => ref *(ulong*)(EcsSpeed_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSpeed", out EcsSpeed_Ptr) : EcsSpeed_Ptr);
+        public static ref ulong EcsSpeed => ref *(ulong*)(EcsSpeed_Ptr == null ? EcsSpeed_Ptr = EcsSpeed_BindgenGetExtern() : EcsSpeed_Ptr);
 
-        public static ref ulong EcsSymbol => ref *(ulong*)(EcsSymbol_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSymbol", out EcsSymbol_Ptr) : EcsSymbol_Ptr);
+        public static ref ulong EcsSymbol => ref *(ulong*)(EcsSymbol_Ptr == null ? EcsSymbol_Ptr = EcsSymbol_BindgenGetExtern() : EcsSymbol_Ptr);
 
-        public static ref ulong EcsSymmetric => ref *(ulong*)(EcsSymmetric_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSymmetric", out EcsSymmetric_Ptr) : EcsSymmetric_Ptr);
+        public static ref ulong EcsSymmetric => ref *(ulong*)(EcsSymmetric_Ptr == null ? EcsSymmetric_Ptr = EcsSymmetric_BindgenGetExtern() : EcsSymmetric_Ptr);
 
-        public static ref ulong EcsSystem => ref *(ulong*)(EcsSystem_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsSystem", out EcsSystem_Ptr) : EcsSystem_Ptr);
+        public static ref ulong EcsSystem => ref *(ulong*)(EcsSystem_Ptr == null ? EcsSystem_Ptr = EcsSystem_BindgenGetExtern() : EcsSystem_Ptr);
 
-        public static ref ulong EcsTarget => ref *(ulong*)(EcsTarget_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTarget", out EcsTarget_Ptr) : EcsTarget_Ptr);
+        public static ref ulong EcsTarget => ref *(ulong*)(EcsTarget_Ptr == null ? EcsTarget_Ptr = EcsTarget_BindgenGetExtern() : EcsTarget_Ptr);
 
-        public static ref ulong EcsTebi => ref *(ulong*)(EcsTebi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTebi", out EcsTebi_Ptr) : EcsTebi_Ptr);
+        public static ref ulong EcsTebi => ref *(ulong*)(EcsTebi_Ptr == null ? EcsTebi_Ptr = EcsTebi_BindgenGetExtern() : EcsTebi_Ptr);
 
-        public static ref ulong EcsTemperature => ref *(ulong*)(EcsTemperature_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTemperature", out EcsTemperature_Ptr) : EcsTemperature_Ptr);
+        public static ref ulong EcsTemperature => ref *(ulong*)(EcsTemperature_Ptr == null ? EcsTemperature_Ptr = EcsTemperature_BindgenGetExtern() : EcsTemperature_Ptr);
 
-        public static ref ulong EcsTera => ref *(ulong*)(EcsTera_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTera", out EcsTera_Ptr) : EcsTera_Ptr);
+        public static ref ulong EcsTera => ref *(ulong*)(EcsTera_Ptr == null ? EcsTera_Ptr = EcsTera_BindgenGetExtern() : EcsTera_Ptr);
 
-        public static ref ulong EcsThis => ref *(ulong*)(EcsThis_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsThis", out EcsThis_Ptr) : EcsThis_Ptr);
+        public static ref ulong EcsThis => ref *(ulong*)(EcsThis_Ptr == null ? EcsThis_Ptr = EcsThis_BindgenGetExtern() : EcsThis_Ptr);
 
-        public static ref ulong EcsTime => ref *(ulong*)(EcsTime_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTime", out EcsTime_Ptr) : EcsTime_Ptr);
+        public static ref ulong EcsTime => ref *(ulong*)(EcsTime_Ptr == null ? EcsTime_Ptr = EcsTime_BindgenGetExtern() : EcsTime_Ptr);
 
-        public static ref ulong EcsTrait => ref *(ulong*)(EcsTrait_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTrait", out EcsTrait_Ptr) : EcsTrait_Ptr);
+        public static ref ulong EcsTrait => ref *(ulong*)(EcsTrait_Ptr == null ? EcsTrait_Ptr = EcsTrait_BindgenGetExtern() : EcsTrait_Ptr);
 
-        public static ref ulong EcsTransitive => ref *(ulong*)(EcsTransitive_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTransitive", out EcsTransitive_Ptr) : EcsTransitive_Ptr);
+        public static ref ulong EcsTransitive => ref *(ulong*)(EcsTransitive_Ptr == null ? EcsTransitive_Ptr = EcsTransitive_BindgenGetExtern() : EcsTransitive_Ptr);
 
-        public static ref ulong EcsTraversable => ref *(ulong*)(EcsTraversable_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsTraversable", out EcsTraversable_Ptr) : EcsTraversable_Ptr);
+        public static ref ulong EcsTraversable => ref *(ulong*)(EcsTraversable_Ptr == null ? EcsTraversable_Ptr = EcsTraversable_BindgenGetExtern() : EcsTraversable_Ptr);
 
-        public static ref ulong EcsUnion => ref *(ulong*)(EcsUnion_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUnion", out EcsUnion_Ptr) : EcsUnion_Ptr);
+        public static ref ulong EcsUnion => ref *(ulong*)(EcsUnion_Ptr == null ? EcsUnion_Ptr = EcsUnion_BindgenGetExtern() : EcsUnion_Ptr);
 
-        public static ref ulong EcsUnitPrefixes => ref *(ulong*)(EcsUnitPrefixes_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUnitPrefixes", out EcsUnitPrefixes_Ptr) : EcsUnitPrefixes_Ptr);
+        public static ref ulong EcsUnitPrefixes => ref *(ulong*)(EcsUnitPrefixes_Ptr == null ? EcsUnitPrefixes_Ptr = EcsUnitPrefixes_BindgenGetExtern() : EcsUnitPrefixes_Ptr);
 
-        public static ref ulong EcsUri => ref *(ulong*)(EcsUri_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUri", out EcsUri_Ptr) : EcsUri_Ptr);
+        public static ref ulong EcsUri => ref *(ulong*)(EcsUri_Ptr == null ? EcsUri_Ptr = EcsUri_BindgenGetExtern() : EcsUri_Ptr);
 
-        public static ref ulong EcsUriFile => ref *(ulong*)(EcsUriFile_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUriFile", out EcsUriFile_Ptr) : EcsUriFile_Ptr);
+        public static ref ulong EcsUriFile => ref *(ulong*)(EcsUriFile_Ptr == null ? EcsUriFile_Ptr = EcsUriFile_BindgenGetExtern() : EcsUriFile_Ptr);
 
-        public static ref ulong EcsUriHyperlink => ref *(ulong*)(EcsUriHyperlink_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUriHyperlink", out EcsUriHyperlink_Ptr) : EcsUriHyperlink_Ptr);
+        public static ref ulong EcsUriHyperlink => ref *(ulong*)(EcsUriHyperlink_Ptr == null ? EcsUriHyperlink_Ptr = EcsUriHyperlink_BindgenGetExtern() : EcsUriHyperlink_Ptr);
 
-        public static ref ulong EcsUriImage => ref *(ulong*)(EcsUriImage_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsUriImage", out EcsUriImage_Ptr) : EcsUriImage_Ptr);
+        public static ref ulong EcsUriImage => ref *(ulong*)(EcsUriImage_Ptr == null ? EcsUriImage_Ptr = EcsUriImage_BindgenGetExtern() : EcsUriImage_Ptr);
 
-        public static ref ulong EcsVariable => ref *(ulong*)(EcsVariable_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsVariable", out EcsVariable_Ptr) : EcsVariable_Ptr);
+        public static ref ulong EcsVariable => ref *(ulong*)(EcsVariable_Ptr == null ? EcsVariable_Ptr = EcsVariable_BindgenGetExtern() : EcsVariable_Ptr);
 
-        public static ref ulong EcsWildcard => ref *(ulong*)(EcsWildcard_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsWildcard", out EcsWildcard_Ptr) : EcsWildcard_Ptr);
+        public static ref ulong EcsWildcard => ref *(ulong*)(EcsWildcard_Ptr == null ? EcsWildcard_Ptr = EcsWildcard_BindgenGetExtern() : EcsWildcard_Ptr);
 
-        public static ref ulong EcsWith => ref *(ulong*)(EcsWith_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsWith", out EcsWith_Ptr) : EcsWith_Ptr);
+        public static ref ulong EcsWith => ref *(ulong*)(EcsWith_Ptr == null ? EcsWith_Ptr = EcsWith_BindgenGetExtern() : EcsWith_Ptr);
 
-        public static ref ulong EcsWorld => ref *(ulong*)(EcsWorld_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsWorld", out EcsWorld_Ptr) : EcsWorld_Ptr);
+        public static ref ulong EcsWorld => ref *(ulong*)(EcsWorld_Ptr == null ? EcsWorld_Ptr = EcsWorld_BindgenGetExtern() : EcsWorld_Ptr);
 
-        public static ref ulong EcsYobi => ref *(ulong*)(EcsYobi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsYobi", out EcsYobi_Ptr) : EcsYobi_Ptr);
+        public static ref ulong EcsYobi => ref *(ulong*)(EcsYobi_Ptr == null ? EcsYobi_Ptr = EcsYobi_BindgenGetExtern() : EcsYobi_Ptr);
 
-        public static ref ulong EcsYocto => ref *(ulong*)(EcsYocto_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsYocto", out EcsYocto_Ptr) : EcsYocto_Ptr);
+        public static ref ulong EcsYocto => ref *(ulong*)(EcsYocto_Ptr == null ? EcsYocto_Ptr = EcsYocto_BindgenGetExtern() : EcsYocto_Ptr);
 
-        public static ref ulong EcsYotta => ref *(ulong*)(EcsYotta_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsYotta", out EcsYotta_Ptr) : EcsYotta_Ptr);
+        public static ref ulong EcsYotta => ref *(ulong*)(EcsYotta_Ptr == null ? EcsYotta_Ptr = EcsYotta_BindgenGetExtern() : EcsYotta_Ptr);
 
-        public static ref ulong EcsZebi => ref *(ulong*)(EcsZebi_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsZebi", out EcsZebi_Ptr) : EcsZebi_Ptr);
+        public static ref ulong EcsZebi => ref *(ulong*)(EcsZebi_Ptr == null ? EcsZebi_Ptr = EcsZebi_BindgenGetExtern() : EcsZebi_Ptr);
 
-        public static ref ulong EcsZepto => ref *(ulong*)(EcsZepto_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsZepto", out EcsZepto_Ptr) : EcsZepto_Ptr);
+        public static ref ulong EcsZepto => ref *(ulong*)(EcsZepto_Ptr == null ? EcsZepto_Ptr = EcsZepto_BindgenGetExtern() : EcsZepto_Ptr);
 
-        public static ref ulong EcsZetta => ref *(ulong*)(EcsZetta_Ptr == null ? BindgenInternal.LoadDllSymbol("EcsZetta", out EcsZetta_Ptr) : EcsZetta_Ptr);
+        public static ref ulong EcsZetta => ref *(ulong*)(EcsZetta_Ptr == null ? EcsZetta_Ptr = EcsZetta_BindgenGetExtern() : EcsZetta_Ptr);
 
-        public static ref ulong FLECS_IDecs_bool_tID_ => ref *(ulong*)(FLECS_IDecs_bool_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_bool_tID_", out FLECS_IDecs_bool_tID__Ptr) : FLECS_IDecs_bool_tID__Ptr);
+        public static ref ulong FLECS_IDecs_bool_tID_ => ref *(ulong*)(FLECS_IDecs_bool_tID__Ptr == null ? FLECS_IDecs_bool_tID__Ptr = FLECS_IDecs_bool_tID__BindgenGetExtern() : FLECS_IDecs_bool_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_byte_tID_ => ref *(ulong*)(FLECS_IDecs_byte_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_byte_tID_", out FLECS_IDecs_byte_tID__Ptr) : FLECS_IDecs_byte_tID__Ptr);
+        public static ref ulong FLECS_IDecs_byte_tID_ => ref *(ulong*)(FLECS_IDecs_byte_tID__Ptr == null ? FLECS_IDecs_byte_tID__Ptr = FLECS_IDecs_byte_tID__BindgenGetExtern() : FLECS_IDecs_byte_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_char_tID_ => ref *(ulong*)(FLECS_IDecs_char_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_char_tID_", out FLECS_IDecs_char_tID__Ptr) : FLECS_IDecs_char_tID__Ptr);
+        public static ref ulong FLECS_IDecs_char_tID_ => ref *(ulong*)(FLECS_IDecs_char_tID__Ptr == null ? FLECS_IDecs_char_tID__Ptr = FLECS_IDecs_char_tID__BindgenGetExtern() : FLECS_IDecs_char_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_entity_tID_ => ref *(ulong*)(FLECS_IDecs_entity_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_entity_tID_", out FLECS_IDecs_entity_tID__Ptr) : FLECS_IDecs_entity_tID__Ptr);
+        public static ref ulong FLECS_IDecs_entity_tID_ => ref *(ulong*)(FLECS_IDecs_entity_tID__Ptr == null ? FLECS_IDecs_entity_tID__Ptr = FLECS_IDecs_entity_tID__BindgenGetExtern() : FLECS_IDecs_entity_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_f32_tID_ => ref *(ulong*)(FLECS_IDecs_f32_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_f32_tID_", out FLECS_IDecs_f32_tID__Ptr) : FLECS_IDecs_f32_tID__Ptr);
+        public static ref ulong FLECS_IDecs_f32_tID_ => ref *(ulong*)(FLECS_IDecs_f32_tID__Ptr == null ? FLECS_IDecs_f32_tID__Ptr = FLECS_IDecs_f32_tID__BindgenGetExtern() : FLECS_IDecs_f32_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_f64_tID_ => ref *(ulong*)(FLECS_IDecs_f64_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_f64_tID_", out FLECS_IDecs_f64_tID__Ptr) : FLECS_IDecs_f64_tID__Ptr);
+        public static ref ulong FLECS_IDecs_f64_tID_ => ref *(ulong*)(FLECS_IDecs_f64_tID__Ptr == null ? FLECS_IDecs_f64_tID__Ptr = FLECS_IDecs_f64_tID__BindgenGetExtern() : FLECS_IDecs_f64_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_i16_tID_ => ref *(ulong*)(FLECS_IDecs_i16_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_i16_tID_", out FLECS_IDecs_i16_tID__Ptr) : FLECS_IDecs_i16_tID__Ptr);
+        public static ref ulong FLECS_IDecs_i16_tID_ => ref *(ulong*)(FLECS_IDecs_i16_tID__Ptr == null ? FLECS_IDecs_i16_tID__Ptr = FLECS_IDecs_i16_tID__BindgenGetExtern() : FLECS_IDecs_i16_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_i32_tID_ => ref *(ulong*)(FLECS_IDecs_i32_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_i32_tID_", out FLECS_IDecs_i32_tID__Ptr) : FLECS_IDecs_i32_tID__Ptr);
+        public static ref ulong FLECS_IDecs_i32_tID_ => ref *(ulong*)(FLECS_IDecs_i32_tID__Ptr == null ? FLECS_IDecs_i32_tID__Ptr = FLECS_IDecs_i32_tID__BindgenGetExtern() : FLECS_IDecs_i32_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_i64_tID_ => ref *(ulong*)(FLECS_IDecs_i64_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_i64_tID_", out FLECS_IDecs_i64_tID__Ptr) : FLECS_IDecs_i64_tID__Ptr);
+        public static ref ulong FLECS_IDecs_i64_tID_ => ref *(ulong*)(FLECS_IDecs_i64_tID__Ptr == null ? FLECS_IDecs_i64_tID__Ptr = FLECS_IDecs_i64_tID__BindgenGetExtern() : FLECS_IDecs_i64_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_i8_tID_ => ref *(ulong*)(FLECS_IDecs_i8_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_i8_tID_", out FLECS_IDecs_i8_tID__Ptr) : FLECS_IDecs_i8_tID__Ptr);
+        public static ref ulong FLECS_IDecs_i8_tID_ => ref *(ulong*)(FLECS_IDecs_i8_tID__Ptr == null ? FLECS_IDecs_i8_tID__Ptr = FLECS_IDecs_i8_tID__BindgenGetExtern() : FLECS_IDecs_i8_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_id_tID_ => ref *(ulong*)(FLECS_IDecs_id_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_id_tID_", out FLECS_IDecs_id_tID__Ptr) : FLECS_IDecs_id_tID__Ptr);
+        public static ref ulong FLECS_IDecs_id_tID_ => ref *(ulong*)(FLECS_IDecs_id_tID__Ptr == null ? FLECS_IDecs_id_tID__Ptr = FLECS_IDecs_id_tID__BindgenGetExtern() : FLECS_IDecs_id_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_iptr_tID_ => ref *(ulong*)(FLECS_IDecs_iptr_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_iptr_tID_", out FLECS_IDecs_iptr_tID__Ptr) : FLECS_IDecs_iptr_tID__Ptr);
+        public static ref ulong FLECS_IDecs_iptr_tID_ => ref *(ulong*)(FLECS_IDecs_iptr_tID__Ptr == null ? FLECS_IDecs_iptr_tID__Ptr = FLECS_IDecs_iptr_tID__BindgenGetExtern() : FLECS_IDecs_iptr_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_string_tID_ => ref *(ulong*)(FLECS_IDecs_string_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_string_tID_", out FLECS_IDecs_string_tID__Ptr) : FLECS_IDecs_string_tID__Ptr);
+        public static ref ulong FLECS_IDecs_string_tID_ => ref *(ulong*)(FLECS_IDecs_string_tID__Ptr == null ? FLECS_IDecs_string_tID__Ptr = FLECS_IDecs_string_tID__BindgenGetExtern() : FLECS_IDecs_string_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_u16_tID_ => ref *(ulong*)(FLECS_IDecs_u16_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_u16_tID_", out FLECS_IDecs_u16_tID__Ptr) : FLECS_IDecs_u16_tID__Ptr);
+        public static ref ulong FLECS_IDecs_u16_tID_ => ref *(ulong*)(FLECS_IDecs_u16_tID__Ptr == null ? FLECS_IDecs_u16_tID__Ptr = FLECS_IDecs_u16_tID__BindgenGetExtern() : FLECS_IDecs_u16_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_u32_tID_ => ref *(ulong*)(FLECS_IDecs_u32_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_u32_tID_", out FLECS_IDecs_u32_tID__Ptr) : FLECS_IDecs_u32_tID__Ptr);
+        public static ref ulong FLECS_IDecs_u32_tID_ => ref *(ulong*)(FLECS_IDecs_u32_tID__Ptr == null ? FLECS_IDecs_u32_tID__Ptr = FLECS_IDecs_u32_tID__BindgenGetExtern() : FLECS_IDecs_u32_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_u64_tID_ => ref *(ulong*)(FLECS_IDecs_u64_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_u64_tID_", out FLECS_IDecs_u64_tID__Ptr) : FLECS_IDecs_u64_tID__Ptr);
+        public static ref ulong FLECS_IDecs_u64_tID_ => ref *(ulong*)(FLECS_IDecs_u64_tID__Ptr == null ? FLECS_IDecs_u64_tID__Ptr = FLECS_IDecs_u64_tID__BindgenGetExtern() : FLECS_IDecs_u64_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_u8_tID_ => ref *(ulong*)(FLECS_IDecs_u8_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_u8_tID_", out FLECS_IDecs_u8_tID__Ptr) : FLECS_IDecs_u8_tID__Ptr);
+        public static ref ulong FLECS_IDecs_u8_tID_ => ref *(ulong*)(FLECS_IDecs_u8_tID__Ptr == null ? FLECS_IDecs_u8_tID__Ptr = FLECS_IDecs_u8_tID__BindgenGetExtern() : FLECS_IDecs_u8_tID__Ptr);
 
-        public static ref ulong FLECS_IDecs_uptr_tID_ => ref *(ulong*)(FLECS_IDecs_uptr_tID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDecs_uptr_tID_", out FLECS_IDecs_uptr_tID__Ptr) : FLECS_IDecs_uptr_tID__Ptr);
+        public static ref ulong FLECS_IDecs_uptr_tID_ => ref *(ulong*)(FLECS_IDecs_uptr_tID__Ptr == null ? FLECS_IDecs_uptr_tID__Ptr = FLECS_IDecs_uptr_tID__BindgenGetExtern() : FLECS_IDecs_uptr_tID__Ptr);
 
-        public static ref ulong FLECS_IDEcsAlertCriticalID_ => ref *(ulong*)(FLECS_IDEcsAlertCriticalID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertCriticalID_", out FLECS_IDEcsAlertCriticalID__Ptr) : FLECS_IDEcsAlertCriticalID__Ptr);
+        public static ref ulong FLECS_IDEcsAlertCriticalID_ => ref *(ulong*)(FLECS_IDEcsAlertCriticalID__Ptr == null ? FLECS_IDEcsAlertCriticalID__Ptr = FLECS_IDEcsAlertCriticalID__BindgenGetExtern() : FLECS_IDEcsAlertCriticalID__Ptr);
 
-        public static ref ulong FLECS_IDEcsAlertErrorID_ => ref *(ulong*)(FLECS_IDEcsAlertErrorID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertErrorID_", out FLECS_IDEcsAlertErrorID__Ptr) : FLECS_IDEcsAlertErrorID__Ptr);
+        public static ref ulong FLECS_IDEcsAlertErrorID_ => ref *(ulong*)(FLECS_IDEcsAlertErrorID__Ptr == null ? FLECS_IDEcsAlertErrorID__Ptr = FLECS_IDEcsAlertErrorID__BindgenGetExtern() : FLECS_IDEcsAlertErrorID__Ptr);
 
-        public static ref ulong FLECS_IDEcsAlertID_ => ref *(ulong*)(FLECS_IDEcsAlertID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertID_", out FLECS_IDEcsAlertID__Ptr) : FLECS_IDEcsAlertID__Ptr);
+        public static ref ulong FLECS_IDEcsAlertID_ => ref *(ulong*)(FLECS_IDEcsAlertID__Ptr == null ? FLECS_IDEcsAlertID__Ptr = FLECS_IDEcsAlertID__BindgenGetExtern() : FLECS_IDEcsAlertID__Ptr);
 
-        public static ref ulong FLECS_IDEcsAlertInfoID_ => ref *(ulong*)(FLECS_IDEcsAlertInfoID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertInfoID_", out FLECS_IDEcsAlertInfoID__Ptr) : FLECS_IDEcsAlertInfoID__Ptr);
+        public static ref ulong FLECS_IDEcsAlertInfoID_ => ref *(ulong*)(FLECS_IDEcsAlertInfoID__Ptr == null ? FLECS_IDEcsAlertInfoID__Ptr = FLECS_IDEcsAlertInfoID__BindgenGetExtern() : FLECS_IDEcsAlertInfoID__Ptr);
 
-        public static ref ulong FLECS_IDEcsAlertInstanceID_ => ref *(ulong*)(FLECS_IDEcsAlertInstanceID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertInstanceID_", out FLECS_IDEcsAlertInstanceID__Ptr) : FLECS_IDEcsAlertInstanceID__Ptr);
+        public static ref ulong FLECS_IDEcsAlertInstanceID_ => ref *(ulong*)(FLECS_IDEcsAlertInstanceID__Ptr == null ? FLECS_IDEcsAlertInstanceID__Ptr = FLECS_IDEcsAlertInstanceID__BindgenGetExtern() : FLECS_IDEcsAlertInstanceID__Ptr);
 
-        public static ref ulong FLECS_IDEcsAlertsActiveID_ => ref *(ulong*)(FLECS_IDEcsAlertsActiveID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertsActiveID_", out FLECS_IDEcsAlertsActiveID__Ptr) : FLECS_IDEcsAlertsActiveID__Ptr);
+        public static ref ulong FLECS_IDEcsAlertsActiveID_ => ref *(ulong*)(FLECS_IDEcsAlertsActiveID__Ptr == null ? FLECS_IDEcsAlertsActiveID__Ptr = FLECS_IDEcsAlertsActiveID__BindgenGetExtern() : FLECS_IDEcsAlertsActiveID__Ptr);
 
-        public static ref ulong FLECS_IDEcsAlertTimeoutID_ => ref *(ulong*)(FLECS_IDEcsAlertTimeoutID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertTimeoutID_", out FLECS_IDEcsAlertTimeoutID__Ptr) : FLECS_IDEcsAlertTimeoutID__Ptr);
+        public static ref ulong FLECS_IDEcsAlertTimeoutID_ => ref *(ulong*)(FLECS_IDEcsAlertTimeoutID__Ptr == null ? FLECS_IDEcsAlertTimeoutID__Ptr = FLECS_IDEcsAlertTimeoutID__BindgenGetExtern() : FLECS_IDEcsAlertTimeoutID__Ptr);
 
-        public static ref ulong FLECS_IDEcsAlertWarningID_ => ref *(ulong*)(FLECS_IDEcsAlertWarningID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsAlertWarningID_", out FLECS_IDEcsAlertWarningID__Ptr) : FLECS_IDEcsAlertWarningID__Ptr);
+        public static ref ulong FLECS_IDEcsAlertWarningID_ => ref *(ulong*)(FLECS_IDEcsAlertWarningID__Ptr == null ? FLECS_IDEcsAlertWarningID__Ptr = FLECS_IDEcsAlertWarningID__BindgenGetExtern() : FLECS_IDEcsAlertWarningID__Ptr);
 
-        public static ref ulong FLECS_IDEcsArrayID_ => ref *(ulong*)(FLECS_IDEcsArrayID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsArrayID_", out FLECS_IDEcsArrayID__Ptr) : FLECS_IDEcsArrayID__Ptr);
+        public static ref ulong FLECS_IDEcsArrayID_ => ref *(ulong*)(FLECS_IDEcsArrayID__Ptr == null ? FLECS_IDEcsArrayID__Ptr = FLECS_IDEcsArrayID__BindgenGetExtern() : FLECS_IDEcsArrayID__Ptr);
 
-        public static ref ulong FLECS_IDEcsBitmaskID_ => ref *(ulong*)(FLECS_IDEcsBitmaskID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsBitmaskID_", out FLECS_IDEcsBitmaskID__Ptr) : FLECS_IDEcsBitmaskID__Ptr);
+        public static ref ulong FLECS_IDEcsBitmaskID_ => ref *(ulong*)(FLECS_IDEcsBitmaskID__Ptr == null ? FLECS_IDEcsBitmaskID__Ptr = FLECS_IDEcsBitmaskID__BindgenGetExtern() : FLECS_IDEcsBitmaskID__Ptr);
 
-        public static ref ulong FLECS_IDEcsComponentID_ => ref *(ulong*)(FLECS_IDEcsComponentID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsComponentID_", out FLECS_IDEcsComponentID__Ptr) : FLECS_IDEcsComponentID__Ptr);
+        public static ref ulong FLECS_IDEcsComponentID_ => ref *(ulong*)(FLECS_IDEcsComponentID__Ptr == null ? FLECS_IDEcsComponentID__Ptr = FLECS_IDEcsComponentID__BindgenGetExtern() : FLECS_IDEcsComponentID__Ptr);
 
-        public static ref ulong FLECS_IDEcsCounterID_ => ref *(ulong*)(FLECS_IDEcsCounterID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCounterID_", out FLECS_IDEcsCounterID__Ptr) : FLECS_IDEcsCounterID__Ptr);
+        public static ref ulong FLECS_IDEcsCounterID_ => ref *(ulong*)(FLECS_IDEcsCounterID__Ptr == null ? FLECS_IDEcsCounterID__Ptr = FLECS_IDEcsCounterID__BindgenGetExtern() : FLECS_IDEcsCounterID__Ptr);
 
-        public static ref ulong FLECS_IDEcsCounterIdID_ => ref *(ulong*)(FLECS_IDEcsCounterIdID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCounterIdID_", out FLECS_IDEcsCounterIdID__Ptr) : FLECS_IDEcsCounterIdID__Ptr);
+        public static ref ulong FLECS_IDEcsCounterIdID_ => ref *(ulong*)(FLECS_IDEcsCounterIdID__Ptr == null ? FLECS_IDEcsCounterIdID__Ptr = FLECS_IDEcsCounterIdID__BindgenGetExtern() : FLECS_IDEcsCounterIdID__Ptr);
 
-        public static ref ulong FLECS_IDEcsCounterIncrementID_ => ref *(ulong*)(FLECS_IDEcsCounterIncrementID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsCounterIncrementID_", out FLECS_IDEcsCounterIncrementID__Ptr) : FLECS_IDEcsCounterIncrementID__Ptr);
+        public static ref ulong FLECS_IDEcsCounterIncrementID_ => ref *(ulong*)(FLECS_IDEcsCounterIncrementID__Ptr == null ? FLECS_IDEcsCounterIncrementID__Ptr = FLECS_IDEcsCounterIncrementID__BindgenGetExtern() : FLECS_IDEcsCounterIncrementID__Ptr);
 
-        public static ref ulong FLECS_IDEcsDefaultChildComponentID_ => ref *(ulong*)(FLECS_IDEcsDefaultChildComponentID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDefaultChildComponentID_", out FLECS_IDEcsDefaultChildComponentID__Ptr) : FLECS_IDEcsDefaultChildComponentID__Ptr);
+        public static ref ulong FLECS_IDEcsDefaultChildComponentID_ => ref *(ulong*)(FLECS_IDEcsDefaultChildComponentID__Ptr == null ? FLECS_IDEcsDefaultChildComponentID__Ptr = FLECS_IDEcsDefaultChildComponentID__BindgenGetExtern() : FLECS_IDEcsDefaultChildComponentID__Ptr);
 
-        public static ref ulong FLECS_IDEcsDocDescriptionID_ => ref *(ulong*)(FLECS_IDEcsDocDescriptionID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsDocDescriptionID_", out FLECS_IDEcsDocDescriptionID__Ptr) : FLECS_IDEcsDocDescriptionID__Ptr);
+        public static ref ulong FLECS_IDEcsDocDescriptionID_ => ref *(ulong*)(FLECS_IDEcsDocDescriptionID__Ptr == null ? FLECS_IDEcsDocDescriptionID__Ptr = FLECS_IDEcsDocDescriptionID__BindgenGetExtern() : FLECS_IDEcsDocDescriptionID__Ptr);
 
-        public static ref ulong FLECS_IDEcsEnumID_ => ref *(ulong*)(FLECS_IDEcsEnumID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsEnumID_", out FLECS_IDEcsEnumID__Ptr) : FLECS_IDEcsEnumID__Ptr);
+        public static ref ulong FLECS_IDEcsEnumID_ => ref *(ulong*)(FLECS_IDEcsEnumID__Ptr == null ? FLECS_IDEcsEnumID__Ptr = FLECS_IDEcsEnumID__BindgenGetExtern() : FLECS_IDEcsEnumID__Ptr);
 
-        public static ref ulong FLECS_IDEcsGaugeID_ => ref *(ulong*)(FLECS_IDEcsGaugeID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsGaugeID_", out FLECS_IDEcsGaugeID__Ptr) : FLECS_IDEcsGaugeID__Ptr);
+        public static ref ulong FLECS_IDEcsGaugeID_ => ref *(ulong*)(FLECS_IDEcsGaugeID__Ptr == null ? FLECS_IDEcsGaugeID__Ptr = FLECS_IDEcsGaugeID__BindgenGetExtern() : FLECS_IDEcsGaugeID__Ptr);
 
-        public static ref ulong FLECS_IDEcsIdentifierID_ => ref *(ulong*)(FLECS_IDEcsIdentifierID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsIdentifierID_", out FLECS_IDEcsIdentifierID__Ptr) : FLECS_IDEcsIdentifierID__Ptr);
+        public static ref ulong FLECS_IDEcsIdentifierID_ => ref *(ulong*)(FLECS_IDEcsIdentifierID__Ptr == null ? FLECS_IDEcsIdentifierID__Ptr = FLECS_IDEcsIdentifierID__BindgenGetExtern() : FLECS_IDEcsIdentifierID__Ptr);
 
-        public static ref ulong FLECS_IDEcsMemberID_ => ref *(ulong*)(FLECS_IDEcsMemberID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMemberID_", out FLECS_IDEcsMemberID__Ptr) : FLECS_IDEcsMemberID__Ptr);
+        public static ref ulong FLECS_IDEcsMemberID_ => ref *(ulong*)(FLECS_IDEcsMemberID__Ptr == null ? FLECS_IDEcsMemberID__Ptr = FLECS_IDEcsMemberID__BindgenGetExtern() : FLECS_IDEcsMemberID__Ptr);
 
-        public static ref ulong FLECS_IDEcsMemberRangesID_ => ref *(ulong*)(FLECS_IDEcsMemberRangesID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMemberRangesID_", out FLECS_IDEcsMemberRangesID__Ptr) : FLECS_IDEcsMemberRangesID__Ptr);
+        public static ref ulong FLECS_IDEcsMemberRangesID_ => ref *(ulong*)(FLECS_IDEcsMemberRangesID__Ptr == null ? FLECS_IDEcsMemberRangesID__Ptr = FLECS_IDEcsMemberRangesID__BindgenGetExtern() : FLECS_IDEcsMemberRangesID__Ptr);
 
-        public static ref ulong FLECS_IDEcsMetricID_ => ref *(ulong*)(FLECS_IDEcsMetricID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricID_", out FLECS_IDEcsMetricID__Ptr) : FLECS_IDEcsMetricID__Ptr);
+        public static ref ulong FLECS_IDEcsMetricID_ => ref *(ulong*)(FLECS_IDEcsMetricID__Ptr == null ? FLECS_IDEcsMetricID__Ptr = FLECS_IDEcsMetricID__BindgenGetExtern() : FLECS_IDEcsMetricID__Ptr);
 
-        public static ref ulong FLECS_IDEcsMetricInstanceID_ => ref *(ulong*)(FLECS_IDEcsMetricInstanceID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricInstanceID_", out FLECS_IDEcsMetricInstanceID__Ptr) : FLECS_IDEcsMetricInstanceID__Ptr);
+        public static ref ulong FLECS_IDEcsMetricInstanceID_ => ref *(ulong*)(FLECS_IDEcsMetricInstanceID__Ptr == null ? FLECS_IDEcsMetricInstanceID__Ptr = FLECS_IDEcsMetricInstanceID__BindgenGetExtern() : FLECS_IDEcsMetricInstanceID__Ptr);
 
-        public static ref ulong FLECS_IDEcsMetricSourceID_ => ref *(ulong*)(FLECS_IDEcsMetricSourceID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricSourceID_", out FLECS_IDEcsMetricSourceID__Ptr) : FLECS_IDEcsMetricSourceID__Ptr);
+        public static ref ulong FLECS_IDEcsMetricSourceID_ => ref *(ulong*)(FLECS_IDEcsMetricSourceID__Ptr == null ? FLECS_IDEcsMetricSourceID__Ptr = FLECS_IDEcsMetricSourceID__BindgenGetExtern() : FLECS_IDEcsMetricSourceID__Ptr);
 
-        public static ref ulong FLECS_IDEcsMetricValueID_ => ref *(ulong*)(FLECS_IDEcsMetricValueID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsMetricValueID_", out FLECS_IDEcsMetricValueID__Ptr) : FLECS_IDEcsMetricValueID__Ptr);
+        public static ref ulong FLECS_IDEcsMetricValueID_ => ref *(ulong*)(FLECS_IDEcsMetricValueID__Ptr == null ? FLECS_IDEcsMetricValueID__Ptr = FLECS_IDEcsMetricValueID__BindgenGetExtern() : FLECS_IDEcsMetricValueID__Ptr);
 
-        public static ref ulong FLECS_IDEcsOpaqueID_ => ref *(ulong*)(FLECS_IDEcsOpaqueID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsOpaqueID_", out FLECS_IDEcsOpaqueID__Ptr) : FLECS_IDEcsOpaqueID__Ptr);
+        public static ref ulong FLECS_IDEcsOpaqueID_ => ref *(ulong*)(FLECS_IDEcsOpaqueID__Ptr == null ? FLECS_IDEcsOpaqueID__Ptr = FLECS_IDEcsOpaqueID__BindgenGetExtern() : FLECS_IDEcsOpaqueID__Ptr);
 
-        public static ref ulong FLECS_IDEcsPipelineID_ => ref *(ulong*)(FLECS_IDEcsPipelineID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPipelineID_", out FLECS_IDEcsPipelineID__Ptr) : FLECS_IDEcsPipelineID__Ptr);
+        public static ref ulong FLECS_IDEcsPipelineID_ => ref *(ulong*)(FLECS_IDEcsPipelineID__Ptr == null ? FLECS_IDEcsPipelineID__Ptr = FLECS_IDEcsPipelineID__BindgenGetExtern() : FLECS_IDEcsPipelineID__Ptr);
 
-        public static ref ulong FLECS_IDEcsPipelineQueryID_ => ref *(ulong*)(FLECS_IDEcsPipelineQueryID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPipelineQueryID_", out FLECS_IDEcsPipelineQueryID__Ptr) : FLECS_IDEcsPipelineQueryID__Ptr);
+        public static ref ulong FLECS_IDEcsPipelineStatsID_ => ref *(ulong*)(FLECS_IDEcsPipelineStatsID__Ptr == null ? FLECS_IDEcsPipelineStatsID__Ptr = FLECS_IDEcsPipelineStatsID__BindgenGetExtern() : FLECS_IDEcsPipelineStatsID__Ptr);
 
-        public static ref ulong FLECS_IDEcsPipelineStatsID_ => ref *(ulong*)(FLECS_IDEcsPipelineStatsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPipelineStatsID_", out FLECS_IDEcsPipelineStatsID__Ptr) : FLECS_IDEcsPipelineStatsID__Ptr);
+        public static ref ulong FLECS_IDEcsPolyID_ => ref *(ulong*)(FLECS_IDEcsPolyID__Ptr == null ? FLECS_IDEcsPolyID__Ptr = FLECS_IDEcsPolyID__BindgenGetExtern() : FLECS_IDEcsPolyID__Ptr);
 
-        public static ref ulong FLECS_IDEcsPolyID_ => ref *(ulong*)(FLECS_IDEcsPolyID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPolyID_", out FLECS_IDEcsPolyID__Ptr) : FLECS_IDEcsPolyID__Ptr);
+        public static ref ulong FLECS_IDEcsPrimitiveID_ => ref *(ulong*)(FLECS_IDEcsPrimitiveID__Ptr == null ? FLECS_IDEcsPrimitiveID__Ptr = FLECS_IDEcsPrimitiveID__BindgenGetExtern() : FLECS_IDEcsPrimitiveID__Ptr);
 
-        public static ref ulong FLECS_IDEcsPrimitiveID_ => ref *(ulong*)(FLECS_IDEcsPrimitiveID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsPrimitiveID_", out FLECS_IDEcsPrimitiveID__Ptr) : FLECS_IDEcsPrimitiveID__Ptr);
+        public static ref ulong FLECS_IDEcsRateFilterID_ => ref *(ulong*)(FLECS_IDEcsRateFilterID__Ptr == null ? FLECS_IDEcsRateFilterID__Ptr = FLECS_IDEcsRateFilterID__BindgenGetExtern() : FLECS_IDEcsRateFilterID__Ptr);
 
-        public static ref ulong FLECS_IDEcsRateFilterID_ => ref *(ulong*)(FLECS_IDEcsRateFilterID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsRateFilterID_", out FLECS_IDEcsRateFilterID__Ptr) : FLECS_IDEcsRateFilterID__Ptr);
+        public static ref ulong FLECS_IDEcsRestID_ => ref *(ulong*)(FLECS_IDEcsRestID__Ptr == null ? FLECS_IDEcsRestID__Ptr = FLECS_IDEcsRestID__BindgenGetExtern() : FLECS_IDEcsRestID__Ptr);
 
-        public static ref ulong FLECS_IDEcsRestID_ => ref *(ulong*)(FLECS_IDEcsRestID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsRestID_", out FLECS_IDEcsRestID__Ptr) : FLECS_IDEcsRestID__Ptr);
+        public static ref ulong FLECS_IDEcsScriptID_ => ref *(ulong*)(FLECS_IDEcsScriptID__Ptr == null ? FLECS_IDEcsScriptID__Ptr = FLECS_IDEcsScriptID__BindgenGetExtern() : FLECS_IDEcsScriptID__Ptr);
 
-        public static ref ulong FLECS_IDEcsScriptID_ => ref *(ulong*)(FLECS_IDEcsScriptID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsScriptID_", out FLECS_IDEcsScriptID__Ptr) : FLECS_IDEcsScriptID__Ptr);
+        public static ref ulong FLECS_IDEcsStructID_ => ref *(ulong*)(FLECS_IDEcsStructID__Ptr == null ? FLECS_IDEcsStructID__Ptr = FLECS_IDEcsStructID__BindgenGetExtern() : FLECS_IDEcsStructID__Ptr);
 
-        public static ref ulong FLECS_IDEcsStructID_ => ref *(ulong*)(FLECS_IDEcsStructID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsStructID_", out FLECS_IDEcsStructID__Ptr) : FLECS_IDEcsStructID__Ptr);
+        public static ref ulong FLECS_IDEcsSystemStatsID_ => ref *(ulong*)(FLECS_IDEcsSystemStatsID__Ptr == null ? FLECS_IDEcsSystemStatsID__Ptr = FLECS_IDEcsSystemStatsID__BindgenGetExtern() : FLECS_IDEcsSystemStatsID__Ptr);
 
-        public static ref ulong FLECS_IDEcsSystemStatsID_ => ref *(ulong*)(FLECS_IDEcsSystemStatsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsSystemStatsID_", out FLECS_IDEcsSystemStatsID__Ptr) : FLECS_IDEcsSystemStatsID__Ptr);
+        public static ref ulong FLECS_IDEcsTickSourceID_ => ref *(ulong*)(FLECS_IDEcsTickSourceID__Ptr == null ? FLECS_IDEcsTickSourceID__Ptr = FLECS_IDEcsTickSourceID__BindgenGetExtern() : FLECS_IDEcsTickSourceID__Ptr);
 
-        public static ref ulong FLECS_IDEcsTickSourceID_ => ref *(ulong*)(FLECS_IDEcsTickSourceID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTickSourceID_", out FLECS_IDEcsTickSourceID__Ptr) : FLECS_IDEcsTickSourceID__Ptr);
+        public static ref ulong FLECS_IDEcsTimerID_ => ref *(ulong*)(FLECS_IDEcsTimerID__Ptr == null ? FLECS_IDEcsTimerID__Ptr = FLECS_IDEcsTimerID__BindgenGetExtern() : FLECS_IDEcsTimerID__Ptr);
 
-        public static ref ulong FLECS_IDEcsTimerID_ => ref *(ulong*)(FLECS_IDEcsTimerID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTimerID_", out FLECS_IDEcsTimerID__Ptr) : FLECS_IDEcsTimerID__Ptr);
+        public static ref ulong FLECS_IDEcsTypeID_ => ref *(ulong*)(FLECS_IDEcsTypeID__Ptr == null ? FLECS_IDEcsTypeID__Ptr = FLECS_IDEcsTypeID__BindgenGetExtern() : FLECS_IDEcsTypeID__Ptr);
 
-        public static ref ulong FLECS_IDEcsTypeID_ => ref *(ulong*)(FLECS_IDEcsTypeID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTypeID_", out FLECS_IDEcsTypeID__Ptr) : FLECS_IDEcsTypeID__Ptr);
+        public static ref ulong FLECS_IDEcsTypeSerializerID_ => ref *(ulong*)(FLECS_IDEcsTypeSerializerID__Ptr == null ? FLECS_IDEcsTypeSerializerID__Ptr = FLECS_IDEcsTypeSerializerID__BindgenGetExtern() : FLECS_IDEcsTypeSerializerID__Ptr);
 
-        public static ref ulong FLECS_IDEcsTypeSerializerID_ => ref *(ulong*)(FLECS_IDEcsTypeSerializerID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsTypeSerializerID_", out FLECS_IDEcsTypeSerializerID__Ptr) : FLECS_IDEcsTypeSerializerID__Ptr);
+        public static ref ulong FLECS_IDEcsUnitID_ => ref *(ulong*)(FLECS_IDEcsUnitID__Ptr == null ? FLECS_IDEcsUnitID__Ptr = FLECS_IDEcsUnitID__BindgenGetExtern() : FLECS_IDEcsUnitID__Ptr);
 
-        public static ref ulong FLECS_IDEcsUnitID_ => ref *(ulong*)(FLECS_IDEcsUnitID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUnitID_", out FLECS_IDEcsUnitID__Ptr) : FLECS_IDEcsUnitID__Ptr);
+        public static ref ulong FLECS_IDEcsUnitPrefixID_ => ref *(ulong*)(FLECS_IDEcsUnitPrefixID__Ptr == null ? FLECS_IDEcsUnitPrefixID__Ptr = FLECS_IDEcsUnitPrefixID__BindgenGetExtern() : FLECS_IDEcsUnitPrefixID__Ptr);
 
-        public static ref ulong FLECS_IDEcsUnitPrefixID_ => ref *(ulong*)(FLECS_IDEcsUnitPrefixID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsUnitPrefixID_", out FLECS_IDEcsUnitPrefixID__Ptr) : FLECS_IDEcsUnitPrefixID__Ptr);
+        public static ref ulong FLECS_IDEcsVectorID_ => ref *(ulong*)(FLECS_IDEcsVectorID__Ptr == null ? FLECS_IDEcsVectorID__Ptr = FLECS_IDEcsVectorID__BindgenGetExtern() : FLECS_IDEcsVectorID__Ptr);
 
-        public static ref ulong FLECS_IDEcsVectorID_ => ref *(ulong*)(FLECS_IDEcsVectorID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsVectorID_", out FLECS_IDEcsVectorID__Ptr) : FLECS_IDEcsVectorID__Ptr);
+        public static ref ulong FLECS_IDEcsWorldStatsID_ => ref *(ulong*)(FLECS_IDEcsWorldStatsID__Ptr == null ? FLECS_IDEcsWorldStatsID__Ptr = FLECS_IDEcsWorldStatsID__BindgenGetExtern() : FLECS_IDEcsWorldStatsID__Ptr);
 
-        public static ref ulong FLECS_IDEcsWorldStatsID_ => ref *(ulong*)(FLECS_IDEcsWorldStatsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsWorldStatsID_", out FLECS_IDEcsWorldStatsID__Ptr) : FLECS_IDEcsWorldStatsID__Ptr);
+        public static ref ulong FLECS_IDEcsWorldSummaryID_ => ref *(ulong*)(FLECS_IDEcsWorldSummaryID__Ptr == null ? FLECS_IDEcsWorldSummaryID__Ptr = FLECS_IDEcsWorldSummaryID__BindgenGetExtern() : FLECS_IDEcsWorldSummaryID__Ptr);
 
-        public static ref ulong FLECS_IDEcsWorldSummaryID_ => ref *(ulong*)(FLECS_IDEcsWorldSummaryID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDEcsWorldSummaryID_", out FLECS_IDEcsWorldSummaryID__Ptr) : FLECS_IDEcsWorldSummaryID__Ptr);
+        public static ref ulong FLECS_IDFlecsAlertsID_ => ref *(ulong*)(FLECS_IDFlecsAlertsID__Ptr == null ? FLECS_IDFlecsAlertsID__Ptr = FLECS_IDFlecsAlertsID__BindgenGetExtern() : FLECS_IDFlecsAlertsID__Ptr);
 
-        public static ref ulong FLECS_IDFlecsAlertsID_ => ref *(ulong*)(FLECS_IDFlecsAlertsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDFlecsAlertsID_", out FLECS_IDFlecsAlertsID__Ptr) : FLECS_IDFlecsAlertsID__Ptr);
+        public static ref ulong FLECS_IDFlecsMetricsID_ => ref *(ulong*)(FLECS_IDFlecsMetricsID__Ptr == null ? FLECS_IDFlecsMetricsID__Ptr = FLECS_IDFlecsMetricsID__BindgenGetExtern() : FLECS_IDFlecsMetricsID__Ptr);
 
-        public static ref ulong FLECS_IDFlecsMetricsID_ => ref *(ulong*)(FLECS_IDFlecsMetricsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDFlecsMetricsID_", out FLECS_IDFlecsMetricsID__Ptr) : FLECS_IDFlecsMetricsID__Ptr);
-
-        public static ref ulong FLECS_IDFlecsStatsID_ => ref *(ulong*)(FLECS_IDFlecsStatsID__Ptr == null ? BindgenInternal.LoadDllSymbol("FLECS_IDFlecsStatsID_", out FLECS_IDFlecsStatsID__Ptr) : FLECS_IDFlecsStatsID__Ptr);
+        public static ref ulong FLECS_IDFlecsStatsID_ => ref *(ulong*)(FLECS_IDFlecsStatsID__Ptr == null ? FLECS_IDFlecsStatsID__Ptr = FLECS_IDFlecsStatsID__BindgenGetExtern() : FLECS_IDFlecsStatsID__Ptr);
 
         public partial class BindgenInternal
         {
-            public const string DllImportPath = "flecs";
-
-            static BindgenInternal()
-            {
-                DllFilePaths = new System.Collections.Generic.List<string>
-                {
-                    "flecs",
-                    "libflecs",
-                    "runtimes/linux-x64/native/libflecs",
-                    "runtimes/linux-arm64/native/libflecs",
-                    "runtimes/osx-x64/native/libflecs",
-                    "runtimes/osx-arm64/native/libflecs",
-                    "runtimes/win-x64/native/flecs",
-                    "runtimes/win-arm64/native/flecs"
-                };
-            }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "SYSLIB1054")]
-        public partial class BindgenInternal
-        {
-            public static readonly System.Collections.Generic.List<string> DllFilePaths;
-
-            public static System.IntPtr LibraryHandle = System.IntPtr.Zero;
-
-            public static readonly object Lock = new object ();
-
-            public static bool IsLinux => System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux);
-
-            public static bool IsOsx => System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX);
-
-            public static bool IsWindows => System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows);
-
-            [System.Runtime.InteropServices.DllImport("libc", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "dlopen")]
-            public static extern System.IntPtr LoadLibraryLinux(string? path, int flags);
-
-            [System.Runtime.InteropServices.DllImport("libdl", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "dlopen")]
-            public static extern System.IntPtr LoadLibraryOsx(string? path, int flags);
-
-            [System.Runtime.InteropServices.DllImport("kernel32", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "LoadLibrary")]
-            public static extern System.IntPtr LoadLibraryWindows(string path);
-
-            [System.Runtime.InteropServices.DllImport("kernel32", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "GetModuleHandle")]
-            public static extern System.IntPtr GetModuleHandle(string? name);
-
-            [System.Runtime.InteropServices.DllImport("libc", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "dlsym")]
-            public static extern System.IntPtr GetExportLinux(System.IntPtr handle, string name);
-
-            [System.Runtime.InteropServices.DllImport("libdl", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "dlsym")]
-            public static extern System.IntPtr GetExportOsx(System.IntPtr handle, string name);
-
-            [System.Runtime.InteropServices.DllImport("kernel32", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "GetProcAddress")]
-            public static extern System.IntPtr GetExportWindows(System.IntPtr handle, string name);
-
-            [System.Runtime.InteropServices.DllImport("libc", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "dlerror")]
-            public static extern byte* GetLastErrorLinux();
-
-            [System.Runtime.InteropServices.DllImport("libdl", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "dlerror")]
-            public static extern byte* GetLastErrorOsx();
-
-            [System.Runtime.InteropServices.DllImport("kernel32", CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall, CharSet = System.Runtime.InteropServices.CharSet.Ansi, EntryPoint = "GetLastError")]
-            public static extern int GetLastErrorWindows();
-
-            public static bool TryLoad(string path, out System.IntPtr handle)
-            {
-#if NETCOREAPP3_0_OR_GREATER
-            return System.Runtime.InteropServices.NativeLibrary.TryLoad(path, System.Reflection.Assembly.GetExecutingAssembly(), null, out handle);
-#else
-                handle = System.IntPtr.Zero;
-                if (IsLinux)
-                    handle = LoadLibraryLinux(path, 0x101);
-                else if (IsOsx)
-                    handle = LoadLibraryOsx(path, 0x101);
-                else if (IsWindows)
-                    handle = LoadLibraryWindows(path);
-                return handle != System.IntPtr.Zero;
-#endif
-            }
-
-            public static System.IntPtr GetExport(string symbol)
-            {
-#if NETCOREAPP3_0_OR_GREATER
-            return System.Runtime.InteropServices.NativeLibrary.GetExport(LibraryHandle, symbol);
-#else
-                if (IsLinux)
-                {
-                    GetLastErrorLinux();
-                    System.IntPtr handle = GetExportLinux(LibraryHandle, symbol);
-                    if (handle != System.IntPtr.Zero)
-                        return handle;
-                    byte* errorResult = GetLastErrorLinux();
-                    if (errorResult == null)
-                        return handle;
-                    string errorMessage = System.Runtime.InteropServices.Marshal.PtrToStringAnsi((System.IntPtr)errorResult)!;
-                    throw new System.EntryPointNotFoundException(errorMessage);
-                }
-
-                if (IsOsx)
-                {
-                    GetLastErrorOsx();
-                    System.IntPtr handle = GetExportOsx(LibraryHandle, symbol);
-                    if (handle != System.IntPtr.Zero)
-                        return handle;
-                    byte* errorResult = GetLastErrorOsx();
-                    if (errorResult == null)
-                        return handle;
-                    string errorMessage = System.Runtime.InteropServices.Marshal.PtrToStringAnsi((System.IntPtr)errorResult)!;
-                    throw new System.EntryPointNotFoundException(errorMessage);
-                }
-
-                if (IsWindows)
-                {
-                    System.IntPtr handle = GetExportWindows(LibraryHandle, symbol);
-                    if (handle != System.IntPtr.Zero)
-                        return handle;
-                    int errorCode = GetLastErrorWindows();
-                    string errorMessage = new System.ComponentModel.Win32Exception(errorCode).Message;
-                    throw new System.EntryPointNotFoundException($"{errorMessage} \"{symbol}\" not found.");
-                }
-
-                throw new System.InvalidOperationException($"Failed to export symbol \"{symbol}\" from dll. Platform is not linux, mac, or windows.");
-#endif
-            }
-
-            public static void ResolveLibrary()
-            {
-                System.IntPtr handle = default;
-#if NETCOREAPP3_0_OR_GREATER
-            foreach (string dllFilePath in DllFilePaths)
-            {
-                if (TryLoad(dllFilePath, out handle))
-                    goto Return;
-            }
-#else
-                string fileExtension;
-                if (IsLinux)
-                    fileExtension = ".so";
-                else if (IsOsx)
-                    fileExtension = ".dylib";
-                else if (IsWindows)
-                    fileExtension = ".dll";
-                else
-                    throw new System.InvalidOperationException("Can't determine native library file extension for the current system.");
-                foreach (string dllFilePath in DllFilePaths)
-                {
-                    string fileName = System.IO.Path.GetFileName(dllFilePath);
-                    string parentDir = $"{dllFilePath}/..";
-                    string exeDir = System.IO.Path.GetFullPath(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!);
-                    string searchDir = System.IO.Path.IsPathRooted(dllFilePath) ? System.IO.Path.GetFullPath(parentDir) + "/" : System.IO.Path.GetFullPath($"{exeDir}/{parentDir}") + "/";
-                    if (TryLoad($"{searchDir}{fileName}", out handle))
-                        goto Return;
-                    if (TryLoad($"{searchDir}{fileName}{fileExtension}", out handle))
-                        goto Return;
-                    if (TryLoad($"{searchDir}lib{fileName}", out handle))
-                        goto Return;
-                    if (TryLoad($"{searchDir}lib{fileName}{fileExtension}", out handle))
-                        goto Return;
-                    if (!fileName.StartsWith("lib") || fileName == "lib")
-                        continue;
-                    string unprefixed = fileName.Substring(4);
-                    if (TryLoad($"{searchDir}{unprefixed}", out handle))
-                        goto Return;
-                    if (TryLoad($"{searchDir}{unprefixed}{fileExtension}", out handle))
-                        goto Return;
-                }
-
-#endif
-#if NET7_0_OR_GREATER
-                handle = System.Runtime.InteropServices.NativeLibrary.GetMainProgramHandle();
-#else
-                if (IsLinux)
-                    handle = LoadLibraryLinux(null, 0x101);
-                else if (IsOsx)
-                    handle = LoadLibraryOsx(null, 0x101);
-                else if (IsWindows)
-                    handle = GetModuleHandle(null);
-#endif
-                Return:
-                    LibraryHandle = handle;
-            }
-
-            public static void* LoadDllSymbol(string variableSymbol, out void* field)
-            {
-                lock (Lock)
-                {
-                    if (LibraryHandle == System.IntPtr.Zero)
-                        ResolveLibrary();
-                    return field = (void*)GetExport(variableSymbol);
-                }
-            }
+            public const string DllImportPath = @"flecs";
         }
     }
 }
