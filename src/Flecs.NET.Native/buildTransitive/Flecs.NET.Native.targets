@@ -1,8 +1,6 @@
 <Project>
-  <!-- FIXME: BindgenInternal.LoadDLLSymbol do not supports static linking
   <ItemGroup Condition="'$(PublishAot)' == 'true' And Exists('$(FlecsStaticLibrary)')">
     <DirectPInvoke Include="flecs"/>
     <NativeLibrary Include="$(FlecsStaticLibrary)"/>
   </ItemGroup>
-  -->
 </Project>

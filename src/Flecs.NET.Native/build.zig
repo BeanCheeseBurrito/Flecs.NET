@@ -20,7 +20,8 @@ pub fn compileFlecs(options: anytype, b: *Build, lib_type: LibType) void {
     };
 
     lib.linkLibC();
-    lib.addCSourceFile(.{ .file = b.path("../../submodules/flecs/distr/flecs.c"), .flags = &.{"-fno-sanitize=undefined"} });
+    lib.addCSourceFile(.{ .file = b.path("../../native/flecs/distr/flecs.c"), .flags = &.{"-fno-sanitize=undefined"} });
+    lib.addCSourceFile(.{ .file = b.path("../../native/flecs_helpers.c"), .flags = &.{"-fno-sanitize=undefined"} });
     lib.defineCMacro(if (options.optimize == .Debug) "FLECS_DEBUG" else "FLECS_NDEBUG", null);
 
     if (options.soft_assert) {
