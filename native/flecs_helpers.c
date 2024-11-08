@@ -1,3 +1,8 @@
+#ifdef _WIN32
+    #define BINDGEN_API __declspec(dllexport)
+#else
+    #define BINDGEN_API __attribute__((visibility("default")))
+#endif
 extern void* ECS_AUTO_OVERRIDE;
 extern void* ecs_block_allocator_alloc_count;
 extern void* ecs_block_allocator_free_count;
@@ -292,885 +297,885 @@ extern void* FLECS_IDEcsWorldSummaryID_;
 extern void* FLECS_IDFlecsAlertsID_;
 extern void* FLECS_IDFlecsMetricsID_;
 extern void* FLECS_IDFlecsStatsID_;
-void* ECS_AUTO_OVERRIDE_BindgenGetExtern() {
+BINDGEN_API void* ECS_AUTO_OVERRIDE_BindgenGetExtern() {
     return &ECS_AUTO_OVERRIDE;
 }
-void* ecs_block_allocator_alloc_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_block_allocator_alloc_count_BindgenGetExtern() {
     return &ecs_block_allocator_alloc_count;
 }
-void* ecs_block_allocator_free_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_block_allocator_free_count_BindgenGetExtern() {
     return &ecs_block_allocator_free_count;
 }
-void* ecs_http_busy_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_http_busy_count_BindgenGetExtern() {
     return &ecs_http_busy_count;
 }
-void* ecs_http_request_handled_error_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_http_request_handled_error_count_BindgenGetExtern() {
     return &ecs_http_request_handled_error_count;
 }
-void* ecs_http_request_handled_ok_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_http_request_handled_ok_count_BindgenGetExtern() {
     return &ecs_http_request_handled_ok_count;
 }
-void* ecs_http_request_invalid_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_http_request_invalid_count_BindgenGetExtern() {
     return &ecs_http_request_invalid_count;
 }
-void* ecs_http_request_not_handled_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_http_request_not_handled_count_BindgenGetExtern() {
     return &ecs_http_request_not_handled_count;
 }
-void* ecs_http_request_preflight_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_http_request_preflight_count_BindgenGetExtern() {
     return &ecs_http_request_preflight_count;
 }
-void* ecs_http_request_received_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_http_request_received_count_BindgenGetExtern() {
     return &ecs_http_request_received_count;
 }
-void* ecs_http_send_error_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_http_send_error_count_BindgenGetExtern() {
     return &ecs_http_send_error_count;
 }
-void* ecs_http_send_ok_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_http_send_ok_count_BindgenGetExtern() {
     return &ecs_http_send_ok_count;
 }
-void* ecs_os_api_BindgenGetExtern() {
+BINDGEN_API void* ecs_os_api_BindgenGetExtern() {
     return &ecs_os_api;
 }
-void* ecs_os_api_calloc_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_os_api_calloc_count_BindgenGetExtern() {
     return &ecs_os_api_calloc_count;
 }
-void* ecs_os_api_free_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_os_api_free_count_BindgenGetExtern() {
     return &ecs_os_api_free_count;
 }
-void* ecs_os_api_malloc_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_os_api_malloc_count_BindgenGetExtern() {
     return &ecs_os_api_malloc_count;
 }
-void* ecs_os_api_realloc_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_os_api_realloc_count_BindgenGetExtern() {
     return &ecs_os_api_realloc_count;
 }
-void* ECS_PAIR_BindgenGetExtern() {
+BINDGEN_API void* ECS_PAIR_BindgenGetExtern() {
     return &ECS_PAIR;
 }
-void* ecs_stack_allocator_alloc_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_stack_allocator_alloc_count_BindgenGetExtern() {
     return &ecs_stack_allocator_alloc_count;
 }
-void* ecs_stack_allocator_free_count_BindgenGetExtern() {
+BINDGEN_API void* ecs_stack_allocator_free_count_BindgenGetExtern() {
     return &ecs_stack_allocator_free_count;
 }
-void* ECS_TOGGLE_BindgenGetExtern() {
+BINDGEN_API void* ECS_TOGGLE_BindgenGetExtern() {
     return &ECS_TOGGLE;
 }
-void* EcsAcceleration_BindgenGetExtern() {
+BINDGEN_API void* EcsAcceleration_BindgenGetExtern() {
     return &EcsAcceleration;
 }
-void* EcsAcyclic_BindgenGetExtern() {
+BINDGEN_API void* EcsAcyclic_BindgenGetExtern() {
     return &EcsAcyclic;
 }
-void* EcsAlertCritical_BindgenGetExtern() {
+BINDGEN_API void* EcsAlertCritical_BindgenGetExtern() {
     return &EcsAlertCritical;
 }
-void* EcsAlertError_BindgenGetExtern() {
+BINDGEN_API void* EcsAlertError_BindgenGetExtern() {
     return &EcsAlertError;
 }
-void* EcsAlertInfo_BindgenGetExtern() {
+BINDGEN_API void* EcsAlertInfo_BindgenGetExtern() {
     return &EcsAlertInfo;
 }
-void* EcsAlertWarning_BindgenGetExtern() {
+BINDGEN_API void* EcsAlertWarning_BindgenGetExtern() {
     return &EcsAlertWarning;
 }
-void* EcsAlias_BindgenGetExtern() {
+BINDGEN_API void* EcsAlias_BindgenGetExtern() {
     return &EcsAlias;
 }
-void* EcsAmount_BindgenGetExtern() {
+BINDGEN_API void* EcsAmount_BindgenGetExtern() {
     return &EcsAmount;
 }
-void* EcsAmpere_BindgenGetExtern() {
+BINDGEN_API void* EcsAmpere_BindgenGetExtern() {
     return &EcsAmpere;
 }
-void* EcsAngle_BindgenGetExtern() {
+BINDGEN_API void* EcsAngle_BindgenGetExtern() {
     return &EcsAngle;
 }
-void* EcsAny_BindgenGetExtern() {
+BINDGEN_API void* EcsAny_BindgenGetExtern() {
     return &EcsAny;
 }
-void* EcsAtto_BindgenGetExtern() {
+BINDGEN_API void* EcsAtto_BindgenGetExtern() {
     return &EcsAtto;
 }
-void* EcsBar_BindgenGetExtern() {
+BINDGEN_API void* EcsBar_BindgenGetExtern() {
     return &EcsBar;
 }
-void* EcsBel_BindgenGetExtern() {
+BINDGEN_API void* EcsBel_BindgenGetExtern() {
     return &EcsBel;
 }
-void* EcsBits_BindgenGetExtern() {
+BINDGEN_API void* EcsBits_BindgenGetExtern() {
     return &EcsBits;
 }
-void* EcsBitsPerSecond_BindgenGetExtern() {
+BINDGEN_API void* EcsBitsPerSecond_BindgenGetExtern() {
     return &EcsBitsPerSecond;
 }
-void* EcsBytes_BindgenGetExtern() {
+BINDGEN_API void* EcsBytes_BindgenGetExtern() {
     return &EcsBytes;
 }
-void* EcsBytesPerSecond_BindgenGetExtern() {
+BINDGEN_API void* EcsBytesPerSecond_BindgenGetExtern() {
     return &EcsBytesPerSecond;
 }
-void* EcsCandela_BindgenGetExtern() {
+BINDGEN_API void* EcsCandela_BindgenGetExtern() {
     return &EcsCandela;
 }
-void* EcsCanToggle_BindgenGetExtern() {
+BINDGEN_API void* EcsCanToggle_BindgenGetExtern() {
     return &EcsCanToggle;
 }
-void* EcsCelsius_BindgenGetExtern() {
+BINDGEN_API void* EcsCelsius_BindgenGetExtern() {
     return &EcsCelsius;
 }
-void* EcsCenti_BindgenGetExtern() {
+BINDGEN_API void* EcsCenti_BindgenGetExtern() {
     return &EcsCenti;
 }
-void* EcsCentiMeters_BindgenGetExtern() {
+BINDGEN_API void* EcsCentiMeters_BindgenGetExtern() {
     return &EcsCentiMeters;
 }
-void* EcsChildOf_BindgenGetExtern() {
+BINDGEN_API void* EcsChildOf_BindgenGetExtern() {
     return &EcsChildOf;
 }
-void* EcsColor_BindgenGetExtern() {
+BINDGEN_API void* EcsColor_BindgenGetExtern() {
     return &EcsColor;
 }
-void* EcsColorCss_BindgenGetExtern() {
+BINDGEN_API void* EcsColorCss_BindgenGetExtern() {
     return &EcsColorCss;
 }
-void* EcsColorHsl_BindgenGetExtern() {
+BINDGEN_API void* EcsColorHsl_BindgenGetExtern() {
     return &EcsColorHsl;
 }
-void* EcsColorRgb_BindgenGetExtern() {
+BINDGEN_API void* EcsColorRgb_BindgenGetExtern() {
     return &EcsColorRgb;
 }
-void* EcsConstant_BindgenGetExtern() {
+BINDGEN_API void* EcsConstant_BindgenGetExtern() {
     return &EcsConstant;
 }
-void* EcsCounter_BindgenGetExtern() {
+BINDGEN_API void* EcsCounter_BindgenGetExtern() {
     return &EcsCounter;
 }
-void* EcsCounterId_BindgenGetExtern() {
+BINDGEN_API void* EcsCounterId_BindgenGetExtern() {
     return &EcsCounterId;
 }
-void* EcsCounterIncrement_BindgenGetExtern() {
+BINDGEN_API void* EcsCounterIncrement_BindgenGetExtern() {
     return &EcsCounterIncrement;
 }
-void* EcsData_BindgenGetExtern() {
+BINDGEN_API void* EcsData_BindgenGetExtern() {
     return &EcsData;
 }
-void* EcsDataRate_BindgenGetExtern() {
+BINDGEN_API void* EcsDataRate_BindgenGetExtern() {
     return &EcsDataRate;
 }
-void* EcsDate_BindgenGetExtern() {
+BINDGEN_API void* EcsDate_BindgenGetExtern() {
     return &EcsDate;
 }
-void* EcsDays_BindgenGetExtern() {
+BINDGEN_API void* EcsDays_BindgenGetExtern() {
     return &EcsDays;
 }
-void* EcsDeca_BindgenGetExtern() {
+BINDGEN_API void* EcsDeca_BindgenGetExtern() {
     return &EcsDeca;
 }
-void* EcsDeci_BindgenGetExtern() {
+BINDGEN_API void* EcsDeci_BindgenGetExtern() {
     return &EcsDeci;
 }
-void* EcsDeciBel_BindgenGetExtern() {
+BINDGEN_API void* EcsDeciBel_BindgenGetExtern() {
     return &EcsDeciBel;
 }
-void* EcsDegrees_BindgenGetExtern() {
+BINDGEN_API void* EcsDegrees_BindgenGetExtern() {
     return &EcsDegrees;
 }
-void* EcsDelete_BindgenGetExtern() {
+BINDGEN_API void* EcsDelete_BindgenGetExtern() {
     return &EcsDelete;
 }
-void* EcsDependsOn_BindgenGetExtern() {
+BINDGEN_API void* EcsDependsOn_BindgenGetExtern() {
     return &EcsDependsOn;
 }
-void* EcsDisabled_BindgenGetExtern() {
+BINDGEN_API void* EcsDisabled_BindgenGetExtern() {
     return &EcsDisabled;
 }
-void* EcsDocBrief_BindgenGetExtern() {
+BINDGEN_API void* EcsDocBrief_BindgenGetExtern() {
     return &EcsDocBrief;
 }
-void* EcsDocColor_BindgenGetExtern() {
+BINDGEN_API void* EcsDocColor_BindgenGetExtern() {
     return &EcsDocColor;
 }
-void* EcsDocDetail_BindgenGetExtern() {
+BINDGEN_API void* EcsDocDetail_BindgenGetExtern() {
     return &EcsDocDetail;
 }
-void* EcsDocLink_BindgenGetExtern() {
+BINDGEN_API void* EcsDocLink_BindgenGetExtern() {
     return &EcsDocLink;
 }
-void* EcsDontInherit_BindgenGetExtern() {
+BINDGEN_API void* EcsDontInherit_BindgenGetExtern() {
     return &EcsDontInherit;
 }
-void* EcsDuration_BindgenGetExtern() {
+BINDGEN_API void* EcsDuration_BindgenGetExtern() {
     return &EcsDuration;
 }
-void* EcsElectricCurrent_BindgenGetExtern() {
+BINDGEN_API void* EcsElectricCurrent_BindgenGetExtern() {
     return &EcsElectricCurrent;
 }
-void* EcsEmpty_BindgenGetExtern() {
+BINDGEN_API void* EcsEmpty_BindgenGetExtern() {
     return &EcsEmpty;
 }
-void* EcsExa_BindgenGetExtern() {
+BINDGEN_API void* EcsExa_BindgenGetExtern() {
     return &EcsExa;
 }
-void* EcsExbi_BindgenGetExtern() {
+BINDGEN_API void* EcsExbi_BindgenGetExtern() {
     return &EcsExbi;
 }
-void* EcsExclusive_BindgenGetExtern() {
+BINDGEN_API void* EcsExclusive_BindgenGetExtern() {
     return &EcsExclusive;
 }
-void* EcsFahrenheit_BindgenGetExtern() {
+BINDGEN_API void* EcsFahrenheit_BindgenGetExtern() {
     return &EcsFahrenheit;
 }
-void* EcsFemto_BindgenGetExtern() {
+BINDGEN_API void* EcsFemto_BindgenGetExtern() {
     return &EcsFemto;
 }
-void* EcsFinal_BindgenGetExtern() {
+BINDGEN_API void* EcsFinal_BindgenGetExtern() {
     return &EcsFinal;
 }
-void* EcsFlecs_BindgenGetExtern() {
+BINDGEN_API void* EcsFlecs_BindgenGetExtern() {
     return &EcsFlecs;
 }
-void* EcsFlecsCore_BindgenGetExtern() {
+BINDGEN_API void* EcsFlecsCore_BindgenGetExtern() {
     return &EcsFlecsCore;
 }
-void* EcsForce_BindgenGetExtern() {
+BINDGEN_API void* EcsForce_BindgenGetExtern() {
     return &EcsForce;
 }
-void* EcsFrequency_BindgenGetExtern() {
+BINDGEN_API void* EcsFrequency_BindgenGetExtern() {
     return &EcsFrequency;
 }
-void* EcsGauge_BindgenGetExtern() {
+BINDGEN_API void* EcsGauge_BindgenGetExtern() {
     return &EcsGauge;
 }
-void* EcsGibi_BindgenGetExtern() {
+BINDGEN_API void* EcsGibi_BindgenGetExtern() {
     return &EcsGibi;
 }
-void* EcsGibiBytes_BindgenGetExtern() {
+BINDGEN_API void* EcsGibiBytes_BindgenGetExtern() {
     return &EcsGibiBytes;
 }
-void* EcsGiga_BindgenGetExtern() {
+BINDGEN_API void* EcsGiga_BindgenGetExtern() {
     return &EcsGiga;
 }
-void* EcsGigaBits_BindgenGetExtern() {
+BINDGEN_API void* EcsGigaBits_BindgenGetExtern() {
     return &EcsGigaBits;
 }
-void* EcsGigaBitsPerSecond_BindgenGetExtern() {
+BINDGEN_API void* EcsGigaBitsPerSecond_BindgenGetExtern() {
     return &EcsGigaBitsPerSecond;
 }
-void* EcsGigaBytes_BindgenGetExtern() {
+BINDGEN_API void* EcsGigaBytes_BindgenGetExtern() {
     return &EcsGigaBytes;
 }
-void* EcsGigaBytesPerSecond_BindgenGetExtern() {
+BINDGEN_API void* EcsGigaBytesPerSecond_BindgenGetExtern() {
     return &EcsGigaBytesPerSecond;
 }
-void* EcsGigaHertz_BindgenGetExtern() {
+BINDGEN_API void* EcsGigaHertz_BindgenGetExtern() {
     return &EcsGigaHertz;
 }
-void* EcsGrams_BindgenGetExtern() {
+BINDGEN_API void* EcsGrams_BindgenGetExtern() {
     return &EcsGrams;
 }
-void* EcsHecto_BindgenGetExtern() {
+BINDGEN_API void* EcsHecto_BindgenGetExtern() {
     return &EcsHecto;
 }
-void* EcsHertz_BindgenGetExtern() {
+BINDGEN_API void* EcsHertz_BindgenGetExtern() {
     return &EcsHertz;
 }
-void* EcsHours_BindgenGetExtern() {
+BINDGEN_API void* EcsHours_BindgenGetExtern() {
     return &EcsHours;
 }
-void* EcsInherit_BindgenGetExtern() {
+BINDGEN_API void* EcsInherit_BindgenGetExtern() {
     return &EcsInherit;
 }
-void* EcsIsA_BindgenGetExtern() {
+BINDGEN_API void* EcsIsA_BindgenGetExtern() {
     return &EcsIsA;
 }
-void* EcsKelvin_BindgenGetExtern() {
+BINDGEN_API void* EcsKelvin_BindgenGetExtern() {
     return &EcsKelvin;
 }
-void* EcsKibi_BindgenGetExtern() {
+BINDGEN_API void* EcsKibi_BindgenGetExtern() {
     return &EcsKibi;
 }
-void* EcsKibiBytes_BindgenGetExtern() {
+BINDGEN_API void* EcsKibiBytes_BindgenGetExtern() {
     return &EcsKibiBytes;
 }
-void* EcsKilo_BindgenGetExtern() {
+BINDGEN_API void* EcsKilo_BindgenGetExtern() {
     return &EcsKilo;
 }
-void* EcsKiloBits_BindgenGetExtern() {
+BINDGEN_API void* EcsKiloBits_BindgenGetExtern() {
     return &EcsKiloBits;
 }
-void* EcsKiloBitsPerSecond_BindgenGetExtern() {
+BINDGEN_API void* EcsKiloBitsPerSecond_BindgenGetExtern() {
     return &EcsKiloBitsPerSecond;
 }
-void* EcsKiloBytes_BindgenGetExtern() {
+BINDGEN_API void* EcsKiloBytes_BindgenGetExtern() {
     return &EcsKiloBytes;
 }
-void* EcsKiloBytesPerSecond_BindgenGetExtern() {
+BINDGEN_API void* EcsKiloBytesPerSecond_BindgenGetExtern() {
     return &EcsKiloBytesPerSecond;
 }
-void* EcsKiloGrams_BindgenGetExtern() {
+BINDGEN_API void* EcsKiloGrams_BindgenGetExtern() {
     return &EcsKiloGrams;
 }
-void* EcsKiloHertz_BindgenGetExtern() {
+BINDGEN_API void* EcsKiloHertz_BindgenGetExtern() {
     return &EcsKiloHertz;
 }
-void* EcsKiloMeters_BindgenGetExtern() {
+BINDGEN_API void* EcsKiloMeters_BindgenGetExtern() {
     return &EcsKiloMeters;
 }
-void* EcsKiloMetersPerHour_BindgenGetExtern() {
+BINDGEN_API void* EcsKiloMetersPerHour_BindgenGetExtern() {
     return &EcsKiloMetersPerHour;
 }
-void* EcsKiloMetersPerSecond_BindgenGetExtern() {
+BINDGEN_API void* EcsKiloMetersPerSecond_BindgenGetExtern() {
     return &EcsKiloMetersPerSecond;
 }
-void* EcsLength_BindgenGetExtern() {
+BINDGEN_API void* EcsLength_BindgenGetExtern() {
     return &EcsLength;
 }
-void* EcsLuminousIntensity_BindgenGetExtern() {
+BINDGEN_API void* EcsLuminousIntensity_BindgenGetExtern() {
     return &EcsLuminousIntensity;
 }
-void* EcsMass_BindgenGetExtern() {
+BINDGEN_API void* EcsMass_BindgenGetExtern() {
     return &EcsMass;
 }
-void* EcsMebi_BindgenGetExtern() {
+BINDGEN_API void* EcsMebi_BindgenGetExtern() {
     return &EcsMebi;
 }
-void* EcsMebiBytes_BindgenGetExtern() {
+BINDGEN_API void* EcsMebiBytes_BindgenGetExtern() {
     return &EcsMebiBytes;
 }
-void* EcsMega_BindgenGetExtern() {
+BINDGEN_API void* EcsMega_BindgenGetExtern() {
     return &EcsMega;
 }
-void* EcsMegaBits_BindgenGetExtern() {
+BINDGEN_API void* EcsMegaBits_BindgenGetExtern() {
     return &EcsMegaBits;
 }
-void* EcsMegaBitsPerSecond_BindgenGetExtern() {
+BINDGEN_API void* EcsMegaBitsPerSecond_BindgenGetExtern() {
     return &EcsMegaBitsPerSecond;
 }
-void* EcsMegaBytes_BindgenGetExtern() {
+BINDGEN_API void* EcsMegaBytes_BindgenGetExtern() {
     return &EcsMegaBytes;
 }
-void* EcsMegaBytesPerSecond_BindgenGetExtern() {
+BINDGEN_API void* EcsMegaBytesPerSecond_BindgenGetExtern() {
     return &EcsMegaBytesPerSecond;
 }
-void* EcsMegaHertz_BindgenGetExtern() {
+BINDGEN_API void* EcsMegaHertz_BindgenGetExtern() {
     return &EcsMegaHertz;
 }
-void* EcsMeters_BindgenGetExtern() {
+BINDGEN_API void* EcsMeters_BindgenGetExtern() {
     return &EcsMeters;
 }
-void* EcsMetersPerSecond_BindgenGetExtern() {
+BINDGEN_API void* EcsMetersPerSecond_BindgenGetExtern() {
     return &EcsMetersPerSecond;
 }
-void* EcsMetric_BindgenGetExtern() {
+BINDGEN_API void* EcsMetric_BindgenGetExtern() {
     return &EcsMetric;
 }
-void* EcsMetricInstance_BindgenGetExtern() {
+BINDGEN_API void* EcsMetricInstance_BindgenGetExtern() {
     return &EcsMetricInstance;
 }
-void* EcsMicro_BindgenGetExtern() {
+BINDGEN_API void* EcsMicro_BindgenGetExtern() {
     return &EcsMicro;
 }
-void* EcsMicroMeters_BindgenGetExtern() {
+BINDGEN_API void* EcsMicroMeters_BindgenGetExtern() {
     return &EcsMicroMeters;
 }
-void* EcsMicroSeconds_BindgenGetExtern() {
+BINDGEN_API void* EcsMicroSeconds_BindgenGetExtern() {
     return &EcsMicroSeconds;
 }
-void* EcsMiles_BindgenGetExtern() {
+BINDGEN_API void* EcsMiles_BindgenGetExtern() {
     return &EcsMiles;
 }
-void* EcsMilesPerHour_BindgenGetExtern() {
+BINDGEN_API void* EcsMilesPerHour_BindgenGetExtern() {
     return &EcsMilesPerHour;
 }
-void* EcsMilli_BindgenGetExtern() {
+BINDGEN_API void* EcsMilli_BindgenGetExtern() {
     return &EcsMilli;
 }
-void* EcsMilliMeters_BindgenGetExtern() {
+BINDGEN_API void* EcsMilliMeters_BindgenGetExtern() {
     return &EcsMilliMeters;
 }
-void* EcsMilliSeconds_BindgenGetExtern() {
+BINDGEN_API void* EcsMilliSeconds_BindgenGetExtern() {
     return &EcsMilliSeconds;
 }
-void* EcsMinutes_BindgenGetExtern() {
+BINDGEN_API void* EcsMinutes_BindgenGetExtern() {
     return &EcsMinutes;
 }
-void* EcsModule_BindgenGetExtern() {
+BINDGEN_API void* EcsModule_BindgenGetExtern() {
     return &EcsModule;
 }
-void* EcsMole_BindgenGetExtern() {
+BINDGEN_API void* EcsMole_BindgenGetExtern() {
     return &EcsMole;
 }
-void* EcsMonitor_BindgenGetExtern() {
+BINDGEN_API void* EcsMonitor_BindgenGetExtern() {
     return &EcsMonitor;
 }
-void* EcsName_BindgenGetExtern() {
+BINDGEN_API void* EcsName_BindgenGetExtern() {
     return &EcsName;
 }
-void* EcsNano_BindgenGetExtern() {
+BINDGEN_API void* EcsNano_BindgenGetExtern() {
     return &EcsNano;
 }
-void* EcsNanoMeters_BindgenGetExtern() {
+BINDGEN_API void* EcsNanoMeters_BindgenGetExtern() {
     return &EcsNanoMeters;
 }
-void* EcsNanoSeconds_BindgenGetExtern() {
+BINDGEN_API void* EcsNanoSeconds_BindgenGetExtern() {
     return &EcsNanoSeconds;
 }
-void* EcsNewton_BindgenGetExtern() {
+BINDGEN_API void* EcsNewton_BindgenGetExtern() {
     return &EcsNewton;
 }
-void* EcsNotQueryable_BindgenGetExtern() {
+BINDGEN_API void* EcsNotQueryable_BindgenGetExtern() {
     return &EcsNotQueryable;
 }
-void* EcsObserver_BindgenGetExtern() {
+BINDGEN_API void* EcsObserver_BindgenGetExtern() {
     return &EcsObserver;
 }
-void* EcsOnAdd_BindgenGetExtern() {
+BINDGEN_API void* EcsOnAdd_BindgenGetExtern() {
     return &EcsOnAdd;
 }
-void* EcsOnDelete_BindgenGetExtern() {
+BINDGEN_API void* EcsOnDelete_BindgenGetExtern() {
     return &EcsOnDelete;
 }
-void* EcsOnDeleteTarget_BindgenGetExtern() {
+BINDGEN_API void* EcsOnDeleteTarget_BindgenGetExtern() {
     return &EcsOnDeleteTarget;
 }
-void* EcsOneOf_BindgenGetExtern() {
+BINDGEN_API void* EcsOneOf_BindgenGetExtern() {
     return &EcsOneOf;
 }
-void* EcsOnInstantiate_BindgenGetExtern() {
+BINDGEN_API void* EcsOnInstantiate_BindgenGetExtern() {
     return &EcsOnInstantiate;
 }
-void* EcsOnLoad_BindgenGetExtern() {
+BINDGEN_API void* EcsOnLoad_BindgenGetExtern() {
     return &EcsOnLoad;
 }
-void* EcsOnRemove_BindgenGetExtern() {
+BINDGEN_API void* EcsOnRemove_BindgenGetExtern() {
     return &EcsOnRemove;
 }
-void* EcsOnSet_BindgenGetExtern() {
+BINDGEN_API void* EcsOnSet_BindgenGetExtern() {
     return &EcsOnSet;
 }
-void* EcsOnStart_BindgenGetExtern() {
+BINDGEN_API void* EcsOnStart_BindgenGetExtern() {
     return &EcsOnStart;
 }
-void* EcsOnStore_BindgenGetExtern() {
+BINDGEN_API void* EcsOnStore_BindgenGetExtern() {
     return &EcsOnStore;
 }
-void* EcsOnTableCreate_BindgenGetExtern() {
+BINDGEN_API void* EcsOnTableCreate_BindgenGetExtern() {
     return &EcsOnTableCreate;
 }
-void* EcsOnTableDelete_BindgenGetExtern() {
+BINDGEN_API void* EcsOnTableDelete_BindgenGetExtern() {
     return &EcsOnTableDelete;
 }
-void* EcsOnTableEmpty_BindgenGetExtern() {
+BINDGEN_API void* EcsOnTableEmpty_BindgenGetExtern() {
     return &EcsOnTableEmpty;
 }
-void* EcsOnTableFill_BindgenGetExtern() {
+BINDGEN_API void* EcsOnTableFill_BindgenGetExtern() {
     return &EcsOnTableFill;
 }
-void* EcsOnUpdate_BindgenGetExtern() {
+BINDGEN_API void* EcsOnUpdate_BindgenGetExtern() {
     return &EcsOnUpdate;
 }
-void* EcsOnValidate_BindgenGetExtern() {
+BINDGEN_API void* EcsOnValidate_BindgenGetExtern() {
     return &EcsOnValidate;
 }
-void* EcsOverride_BindgenGetExtern() {
+BINDGEN_API void* EcsOverride_BindgenGetExtern() {
     return &EcsOverride;
 }
-void* EcsPairIsTag_BindgenGetExtern() {
+BINDGEN_API void* EcsPairIsTag_BindgenGetExtern() {
     return &EcsPairIsTag;
 }
-void* EcsPanic_BindgenGetExtern() {
+BINDGEN_API void* EcsPanic_BindgenGetExtern() {
     return &EcsPanic;
 }
-void* EcsPascal_BindgenGetExtern() {
+BINDGEN_API void* EcsPascal_BindgenGetExtern() {
     return &EcsPascal;
 }
-void* EcsPebi_BindgenGetExtern() {
+BINDGEN_API void* EcsPebi_BindgenGetExtern() {
     return &EcsPebi;
 }
-void* EcsPercentage_BindgenGetExtern() {
+BINDGEN_API void* EcsPercentage_BindgenGetExtern() {
     return &EcsPercentage;
 }
-void* EcsPeriod1d_BindgenGetExtern() {
+BINDGEN_API void* EcsPeriod1d_BindgenGetExtern() {
     return &EcsPeriod1d;
 }
-void* EcsPeriod1h_BindgenGetExtern() {
+BINDGEN_API void* EcsPeriod1h_BindgenGetExtern() {
     return &EcsPeriod1h;
 }
-void* EcsPeriod1m_BindgenGetExtern() {
+BINDGEN_API void* EcsPeriod1m_BindgenGetExtern() {
     return &EcsPeriod1m;
 }
-void* EcsPeriod1s_BindgenGetExtern() {
+BINDGEN_API void* EcsPeriod1s_BindgenGetExtern() {
     return &EcsPeriod1s;
 }
-void* EcsPeriod1w_BindgenGetExtern() {
+BINDGEN_API void* EcsPeriod1w_BindgenGetExtern() {
     return &EcsPeriod1w;
 }
-void* EcsPeta_BindgenGetExtern() {
+BINDGEN_API void* EcsPeta_BindgenGetExtern() {
     return &EcsPeta;
 }
-void* EcsPhase_BindgenGetExtern() {
+BINDGEN_API void* EcsPhase_BindgenGetExtern() {
     return &EcsPhase;
 }
-void* EcsPico_BindgenGetExtern() {
+BINDGEN_API void* EcsPico_BindgenGetExtern() {
     return &EcsPico;
 }
-void* EcsPicoMeters_BindgenGetExtern() {
+BINDGEN_API void* EcsPicoMeters_BindgenGetExtern() {
     return &EcsPicoMeters;
 }
-void* EcsPicoSeconds_BindgenGetExtern() {
+BINDGEN_API void* EcsPicoSeconds_BindgenGetExtern() {
     return &EcsPicoSeconds;
 }
-void* EcsPixels_BindgenGetExtern() {
+BINDGEN_API void* EcsPixels_BindgenGetExtern() {
     return &EcsPixels;
 }
-void* EcsPostFrame_BindgenGetExtern() {
+BINDGEN_API void* EcsPostFrame_BindgenGetExtern() {
     return &EcsPostFrame;
 }
-void* EcsPostLoad_BindgenGetExtern() {
+BINDGEN_API void* EcsPostLoad_BindgenGetExtern() {
     return &EcsPostLoad;
 }
-void* EcsPostUpdate_BindgenGetExtern() {
+BINDGEN_API void* EcsPostUpdate_BindgenGetExtern() {
     return &EcsPostUpdate;
 }
-void* EcsPredEq_BindgenGetExtern() {
+BINDGEN_API void* EcsPredEq_BindgenGetExtern() {
     return &EcsPredEq;
 }
-void* EcsPredLookup_BindgenGetExtern() {
+BINDGEN_API void* EcsPredLookup_BindgenGetExtern() {
     return &EcsPredLookup;
 }
-void* EcsPredMatch_BindgenGetExtern() {
+BINDGEN_API void* EcsPredMatch_BindgenGetExtern() {
     return &EcsPredMatch;
 }
-void* EcsPrefab_BindgenGetExtern() {
+BINDGEN_API void* EcsPrefab_BindgenGetExtern() {
     return &EcsPrefab;
 }
-void* EcsPreFrame_BindgenGetExtern() {
+BINDGEN_API void* EcsPreFrame_BindgenGetExtern() {
     return &EcsPreFrame;
 }
-void* EcsPressure_BindgenGetExtern() {
+BINDGEN_API void* EcsPressure_BindgenGetExtern() {
     return &EcsPressure;
 }
-void* EcsPreStore_BindgenGetExtern() {
+BINDGEN_API void* EcsPreStore_BindgenGetExtern() {
     return &EcsPreStore;
 }
-void* EcsPreUpdate_BindgenGetExtern() {
+BINDGEN_API void* EcsPreUpdate_BindgenGetExtern() {
     return &EcsPreUpdate;
 }
-void* EcsPrivate_BindgenGetExtern() {
+BINDGEN_API void* EcsPrivate_BindgenGetExtern() {
     return &EcsPrivate;
 }
-void* EcsQuantity_BindgenGetExtern() {
+BINDGEN_API void* EcsQuantity_BindgenGetExtern() {
     return &EcsQuantity;
 }
-void* EcsQuery_BindgenGetExtern() {
+BINDGEN_API void* EcsQuery_BindgenGetExtern() {
     return &EcsQuery;
 }
-void* EcsRadians_BindgenGetExtern() {
+BINDGEN_API void* EcsRadians_BindgenGetExtern() {
     return &EcsRadians;
 }
-void* EcsReflexive_BindgenGetExtern() {
+BINDGEN_API void* EcsReflexive_BindgenGetExtern() {
     return &EcsReflexive;
 }
-void* EcsRelationship_BindgenGetExtern() {
+BINDGEN_API void* EcsRelationship_BindgenGetExtern() {
     return &EcsRelationship;
 }
-void* EcsRemove_BindgenGetExtern() {
+BINDGEN_API void* EcsRemove_BindgenGetExtern() {
     return &EcsRemove;
 }
-void* EcsScopeClose_BindgenGetExtern() {
+BINDGEN_API void* EcsScopeClose_BindgenGetExtern() {
     return &EcsScopeClose;
 }
-void* EcsScopeOpen_BindgenGetExtern() {
+BINDGEN_API void* EcsScopeOpen_BindgenGetExtern() {
     return &EcsScopeOpen;
 }
-void* EcsSeconds_BindgenGetExtern() {
+BINDGEN_API void* EcsSeconds_BindgenGetExtern() {
     return &EcsSeconds;
 }
-void* EcsSlotOf_BindgenGetExtern() {
+BINDGEN_API void* EcsSlotOf_BindgenGetExtern() {
     return &EcsSlotOf;
 }
-void* EcsSparse_BindgenGetExtern() {
+BINDGEN_API void* EcsSparse_BindgenGetExtern() {
     return &EcsSparse;
 }
-void* EcsSpeed_BindgenGetExtern() {
+BINDGEN_API void* EcsSpeed_BindgenGetExtern() {
     return &EcsSpeed;
 }
-void* EcsSymbol_BindgenGetExtern() {
+BINDGEN_API void* EcsSymbol_BindgenGetExtern() {
     return &EcsSymbol;
 }
-void* EcsSymmetric_BindgenGetExtern() {
+BINDGEN_API void* EcsSymmetric_BindgenGetExtern() {
     return &EcsSymmetric;
 }
-void* EcsSystem_BindgenGetExtern() {
+BINDGEN_API void* EcsSystem_BindgenGetExtern() {
     return &EcsSystem;
 }
-void* EcsTarget_BindgenGetExtern() {
+BINDGEN_API void* EcsTarget_BindgenGetExtern() {
     return &EcsTarget;
 }
-void* EcsTebi_BindgenGetExtern() {
+BINDGEN_API void* EcsTebi_BindgenGetExtern() {
     return &EcsTebi;
 }
-void* EcsTemperature_BindgenGetExtern() {
+BINDGEN_API void* EcsTemperature_BindgenGetExtern() {
     return &EcsTemperature;
 }
-void* EcsTera_BindgenGetExtern() {
+BINDGEN_API void* EcsTera_BindgenGetExtern() {
     return &EcsTera;
 }
-void* EcsThis_BindgenGetExtern() {
+BINDGEN_API void* EcsThis_BindgenGetExtern() {
     return &EcsThis;
 }
-void* EcsTime_BindgenGetExtern() {
+BINDGEN_API void* EcsTime_BindgenGetExtern() {
     return &EcsTime;
 }
-void* EcsTrait_BindgenGetExtern() {
+BINDGEN_API void* EcsTrait_BindgenGetExtern() {
     return &EcsTrait;
 }
-void* EcsTransitive_BindgenGetExtern() {
+BINDGEN_API void* EcsTransitive_BindgenGetExtern() {
     return &EcsTransitive;
 }
-void* EcsTraversable_BindgenGetExtern() {
+BINDGEN_API void* EcsTraversable_BindgenGetExtern() {
     return &EcsTraversable;
 }
-void* EcsUnion_BindgenGetExtern() {
+BINDGEN_API void* EcsUnion_BindgenGetExtern() {
     return &EcsUnion;
 }
-void* EcsUnitPrefixes_BindgenGetExtern() {
+BINDGEN_API void* EcsUnitPrefixes_BindgenGetExtern() {
     return &EcsUnitPrefixes;
 }
-void* EcsUri_BindgenGetExtern() {
+BINDGEN_API void* EcsUri_BindgenGetExtern() {
     return &EcsUri;
 }
-void* EcsUriFile_BindgenGetExtern() {
+BINDGEN_API void* EcsUriFile_BindgenGetExtern() {
     return &EcsUriFile;
 }
-void* EcsUriHyperlink_BindgenGetExtern() {
+BINDGEN_API void* EcsUriHyperlink_BindgenGetExtern() {
     return &EcsUriHyperlink;
 }
-void* EcsUriImage_BindgenGetExtern() {
+BINDGEN_API void* EcsUriImage_BindgenGetExtern() {
     return &EcsUriImage;
 }
-void* EcsVariable_BindgenGetExtern() {
+BINDGEN_API void* EcsVariable_BindgenGetExtern() {
     return &EcsVariable;
 }
-void* EcsWildcard_BindgenGetExtern() {
+BINDGEN_API void* EcsWildcard_BindgenGetExtern() {
     return &EcsWildcard;
 }
-void* EcsWith_BindgenGetExtern() {
+BINDGEN_API void* EcsWith_BindgenGetExtern() {
     return &EcsWith;
 }
-void* EcsWorld_BindgenGetExtern() {
+BINDGEN_API void* EcsWorld_BindgenGetExtern() {
     return &EcsWorld;
 }
-void* EcsYobi_BindgenGetExtern() {
+BINDGEN_API void* EcsYobi_BindgenGetExtern() {
     return &EcsYobi;
 }
-void* EcsYocto_BindgenGetExtern() {
+BINDGEN_API void* EcsYocto_BindgenGetExtern() {
     return &EcsYocto;
 }
-void* EcsYotta_BindgenGetExtern() {
+BINDGEN_API void* EcsYotta_BindgenGetExtern() {
     return &EcsYotta;
 }
-void* EcsZebi_BindgenGetExtern() {
+BINDGEN_API void* EcsZebi_BindgenGetExtern() {
     return &EcsZebi;
 }
-void* EcsZepto_BindgenGetExtern() {
+BINDGEN_API void* EcsZepto_BindgenGetExtern() {
     return &EcsZepto;
 }
-void* EcsZetta_BindgenGetExtern() {
+BINDGEN_API void* EcsZetta_BindgenGetExtern() {
     return &EcsZetta;
 }
-void* FLECS_IDecs_bool_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_bool_tID__BindgenGetExtern() {
     return &FLECS_IDecs_bool_tID_;
 }
-void* FLECS_IDecs_byte_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_byte_tID__BindgenGetExtern() {
     return &FLECS_IDecs_byte_tID_;
 }
-void* FLECS_IDecs_char_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_char_tID__BindgenGetExtern() {
     return &FLECS_IDecs_char_tID_;
 }
-void* FLECS_IDecs_entity_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_entity_tID__BindgenGetExtern() {
     return &FLECS_IDecs_entity_tID_;
 }
-void* FLECS_IDecs_f32_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_f32_tID__BindgenGetExtern() {
     return &FLECS_IDecs_f32_tID_;
 }
-void* FLECS_IDecs_f64_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_f64_tID__BindgenGetExtern() {
     return &FLECS_IDecs_f64_tID_;
 }
-void* FLECS_IDecs_i16_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_i16_tID__BindgenGetExtern() {
     return &FLECS_IDecs_i16_tID_;
 }
-void* FLECS_IDecs_i32_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_i32_tID__BindgenGetExtern() {
     return &FLECS_IDecs_i32_tID_;
 }
-void* FLECS_IDecs_i64_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_i64_tID__BindgenGetExtern() {
     return &FLECS_IDecs_i64_tID_;
 }
-void* FLECS_IDecs_i8_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_i8_tID__BindgenGetExtern() {
     return &FLECS_IDecs_i8_tID_;
 }
-void* FLECS_IDecs_id_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_id_tID__BindgenGetExtern() {
     return &FLECS_IDecs_id_tID_;
 }
-void* FLECS_IDecs_iptr_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_iptr_tID__BindgenGetExtern() {
     return &FLECS_IDecs_iptr_tID_;
 }
-void* FLECS_IDecs_string_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_string_tID__BindgenGetExtern() {
     return &FLECS_IDecs_string_tID_;
 }
-void* FLECS_IDecs_u16_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_u16_tID__BindgenGetExtern() {
     return &FLECS_IDecs_u16_tID_;
 }
-void* FLECS_IDecs_u32_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_u32_tID__BindgenGetExtern() {
     return &FLECS_IDecs_u32_tID_;
 }
-void* FLECS_IDecs_u64_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_u64_tID__BindgenGetExtern() {
     return &FLECS_IDecs_u64_tID_;
 }
-void* FLECS_IDecs_u8_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_u8_tID__BindgenGetExtern() {
     return &FLECS_IDecs_u8_tID_;
 }
-void* FLECS_IDecs_uptr_tID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDecs_uptr_tID__BindgenGetExtern() {
     return &FLECS_IDecs_uptr_tID_;
 }
-void* FLECS_IDEcsAlertCriticalID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsAlertCriticalID__BindgenGetExtern() {
     return &FLECS_IDEcsAlertCriticalID_;
 }
-void* FLECS_IDEcsAlertErrorID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsAlertErrorID__BindgenGetExtern() {
     return &FLECS_IDEcsAlertErrorID_;
 }
-void* FLECS_IDEcsAlertID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsAlertID__BindgenGetExtern() {
     return &FLECS_IDEcsAlertID_;
 }
-void* FLECS_IDEcsAlertInfoID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsAlertInfoID__BindgenGetExtern() {
     return &FLECS_IDEcsAlertInfoID_;
 }
-void* FLECS_IDEcsAlertInstanceID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsAlertInstanceID__BindgenGetExtern() {
     return &FLECS_IDEcsAlertInstanceID_;
 }
-void* FLECS_IDEcsAlertsActiveID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsAlertsActiveID__BindgenGetExtern() {
     return &FLECS_IDEcsAlertsActiveID_;
 }
-void* FLECS_IDEcsAlertTimeoutID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsAlertTimeoutID__BindgenGetExtern() {
     return &FLECS_IDEcsAlertTimeoutID_;
 }
-void* FLECS_IDEcsAlertWarningID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsAlertWarningID__BindgenGetExtern() {
     return &FLECS_IDEcsAlertWarningID_;
 }
-void* FLECS_IDEcsArrayID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsArrayID__BindgenGetExtern() {
     return &FLECS_IDEcsArrayID_;
 }
-void* FLECS_IDEcsBitmaskID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsBitmaskID__BindgenGetExtern() {
     return &FLECS_IDEcsBitmaskID_;
 }
-void* FLECS_IDEcsComponentID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsComponentID__BindgenGetExtern() {
     return &FLECS_IDEcsComponentID_;
 }
-void* FLECS_IDEcsCounterID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsCounterID__BindgenGetExtern() {
     return &FLECS_IDEcsCounterID_;
 }
-void* FLECS_IDEcsCounterIdID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsCounterIdID__BindgenGetExtern() {
     return &FLECS_IDEcsCounterIdID_;
 }
-void* FLECS_IDEcsCounterIncrementID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsCounterIncrementID__BindgenGetExtern() {
     return &FLECS_IDEcsCounterIncrementID_;
 }
-void* FLECS_IDEcsDefaultChildComponentID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsDefaultChildComponentID__BindgenGetExtern() {
     return &FLECS_IDEcsDefaultChildComponentID_;
 }
-void* FLECS_IDEcsDocDescriptionID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsDocDescriptionID__BindgenGetExtern() {
     return &FLECS_IDEcsDocDescriptionID_;
 }
-void* FLECS_IDEcsEnumID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsEnumID__BindgenGetExtern() {
     return &FLECS_IDEcsEnumID_;
 }
-void* FLECS_IDEcsGaugeID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsGaugeID__BindgenGetExtern() {
     return &FLECS_IDEcsGaugeID_;
 }
-void* FLECS_IDEcsIdentifierID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsIdentifierID__BindgenGetExtern() {
     return &FLECS_IDEcsIdentifierID_;
 }
-void* FLECS_IDEcsMemberID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsMemberID__BindgenGetExtern() {
     return &FLECS_IDEcsMemberID_;
 }
-void* FLECS_IDEcsMemberRangesID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsMemberRangesID__BindgenGetExtern() {
     return &FLECS_IDEcsMemberRangesID_;
 }
-void* FLECS_IDEcsMetricID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsMetricID__BindgenGetExtern() {
     return &FLECS_IDEcsMetricID_;
 }
-void* FLECS_IDEcsMetricInstanceID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsMetricInstanceID__BindgenGetExtern() {
     return &FLECS_IDEcsMetricInstanceID_;
 }
-void* FLECS_IDEcsMetricSourceID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsMetricSourceID__BindgenGetExtern() {
     return &FLECS_IDEcsMetricSourceID_;
 }
-void* FLECS_IDEcsMetricValueID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsMetricValueID__BindgenGetExtern() {
     return &FLECS_IDEcsMetricValueID_;
 }
-void* FLECS_IDEcsOpaqueID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsOpaqueID__BindgenGetExtern() {
     return &FLECS_IDEcsOpaqueID_;
 }
-void* FLECS_IDEcsPipelineID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsPipelineID__BindgenGetExtern() {
     return &FLECS_IDEcsPipelineID_;
 }
-void* FLECS_IDEcsPipelineStatsID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsPipelineStatsID__BindgenGetExtern() {
     return &FLECS_IDEcsPipelineStatsID_;
 }
-void* FLECS_IDEcsPolyID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsPolyID__BindgenGetExtern() {
     return &FLECS_IDEcsPolyID_;
 }
-void* FLECS_IDEcsPrimitiveID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsPrimitiveID__BindgenGetExtern() {
     return &FLECS_IDEcsPrimitiveID_;
 }
-void* FLECS_IDEcsRateFilterID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsRateFilterID__BindgenGetExtern() {
     return &FLECS_IDEcsRateFilterID_;
 }
-void* FLECS_IDEcsRestID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsRestID__BindgenGetExtern() {
     return &FLECS_IDEcsRestID_;
 }
-void* FLECS_IDEcsScriptID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsScriptID__BindgenGetExtern() {
     return &FLECS_IDEcsScriptID_;
 }
-void* FLECS_IDEcsStructID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsStructID__BindgenGetExtern() {
     return &FLECS_IDEcsStructID_;
 }
-void* FLECS_IDEcsSystemStatsID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsSystemStatsID__BindgenGetExtern() {
     return &FLECS_IDEcsSystemStatsID_;
 }
-void* FLECS_IDEcsTickSourceID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsTickSourceID__BindgenGetExtern() {
     return &FLECS_IDEcsTickSourceID_;
 }
-void* FLECS_IDEcsTimerID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsTimerID__BindgenGetExtern() {
     return &FLECS_IDEcsTimerID_;
 }
-void* FLECS_IDEcsTypeID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsTypeID__BindgenGetExtern() {
     return &FLECS_IDEcsTypeID_;
 }
-void* FLECS_IDEcsTypeSerializerID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsTypeSerializerID__BindgenGetExtern() {
     return &FLECS_IDEcsTypeSerializerID_;
 }
-void* FLECS_IDEcsUnitID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsUnitID__BindgenGetExtern() {
     return &FLECS_IDEcsUnitID_;
 }
-void* FLECS_IDEcsUnitPrefixID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsUnitPrefixID__BindgenGetExtern() {
     return &FLECS_IDEcsUnitPrefixID_;
 }
-void* FLECS_IDEcsVectorID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsVectorID__BindgenGetExtern() {
     return &FLECS_IDEcsVectorID_;
 }
-void* FLECS_IDEcsWorldStatsID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsWorldStatsID__BindgenGetExtern() {
     return &FLECS_IDEcsWorldStatsID_;
 }
-void* FLECS_IDEcsWorldSummaryID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDEcsWorldSummaryID__BindgenGetExtern() {
     return &FLECS_IDEcsWorldSummaryID_;
 }
-void* FLECS_IDFlecsAlertsID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDFlecsAlertsID__BindgenGetExtern() {
     return &FLECS_IDFlecsAlertsID_;
 }
-void* FLECS_IDFlecsMetricsID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDFlecsMetricsID__BindgenGetExtern() {
     return &FLECS_IDFlecsMetricsID_;
 }
-void* FLECS_IDFlecsStatsID__BindgenGetExtern() {
+BINDGEN_API void* FLECS_IDFlecsStatsID__BindgenGetExtern() {
     return &FLECS_IDFlecsStatsID_;
 }
