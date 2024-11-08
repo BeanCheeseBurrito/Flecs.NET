@@ -151,9 +151,13 @@
 
     <!-- All the native code compile magic lives here -->
     <Target Name="CompileNatives" AfterTargets="Build" Condition="'$(SkipNatives)' != 'true'">
+        <PropertyGroup>
+            <BuildCommand>$(ZigExePath) build -Doptimize=$(ZigConfiguration) --prefix $(OutputPath)runtimes --prefix-lib-dir $(RuntimeIdentifier)/native --prefix-exe-dir $(RuntimeIdentifier)/native -Dtarget=$(ZigIdentifier) $(ZigArgs)</BuildCommand>
+        </PropertyGroup>
         <Message Importance="High" Text="Build Target: $(RuntimeIdentifier) $(Configuration)"/>
         <Message Importance="High" Text="Build Zig Target: $(ZigIdentifier) $(ZigConfiguration)"/>
         <Message Importance="High" Text="Build Zig Args: $(ZigArgs)"/>
-        <Exec Command="$(ZigExePath) build -Doptimize=$(ZigConfiguration) --prefix $(OutputPath)runtimes --prefix-lib-dir $(RuntimeIdentifier)/native --prefix-exe-dir $(RuntimeIdentifier)/native -Dtarget=$(ZigIdentifier) $(ZigArgs)"/>
+        <Exec Command="$(BuildCommand) -Dlibrary-type=Shared" Condition="'$(RuntimeIdentifier)' != 'browser-wasm'"/>
+        <Exec Command="$(BuildCommand) -Dlibrary-type=Static"/>
     </Target>
 </Project>
