@@ -3,7 +3,10 @@ const Build = std.Build;
 
 pub const LibType = enum { Shared, Static };
 
-const src_flags = [_][]const u8{"-fno-sanitize=undefined"};
+const src_flags = [_][]const u8{
+    "-fno-sanitize=undefined",
+    "-fno-stack-protector",
+};
 
 const src_files = [_][]const u8{
     "../../native/flecs_helpers.c",
