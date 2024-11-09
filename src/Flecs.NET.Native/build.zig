@@ -1,11 +1,11 @@
 const std = @import("std");
 const Build = std.Build;
 
-pub const LibType = enum { Shared, Static };
+pub const LibraryType = enum { Shared, Static };
 
 const src_flags = [_][]const u8{
+    "-std=c99",
     "-fno-sanitize=undefined",
-    "-fno-stack-protector",
 };
 
 const src_files = [_][]const u8{
@@ -123,43 +123,42 @@ const src_files = [_][]const u8{
     "../../native/flecs/src/storage/table_graph.c",
 };
 
-pub fn compileFlecs(options: anytype, b: *Build, lib_type: LibType) void {
-    const lib = switch (lib_type) {
+pub fn compileFlecs(b: *Build, options: anytype) void {
+    const lib = switch (options.library_type) {
         .Shared => b.addSharedLibrary(.{
             .name = "flecs",
             .target = options.target,
             .optimize = options.optimize,
             .strip = options.optimize != .Debug,
+            .link_libc = true,
         }),
         .Static => b.addStaticLibrary(.{
             .name = "flecs",
             .target = options.target,
             .optimize = options.optimize,
             .strip = options.optimize != .Debug,
+            .link_libc = true,
+            .root_source_file = if (options.compiler_rt_path) |path| .{ .cwd_relative = path } else null,
         }),
     };
 
-    lib.linkLibC();
-
     lib.defineCMacro(if (options.optimize == .Debug) "FLECS_DEBUG" else "FLECS_NDEBUG", null);
-    lib.defineCMacro(if (lib_type == LibType.Shared) "flecs_EXPORTS" else "flecs_STATIC", null);
-
-    if (options.soft_assert) {
-        lib.defineCMacro("FLECS_SOFT_ASSERT", null);
-    }
-
-    for (src_files) |file| {
-        lib.addCSourceFile(.{
-            .file = b.path(file),
-            .flags = &src_flags,
-        });
-    }
+    lib.defineCMacro(if (options.library_type == LibraryType.Shared) "flecs_EXPORTS" else "flecs_STATIC", null);
 
     lib.addIncludePath(b.path("../../native/flecs/include"));
+
+    for (src_files) |file| {
+        lib.addCSourceFile(.{ .file = b.path(file), .flags = &src_flags });
+    }
 
     switch (options.target.result.os.tag) {
         .windows => {
             lib.linkSystemLibrary("ws2_32");
+
+            // Temporary fix to get rid of undefined symbol errors when statically linking in Native AOT.
+            if (options.library_type == LibraryType.Static) {
+                lib.addCSourceFile(.{ .file = b.path("../../native/windows.c"), .flags = &src_flags });
+            }
         },
         .ios => {
             if (b.sysroot == null) {
@@ -187,12 +186,13 @@ pub fn compileFlecs(options: anytype, b: *Build, lib_type: LibType) void {
 }
 
 pub fn build(b: *Build) void {
-    const options = .{
+    compileFlecs(b, .{
         .optimize = b.standardOptimizeOption(.{}),
         .target = b.standardTargetOptions(.{}),
-        .soft_assert = b.option(bool, "soft-assert", "Compile with the FLECS_SOFT_ASSERT define.") orelse false,
-        .library_type = b.option(LibType, "library-type", "Compile as a static or shared library.") orelse LibType.Shared,
-    };
-
-    compileFlecs(options, b, options.library_type);
+        .library_type = b.option(LibraryType, "library-type", "Compile as a static or shared library.") orelse LibraryType.Shared,
+        // When building static libraries for Windows, zig's compiler-rt needs to be bundled.
+        // For some reason, setting "bundle_compiler_rt" to true doesn't produce a static library that works with NativeAOT.
+        // As a work-around, we manually build the compiler_rt.zig file alongside flecs.
+        .compiler_rt_path = b.option([]const u8, "compiler-rt-path", "Path to the compiler_rt file.") orelse null,
+    });
 }
