@@ -92,28 +92,25 @@ jobs:
         working-directory: src/Flecs.NET.Native
         run: |
           dotnet build -c Debug -r linux-x64
-          dotnet build -c Release -r linux-x64
           dotnet build -c Debug -r linux-arm64
-          dotnet build -c Release -r linux-arm64
-
           dotnet build -c Debug -r osx-x64
-          dotnet build -c Release -r osx-x64
           dotnet build -c Debug -r osx-arm64
-          dotnet build -c Release -r osx-arm64
-
           dotnet build -c Debug -r win-x64
-          dotnet build -c Release -r win-x64
           dotnet build -c Debug -r win-arm64
-          dotnet build -c Release -r win-arm64
-
           dotnet build -c Debug -r browser-wasm
-          dotnet build -c Release -r browser-wasm
-
           dotnet build -c Debug -r iossimulator-x64
-          dotnet build -c Release -r iossimulator-x64
           dotnet build -c Debug -r iossimulator-arm64
-          dotnet build -c Release -r iossimulator-arm64
           dotnet build -c Debug -r ios-arm64
+
+          dotnet build -c Release -r linux-x64
+          dotnet build -c Release -r linux-arm64
+          dotnet build -c Release -r osx-x64
+          dotnet build -c Release -r osx-arm64
+          dotnet build -c Release -r win-x64
+          dotnet build -c Release -r win-arm64
+          dotnet build -c Release -r browser-wasm
+          dotnet build -c Release -r iossimulator-x64
+          dotnet build -c Release -r iossimulator-arm64
           dotnet build -c Release -r ios-arm64
 
       - name: Run Tests
@@ -133,7 +130,7 @@ jobs:
 
       - name: Upload Artifacts
         if: matrix.os == 'macos-13'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Nuget Packages
           path: |
