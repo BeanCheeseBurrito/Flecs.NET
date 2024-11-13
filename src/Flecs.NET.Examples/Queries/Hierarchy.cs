@@ -42,6 +42,7 @@ public static class Queries_Hierarchy
         // Create a hierarchical query to compute the global position from the
         // local position and the parent position.
         using Query<Position, Position, Position> q = world.QueryBuilder<Position, Position, Position>()
+            .Cached() // Cascade queries must be cached.
             // Modify terms from template to make sure the query selects the
             // local, world and parent position components.
             .TermAt(0).Second<Local>()  // Self local position
