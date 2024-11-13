@@ -63,6 +63,20 @@ public class DocTests
     }
 
     [Fact]
+    private void SetUuid()
+    {
+        using World world = World.Create();
+
+        Entity e = world.Entity("Foo");
+
+        e.SetDocUuid("81f50b40-09ff-4ce0-a388-4a52a14052c7");
+
+        Assert.True(e.Has<EcsDocDescription>(Ecs.Doc.Uuid));
+
+        Assert.Equal(e.DocUuid(), "81f50b40-09ff-4ce0-a388-4a52a14052c7");
+    }
+
+    [Fact]
     private void GetNameNoDocName()
     {
         using World world = World.Create();
