@@ -12,6 +12,7 @@ namespace Flecs.NET.Tests.Cpp;
 [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
 [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
 [SuppressMessage("ReSharper", "AccessToModifiedClosure")]
+[SuppressMessage("ReSharper", "VariableHidesOuterVariable")]
 public unsafe class QueryTests
 {
     public static int InvokedCount;
@@ -2844,10 +2845,10 @@ public unsafe class QueryTests
         Entity e1 = world.Entity()
             .Set(new Position(10, 20))
             .Add<Foo>();
-        Entity e2 = world.Entity()
+        world.Entity()
             .Set(new Position(10, 20))
             .Add<Bar>();
-        Entity e3 = world.Entity()
+        world.Entity()
             .Set(new Position(10, 20))
             .Add<Hello>();
 
@@ -3065,7 +3066,7 @@ public unsafe class QueryTests
             .QueryFlags(EcsQueryMatchEmptyTables)
             .Build();
 
-        q.Each((Iter it, int i, ref Position p, ref Velocity v) =>
+        q.Each((Iter _, int _, ref Position p, ref Velocity v) =>
         {
             p.X += v.X;
             p.Y += v.Y;
@@ -3095,12 +3096,12 @@ public unsafe class QueryTests
         Entity other = world.Entity()
             .Set(new OtherComp(10));
 
-        for (int i = 0; i < 3; ++i)
+        for (int i = 0; i < 3; i++)
             world.Entity()
                 .Set(new ThisComp(i))
                 .Add<RelData>(other);
 
-        Query<RelData, ThisComp, OtherComp> q = world.QueryBuilder<RelData, ThisComp, OtherComp>()
+        using Query<RelData, ThisComp, OtherComp> q = world.QueryBuilder<RelData, ThisComp, OtherComp>()
             .TermAt(0).Second("$other")
             .TermAt(2).Src("$other")
             .Build();
@@ -3130,12 +3131,12 @@ public unsafe class QueryTests
         world.Entity()
             .Set(new OtherComp(1));
 
-        for (int i = 0; i < 3; ++i)
+        for (int i = 0; i < 3; i++)
             world.Entity()
                 .Set(new ThisComp(i))
                 .Add<RelData>(other);
 
-        Query<RelData, ThisComp, OtherComp> q = world.QueryBuilder<RelData, ThisComp, OtherComp>()
+        using Query<RelData, ThisComp, OtherComp> q = world.QueryBuilder<RelData, ThisComp, OtherComp>()
             .TermAt(0).Second("$other")
             .TermAt(2).Src("$other")
             .Build();
@@ -3148,5 +3149,172 @@ public unsafe class QueryTests
         });
 
         Assert.Equal(7, isPresent);
+    }
+
+    [Fact]
+    private void IterTargets()
+    {
+        using World world = World.Create();
+
+        Entity likes = world.Entity();
+        Entity pizza = world.Entity();
+        Entity salad = world.Entity();
+        Entity alice = world.Entity()
+            .Add(likes, pizza)
+            .Add(likes, salad);
+
+        using Query q = world.QueryBuilder()
+            .With(likes, Ecs.Any)
+            .Build();
+
+        int count = 0;
+        int tgtCount = 0;
+
+        q.Each((Iter it, int row) =>
+        {
+            Entity e = it.Entity(row);
+            Assert.True(e == alice);
+
+            it.Targets(0, (Entity tgt) =>
+            {
+                if (tgtCount == 0)
+                    Assert.True(tgt == pizza);
+                if (tgtCount == 1)
+                    Assert.True(tgt == salad);
+                tgtCount++;
+            });
+
+            count++;
+        });
+
+        Assert.Equal(1, count);
+        Assert.Equal(2, tgtCount);
+    }
+
+    [Fact]
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    private void IterTargets2ndField()
+    {
+        using World world = World.Create();
+
+        Entity likes = world.Entity();
+        Entity pizza = world.Entity();
+        Entity salad = world.Entity();
+        Entity alice = world.Entity()
+            .Add<Position>()
+            .Add(likes, pizza)
+            .Add(likes, salad);
+
+        using Query q = world.QueryBuilder()
+            .With<Position>()
+            .With(likes, Ecs.Any)
+            .Build();
+
+        int count = 0;
+        int tgtCount = 0;
+
+        q.Each((Iter it, int row) =>
+        {
+            Entity e = it.Entity(row);
+            Assert.True(e == alice);
+
+            it.Targets(1, (Entity tgt) =>
+            {
+                if (tgtCount == 0)
+                    Assert.True(tgt == pizza);
+                if (tgtCount == 1)
+                    Assert.True(tgt == salad);
+                tgtCount++;
+            });
+
+            count++;
+        });
+
+        Assert.Equal(1, count);
+        Assert.Equal(2, tgtCount);
+    }
+
+    [Fact]
+    private void IterTargetsFieldOutOfRange()
+    {
+        using World world = World.Create();
+
+        Entity likes = world.Entity();
+        Entity pizza = world.Entity();
+        Entity salad = world.Entity();
+        Entity alice = world.Entity()
+            .Add(likes, pizza)
+            .Add(likes, salad);
+
+        using Query q = world.QueryBuilder()
+            .With(likes, Ecs.Any)
+            .Build();
+
+        q.Each((Iter it, int row) =>
+        {
+            Entity e = it.Entity(row);
+            Assert.True(e == alice);
+
+            Assert.Throws<Ecs.AssertionException>(() =>
+            {
+                it.Targets(1, (Entity _) => { });
+            });
+        });
+    }
+
+    [Fact]
+    private void IterTargetsFieldNotAPair()
+    {
+        using World world = World.Create();
+
+        Entity likes = world.Entity();
+        Entity pizza = world.Entity();
+        Entity salad = world.Entity();
+        Entity alice = world.Entity()
+            .Add<Position>()
+            .Add(likes, pizza)
+            .Add(likes, salad);
+
+        using Query q = world.QueryBuilder()
+            .With<Position>()
+            .Build();
+
+        q.Each((Iter it, int row) =>
+        {
+            Entity e = it.Entity(row);
+            Assert.True(e == alice);
+
+            Assert.Throws<Ecs.AssertionException>(() =>
+            {
+                it.Targets(1, (Entity _) => { });
+            });
+        });
+    }
+
+    [Fact]
+    private void IterTargetsFieldNotSet()
+    {
+        using World world = World.Create();
+
+        Entity likes = world.Entity();
+        Entity alice = world.Entity()
+            .Add<Position>();
+
+        using Query q = world.QueryBuilder()
+            .With<Position>()
+            .With(likes, Ecs.Any).Optional()
+            .Build();
+
+        q.Each((Iter it, int row) =>
+        {
+            Entity e = it.Entity(row);
+            Assert.True(e == alice);
+            Assert.True(!it.IsSet(1));
+
+            Assert.Throws<Ecs.AssertionException>(() =>
+            {
+                it.Targets(1, (Entity _) => { });
+            });
+        });
     }
 }

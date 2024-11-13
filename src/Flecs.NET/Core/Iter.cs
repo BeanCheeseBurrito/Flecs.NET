@@ -413,6 +413,52 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     }
 
     /// <summary>
+    ///     Iterate targets for pair field.
+    /// </summary>
+    /// <param name="index">The field index.</param>
+    /// <param name="callback">The callback.</param>
+    public void Targets(int index, Ecs.EachEntityCallback callback)
+    {
+        Ecs.Assert(Handle->table != null, nameof(ECS_INVALID_OPERATION));
+        Ecs.Assert(index < Handle->field_count,  nameof(ECS_INVALID_PARAMETER));
+        Ecs.Assert(Utils.Bool(ecs_field_is_set(Handle, (byte)index)),  nameof(ECS_INVALID_PARAMETER));
+
+        ecs_type_t* tableType = ecs_table_get_type(Handle->table);
+        ecs_table_record_t *tr = Handle->trs[index];
+
+        int end = tr->index + tr->count;
+        for (int i = tr->index; i < end; i++)
+        {
+            ulong id = tableType->array[i];
+            Ecs.Assert(Ecs.IsPair(id), "Field must be a pair.");
+            callback(new Entity(Handle->world, Ecs.PairSecond(Handle->real_world, id)));
+        }
+    }
+
+    /// <summary>
+    ///     Iterate targets for pair field.
+    /// </summary>
+    /// <param name="index">The field index.</param>
+    /// <param name="callback">The callback.</param>
+    public void Targets(int index, delegate*<Entity, void> callback)
+    {
+        Ecs.Assert(Handle->table != null, nameof(ECS_INVALID_OPERATION));
+        Ecs.Assert(index < Handle->field_count,  nameof(ECS_INVALID_PARAMETER));
+        Ecs.Assert(Utils.Bool(ecs_field_is_set(Handle, (byte)index)),  nameof(ECS_INVALID_PARAMETER));
+
+        ecs_type_t* tableType = ecs_table_get_type(Handle->table);
+        ecs_table_record_t *tr = Handle->trs[index];
+
+        int end = tr->index + tr->count;
+        for (int i = tr->index; i < end; i++)
+        {
+            ulong id = tableType->array[i];
+            Ecs.Assert(Ecs.IsPair(id), "Field must be a pair.");
+            callback(new Entity(Handle->world, Ecs.PairSecond(Handle->real_world, id)));
+        }
+    }
+
+    /// <summary>
     ///     Progress iterator.
     /// </summary>
     /// <returns>The result.</returns>
