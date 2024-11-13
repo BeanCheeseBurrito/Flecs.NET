@@ -71,6 +71,7 @@ extern void* EcsDocBrief;
 extern void* EcsDocColor;
 extern void* EcsDocDetail;
 extern void* EcsDocLink;
+extern void* EcsDocUuid;
 extern void* EcsDontInherit;
 extern void* EcsDuration;
 extern void* EcsElectricCurrent;
@@ -500,6 +501,9 @@ BINDGEN_API void* EcsDocDetail_BindgenGetExtern() {
 }
 BINDGEN_API void* EcsDocLink_BindgenGetExtern() {
     return &EcsDocLink;
+}
+BINDGEN_API void* EcsDocUuid_BindgenGetExtern() {
+    return &EcsDocUuid;
 }
 BINDGEN_API void* EcsDontInherit_BindgenGetExtern() {
     return &EcsDontInherit;

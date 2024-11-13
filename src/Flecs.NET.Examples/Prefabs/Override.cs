@@ -31,7 +31,7 @@ public static class Prefabs_Override
         world.Component<Attack>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
         world.Component<Defense>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
 
-        // Attack and Damage are properties that can be shared across many
+        // Attack and Defense are properties that can be shared across many
         // spaceships. This saves memory, and speeds up prefab creation as we don't
         // have to copy the values of Attack and Defense to private components.
         Entity spaceShip = world.Prefab("SpaceShip")

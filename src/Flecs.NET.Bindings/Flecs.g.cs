@@ -154,6 +154,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_doc_get_name", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_doc_get_name(ecs_world_t* world, ulong entity);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_doc_get_uuid", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern byte* ecs_doc_get_uuid(ecs_world_t* world, ulong entity);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_doc_set_brief", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_doc_set_brief(ecs_world_t* world, ulong entity, byte* description);
 
@@ -168,6 +171,9 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_doc_set_name", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_doc_set_name(ecs_world_t* world, ulong entity, byte* name);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_doc_set_uuid", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ecs_doc_set_uuid(ecs_world_t* world, ulong entity, byte* uuid);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_each_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ecs_iter_t ecs_each_id(ecs_world_t* world, ulong id);
@@ -314,7 +320,7 @@ namespace Flecs.NET.Bindings
         public static extern byte* ecs_get_path_w_sep(ecs_world_t* world, ulong parent, ulong child, byte* sep, byte* prefix);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_get_path_w_sep_buf", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static extern void ecs_get_path_w_sep_buf(ecs_world_t* world, ulong parent, ulong child, byte* sep, byte* prefix, ecs_strbuf_t* buf);
+        public static extern void ecs_get_path_w_sep_buf(ecs_world_t* world, ulong parent, ulong child, byte* sep, byte* prefix, ecs_strbuf_t* buf, byte escape);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_get_pipeline", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ulong ecs_get_pipeline(ecs_world_t* world);
@@ -940,6 +946,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_query_fini", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_query_fini(ecs_query_t* query);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_query_get_cache_query", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern ecs_query_t* ecs_query_get_cache_query(ecs_query_t* query);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_query_get_group_ctx", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void* ecs_query_get_group_ctx(ecs_query_t* query, ulong group_id);
 
@@ -1348,6 +1357,9 @@ namespace Flecs.NET.Bindings
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_table_add_id", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern ecs_table_t* ecs_table_add_id(ecs_world_t* world, ecs_table_t* table, ulong id);
 
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_table_clear_entities", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ecs_table_clear_entities(ecs_world_t* world, ecs_table_t* table);
+
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_table_column_count", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern int ecs_table_column_count(ecs_table_t* table);
 
@@ -1572,6 +1584,9 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_from_json_file", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern byte* ecs_world_from_json_file(ecs_world_t* world, byte* filename, ecs_from_json_desc_t* desc);
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_get_flags", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern uint ecs_world_get_flags(ecs_world_t* world);
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_world_stats_copy_last", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ecs_world_stats_copy_last(ecs_world_stats_t* dst, ecs_world_stats_t* src);
@@ -12027,7 +12042,9 @@ namespace Flecs.NET.Bindings
 
         public const uint EcsObserverIsParentDisabled = 16;
 
-        public const uint EcsObserverYieldOnDelete = 64;
+        public const uint EcsObserverYieldOnCreate = 64;
+
+        public const uint EcsObserverYieldOnDelete = 128;
 
         public const uint EcsOsApiHighResolutionTimer = 1;
 
@@ -12078,6 +12095,8 @@ namespace Flecs.NET.Bindings
         public const uint EcsQueryMatchThis = 2048;
 
         public const uint EcsQueryMatchWildcards = 16384;
+
+        public const uint EcsQueryNested = 268435456;
 
         public const uint EcsQueryTableOnly = 128;
 
@@ -12239,13 +12258,13 @@ namespace Flecs.NET.Bindings
 
         public const int FLECS_VARIABLE_COUNT_MAX = 64;
 
-        public const string FLECS_VERSION = "4.0.1";
+        public const string FLECS_VERSION = "4.0.3";
 
         public const int FLECS_VERSION_MAJOR = 4;
 
         public const int FLECS_VERSION_MINOR = 0;
 
-        public const int FLECS_VERSION_PATCH = 1;
+        public const int FLECS_VERSION_PATCH = 3;
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "ECS_AUTO_OVERRIDE_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         private static extern void* ECS_AUTO_OVERRIDE_BindgenGetExtern();
@@ -12450,6 +12469,9 @@ namespace Flecs.NET.Bindings
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDocLink_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         private static extern void* EcsDocLink_BindgenGetExtern();
+
+        [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDocUuid_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private static extern void* EcsDocUuid_BindgenGetExtern();
 
         [System.Runtime.InteropServices.DllImport(BindgenInternal.DllImportPath, EntryPoint = "EcsDontInherit_BindgenGetExtern", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         private static extern void* EcsDontInherit_BindgenGetExtern();
@@ -13265,6 +13287,8 @@ namespace Flecs.NET.Bindings
 
         private static void* EcsDocLink_Ptr;
 
+        private static void* EcsDocUuid_Ptr;
+
         private static void* EcsDontInherit_Ptr;
 
         private static void* EcsDuration_Ptr;
@@ -13852,6 +13876,8 @@ namespace Flecs.NET.Bindings
         public static ref ulong EcsDocDetail => ref *(ulong*)(EcsDocDetail_Ptr == null ? EcsDocDetail_Ptr = EcsDocDetail_BindgenGetExtern() : EcsDocDetail_Ptr);
 
         public static ref ulong EcsDocLink => ref *(ulong*)(EcsDocLink_Ptr == null ? EcsDocLink_Ptr = EcsDocLink_BindgenGetExtern() : EcsDocLink_Ptr);
+
+        public static ref ulong EcsDocUuid => ref *(ulong*)(EcsDocUuid_Ptr == null ? EcsDocUuid_Ptr = EcsDocUuid_BindgenGetExtern() : EcsDocUuid_Ptr);
 
         public static ref ulong EcsDontInherit => ref *(ulong*)(EcsDontInherit_Ptr == null ? EcsDontInherit_Ptr = EcsDontInherit_BindgenGetExtern() : EcsDontInherit_Ptr);
 
