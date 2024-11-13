@@ -1464,6 +1464,15 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
     }
 
     /// <summary>
+    ///     Returns the entity's doc uuid.
+    /// </summary>
+    /// <returns></returns>
+    public string DocUuid()
+    {
+        return NativeString.GetString(ecs_doc_get_uuid(World, Id));
+    }
+
+    /// <summary>
     ///     Return number of alerts for entity.
     /// </summary>
     /// <param name="alert"></param>
@@ -3037,6 +3046,18 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
     {
         using NativeString nativeColor = (NativeString)color;
         ecs_doc_set_color(World, Id, nativeColor);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Set doc uuid.
+    /// </summary>
+    /// <param name="uuid">The uuid string.</param>
+    /// <returns></returns>
+    public ref Entity SetDocUuid(string uuid)
+    {
+        using NativeString nativeUuid = (NativeString)uuid;
+        ecs_doc_set_uuid(World, Id, nativeUuid);
         return ref this;
     }
 
