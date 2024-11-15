@@ -302,6 +302,14 @@ public struct MyModule : IFlecsModule
     }
 }
 
+public class ReparentRootModule : IFlecsModule
+{
+    public void InitModule(World world)
+    {
+        world.Module<ReparentRootModule>("Namespace.ReparentRootModule");
+    }
+}
+
 namespace Namespace
 {
     public struct NestedNameSpaceType;

@@ -377,4 +377,17 @@ public class ModuleTests
         Assert.True(nsChild != 0);
         Assert.True(nsChild.Has(Ecs.Module));
     }
+
+    [Fact]
+    private void RenameReparentRootModule()
+    {
+        using World world = World.Create();
+
+        Entity m = world.Import<ReparentRootModule>();
+        Entity p = m.Parent();
+
+        Assert.True(p != 0);
+        Assert.Equal("Namespace", p.Name());
+        Assert.Equal("ReparentRootModule", m.Name());
+    }
 }
