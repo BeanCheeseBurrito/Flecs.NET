@@ -3076,7 +3076,7 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
         // Module was reparented, cleanup old parent(s)
         Entity current = prevParent;
 
-        do
+        while (current != 0)
         {
             Entity next = current.Parent();
 
@@ -3086,7 +3086,7 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
                 current.Destruct();
 
             current = next;
-        } while (current != 0);
+        }
 
         return Entity(result);
     }
