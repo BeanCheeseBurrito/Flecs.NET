@@ -106,6 +106,17 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     }
 
     /// <summary>
+    ///     Set observer flags.
+    /// </summary>
+    /// <param name="flags">The flags value.</param>
+    /// <returns></returns>
+    public ref ObserverBuilder ObserverFlags(uint flags)
+    {
+        Desc.flags_ |= flags;
+        return ref this;
+    }
+
+    /// <summary>
     ///     Set observer context.
     /// </summary>
     /// <param name="data"></param>
