@@ -451,6 +451,105 @@ public class ObserverTests
     }
 
     [Fact]
+    private void YieldExistingOnCreateFlag()
+    {
+        using World world = World.Create();
+
+        Entity e1 = world.Entity().Add<Tag0>();
+        Entity e2 = world.Entity().Add<Tag0>();
+        Entity e3 = world.Entity().Add<Tag0>().Add<Tag1>();
+
+        int count = 0;
+
+        Observer o = world.Observer()
+            .With<Tag0>()
+            .Event(Ecs.OnAdd)
+            .Event(Ecs.OnRemove)
+            .ObserverFlags(EcsObserverYieldOnCreate)
+            .Each((Entity e) =>
+            {
+                if (e == e1)
+                    count++;
+                if (e == e2)
+                    count += 2;
+                if (e == e3)
+                    count += 3;
+            });
+
+        Assert.Equal(6, count);
+
+        o.Destruct();
+
+        Assert.Equal(6, count);
+    }
+
+    [Fact]
+    private void YieldExistingOnDeleteFlag()
+    {
+        using World world = World.Create();
+
+        Entity e1 = world.Entity().Add<Tag0>();
+        Entity e2 = world.Entity().Add<Tag0>();
+        Entity e3 = world.Entity().Add<Tag0>().Add<Tag1>();
+
+        int count = 0;
+
+        Observer o = world.Observer()
+            .With<Tag0>()
+            .Event(Ecs.OnAdd)
+            .Event(Ecs.OnRemove)
+            .ObserverFlags(EcsObserverYieldOnDelete)
+            .Each((Entity e) =>
+            {
+                if (e == e1)
+                    count++;
+                if (e == e2)
+                    count += 2;
+                if (e == e3)
+                    count += 3;
+            });
+
+        Assert.Equal(0, count);
+
+        o.Destruct();
+
+        Assert.Equal(6, count);
+    }
+
+    [Fact]
+    private void YieldExistingOnCreateDeleteFlag()
+    {
+        using World world = World.Create();
+
+        Entity e1 = world.Entity().Add<Tag0>();
+        Entity e2 = world.Entity().Add<Tag0>();
+        Entity e3 = world.Entity().Add<Tag0>().Add<Tag1>();
+
+        int count = 0;
+
+        Observer o = world.Observer()
+            .With<Tag0>()
+            .Event(Ecs.OnAdd)
+            .Event(Ecs.OnRemove)
+            .ObserverFlags(EcsObserverYieldOnCreate | EcsObserverYieldOnDelete)
+            .Each((Entity e) =>
+            {
+                if (e == e1)
+                    count++;
+                if (e == e2)
+                    count += 2;
+                if (e == e3)
+                    count += 3;
+            });
+
+        Assert.Equal(6, count);
+
+        o.Destruct();
+
+        Assert.Equal(12, count);
+    }
+
+    [Fact]
     private void DefaultCtor()
     {
         using World world = World.Create();
