@@ -1468,4 +1468,120 @@ public class ObserverTests
         Assert.Equal(1, count);
         Assert.True(i == matched);
     }
+
+    [Fact]
+    private void OnSetAfterRemoveOverride()
+    {
+        using World world = World.Create();
+
+        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
+        Entity @base = world.Prefab()
+            .Set(new Position(1, 2));
+
+        Entity e1 = world.Entity().IsA(@base)
+            .Set(new Position(10, 20));
+
+        int count = 0;
+
+        world.Observer<Position>()
+            .Event(Ecs.OnSet)
+            .Each((Iter it, int row, ref Position p) =>
+            {
+                Assert.True(it.Entity(row) == e1);
+                Assert.True(it.Src(0) == @base);
+                Assert.Equal(1, p.X);
+                Assert.Equal(2, p.Y);
+                count++;
+            });
+
+        e1.Remove<Position>();
+
+        Assert.Equal(1, count);
+    }
+
+    [Fact]
+    private void OnSetAfterRemoveOverrideCreateObserverBefore()
+    {
+        using World world = World.Create();
+
+        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
+        int count = 0;
+
+        Entity @base = world.Prefab();
+        Entity e1 = world.Entity();
+
+        world.Observer<Position>()
+            .Event(Ecs.OnSet)
+            .Each((Iter it, int row, ref Position _) =>
+            {
+                Assert.True(it.Entity(row) == e1);
+                Assert.True(it.Src(0) == @base);
+                count++;
+            });
+
+        @base.Set(new Position(1, 2));
+        e1.Add<Position>().IsA(@base);
+
+        Assert.Equal(0, count);
+
+        e1.Remove<Position>();
+
+        Assert.Equal(1, count);
+    }
+
+    [Fact]
+    private void OnSetWithOverrideAfterDelete()
+    {
+        using World world = World.Create();
+
+        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
+        Entity @base = world.Prefab()
+            .Set(new Position(1, 2));
+
+        Entity e1 = world.Entity().IsA(@base)
+            .Set(new Position(10, 20));
+
+        int count = 0;
+
+        world.Observer<Position>()
+            .Event(Ecs.OnSet)
+            .Each((Iter _, int _, ref Position _) =>
+            {
+                count++;
+            });
+
+        e1.Destruct();
+
+        Assert.Equal(0, count);
+    }
+
+    [Fact]
+    private void OnSetWithOverrideAfterClear()
+    {
+        using World world = World.Create();
+
+        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+
+        Entity @base = world.Prefab()
+            .Set(new Position(1, 2));
+
+        Entity e1 = world.Entity().IsA(@base)
+            .Set(new Position(10, 20));
+
+        int count = 0;
+
+        world.Observer<Position>()
+            .Event(Ecs.OnSet)
+            .Each((Iter _, int _, ref Position _) =>
+            {
+                count++;
+            });
+
+        e1.Clear();
+
+        Assert.Equal(0, count);
+    }
 }
