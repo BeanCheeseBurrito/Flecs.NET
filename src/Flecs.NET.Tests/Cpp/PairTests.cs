@@ -1114,4 +1114,57 @@ public unsafe class PairTests
 
         Assert.True(bob.Has<Likes>(alice));
     }
+
+    [Fact]
+    private void ModifiedTagSecond()
+    {
+        using World world = World.Create();
+
+        int count = 0;
+        world.Observer<Position>()
+            .TermAt(0).Second<Tag>()
+            .Event(Ecs.OnSet)
+            .Each((ref Position p) =>
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+                count++;
+            });
+
+        Entity e = world.Entity();
+
+        ref Position p = ref e.EnsureFirst<Position, Tag>();
+        p.X = 10;
+        p.Y = 20;
+        e.Modified<Position, Tag>();
+
+        Assert.Equal(1, count);
+    }
+
+    [Fact]
+    private void ModifiedTagFirst()
+    {
+        using World world = World.Create();
+
+        int count = 0;
+        world.Observer()
+            .With<Tag, Position>()
+            .Event(Ecs.OnSet)
+            .Each((Iter it, int row) =>
+            {
+                ref Position p = ref it.FieldAt<Position>(0, row);
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+                count++;
+            });
+
+        Entity e = world.Entity();
+
+        ref Position p = ref e.EnsureSecond<Tag, Position>();
+        p.X = 10;
+        p.Y = 20;
+        e.Modified<Tag, Position>();
+
+        Assert.Equal(1, count);
+    }
 }

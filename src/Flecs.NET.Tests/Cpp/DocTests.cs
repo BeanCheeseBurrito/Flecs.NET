@@ -73,7 +73,7 @@ public class DocTests
 
         Assert.True(e.Has<EcsDocDescription>(Ecs.Doc.Uuid));
 
-        Assert.Equal(e.DocUuid(), "81f50b40-09ff-4ce0-a388-4a52a14052c7");
+        Assert.Equal("81f50b40-09ff-4ce0-a388-4a52a14052c7", e.DocUuid());
     }
 
     [Fact]
