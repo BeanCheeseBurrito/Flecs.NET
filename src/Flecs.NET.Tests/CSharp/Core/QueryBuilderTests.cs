@@ -92,16 +92,19 @@ public class QueryBuilderTests
         world.Component<Velocity>();
 
         world.QueryBuilder()
+            .Cached()
             .With<Position>()
             .TermAt<Position>(0)
             .Build();
 
         world.QueryBuilder()
+            .Cached()
             .With<Tag, Position>()
             .TermAt<Position>(0)
             .Build();
 
         world.QueryBuilder()
+            .Cached()
             .With<Tag>().Second<Position>()
             .TermAt<Position>(0)
             .Build();
@@ -109,6 +112,7 @@ public class QueryBuilderTests
         Assert.Throws<Ecs.AssertionException>(() =>
         {
             world.QueryBuilder()
+                .Cached()
                 .With<Tag>().Second<Position>()
                 .TermAt<Tag>(0)
                 .Build();
@@ -117,6 +121,7 @@ public class QueryBuilderTests
         Assert.Throws<Ecs.AssertionException>(() =>
         {
             world.QueryBuilder()
+                .Cached()
                 .With<Velocity>().Second<Position>()
                 .TermAt<Position>(0)
                 .Build();
@@ -124,14 +129,15 @@ public class QueryBuilderTests
 
         Assert.Throws<Ecs.AssertionException>(() =>
         {
-            world.Component<Tag>().Entity.Add(Ecs.PairIsTag);
+            world.Component<Tag>().Add(Ecs.PairIsTag);
 
             world.QueryBuilder()
+                .Cached()
                 .With<Tag, Position>()
                 .TermAt<Position>(0)
                 .Build();
 
-            world.Component<Tag>().Entity.Remove(Ecs.PairIsTag);
+            world.Component<Tag>().Remove(Ecs.PairIsTag);
         });
     }
 }

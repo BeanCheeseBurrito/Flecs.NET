@@ -232,7 +232,7 @@ public unsafe class PairTests
     {
         using World world = World.Create();
 
-        world.Component<Pair>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Pair>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Entity()
             .Set<Pair, Position>(new Pair { Value = 10 });
@@ -1015,7 +1015,7 @@ public unsafe class PairTests
     {
         using World world = World.Create();
 
-        world.Component<Tag>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Tag>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Entity().Add<Tag>();
         Entity self = world.Entity().IsA(@base).Add<Tag>();
@@ -1030,7 +1030,7 @@ public unsafe class PairTests
     {
         using World world = World.Create();
 
-        world.Component<Tag>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Tag>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Entity().Add<Tag>();
         Entity self = world.Entity().IsA(@base);
@@ -1101,7 +1101,7 @@ public unsafe class PairTests
     {
         using World world = World.Create();
 
-        world.Component<Likes>().Entity.Add(Ecs.Symmetric);
+        world.Component<Likes>().Add(Ecs.Symmetric);
 
         Entity idk = world.Entity("Idk");
 

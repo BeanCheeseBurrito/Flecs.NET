@@ -92,7 +92,7 @@ public unsafe class WorldFactoryTests
             });
 
         Assert.True(system.Id != 0);
-        Assert.Equal("MySystem", system.Entity.Name());
+        Assert.Equal("MySystem", system.Name());
 
         Entity e = world.Entity()
             .Set(new Position { X = 10, Y = 20 })
@@ -131,7 +131,7 @@ public unsafe class WorldFactoryTests
             });
 
         Assert.True(system.Id != 0);
-        Assert.Equal("MySystem", system.Entity.Name());
+        Assert.Equal("MySystem", system.Name());
 
         Entity e = world.Entity()
             .Set(new Position { X = 10, Y = 20 })

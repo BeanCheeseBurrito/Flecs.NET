@@ -787,7 +787,7 @@ public unsafe class EntityTests
 
         Entity entity = world.Entity();
 
-        entity = entity.Id.AddFlags(ECS_PAIR);
+        entity = entity.AddFlags(ECS_PAIR);
 
         Assert.True((entity & ECS_PAIR) != 0);
     }
@@ -801,11 +801,11 @@ public unsafe class EntityTests
 
         ulong id = entity;
 
-        entity = entity.Id.AddFlags(ECS_PAIR);
+        entity = entity.AddFlags(ECS_PAIR);
 
         Assert.True((entity & ECS_PAIR) != 0);
 
-        entity = entity.Id.RemoveFlags();
+        entity = entity.RemoveFlags();
 
         Assert.True(entity == id);
     }
@@ -817,13 +817,13 @@ public unsafe class EntityTests
 
         Entity entity = world.Entity();
 
-        entity = entity.Id.AddFlags(ECS_PAIR);
+        entity = entity.AddFlags(ECS_PAIR);
 
-        Assert.True(entity.Id.HasFlags(ECS_PAIR));
+        Assert.True(entity.HasFlags(ECS_PAIR));
 
-        entity = entity.Id.RemoveFlags();
+        entity = entity.RemoveFlags();
 
-        Assert.True(!entity.Id.HasFlags(ECS_PAIR));
+        Assert.True(!entity.HasFlags(ECS_PAIR));
     }
 
     [Fact]
@@ -1171,8 +1171,8 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
-        world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Velocity>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity prefab = world.Prefab()
             .Add<Position>()
@@ -1193,8 +1193,8 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
-        world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Velocity>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity prefab = world.Prefab()
             .Add<Position>()
@@ -1216,8 +1216,8 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
-        world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Velocity>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity prefab = world.Prefab()
             .Add<Position>()
@@ -1243,7 +1243,7 @@ public unsafe class EntityTests
 
         Component<MyTag> comp = world.Component<MyTag>();
 
-        EcsComponent* ptr = comp.Entity.GetPtr<EcsComponent>();
+        EcsComponent* ptr = comp.GetPtr<EcsComponent>();
         Assert.Equal(0, ptr->size);
         Assert.Equal(0, ptr->alignment);
     }
@@ -1307,7 +1307,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.CanToggle);
+        world.Component<Position>().Add(Ecs.CanToggle);
 
         Entity e = world.Entity()
             .Add<Position>();
@@ -1321,7 +1321,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.CanToggle);
+        world.Component<Position>().Add(Ecs.CanToggle);
 
         Entity e = world.Entity()
             .Add<Position>()
@@ -1335,7 +1335,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.CanToggle);
+        world.Component<Position>().Add(Ecs.CanToggle);
 
         Entity e = world.Entity()
             .Add<Position>()
@@ -1349,7 +1349,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.CanToggle);
+        world.Component<Position>().Add(Ecs.CanToggle);
 
         Entity e = world.Entity()
             .Add<Position, TgtA>();
@@ -1363,7 +1363,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.CanToggle);
+        world.Component<Position>().Add(Ecs.CanToggle);
 
         Entity e = world.Entity()
             .Add<Position, Tgt>()
@@ -1377,7 +1377,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.CanToggle);
+        world.Component<Position>().Add(Ecs.CanToggle);
 
         Entity e = world.Entity()
             .Add<Position, Tgt>()
@@ -1391,7 +1391,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.CanToggle);
+        world.Component<Position>().Add(Ecs.CanToggle);
 
         Entity rel = world.Entity();
         Entity tgtA = world.Entity();
@@ -1439,7 +1439,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.CanToggle);
+        world.Component<Position>().Add(Ecs.CanToggle);
 
         Entity tgtA = world.Entity();
         Entity tgtB = world.Entity();
@@ -1456,7 +1456,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.CanToggle);
+        world.Component<Position>().Add(Ecs.CanToggle);
 
         Entity tgt = world.Entity();
 
@@ -1472,7 +1472,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.CanToggle);
+        world.Component<Position>().Add(Ecs.CanToggle);
 
         Entity tgt = world.Entity();
 
@@ -1536,7 +1536,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Entity()
             .AutoOverride<Position>();
@@ -1575,7 +1575,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
         Entity tgtA = world.Entity();
         Entity tgtB = world.Entity();
 
@@ -1621,7 +1621,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Entity()
             .AutoOverride<Position, Tag0>()
@@ -1642,7 +1642,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Entity()
             .SetAutoOverride(new Position(10, 20));
@@ -1668,7 +1668,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Position plvalue = new Position(10, 20);
 
@@ -1696,7 +1696,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Entity()
             .SetAutoOverride<Position, Tgt>(new Position(10, 20));
@@ -1722,7 +1722,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity tgt = world.Entity();
 
@@ -1750,7 +1750,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Tgt>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Tgt>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Entity()
             .SetAutoOverride<Tgt, Position>(new Position(10, 20));
@@ -2498,7 +2498,7 @@ public unsafe class EntityTests
         });
 
         Component<Self> self = world.Component<Self>();
-        Assert.True(!self.Entity.Has(tag));
+        Assert.True(!self.Has(tag));
 
         int count = 0;
         using Query query = world.QueryBuilder()
@@ -2533,7 +2533,7 @@ public unsafe class EntityTests
         });
 
         Component<Self> self = world.Component<Self>();
-        Assert.True(!self.Entity.Has<Likes>(bob));
+        Assert.True(!self.Has<Likes>(bob));
 
         int count = 0;
         using Query q = world.QueryBuilder()
@@ -2570,7 +2570,7 @@ public unsafe class EntityTests
         });
 
         Component<Self> self = world.Component<Self>();
-        Assert.True(!self.Entity.Has(likes, bob));
+        Assert.True(!self.Has(likes, bob));
 
         int count = 0;
         using Query q = world.QueryBuilder()
@@ -2662,7 +2662,7 @@ public unsafe class EntityTests
         Assert.True(world.Lookup("P.C3") == parent.Lookup("C3"));
 
         Component<Self> self = world.Component<Self>();
-        Assert.True(!self.Entity.Has(Ecs.ChildOf, parent));
+        Assert.True(!self.Has(Ecs.ChildOf, parent));
 
         int count = 0;
         using Query q = world.QueryBuilder()
@@ -3752,7 +3752,7 @@ public unsafe class EntityTests
 
         Id id = world.Id(e);
 
-        Assert.True(id.Entity() == e);
+        Assert.True(id.ToEntity() == e);
     }
 
     [Fact]
@@ -4306,7 +4306,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<First>().Entity.Add(Ecs.Exclusive);
+        world.Component<First>().Add(Ecs.Exclusive);
 
         Entity e = world.Entity();
         Entity o1 = world.Entity();
@@ -4329,7 +4329,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<R>().Entity.Add(Ecs.Exclusive);
+        world.Component<R>().Add(Ecs.Exclusive);
 
         Entity e = world.Entity();
 
@@ -4469,7 +4469,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Rel>().Entity.Add(EcsTraversable);
+        world.Component<Rel>().Add(EcsTraversable);
 
         Entity e1 = world.Entity();
         Entity e2 = world.Entity().Add<Rel>(e1);
@@ -4595,7 +4595,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Velocity>().Entity.Add(Ecs.Sparse);
+        world.Component<Velocity>().Add(Ecs.Sparse);
 
         Entity e = world.Entity().Set(new Velocity(1, 2));
 
@@ -4611,7 +4611,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Velocity>().Entity.Add(Ecs.Sparse);
+        world.Component<Velocity>().Add(Ecs.Sparse);
 
         Entity e = world.Entity().Insert((ref Velocity v) =>
         {
@@ -4632,7 +4632,7 @@ public unsafe class EntityTests
         using World world = World.Create();
 
         world.Component<Position>();
-        world.Component<Velocity>().Entity.Add(Ecs.Sparse);
+        world.Component<Velocity>().Add(Ecs.Sparse);
 
         Entity e = world.Entity().Insert((ref Position p, ref Velocity v) =>
         {
@@ -4659,7 +4659,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Velocity>().Entity.Add(Ecs.Sparse);
+        world.Component<Velocity>().Add(Ecs.Sparse);
 
         Entity @base = world.Entity().Set(new Velocity(1, 2));
 
@@ -4678,7 +4678,7 @@ public unsafe class EntityTests
     {
         using World world = World.Create();
 
-        world.Component<Velocity>().Entity.Add(Ecs.Sparse);
+        world.Component<Velocity>().Add(Ecs.Sparse);
 
         Entity @base = world.Entity().Set(new Velocity(1, 2));
 

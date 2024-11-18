@@ -821,7 +821,7 @@ public unsafe class QueryTests
     {
         using World world = World.Create();
 
-        world.Component<SharedComponent>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<SharedComponent>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         using Query<UnmanagedComponent, SharedComponent> query = world.Query<UnmanagedComponent, SharedComponent>();
 
@@ -848,7 +848,7 @@ public unsafe class QueryTests
     {
         using World world = World.Create();
 
-        world.Component<SharedComponent>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<SharedComponent>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         using Query<ManagedComponent, SharedComponent> query = world.Query<ManagedComponent, SharedComponent>();
 
@@ -875,7 +875,7 @@ public unsafe class QueryTests
     {
         using World world = World.Create();
 
-        world.Component<SparseComponent>().Entity.Add(Ecs.Sparse);
+        world.Component<SparseComponent>().Add(Ecs.Sparse);
 
         using Query<UnmanagedComponent, SparseComponent> query = world.Query<UnmanagedComponent, SparseComponent>();
 
@@ -902,7 +902,7 @@ public unsafe class QueryTests
     {
         using World world = World.Create();
 
-        world.Component<SparseComponent>().Entity.Add(Ecs.Sparse);
+        world.Component<SparseComponent>().Add(Ecs.Sparse);
 
         using Query<ManagedComponent, SparseComponent> query = world.Query<ManagedComponent, SparseComponent>();
 
@@ -929,8 +929,8 @@ public unsafe class QueryTests
     {
         using World world = World.Create();
 
-        world.Component<SparseComponent>().Entity.Add(Ecs.Sparse);
-        world.Component<SharedComponent>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<SparseComponent>().Add(Ecs.Sparse);
+        world.Component<SharedComponent>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         using Query<UnmanagedComponent, SparseComponent, SharedComponent> query =
             world.Query<UnmanagedComponent, SparseComponent, SharedComponent>();
@@ -960,8 +960,8 @@ public unsafe class QueryTests
     {
         using World world = World.Create();
 
-        world.Component<SparseComponent>().Entity.Add(Ecs.Sparse);
-        world.Component<SharedComponent>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<SparseComponent>().Add(Ecs.Sparse);
+        world.Component<SharedComponent>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         using Query<ManagedComponent, SparseComponent, SharedComponent> query =
             world.Query<ManagedComponent, SparseComponent, SharedComponent>();

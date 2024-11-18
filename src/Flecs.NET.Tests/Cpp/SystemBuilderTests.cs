@@ -473,7 +473,7 @@ public class SystemBuilderTests
                 }
             });
 
-        Assert.True(s.Entity.Has<Position>());
+        Assert.True(s.Has<Position>());
     }
 
     [Fact]
