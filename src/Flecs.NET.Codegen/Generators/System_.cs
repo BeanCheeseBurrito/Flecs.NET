@@ -9,9 +9,14 @@ public class System_ : GeneratorBase
 {
     public override void Generate()
     {
+        AddSource($"System.Id.g.cs", Id.GenerateExtensions(Type.System_));
+        AddSource($"System.Entity.g.cs", Entity.GenerateExtensions(Type.System_));
+
         for (int i = 0; i < Generator.GenericCount; i++)
         {
             AddSource($"System/T{i + 1}.g.cs", GenerateSystem(i));
+            AddSource($"System.Id/T{i + 1}.g.cs", Id.GenerateExtensions(Type.System, i));
+            AddSource($"System.Entity/T{i + 1}.g.cs", Entity.GenerateExtensions(Type.System, i));
         }
     }
 
@@ -31,7 +36,7 @@ public class System_ : GeneratorBase
             ///     A type-safe wrapper around <see cref="System"/> that takes {{i + 1}} type arguments.
             /// </summary>
             /// {{Generator.XmlTypeParameters[i]}}
-            public unsafe struct {{systemTypeName}} : IEquatable<{{systemTypeName}}>, IEntity
+            public unsafe partial struct {{systemTypeName}} : IEquatable<{{systemTypeName}}>, IEntity<{{systemTypeName}}>
             {
                 private System_ _system;
             
@@ -66,12 +71,6 @@ public class System_ : GeneratorBase
                 {
                     {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
                     _system = new System_(entity);
-                }
-            
-                /// <inheritdoc cref="System_.Destruct()"/>
-                public void Destruct()
-                {
-                    _system.Destruct();
                 }
             
                 ///
@@ -188,7 +187,7 @@ public class System_ : GeneratorBase
                     return ToId(system);
                 }
             
-                /// <inheritdoc cref="System_.ToEntity"/>
+                /// <inheritdoc cref="System_.ToEntity(System_)"/>
                 public static implicit operator Entity({{systemTypeName}} system)
                 {
                     return ToEntity(system);
@@ -206,7 +205,7 @@ public class System_ : GeneratorBase
                     return system.Id;
                 }
             
-                /// <inheritdoc cref="System_.ToEntity"/>
+                /// <inheritdoc cref="System_.ToEntity(System_)"/>
                 public static Entity ToEntity({{systemTypeName}} system)
                 {
                     return system.Entity;

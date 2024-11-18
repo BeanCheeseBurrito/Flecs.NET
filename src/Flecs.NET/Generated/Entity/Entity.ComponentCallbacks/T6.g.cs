@@ -23,7 +23,7 @@ public unsafe partial struct Entity
     ///     application to ensure access is protected.  <br/><br/>
     /// </summary>
     /// <param name="callback">The callback.</param>
-    /// System.String[]
+    /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam> <typeparam name="T3">The T3 component type.</typeparam> <typeparam name="T4">The T4 component type.</typeparam> <typeparam name="T5">The T5 component type.</typeparam>
     /// <returns>True if the entity has the specified components.</returns>
     public bool Read<T0, T1, T2, T3, T4, T5>(Ecs.ReadRefCallback<T0, T1, T2, T3, T4, T5> callback)
     {
@@ -47,7 +47,7 @@ public unsafe partial struct Entity
     ///     application to ensure access is protected.  <br/><br/>
     /// </summary>
     /// <param name="callback">The callback.</param>
-    /// System.String[]
+    /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam> <typeparam name="T3">The T3 component type.</typeparam> <typeparam name="T4">The T4 component type.</typeparam> <typeparam name="T5">The T5 component type.</typeparam>
     /// <returns>True if the entity has the specified components.</returns>
     public bool Write<T0, T1, T2, T3, T4, T5>(Ecs.WriteRefCallback<T0, T1, T2, T3, T4, T5> callback)
     {
@@ -70,7 +70,7 @@ public unsafe partial struct Entity
     ///     has been invoked.
     /// </summary>
     /// <param name="callback">The callback.</param>
-    /// System.String[]
+    /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam> <typeparam name="T3">The T3 component type.</typeparam> <typeparam name="T4">The T4 component type.</typeparam> <typeparam name="T5">The T5 component type.</typeparam>
     /// <returns>Reference to self.</returns>
     public ref Entity Insert<T0, T1, T2, T3, T4, T5>(Ecs.InsertRefCallback<T0, T1, T2, T3, T4, T5> callback)
     {

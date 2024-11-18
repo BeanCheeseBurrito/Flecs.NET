@@ -6,7 +6,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     A wrapper around pipeline.
 /// </summary>
-public unsafe struct Pipeline : IEquatable<Pipeline>
+public unsafe partial struct Pipeline : IEquatable<Pipeline>, IEntity<Pipeline>
 {
     private Entity _entity;
 

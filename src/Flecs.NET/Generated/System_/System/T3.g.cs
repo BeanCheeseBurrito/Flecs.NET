@@ -11,7 +11,7 @@ namespace Flecs.NET.Core;
 ///     A type-safe wrapper around <see cref="System"/> that takes 3 type arguments.
 /// </summary>
 /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam>
-public unsafe struct System<T0, T1, T2> : IEquatable<System<T0, T1, T2>>, IEntity
+public unsafe partial struct System<T0, T1, T2> : IEquatable<System<T0, T1, T2>>, IEntity<System<T0, T1, T2>>
 {
     private System_ _system;
 
@@ -46,12 +46,6 @@ public unsafe struct System<T0, T1, T2> : IEquatable<System<T0, T1, T2>>, IEntit
     {
         TypeHelper<T0, T1, T2>.AssertNoTags();
         _system = new System_(entity);
-    }
-
-    /// <inheritdoc cref="System_.Destruct()"/>
-    public void Destruct()
-    {
-        _system.Destruct();
     }
 
     ///
@@ -168,7 +162,7 @@ public unsafe struct System<T0, T1, T2> : IEquatable<System<T0, T1, T2>>, IEntit
         return ToId(system);
     }
 
-    /// <inheritdoc cref="System_.ToEntity"/>
+    /// <inheritdoc cref="System_.ToEntity(System_)"/>
     public static implicit operator Entity(System<T0, T1, T2> system)
     {
         return ToEntity(system);
@@ -186,7 +180,7 @@ public unsafe struct System<T0, T1, T2> : IEquatable<System<T0, T1, T2>>, IEntit
         return system.Id;
     }
 
-    /// <inheritdoc cref="System_.ToEntity"/>
+    /// <inheritdoc cref="System_.ToEntity(System_)"/>
     public static Entity ToEntity(System<T0, T1, T2> system)
     {
         return system.Entity;

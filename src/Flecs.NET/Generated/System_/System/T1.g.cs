@@ -11,7 +11,7 @@ namespace Flecs.NET.Core;
 ///     A type-safe wrapper around <see cref="System"/> that takes 1 type arguments.
 /// </summary>
 /// <typeparam name="T0">The T0 component type.</typeparam>
-public unsafe struct System<T0> : IEquatable<System<T0>>, IEntity
+public unsafe partial struct System<T0> : IEquatable<System<T0>>, IEntity<System<T0>>
 {
     private System_ _system;
 
@@ -46,12 +46,6 @@ public unsafe struct System<T0> : IEquatable<System<T0>>, IEntity
     {
         TypeHelper<T0>.AssertNoTags();
         _system = new System_(entity);
-    }
-
-    /// <inheritdoc cref="System_.Destruct()"/>
-    public void Destruct()
-    {
-        _system.Destruct();
     }
 
     ///
@@ -168,7 +162,7 @@ public unsafe struct System<T0> : IEquatable<System<T0>>, IEntity
         return ToId(system);
     }
 
-    /// <inheritdoc cref="System_.ToEntity"/>
+    /// <inheritdoc cref="System_.ToEntity(System_)"/>
     public static implicit operator Entity(System<T0> system)
     {
         return ToEntity(system);
@@ -186,7 +180,7 @@ public unsafe struct System<T0> : IEquatable<System<T0>>, IEntity
         return system.Id;
     }
 
-    /// <inheritdoc cref="System_.ToEntity"/>
+    /// <inheritdoc cref="System_.ToEntity(System_)"/>
     public static Entity ToEntity(System<T0> system)
     {
         return system.Entity;

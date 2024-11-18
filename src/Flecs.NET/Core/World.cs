@@ -2757,7 +2757,7 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public Entity Prefab<T>()
     {
-        return new Component<T>(Handle).Entity.Add(EcsPrefab);
+        return new Component<T>(Handle).Add(EcsPrefab);
     }
 
     /// <summary>
@@ -2768,7 +2768,7 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public Entity Prefab<T>(string name)
     {
-        return new Component<T>(Handle, name).Entity.Add(EcsPrefab);
+        return new Component<T>(Handle, name).Add(EcsPrefab);
     }
 
     /// <summary>

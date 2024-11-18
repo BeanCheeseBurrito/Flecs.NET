@@ -9,6 +9,7 @@ public enum Type
 {
     Alert,
     AlertBuilder,
+    Component,
     Entity,
     IIterable,
     IterIterable,
@@ -22,6 +23,8 @@ public enum Type
     System,
     System_,
     SystemBuilder,
+    TimerEntity,
     TypeHelper,
+    UntypedComponent,
     WorkerIterable
 }

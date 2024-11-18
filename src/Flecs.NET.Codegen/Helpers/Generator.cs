@@ -227,6 +227,9 @@ public static class Generator
 
     public static string GetTypeName(Type type, int i = -1)
     {
+        if (type == Type.Component)
+            return $"{type}<TComponent>";
+
         return i < 0
             ? type.ToString()
             : GenericNames[(int)type][i];

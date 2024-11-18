@@ -135,7 +135,7 @@ public unsafe struct Id : IEquatable<Id>
     ///     Return id as entity. (only allowed when id is valid entity)
     /// </summary>
     /// <returns></returns>
-    public Entity Entity()
+    public Entity ToEntity()
     {
         Ecs.Assert(!IsPair());
         Ecs.Assert(Flags() == 0);

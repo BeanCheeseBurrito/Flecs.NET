@@ -6,7 +6,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     A wrapper for an alert.
 /// </summary>
-public unsafe struct Alert : IEquatable<Alert>
+public unsafe partial struct Alert : IEquatable<Alert>, IEntity<Alert>
 {
     private Entity _entity;
 

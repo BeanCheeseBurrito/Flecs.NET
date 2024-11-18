@@ -9,7 +9,7 @@ namespace Flecs.NET.Core;
 /// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores")]
-public unsafe struct System_ : IEquatable<System_>
+public unsafe partial struct System_ : IEquatable<System_>
 {
     private Entity _entity;
 
@@ -45,14 +45,6 @@ public unsafe struct System_ : IEquatable<System_>
     public System_(Entity entity)
     {
         _entity = entity;
-    }
-
-    /// <summary>
-    ///     Destructs the system.
-    /// </summary>
-    public void Destruct()
-    {
-        Entity.Destruct();
     }
 
     /// <summary>

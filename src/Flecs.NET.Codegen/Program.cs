@@ -1,7 +1,9 @@
 using Flecs.NET.Codegen.Helpers;
 using Flecs.NET.Codegen.Generators;
 
+Generate<Alert>();
 Generate<AlertBuilder>();
+Generate<Component>();
 Generate<BindingContext>();
 Generate<Ecs>();
 Generate<Entity>();
@@ -17,7 +19,9 @@ Generate<Query>();
 Generate<QueryBuilder>();
 Generate<System_>();
 Generate<SystemBuilder>();
+Generate<TimerEntity>();
 Generate<TypeHelper>();
+Generate<UntypedComponent>();
 Generate<WorkerIterable>();
 Generate<World>();
 

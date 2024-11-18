@@ -6,7 +6,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     Timer struct.
 /// </summary>
-public unsafe struct TimerEntity : IEquatable<TimerEntity>
+public unsafe partial struct TimerEntity : IEquatable<TimerEntity>, IEntity<TimerEntity>
 {
     private Entity _entity;
 

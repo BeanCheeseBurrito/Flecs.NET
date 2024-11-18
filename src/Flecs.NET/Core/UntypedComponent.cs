@@ -8,7 +8,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     An untyped component.
 /// </summary>
-public unsafe partial struct UntypedComponent : IEquatable<UntypedComponent>
+public unsafe partial struct UntypedComponent : IEquatable<UntypedComponent>, IEntity<UntypedComponent>
 {
     private Entity _entity;
 
