@@ -92,8 +92,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
-            world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+            world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
+            world.Component<Velocity>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Entity @base = world.Entity()
                 .Set(new Velocity(1, 2));
@@ -422,8 +422,8 @@ namespace Flecs.NET.Tests.Cpp
         {
             using World world = World.Create();
 
-            world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
-            world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+            world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
+            world.Component<Velocity>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
             Entity @base = world.Entity()
                 .Set(new Velocity(1, 2));
@@ -575,7 +575,7 @@ namespace Flecs.NET.Tests.Cpp
                     }
                 });
 
-            Assert.Equal("bar", system1.Entity.Name());
+            Assert.Equal("bar", system1.Name());
 
             Entity e = world.Lookup("foo");
             Assert.True(e.Id != 0);
@@ -1395,7 +1395,7 @@ namespace Flecs.NET.Tests.Cpp
                         count++;
                     }
                 })
-                .Entity.Add(tag);
+                .Add(tag);
 
             world.System()
                 .Kind(onFrame)
@@ -1407,7 +1407,7 @@ namespace Flecs.NET.Tests.Cpp
                         count++;
                     }
                 })
-                .Entity.Add(tag);
+                .Add(tag);
 
             world.System()
                 .Kind(preFrame)
@@ -1419,7 +1419,7 @@ namespace Flecs.NET.Tests.Cpp
                         count++;
                     }
                 })
-                .Entity.Add(tag);
+                .Add(tag);
 
             Assert.Equal(0, count);
 
@@ -2242,7 +2242,7 @@ namespace Flecs.NET.Tests.Cpp
 
             TimerEntity t = world.Timer().Interval(2.1f);
 
-            ref EcsTimer timer = ref t.Entity.Ensure<EcsTimer>();
+            ref EcsTimer timer = ref t.Ensure<EcsTimer>();
             timer.time = 0;
 
             int sysAInvoked = 0, sysBInvoked = 0;

@@ -572,7 +572,7 @@ public unsafe class TableTests
     {
         using World world = World.Create();
 
-        world.Component<Rel>().Entity.Add(Ecs.Traversable);
+        world.Component<Rel>().Add(Ecs.Traversable);
 
         Entity e1 = world.Entity();
         Entity e2 = world.Entity().Add<Rel>(e1);

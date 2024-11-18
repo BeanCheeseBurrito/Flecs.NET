@@ -971,7 +971,7 @@ public class ObserverTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.Sparse);
+        world.Component<Position>().Add(Ecs.Sparse);
 
         int count = 0;
 
@@ -1387,7 +1387,7 @@ public class ObserverTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         int count = 0;
         Entity matched = default;
@@ -1415,7 +1415,7 @@ public class ObserverTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         int count = 0;
         Entity matched = default;
@@ -1443,7 +1443,7 @@ public class ObserverTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         int count = 0;
         Entity matched = default;
@@ -1474,7 +1474,7 @@ public class ObserverTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Prefab()
             .Set(new Position(1, 2));
@@ -1505,7 +1505,7 @@ public class ObserverTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         int count = 0;
 
@@ -1536,7 +1536,7 @@ public class ObserverTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Prefab()
             .Set(new Position(1, 2));
@@ -1563,7 +1563,7 @@ public class ObserverTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Prefab()
             .Set(new Position(1, 2));

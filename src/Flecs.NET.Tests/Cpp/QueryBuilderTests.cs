@@ -1166,7 +1166,7 @@ public unsafe class QueryBuilderTests
     {
         using World world = World.Create();
 
-        world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Other>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         using Query<Self> q = world.QueryBuilder<Self>()
             .With<Other>().Src().Up(Ecs.IsA).In()
@@ -1210,7 +1210,7 @@ public unsafe class QueryBuilderTests
     {
         using World world = World.Create();
 
-        world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Other>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         using Query<Self> q = world.QueryBuilder<Self>()
             .With<Other>().Src().Self().Up(Ecs.IsA).In()
@@ -1364,7 +1364,7 @@ public unsafe class QueryBuilderTests
     {
         using World world = World.Create();
 
-        world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Other>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         using Query<Self, Other> q = world.QueryBuilder<Self, Other>()
             .TermAt(1).Src().Up(Ecs.IsA)
@@ -1398,7 +1398,7 @@ public unsafe class QueryBuilderTests
     {
         using World world = World.Create();
 
-        world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Other>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         using Query<Self, Other> q = world.QueryBuilder<Self, Other>()
             .TermAt(1).Src().Self().Up(Ecs.IsA)
@@ -1504,7 +1504,7 @@ public unsafe class QueryBuilderTests
     {
         using World world = World.Create();
 
-        world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Other>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         using Query<Self, Other> q = world.QueryBuilder<Self, Other>()
             .TermAt(1).Up(Ecs.IsA)
@@ -1538,7 +1538,7 @@ public unsafe class QueryBuilderTests
     {
         using World world = World.Create();
 
-        world.Component<Other>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Other>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         using Query<Self, Other> q = world.QueryBuilder<Self, Other>()
             .TermAt(1).Self().Up(Ecs.IsA)
@@ -3093,7 +3093,7 @@ public unsafe class QueryBuilderTests
         using World world = World.Create();
 
 
-        world.Component<Rel>().Entity.Add(Ecs.Traversable);
+        world.Component<Rel>().Add(Ecs.Traversable);
 
         using Query<Self> q = world.QueryBuilder<Self>()
             .With<Other>().Src().Up<Rel>().In()
@@ -3138,7 +3138,7 @@ public unsafe class QueryBuilderTests
         using World world = World.Create();
 
 
-        world.Component<Rel>().Entity.Add(Ecs.Traversable);
+        world.Component<Rel>().Add(Ecs.Traversable);
 
         Entity tag = world.Entity();
         Entity foo = world.Entity();

@@ -638,8 +638,8 @@ public unsafe class QueryTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
-        world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Velocity>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Entity()
             .Set(new Velocity(1, 2));
@@ -762,7 +762,7 @@ public unsafe class QueryTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.Sparse);
+        world.Component<Position>().Add(Ecs.Sparse);
         world.Component<Velocity>();
 
         Entity entity = world.Entity()
@@ -951,7 +951,7 @@ public unsafe class QueryTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.Sparse);
+        world.Component<Position>().Add(Ecs.Sparse);
         world.Component<Velocity>();
 
         Entity entity = world.Entity()
@@ -1044,8 +1044,8 @@ public unsafe class QueryTests
     {
         using World world = World.Create();
 
-        world.Component<Position>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
-        world.Component<Velocity>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Position>().Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Velocity>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         Entity @base = world.Entity()
             .Set(new Velocity(1, 2));
@@ -1320,7 +1320,7 @@ public unsafe class QueryTests
         using World world = World.Create();
 
         Component<Template<int>> comp = world.Component<Template<int>>();
-        Assert.Equal("Template<System.Int32>", comp.Entity.Name());
+        Assert.Equal("Template<System.Int32>", comp.Name());
 
         int count = 0;
         using Query<Position> q = world.QueryBuilder<Position>().Expr("Template<System.Int32>").Build();
@@ -1350,7 +1350,7 @@ public unsafe class QueryTests
         using World world = World.Create();
 
         Component<Template<int>> comp = world.Component<Template<int>>();
-        Assert.Equal("Template<System.Int32>", comp.Entity.Name());
+        Assert.Equal("Template<System.Int32>", comp.Name());
 
         int count = 0;
         using Query<Position, Template<int>> q = world.Query<Position, Template<int>>();
