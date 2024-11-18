@@ -38,9 +38,9 @@ public static class GameMechanics_InventorySystem
             .Add(Ecs.Exclusive); // Item can only be contained by one container
 
         // Register item kinds
-        ecs.Component<Sword>().Entity.IsA<Item>();
-        ecs.Component<Armor>().Entity.IsA<Item>();
-        ecs.Component<Coin>().Entity.IsA<Item>();
+        ecs.Component<Sword>().IsA<Item>();
+        ecs.Component<Armor>().IsA<Item>();
+        ecs.Component<Coin>().IsA<Item>();
 
         // Register item prefabs
         ecs.Prefab<WoodenSword>().Add<Sword>()
@@ -116,8 +116,8 @@ public static class GameMechanics_InventorySystem
             {
                 // If id is a plain entity (component), check if component inherits
                 // from Item
-                if (id.Entity().Has(Ecs.IsA, world.Id<Item>()))
-                    result = id.Entity();
+                if (id.ToEntity().Has(Ecs.IsA, world.Id<Item>()))
+                    result = id.ToEntity();
             }
             else if (id.IsPair())
             {
@@ -146,8 +146,8 @@ public static class GameMechanics_InventorySystem
         {
             if (id.IsEntity())
             {
-                if (id.Entity().Has(Ecs.IsA, world.Id<Item>()))
-                    result = id.Entity().Name();
+                if (id.ToEntity().Has(Ecs.IsA, world.Id<Item>()))
+                    result = id.ToEntity().Name();
             }
             else if (id.IsPair())
             {

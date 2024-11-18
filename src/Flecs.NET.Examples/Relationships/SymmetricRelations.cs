@@ -11,7 +11,7 @@ public static class Relationships_SymmetricRelations
 
         // Register TradesWith as symmetric relationship. Symmetric relationships
         // go both ways, adding (R, B) to A will also add (R, A) to B.
-        world.Component<TradesWith>().Entity.Add(Ecs.Symmetric);
+        world.Component<TradesWith>().Add(Ecs.Symmetric);
 
         // Create two players
         Entity player1 = world.Entity();

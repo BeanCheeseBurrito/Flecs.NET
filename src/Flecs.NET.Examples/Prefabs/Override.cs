@@ -28,8 +28,8 @@ public static class Prefabs_Override
         using World world = World.Create();
 
         // Change the instantiation behavior for Attack and Defense to inherit.
-        world.Component<Attack>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
-        world.Component<Defense>().Entity.Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Attack>().Add(Ecs.OnInstantiate, Ecs.Inherit);
+        world.Component<Defense>().Add(Ecs.OnInstantiate, Ecs.Inherit);
 
         // Attack and Defense are properties that can be shared across many
         // spaceships. This saves memory, and speeds up prefab creation as we don't

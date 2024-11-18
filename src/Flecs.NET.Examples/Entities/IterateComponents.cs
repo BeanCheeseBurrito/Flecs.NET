@@ -59,7 +59,7 @@ public static class Entities_IterateComponents
             else
             {
                 // Id contains a regular entity. Strip role before printing.
-                Entity comp = id.Entity();
+                Entity comp = id.ToEntity();
                 Console.Write($"Entity: {comp}");
             }
 

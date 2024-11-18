@@ -11,7 +11,7 @@ public static class Relationships_ExclusiveRelations
 
         // Register Platoon as exclusive relationship. This ensures that an entity
         // can only belong to a single Platoon.
-        world.Component<Platoon>().Entity.Add(Ecs.Exclusive);
+        world.Component<Platoon>().Add(Ecs.Exclusive);
 
         // Create two platoons
         Entity platoon1 = world.Entity();
