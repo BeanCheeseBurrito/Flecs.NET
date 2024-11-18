@@ -11,7 +11,7 @@ namespace Flecs.NET.Core;
 ///     A type-safe wrapper around <see cref="Observer"/> that takes 16 type arguments.
 /// </summary>
 /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam>
-public unsafe struct Observer<T0, T1, T2> : IEquatable<Observer<T0, T1, T2>>, IDisposable
+public unsafe partial struct Observer<T0, T1, T2> : IEquatable<Observer<T0, T1, T2>>, IDisposable
 {
     private Observer _observer;
 
@@ -54,12 +54,6 @@ public unsafe struct Observer<T0, T1, T2> : IEquatable<Observer<T0, T1, T2>>, ID
         _observer.Dispose();
     }
 
-    /// <inheritdoc cref="Observer.Destruct"/>
-    public void Destruct()
-    {
-        _observer.Destruct();
-    }
-
     ///
     public void Ctx(void* ctx)
     {
@@ -96,7 +90,7 @@ public unsafe struct Observer<T0, T1, T2> : IEquatable<Observer<T0, T1, T2>>, ID
         return ToId(observer);
     }
 
-    /// <inheritdoc cref="Observer.ToEntity"/>
+    /// <inheritdoc cref="Observer.ToEntity(Observer)"/>
     public static implicit operator Entity(Observer<T0, T1, T2> observer)
     {
         return ToEntity(observer);
@@ -114,7 +108,7 @@ public unsafe struct Observer<T0, T1, T2> : IEquatable<Observer<T0, T1, T2>>, ID
         return observer.Id;
     }
 
-    /// <inheritdoc cref="Observer.ToEntity"/>
+    /// <inheritdoc cref="Observer.ToEntity(Observer)"/>
     public static Entity ToEntity(Observer<T0, T1, T2> observer)
     {
         return observer.Entity;

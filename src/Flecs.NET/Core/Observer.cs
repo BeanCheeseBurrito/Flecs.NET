@@ -6,7 +6,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     A wrapper around observer.
 /// </summary>
-public unsafe struct Observer : IEquatable<Observer>, IDisposable
+public unsafe partial struct Observer : IEquatable<Observer>, IDisposable, IEntity<Observer>
 {
     private Entity _entity;
 
@@ -50,14 +50,6 @@ public unsafe struct Observer : IEquatable<Observer>, IDisposable
     public void Dispose()
     {
         Destruct();
-    }
-
-    /// <summary>
-    ///     Destructs the observer.
-    /// </summary>
-    public void Destruct()
-    {
-        Entity.Destruct();
     }
 
     /// <summary>

@@ -6,9 +6,14 @@ public class Observer : GeneratorBase
 {
     public override void Generate()
     {
+        AddSource($"Observer.Id.g.cs", Id.GenerateExtensions(Type.Observer));
+        AddSource($"Observer.Entity.g.cs", Entity.GenerateExtensions(Type.Observer));
+
         for (int i = 0; i < Generator.GenericCount; i++)
         {
             AddSource($"Observer/T{i + 1}.g.cs", GenerateObserver(i));
+            AddSource($"Observer.Id/T{i + 1}.g.cs", Id.GenerateExtensions(Type.Observer, i));
+            AddSource($"Observer.Entity/T{i + 1}.g.cs", Entity.GenerateExtensions(Type.Observer, i));
         }
     }
 
@@ -26,7 +31,7 @@ public class Observer : GeneratorBase
             ///     A type-safe wrapper around <see cref="Observer"/> that takes 16 type arguments.
             /// </summary>
             /// {{Generator.XmlTypeParameters[i]}}
-            public unsafe struct {{Generator.GetTypeName(Type.Observer, i)}} : IEquatable<{{Generator.GetTypeName(Type.Observer, i)}}>, IDisposable
+            public unsafe partial struct {{Generator.GetTypeName(Type.Observer, i)}} : IEquatable<{{Generator.GetTypeName(Type.Observer, i)}}>, IDisposable
             {
                 private Observer _observer;
             
@@ -69,12 +74,6 @@ public class Observer : GeneratorBase
                     _observer.Dispose();
                 }
             
-                /// <inheritdoc cref="Observer.Destruct"/>
-                public void Destruct()
-                {
-                    _observer.Destruct();
-                }
-            
                 ///
                 public void Ctx(void* ctx)
                 {
@@ -111,7 +110,7 @@ public class Observer : GeneratorBase
                     return ToId(observer);
                 }
             
-                /// <inheritdoc cref="Observer.ToEntity"/>
+                /// <inheritdoc cref="Observer.ToEntity(Observer)"/>
                 public static implicit operator Entity({{Generator.GetTypeName(Type.Observer, i)}} observer)
                 {
                     return ToEntity(observer);
@@ -129,7 +128,7 @@ public class Observer : GeneratorBase
                     return observer.Id;
                 }
             
-                /// <inheritdoc cref="Observer.ToEntity"/>
+                /// <inheritdoc cref="Observer.ToEntity(Observer)"/>
                 public static Entity ToEntity({{Generator.GetTypeName(Type.Observer, i)}} observer)
                 {
                     return observer.Entity;

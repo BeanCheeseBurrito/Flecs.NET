@@ -10,7 +10,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     A wrapper for working with entities.
 /// </summary>
-public unsafe partial struct Entity : IEquatable<Entity>, IEntity
+public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
 {
     private Id _id;
 
@@ -24,7 +24,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
     /// </summary>
     public ref Id Id => ref _id;
 
-    ref Entity IEntity.Entity => ref this;
+    ref Entity IEntity<Entity>.Entity => ref this;
 
     /// <summary>
     ///     Returns a null entity.
@@ -96,108 +96,6 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
         desc.root_sep = Pointers.DefaultSeparator;
 
         _id = new Id(world, ecs_entity_init(world, &desc));
-    }
-
-    /// <inheritdoc cref="Id.IsPair()"/>
-    public bool IsPair()
-    {
-        return Id.IsPair();
-    }
-
-    /// <inheritdoc cref="Id.IsWildCard()"/>
-    public bool IsWildCard()
-    {
-        return Id.IsWildCard();
-    }
-
-    /// <inheritdoc cref="Id.IsEntity()"/>
-    public bool IsEntity()
-    {
-        return Id.IsEntity();
-    }
-
-    /// <inheritdoc cref="Id.AddFlags(ulong)"/>
-    public Entity AddFlags(ulong flags)
-    {
-        return Id.AddFlags(flags);
-    }
-
-    /// <inheritdoc cref="Id.RemoveFlags(ulong)"/>
-    public Entity RemoveFlags(ulong flags)
-    {
-        return Id.RemoveFlags(flags);
-    }
-
-    /// <inheritdoc cref="Id.RemoveFlags()"/>
-    public Entity RemoveFlags()
-    {
-        return Id.RemoveFlags();
-    }
-
-    /// <inheritdoc cref="Id.RemoveGeneration()"/>
-    public Entity RemoveGeneration()
-    {
-        return Id.RemoveGeneration();
-    }
-
-    /// <inheritdoc cref="Id.TypeId()"/>
-    public Entity TypeId()
-    {
-        return Id.TypeId();
-    }
-
-    /// <inheritdoc cref="Id.HasFlags(ulong)"/>
-    public bool HasFlags(ulong flags)
-    {
-        return Id.HasFlags(flags);
-    }
-
-    /// <inheritdoc cref="Id.HasFlags()"/>
-    public bool HasFlags()
-    {
-        return Id.HasFlags();
-    }
-
-    /// <inheritdoc cref="Id.Flags()"/>
-    public Entity Flags()
-    {
-        return Id.Flags();
-    }
-
-    /// <inheritdoc cref="Id.HasRelation(ulong)"/>
-    public bool HasRelation(ulong first)
-    {
-        return Id.HasRelation(first);
-    }
-
-    /// <inheritdoc cref="Id.First()"/>
-    public Entity First()
-    {
-        return Id.First();
-    }
-
-    /// <inheritdoc cref="Id.Second()"/>
-    public Entity Second()
-    {
-        return Id.Second();
-    }
-
-    /// <inheritdoc cref="Id.Str()"/>
-    public string Str()
-    {
-        return Id.Str();
-    }
-
-    /// <inheritdoc cref="Id.FlagsStr()"/>
-    public string FlagsStr()
-    {
-        return Id.FlagsStr();
-    }
-
-    /// <inheritdoc cref="Id.CsWorld()"/>
-    public World CsWorld()
-    {
-        return Id.CsWorld();
     }
 
     /// <summary>
@@ -1090,6 +988,52 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
         ulong id = ecs_lookup_path_w_sep(World, Id, nativePath,
             Pointers.DefaultSeparator, Pointers.DefaultSeparator, Utils.Bool(recursive));
         return new Entity(World, id);
+    }
+
+    /// <summary>
+    ///     Lookup an entity from a path.
+    /// </summary>
+    /// <param name="path">The path to resolve.</param>
+    /// <param name="entity">The entity if found, else 0.</param>
+    /// <returns>True if the entity was found, else false.</returns>
+    public bool TryLookup(string path, out Entity entity)
+    {
+        return TryLookup(path, false, out entity);
+    }
+
+    /// <summary>
+    ///     Lookup an entity from a path.
+    /// </summary>
+    /// <param name="path">The path to resolve.</param>
+    /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+    /// <param name="entity">The entity if found, else 0.</param>
+    /// <returns>True if the entity was found, else false.</returns>
+    public bool TryLookup(string path, bool recursive, out Entity entity)
+    {
+        return (entity = Lookup(path, recursive)) != 0;
+    }
+
+    /// <summary>
+    ///     Lookup an entity from a path.
+    /// </summary>
+    /// <param name="path">The path to resolve.</param>
+    /// <param name="entity">The entity if found, else 0.</param>
+    /// <returns>True if the entity was found, else false.</returns>
+    public bool TryLookup(string path, out ulong entity)
+    {
+        return TryLookup(path, false, out entity);
+    }
+
+    /// <summary>
+    ///     Lookup an entity from a path.
+    /// </summary>
+    /// <param name="path">The path to resolve.</param>
+    /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
+    /// <param name="entity">The entity if found, else 0.</param>
+    /// <returns>True if the entity was found, else false.</returns>
+    public bool TryLookup(string path, bool recursive, out ulong entity)
+    {
+        return (entity = Lookup(path, recursive)) != 0;
     }
 
     /// <summary>
@@ -2629,7 +2573,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
     public ref Entity SetUntyped(ulong id, int size, void* data)
     {
         Ecs.Assert(ecs_get_typeid(World, id) != 0, "Cannot set component data for tag ids.");
-        ecs_set_id(World, Id, id, (IntPtr)size, data);
+        ecs_set_id(World, Id, id, size, data);
         return ref this;
     }
 
@@ -2953,6 +2897,44 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
     }
 
     /// <summary>
+    ///     Entities created in function will have the current entity.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    /// <returns>Reference to self.</returns>
+    public ref Entity With(Ecs.WorldCallback callback)
+    {
+        ulong prev = ecs_set_with(World, Id);
+        callback(World);
+        ecs_set_with(World, prev);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Entities created in function will have (first, this).
+    /// </summary>
+    /// <param name="first">The id.</param>
+    /// <param name="callback">The callback.</param>
+    /// <returns>Reference to self.</returns>
+    public ref Entity With(ulong first, Ecs.WorldCallback callback)
+    {
+        ulong prev = ecs_set_with(World, Ecs.Pair(first, Id));
+        callback(World);
+        ecs_set_with(World, prev);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Entities created in function will have (TFirst, this).
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="TFirst">The component id.</typeparam>
+    /// <returns>Reference to self.</returns>
+    public ref Entity With<TFirst>(Ecs.WorldCallback callback)
+    {
+        return ref With(Type<TFirst>.Id(World), callback);
+    }
+
+    /// <summary>
     ///     The function will be run with the scope set to the current entity.
     /// </summary>
     /// <param name="callback">The callback.</param>
@@ -2961,6 +2943,19 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
     {
         ulong prev = ecs_set_scope(World, Id);
         callback();
+        ecs_set_scope(World, prev);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     The function will be run with the scope set to the current entity.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    /// <returns>Reference to self.</returns>
+    public ref Entity Scope(Ecs.WorldCallback callback)
+    {
+        ulong prev = ecs_set_scope(World, Id);
+        callback(World);
         ecs_set_scope(World, prev);
         return ref this;
     }
@@ -3951,106 +3946,5 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity
     public override string ToString()
     {
         return Id.ToString();
-    }
-}
-
-// Flecs.NET Extensions
-public unsafe partial struct Entity
-{
-    /// <summary>
-    ///     Entities created in function will have the current entity.
-    /// </summary>
-    /// <param name="callback">The callback.</param>
-    /// <returns>Reference to self.</returns>
-    public ref Entity With(Ecs.WorldCallback callback)
-    {
-        ulong prev = ecs_set_with(World, Id);
-        callback(World);
-        ecs_set_with(World, prev);
-        return ref this;
-    }
-
-    /// <summary>
-    ///     Entities created in function will have (first, this).
-    /// </summary>
-    /// <param name="first">The id.</param>
-    /// <param name="callback">The callback.</param>
-    /// <returns>Reference to self.</returns>
-    public ref Entity With(ulong first, Ecs.WorldCallback callback)
-    {
-        ulong prev = ecs_set_with(World, Ecs.Pair(first, Id));
-        callback(World);
-        ecs_set_with(World, prev);
-        return ref this;
-    }
-
-    /// <summary>
-    ///     Entities created in function will have (TFirst, this).
-    /// </summary>
-    /// <param name="callback">The callback.</param>
-    /// <typeparam name="TFirst">The component id.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public ref Entity With<TFirst>(Ecs.WorldCallback callback)
-    {
-        return ref With(Type<TFirst>.Id(World), callback);
-    }
-
-    /// <summary>
-    ///     The function will be run with the scope set to the current entity.
-    /// </summary>
-    /// <param name="callback">The callback.</param>
-    /// <returns>Reference to self.</returns>
-    public ref Entity Scope(Ecs.WorldCallback callback)
-    {
-        ulong prev = ecs_set_scope(World, Id);
-        callback(World);
-        ecs_set_scope(World, prev);
-        return ref this;
-    }
-
-    /// <summary>
-    ///     Lookup an entity from a path.
-    /// </summary>
-    /// <param name="path">The path to resolve.</param>
-    /// <param name="entity">The entity if found, else 0.</param>
-    /// <returns>True if the entity was found, else false.</returns>
-    public bool TryLookup(string path, out Entity entity)
-    {
-        return TryLookup(path, false, out entity);
-    }
-
-    /// <summary>
-    ///     Lookup an entity from a path.
-    /// </summary>
-    /// <param name="path">The path to resolve.</param>
-    /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
-    /// <param name="entity">The entity if found, else 0.</param>
-    /// <returns>True if the entity was found, else false.</returns>
-    public bool TryLookup(string path, bool recursive, out Entity entity)
-    {
-        return (entity = Lookup(path, recursive)) != 0;
-    }
-
-    /// <summary>
-    ///     Lookup an entity from a path.
-    /// </summary>
-    /// <param name="path">The path to resolve.</param>
-    /// <param name="entity">The entity if found, else 0.</param>
-    /// <returns>True if the entity was found, else false.</returns>
-    public bool TryLookup(string path, out ulong entity)
-    {
-        return TryLookup(path, false, out entity);
-    }
-
-    /// <summary>
-    ///     Lookup an entity from a path.
-    /// </summary>
-    /// <param name="path">The path to resolve.</param>
-    /// <param name="recursive">Recursively traverse up the tree until entity is found.</param>
-    /// <param name="entity">The entity if found, else 0.</param>
-    /// <returns>True if the entity was found, else false.</returns>
-    public bool TryLookup(string path, bool recursive, out ulong entity)
-    {
-        return (entity = Lookup(path, recursive)) != 0;
     }
 }

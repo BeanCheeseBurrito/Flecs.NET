@@ -10,7 +10,7 @@ namespace Flecs.NET.Core;
 ///     Struct used to register components and component metadata.
 /// </summary>
 /// <typeparam name="TComponent"></typeparam>
-public unsafe partial struct Component<TComponent> : IEquatable<Component<TComponent>>, IEquatable<ulong>
+public unsafe partial struct Component<TComponent> : IEquatable<Component<TComponent>>, IEquatable<ulong>, IEntity<Component<TComponent>>
 {
     private UntypedComponent _untypedComponent;
 

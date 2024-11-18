@@ -11,7 +11,7 @@ namespace Flecs.NET.Core;
 ///     A type-safe wrapper around <see cref="Pipeline"/> that takes 1 type arguments.
 /// </summary>
 /// <typeparam name="T0">The T0 component type.</typeparam>
-public unsafe partial struct Pipeline<T0> : IEquatable<Pipeline<T0>>, IEntity
+public unsafe partial struct Pipeline<T0> : IEquatable<Pipeline<T0>>, IEntity<Pipeline<T0>>
 {
     private Pipeline _pipeline;
 

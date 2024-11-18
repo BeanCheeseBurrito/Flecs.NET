@@ -6,14 +6,21 @@ public class Pipeline : GeneratorBase
 {
     public override void Generate()
     {
+        AddSource($"Pipeline.Id.g.cs", Id.GenerateExtensions(Type.Pipeline));
+        AddSource($"Pipeline.Entity.g.cs", Entity.GenerateExtensions(Type.Pipeline));
+
         for (int i = 0; i < Generator.GenericCount; i++)
         {
             AddSource($"Pipeline/T{i + 1}.g.cs", GeneratePipeline(i));
+            AddSource($"Pipeline.Id/T{i + 1}.g.cs", Id.GenerateExtensions(Type.Pipeline, i));
+            AddSource($"Pipeline.Entity/T{i + 1}.g.cs", Entity.GenerateExtensions(Type.Pipeline, i));
         }
     }
 
     private static string GeneratePipeline(int i)
     {
+        string typeName = Generator.GetTypeName(Type.Pipeline, i);
+
         return $$"""
             #nullable enable
 
@@ -26,7 +33,7 @@ public class Pipeline : GeneratorBase
             ///     A type-safe wrapper around <see cref="Pipeline"/> that takes {{i + 1}} type arguments.
             /// </summary>
             /// {{Generator.XmlTypeParameters[i]}}
-            public unsafe partial struct {{Generator.GetTypeName(Type.Pipeline, i)}} : IEquatable<{{Generator.GetTypeName(Type.Pipeline, i)}}>, IEntity
+            public unsafe partial struct {{typeName}} : IEquatable<{{typeName}}>, IEntity<{{typeName}}>
             {
                 private Pipeline _pipeline;
             
@@ -61,37 +68,37 @@ public class Pipeline : GeneratorBase
                 }
             
                 /// <inheritdoc cref="Pipeline.ToUInt64(Pipeline)"/>
-                public static implicit operator ulong({{Generator.GetTypeName(Type.Pipeline, i)}} pipeline)
+                public static implicit operator ulong({{typeName}} pipeline)
                 {
                     return ToUInt64(pipeline);
                 }
             
                 /// <inheritdoc cref="Pipeline.ToId(Pipeline)"/>
-                public static implicit operator Id({{Generator.GetTypeName(Type.Pipeline, i)}} pipeline)
+                public static implicit operator Id({{typeName}} pipeline)
                 {
                     return ToId(pipeline);
                 }
             
                 /// <inheritdoc cref="Pipeline.ToEntity(Pipeline)"/>
-                public static implicit operator Entity({{Generator.GetTypeName(Type.Pipeline, i)}} pipeline)
+                public static implicit operator Entity({{typeName}} pipeline)
                 {
                     return ToEntity(pipeline);
                 }
             
                 /// <inheritdoc cref="Pipeline.ToUInt64(Pipeline)"/>
-                public static ulong ToUInt64({{Generator.GetTypeName(Type.Pipeline, i)}} pipeline)
+                public static ulong ToUInt64({{typeName}} pipeline)
                 {
                     return pipeline.Entity;
                 }
             
                 /// <inheritdoc cref="Pipeline.ToId(Pipeline)"/>
-                public static Id ToId({{Generator.GetTypeName(Type.Pipeline, i)}} pipeline)
+                public static Id ToId({{typeName}} pipeline)
                 {
                     return pipeline.Id;
                 }
             
                 /// <inheritdoc cref="Pipeline.ToEntity(Pipeline)"/>
-                public static Entity ToEntity({{Generator.GetTypeName(Type.Pipeline, i)}} pipeline)
+                public static Entity ToEntity({{typeName}} pipeline)
                 {
                     return pipeline.Entity;
                 }
@@ -103,7 +110,7 @@ public class Pipeline : GeneratorBase
                 }
             
                 /// <inheritdoc cref="Pipeline.Equals(Pipeline)"/>
-                public bool Equals({{Generator.GetTypeName(Type.Pipeline, i)}} other)
+                public bool Equals({{typeName}} other)
                 {
                     return Entity == other.Entity;
                 }
@@ -111,7 +118,7 @@ public class Pipeline : GeneratorBase
                 /// <inheritdoc cref="Pipeline.Equals(object)"/>
                 public override bool Equals(object? obj)
                 {
-                    return obj is {{Generator.GetTypeName(Type.Pipeline, i)}} other && Equals(other);
+                    return obj is {{typeName}} other && Equals(other);
                 }
             
                 /// <inheritdoc cref="Pipeline.GetHashCode()"/>
@@ -121,13 +128,13 @@ public class Pipeline : GeneratorBase
                 }
             
                 /// <inheritdoc cref="Pipeline.op_Equality"/>
-                public static bool operator ==({{Generator.GetTypeName(Type.Pipeline, i)}} left, {{Generator.GetTypeName(Type.Pipeline, i)}} right)
+                public static bool operator ==({{typeName}} left, {{typeName}} right)
                 {
                     return left.Equals(right);
                 }
             
                 /// <inheritdoc cref="Pipeline.op_Inequality"/>
-                public static bool operator !=({{Generator.GetTypeName(Type.Pipeline, i)}} left, {{Generator.GetTypeName(Type.Pipeline, i)}} right)
+                public static bool operator !=({{typeName}} left, {{typeName}} right)
                 {
                     return !(left == right);
                 }
