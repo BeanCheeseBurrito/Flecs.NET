@@ -40,7 +40,7 @@ public static class Relationships_RelationComponent
 
         // You can prevent a pair from assuming the type of a component by adding
         // the Tag property to a relationship:
-        world.Component<MustHave>().Entity.Add(Ecs.PairIsTag);
+        world.Component<MustHave>().Add(Ecs.PairIsTag);
 
         // Even though Position is a component, <MustHave, Position> contains no
         // data because MustHave has the Tag property.

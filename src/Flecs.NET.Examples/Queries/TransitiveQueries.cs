@@ -29,7 +29,7 @@ public static class Queries_TransitiveQueries
         using World world = World.Create();
 
         // Register the LocatedIn relationship as transitive
-        world.Component<LocatedIn>().Entity.Add(Ecs.Transitive);
+        world.Component<LocatedIn>().Add(Ecs.Transitive);
 
         // Populate the store with locations
         Entity earth = world.Entity("Earth")

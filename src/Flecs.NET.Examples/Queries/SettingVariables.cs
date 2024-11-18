@@ -30,13 +30,13 @@ public static class Queries_SettingVariables
         using World world = World.Create();
 
         // See ComponentInheritance example
-        world.Component<CombatUnit>().Entity.IsA<Unit>();
-        world.Component<MeleeUnit>().Entity.IsA<CombatUnit>();
-        world.Component<RangedUnit>().Entity.IsA<CombatUnit>();
+        world.Component<CombatUnit>().IsA<Unit>();
+        world.Component<MeleeUnit>().IsA<CombatUnit>();
+        world.Component<RangedUnit>().IsA<CombatUnit>();
 
-        world.Component<Warrior>().Entity.IsA<MeleeUnit>();
-        world.Component<Wizard>().Entity.IsA<RangedUnit>();
-        world.Component<Marksman>().Entity.IsA<RangedUnit>();
+        world.Component<Warrior>().IsA<MeleeUnit>();
+        world.Component<Wizard>().IsA<RangedUnit>();
+        world.Component<Marksman>().IsA<RangedUnit>();
 
         // Populate store with players and platoons
         for (int p = 0; p < PlayerCount; p++)
