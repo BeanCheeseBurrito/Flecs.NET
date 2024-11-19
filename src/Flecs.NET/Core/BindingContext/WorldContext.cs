@@ -26,4 +26,18 @@ internal unsafe struct WorldContext : IDisposable
         foreach (nint ptr in WorldFinishContexts)
             Memory.Free((WorldFinishContext*)ptr);
     }
+
+    public static void Free(WorldContext* context)
+    {
+        if (context == null)
+            return;
+        context->Dispose();
+        Memory.Free(context);
+    }
+
+    public static void Free(ref WorldContext context)
+    {
+        fixed (WorldContext* ptr = &context)
+            Free(ptr);
+    }
 }

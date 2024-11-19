@@ -3,16 +3,16 @@ using Flecs.NET.Utilities;
 
 namespace Flecs.NET.Core.BindingContext;
 
-internal unsafe struct PostFrameContext : IDisposable
+internal unsafe struct ObserverContext : IDisposable
 {
-    public Callback Callback;
+    public UserContext UserContext;
 
     public void Dispose()
     {
-        Callback.Dispose();
+        UserContext.Dispose();
     }
 
-    public static void Free(PostFrameContext* context)
+    public static void Free(ObserverContext* context)
     {
         if (context == null)
             return;
@@ -20,9 +20,9 @@ internal unsafe struct PostFrameContext : IDisposable
         Memory.Free(context);
     }
 
-    public static void Free(ref PostFrameContext context)
+    public static void Free(ref ObserverContext context)
     {
-        fixed (PostFrameContext* ptr = &context)
+        fixed (ObserverContext* ptr = &context)
             Free(ptr);
     }
 }

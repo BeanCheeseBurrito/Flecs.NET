@@ -102,7 +102,9 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// </summary>
     public void Dispose()
     {
-        QueryContext.Dispose();
+        QueryContext.Free(ref QueryContext);
+        GroupByContext.Free(ref GroupByContext);
+        this = default;
     }
 
     /// <summary>

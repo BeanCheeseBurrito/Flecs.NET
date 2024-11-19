@@ -12,48 +12,54 @@ namespace Flecs.NET.Core.BindingContext;
 /// </summary>
 internal static unsafe class Functions
 {
-    #region  Context Free
+    #region Context Free
 
     [UnmanagedCallersOnly]
     internal static void WorldContextFree(WorldContext* context)
     {
-        context->Dispose();
-        Memory.Free(context);
+        WorldContext.Free(context);
     }
 
     [UnmanagedCallersOnly]
     internal static void IteratorContextFree(IteratorContext* context)
     {
-        context->Dispose();
-        Memory.Free(context);
+        IteratorContext.Free(context);
     }
 
     [UnmanagedCallersOnly]
     internal static void RunContextFree(RunContext* context)
     {
-        context->Dispose();
-        Memory.Free(context);
+        RunContext.Free(context);
     }
 
     [UnmanagedCallersOnly]
     internal static void QueryContextFree(QueryContext* context)
     {
-        context->Dispose();
-        Memory.Free(context);
+        QueryContext.Free(context);
     }
 
     [UnmanagedCallersOnly]
     internal static void GroupByContextFree(GroupByContext* context)
     {
-        context->Dispose();
-        Memory.Free(context);
+        GroupByContext.Free(context);
+    }
+
+    [UnmanagedCallersOnly]
+    internal static void SystemContextFree(SystemContext* context)
+    {
+        SystemContext.Free(context);
+    }
+
+    [UnmanagedCallersOnly]
+    internal static void ObserverContextFree(ObserverContext* context)
+    {
+        ObserverContext.Free(context);
     }
 
     [UnmanagedCallersOnly]
     internal static void TypeHooksContextFree(TypeHooksContext* context)
     {
-        context->Dispose();
-        Memory.Free(context);
+        TypeHooksContext.Free(context);
     }
 
     internal static void UserContextFinishDelegate<T>(ref UserContext context)
