@@ -1,8 +1,9 @@
 using System;
+using Flecs.NET.Utilities;
 
 namespace Flecs.NET.Core.BindingContext;
 
-internal struct TypeHooksContext : IDisposable
+internal unsafe struct TypeHooksContext : IDisposable
 {
     public int Header;
 
@@ -27,5 +28,19 @@ internal struct TypeHooksContext : IDisposable
         OnSet.Dispose();
         OnRemove.Dispose();
         ContextFree.Dispose();
+    }
+
+    public static void Free(TypeHooksContext* context)
+    {
+        if (context == null)
+            return;
+        context->Dispose();
+        Memory.Free(context);
+    }
+
+    public static void Free(ref TypeHooksContext context)
+    {
+        fixed (TypeHooksContext* ptr = &context)
+            Free(ptr);
     }
 }

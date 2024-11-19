@@ -1,8 +1,9 @@
 using System;
+using Flecs.NET.Utilities;
 
 namespace Flecs.NET.Core.BindingContext;
 
-internal struct OsApiContext : IDisposable
+internal unsafe struct OsApiContext : IDisposable
 {
     public Callback Abort;
     public Callback Log;
@@ -11,5 +12,19 @@ internal struct OsApiContext : IDisposable
     {
         Abort.Dispose();
         Log.Dispose();
+    }
+
+    public static void Free(OsApiContext* context)
+    {
+        if (context == null)
+            return;
+        context->Dispose();
+        Memory.Free(context);
+    }
+
+    public static void Free(ref OsApiContext context)
+    {
+        fixed (OsApiContext* ptr = &context)
+            Free(ptr);
     }
 }

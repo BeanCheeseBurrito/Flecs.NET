@@ -30,6 +30,10 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// </summary>
     public ref QueryBuilder QueryBuilder => ref _queryBuilder;
 
+    internal ref ObserverContext ObserverContext => ref *EnsureObserverContext();
+    internal ref IteratorContext IteratorContext => ref *EnsureIteratorContext();
+    internal ref RunContext RunContext => ref *EnsureRunContext();
+
     /// <summary>
     /// Creates an observer builder for the provided world.
     /// </summary>
@@ -66,8 +70,10 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     public void Dispose()
     {
         QueryBuilder.Dispose();
-        FreeRun();
-        FreeCallback();
+        ObserverContext.Free(ref ObserverContext);
+        IteratorContext.Free(ref IteratorContext);
+        RunContext.Free(ref RunContext);
+        this = default;
     }
 
     /// <summary>
@@ -309,45 +315,25 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
 
     internal ref ObserverBuilder SetCallback<T>(T callback, nint invoker) where T : Delegate
     {
-        FreeCallback();
-        IteratorContext context = default;
-        context.Callback.Set(callback, invoker);
-        Desc.callback = Pointers.IteratorCallback;
-        Desc.callback_ctx = Memory.Alloc(context);
-        Desc.callback_ctx_free = Pointers.IteratorContextFree;
+        IteratorContext.Callback.Set(callback, invoker);
         return ref this;
     }
 
     internal ref ObserverBuilder SetCallback(nint callback, nint invoker)
     {
-        FreeCallback();
-        IteratorContext context = default;
-        context.Callback.Set(callback, invoker);
-        Desc.callback = Pointers.IteratorCallback;
-        Desc.callback_ctx = Memory.Alloc(context);
-        Desc.callback_ctx_free = Pointers.IteratorContextFree;
+        IteratorContext.Callback.Set(callback, invoker);
         return ref this;
     }
 
     internal ref ObserverBuilder SetRun<T>(T callback, nint invoker) where T : Delegate
     {
-        FreeRun();
-        RunContext context = default;
-        context.Callback.Set(callback, invoker);
-        Desc.run = Pointers.RunCallback;
-        Desc.run_ctx = Memory.Alloc(context);
-        Desc.run_ctx_free = Pointers.RunContextFree;
+        RunContext.Callback.Set(callback, invoker);
         return ref this;
     }
 
     internal ref ObserverBuilder SetRun(nint callback, nint invoker)
     {
-        FreeRun();
-        RunContext context = default;
-        context.Callback.Set(callback, invoker);
-        Desc.run = Pointers.RunCallback;
-        Desc.run_ctx = Memory.Alloc(context);
-        Desc.run_ctx_free = Pointers.RunContextFree;
+        RunContext.Callback.Set(callback, invoker);
         return ref this;
     }
 
@@ -368,20 +354,36 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
         return Build();
     }
 
-    private void FreeRun()
+    private ObserverContext* EnsureObserverContext()
     {
-        if (Desc.run == default)
-            return;
+        if (Desc.ctx != null)
+            return (ObserverContext*)Desc.ctx;
 
-        ((delegate*<void*, void>)Desc.run_ctx_free)(Desc.run_ctx);
+        Desc.ctx = Memory.AllocZeroed<ObserverContext>(1);
+        Desc.ctx_free = Pointers.ObserverContextFree;
+        return (ObserverContext*)Desc.ctx;
     }
 
-    private void FreeCallback()
+    private IteratorContext* EnsureIteratorContext()
     {
-        if (Desc.callback == default)
-            return;
+        if (Desc.callback_ctx != null)
+            return (IteratorContext*)Desc.callback_ctx;
 
-        ((delegate*<void*, void>)Desc.callback_ctx_free)(Desc.callback_ctx);
+        Desc.callback = Pointers.IteratorCallback;
+        Desc.callback_ctx = Memory.AllocZeroed<IteratorContext>(1);
+        Desc.callback_ctx_free = Pointers.IteratorContextFree;
+        return (IteratorContext*)Desc.callback_ctx;
+    }
+
+    private RunContext* EnsureRunContext()
+    {
+        if (Desc.run_ctx != null)
+            return (RunContext*)Desc.run_ctx;
+
+        Desc.run = Pointers.RunCallback;
+        Desc.run_ctx = Memory.AllocZeroed<RunContext>(1);
+        Desc.run_ctx_free = Pointers.RunContextFree;
+        return (RunContext*)Desc.run_ctx;
     }
 
     /// <summary>
