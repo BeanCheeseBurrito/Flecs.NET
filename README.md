@@ -49,7 +49,6 @@ public record struct Velocity(float X, float Y);
 
 **Flecs.NET.Native - Precompiled native libraries**
 - Provides both shared and static libraries for Windows, MacOS, Linux, iOS, and WASM
-- `$(FlecsStaticLibrary)` is provided for static linking in MSBuild projects
 - Packaged with Zig for dependency free cross-compilation everywhere
 
 ## NuGet
@@ -70,11 +69,10 @@ dotnet add PROJECT package Flecs.NET.Bindings.Release --version *-*
 dotnet add PROJECT package Flecs.NET.Native.Release --version *-*
 ```
 
-**Flecs.NET** provides both [release](https://www.nuget.org/packages/Flecs.NET.Release) and [debug](https://www.nuget.org/packages/Flecs.NET.Debug) packages for nuget.
+**Flecs.NET** provides both [release](https://www.nuget.org/packages/Flecs.NET.Release) and [debug](https://www.nuget.org/packages/Flecs.NET.Debug) packages for nuget. It is recommended that the debug packages be used when developing as they include checks for incorrect usage of the API.
 To include both of them in your project based on your build configuration, use the package references below. The latest stable or prerelease versions will be added to your project.
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
@@ -84,7 +82,20 @@ To include both of them in your project based on your build configuration, use t
         <PackageReference Include="Flecs.NET.Debug" Version="*-*" Condition="'$(Configuration)' == 'Debug'" />
         <PackageReference Include="Flecs.NET.Release" Version="*-*" Condition="'$(Configuration)' == 'Release'" />
     </ItemGroup>
+</Project>
+```
+### Static Linking
+**Flecs.NET** provides precompiled static libraries that can be used when ``PublishAOT`` is enabled. To enable static linking, add ``<FlecsStaticLink>true</FlecsStaticLink>`` to a property group. To prevent shared libraries from being copied to the output directory, add ``ExcludeAssets="native"`` to your package reference.
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PublishAot>true</PublishAot>
+        <FlecsStaticLink>true</FlecsStaticLink>
+    </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Flecs.NET.Debug" Version="*-*" ExcludeAssets="native"/>
+    </ItemGroup>
 </Project>
 ```
 
@@ -106,7 +117,6 @@ dotnet add PROJECT package Flecs.NET.Release --version *-build.*
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
@@ -115,7 +125,6 @@ dotnet add PROJECT package Flecs.NET.Release --version *-build.*
     <ItemGroup>
         <PackageReference Include="Flecs.NET.Debug" Version="*-build.*"/>
     </ItemGroup>
-
 </Project>
 ```
 ___
@@ -167,7 +176,6 @@ Reference the project and import the native libraries. You should now be able to
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
@@ -176,7 +184,6 @@ Reference the project and import the native libraries. You should now be able to
     <ItemGroup>
         <ProjectReference Include="PATH/Flecs.NET/src/Flecs.NET/Flecs.NET.csproj" />
     </ItemGroup>
-
 </Project>
 ```
 

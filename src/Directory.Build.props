@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <VersionPrefix>4.0.2</VersionPrefix>
+        <VersionPrefix>4.0.3</VersionPrefix>
         <Authors>BeanCheeseBurrito</Authors>
         <Copyright>BeanCheeseBurrito</Copyright>
         <PackageProjectUrl>https://github.com/BeanCheeseBurrito/Flecs.NET</PackageProjectUrl>

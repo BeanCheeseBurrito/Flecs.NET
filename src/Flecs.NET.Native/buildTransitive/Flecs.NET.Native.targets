@@ -1,6 +1,13 @@
 <Project>
-  <ItemGroup Condition="'$(PublishAot)' == 'true' And Exists('$(FlecsStaticLibrary)')">
-    <DirectPInvoke Include="flecs"/>
-    <NativeLibrary Include="$(FlecsStaticLibrary)"/>
-  </ItemGroup>
+    <PropertyGroup>
+        <IsWindowsRuntime Condition="'$(RuntimeIdentifier)' != '' and $(RuntimeIdentifier.StartsWith('win-'))">true</IsWindowsRuntime>
+        <FlecsStaticPath>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)../static/$(RuntimeIdentifier)/native/'))</FlecsStaticPath>
+        <FlecsStaticLibrary Condition="'$(IsWindowsRuntime)' == 'true'">$(FlecsStaticPath)flecs.lib</FlecsStaticLibrary>
+        <FlecsStaticLibrary Condition="'$(IsWindowsRuntime)' != 'true'">$(FlecsStaticPath)libflecs.a</FlecsStaticLibrary>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(PublishAot)' == 'true' And '$(FlecsStaticLink)' == 'true' And Exists('$(FlecsStaticLibrary)')">
+        <DirectPInvoke Include="flecs"/>
+        <NativeLibrary Include="$(FlecsStaticLibrary)"/>
+    </ItemGroup>
 </Project>
