@@ -15,6 +15,10 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     private QueryBuilder _queryBuilder;
     private int _eventCount;
 
+    internal ref UserContext UserContext => ref *EnsureUserContext();
+    internal ref IteratorContext IteratorContext => ref *EnsureIteratorContext();
+    internal ref RunContext RunContext => ref *EnsureRunContext();
+
     /// <summary>
     ///     A reference to the world.
     /// </summary>
@@ -29,10 +33,6 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     ///     A reference to the query builder.
     /// </summary>
     public ref QueryBuilder QueryBuilder => ref _queryBuilder;
-
-    internal ref ObserverContext ObserverContext => ref *EnsureObserverContext();
-    internal ref IteratorContext IteratorContext => ref *EnsureIteratorContext();
-    internal ref RunContext RunContext => ref *EnsureRunContext();
 
     /// <summary>
     /// Creates an observer builder for the provided world.
@@ -64,13 +64,26 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     }
 
     /// <summary>
+    ///     Creates an observer builder for the provided world.
+    /// </summary>
+    /// <param name="world">The world.</param>
+    /// <param name="entity">The observer entity.</param>
+    public ObserverBuilder(ecs_world_t* world, ulong entity) : this(world)
+    {
+        ecs_entity_desc_t entityDesc = default;
+        entityDesc.id = entity;
+
+        Desc.entity = ecs_entity_init(world, &entityDesc);
+    }
+
+    /// <summary>
     ///     Disposes the observer builder. This should be called if the observer builder
     ///     will be discarded and .Iter()/.Each()/.Run() isn't called.
     /// </summary>
     public void Dispose()
     {
         QueryBuilder.Dispose();
-        ObserverContext.Free(ref ObserverContext);
+        UserContext.Free(ref UserContext);
         IteratorContext.Free(ref IteratorContext);
         RunContext.Free(ref RunContext);
         this = default;
@@ -123,13 +136,82 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     }
 
     /// <summary>
-    ///     Set observer context.
+    ///     Sets the observer user context object.
     /// </summary>
-    /// <param name="data"></param>
+    /// <param name="value">The user context object.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
     /// <returns></returns>
-    public ref ObserverBuilder Ctx(void* data)
+    public ref ObserverBuilder Ctx<T>(T value)
     {
-        Desc.ctx = data;
+        UserContext.Set(ref value);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the observer user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref ObserverBuilder Ctx<T>(T value, Ecs.UserContextFinish<T> callback)
+    {
+        UserContext.Set(ref value, callback);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the observer user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref ObserverBuilder Ctx<T>(T value, delegate*<ref T, void> callback)
+    {
+        UserContext.Set(ref value, callback);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the observer user context object.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref ObserverBuilder Ctx<T>(ref T value)
+    {
+        UserContext.Set(ref value);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the observer user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref ObserverBuilder Ctx<T>(ref T value, Ecs.UserContextFinish<T> callback)
+    {
+        UserContext.Set(ref value, callback);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the observer user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref ObserverBuilder Ctx<T>(ref T value, delegate*<ref T, void> callback)
+    {
+        UserContext.Set(ref value, callback);
         return ref this;
     }
 
@@ -354,14 +436,14 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
         return Build();
     }
 
-    private ObserverContext* EnsureObserverContext()
+    private UserContext* EnsureUserContext()
     {
         if (Desc.ctx != null)
-            return (ObserverContext*)Desc.ctx;
+            return (UserContext*)Desc.ctx;
 
-        Desc.ctx = Memory.AllocZeroed<ObserverContext>(1);
-        Desc.ctx_free = Pointers.ObserverContextFree;
-        return (ObserverContext*)Desc.ctx;
+        Desc.ctx = Memory.AllocZeroed<UserContext>(1);
+        Desc.ctx_free = Pointers.UserContextFree;
+        return (UserContext*)Desc.ctx;
     }
 
     private IteratorContext* EnsureIteratorContext()

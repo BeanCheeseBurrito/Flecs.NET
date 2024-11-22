@@ -124,10 +124,45 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T
         return ref this;
     }
 
-    /// <inheritdoc cref="SystemBuilder.Ctx"/>
-    public ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Ctx(void* ctx)
+    /// <inheritdoc cref="SystemBuilder.Ctx{T}(T)"/>
+    public ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Ctx<T>(T value)
     {
-        _systemBuilder.Ctx(ctx);
+        _systemBuilder.Ctx(ref value);
+        return ref this;
+    }
+    
+    /// <inheritdoc cref="SystemBuilder.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+    public ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Ctx<T>(T value, Ecs.UserContextFinish<T> callback)
+    {
+        _systemBuilder.Ctx(ref value, callback);
+        return ref this;
+    }
+    
+    /// <inheritdoc cref="SystemBuilder.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+    public ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Ctx<T>(T value, delegate*<ref T, void> callback)
+    {
+        _systemBuilder.Ctx(ref value, callback);
+        return ref this;
+    }
+    
+    /// <inheritdoc cref="SystemBuilder.Ctx{T}(ref T)"/>
+    public ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Ctx<T>(ref T value)
+    {
+        _systemBuilder.Ctx(ref value);
+        return ref this;
+    }
+    
+    /// <inheritdoc cref="SystemBuilder.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+    public ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Ctx<T>(ref T value, Ecs.UserContextFinish<T> callback)
+    {
+        _systemBuilder.Ctx(ref value, callback);
+        return ref this;
+    }
+    
+    /// <inheritdoc cref="SystemBuilder.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+    public ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Ctx<T>(ref T value, delegate*<ref T, void> callback)
+    {
+        _systemBuilder.Ctx(ref value, callback);
         return ref this;
     }
     

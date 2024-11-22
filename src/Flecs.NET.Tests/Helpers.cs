@@ -51,6 +51,8 @@ public record struct SharedComponent(int Value);
 
 public record struct SparseComponent(int Value);
 
+public record struct UnmanagedStruct(int Value);
+
 public record struct ManagedStruct(int Value)
 {
     public object Dummy = null!;

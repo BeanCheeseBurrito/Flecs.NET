@@ -19,6 +19,7 @@ public class Observer : GeneratorBase
 
     private static string GenerateObserver(int i)
     {
+        string typeName = Generator.GetTypeName(Type.Observer, i);
         return $$"""
             #nullable enable
 
@@ -31,7 +32,7 @@ public class Observer : GeneratorBase
             ///     A type-safe wrapper around <see cref="Observer"/> that takes 16 type arguments.
             /// </summary>
             /// {{Generator.XmlTypeParameters[i]}}
-            public unsafe partial struct {{Generator.GetTypeName(Type.Observer, i)}} : IEquatable<{{Generator.GetTypeName(Type.Observer, i)}}>, IDisposable
+            public unsafe partial struct {{typeName}} : IDisposable, IEquatable<{{typeName}}>, IEntity<{{typeName}}>
             {
                 private Observer _observer;
             
@@ -74,22 +75,46 @@ public class Observer : GeneratorBase
                     _observer.Dispose();
                 }
             
-                ///
-                public void Ctx(void* ctx)
+                /// <inheritdoc cref="Observer.Ctx{T}(T)"/>
+                public void Ctx<T>(T value)
                 {
-                    _observer.Ctx(ctx);
+                    _observer.Ctx(ref value);
                 }
-            
-                /// <inheritdoc cref="Observer.Ctx()"/>
-                public void* Ctx()
+                
+                /// <inheritdoc cref="Observer.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+                public void Ctx<T>(T value, Ecs.UserContextFinish<T> callback)
                 {
-                    return _observer.Ctx();
+                    _observer.Ctx(ref value, callback);
                 }
-            
+                
+                /// <inheritdoc cref="Observer.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+                public void Ctx<T>(T value, delegate*<ref T, void> callback)
+                {
+                    _observer.Ctx(ref value, callback);
+                }
+                
+                /// <inheritdoc cref="Observer.Ctx{T}(ref T)"/>
+                public void Ctx<T>(ref T value)
+                {
+                    _observer.Ctx(ref value);
+                }
+                
+                /// <inheritdoc cref="Observer.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+                public void Ctx<T>(ref T value, Ecs.UserContextFinish<T> callback)
+                {
+                    _observer.Ctx(ref value, callback);
+                }
+                
+                /// <inheritdoc cref="Observer.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+                public void Ctx<T>(ref T value, delegate*<ref T, void> callback)
+                {
+                    _observer.Ctx(ref value, callback);
+                }
+                
                 /// <inheritdoc cref="Observer.Ctx{T}()"/>
-                public T* Ctx<T>() where T : unmanaged
+                public ref T Ctx<T>()
                 {
-                    return _observer.Ctx<T>();
+                    return ref _observer.Ctx<T>();
                 }
             
                 /// <inheritdoc cref="Observer.Query()"/>
@@ -99,43 +124,43 @@ public class Observer : GeneratorBase
                 }
             
                 /// <inheritdoc cref="Observer.ToUInt64"/>
-                public static implicit operator ulong({{Generator.GetTypeName(Type.Observer, i)}} observer)
+                public static implicit operator ulong({{typeName}} observer)
                 {
                     return ToUInt64(observer);
                 }
             
                 /// <inheritdoc cref="Observer.ToId"/>
-                public static implicit operator Id({{Generator.GetTypeName(Type.Observer, i)}} observer)
+                public static implicit operator Id({{typeName}} observer)
                 {
                     return ToId(observer);
                 }
             
                 /// <inheritdoc cref="Observer.ToEntity(Observer)"/>
-                public static implicit operator Entity({{Generator.GetTypeName(Type.Observer, i)}} observer)
+                public static implicit operator Entity({{typeName}} observer)
                 {
                     return ToEntity(observer);
                 }
             
                 /// <inheritdoc cref="Observer.ToUInt64"/>
-                public static ulong ToUInt64({{Generator.GetTypeName(Type.Observer, i)}} observer)
+                public static ulong ToUInt64({{typeName}} observer)
                 {
                     return observer.Entity;
                 }
             
                 /// <inheritdoc cref="Observer.ToId"/>
-                public static Id ToId({{Generator.GetTypeName(Type.Observer, i)}} observer)
+                public static Id ToId({{typeName}} observer)
                 {
                     return observer.Id;
                 }
             
                 /// <inheritdoc cref="Observer.ToEntity(Observer)"/>
-                public static Entity ToEntity({{Generator.GetTypeName(Type.Observer, i)}} observer)
+                public static Entity ToEntity({{typeName}} observer)
                 {
                     return observer.Entity;
                 }
             
                 /// <inheritdoc cref="Observer.Equals(Observer)"/>
-                public bool Equals({{Generator.GetTypeName(Type.Observer, i)}} other)
+                public bool Equals({{typeName}} other)
                 {
                     return _observer == other._observer;
                 }
@@ -143,7 +168,7 @@ public class Observer : GeneratorBase
                 /// <inheritdoc cref="Observer.Equals(object)"/>
                 public override bool Equals(object? obj)
                 {
-                    return obj is {{Generator.GetTypeName(Type.Observer, i)}} other && Equals(other);
+                    return obj is {{typeName}} other && Equals(other);
                 }
             
                 /// <inheritdoc cref="Observer.GetHashCode()"/>
@@ -153,13 +178,13 @@ public class Observer : GeneratorBase
                 }
             
                 /// <inheritdoc cref="Observer.op_Equality"/>
-                public static bool operator ==({{Generator.GetTypeName(Type.Observer, i)}} left, {{Generator.GetTypeName(Type.Observer, i)}} right)
+                public static bool operator ==({{typeName}} left, {{typeName}} right)
                 {
                     return left.Equals(right);
                 }
             
                 /// <inheritdoc cref="Observer.op_Inequality"/>
-                public static bool operator !=({{Generator.GetTypeName(Type.Observer, i)}} left, {{Generator.GetTypeName(Type.Observer, i)}} right)
+                public static bool operator !=({{typeName}} left, {{typeName}} right)
                 {
                     return !(left == right);
                 }

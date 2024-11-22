@@ -2593,4 +2593,42 @@ public unsafe class SystemTests
             p->Y += v->Y;
         }
     }
+
+    [Fact]
+    private void Ctx()
+    {
+        using World world = World.Create();
+
+        System_ system = world.System()
+            .Ctx(new UnmanagedStruct(10))
+            .Each(static (Iter it, int _) =>
+            {
+                it.Ctx<UnmanagedStruct>().Value = 20;
+            });
+
+        Assert.Equal(10, system.Ctx<UnmanagedStruct>().Value);
+        system.Run();
+        Assert.Equal(20, system.Ctx<UnmanagedStruct>().Value);
+    }
+
+    [Fact]
+    private void CtxWithCallback()
+    {
+        using World world = World.Create();
+
+        System_ system = world.System()
+            .Ctx(new UnmanagedStruct(10), static (ref UnmanagedStruct ctx) =>
+            {
+                Assert.Equal(30, ctx.Value);
+            })
+            .Each(static (Iter it, int _) =>
+            {
+                it.Ctx<UnmanagedStruct>().Value = 20;
+            });
+
+        Assert.Equal(10, system.Ctx<UnmanagedStruct>().Value);
+        system.Run();
+        Assert.Equal(20, system.Ctx<UnmanagedStruct>().Value);
+        system.Ctx<UnmanagedStruct>().Value = 30;
+    }
 }

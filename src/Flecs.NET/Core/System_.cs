@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Flecs.NET.Core.BindingContext;
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
@@ -9,7 +10,7 @@ namespace Flecs.NET.Core;
 /// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores")]
-public unsafe partial struct System_ : IEquatable<System_>
+public unsafe partial struct System_ : IDisposable, IEquatable<System_>, IEntity<System_>
 {
     private Entity _entity;
 
@@ -48,24 +49,107 @@ public unsafe partial struct System_ : IEquatable<System_>
     }
 
     /// <summary>
-    ///     Sets the context for the system.
+    ///     Disposes this system.
     /// </summary>
-    /// <param name="ctx"></param>
-    public void Ctx(void* ctx)
+    public void Dispose()
     {
-        ecs_system_desc_t desc = default;
-        desc.entity = Entity;
-        desc.ctx = ctx;
-        ecs_system_init(World, &desc);
+        Entity.Destruct();
+    }
+
+    /// <summary>
+    ///     Sets the system user context object.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public void Ctx<T>(T value)
+    {
+        new SystemBuilder(World, Entity)
+            .Ctx(ref value)
+            .Build();
+    }
+
+    /// <summary>
+    ///     Sets the system user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public void Ctx<T>(T value, Ecs.UserContextFinish<T> callback)
+    {
+        new SystemBuilder(World, Entity)
+            .Ctx(ref value, callback)
+            .Build();
+    }
+
+    /// <summary>
+    ///     Sets the system user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public void Ctx<T>(T value, delegate*<ref T, void> callback)
+    {
+        new SystemBuilder(World, Entity)
+            .Ctx(ref value, callback)
+            .Build();
+    }
+
+    /// <summary>
+    ///     Sets the system user context object.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public void Ctx<T>(ref T value)
+    {
+        new SystemBuilder(World, Entity)
+            .Ctx(ref value)
+            .Build();
+    }
+
+    /// <summary>
+    ///     Sets the system user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public void Ctx<T>(ref T value, Ecs.UserContextFinish<T> callback)
+    {
+        new SystemBuilder(World, Entity)
+            .Ctx(ref value, callback)
+            .Build();
+    }
+
+    /// <summary>
+    ///     Sets the system user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public void Ctx<T>(ref T value, delegate*<ref T, void> callback)
+    {
+        new SystemBuilder(World, Entity)
+            .Ctx(ref value, callback)
+            .Build();
     }
 
     /// <summary>
     ///     Returns the context for the system.
     /// </summary>
     /// <returns></returns>
-    public void* Ctx()
+    public ref T Ctx<T>()
     {
-        return ecs_system_get(World, Entity)->ctx;
+        UserContext* context = (UserContext*)ecs_system_get(World, Entity)->ctx;
+        return ref context->Get<T>();
     }
 
     /// <summary>

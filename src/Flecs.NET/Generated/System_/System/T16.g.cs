@@ -11,7 +11,7 @@ namespace Flecs.NET.Core;
 ///     A type-safe wrapper around <see cref="System"/> that takes 16 type arguments.
 /// </summary>
 /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam> <typeparam name="T3">The T3 component type.</typeparam> <typeparam name="T4">The T4 component type.</typeparam> <typeparam name="T5">The T5 component type.</typeparam> <typeparam name="T6">The T6 component type.</typeparam> <typeparam name="T7">The T7 component type.</typeparam> <typeparam name="T8">The T8 component type.</typeparam> <typeparam name="T9">The T9 component type.</typeparam> <typeparam name="T10">The T10 component type.</typeparam> <typeparam name="T11">The T11 component type.</typeparam> <typeparam name="T12">The T12 component type.</typeparam> <typeparam name="T13">The T13 component type.</typeparam> <typeparam name="T14">The T14 component type.</typeparam> <typeparam name="T15">The T15 component type.</typeparam>
-public unsafe partial struct System<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> : IEquatable<System<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>, IEntity<System<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>
+public unsafe partial struct System<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> : IDisposable, IEquatable<System<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>, IEntity<System<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>
 {
     private System_ _system;
 
@@ -47,17 +47,53 @@ public unsafe partial struct System<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>.AssertNoTags();
         _system = new System_(entity);
     }
-
-    ///
-    public void Ctx(void* ctx)
+    
+    /// <inheritdoc cref="System_.Dispose"/>
+    public void Dispose()
     {
-        _system.Ctx(ctx);
+        _system.Dispose();
     }
 
-    /// <inheritdoc cref="System_.Ctx()"/>
-    public void* Ctx()
+    /// <inheritdoc cref="System_.Ctx{T}(T)"/>
+    public void Ctx<T>(T value)
     {
-        return _system.Ctx();
+        _system.Ctx(ref value);
+    }
+    
+    /// <inheritdoc cref="System_.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+    public void Ctx<T>(T value, Ecs.UserContextFinish<T> callback)
+    {
+        _system.Ctx(ref value, callback);
+    }
+    
+    /// <inheritdoc cref="System_.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+    public void Ctx<T>(T value, delegate*<ref T, void> callback)
+    {
+        _system.Ctx(ref value, callback);
+    }
+    
+    /// <inheritdoc cref="System_.Ctx{T}(ref T)"/>
+    public void Ctx<T>(ref T value)
+    {
+        _system.Ctx(ref value);
+    }
+    
+    /// <inheritdoc cref="System_.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+    public void Ctx<T>(ref T value, Ecs.UserContextFinish<T> callback)
+    {
+        _system.Ctx(ref value, callback);
+    }
+    
+    /// <inheritdoc cref="System_.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+    public void Ctx<T>(ref T value, delegate*<ref T, void> callback)
+    {
+        _system.Ctx(ref value, callback);
+    }
+
+    /// <inheritdoc cref="System_.Ctx{T}()"/>
+    public ref T Ctx<T>()
+    {
+        return ref _system.Ctx<T>();
     }
 
     /// <inheritdoc cref="System_.Query()"/>

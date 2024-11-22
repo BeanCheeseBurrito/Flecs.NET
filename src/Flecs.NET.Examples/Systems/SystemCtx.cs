@@ -18,7 +18,7 @@ file static unsafe class Systems_SystemCtx
         using Query<Position, Radius> qCollide = world.Query<Position, Radius>();
 
         System<Position, Radius> system = world.System<Position, Radius>("Collide")
-            .Ctx(&qCollide)
+            .Ctx(qCollide)
             .Each((Iter it, int i, ref Position p, ref Radius r) =>
             {
                 ref Query<Position, Radius> q = ref it.Ctx<Query<Position, Radius>>();

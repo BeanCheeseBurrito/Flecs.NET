@@ -6,9 +6,9 @@ namespace Flecs.NET.Core;
 public static unsafe partial class Ecs
 {
     /// <summary>
-    ///     App init action.
+    ///     App init callback.
     /// </summary>
-    public delegate int AppInitAction(ecs_world_t* world);
+    public delegate void AppInitCallback(World world);
 
     /// <summary>
     ///     Callback to be run before a user context object is released by flecs.

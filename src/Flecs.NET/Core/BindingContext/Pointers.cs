@@ -33,9 +33,8 @@ internal static unsafe class Pointers
     internal static readonly nint RunContextFree = (nint)(delegate* unmanaged<RunContext*, void>)&Functions.RunContextFree;
     internal static readonly nint QueryContextFree = (nint)(delegate* unmanaged<QueryContext*, void>)&Functions.QueryContextFree;
     internal static readonly nint GroupByContextFree = (nint)(delegate* unmanaged<GroupByContext*, void>)&Functions.GroupByContextFree;
-    internal static readonly nint SystemContextFree = (nint)(delegate* unmanaged<SystemContext*, void>)&Functions.SystemContextFree;
-    internal static readonly nint ObserverContextFree = (nint)(delegate* unmanaged<ObserverContext*, void>)&Functions.ObserverContextFree;
     internal static readonly nint TypeHooksContextFree = (nint)(delegate* unmanaged<TypeHooksContext*, void>)&Functions.TypeHooksContextFree;
+    internal static readonly nint UserContextFree = (nint)(delegate* unmanaged<UserContext*, void>)&Functions.UserContextFree;
 
     #endregion
 
@@ -100,6 +99,14 @@ internal static unsafe class Pointers
     internal static readonly nint WorldFinishCallback = (nint)(delegate* unmanaged<ecs_world_t*, void*, void>)&Functions.WorldFinishCallback;
     internal static readonly nint WorldFinishCallbackDelegate = (nint)(delegate*<ecs_world_t*, void*, void>)&Functions.WorldFinishCallbackDelegate;
     internal static readonly nint WorldFinishCallbackPointer = (nint)(delegate*<ecs_world_t*, void*, void>)&Functions.WorldFinishCallbackPointer;
+
+    #endregion
+
+    #region App Init Callbacks
+
+    internal static readonly nint AppInitCallback = (nint)(delegate* unmanaged<ecs_world_t*, int>)&Functions.AppInitCallback;
+    internal static readonly nint AppInitCallbackDelegate = (nint)(delegate*<World, WorldContext*, void>)&Functions.AppInitCallbackDelegate;
+    internal static readonly nint AppInitCallbackPointer = (nint)(delegate*<World, WorldContext*, void>)&Functions.AppInitCallbackPointer;
 
     #endregion
 

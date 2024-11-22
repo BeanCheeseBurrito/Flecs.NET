@@ -145,10 +145,45 @@ public class SystemBuilder : GeneratorBase
                     return ref this;
                 }
             
-                /// <inheritdoc cref="SystemBuilder.Ctx"/>
-                public ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} Ctx(void* ctx)
+                /// <inheritdoc cref="SystemBuilder.Ctx{T}(T)"/>
+                public ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} Ctx<T>(T value)
                 {
-                    _systemBuilder.Ctx(ctx);
+                    _systemBuilder.Ctx(ref value);
+                    return ref this;
+                }
+                
+                /// <inheritdoc cref="SystemBuilder.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+                public ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} Ctx<T>(T value, Ecs.UserContextFinish<T> callback)
+                {
+                    _systemBuilder.Ctx(ref value, callback);
+                    return ref this;
+                }
+                
+                /// <inheritdoc cref="SystemBuilder.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+                public ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} Ctx<T>(T value, delegate*<ref T, void> callback)
+                {
+                    _systemBuilder.Ctx(ref value, callback);
+                    return ref this;
+                }
+                
+                /// <inheritdoc cref="SystemBuilder.Ctx{T}(ref T)"/>
+                public ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} Ctx<T>(ref T value)
+                {
+                    _systemBuilder.Ctx(ref value);
+                    return ref this;
+                }
+                
+                /// <inheritdoc cref="SystemBuilder.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+                public ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} Ctx<T>(ref T value, Ecs.UserContextFinish<T> callback)
+                {
+                    _systemBuilder.Ctx(ref value, callback);
+                    return ref this;
+                }
+                
+                /// <inheritdoc cref="SystemBuilder.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+                public ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} Ctx<T>(ref T value, delegate*<ref T, void> callback)
+                {
+                    _systemBuilder.Ctx(ref value, callback);
                     return ref this;
                 }
                 

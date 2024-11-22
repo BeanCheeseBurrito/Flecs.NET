@@ -11,7 +11,7 @@ namespace Flecs.NET.Core;
 ///     A type-safe wrapper around <see cref="Observer"/> that takes 16 type arguments.
 /// </summary>
 /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam> <typeparam name="T3">The T3 component type.</typeparam> <typeparam name="T4">The T4 component type.</typeparam> <typeparam name="T5">The T5 component type.</typeparam> <typeparam name="T6">The T6 component type.</typeparam> <typeparam name="T7">The T7 component type.</typeparam> <typeparam name="T8">The T8 component type.</typeparam>
-public unsafe partial struct Observer<T0, T1, T2, T3, T4, T5, T6, T7, T8> : IEquatable<Observer<T0, T1, T2, T3, T4, T5, T6, T7, T8>>, IDisposable
+public unsafe partial struct Observer<T0, T1, T2, T3, T4, T5, T6, T7, T8> : IDisposable, IEquatable<Observer<T0, T1, T2, T3, T4, T5, T6, T7, T8>>, IEntity<Observer<T0, T1, T2, T3, T4, T5, T6, T7, T8>>
 {
     private Observer _observer;
 
@@ -54,22 +54,46 @@ public unsafe partial struct Observer<T0, T1, T2, T3, T4, T5, T6, T7, T8> : IEqu
         _observer.Dispose();
     }
 
-    ///
-    public void Ctx(void* ctx)
+    /// <inheritdoc cref="Observer.Ctx{T}(T)"/>
+    public void Ctx<T>(T value)
     {
-        _observer.Ctx(ctx);
+        _observer.Ctx(ref value);
     }
-
-    /// <inheritdoc cref="Observer.Ctx()"/>
-    public void* Ctx()
+    
+    /// <inheritdoc cref="Observer.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+    public void Ctx<T>(T value, Ecs.UserContextFinish<T> callback)
     {
-        return _observer.Ctx();
+        _observer.Ctx(ref value, callback);
     }
-
+    
+    /// <inheritdoc cref="Observer.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+    public void Ctx<T>(T value, delegate*<ref T, void> callback)
+    {
+        _observer.Ctx(ref value, callback);
+    }
+    
+    /// <inheritdoc cref="Observer.Ctx{T}(ref T)"/>
+    public void Ctx<T>(ref T value)
+    {
+        _observer.Ctx(ref value);
+    }
+    
+    /// <inheritdoc cref="Observer.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+    public void Ctx<T>(ref T value, Ecs.UserContextFinish<T> callback)
+    {
+        _observer.Ctx(ref value, callback);
+    }
+    
+    /// <inheritdoc cref="Observer.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+    public void Ctx<T>(ref T value, delegate*<ref T, void> callback)
+    {
+        _observer.Ctx(ref value, callback);
+    }
+    
     /// <inheritdoc cref="Observer.Ctx{T}()"/>
-    public T* Ctx<T>() where T : unmanaged
+    public ref T Ctx<T>()
     {
-        return _observer.Ctx<T>();
+        return ref _observer.Ctx<T>();
     }
 
     /// <inheritdoc cref="Observer.Query()"/>

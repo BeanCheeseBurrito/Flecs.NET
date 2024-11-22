@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
@@ -164,9 +165,10 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public ref T Ctx<T>() where T : unmanaged
+    public ref T Ctx<T>()
     {
-        return ref *CtxPtr<T>();
+        UserContext* context = (UserContext*)Handle->ctx;
+        return ref context->Get<T>();
     }
 
     /// <summary>
