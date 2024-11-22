@@ -96,10 +96,45 @@ public class ObserverBuilder : GeneratorBase
                     return ref this;
                 }
             
-                ///
-                public ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} Ctx(void* data)
+                /// <inheritdoc cref="ObserverBuilder.Ctx{T}(T)"/>
+                public ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} Ctx<T>(T value)
                 {
-                    _observerBuilder.Ctx(data);
+                    _observerBuilder.Ctx(ref value);
+                    return ref this;
+                }
+                
+                /// <inheritdoc cref="ObserverBuilder.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+                public ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} Ctx<T>(T value, Ecs.UserContextFinish<T> callback)
+                {
+                    _observerBuilder.Ctx(ref value, callback);
+                    return ref this;
+                }
+                
+                /// <inheritdoc cref="ObserverBuilder.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+                public ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} Ctx<T>(T value, delegate*<ref T, void> callback)
+                {
+                    _observerBuilder.Ctx(ref value, callback);
+                    return ref this;
+                }
+                
+                /// <inheritdoc cref="ObserverBuilder.Ctx{T}(ref T)"/>
+                public ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} Ctx<T>(ref T value)
+                {
+                    _observerBuilder.Ctx(ref value);
+                    return ref this;
+                }
+                
+                /// <inheritdoc cref="ObserverBuilder.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+                public ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} Ctx<T>(ref T value, Ecs.UserContextFinish<T> callback)
+                {
+                    _observerBuilder.Ctx(ref value, callback);
+                    return ref this;
+                }
+                
+                /// <inheritdoc cref="ObserverBuilder.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+                public ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} Ctx<T>(ref T value, delegate*<ref T, void> callback)
+                {
+                    _observerBuilder.Ctx(ref value, callback);
                     return ref this;
                 }
                 

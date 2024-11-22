@@ -45,21 +45,15 @@ internal static unsafe class Functions
     }
 
     [UnmanagedCallersOnly]
-    internal static void SystemContextFree(SystemContext* context)
-    {
-        SystemContext.Free(context);
-    }
-
-    [UnmanagedCallersOnly]
-    internal static void ObserverContextFree(ObserverContext* context)
-    {
-        ObserverContext.Free(context);
-    }
-
-    [UnmanagedCallersOnly]
     internal static void TypeHooksContextFree(TypeHooksContext* context)
     {
         TypeHooksContext.Free(context);
+    }
+
+    [UnmanagedCallersOnly]
+    internal static void UserContextFree(UserContext* context)
+    {
+        UserContext.Free(context);
     }
 
     internal static void UserContextFinishDelegate<T>(ref UserContext context)
@@ -381,7 +375,7 @@ internal static unsafe class Functions
 
     #endregion
 
-    #region World Finish Callback
+    #region World Finish Callbacks
 
     [UnmanagedCallersOnly]
     internal static void WorldFinishCallback(ecs_world_t* world, void* ctx)
@@ -400,6 +394,28 @@ internal static unsafe class Functions
     {
         WorldFinishContext* context = (WorldFinishContext*)ctx;
         ((delegate*<World, void>)context->Callback.Pointer)(world);
+    }
+
+    #endregion
+
+    #region App Init Callbacks
+
+    [UnmanagedCallersOnly]
+    internal static int AppInitCallback(ecs_world_t* world)
+    {
+        WorldContext* context = new World(world).GetBindingContext();
+        ((delegate*<World, WorldContext*, void>)context->AppInit.Invoker)(world, context);
+        return 0;
+    }
+
+    internal static void AppInitCallbackDelegate(World world, WorldContext* context)
+    {
+        ((Ecs.AppInitCallback)context->AppInit.Delegate.Target!)(world);
+    }
+
+    internal static void AppInitCallbackPointer(World world, WorldContext* context)
+    {
+        ((delegate*<World, void>)context->AppInit.Pointer)(world);
     }
 
     #endregion

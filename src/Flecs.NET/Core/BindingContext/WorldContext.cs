@@ -9,6 +9,7 @@ internal unsafe struct WorldContext : IDisposable
     public UserContext UserContext;
 
     public Callback UserContextFree;
+    public Callback AppInit;
 
     public NativeList<ulong> TypeCache;
     public NativeList<nint> RunPostFrameContexts; // Stores PostFrameContext*
@@ -18,6 +19,7 @@ internal unsafe struct WorldContext : IDisposable
     {
         UserContext.Dispose();
         UserContextFree.Dispose();
+        AppInit.Dispose();
         TypeCache.Dispose();
 
         foreach (nint ptr in RunPostFrameContexts)

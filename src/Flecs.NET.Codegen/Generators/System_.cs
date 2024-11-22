@@ -36,7 +36,7 @@ public class System_ : GeneratorBase
             ///     A type-safe wrapper around <see cref="System"/> that takes {{i + 1}} type arguments.
             /// </summary>
             /// {{Generator.XmlTypeParameters[i]}}
-            public unsafe partial struct {{systemTypeName}} : IEquatable<{{systemTypeName}}>, IEntity<{{systemTypeName}}>
+            public unsafe partial struct {{systemTypeName}} : IDisposable, IEquatable<{{systemTypeName}}>, IEntity<{{systemTypeName}}>
             {
                 private System_ _system;
             
@@ -72,17 +72,53 @@ public class System_ : GeneratorBase
                     {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
                     _system = new System_(entity);
                 }
-            
-                ///
-                public void Ctx(void* ctx)
+                
+                /// <inheritdoc cref="System_.Dispose"/>
+                public void Dispose()
                 {
-                    _system.Ctx(ctx);
+                    _system.Dispose();
                 }
             
-                /// <inheritdoc cref="System_.Ctx()"/>
-                public void* Ctx()
+                /// <inheritdoc cref="System_.Ctx{T}(T)"/>
+                public void Ctx<T>(T value)
                 {
-                    return _system.Ctx();
+                    _system.Ctx(ref value);
+                }
+                
+                /// <inheritdoc cref="System_.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+                public void Ctx<T>(T value, Ecs.UserContextFinish<T> callback)
+                {
+                    _system.Ctx(ref value, callback);
+                }
+                
+                /// <inheritdoc cref="System_.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+                public void Ctx<T>(T value, delegate*<ref T, void> callback)
+                {
+                    _system.Ctx(ref value, callback);
+                }
+                
+                /// <inheritdoc cref="System_.Ctx{T}(ref T)"/>
+                public void Ctx<T>(ref T value)
+                {
+                    _system.Ctx(ref value);
+                }
+                
+                /// <inheritdoc cref="System_.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+                public void Ctx<T>(ref T value, Ecs.UserContextFinish<T> callback)
+                {
+                    _system.Ctx(ref value, callback);
+                }
+                
+                /// <inheritdoc cref="System_.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+                public void Ctx<T>(ref T value, delegate*<ref T, void> callback)
+                {
+                    _system.Ctx(ref value, callback);
+                }
+            
+                /// <inheritdoc cref="System_.Ctx{T}()"/>
+                public ref T Ctx<T>()
+                {
+                    return ref _system.Ctx<T>();
                 }
             
                 /// <inheritdoc cref="System_.Query()"/>

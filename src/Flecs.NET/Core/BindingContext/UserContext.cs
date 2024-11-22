@@ -74,6 +74,20 @@ internal unsafe struct UserContext : IDisposable, IEquatable<UserContext>
         return Alloc(ref value);
     }
 
+    public static void Free(UserContext* context)
+    {
+        if (context == null)
+            return;
+        context->Dispose();
+        Memory.Free(context);
+    }
+
+    public static void Free(ref UserContext context)
+    {
+        fixed (UserContext* ptr = &context)
+            Free(ptr);
+    }
+
     public bool Equals(UserContext other)
     {
         return Object.Equals(other.Object);

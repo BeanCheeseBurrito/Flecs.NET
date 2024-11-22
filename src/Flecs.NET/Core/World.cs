@@ -14,7 +14,7 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
 {
     private ecs_world_t* _handle;
 
-    private ref WorldContext WorldContext => ref *EnsureBindingContext();
+    internal ref WorldContext WorldContext => ref *EnsureBindingContext();
 
     /// <summary>
     ///     The handle to the C world.
@@ -3857,6 +3857,11 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     public void InitBuiltinComponents()
     {
         Import<Ecs.Meta>();
+    }
+
+    internal WorldContext* GetBindingContext()
+    {
+        return (WorldContext*)ecs_get_binding_ctx_fast(Handle);
     }
 
     private WorldContext* EnsureBindingContext()

@@ -1,5 +1,5 @@
 using System;
-using System.Runtime.InteropServices;
+using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
@@ -8,16 +8,15 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     A wrapper around ecs_app_desc_t.
 /// </summary>
-public unsafe struct AppBuilder : IDisposable, IEquatable<AppBuilder>
+public unsafe struct AppBuilder : IEquatable<AppBuilder>
 {
-    private ecs_world_t* _world;
+    private World _world;
     private ecs_app_desc_t _desc;
-    private GCHandle _initHandle;
 
     /// <summary>
     ///     Reference to world.
     /// </summary>
-    public ref ecs_world_t* World => ref _world;
+    public ref World World => ref _world;
 
     /// <summary>
     ///     Reference to app description.
@@ -28,26 +27,16 @@ public unsafe struct AppBuilder : IDisposable, IEquatable<AppBuilder>
     ///     Creates an app builder for world.
     /// </summary>
     /// <param name="world"></param>
-    public AppBuilder(ecs_world_t* world)
+    public AppBuilder(World world)
     {
         _world = world;
         _desc = default;
-        _initHandle = default;
 
         ecs_world_info_t* stats = ecs_get_world_info(world);
         Desc.target_fps = stats->target_fps;
 
         if (Math.Abs(Desc.target_fps - 0) < 0.01)
             Desc.target_fps = 60;
-    }
-
-    /// <summary>
-    ///     Cleans up resources.
-    /// </summary>
-    public void Dispose()
-    {
-        Managed.FreeGcHandle(_initHandle);
-        _initHandle = default;
     }
 
     /// <summary>
@@ -120,25 +109,24 @@ public unsafe struct AppBuilder : IDisposable, IEquatable<AppBuilder>
     /// <summary>
     ///     Sets a callback to be run before starting the main loop.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="callback">The callback.</param>
     /// <returns></returns>
-    public ref AppBuilder Init(Ecs.AppInitAction value)
+    public ref AppBuilder Init(Ecs.AppInitCallback callback)
     {
-        Managed.FreeGcHandle(_initHandle);
-        _initHandle = GCHandle.Alloc(value);
-
-        Desc.init = Marshal.GetFunctionPointerForDelegate(value);
+        World.WorldContext.AppInit.Set(callback, Pointers.AppInitCallbackDelegate);
+        Desc.init = Pointers.AppInitCallback;
         return ref this;
     }
 
     /// <summary>
-    ///     Context for storing custom data.
+    ///     Sets a callback to be run before starting the main loop.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="callback">The callback.</param>
     /// <returns></returns>
-    public ref AppBuilder Ctx(void* value)
+    public ref AppBuilder Init(delegate*<World, void> callback)
     {
-        Desc.ctx = value;
+        World.WorldContext.AppInit.Set((int)callback, Pointers.AppInitCallbackPointer);
+        Desc.init = Pointers.AppInitCallback;
         return ref this;
     }
 
@@ -149,15 +137,7 @@ public unsafe struct AppBuilder : IDisposable, IEquatable<AppBuilder>
     public int Run()
     {
         fixed (ecs_app_desc_t* appDesc = &Desc)
-        {
-            int result = ecs_app_run(World, appDesc);
-
-            if (ecs_should_quit(World) == 1)
-                _ = ecs_fini(World);
-
-            Dispose();
-            return result;
-        }
+            return ecs_app_run(World, appDesc);
     }
 
     /// <summary>

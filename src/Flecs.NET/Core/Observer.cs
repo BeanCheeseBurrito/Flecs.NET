@@ -1,4 +1,5 @@
 using System;
+using Flecs.NET.Core.BindingContext;
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
@@ -49,38 +50,103 @@ public unsafe partial struct Observer : IEquatable<Observer>, IDisposable, IEnti
     /// </summary>
     public void Dispose()
     {
-        Destruct();
+        Entity.Destruct();
     }
 
     /// <summary>
-    ///     Sets the observer context.
+    ///     Sets the observer user context object.
     /// </summary>
-    /// <param name="ctx"></param>
-    public void Ctx(void* ctx)
+    /// <param name="value">The user context object.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public void Ctx<T>(T value)
     {
-        ecs_observer_desc_t desc = default;
-        desc.entity = Entity;
-        desc.ctx = ctx;
-        ecs_observer_init(World, &desc);
+        new ObserverBuilder(World, Entity)
+            .Ctx(ref value)
+            .Build();
     }
 
     /// <summary>
-    ///     Gets the observer context.
+    ///     Sets the observer user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public void Ctx<T>(T value, Ecs.UserContextFinish<T> callback)
+    {
+        new ObserverBuilder(World, Entity)
+            .Ctx(ref value, callback)
+            .Build();
+    }
+
+    /// <summary>
+    ///     Sets the observer user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public void Ctx<T>(T value, delegate*<ref T, void> callback)
+    {
+        new ObserverBuilder(World, Entity)
+            .Ctx(ref value, callback)
+            .Build();
+    }
+
+    /// <summary>
+    ///     Sets the observer user context object.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public void Ctx<T>(ref T value)
+    {
+        new ObserverBuilder(World, Entity)
+            .Ctx(ref value)
+            .Build();
+    }
+
+    /// <summary>
+    ///     Sets the observer user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public void Ctx<T>(ref T value, Ecs.UserContextFinish<T> callback)
+    {
+        new ObserverBuilder(World, Entity)
+            .Ctx(ref value, callback)
+            .Build();
+    }
+
+    /// <summary>
+    ///     Sets the observer user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public void Ctx<T>(ref T value, delegate*<ref T, void> callback)
+    {
+        new ObserverBuilder(World, Entity)
+            .Ctx(ref value, callback)
+            .Build();
+    }
+
+    /// <summary>
+    ///     Returns the context for the system.
     /// </summary>
     /// <returns></returns>
-    public void* Ctx()
+    public ref T Ctx<T>()
     {
-        return ecs_observer_get(World, Entity)->ctx;
-    }
-
-    /// <summary>
-    ///     Gets the observer context.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public T* Ctx<T>() where T : unmanaged
-    {
-        return (T*)Ctx();
+        UserContext* context = (UserContext*)ecs_observer_get(World, Entity)->ctx;
+        return ref context->Get<T>();
     }
 
     /// <summary>

@@ -14,6 +14,10 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     private ecs_system_desc_t _desc;
     private QueryBuilder _queryBuilder;
 
+    internal ref UserContext UserContext => ref *EnsureUserContext();
+    internal ref IteratorContext IteratorContext => ref *EnsureIteratorContext();
+    internal ref RunContext RunContext => ref *EnsureRunContext();
+
     /// <summary>
     ///     A reference to the world.
     /// </summary>
@@ -28,10 +32,6 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     ///     A reference to the query builder.
     /// </summary>
     public ref QueryBuilder QueryBuilder => ref _queryBuilder;
-
-    internal ref SystemContext SystemContext => ref *EnsureSystemContext();
-    internal ref IteratorContext IteratorContext => ref *EnsureIteratorContext();
-    internal ref RunContext RunContext => ref *EnsureRunContext();
 
     /// <summary>
     ///     Creates a system builder for the provided world.
@@ -68,6 +68,33 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
         entityDesc.root_sep = Pointers.DefaultSeparator;
 
         Desc.entity = ecs_entity_init(world, &entityDesc);
+
+        if (ecs_has_id(world, Desc.entity, Ecs.Pair(EcsDependsOn, EcsWildcard)) == Utils.True)
+            return;
+
+        ecs_add_id(world, Desc.entity, Ecs.Pair(EcsDependsOn, EcsOnUpdate));
+        ecs_add_id(world, Desc.entity, EcsOnUpdate);
+    }
+
+    /// <summary>
+    ///     Creates a system builder for the provided world.
+    /// </summary>
+    /// <param name="world">The world.</param>
+    /// <param name="entity">The system entity.</param>
+    public SystemBuilder(ecs_world_t* world, ulong entity)
+    {
+        _world = world;
+        _desc = default;
+        _queryBuilder = new QueryBuilder(world);
+
+        ecs_entity_desc_t entityDesc = default;
+        entityDesc.id = entity;
+
+        Desc.entity = ecs_entity_init(world, &entityDesc);
+
+        if (ecs_has_id(world, Desc.entity, Ecs.Pair(EcsDependsOn, EcsWildcard)) == Utils.True)
+            return;
+
         ecs_add_id(world, Desc.entity, Ecs.Pair(EcsDependsOn, EcsOnUpdate));
         ecs_add_id(world, Desc.entity, EcsOnUpdate);
     }
@@ -79,7 +106,7 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     public void Dispose()
     {
         QueryBuilder.Dispose();
-        SystemContext.Free(ref SystemContext);
+        UserContext.Free(ref UserContext);
         IteratorContext.Free(ref IteratorContext);
         RunContext.Free(ref RunContext);
         this = default;
@@ -210,13 +237,82 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
     }
 
     /// <summary>
-    ///     Set system context.
+    ///     Sets the system user context object.
     /// </summary>
-    /// <param name="ctx"></param>
+    /// <param name="value">The user context object.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
     /// <returns></returns>
-    public ref SystemBuilder Ctx(void* ctx)
+    public ref SystemBuilder Ctx<T>(T value)
     {
-        Desc.ctx = ctx;
+        UserContext.Set(ref value);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the system user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref SystemBuilder Ctx<T>(T value, Ecs.UserContextFinish<T> callback)
+    {
+        UserContext.Set(ref value, callback);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the system user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref SystemBuilder Ctx<T>(T value, delegate*<ref T, void> callback)
+    {
+        UserContext.Set(ref value, callback);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the system user context object.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref SystemBuilder Ctx<T>(ref T value)
+    {
+        UserContext.Set(ref value);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the system user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref SystemBuilder Ctx<T>(ref T value, Ecs.UserContextFinish<T> callback)
+    {
+        UserContext.Set(ref value, callback);
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Sets the system user context object. The provided callback will be run before the
+    ///     user context object is released by flecs.
+    /// </summary>
+    /// <param name="value">The user context object.</param>
+    /// <param name="callback">The callback.</param>
+    /// <typeparam name="T">The user context type.</typeparam>
+    /// <returns></returns>
+    public ref SystemBuilder Ctx<T>(ref T value, delegate*<ref T, void> callback)
+    {
+        UserContext.Set(ref value, callback);
         return ref this;
     }
 
@@ -437,14 +533,14 @@ public unsafe partial struct SystemBuilder : IDisposable, IEquatable<SystemBuild
         return Build();
     }
 
-    private SystemContext* EnsureSystemContext()
+    private UserContext* EnsureUserContext()
     {
         if (Desc.ctx != null)
-            return (SystemContext*)Desc.ctx;
+            return (UserContext*)Desc.ctx;
 
-        Desc.ctx = Memory.AllocZeroed<SystemContext>(1);
-        Desc.ctx_free = Pointers.SystemContextFree;
-        return (SystemContext*)Desc.ctx;
+        Desc.ctx = Memory.AllocZeroed<UserContext>(1);
+        Desc.ctx_free = Pointers.UserContextFree;
+        return (UserContext*)Desc.ctx;
     }
 
     private IteratorContext* EnsureIteratorContext()

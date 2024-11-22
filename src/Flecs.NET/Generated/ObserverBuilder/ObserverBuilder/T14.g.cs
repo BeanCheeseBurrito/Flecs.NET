@@ -75,10 +75,45 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
         return ref this;
     }
 
-    ///
-    public ref ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Ctx(void* data)
+    /// <inheritdoc cref="ObserverBuilder.Ctx{T}(T)"/>
+    public ref ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Ctx<T>(T value)
     {
-        _observerBuilder.Ctx(data);
+        _observerBuilder.Ctx(ref value);
+        return ref this;
+    }
+    
+    /// <inheritdoc cref="ObserverBuilder.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+    public ref ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Ctx<T>(T value, Ecs.UserContextFinish<T> callback)
+    {
+        _observerBuilder.Ctx(ref value, callback);
+        return ref this;
+    }
+    
+    /// <inheritdoc cref="ObserverBuilder.Ctx{T}(T, Ecs.UserContextFinish{T})"/>
+    public ref ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Ctx<T>(T value, delegate*<ref T, void> callback)
+    {
+        _observerBuilder.Ctx(ref value, callback);
+        return ref this;
+    }
+    
+    /// <inheritdoc cref="ObserverBuilder.Ctx{T}(ref T)"/>
+    public ref ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Ctx<T>(ref T value)
+    {
+        _observerBuilder.Ctx(ref value);
+        return ref this;
+    }
+    
+    /// <inheritdoc cref="ObserverBuilder.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+    public ref ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Ctx<T>(ref T value, Ecs.UserContextFinish<T> callback)
+    {
+        _observerBuilder.Ctx(ref value, callback);
+        return ref this;
+    }
+    
+    /// <inheritdoc cref="ObserverBuilder.Ctx{T}(ref T, Ecs.UserContextFinish{T})"/>
+    public ref ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Ctx<T>(ref T value, delegate*<ref T, void> callback)
+    {
+        _observerBuilder.Ctx(ref value, callback);
         return ref this;
     }
     

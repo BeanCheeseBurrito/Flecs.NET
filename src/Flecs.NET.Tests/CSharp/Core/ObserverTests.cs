@@ -2667,4 +2667,46 @@ public unsafe class ObserverTests
             p->Y += v->Y;
         }
     }
+
+    [Fact]
+    private void Ctx()
+    {
+        using World world = World.Create();
+
+        Observer observer = world.Observer()
+            .Event(Ecs.OnAdd)
+            .With<Position>()
+            .Ctx(new UnmanagedStruct(10))
+            .Each(static (Iter it, int _) =>
+            {
+                it.Ctx<UnmanagedStruct>().Value = 20;
+            });
+
+        Assert.Equal(10, observer.Ctx<UnmanagedStruct>().Value);
+        world.Entity().Add<Position>();
+        Assert.Equal(20, observer.Ctx<UnmanagedStruct>().Value);
+    }
+
+    [Fact]
+    private void CtxWithCallback()
+    {
+        using World world = World.Create();
+
+        Observer observer = world.Observer()
+            .Event(Ecs.OnAdd)
+            .With<Position>()
+            .Ctx(new UnmanagedStruct(10),static (ref UnmanagedStruct ctx) =>
+            {
+                Assert.Equal(30, ctx.Value);
+            })
+            .Each(static (Iter it, int _) =>
+            {
+                it.Ctx<UnmanagedStruct>().Value = 20;
+            });
+
+        Assert.Equal(10, observer.Ctx<UnmanagedStruct>().Value);
+        world.Entity().Add<Position>();
+        Assert.Equal(20, observer.Ctx<UnmanagedStruct>().Value);
+        observer.Ctx<UnmanagedStruct>().Value = 30;
+    }
 }
