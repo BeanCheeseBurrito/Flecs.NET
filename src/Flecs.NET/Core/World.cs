@@ -10,16 +10,16 @@ namespace Flecs.NET.Core;
 ///     The world is the container of all ECS data and systems. If the world is deleted, all data in the world will be
 ///     deleted as well.
 /// </summary>
-public unsafe partial struct World : IDisposable, IEquatable<World>
+public readonly unsafe partial struct World : IDisposable, IEquatable<World>
 {
-    private ecs_world_t* _handle;
+    private readonly ecs_world_t* _handle;
 
     internal ref WorldContext WorldContext => ref *EnsureBindingContext();
 
     /// <summary>
     ///     The handle to the C world.
     /// </summary>
-    public ref ecs_world_t* Handle => ref _handle;
+    public ref readonly ecs_world_t* Handle => ref _handle;
 
     /// <summary>
     ///     Constructs a world from an <see cref="ecs_world_t"/> pointer.
@@ -96,19 +96,6 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
             return;
 
         _ = ecs_fini(Handle);
-        Handle = null;
-    }
-
-    /// <summary>
-    ///     Deletes and creates a new world.
-    /// </summary>
-    public void Reset()
-    {
-        Ecs.Assert(Handle != null, nameof(ECS_INVALID_OPERATION));
-        Ecs.Assert(Ecs.IsStageOrWorld(Handle));
-        Ecs.Assert(!Ecs.PolyIs(Handle, ecs_stage_t_magic));
-        _ = ecs_fini(Handle);
-        Handle = ecs_init();
     }
 
     /// <summary>
@@ -454,10 +441,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="size">The size of the pointed-to data.</param>
     /// <param name="data">The pointer to the data.</param>
     /// <returns>Reference to self.</returns>
-    public ref World SetUntyped(ulong id, int size, void* data)
+    public World SetUntyped(ulong id, int size, void* data)
     {
         Entity(id).SetUntyped(id, size, data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
@@ -466,10 +453,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="id">The id of the component to set.</param>
     /// <param name="data">The pointer to the data.</param>
     /// <returns>Reference to self.</returns>
-    public ref World SetUntyped(ulong id, void* data)
+    public World SetUntyped(ulong id, void* data)
     {
         Entity(id).SetUntyped(id, data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
@@ -480,10 +467,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="size">The size of the pointed-to data.</param>
     /// <param name="data">The pointer to the data.</param>
     /// <returns>Reference to self.</returns>
-    public ref World SetUntyped(ulong first, ulong second, int size, void* data)
+    public World SetUntyped(ulong first, ulong second, int size, void* data)
     {
         Entity(first).SetUntyped(first, second, size, data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
@@ -492,10 +479,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="data">The pointer to the data.</param>
     /// <typeparam name="T">The component type.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World SetPtr<T>(T* data)
+    public World SetPtr<T>(T* data)
     {
         Entity<T>().SetPtr(data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
@@ -505,10 +492,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="data">The pointer to the data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World SetPtr<TFirst>(ulong second, TFirst* data)
+    public World SetPtr<TFirst>(ulong second, TFirst* data)
     {
         Entity<TFirst>().SetPtr(second, data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
@@ -518,10 +505,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World SetPtr<TFirst, TSecond>(TFirst* data)
+    public World SetPtr<TFirst, TSecond>(TFirst* data)
     {
         Entity<TFirst>().SetPtr<TFirst, TSecond>(data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
@@ -531,10 +518,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World SetPtr<TFirst, TSecond>(TSecond* data)
+    public World SetPtr<TFirst, TSecond>(TSecond* data)
     {
         Entity<TFirst>().SetPtr<TFirst, TSecond>(data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
@@ -545,9 +532,9 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World SetPtr<TFirst, TSecond>(TSecond second, TFirst* data) where TSecond : Enum
+    public World SetPtr<TFirst, TSecond>(TSecond second, TFirst* data) where TSecond : Enum
     {
-        return ref SetPtr(Type<TSecond>.Id(Handle, second), data);
+        return SetPtr(Type<TSecond>.Id(Handle, second), data);
     }
 
     /// <summary>
@@ -558,9 +545,9 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World SetPtr<TFirst, TSecond>(TFirst first, TSecond* data) where TFirst : Enum
+    public World SetPtr<TFirst, TSecond>(TFirst first, TSecond* data) where TFirst : Enum
     {
-        return ref SetPtrSecond(Type<TFirst>.Id(Handle, first), data);
+        return SetPtrSecond(Type<TFirst>.Id(Handle, first), data);
     }
 
     /// <summary>
@@ -570,10 +557,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="data">The pointer to the data.</param>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World SetPtrSecond<TSecond>(ulong first, TSecond* data)
+    public World SetPtrSecond<TSecond>(ulong first, TSecond* data)
     {
         Entity(first).SetPtrSecond(first, data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
@@ -582,9 +569,9 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="data">The data.</param>
     /// <typeparam name="T">The component type.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World Set<T>(T data)
+    public World Set<T>(T data)
     {
-        return ref Set(ref data);
+        return Set(ref data);
     }
 
     /// <summary>
@@ -594,9 +581,9 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="data">The data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World Set<TFirst>(ulong second, TFirst data)
+    public World Set<TFirst>(ulong second, TFirst data)
     {
-        return ref Set(second, ref data);
+        return Set(second, ref data);
     }
 
     /// <summary>
@@ -606,9 +593,9 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World Set<TFirst, TSecond>(TFirst data)
+    public World Set<TFirst, TSecond>(TFirst data)
     {
-        return ref Set<TFirst, TSecond>(ref data);
+        return Set<TFirst, TSecond>(ref data);
     }
 
     /// <summary>
@@ -618,9 +605,9 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World Set<TFirst, TSecond>(TSecond data)
+    public World Set<TFirst, TSecond>(TSecond data)
     {
-        return ref Set<TFirst, TSecond>(ref data);
+        return Set<TFirst, TSecond>(ref data);
     }
 
     /// <summary>
@@ -631,9 +618,9 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World Set<TFirst, TSecond>(TSecond second, TFirst data) where TSecond : Enum
+    public World Set<TFirst, TSecond>(TSecond second, TFirst data) where TSecond : Enum
     {
-        return ref Set<TFirst, TSecond>(second, ref data);
+        return Set<TFirst, TSecond>(second, ref data);
     }
 
     /// <summary>
@@ -644,9 +631,9 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World Set<TFirst, TSecond>(TFirst first, TSecond data) where TFirst : Enum
+    public World Set<TFirst, TSecond>(TFirst first, TSecond data) where TFirst : Enum
     {
-        return ref Set<TFirst, TSecond>(first, ref data);
+        return Set<TFirst, TSecond>(first, ref data);
     }
 
     /// <summary>
@@ -656,9 +643,9 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="data">The data.</param>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World SetSecond<TSecond>(ulong first, TSecond data)
+    public World SetSecond<TSecond>(ulong first, TSecond data)
     {
-        return ref SetSecond(first, ref data);
+        return SetSecond(first, ref data);
     }
 
     /// <summary>
@@ -667,10 +654,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="data">The reference to the data.</param>
     /// <typeparam name="T">The component type.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World Set<T>(ref T data)
+    public World Set<T>(ref T data)
     {
         Entity<T>().Set(ref data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
@@ -680,10 +667,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="data">The reference to the data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World Set<TFirst>(ulong second, ref TFirst data)
+    public World Set<TFirst>(ulong second, ref TFirst data)
     {
         Entity<TFirst>().Set(second, ref data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
@@ -693,10 +680,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World Set<TFirst, TSecond>(ref TFirst data)
+    public World Set<TFirst, TSecond>(ref TFirst data)
     {
         Entity<TFirst>().Set<TFirst, TSecond>(ref data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
@@ -706,10 +693,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World Set<TFirst, TSecond>(ref TSecond data)
+    public World Set<TFirst, TSecond>(ref TSecond data)
     {
         Entity<TFirst>().Set<TFirst, TSecond>(ref data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
@@ -720,9 +707,9 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World Set<TFirst, TSecond>(TSecond second, ref TFirst data) where TSecond : Enum
+    public World Set<TFirst, TSecond>(TSecond second, ref TFirst data) where TSecond : Enum
     {
-        return ref Set(Type<TSecond>.Id(Handle, second), ref data);
+        return Set(Type<TSecond>.Id(Handle, second), ref data);
     }
 
     /// <summary>
@@ -733,9 +720,9 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World Set<TFirst, TSecond>(TFirst first, ref TSecond data) where TFirst : Enum
+    public World Set<TFirst, TSecond>(TFirst first, ref TSecond data) where TFirst : Enum
     {
-        return ref SetSecond(Type<TFirst>.Id(Handle, first), ref data);
+        return SetSecond(Type<TFirst>.Id(Handle, first), ref data);
     }
 
     /// <summary>
@@ -745,10 +732,10 @@ public unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="data">The reference to the data.</param>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref World SetSecond<TSecond>(ulong first, ref TSecond data)
+    public World SetSecond<TSecond>(ulong first, ref TSecond data)
     {
         Entity(first).SetSecond(first, ref data);
-        return ref this;
+        return this;
     }
 
     /// <summary>
