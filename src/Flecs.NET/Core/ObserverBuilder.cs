@@ -120,7 +120,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns></returns>
     public ref ObserverBuilder YieldExisting(bool value = true)
     {
-        Desc.yield_existing = Utils.Bool(value);
+        Desc.yield_existing = value;
         return ref this;
     }
 
@@ -222,7 +222,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Run(Action callback)
     {
-        return SetCallback(callback, Pointers.ActionCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.ActionCallbackDelegate).Build();
     }
 
     /// <summary>
@@ -232,7 +232,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Run(delegate*<void> callback)
     {
-        return SetCallback((nint)callback, Pointers.ActionCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.ActionCallbackPointer).Build();
     }
 
     /// <summary>
@@ -242,7 +242,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Run(Ecs.RunCallback run)
     {
-        return SetRun(run, Pointers.RunCallbackDelegate).Build();
+        return SetRun(run, (delegate*<ecs_iter_t*, void>)&Functions.RunCallbackDelegate).Build();
     }
 
     /// <summary>
@@ -252,7 +252,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Run(delegate*<Iter, void> callback)
     {
-        return SetRun((nint)callback, Pointers.RunCallbackPointer).Build();
+        return SetRun(callback, (delegate*<ecs_iter_t*, void>)&Functions.RunCallbackPointer).Build();
     }
 
     /// <summary>
@@ -262,7 +262,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>Reference to self.</returns>
     public ref ObserverBuilder Run(Ecs.RunDelegateCallback run)
     {
-        return ref SetRun(run, Pointers.RunDelegateCallbackDelegate);
+        return ref SetRun(run, (delegate*<ecs_iter_t*, void>)&Functions.RunDelegateCallbackDelegate);
     }
 
     /// <summary>
@@ -272,7 +272,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>Reference to self.</returns>
     public ref ObserverBuilder Run(delegate*<Iter, Action<Iter>, void> callback)
     {
-        return ref SetRun((nint)callback, Pointers.RunDelegateCallbackPointer);
+        return ref SetRun(callback, (delegate*<ecs_iter_t*, void>)&Functions.RunDelegateCallbackPointer);
     }
 
     /// <summary>
@@ -282,7 +282,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>Reference to self.</returns>
     public ref ObserverBuilder Run(Ecs.RunPointerCallback callback)
     {
-        return ref SetRun(callback, Pointers.RunPointerCallbackDelegate);
+        return ref SetRun(callback, (delegate*<ecs_iter_t*, void>)&Functions.RunPointerCallbackDelegate);
     }
 
     /// <summary>
@@ -292,7 +292,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>Reference to self.</returns>
     public ref ObserverBuilder Run(delegate*<Iter, delegate*<Iter, void>, void> callback)
     {
-        return ref SetRun((nint)callback, Pointers.RunPointerCallbackPointer);
+        return ref SetRun(callback, (delegate*<ecs_iter_t*, void>)&Functions.RunPointerCallbackPointer);
     }
 
     /// <summary>
@@ -302,7 +302,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Iter(Action callback)
     {
-        return SetCallback(callback, Pointers.ActionCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.ActionCallbackDelegate).Build();
     }
 
     /// <summary>
@@ -312,7 +312,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Iter(delegate*<void> callback)
     {
-        return SetCallback((nint)callback, Pointers.ActionCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.ActionCallbackPointer).Build();
     }
 
     /// <summary>
@@ -322,7 +322,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Iter(Ecs.IterCallback callback)
     {
-        return SetCallback(callback, Pointers.IterCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.IterCallbackDelegate).Build();
     }
 
     /// <summary>
@@ -332,7 +332,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Iter(delegate*<Iter, void> callback)
     {
-        return SetCallback((nint)callback, Pointers.IterCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.IterCallbackPointer).Build();
     }
 
     /// <summary>
@@ -342,7 +342,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Each(Action callback)
     {
-        return SetCallback(callback, Pointers.ActionCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.ActionCallbackDelegate).Build();
     }
 
     /// <summary>
@@ -352,7 +352,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Each(delegate*<void> callback)
     {
-        return SetCallback((nint)callback, Pointers.ActionCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.ActionCallbackPointer).Build();
     }
 
     /// <summary>
@@ -362,7 +362,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Each(Ecs.EachEntityCallback callback)
     {
-        return SetCallback(callback, Pointers.EachEntityCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachEntityCallbackDelegate).Build();
     }
 
     /// <summary>
@@ -372,7 +372,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Each(delegate*<Entity, void> callback)
     {
-        return SetCallback((nint)callback, Pointers.EachEntityCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachEntityCallbackPointer).Build();
     }
 
     /// <summary>
@@ -382,7 +382,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Each(Ecs.EachIterCallback callback)
     {
-        return SetCallback(callback, Pointers.EachIterCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachIterCallbackDelegate).Build();
     }
 
     /// <summary>
@@ -392,28 +392,28 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
     /// <returns>The created observer.</returns>
     public Observer Each(delegate*<Iter, int, void> callback)
     {
-        return SetCallback((nint)callback, Pointers.EachIterCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachIterCallbackPointer).Build();
     }
 
-    internal ref ObserverBuilder SetCallback<T>(T callback, nint invoker) where T : Delegate
+    internal ref ObserverBuilder SetCallback<T>(T callback, void* invoker) where T : Delegate
     {
         IteratorContext.Callback.Set(callback, invoker);
         return ref this;
     }
 
-    internal ref ObserverBuilder SetCallback(nint callback, nint invoker)
+    internal ref ObserverBuilder SetCallback(void* callback, void* invoker)
     {
         IteratorContext.Callback.Set(callback, invoker);
         return ref this;
     }
 
-    internal ref ObserverBuilder SetRun<T>(T callback, nint invoker) where T : Delegate
+    internal ref ObserverBuilder SetRun<T>(T callback, void* invoker) where T : Delegate
     {
         RunContext.Callback.Set(callback, invoker);
         return ref this;
     }
 
-    internal ref ObserverBuilder SetRun(nint callback, nint invoker)
+    internal ref ObserverBuilder SetRun(void* callback, void* invoker)
     {
         RunContext.Callback.Set(callback, invoker);
         return ref this;
@@ -442,7 +442,7 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
             return (UserContext*)Desc.ctx;
 
         Desc.ctx = Memory.AllocZeroed<UserContext>(1);
-        Desc.ctx_free = Pointers.UserContextFree;
+        Desc.ctx_free = &Functions.UserContextFree;
         return (UserContext*)Desc.ctx;
     }
 
@@ -451,9 +451,9 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
         if (Desc.callback_ctx != null)
             return (IteratorContext*)Desc.callback_ctx;
 
-        Desc.callback = Pointers.IteratorCallback;
+        Desc.callback = &Functions.IteratorCallback;
         Desc.callback_ctx = Memory.AllocZeroed<IteratorContext>(1);
-        Desc.callback_ctx_free = Pointers.IteratorContextFree;
+        Desc.callback_ctx_free = &Functions.IteratorContextFree;
         return (IteratorContext*)Desc.callback_ctx;
     }
 
@@ -462,9 +462,9 @@ public unsafe partial struct ObserverBuilder : IDisposable, IEquatable<ObserverB
         if (Desc.run_ctx != null)
             return (RunContext*)Desc.run_ctx;
 
-        Desc.run = Pointers.RunCallback;
+        Desc.run = &Functions.RunCallback;
         Desc.run_ctx = Memory.AllocZeroed<RunContext>(1);
-        Desc.run_ctx_free = Pointers.RunContextFree;
+        Desc.run_ctx_free = &Functions.RunContextFree;
         return (RunContext*)Desc.run_ctx;
     }
 

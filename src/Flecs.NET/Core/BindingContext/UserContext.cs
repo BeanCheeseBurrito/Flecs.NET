@@ -39,14 +39,14 @@ internal unsafe struct UserContext : IDisposable, IEquatable<UserContext>
     {
         Dispose();
         Object = GCHandle.Alloc(new StrongBox<T>(value));
-        Callback.Set(callback, Pointers<T>.UserContextFinishDelegate);
+        Callback.Set(callback, (delegate*<ref UserContext, void>)&Functions.UserContextFinishDelegate<T>);
     }
 
     public void Set<T>(ref T value, delegate*<ref T, void> callback)
     {
         Dispose();
         Object = GCHandle.Alloc(new StrongBox<T>(value));
-        Callback.Set((nint)callback, Pointers<T>.UserContextFinishPointer);
+        Callback.Set(callback, (delegate*<ref UserContext, void>)&Functions.UserContextFinishPointer<T>);
     }
 
     public void Set<T>(T value)

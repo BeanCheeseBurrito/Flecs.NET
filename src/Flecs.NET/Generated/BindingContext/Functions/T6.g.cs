@@ -6,123 +6,123 @@ using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core.BindingContext;
 
-internal static unsafe partial class Functions<T0, T1, T2, T3, T4, T5, T6>
+internal static unsafe partial class Functions
 {
-    internal static void RunCallbackDelegate(ecs_iter_t* iter)
+    internal static void RunCallbackDelegate<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         RunContext* context = (RunContext*)iter->run_ctx;
         Invoker.Run(iter, (Ecs.RunCallback)context->Callback.Delegate.Target!);
     }
 
-    internal static void RunCallbackPointer(ecs_iter_t* iter)
+    internal static void RunCallbackPointer<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         RunContext* context = (RunContext*)iter->run_ctx;
         Invoker.Run(iter, (delegate*<Iter, void>)context->Callback.Pointer);
     }
 
-    internal static void IterFieldCallbackDelegate(ecs_iter_t* iter)
+    internal static void IterFieldCallbackDelegate<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Iter(iter, (Ecs.IterFieldCallback<T0, T1, T2, T3, T4, T5, T6>)context->Callback.Delegate.Target!);
     }
 
-    internal static void IterSpanCallbackDelegate(ecs_iter_t* iter)
+    internal static void IterSpanCallbackDelegate<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Iter(iter, (Ecs.IterSpanCallback<T0, T1, T2, T3, T4, T5, T6>)context->Callback.Delegate.Target!);
     }
 
-    internal static void IterPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void IterPointerCallbackDelegate<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Iter(iter, (Ecs.IterPointerCallback<T0, T1, T2, T3, T4, T5, T6>)context->Callback.Delegate.Target!);
     }
 
-    internal static void IterFieldCallbackPointer(ecs_iter_t* iter)
+    internal static void IterFieldCallbackPointer<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Iter(iter, (delegate*<Iter, Field<T0>, Field<T1>, Field<T2>, Field<T3>, Field<T4>, Field<T5>, Field<T6>, void>)context->Callback.Pointer);
     }
 
-    internal static void IterSpanCallbackPointer(ecs_iter_t* iter)
+    internal static void IterSpanCallbackPointer<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Iter(iter, (delegate*<Iter, Span<T0>, Span<T1>, Span<T2>, Span<T3>, Span<T4>, Span<T5>, Span<T6>, void>)context->Callback.Pointer);
     }
 
-    internal static void IterPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void IterPointerCallbackPointer<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Iter(iter, (delegate*<Iter, T0*, T1*, T2*, T3*, T4*, T5*, T6*, void>)context->Callback.Pointer);
     }
 
-    internal static void EachRefCallbackDelegate(ecs_iter_t* iter)
+    internal static void EachRefCallbackDelegate<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Each(iter, (Ecs.EachRefCallback<T0, T1, T2, T3, T4, T5, T6>)context->Callback.Delegate.Target!);
     }
 
-    internal static void EachEntityRefCallbackDelegate(ecs_iter_t* iter)
+    internal static void EachEntityRefCallbackDelegate<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Each(iter, (Ecs.EachEntityRefCallback<T0, T1, T2, T3, T4, T5, T6>)context->Callback.Delegate.Target!);
     }
 
-    internal static void EachIterRefCallbackDelegate(ecs_iter_t* iter)
+    internal static void EachIterRefCallbackDelegate<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Each(iter, (Ecs.EachIterRefCallback<T0, T1, T2, T3, T4, T5, T6>)context->Callback.Delegate.Target!);
     }
 
-    internal static void EachRefCallbackPointer(ecs_iter_t* iter)
+    internal static void EachRefCallbackPointer<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Each(iter, (delegate*<ref T0, ref T1, ref T2, ref T3, ref T4, ref T5, ref T6, void>)context->Callback.Pointer);
     }
 
-    internal static void EachEntityRefCallbackPointer(ecs_iter_t* iter)
+    internal static void EachEntityRefCallbackPointer<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Each(iter, (delegate*<Entity, ref T0, ref T1, ref T2, ref T3, ref T4, ref T5, ref T6, void>)context->Callback.Pointer);
     }
 
-    internal static void EachIterRefCallbackPointer(ecs_iter_t* iter)
+    internal static void EachIterRefCallbackPointer<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Each(iter, (delegate*<Iter, int, ref T0, ref T1, ref T2, ref T3, ref T4, ref T5, ref T6, void>)context->Callback.Pointer);
     }
 
-    internal static void EachPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void EachPointerCallbackDelegate<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Each(iter, (Ecs.EachPointerCallback<T0, T1, T2, T3, T4, T5, T6>)context->Callback.Delegate.Target!);
     }
 
-    internal static void EachEntityPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void EachEntityPointerCallbackDelegate<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Each(iter, (Ecs.EachEntityPointerCallback<T0, T1, T2, T3, T4, T5, T6>)context->Callback.Delegate.Target!);
     }
 
-    internal static void EachIterPointerCallbackDelegate(ecs_iter_t* iter)
+    internal static void EachIterPointerCallbackDelegate<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Each(iter, (Ecs.EachIterPointerCallback<T0, T1, T2, T3, T4, T5, T6>)context->Callback.Delegate.Target!);
     }
 
-    internal static void EachPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void EachPointerCallbackPointer<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Each(iter, (delegate*<T0*, T1*, T2*, T3*, T4*, T5*, T6*, void>)context->Callback.Pointer);
     }
 
-    internal static void EachEntityPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void EachEntityPointerCallbackPointer<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Each(iter, (delegate*<Entity, T0*, T1*, T2*, T3*, T4*, T5*, T6*, void>)context->Callback.Pointer);
     }
 
-    internal static void EachIterPointerCallbackPointer(ecs_iter_t* iter)
+    internal static void EachIterPointerCallbackPointer<T0, T1, T2, T3, T4, T5, T6>(ecs_iter_t* iter)
     {
         IteratorContext* context = (IteratorContext*)iter->callback_ctx;
         Invoker.Each(iter, (delegate*<Iter, int, T0*, T1*, T2*, T3*, T4*, T5*, T6*, void>)context->Callback.Pointer);

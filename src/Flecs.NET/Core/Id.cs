@@ -119,7 +119,7 @@ public unsafe struct Id : IEquatable<Id>
     /// <returns></returns>
     public bool IsWildCard()
     {
-        return ecs_id_is_wildcard(Value) == 1;
+        return ecs_id_is_wildcard(Value);
     }
 
     /// <summary>

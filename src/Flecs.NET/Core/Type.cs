@@ -279,7 +279,7 @@ public static unsafe class Type<T>
 
         ecs_entity_desc_t entityDesc = default;
         entityDesc.id = id;
-        entityDesc.use_low_id = Utils.True;
+        entityDesc.use_low_id = true;
         entityDesc.name = nativeName;
         entityDesc.symbol = nativeSymbol;
         entityDesc.sep = Pointers.DefaultSeparator;
@@ -314,18 +314,18 @@ public static unsafe class Type<T>
 
         // Set default hooks for managed components.
         TypeHooksContext* hooksContext = Memory.Alloc(TypeHooksContext.Default);
-        hooksContext->Ctor.Invoker = Pointers<T>.DefaultManagedCtorCallback;
-        hooksContext->Dtor.Invoker = Pointers<T>.DefaultManagedDtorCallback;
-        hooksContext->Move.Invoker = Pointers<T>.DefaultManagedMoveCallback;
-        hooksContext->Copy.Invoker = Pointers<T>.DefaultManagedCopyCallback;
+        hooksContext->Ctor.Invoker = (delegate*<GCHandle*, int, ecs_type_info_t*, void>)&Functions.DefaultManagedCtorCallback<T>;
+        hooksContext->Dtor.Invoker = (delegate*<GCHandle*, int, ecs_type_info_t*, void>)&Functions.DefaultManagedDtorCallback<T>;
+        hooksContext->Move.Invoker = (delegate*<GCHandle*, GCHandle*, int, ecs_type_info_t*, void>)&Functions.DefaultManagedMoveCallback<T>;
+        hooksContext->Copy.Invoker = (delegate*<GCHandle*, GCHandle*, int, ecs_type_info_t*, void>)&Functions.DefaultManagedCopyCallback<T>;
 
         ecs_type_hooks_t hooks = default;
-        hooks.ctor = Pointers.CtorCallback;
-        hooks.dtor = Pointers.DtorCallback;
-        hooks.move = Pointers.MoveCallback;
-        hooks.copy = Pointers.CopyCallback;
+        hooks.ctor = &Functions.CtorCallback;
+        hooks.dtor = &Functions.DtorCallback;
+        hooks.move = &Functions.MoveCallback;
+        hooks.copy = &Functions.CopyCallback;
         hooks.binding_ctx = hooksContext;
-        hooks.binding_ctx_free = Pointers.TypeHooksContextFree;
+        hooks.binding_ctx_free = &Functions.TypeHooksContextFree;
 
         ecs_set_hooks_id(world, component, &hooks);
 

@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Flecs.NET.Utilities;
 
 using static Flecs.NET.Bindings.flecs;
 
@@ -52,7 +51,7 @@ internal static unsafe partial class TypeHelper<T0, T1, T2, T3, T4, T5, T6>
         if (allowSparseTypes)
             return;
  
-        int sparseTypes = (ecs_has_id(world, Type<T0>.Id(world), Ecs.Sparse) == Utils.True ? 1 << 0 : 0) | (ecs_has_id(world, Type<T1>.Id(world), Ecs.Sparse) == Utils.True ? 1 << 1 : 0) | (ecs_has_id(world, Type<T2>.Id(world), Ecs.Sparse) == Utils.True ? 1 << 2 : 0) | (ecs_has_id(world, Type<T3>.Id(world), Ecs.Sparse) == Utils.True ? 1 << 3 : 0) | (ecs_has_id(world, Type<T4>.Id(world), Ecs.Sparse) == Utils.True ? 1 << 4 : 0) | (ecs_has_id(world, Type<T5>.Id(world), Ecs.Sparse) == Utils.True ? 1 << 5 : 0) | (ecs_has_id(world, Type<T6>.Id(world), Ecs.Sparse) == Utils.True ? 1 << 6 : 0);
+        int sparseTypes = (ecs_has_id(world, Type<T0>.Id(world), Ecs.Sparse) ? 1 << 0 : 0) | (ecs_has_id(world, Type<T1>.Id(world), Ecs.Sparse) ? 1 << 1 : 0) | (ecs_has_id(world, Type<T2>.Id(world), Ecs.Sparse) ? 1 << 2 : 0) | (ecs_has_id(world, Type<T3>.Id(world), Ecs.Sparse) ? 1 << 3 : 0) | (ecs_has_id(world, Type<T4>.Id(world), Ecs.Sparse) ? 1 << 4 : 0) | (ecs_has_id(world, Type<T5>.Id(world), Ecs.Sparse) ? 1 << 5 : 0) | (ecs_has_id(world, Type<T6>.Id(world), Ecs.Sparse) ? 1 << 6 : 0);
  
         if (sparseTypes == 0)
             return;

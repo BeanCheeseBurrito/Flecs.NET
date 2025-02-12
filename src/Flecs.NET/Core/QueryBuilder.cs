@@ -1647,7 +1647,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
         _termIdType = TermIdType.Src;
 
         fixed (ecs_term_t* ptr = &CurrentTerm)
-            Ecs.Assert(ecs_term_is_initialized(ptr) == Utils.True, "Term is not initialized.");
+            Ecs.Assert(ecs_term_is_initialized(ptr), "Term is not initialized.");
 
         return ref this;
     }
@@ -1671,8 +1671,8 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder OrderBy(ulong component, Ecs.OrderByCallback callback)
     {
-        QueryContext.OrderBy.Set(callback, 0);
-        Desc.order_by_callback = Marshal.GetFunctionPointerForDelegate(callback);
+        QueryContext.OrderBy.Set(callback, null);
+        Desc.order_by_callback = (delegate* unmanaged<ulong, void*, ulong, void*, int>)Marshal.GetFunctionPointerForDelegate(callback);
         Desc.order_by = component;
         return ref this;
     }
@@ -1695,7 +1695,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder GroupBy(ulong component)
     {
-        Desc.group_by_callback = IntPtr.Zero;
+        Desc.group_by_callback = default;
         Desc.group_by = component;
         return ref this;
     }
@@ -1708,8 +1708,8 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder GroupBy(ulong component, Ecs.GroupByCallback callback)
     {
-        GroupByContext.GroupBy.Set(callback, Pointers.GroupByCallbackDelegate);
-        Desc.group_by_callback = Pointers.GroupByCallback;
+        GroupByContext.GroupBy.Set(callback, (delegate*<ecs_world_t*, ecs_table_t*, ulong, GroupByContext*, ulong>)&Functions.GroupByCallbackDelegate);
+        Desc.group_by_callback = &Functions.GroupByCallback;
         Desc.group_by = component;
         return ref this;
     }
@@ -1723,8 +1723,8 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder GroupBy<TContext>(ulong component, Ecs.GroupByCallback<TContext> callback)
     {
-        GroupByContext.GroupBy.Set(callback, Pointers<TContext>.GroupByCallbackDelegate);
-        Desc.group_by_callback = Pointers.GroupByCallback;
+        GroupByContext.GroupBy.Set(callback, (delegate*<ecs_world_t*, ecs_table_t*, ulong, GroupByContext*, ulong>)&Functions.GroupByCallbackDelegate<TContext>);
+        Desc.group_by_callback = &Functions.GroupByCallback;
         Desc.group_by = component;
         return ref this;
     }
@@ -1807,8 +1807,8 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder OnGroupCreate(Ecs.GroupCreateCallback callback)
     {
-        GroupByContext.GroupCreate.Set(callback, Pointers.GroupCreateCallbackDelegate);
-        Desc.on_group_create = Pointers.GroupCreateCallback;
+        GroupByContext.GroupCreate.Set(callback, (delegate*<ecs_world_t*, ulong, GroupByContext*, void*>)&Functions.GroupCreateCallbackDelegate);
+        Desc.on_group_create = &Functions.GroupCreateCallback;
         return ref this;
     }
 
@@ -1820,8 +1820,8 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder OnGroupCreate<T>(Ecs.GroupCreateCallback<T> callback)
     {
-        GroupByContext.GroupCreate.Set(callback, Pointers<T>.GroupCreateCallbackDelegate);
-        Desc.on_group_create = Pointers.GroupCreateCallback;
+        GroupByContext.GroupCreate.Set(callback, (delegate*<ecs_world_t*, ulong, GroupByContext*, void*>)&Functions.GroupCreateCallbackDelegate<T>);
+        Desc.on_group_create = &Functions.GroupCreateCallback;
         return ref this;
     }
 
@@ -1832,8 +1832,8 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder OnGroupDelete(Ecs.GroupDeleteCallback callback)
     {
-        GroupByContext.GroupDelete.Set(callback, Pointers.GroupDeleteCallbackDelegate);
-        Desc.on_group_delete = Pointers.GroupDeleteCallback;
+        GroupByContext.GroupDelete.Set(callback, (delegate*<ecs_world_t*, ulong, UserContext*, GroupByContext*, void>)&Functions.GroupDeleteCallbackDelegate);
+        Desc.on_group_delete = &Functions.GroupDeleteCallback;
         return ref this;
     }
 
@@ -1845,8 +1845,8 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     /// <returns></returns>
     public ref QueryBuilder OnGroupDelete<T>(Ecs.GroupDeleteCallback<T> callback)
     {
-        GroupByContext.GroupDelete.Set(callback, Pointers<T>.GroupDeleteCallbackDelegate);
-        Desc.on_group_delete = Pointers.GroupDeleteCallback;
+        GroupByContext.GroupDelete.Set(callback, (delegate*<ecs_world_t*, ulong, UserContext*, GroupByContext*, void>)&Functions.GroupDeleteCallbackDelegate<T>);
+        Desc.on_group_delete = &Functions.GroupDeleteCallback;
         return ref this;
     }
 
@@ -1856,7 +1856,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
             return (QueryContext*)_desc.binding_ctx;
 
         _desc.binding_ctx = Memory.AllocZeroed<QueryContext>(1);
-        _desc.binding_ctx_free = Pointers.QueryContextFree;
+        _desc.binding_ctx_free = &Functions.QueryContextFree;
         return (QueryContext*)_desc.binding_ctx;
     }
 
@@ -1866,7 +1866,7 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
             return (GroupByContext*)_desc.group_by_ctx;
 
         _desc.group_by_ctx = Memory.AllocZeroed<GroupByContext>(1);
-        _desc.group_by_ctx_free = Pointers.GroupByContextFree;
+        _desc.group_by_ctx_free = &Functions.GroupByContextFree;
         return (GroupByContext*)_desc.group_by_ctx;
     }
 

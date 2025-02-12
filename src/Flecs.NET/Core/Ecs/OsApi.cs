@@ -44,11 +44,11 @@ public static unsafe partial class Ecs
                 if (Context.Abort == default)
                     SetAbort(&DefaultAbort);
 
-                ecs_os_api.abort_ = Pointers.AbortCallback;
+                ecs_os_api.abort_ = &Functions.AbortCallback;
             }
 
             if (OverrideLog)
-                ecs_os_api.log_ = Context.Log == default ? ecs_os_api.log_ : Pointers.LogCallback;
+                ecs_os_api.log_ = Context.Log == default ? ecs_os_api.log_ : &Functions.LogCallback;
 
             _initialized = true;
         }
@@ -59,7 +59,7 @@ public static unsafe partial class Ecs
         /// <param name="callback">The callback.</param>
         public static void SetAbort(Action callback)
         {
-            Context.Abort.Set(callback, Pointers.AbortCallbackDelegate);
+            Context.Abort.Set(callback, (delegate*<void>)&Functions.AbortCallbackDelegate);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ public static unsafe partial class Ecs
         /// <param name="callback">The callback.</param>
         public static void SetAbort(delegate*<void> callback)
         {
-            Context.Abort.Set((IntPtr)callback, Pointers.AbortCallbackPointer);
+            Context.Abort.Set(callback, (delegate*<void>)&Functions.AbortCallbackPointer);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ public static unsafe partial class Ecs
         /// <param name="callback">The callback.</param>
         public static void SetLog(LogCallback callback)
         {
-            Context.Log.Set(callback, Pointers.LogCallbackDelegate);
+            Context.Log.Set(callback, (delegate*<int, byte*, int, byte*, void>)&Functions.LogCallbackDelegate);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ public static unsafe partial class Ecs
         /// <param name="callback">The callback.</param>
         public static void SetLog(delegate*<int, string, int, string, void> callback)
         {
-            Context.Log.Set((IntPtr)callback, Pointers.LogCallbackPointer);
+            Context.Log.Set(callback, (delegate*<int, byte*, int, byte*, void>)&Functions.LogCallbackPointer);
         }
 
         private static void DefaultAbort()

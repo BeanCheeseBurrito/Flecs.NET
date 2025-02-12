@@ -104,7 +104,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public bool IsValid()
     {
-        return World != null && ecs_is_valid(World, Id) == 1;
+        return World != null && ecs_is_valid(World, Id);
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public bool IsAlive()
     {
-        return World != null && ecs_is_alive(World, Id) == 1;
+        return World != null && ecs_is_alive(World, Id);
     }
 
     /// <summary>
@@ -178,7 +178,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public bool Enabled()
     {
-        return ecs_has_id(World, Id, EcsDisabled) == 0;
+        return !ecs_has_id(World, Id, EcsDisabled);
     }
 
     /// <summary>
@@ -188,7 +188,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public bool Enabled(ulong id)
     {
-        return ecs_is_enabled_id(World, Id, id) == 1;
+        return ecs_is_enabled_id(World, Id, id);
     }
 
     /// <summary>
@@ -402,7 +402,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
             return;
 
         ecs_iter_t it = ecs_each_id(World, Ecs.Pair(relation, Id));
-        while (Utils.Bool(ecs_each_next(&it)))
+        while (ecs_each_next(&it))
             Invoker.Each(&it, callback);
     }
 
@@ -986,7 +986,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
         Ecs.Assert(Id != 0, "Invalid lookup from null handle.");
         using NativeString nativePath = (NativeString)path;
         ulong id = ecs_lookup_path_w_sep(World, Id, nativePath,
-            Pointers.DefaultSeparator, Pointers.DefaultSeparator, Utils.Bool(recursive));
+            Pointers.DefaultSeparator, Pointers.DefaultSeparator, recursive);
         return new Entity(World, id);
     }
 
@@ -1043,7 +1043,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public bool Has(ulong id)
     {
-        return Utils.Bool(ecs_has_id(World, Id, id));
+        return ecs_has_id(World, Id, id);
     }
 
     /// <summary>
@@ -1064,7 +1064,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public bool Has<T>()
     {
-        return Utils.Bool(ecs_has_id(World, Id, Type<T>.Id(World)));
+        return ecs_has_id(World, Id, Type<T>.Id(World));
     }
 
     /// <summary>
@@ -1142,7 +1142,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public bool Owns(ulong id)
     {
-        return ecs_owns_id(World, Id, id) == 1;
+        return ecs_owns_id(World, Id, id);
     }
 
     /// <summary>
@@ -1246,7 +1246,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
             dstId = ecs_new(World);
 
         Entity dst = new Entity(World, dstId);
-        ecs_clone(World, dstId, Id, Utils.Bool(cloneValue));
+        ecs_clone(World, dstId, Id, cloneValue);
         return dst;
     }
 
@@ -1628,7 +1628,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public ref Entity Add(ulong id)
     {
-        Ecs.Assert(ecs_id_is_valid(World, id) == Utils.True, nameof(ECS_INVALID_OPERATION));
+        Ecs.Assert(ecs_id_is_valid(World, id), nameof(ECS_INVALID_OPERATION));
         ecs_add_id(World, Id, id);
         return ref this;
     }
@@ -1745,7 +1745,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
         if (cond)
             return ref Add(first, second);
 
-        if (second == 0 || ecs_has_id(World, first, EcsExclusive) == 1)
+        if (second == 0 || ecs_has_id(World, first, EcsExclusive))
             second = EcsWildcard;
 
         return ref Remove(first, second);
@@ -2349,7 +2349,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public ref Entity Enable()
     {
-        ecs_enable(World, Id, Utils.True);
+        ecs_enable(World, Id, true);
         return ref this;
     }
 
@@ -2360,7 +2360,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public ref Entity Enable(ulong id)
     {
-        ecs_enable_id(World, Id, id, Utils.True);
+        ecs_enable_id(World, Id, id, true);
         return ref this;
     }
 
@@ -2459,7 +2459,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public ref Entity Disable()
     {
-        ecs_enable(World, Id, Utils.False);
+        ecs_enable(World, Id, false);
         return ref this;
     }
 
@@ -2470,7 +2470,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public ref Entity Disable(ulong id)
     {
-        ecs_enable_id(World, Id, id, Utils.False);
+        ecs_enable_id(World, Id, id, false);
         return ref this;
     }
 
@@ -3299,7 +3299,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public ref Entity Observe(ulong eventId, Action callback)
     {
-        return ref ObserveInternal(eventId, callback, Pointers.ActionCallbackDelegate);
+        return ref ObserveInternal(eventId, callback, (delegate*<ecs_iter_t*, void>)&Functions.ActionCallbackDelegate);
     }
 
     /// <summary>
@@ -3310,7 +3310,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public ref Entity Observe(ulong eventId, Ecs.ObserveEntityCallback callback)
     {
-        return ref ObserveInternal(eventId, callback, Pointers.ObserveEntityCallbackDelegate);
+        return ref ObserveInternal(eventId, callback, (delegate*<ecs_iter_t*, void>)&Functions.ObserveEntityCallbackDelegate);
     }
 
     /// <summary>
@@ -3343,7 +3343,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public ref Entity Observe<T>(Ecs.ObserveRefCallback<T> callback)
     {
-        return ref ObserveInternal(Type<T>.Id(World), callback, Pointers<T>.ObserveRefCallbackDelegate);
+        return ref ObserveInternal(Type<T>.Id(World), callback, (delegate*<ecs_iter_t*, void>)&Functions.ObserveRefCallbackDelegate<T>);
     }
 
     /// <summary>
@@ -3354,7 +3354,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public ref Entity Observe<T>(Ecs.ObserveEntityRefCallback<T> callback)
     {
-        return ref ObserveInternal(Type<T>.Id(World), callback, Pointers<T>.ObserveEntityRefCallbackDelegate);
+        return ref ObserveInternal(Type<T>.Id(World), callback, (delegate*<ecs_iter_t*, void>)&Functions.ObserveEntityRefCallbackDelegate<T>);
     }
 
     /// <summary>
@@ -3810,7 +3810,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
         return ref this;
     }
 
-    private ref Entity ObserveInternal<T>(ulong eventId, T callback, nint invoker) where T : Delegate
+    private ref Entity ObserveInternal<T>(ulong eventId, T callback, void* invoker) where T : Delegate
     {
         IteratorContext* iteratorContext = Memory.AllocZeroed<IteratorContext>(1);
         iteratorContext->Callback.Set(callback, invoker);
@@ -3819,9 +3819,9 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
         desc.events[0] = eventId;
         desc.query.terms[0].id = EcsAny;
         desc.query.terms[0].src.id = Id;
-        desc.callback = Pointers.IteratorCallback;
+        desc.callback = &Functions.IteratorCallback;
         desc.callback_ctx = iteratorContext;
-        desc.callback_ctx_free = Pointers.IteratorContextFree;
+        desc.callback_ctx_free = &Functions.IteratorContextFree;
 
         ulong observer = ecs_observer_init(World, &desc);
         ecs_add_id(World, observer, Ecs.Pair(EcsChildOf, Id));
@@ -3829,7 +3829,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
         return ref this;
     }
 
-    private ref Entity ObserveInternal<T>(ulong eventId, IntPtr callback, nint invoker) where T : Delegate
+    private ref Entity ObserveInternal<T>(ulong eventId, void* callback, void* invoker) where T : Delegate
     {
         IteratorContext* iteratorContext = Memory.AllocZeroed<IteratorContext>(1);
         iteratorContext->Callback.Set(callback, invoker);
@@ -3838,9 +3838,9 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
         desc.events[0] = eventId;
         desc.query.terms[0].id = EcsAny;
         desc.query.terms[0].src.id = Id;
-        desc.callback = Pointers.IteratorCallback;
+        desc.callback = &Functions.IteratorCallback;
         desc.callback_ctx = iteratorContext;
-        desc.callback_ctx_free = Pointers.IteratorContextFree;
+        desc.callback_ctx_free = &Functions.IteratorContextFree;
 
         ulong observer = ecs_observer_init(World, &desc);
         ecs_add_id(World, observer, Ecs.Pair(EcsChildOf, Id));

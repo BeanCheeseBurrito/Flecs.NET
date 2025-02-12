@@ -121,7 +121,7 @@ public static class Generator
 
     public static readonly string[] TypeFullNames = CacheJoinedStrings(Separator.Comma, i => $"Type<T{i}>.FullName");
 
-    public static readonly string[] SparseBitField = CacheJoinedStrings(Separator.BitwiseOr, i => $"(ecs_has_id(world, Type<T{i}>.Id(world), Ecs.Sparse) == Utils.True ? 1 << {i} : 0)");
+    public static readonly string[] SparseBitField = CacheJoinedStrings(Separator.BitwiseOr, i => $"(ecs_has_id(world, Type<T{i}>.Id(world), Ecs.Sparse) ? 1 << {i} : 0)");
 
     public static readonly string[] ContainsReferenceTypes = CacheJoinedStrings(Separator.Or, i => $"RuntimeHelpers.IsReferenceOrContainsReferences<T{i}>()");
 

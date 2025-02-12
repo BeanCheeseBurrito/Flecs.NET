@@ -11,10 +11,8 @@ public class SystemBuilder : GeneratorBase
         for (int i = 0; i < Generator.GenericCount; i++)
         {
             AddSource($"SystemBuilder/T{i + 1}.g.cs", GenerateSystemBuilder(i));
-            AddSource($"SystemBuilder.QueryBuilder/T{i + 1}.g.cs",
-                QueryBuilder.GenerateExtensions(Type.SystemBuilder, i));
-            AddSource($"SystemBuilder.NodeBuilder/T{i + 1}.g.cs",
-                NodeBuilder.GenerateExtensions(Type.SystemBuilder, Type.System, i));
+            AddSource($"SystemBuilder.QueryBuilder/T{i + 1}.g.cs", QueryBuilder.GenerateExtensions(Type.SystemBuilder, i));
+            AddSource($"SystemBuilder.NodeBuilder/T{i + 1}.g.cs", NodeBuilder.GenerateExtensions(Type.SystemBuilder, Type.System, i));
         }
     }
 
@@ -227,25 +225,25 @@ public class SystemBuilder : GeneratorBase
                     return ref this;
                 }
             
-                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetCallback<T>(T callback, nint invoker) where T : Delegate
+                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetCallback<T>(T callback, void* invoker) where T : Delegate
                 {
                     _systemBuilder.SetCallback(callback, invoker);
                     return ref this;
                 }
             
-                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetCallback(nint callback, nint invoker)
+                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetCallback(void* callback, void* invoker)
                 {
                     _systemBuilder.SetCallback(callback, invoker);
                     return ref this;
                 }
             
-                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetRun<T>(T callback, nint invoker) where T : Delegate
+                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetRun<T>(T callback, void* invoker) where T : Delegate
                 {
                     _systemBuilder.SetRun(callback, invoker);
                     return ref this;
                 }
             
-                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetRun(nint callback, nint invoker)
+                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetRun(void* callback, void* invoker)
                 {
                     _systemBuilder.SetRun(callback, invoker);
                     return ref this;

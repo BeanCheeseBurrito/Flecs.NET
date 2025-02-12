@@ -193,7 +193,7 @@ public unsafe struct MetricBuilder : IDisposable, IEquatable<MetricBuilder>
     /// <returns></returns>
     public ref MetricBuilder Targets(bool value = true)
     {
-        Desc.targets = Utils.Bool(value);
+        Desc.targets = value;
         return ref this;
     }
 

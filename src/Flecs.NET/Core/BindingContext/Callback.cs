@@ -4,7 +4,7 @@ using Flecs.NET.Utilities;
 
 namespace Flecs.NET.Core.BindingContext;
 
-internal struct Callback : IDisposable, IEquatable<Callback>
+internal unsafe struct Callback : IDisposable, IEquatable<Callback>
 {
     /// <summary>
     ///     Delegate of user callback.
@@ -14,12 +14,12 @@ internal struct Callback : IDisposable, IEquatable<Callback>
     /// <summary>
     ///     Pointer of user callback.
     /// </summary>
-    public nint Pointer;
+    public void* Pointer;
 
     /// <summary>
     ///     Function used to invoke user callback.
     /// </summary>
-    public nint Invoker;
+    public void* Invoker;
 
     public void Dispose()
     {
@@ -29,14 +29,14 @@ internal struct Callback : IDisposable, IEquatable<Callback>
         Delegate = default;
     }
 
-    internal void Set(nint callback, nint invoker)
+    internal void Set(void* callback, void* invoker)
     {
         Dispose();
         Invoker = invoker;
         Pointer = callback;
     }
 
-    internal void Set<T>(T callback, nint invoker) where T : Delegate
+    internal void Set<T>(T callback, void* invoker) where T : Delegate
     {
         Dispose();
         Invoker = invoker;
@@ -65,6 +65,6 @@ internal struct Callback : IDisposable, IEquatable<Callback>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Delegate, Pointer, Invoker);
+        return HashCode.Combine(Delegate, (nint)Pointer, (nint)Invoker);
     }
 }

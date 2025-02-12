@@ -30,7 +30,7 @@ public unsafe struct WorldToJsonDesc : IEquatable<WorldToJsonDesc>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref WorldToJsonDesc BuiltIn(bool value = true)
     {
-        Desc.serialize_builtin = Utils.Bool(value);
+        Desc.serialize_builtin = value;
         return ref this;
     }
 
@@ -42,7 +42,7 @@ public unsafe struct WorldToJsonDesc : IEquatable<WorldToJsonDesc>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref WorldToJsonDesc Modules(bool value = true)
     {
-        Desc.serialize_modules = Utils.Bool(value);
+        Desc.serialize_modules = value;
         return ref this;
     }
 

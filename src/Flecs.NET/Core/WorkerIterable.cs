@@ -97,7 +97,7 @@ public unsafe partial struct WorkerIterable
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool GetNext(ecs_iter_t* it)
     {
-        return Utils.Bool(ecs_worker_next(it));
+        return ecs_worker_next(it);
     }
 }
 

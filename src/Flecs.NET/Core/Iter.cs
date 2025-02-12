@@ -219,7 +219,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     public bool IsSelf(int index)
     {
         Ecs.Assert(index < Handle->field_count, "Field index out of range.");
-        return ecs_field_is_self(Handle, (byte)index) == 1;
+        return ecs_field_is_self(Handle, (byte)index);
     }
 
     /// <summary>
@@ -230,7 +230,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     public bool IsSet(int index)
     {
         Ecs.Assert(index < Handle->field_count, "Field index out of range.");
-        return ecs_field_is_set(Handle, (byte)index) == 1;
+        return ecs_field_is_set(Handle, (byte)index);
     }
 
     /// <summary>
@@ -241,7 +241,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     public bool IsReadonly(int index)
     {
         Ecs.Assert(index < Handle->field_count, "Field index out of range.");
-        return ecs_field_is_readonly(Handle, (byte)index) == 1;
+        return ecs_field_is_readonly(Handle, (byte)index);
     }
 
     /// <summary>
@@ -363,7 +363,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     /// <returns></returns>
     public bool Changed()
     {
-        return Utils.Bool(ecs_iter_changed(Handle));
+        return ecs_iter_changed(Handle);
     }
 
     /// <summary>
@@ -423,7 +423,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     {
         Ecs.Assert(Handle->table != null, nameof(ECS_INVALID_OPERATION));
         Ecs.Assert(index < Handle->field_count,  nameof(ECS_INVALID_PARAMETER));
-        Ecs.Assert(Utils.Bool(ecs_field_is_set(Handle, (byte)index)),  nameof(ECS_INVALID_PARAMETER));
+        Ecs.Assert(ecs_field_is_set(Handle, (byte)index),  nameof(ECS_INVALID_PARAMETER));
 
         ecs_type_t* tableType = ecs_table_get_type(Handle->table);
         ecs_table_record_t *tr = Handle->trs[index];
@@ -446,7 +446,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     {
         Ecs.Assert(Handle->table != null, nameof(ECS_INVALID_OPERATION));
         Ecs.Assert(index < Handle->field_count,  nameof(ECS_INVALID_PARAMETER));
-        Ecs.Assert(Utils.Bool(ecs_field_is_set(Handle, (byte)index)),  nameof(ECS_INVALID_PARAMETER));
+        Ecs.Assert(ecs_field_is_set(Handle, (byte)index),  nameof(ECS_INVALID_PARAMETER));
 
         ecs_type_t* tableType = ecs_table_get_type(Handle->table);
         ecs_table_record_t *tr = Handle->trs[index];
@@ -518,7 +518,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
 
         return new Field<T>(
             ecs_field_w_size(Handle, Type<T>.Size, (byte)index),
-            ecs_field_is_self(Handle, (byte)index) == Utils.True ? Handle->count : 1
+            ecs_field_is_self(Handle, (byte)index) ? Handle->count : 1
         );
     }
 
@@ -534,7 +534,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     {
         Ecs.Assert(index >= 0 && index < iter->field_count, "Field index out of range.");
 
-        if (ecs_id_is_tag(iter->world, iter->ids[index]) == Utils.True || ecs_id_is_wildcard(iter->ids[index]) == Utils.True)
+        if (ecs_id_is_tag(iter->world, iter->ids[index]) || ecs_id_is_wildcard(iter->ids[index]))
         {
             Ecs.Error($$"""
                 Invalid type argument "{{new Entity(iter->world, iter->ids[index])}}" at field index {{index}}. Component data cannot be retrieved for tag types.

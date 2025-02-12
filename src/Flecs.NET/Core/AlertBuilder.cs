@@ -254,7 +254,7 @@ public unsafe partial struct AlertBuilder : IDisposable, IEquatable<AlertBuilder
 
         ulong id = Type<T>.Id(World);
         ulong memberId = ecs_lookup_path_w_sep(World, id, nativeMember,
-            Pointers.DefaultSeparator, Pointers.DefaultSeparator, Utils.False);
+            Pointers.DefaultSeparator, Pointers.DefaultSeparator, false);
 
         AlertVar(var);
 

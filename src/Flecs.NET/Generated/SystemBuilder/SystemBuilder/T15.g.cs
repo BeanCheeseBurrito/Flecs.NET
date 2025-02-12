@@ -206,25 +206,25 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T
         return ref this;
     }
 
-    internal ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> SetCallback<T>(T callback, nint invoker) where T : Delegate
+    internal ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> SetCallback<T>(T callback, void* invoker) where T : Delegate
     {
         _systemBuilder.SetCallback(callback, invoker);
         return ref this;
     }
 
-    internal ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> SetCallback(nint callback, nint invoker)
+    internal ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> SetCallback(void* callback, void* invoker)
     {
         _systemBuilder.SetCallback(callback, invoker);
         return ref this;
     }
 
-    internal ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> SetRun<T>(T callback, nint invoker) where T : Delegate
+    internal ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> SetRun<T>(T callback, void* invoker) where T : Delegate
     {
         _systemBuilder.SetRun(callback, invoker);
         return ref this;
     }
 
-    internal ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> SetRun(nint callback, nint invoker)
+    internal ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> SetRun(void* callback, void* invoker)
     {
         _systemBuilder.SetRun(callback, invoker);
         return ref this;

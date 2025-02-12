@@ -97,7 +97,7 @@ public unsafe partial struct PageIterable
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool GetNext(ecs_iter_t* it)
     {
-        return Utils.Bool(ecs_page_next(it));
+        return ecs_page_next(it);
     }
 }
 

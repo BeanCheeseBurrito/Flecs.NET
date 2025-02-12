@@ -12,7 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Bindgen.NET" Version="0.1.16"/>
+        <PackageReference Include="Bindgen.NET" Version="0.1.17"/>
         <PackageReference Include="Vezel.Zig.Toolsets.$(HostRuntime)" Version="0.13.0.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>

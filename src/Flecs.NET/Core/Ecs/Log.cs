@@ -35,7 +35,7 @@ public static unsafe partial class Ecs
         /// <param name="enabled"></param>
         public static void EnableColors(bool enabled = true)
         {
-            ecs_log_enable_colors(Utils.Bool(enabled));
+            ecs_log_enable_colors(enabled);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ public static unsafe partial class Ecs
         /// <param name="enabled"></param>
         public static void EnableTimestamp(bool enabled = true)
         {
-            ecs_log_enable_timestamp(Utils.Bool(enabled));
+            ecs_log_enable_timestamp(enabled);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ public static unsafe partial class Ecs
         /// <param name="enabled"></param>
         public static void EnableTimeDelta(bool enabled = true)
         {
-            ecs_log_enable_timedelta(Utils.Bool(enabled));
+            ecs_log_enable_timedelta(enabled);
         }
 
         /// <summary>
