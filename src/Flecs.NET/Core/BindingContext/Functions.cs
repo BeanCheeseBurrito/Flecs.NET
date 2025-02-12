@@ -10,50 +10,50 @@ namespace Flecs.NET.Core.BindingContext;
 /// <summary>
 ///     A static class for binding context functions.
 /// </summary>
-internal static unsafe class Functions
+internal static unsafe partial class Functions
 {
     #region Context Free
 
     [UnmanagedCallersOnly]
-    internal static void WorldContextFree(WorldContext* context)
+    internal static void WorldContextFree(void* context)
     {
-        WorldContext.Free(context);
+        WorldContext.Free((WorldContext*)context);
     }
 
     [UnmanagedCallersOnly]
-    internal static void IteratorContextFree(IteratorContext* context)
+    internal static void IteratorContextFree(void* context)
     {
-        IteratorContext.Free(context);
+        IteratorContext.Free((IteratorContext*)context);
     }
 
     [UnmanagedCallersOnly]
-    internal static void RunContextFree(RunContext* context)
+    internal static void RunContextFree(void* context)
     {
-        RunContext.Free(context);
+        RunContext.Free((RunContext*)context);
     }
 
     [UnmanagedCallersOnly]
-    internal static void QueryContextFree(QueryContext* context)
+    internal static void QueryContextFree(void* context)
     {
-        QueryContext.Free(context);
+        QueryContext.Free((QueryContext*)context);
     }
 
     [UnmanagedCallersOnly]
-    internal static void GroupByContextFree(GroupByContext* context)
+    internal static void GroupByContextFree(void* context)
     {
-        GroupByContext.Free(context);
+        GroupByContext.Free((GroupByContext*)context);
     }
 
     [UnmanagedCallersOnly]
-    internal static void TypeHooksContextFree(TypeHooksContext* context)
+    internal static void TypeHooksContextFree(void* context)
     {
-        TypeHooksContext.Free(context);
+        TypeHooksContext.Free((TypeHooksContext*)context);
     }
 
     [UnmanagedCallersOnly]
-    internal static void UserContextFree(UserContext* context)
+    internal static void UserContextFree(void* context)
     {
-        UserContext.Free(context);
+        UserContext.Free((UserContext*)context);
     }
 
     internal static void UserContextFinishDelegate<T>(ref UserContext context)
@@ -237,9 +237,10 @@ internal static unsafe class Functions
     #region Group By Callbacks
 
     [UnmanagedCallersOnly]
-    internal static ulong GroupByCallback(ecs_world_t* world, ecs_table_t* table, ulong id, GroupByContext* context)
+    internal static ulong GroupByCallback(ecs_world_t* world, ecs_table_t* table, ulong id, void* context)
     {
-        return ((delegate*<ecs_world_t*, ecs_table_t*, ulong, GroupByContext*, ulong>)context->GroupBy.Invoker)(world, table, id, context);
+        GroupByContext* groupByContext = (GroupByContext*)context;
+        return ((delegate*<ecs_world_t*, ecs_table_t*, ulong, GroupByContext*, ulong>)groupByContext->GroupBy.Invoker)(world, table, id, groupByContext);
     }
 
     internal static ulong GroupByCallbackDelegate(ecs_world_t* world, ecs_table_t* table, ulong id, GroupByContext* context)
@@ -267,9 +268,10 @@ internal static unsafe class Functions
     #region Group Create Callbacks
 
     [UnmanagedCallersOnly]
-    internal static void* GroupCreateCallback(ecs_world_t* world, ulong id, GroupByContext* context)
+    internal static void* GroupCreateCallback(ecs_world_t* world, ulong id, void* context)
     {
-        return ((delegate*<ecs_world_t*, ulong, GroupByContext*, void*>)context->GroupCreate.Invoker)(world, id, context);
+        GroupByContext* groupByContext = (GroupByContext*)context;
+        return ((delegate*<ecs_world_t*, ulong, GroupByContext*, void*>)groupByContext->GroupCreate.Invoker)(world, id, groupByContext);
     }
 
     internal static void* GroupCreateCallbackDelegate(ecs_world_t* world, ulong id, GroupByContext* context)
@@ -301,9 +303,10 @@ internal static unsafe class Functions
     #region Group Delete Callbacks
 
     [UnmanagedCallersOnly]
-    internal static void GroupDeleteCallback(ecs_world_t* world, ulong id, UserContext* userContext, GroupByContext* context)
+    internal static void GroupDeleteCallback(ecs_world_t* world, ulong id, void* userContext, void* context)
     {
-        ((delegate*<ecs_world_t*, ulong, UserContext*, GroupByContext*, void>)context->GroupDelete.Invoker)(world, id, userContext, context);
+        GroupByContext* groupByContext = (GroupByContext*)context;
+        ((delegate*<ecs_world_t*, ulong, UserContext*, GroupByContext*, void>)groupByContext->GroupDelete.Invoker)(world, id, (UserContext*)userContext, groupByContext);
     }
 
     internal static void GroupDeleteCallbackDelegate(ecs_world_t* world, ulong id, UserContext* userContext, GroupByContext* context)

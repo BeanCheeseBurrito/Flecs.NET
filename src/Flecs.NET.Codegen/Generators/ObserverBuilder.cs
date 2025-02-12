@@ -178,25 +178,25 @@ public class ObserverBuilder : GeneratorBase
                     return ref this;
                 }
             
-                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetCallback<T>(T callback, nint invoker) where T : Delegate
+                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetCallback<T>(T callback, void* invoker) where T : Delegate
                 {
                     _observerBuilder.SetCallback(callback, invoker);
                     return ref this;
                 }
             
-                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetCallback(nint callback, nint invoker)
+                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetCallback(void* callback, void* invoker)
                 {
                     _observerBuilder.SetCallback(callback, invoker);
                     return ref this;
                 }
             
-                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetRun<T>(T callback, nint invoker) where T : Delegate
+                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetRun<T>(T callback, void* invoker) where T : Delegate
                 {
                     _observerBuilder.SetRun(callback, invoker);
                     return ref this;
                 }
             
-                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetRun(nint callback, nint invoker)
+                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetRun(void* callback, void* invoker)
                 {
                     _observerBuilder.SetRun(callback, invoker);
                     return ref this;

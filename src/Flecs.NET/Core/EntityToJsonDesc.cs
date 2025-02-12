@@ -24,15 +24,15 @@ public unsafe struct EntityToJsonDesc : IEquatable<EntityToJsonDesc>
     {
         Desc = new ecs_entity_to_json_desc_t()
         {
-            serialize_doc =        Utils.False,
-            serialize_full_paths = Utils.True,
-            serialize_inherited =  Utils.False,
-            serialize_values =     Utils.True,
-            serialize_builtin =    Utils.False,
-            serialize_type_info =  Utils.False,
-            serialize_alerts =     Utils.False,
+            serialize_doc =        false,
+            serialize_full_paths = true,
+            serialize_inherited =  false,
+            serialize_values =     true,
+            serialize_builtin =    false,
+            serialize_type_info =  false,
+            serialize_alerts =     false,
             serialize_refs =       0,
-            serialize_matches =    Utils.False
+            serialize_matches =    false
         }
     };
 
@@ -44,7 +44,7 @@ public unsafe struct EntityToJsonDesc : IEquatable<EntityToJsonDesc>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityToJsonDesc EntityId(bool value = true)
     {
-        Desc.serialize_entity_id = Utils.Bool(value);
+        Desc.serialize_entity_id = value;
         return ref this;
     }
 
@@ -56,7 +56,7 @@ public unsafe struct EntityToJsonDesc : IEquatable<EntityToJsonDesc>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityToJsonDesc Doc(bool value = true)
     {
-        Desc.serialize_doc = Utils.Bool(value);
+        Desc.serialize_doc = value;
         return ref this;
     }
 
@@ -68,7 +68,7 @@ public unsafe struct EntityToJsonDesc : IEquatable<EntityToJsonDesc>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityToJsonDesc FullPaths(bool value = true)
     {
-        Desc.serialize_full_paths = Utils.Bool(value);
+        Desc.serialize_full_paths = value;
         return ref this;
     }
 
@@ -80,7 +80,7 @@ public unsafe struct EntityToJsonDesc : IEquatable<EntityToJsonDesc>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityToJsonDesc Inherited(bool value = true)
     {
-        Desc.serialize_inherited = Utils.Bool(value);
+        Desc.serialize_inherited = value;
         return ref this;
     }
 
@@ -92,7 +92,7 @@ public unsafe struct EntityToJsonDesc : IEquatable<EntityToJsonDesc>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityToJsonDesc Values(bool value = true)
     {
-        Desc.serialize_values = Utils.Bool(value);
+        Desc.serialize_values = value;
         return ref this;
     }
 
@@ -104,7 +104,7 @@ public unsafe struct EntityToJsonDesc : IEquatable<EntityToJsonDesc>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityToJsonDesc BuiltIn(bool value = true)
     {
-        Desc.serialize_builtin = Utils.Bool(value);
+        Desc.serialize_builtin = value;
         return ref this;
     }
 
@@ -116,7 +116,7 @@ public unsafe struct EntityToJsonDesc : IEquatable<EntityToJsonDesc>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityToJsonDesc TypeInfo(bool value = true)
     {
-        Desc.serialize_type_info = Utils.Bool(value);
+        Desc.serialize_type_info = value;
         return ref this;
     }
 
@@ -128,7 +128,7 @@ public unsafe struct EntityToJsonDesc : IEquatable<EntityToJsonDesc>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityToJsonDesc Alerts(bool value = true)
     {
-        Desc.serialize_alerts = Utils.Bool(value);
+        Desc.serialize_alerts = value;
         return ref this;
     }
 
@@ -152,7 +152,7 @@ public unsafe struct EntityToJsonDesc : IEquatable<EntityToJsonDesc>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref EntityToJsonDesc Matches(bool value = true)
     {
-        Desc.serialize_matches = Utils.Bool(value);
+        Desc.serialize_matches = value;
         return ref this;
     }
 

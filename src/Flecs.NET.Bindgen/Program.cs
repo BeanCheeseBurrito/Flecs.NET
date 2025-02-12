@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using Bindgen.NET;
 
 BindingOptions bindingOptions = new()
@@ -18,9 +17,8 @@ BindingOptions bindingOptions = new()
     OutputFile = GetBindingsOutputPath(),
     NativeOutputFile = GetBindingsHelperOutputPath(),
 
-    GenerateMacros = true,
     GenerateExternVariables = true,
-    GenerateStructEqualityFunctions = true,
+    GenerateDisableRuntimeMarshallingAttribute = true,
 
     Ignored = {"FLECS_IDEcsPipelineQueryID_"}
 };

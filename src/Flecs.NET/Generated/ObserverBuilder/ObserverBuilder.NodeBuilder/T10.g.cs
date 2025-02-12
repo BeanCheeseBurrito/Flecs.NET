@@ -3,6 +3,8 @@
 using System;
 using Flecs.NET.Core.BindingContext;
 
+using static Flecs.NET.Bindings.flecs;
+
 namespace Flecs.NET.Core;
 
 public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
@@ -15,7 +17,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(true);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetRun(callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.RunCallbackDelegate).Build();
+        return SetRun(callback, (delegate*<ecs_iter_t*, void>)&Functions.RunCallbackDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -26,7 +28,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(true);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetRun((nint)callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.RunCallbackPointer).Build();
+        return SetRun(callback, (delegate*<ecs_iter_t*, void>)&Functions.RunCallbackPointer<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -37,7 +39,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(true);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, false);
-        return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.IterFieldCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.IterFieldCallbackDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -48,7 +50,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(false);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, false);
-        return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.IterSpanCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.IterSpanCallbackDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -59,7 +61,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(false);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, false);
-        return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.IterPointerCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.IterPointerCallbackDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -70,7 +72,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(true);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, false);
-        return SetCallback((nint)callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.IterFieldCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.IterFieldCallbackPointer<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -81,7 +83,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(false);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, false);
-        return SetCallback((nint)callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.IterSpanCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.IterSpanCallbackPointer<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -92,7 +94,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(false);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, false);
-        return SetCallback((nint)callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.IterPointerCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.IterPointerCallbackPointer<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -103,7 +105,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(true);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.EachRefCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachRefCallbackDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -114,7 +116,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(true);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.EachEntityRefCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachEntityRefCallbackDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -125,7 +127,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(true);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.EachIterRefCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachIterRefCallbackDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -136,7 +138,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(true);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetCallback((nint)callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.EachRefCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachRefCallbackPointer<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -147,7 +149,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(true);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetCallback((nint)callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.EachEntityRefCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachEntityRefCallbackPointer<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -158,7 +160,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(true);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetCallback((nint)callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.EachIterRefCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachIterRefCallbackPointer<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -169,7 +171,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(false);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.EachPointerCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachPointerCallbackDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -180,7 +182,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(false);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.EachEntityPointerCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachEntityPointerCallbackDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -191,7 +193,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(false);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetCallback(callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.EachIterPointerCallbackDelegate).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachIterPointerCallbackDelegate<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -202,7 +204,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(false);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetCallback((nint)callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.EachPointerCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachPointerCallbackPointer<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -213,7 +215,7 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(false);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetCallback((nint)callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.EachEntityPointerCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachEntityPointerCallbackPointer<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 
     /// <summary>
@@ -224,6 +226,6 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5, T6, T7, T8,
     {
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertReferenceTypes(false);
         TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.AssertSparseTypes(World, true);
-        return SetCallback((nint)callback, Pointers<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>.EachIterPointerCallbackPointer).Build();
+        return SetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.EachIterPointerCallbackPointer<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>).Build();
     }
 }

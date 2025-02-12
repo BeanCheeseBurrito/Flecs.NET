@@ -54,17 +54,17 @@ public readonly unsafe struct BuildInfo : IEquatable<BuildInfo>
     /// <summary>
     ///     Is this a debug build.
     /// </summary>
-    public bool Debug => Utils.Bool(Handle->debug);
+    public bool Debug => Handle->debug;
 
     /// <summary>
     ///     Is this a sanitize build.
     /// </summary>
-    public bool Sanitize => Utils.Bool(Handle->sanitize);
+    public bool Sanitize => Handle->sanitize;
 
     /// <summary>
     ///  Is this a perf tracing build.
     /// </summary>
-    public bool PerfTrace => Utils.Bool(Handle->perf_trace);
+    public bool PerfTrace => Handle->perf_trace;
 
     /// <summary>
     ///     Checks if two <see cref="BuildInfo"/> instances are equal.

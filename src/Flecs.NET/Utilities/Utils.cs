@@ -10,38 +10,6 @@ namespace Flecs.NET.Utilities;
 public static unsafe class Utils
 {
     /// <summary>
-    ///     False.
-    /// </summary>
-    public const byte False = 0;
-
-    /// <summary>
-    ///     True.
-    /// </summary>
-    public const byte True = 1;
-
-    /// <summary>
-    ///     Converts a boolean to a byte.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static byte Bool(bool value)
-    {
-        return value ? True : False;
-    }
-
-    /// <summary>
-    ///     Converts a byte to a boolean.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool Bool(byte value)
-    {
-        return value != 0;
-    }
-
-    /// <summary>
     ///     Checks if specific bit is set.
     /// </summary>
     /// <returns></returns>

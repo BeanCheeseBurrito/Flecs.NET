@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Flecs.NET.Utilities;
 
 using static Flecs.NET.Bindings.flecs;
 
@@ -52,7 +51,7 @@ internal static unsafe partial class TypeHelper<T0, T1>
         if (allowSparseTypes)
             return;
  
-        int sparseTypes = (ecs_has_id(world, Type<T0>.Id(world), Ecs.Sparse) == Utils.True ? 1 << 0 : 0) | (ecs_has_id(world, Type<T1>.Id(world), Ecs.Sparse) == Utils.True ? 1 << 1 : 0);
+        int sparseTypes = (ecs_has_id(world, Type<T0>.Id(world), Ecs.Sparse) ? 1 << 0 : 0) | (ecs_has_id(world, Type<T1>.Id(world), Ecs.Sparse) ? 1 << 1 : 0);
  
         if (sparseTypes == 0)
             return;

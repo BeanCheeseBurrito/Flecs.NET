@@ -92,7 +92,7 @@ public unsafe struct Cursor : IEquatable<Cursor>
     {
         fixed (ecs_meta_cursor_t* cursor = &_cursor)
         {
-            return ecs_meta_is_collection(cursor) == 1;
+            return ecs_meta_is_collection(cursor);
         }
     }
 
@@ -153,7 +153,7 @@ public unsafe struct Cursor : IEquatable<Cursor>
     {
         fixed (ecs_meta_cursor_t* cursor = &_cursor)
         {
-            return ecs_meta_set_bool(cursor, Utils.Bool(value));
+            return ecs_meta_set_bool(cursor, value);
         }
     }
 

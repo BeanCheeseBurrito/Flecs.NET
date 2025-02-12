@@ -90,7 +90,7 @@ public unsafe struct AppBuilder : IEquatable<AppBuilder>
     /// <returns></returns>
     public ref AppBuilder EnableRest(ushort port = 0)
     {
-        Desc.enable_rest = Utils.True;
+        Desc.enable_rest = true;
         Desc.port = port;
         return ref this;
     }
@@ -102,7 +102,7 @@ public unsafe struct AppBuilder : IEquatable<AppBuilder>
     /// <returns></returns>
     public ref AppBuilder EnableStats(bool value = true)
     {
-        Desc.enable_stats = Utils.Bool(value);
+        Desc.enable_stats = value;
         return ref this;
     }
 
@@ -113,8 +113,8 @@ public unsafe struct AppBuilder : IEquatable<AppBuilder>
     /// <returns></returns>
     public ref AppBuilder Init(Ecs.AppInitCallback callback)
     {
-        World.WorldContext.AppInit.Set(callback, Pointers.AppInitCallbackDelegate);
-        Desc.init = Pointers.AppInitCallback;
+        World.WorldContext.AppInit.Set(callback, (delegate*<World, WorldContext*, void>)&Functions.AppInitCallbackDelegate);
+        Desc.init = &Functions.AppInitCallback;
         return ref this;
     }
 
@@ -125,8 +125,8 @@ public unsafe struct AppBuilder : IEquatable<AppBuilder>
     /// <returns></returns>
     public ref AppBuilder Init(delegate*<World, void> callback)
     {
-        World.WorldContext.AppInit.Set((int)callback, Pointers.AppInitCallbackPointer);
-        Desc.init = Pointers.AppInitCallback;
+        World.WorldContext.AppInit.Set(callback, (delegate*<World, WorldContext*, void>)&Functions.AppInitCallbackPointer);
+        Desc.init = &Functions.AppInitCallback;
         return ref this;
     }
 

@@ -206,25 +206,25 @@ public unsafe partial struct SystemBuilder<T0> : IDisposable, IEquatable<SystemB
         return ref this;
     }
 
-    internal ref SystemBuilder<T0> SetCallback<T>(T callback, nint invoker) where T : Delegate
+    internal ref SystemBuilder<T0> SetCallback<T>(T callback, void* invoker) where T : Delegate
     {
         _systemBuilder.SetCallback(callback, invoker);
         return ref this;
     }
 
-    internal ref SystemBuilder<T0> SetCallback(nint callback, nint invoker)
+    internal ref SystemBuilder<T0> SetCallback(void* callback, void* invoker)
     {
         _systemBuilder.SetCallback(callback, invoker);
         return ref this;
     }
 
-    internal ref SystemBuilder<T0> SetRun<T>(T callback, nint invoker) where T : Delegate
+    internal ref SystemBuilder<T0> SetRun<T>(T callback, void* invoker) where T : Delegate
     {
         _systemBuilder.SetRun(callback, invoker);
         return ref this;
     }
 
-    internal ref SystemBuilder<T0> SetRun(nint callback, nint invoker)
+    internal ref SystemBuilder<T0> SetRun(void* callback, void* invoker)
     {
         _systemBuilder.SetRun(callback, invoker);
         return ref this;

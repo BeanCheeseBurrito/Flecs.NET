@@ -157,25 +157,25 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3, T4, T5> : IDisposab
         return ref this;
     }
 
-    private ref ObserverBuilder<T0, T1, T2, T3, T4, T5> SetCallback<T>(T callback, nint invoker) where T : Delegate
+    private ref ObserverBuilder<T0, T1, T2, T3, T4, T5> SetCallback<T>(T callback, void* invoker) where T : Delegate
     {
         _observerBuilder.SetCallback(callback, invoker);
         return ref this;
     }
 
-    private ref ObserverBuilder<T0, T1, T2, T3, T4, T5> SetCallback(nint callback, nint invoker)
+    private ref ObserverBuilder<T0, T1, T2, T3, T4, T5> SetCallback(void* callback, void* invoker)
     {
         _observerBuilder.SetCallback(callback, invoker);
         return ref this;
     }
 
-    private ref ObserverBuilder<T0, T1, T2, T3, T4, T5> SetRun<T>(T callback, nint invoker) where T : Delegate
+    private ref ObserverBuilder<T0, T1, T2, T3, T4, T5> SetRun<T>(T callback, void* invoker) where T : Delegate
     {
         _observerBuilder.SetRun(callback, invoker);
         return ref this;
     }
 
-    private ref ObserverBuilder<T0, T1, T2, T3, T4, T5> SetRun(nint callback, nint invoker)
+    private ref ObserverBuilder<T0, T1, T2, T3, T4, T5> SetRun(void* callback, void* invoker)
     {
         _observerBuilder.SetRun(callback, invoker);
         return ref this;

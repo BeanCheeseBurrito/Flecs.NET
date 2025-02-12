@@ -154,7 +154,7 @@ public class Ecs : GeneratorBase
                 {
                     Ecs.Assert(table != null, nameof(ECS_INTERNAL_ERROR));
                 
-                    if (ecs_table_column_count(table) == 0 && ecs_table_has_flags(table, EcsTableHasSparse) == 0)
+                    if (ecs_table_column_count(table) == 0 && !ecs_table_has_flags(table, EcsTableHasSparse))
                         return false;
                 
                     ecs_world_t* realWorld = ecs_get_world(world);

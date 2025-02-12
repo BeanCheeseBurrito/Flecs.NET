@@ -113,8 +113,8 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     public void AtFini(Ecs.WorldFinishCallback callback)
     {
         WorldFinishContext* context = AllocateWorldFinishContext();
-        context->Callback.Set(callback, Pointers.WorldFinishCallbackDelegate);
-        ecs_atfini(Handle, Pointers.WorldFinishCallback, context);
+        context->Callback.Set(callback, (delegate*<ecs_world_t*, void*, void>)&Functions.WorldFinishCallbackDelegate);
+        ecs_atfini(Handle, &Functions.WorldFinishCallback, context);
     }
 
     /// <summary>
@@ -124,8 +124,8 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     public void AtFini(delegate*<World, void> callback)
     {
         WorldFinishContext* context = AllocateWorldFinishContext();
-        context->Callback.Set((IntPtr)callback, Pointers.WorldFinishCallbackPointer);
-        ecs_atfini(Handle, Pointers.WorldFinishCallback, context);
+        context->Callback.Set(callback, (delegate*<ecs_world_t*, void*, void>)&Functions.WorldFinishCallbackPointer);
+        ecs_atfini(Handle, &Functions.WorldFinishCallback, context);
     }
 
     /// <summary>
@@ -134,7 +134,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public bool ShouldQuit()
     {
-        return ecs_should_quit(Handle) == 1;
+        return ecs_should_quit(Handle);
     }
 
     /// <summary>
@@ -161,7 +161,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public bool ReadonlyBegin(bool multiThreaded = false)
     {
-        return ecs_readonly_begin(Handle, Utils.Bool(multiThreaded)) == 1;
+        return ecs_readonly_begin(Handle, multiThreaded);
     }
 
     /// <summary>
@@ -178,7 +178,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public bool DeferBegin()
     {
-        return ecs_defer_begin(Handle) == 1;
+        return ecs_defer_begin(Handle);
     }
 
     /// <summary>
@@ -187,7 +187,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public bool DeferEnd()
     {
-        return ecs_defer_end(Handle) == 1;
+        return ecs_defer_end(Handle);
     }
 
     /// <summary>
@@ -196,7 +196,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public bool IsDeferred()
     {
-        return ecs_is_deferred(Handle) == 1;
+        return ecs_is_deferred(Handle);
     }
 
     /// <summary>
@@ -233,11 +233,11 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     public bool IsStage()
     {
         Ecs.Assert(
-            flecs_poly_is_(Handle, ecs_world_t_magic) == 1 ||
-            flecs_poly_is_(Handle, ecs_stage_t_magic) == 1,
+            flecs_poly_is_(Handle, ecs_world_t_magic) ||
+            flecs_poly_is_(Handle, ecs_stage_t_magic),
             nameof(ECS_INVALID_PARAMETER)
         );
-        return flecs_poly_is_(Handle, ecs_stage_t_magic) == 1;
+        return flecs_poly_is_(Handle, ecs_stage_t_magic);
     }
 
     /// <summary>
@@ -282,7 +282,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public bool IsReadOnly()
     {
-        return ecs_stage_is_readonly(Handle) == 1;
+        return ecs_stage_is_readonly(Handle);
     }
 
     /// <summary>
@@ -354,7 +354,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <param name="enabled"></param>
     public void EnableRangeCheck(bool enabled = true)
     {
-        ecs_enable_range_check(Handle, Utils.Bool(enabled));
+        ecs_enable_range_check(Handle, enabled);
     }
 
     /// <summary>
@@ -430,7 +430,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
 
         return new Entity(
             Handle,
-            ecs_lookup_path_w_sep(Handle, 0, nativePath, nativeSeparator, nativeRootSeparator, Utils.Bool(recursive))
+            ecs_lookup_path_w_sep(Handle, 0, nativePath, nativeSeparator, nativeRootSeparator, recursive)
         );
     }
 
@@ -1815,7 +1815,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
         using NativeString nativeName = (NativeString)name;
 
         ulong entity = ecs_lookup_path_w_sep(Handle, 0, nativeName,
-            Pointers.DefaultSeparator, Pointers.DefaultSeparator, Utils.True);
+            Pointers.DefaultSeparator, Pointers.DefaultSeparator, true);
 
         Ecs.Assert(entity != 0, nameof(ECS_INVALID_PARAMETER));
 
@@ -2315,7 +2315,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public bool Exists(ulong entity)
     {
-        return ecs_exists(Handle, entity) == 1;
+        return ecs_exists(Handle, entity);
     }
 
     /// <summary>
@@ -2325,7 +2325,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public bool IsAlive(ulong entity)
     {
-        return ecs_is_alive(Handle, entity) == 1;
+        return ecs_is_alive(Handle, entity);
     }
 
     /// <summary>
@@ -2335,7 +2335,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public bool IsValid(ulong entity)
     {
-        return ecs_is_valid(Handle, entity) == 1;
+        return ecs_is_valid(Handle, entity);
     }
 
     /// <summary>
@@ -2366,8 +2366,8 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     public void RunPostFrame(Ecs.PostFrameCallback callback)
     {
         PostFrameContext* postFrameContext = AllocatePostFrameContext();
-        postFrameContext->Callback.Set(callback, Pointers.PostFrameCallbackDelegate);
-        ecs_run_post_frame(Handle, Pointers.PostFrameCallback, postFrameContext);
+        postFrameContext->Callback.Set(callback, (delegate*<ecs_world_t*, void*, void>)&Functions.PostFrameCallbackDelegate);
+        ecs_run_post_frame(Handle, &Functions.PostFrameCallback, postFrameContext);
     }
 
     /// <summary>
@@ -2377,8 +2377,8 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     public void RunPostFrame(delegate*<World, void> callback)
     {
         PostFrameContext* postFrameContext = AllocatePostFrameContext();
-        postFrameContext->Callback.Set((nint)callback, Pointers.PostFrameCallbackPointer);
-        ecs_run_post_frame(Handle, Pointers.PostFrameCallback, postFrameContext);
+        postFrameContext->Callback.Set(callback, (delegate*<ecs_world_t*, void*, void>)&Functions.PostFrameCallbackPointer);
+        ecs_run_post_frame(Handle, &Functions.PostFrameCallback, postFrameContext);
     }
 
     /// <summary>
@@ -2915,7 +2915,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     public void Each(ulong id, Ecs.EachEntityCallback callback)
     {
         ecs_iter_t it = ecs_each_id(Handle, id);
-        while (ecs_each_next(&it) == 1)
+        while (ecs_each_next(&it))
             Invoker.Each(&it, callback);
     }
 
@@ -2950,7 +2950,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     public void Each<TFirst>(ulong second, Ecs.EachEntityRefCallback<TFirst> callback)
     {
         ecs_iter_t it = ecs_each_id(Handle, Ecs.Pair<TFirst>(second, Handle));
-        while (ecs_each_next(&it) == 1)
+        while (ecs_each_next(&it))
             Invoker.Each(&it, callback);
     }
 
@@ -3020,7 +3020,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     public void EachSecond<TSecond>(ulong first, Ecs.EachEntityRefCallback<TSecond> callback)
     {
         ecs_iter_t it = ecs_each_id(Handle, Ecs.PairSecond<TSecond>(first, Handle));
-        while (ecs_each_next(&it) == 1)
+        while (ecs_each_next(&it))
             Invoker.Each(&it, callback);
     }
 
@@ -3069,7 +3069,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
 
             ecs_iter_t it = ecs_each_id(Handle, Pair(Ecs.ChildOf, current));
 
-            if (ecs_iter_is_true(&it) == Utils.False)
+            if (!ecs_iter_is_true(&it))
                 current.Destruct();
 
             current = next;
@@ -3131,7 +3131,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public bool Progress(float deltaTime = 0)
     {
-        return ecs_progress(Handle, deltaTime) == 1;
+        return ecs_progress(Handle, deltaTime);
     }
 
     /// <summary>
@@ -3213,7 +3213,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public bool UsingTaskThreads()
     {
-        return ecs_using_task_threads(Handle) == 1;
+        return ecs_using_task_threads(Handle);
     }
 
     /// <summary>
@@ -3859,7 +3859,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
             return ptr;
 
         ptr = Memory.AllocZeroed<WorldContext>(1);
-        ecs_set_binding_ctx(Handle, ptr, Pointers.WorldContextFree);
+        ecs_set_binding_ctx(Handle, ptr, &Functions.WorldContextFree);
         return ptr;
     }
 
@@ -4183,7 +4183,7 @@ public unsafe partial struct World
         return new Entity(
             Handle,
             ecs_lookup_path_w_sep(Handle, 0, nativePath,
-                Pointers.DefaultSeparator, Pointers.DefaultSeparator, Utils.Bool(recursive))
+                Pointers.DefaultSeparator, Pointers.DefaultSeparator, recursive)
         );
     }
 
@@ -4327,7 +4327,7 @@ public unsafe partial struct World
 
         return new Entity(
             Handle,
-            ecs_lookup_symbol(Handle, nativeSymbol, Utils.Bool(lookupAsPath), Utils.Bool(recursive))
+            ecs_lookup_symbol(Handle, nativeSymbol, lookupAsPath, recursive)
         );
     }
 

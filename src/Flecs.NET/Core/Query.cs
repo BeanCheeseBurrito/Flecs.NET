@@ -101,7 +101,7 @@ public unsafe partial struct Query : IEquatable<Query>, IDisposable, IIterable
     /// <returns></returns>
     public bool Changed()
     {
-        return Utils.Bool(ecs_query_changed(Handle));
+        return ecs_query_changed(Handle);
     }
 
     /// <summary>
@@ -334,7 +334,7 @@ public unsafe partial struct Query
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool GetNext(ecs_iter_t* it)
     {
-        return Utils.Bool(ecs_query_next(it));
+        return ecs_query_next(it);
     }
 }
 

@@ -54,7 +54,7 @@ file static unsafe class Queries_Sorting
     {
         Position* pos1 = (Position*)p1;
         Position* pos2 = (Position*)p2;
-        return Utils.Bool(pos1->X > pos2->X) - Utils.Bool(pos1->X < pos2->X);
+        return pos1->X.CompareTo(pos2->X);
     }
 
     // Iterate query, printed values will be ordered

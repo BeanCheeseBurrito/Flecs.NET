@@ -21,7 +21,6 @@ public class TypeHelper : GeneratorBase
             using System.Diagnostics.CodeAnalysis;
             using System.Linq;
             using System.Runtime.CompilerServices;
-            using Flecs.NET.Utilities;
 
             using static Flecs.NET.Bindings.flecs;
 

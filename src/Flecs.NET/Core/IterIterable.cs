@@ -320,9 +320,9 @@ public unsafe partial struct IterIterable
     {
         return _iterableType switch
         {
-            IterableType.Query => Utils.Bool(ecs_query_next(it)),
-            IterableType.Worker => Utils.Bool(ecs_worker_next(it)),
-            IterableType.Page => Utils.Bool(ecs_page_next(it)),
+            IterableType.Query => ecs_query_next(it),
+            IterableType.Worker => ecs_worker_next(it),
+            IterableType.Page => ecs_page_next(it),
             _ => throw new Ecs.ErrorException()
         };
     }

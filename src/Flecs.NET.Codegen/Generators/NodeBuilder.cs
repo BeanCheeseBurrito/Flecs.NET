@@ -17,13 +17,15 @@ public static class NodeBuilder
                 {
                     {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertReferenceTypes({{(Generator.GetCallbackIsUnmanaged(callback) ? "false" : "true")}});
                     {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertSparseTypes(World, {{(Generator.GetCallbackIsIter(callback) ? "false" : "true")}});
-                    return {{(Generator.GetCallbackIsRun(callback) ? "SetRun" : "SetCallback")}}({{(Generator.GetCallbackIsDelegate(callback) ? string.Empty : "(nint)")}}callback, Pointers<{{Generator.TypeParameters[i]}}>.{{callback}}).Build();
+                    return {{(Generator.GetCallbackIsRun(callback) ? "SetRun" : "SetCallback")}}(callback, (delegate*<ecs_iter_t*, void>)&Functions.{{callback}}<{{Generator.TypeParameters[i]}}>).Build();
                 }
             """);
 
         return $$"""
             using System;
             using Flecs.NET.Core.BindingContext;
+            
+            using static Flecs.NET.Bindings.flecs;
 
             namespace Flecs.NET.Core;
 
