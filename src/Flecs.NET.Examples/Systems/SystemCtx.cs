@@ -9,7 +9,7 @@ using Flecs.NET.Core;
 file record struct Position(float X, float Y);
 file record struct Radius(float Value);
 
-file static unsafe class Systems_SystemCtx
+public static class Systems_SystemCtx
 {
     public static void Main()
     {
@@ -39,8 +39,8 @@ file static unsafe class Systems_SystemCtx
                         return;
 
                     // Check for collision
-                    double dSqr = DistanceSqr(p1, p2);
-                    double rSqr = Sqr(r1.Value + r2.Value);
+                    double dSqr = Math.Sqrt(p2.X - p1.X) + Math.Sqrt(p2.Y - p1.Y);
+                    double rSqr = Math.Sqrt(r1.Value + r2.Value);
 
                     if (rSqr > dSqr)
                         Console.WriteLine($"{e1} and {e2} collided!");
@@ -51,27 +51,12 @@ file static unsafe class Systems_SystemCtx
         for (int i = 0; i < 10; i++)
         {
             world.Entity()
-                .Set(new Position(Rand(100), Rand(100)))
-                .Set(new Radius(Rand(10) + 1));
+                .Set(new Position(Random.Shared.Next(100), Random.Shared.Next(100)))
+                .Set(new Radius(Random.Shared.Next(10) + 1));
         }
 
         // Run the system
         system.Run();
-    }
-
-    private static float Sqr(float value)
-    {
-        return value * value;
-    }
-
-    private static float DistanceSqr(Position p1, Position p2)
-    {
-        return Sqr(p2.X - p1.X) + Sqr(p2.Y - p1.Y);
-    }
-
-    private static float Rand(int max)
-    {
-        return Random.Shared.NextSingle() % max;
     }
 }
 

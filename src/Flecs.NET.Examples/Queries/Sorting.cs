@@ -4,7 +4,7 @@ using Flecs.NET.Utilities;
 // Components
 file record struct Position(float X, float Y);
 
-file static unsafe class Queries_Sorting
+public static unsafe class Queries_Sorting
 {
     public static void Main()
     {
@@ -47,23 +47,25 @@ file static unsafe class Queries_Sorting
         // Run system, output will be sorted
         Console.WriteLine("\n-- System iteration");
         sys.Run();
-    }
 
-    // Order by x member of Position */
-    private static int ComparePosition(ulong e1, void* p1, ulong e2, void* p2)
-    {
-        Position* pos1 = (Position*)p1;
-        Position* pos2 = (Position*)p2;
-        return pos1->X.CompareTo(pos2->X);
-    }
+        return;
 
-    // Iterate query, printed values will be ordered
-    private static void PrintQuery(Query<Position> q)
-    {
-        q.Each((ref Position p) =>
+        // Order by x member of Position */
+        static int ComparePosition(ulong e1, void* p1, ulong e2, void* p2)
         {
-            Console.WriteLine($"({p.X}, {p.Y})");
-        });
+            Position* pos1 = (Position*)p1;
+            Position* pos2 = (Position*)p2;
+            return pos1->X.CompareTo(pos2->X);
+        }
+
+        // Iterate query, printed values will be ordered
+        static void PrintQuery(Query<Position> q)
+        {
+            q.Each((ref Position p) =>
+            {
+                Console.WriteLine($"({p.X}, {p.Y})");
+            });
+        }
     }
 }
 
