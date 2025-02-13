@@ -8,7 +8,7 @@ file struct Star;
 file struct Planet;
 file struct Moon;
 
-file static class Entities_Hierarchy
+public static class Entities_Hierarchy
 {
     public static void Main()
     {
@@ -50,23 +50,25 @@ file static class Entities_Hierarchy
 
         // Do a depth-first walk of the tree
         IterateTree(sun);
-    }
 
-    private static void IterateTree(Entity e, Position pParent = default)
-    {
-        // Print hierarchical name of entity & the entity type
-        Console.WriteLine($"{e.Path()} [{e.Type().Str()}]");
+        return;
 
-        // Get entity position
-        ref readonly Position p = ref e.Get<Position>();
+        static void IterateTree(Entity e, Position pParent = default)
+        {
+            // Print hierarchical name of entity & the entity type
+            Console.WriteLine($"{e.Path()} [{e.Type().Str()}]");
 
-        // Calculate actual position
-        Position pActual = new(p.X + pParent.X, p.Y + pParent.Y);
-        Console.WriteLine($"({pActual.X}, {pActual.Y})");
-        Console.WriteLine();
+            // Get entity position
+            ref readonly Position p = ref e.Get<Position>();
 
-        // Iterate children recursively
-        e.Children((Entity child) => IterateTree(child, pActual));
+            // Calculate actual position
+            Position pActual = new(p.X + pParent.X, p.Y + pParent.Y);
+            Console.WriteLine($"({pActual.X}, {pActual.Y})");
+            Console.WriteLine();
+
+            // Iterate children recursively
+            e.Children((Entity child) => IterateTree(child, pActual));
+        }
     }
 }
 

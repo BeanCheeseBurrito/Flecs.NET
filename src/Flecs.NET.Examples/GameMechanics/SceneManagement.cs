@@ -17,7 +17,7 @@ file record struct Button(string Text);
 file record struct Character(bool Alive);
 file record struct Health(int Amount);
 
-file static class GameMechanics_SceneManagement
+public static class GameMechanics_SceneManagement
 {
     public static void Main()
     {

@@ -7,11 +7,11 @@ file struct NativeString(string str)
     public IntPtr Value = Marshal.StringToHGlobalAnsi(str);
 }
 
-file static class Entities_Hooks
+public static class Entities_Hooks
 {
-    public static void Main(string[] args)
+    public static void Main()
     {
-        World world = World.Create(args);
+        World world = World.Create();
 
         world.Component<NativeString>()
             // Resource management hooks. These hooks should primarily be used for
