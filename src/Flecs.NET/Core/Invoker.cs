@@ -38,7 +38,7 @@ public static unsafe partial class Invoker
     /// <param name="callback"></param>
     public static void Each(ecs_iter_t* iter, Ecs.EachEntityCallback callback)
     {
-        Ecs.Assert(iter->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
+        Ecs.Assert(iter->entities != null, "No entities returned, use Iter() or Each() without the entity argument instead.");
 
         Ecs.TableLock(iter->world, iter->table);
 

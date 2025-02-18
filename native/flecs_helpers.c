@@ -100,6 +100,7 @@ extern void* EcsHecto;
 extern void* EcsHertz;
 extern void* EcsHours;
 extern void* EcsInherit;
+extern void* EcsInheritable;
 extern void* EcsIsA;
 extern void* EcsKelvin;
 extern void* EcsKibi;
@@ -160,8 +161,6 @@ extern void* EcsOnStart;
 extern void* EcsOnStore;
 extern void* EcsOnTableCreate;
 extern void* EcsOnTableDelete;
-extern void* EcsOnTableEmpty;
-extern void* EcsOnTableFill;
 extern void* EcsOnUpdate;
 extern void* EcsOnValidate;
 extern void* EcsOverride;
@@ -201,6 +200,7 @@ extern void* EcsRelationship;
 extern void* EcsRemove;
 extern void* EcsScopeClose;
 extern void* EcsScopeOpen;
+extern void* EcsScriptTemplate;
 extern void* EcsSeconds;
 extern void* EcsSlotOf;
 extern void* EcsSparse;
@@ -283,7 +283,11 @@ extern void* FLECS_IDEcsPolyID_;
 extern void* FLECS_IDEcsPrimitiveID_;
 extern void* FLECS_IDEcsRateFilterID_;
 extern void* FLECS_IDEcsRestID_;
+extern void* FLECS_IDEcsScriptConstVarID_;
+extern void* FLECS_IDEcsScriptFunctionID_;
 extern void* FLECS_IDEcsScriptID_;
+extern void* FLECS_IDEcsScriptMethodID_;
+extern void* FLECS_IDEcsScriptTemplateID_;
 extern void* FLECS_IDEcsStructID_;
 extern void* FLECS_IDEcsSystemStatsID_;
 extern void* FLECS_IDEcsTickSourceID_;
@@ -589,6 +593,9 @@ BINDGEN_API void* EcsHours_BindgenGetExtern() {
 BINDGEN_API void* EcsInherit_BindgenGetExtern() {
     return &EcsInherit;
 }
+BINDGEN_API void* EcsInheritable_BindgenGetExtern() {
+    return &EcsInheritable;
+}
 BINDGEN_API void* EcsIsA_BindgenGetExtern() {
     return &EcsIsA;
 }
@@ -769,12 +776,6 @@ BINDGEN_API void* EcsOnTableCreate_BindgenGetExtern() {
 BINDGEN_API void* EcsOnTableDelete_BindgenGetExtern() {
     return &EcsOnTableDelete;
 }
-BINDGEN_API void* EcsOnTableEmpty_BindgenGetExtern() {
-    return &EcsOnTableEmpty;
-}
-BINDGEN_API void* EcsOnTableFill_BindgenGetExtern() {
-    return &EcsOnTableFill;
-}
 BINDGEN_API void* EcsOnUpdate_BindgenGetExtern() {
     return &EcsOnUpdate;
 }
@@ -891,6 +892,9 @@ BINDGEN_API void* EcsScopeClose_BindgenGetExtern() {
 }
 BINDGEN_API void* EcsScopeOpen_BindgenGetExtern() {
     return &EcsScopeOpen;
+}
+BINDGEN_API void* EcsScriptTemplate_BindgenGetExtern() {
+    return &EcsScriptTemplate;
 }
 BINDGEN_API void* EcsSeconds_BindgenGetExtern() {
     return &EcsSeconds;
@@ -1138,8 +1142,20 @@ BINDGEN_API void* FLECS_IDEcsRateFilterID__BindgenGetExtern() {
 BINDGEN_API void* FLECS_IDEcsRestID__BindgenGetExtern() {
     return &FLECS_IDEcsRestID_;
 }
+BINDGEN_API void* FLECS_IDEcsScriptConstVarID__BindgenGetExtern() {
+    return &FLECS_IDEcsScriptConstVarID_;
+}
+BINDGEN_API void* FLECS_IDEcsScriptFunctionID__BindgenGetExtern() {
+    return &FLECS_IDEcsScriptFunctionID_;
+}
 BINDGEN_API void* FLECS_IDEcsScriptID__BindgenGetExtern() {
     return &FLECS_IDEcsScriptID_;
+}
+BINDGEN_API void* FLECS_IDEcsScriptMethodID__BindgenGetExtern() {
+    return &FLECS_IDEcsScriptMethodID_;
+}
+BINDGEN_API void* FLECS_IDEcsScriptTemplateID__BindgenGetExtern() {
+    return &FLECS_IDEcsScriptTemplateID_;
 }
 BINDGEN_API void* FLECS_IDEcsStructID__BindgenGetExtern() {
     return &FLECS_IDEcsStructID_;

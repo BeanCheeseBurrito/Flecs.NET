@@ -4403,24 +4403,25 @@ public unsafe partial struct World
         return (entity = LookupSymbol(symbol, lookupAsPath, recursive)) != 0;
     }
 
-    /// <summary>
-    ///     Cleanup empty tables.
-    /// </summary>
-    /// <param name="id">Optional component filter for the tables to evaluate.</param>
-    /// <param name="clearGeneration">Free table data when generation > clear_generation.</param>
-    /// <param name="deleteGeneration">Delete table when generation > delete_generation.</param>
-    /// <param name="minIdCount">Minimum number of component ids the table should have.</param>
-    /// <param name="timeBudgetSeconds">Amount of time operation is allowed to spend.</param>
-    /// <returns>Number of deleted tables.</returns>
-    public int DeleteEmptyTables(ulong id, ushort clearGeneration, ushort deleteGeneration, int minIdCount, double timeBudgetSeconds)
-    {
-        return ecs_delete_empty_tables(
-            Handle,
-            id,
-            clearGeneration,
-            deleteGeneration,
-            minIdCount,
-            timeBudgetSeconds
-        );
-    }
+    // TODO: DeleteEmptyTables
+    // /// <summary>
+    // ///     Cleanup empty tables.
+    // /// </summary>
+    // /// <param name="id">Optional component filter for the tables to evaluate.</param>
+    // /// <param name="clearGeneration">Free table data when generation > clear_generation.</param>
+    // /// <param name="deleteGeneration">Delete table when generation > delete_generation.</param>
+    // /// <param name="minIdCount">Minimum number of component ids the table should have.</param>
+    // /// <param name="timeBudgetSeconds">Amount of time operation is allowed to spend.</param>
+    // /// <returns>Number of deleted tables.</returns>
+    // public int DeleteEmptyTables(ulong id, ushort clearGeneration, ushort deleteGeneration, int minIdCount, double timeBudgetSeconds)
+    // {
+    //     return ecs_delete_empty_tables(
+    //         Handle,
+    //         id,
+    //         clearGeneration,
+    //         deleteGeneration,
+    //         minIdCount,
+    //         timeBudgetSeconds
+    //     );
+    // }
 }

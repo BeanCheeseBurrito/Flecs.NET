@@ -1071,7 +1071,7 @@ public class ObserverTests
         world.Observer()
             .With<Position>(tgt).Singleton()
             .Event(Ecs.OnSet)
-            .Each((Entity _) => { count++; });
+            .Each((Iter _, int _) => { count++; });
 
         world.Set(tgt, new Position { X = 10, Y = 20 });
         Assert.Equal(1, count);
