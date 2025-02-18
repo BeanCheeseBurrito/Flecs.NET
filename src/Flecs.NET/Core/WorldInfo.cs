@@ -167,11 +167,6 @@ public readonly unsafe struct WorldInfo : IEquatable<WorldInfo>
     public int TableCount => Handle->table_count;
 
     /// <summary>
-    ///     Number of tables without entities.
-    /// </summary>
-    public int EmptyTableCount => Handle->empty_table_count;
-
-    /// <summary>
     ///     Command counts.
     /// </summary>
     public Commands Cmd => new Commands(Handle);

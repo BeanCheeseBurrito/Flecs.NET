@@ -542,7 +542,7 @@ public static class Generator
             Callback.FindEntityRefCallbackPointer or
 
             Callback.FindEntityPointerCallbackDelegate or
-            Callback.FindEntityPointerCallbackPointer => "int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, \"No entities returned, use Iter() or Each() without the entity argument instead.\");",
+            Callback.FindEntityPointerCallbackPointer => "int count = it.Handle->count; Ecs.Assert(it.Handle->entities != null, \"No entities returned, use Iter() or Each() without the entity argument instead.\");",
 
             _ => throw new ArgumentOutOfRangeException(nameof(callback), callback, null)
         };

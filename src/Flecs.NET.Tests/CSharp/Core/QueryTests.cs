@@ -1001,12 +1001,11 @@ public unsafe class QueryTests
             .With<Position>()
             .GroupByCtx(10, static (ref int groupByCtx) =>
             {
-                Assert.Equal(20, groupByCtx);
+                Assert.Equal(10, groupByCtx);
             })
             .GroupBy(rel, static (World _, Table _, ulong _, ref int groupByCtx) =>
             {
                 Assert.Equal(10, groupByCtx);
-                groupByCtx = 20;
                 return 0;
             })
             .Build();

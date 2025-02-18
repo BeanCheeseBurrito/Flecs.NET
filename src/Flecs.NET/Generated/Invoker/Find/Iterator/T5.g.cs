@@ -158,7 +158,7 @@ public static unsafe partial class Invoker
     /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam> <typeparam name="T3">The T3 component type.</typeparam> <typeparam name="T4">The T4 component type.</typeparam>
     public static Entity Find<T0, T1, T2, T3, T4>(Iter it, Ecs.FindEntityRefCallback<T0, T1, T2, T3, T4> callback)
     {
-        int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
+        int count = it.Handle->count; Ecs.Assert(it.Handle->entities != null, "No entities returned, use Iter() or Each() without the entity argument instead.");
         
         FieldData<T0> field0 = it.GetFieldData<T0>(0); FieldData<T1> field1 = it.GetFieldData<T1>(1); FieldData<T2> field2 = it.GetFieldData<T2>(2); FieldData<T3> field3 = it.GetFieldData<T3>(3); FieldData<T4> field4 = it.GetFieldData<T4>(4);
         IterationTechnique flags = it.GetIterationTechnique(5);
@@ -581,7 +581,7 @@ public static unsafe partial class Invoker
     /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam> <typeparam name="T3">The T3 component type.</typeparam> <typeparam name="T4">The T4 component type.</typeparam>
     public static Entity Find<T0, T1, T2, T3, T4>(Iter it, delegate*<Entity, ref T0, ref T1, ref T2, ref T3, ref T4, bool> callback)
     {
-        int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
+        int count = it.Handle->count; Ecs.Assert(it.Handle->entities != null, "No entities returned, use Iter() or Each() without the entity argument instead.");
         
         FieldData<T0> field0 = it.GetFieldData<T0>(0); FieldData<T1> field1 = it.GetFieldData<T1>(1); FieldData<T2> field2 = it.GetFieldData<T2>(2); FieldData<T3> field3 = it.GetFieldData<T3>(3); FieldData<T4> field4 = it.GetFieldData<T4>(4);
         IterationTechnique flags = it.GetIterationTechnique(5);
@@ -1004,7 +1004,7 @@ public static unsafe partial class Invoker
     /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam> <typeparam name="T3">The T3 component type.</typeparam> <typeparam name="T4">The T4 component type.</typeparam>
     public static Entity Find<T0, T1, T2, T3, T4>(Iter it, Ecs.FindEntityPointerCallback<T0, T1, T2, T3, T4> callback)
     {
-        int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
+        int count = it.Handle->count; Ecs.Assert(it.Handle->entities != null, "No entities returned, use Iter() or Each() without the entity argument instead.");
         
         FieldData<T0> field0 = it.GetFieldData<T0>(0); FieldData<T1> field1 = it.GetFieldData<T1>(1); FieldData<T2> field2 = it.GetFieldData<T2>(2); FieldData<T3> field3 = it.GetFieldData<T3>(3); FieldData<T4> field4 = it.GetFieldData<T4>(4);
         IterationTechnique flags = it.GetIterationTechnique(5);
@@ -1427,7 +1427,7 @@ public static unsafe partial class Invoker
     /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam> <typeparam name="T3">The T3 component type.</typeparam> <typeparam name="T4">The T4 component type.</typeparam>
     public static Entity Find<T0, T1, T2, T3, T4>(Iter it, delegate*<Entity, T0*, T1*, T2*, T3*, T4*, bool> callback)
     {
-        int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
+        int count = it.Handle->count; Ecs.Assert(it.Handle->entities != null, "No entities returned, use Iter() or Each() without the entity argument instead.");
         
         FieldData<T0> field0 = it.GetFieldData<T0>(0); FieldData<T1> field1 = it.GetFieldData<T1>(1); FieldData<T2> field2 = it.GetFieldData<T2>(2); FieldData<T3> field3 = it.GetFieldData<T3>(3); FieldData<T4> field4 = it.GetFieldData<T4>(4);
         IterationTechnique flags = it.GetIterationTechnique(5);

@@ -158,7 +158,7 @@ public static unsafe partial class Invoker
     /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam>
     public static Entity Find<T0, T1>(Iter it, Ecs.FindEntityRefCallback<T0, T1> callback)
     {
-        int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
+        int count = it.Handle->count; Ecs.Assert(it.Handle->entities != null, "No entities returned, use Iter() or Each() without the entity argument instead.");
         
         FieldData<T0> field0 = it.GetFieldData<T0>(0); FieldData<T1> field1 = it.GetFieldData<T1>(1);
         IterationTechnique flags = it.GetIterationTechnique(2);
@@ -581,7 +581,7 @@ public static unsafe partial class Invoker
     /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam>
     public static Entity Find<T0, T1>(Iter it, delegate*<Entity, ref T0, ref T1, bool> callback)
     {
-        int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
+        int count = it.Handle->count; Ecs.Assert(it.Handle->entities != null, "No entities returned, use Iter() or Each() without the entity argument instead.");
         
         FieldData<T0> field0 = it.GetFieldData<T0>(0); FieldData<T1> field1 = it.GetFieldData<T1>(1);
         IterationTechnique flags = it.GetIterationTechnique(2);
@@ -1004,7 +1004,7 @@ public static unsafe partial class Invoker
     /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam>
     public static Entity Find<T0, T1>(Iter it, Ecs.FindEntityPointerCallback<T0, T1> callback)
     {
-        int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
+        int count = it.Handle->count; Ecs.Assert(it.Handle->entities != null, "No entities returned, use Iter() or Each() without the entity argument instead.");
         
         FieldData<T0> field0 = it.GetFieldData<T0>(0); FieldData<T1> field1 = it.GetFieldData<T1>(1);
         IterationTechnique flags = it.GetIterationTechnique(2);
@@ -1427,7 +1427,7 @@ public static unsafe partial class Invoker
     /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam>
     public static Entity Find<T0, T1>(Iter it, delegate*<Entity, T0*, T1*, bool> callback)
     {
-        int count = it.Handle->count; Ecs.Assert(it.Handle->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
+        int count = it.Handle->count; Ecs.Assert(it.Handle->entities != null, "No entities returned, use Iter() or Each() without the entity argument instead.");
         
         FieldData<T0> field0 = it.GetFieldData<T0>(0); FieldData<T1> field1 = it.GetFieldData<T1>(1);
         IterationTechnique flags = it.GetIterationTechnique(2);

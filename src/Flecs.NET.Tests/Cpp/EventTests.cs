@@ -461,18 +461,18 @@ public unsafe class EventTests
         world.Observer()
             .Event<Evt>()
             .With(Ecs.Any).Src(e1)
-            .Each((Entity e) =>
+            .Each((Iter it, int i) =>
             {
-                Assert.True(e == 0);
+                Assert.True(it.Count() == 0);
                 countA++;
             });
 
         world.Observer()
             .Event<Evt>()
             .With(Ecs.Any).Src(e2)
-            .Each((Entity e) =>
+            .Each((Iter it, int i) =>
             {
-                Assert.True(e == 0);
+                Assert.True(it.Count() == 0);
                 countB++;
             });
 
