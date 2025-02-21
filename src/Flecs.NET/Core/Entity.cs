@@ -464,22 +464,8 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public T* GetPtr<T>() where T : unmanaged
     {
-        ulong componentId = Type<T>.Id(World);
-
-        if (!typeof(T).IsEnum)
-        {
-            Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            return (T*)ecs_get_id(World, Id, componentId);
-        }
-
-        ulong target = ecs_get_target(World, Id, componentId, 0);
-
-        if (target == 0)
-            return (T*)ecs_get_id(World, Id, componentId);
-
-        void* ptr = ecs_get_id(World, target, componentId);
-        Ecs.Assert(ptr != null, "Missing enum constant value");
-        return (T*)ptr;
+        Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
+        return (T*)ecs_get_id(World, Id, Type<T>.Id(World));
     }
 
     /// <summary>
@@ -491,7 +477,12 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     public TFirst* GetPtr<TFirst>(ulong second) where TFirst : unmanaged
     {
         Ecs.Assert(Type<TFirst>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-        return (TFirst*)GetPtr(Ecs.Pair<TFirst>(second, World));
+
+        if (!typeof(TFirst).IsEnum || (second != Ecs.Wildcard && second != Ecs.Any))
+            return (TFirst*)GetPtr(Ecs.Pair<TFirst>(second, World));
+
+        Entity target = Target<TFirst>();
+        return target == 0 ? null : (TFirst*)target.GetPtr(EcsConstant, Type<TFirst>.UnderlyingTypeId);
     }
 
     /// <summary>
@@ -567,22 +558,8 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public ref readonly T Get<T>()
     {
-        ulong componentId = Type<T>.Id(World);
-
-        if (!typeof(T).IsEnum)
-        {
-            Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            return ref Managed.GetTypeRef<T>(ecs_get_id(World, Id, componentId));
-        }
-
-        ulong target = ecs_get_target(World, Id, componentId, 0);
-
-        if (target == 0)
-            return ref Managed.GetTypeRef<T>(ecs_get_id(World, Id, componentId));
-
-        void* ptr = ecs_get_id(World, target, componentId);
-        Ecs.Assert(ptr != null, "Missing enum constant value");
-        return ref Managed.GetTypeRef<T>(ptr);
+        Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
+        return ref Managed.GetTypeRef<T>(ecs_get_id(World, Id, Type<T>.Id(World)));
     }
 
     /// <summary>
@@ -594,7 +571,12 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     public ref readonly TFirst Get<TFirst>(ulong second)
     {
         Ecs.Assert(Type<TFirst>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-        return ref Managed.GetTypeRef<TFirst>(GetPtr(Ecs.Pair<TFirst>(second, World)));
+
+        if (!typeof(TFirst).IsEnum || (second != Ecs.Wildcard && second != Ecs.Any))
+            return ref Managed.GetTypeRef<TFirst>(GetPtr(Ecs.Pair<TFirst>(second, World)));
+
+        Entity target = Target<TFirst>();
+        return ref target == 0 ? ref Unsafe.NullRef<TFirst>() : ref Managed.GetTypeRef<TFirst>(target.GetPtr(EcsConstant, Type<TFirst>.UnderlyingTypeId));
     }
 
     /// <summary>
@@ -687,22 +669,8 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public T* GetMutPtr<T>() where T : unmanaged
     {
-        ulong componentId = Type<T>.Id(World);
-
-        if (!typeof(T).IsEnum)
-        {
-            Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            return (T*)ecs_get_mut_id(World, Id, componentId);
-        }
-
-        ulong target = ecs_get_target(World, Id, componentId, 0);
-
-        if (target == 0)
-            return (T*)ecs_get_mut_id(World, Id, componentId);
-
-        void* ptr = ecs_get_mut_id(World, target, componentId);
-        Ecs.Assert(ptr != null, "Missing enum constant value");
-        return (T*)ptr;
+        Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
+        return (T*)ecs_get_mut_id(World, Id, Type<T>.Id(World));
     }
 
     /// <summary>
@@ -788,22 +756,8 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public ref T GetMut<T>()
     {
-        ulong componentId = Type<T>.Id(World);
-
-        if (!typeof(T).IsEnum)
-        {
-            Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            return ref Managed.GetTypeRef<T>(ecs_get_mut_id(World, Id, componentId));
-        }
-
-        ulong target = ecs_get_target(World, Id, componentId, 0);
-
-        if (target == 0)
-            return ref Managed.GetTypeRef<T>(ecs_get_mut_id(World, Id, componentId));
-
-        void* ptr = ecs_get_mut_id(World, target, componentId);
-        Ecs.Assert(ptr != null, "Missing enum constant value");
-        return ref Managed.GetTypeRef<T>(ptr);
+        Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
+        return ref Managed.GetTypeRef<T>(ecs_get_mut_id(World, Id, Type<T>.Id(World)));
     }
 
     /// <summary>
@@ -895,7 +849,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <param name="index"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public Entity Target<T>(int index = 0) where T : unmanaged
+    public Entity Target<T>(int index = 0)
     {
         return new Entity(World, ecs_get_target(World, Id, Type<T>.Id(World), index));
     }
@@ -1433,7 +1387,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public T ToConstant<T>() where T : unmanaged, Enum
     {
-        T* ptr = GetPtr<T>();
+        T* ptr = (T*)GetPtr(Ecs.Constant, Type<T>.UnderlyingTypeId);
         Ecs.Assert(ptr != null, "Entity is not a constant");
         return *ptr;
     }
@@ -3385,22 +3339,8 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public T* EnsurePtr<T>() where T : unmanaged
     {
-        ulong componentId = Type<T>.Id(World);
-
-        if (!typeof(T).IsEnum)
-        {
-            Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            return (T*)ecs_ensure_id(World, Id, componentId);
-        }
-
-        ulong target = ecs_get_target(World, Id, componentId, 0);
-
-        if (target == 0)
-            return  (T*)ecs_ensure_id(World, Id, componentId);
-
-        T* ptr = (T*)ecs_ensure_id(World, target, componentId);
-        Ecs.Assert(ptr != null, "Missing enum constant value");
-        return ptr;
+        Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
+        return (T*)ecs_ensure_id(World, Id, Type<T>.Id(World));
     }
 
     /// <summary>
@@ -3486,22 +3426,8 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <returns></returns>
     public ref T Ensure<T>()
     {
-        ulong componentId = Type<T>.Id(World);
-
-        if (!typeof(T).IsEnum)
-        {
-            Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
-            return ref Managed.GetTypeRef<T>(ecs_ensure_id(World, Id, componentId));
-        }
-
-        ulong target = ecs_get_target(World, Id, componentId, 0);
-
-        if (target == 0)
-            return ref Managed.GetTypeRef<T>(ecs_ensure_id(World, Id, componentId));
-
-        void* ptr = ecs_ensure_id(World, target, componentId);
-        Ecs.Assert(ptr != null, "Missing enum constant value");
-        return ref Managed.GetTypeRef<T>(ptr);
+        Ecs.Assert(Type<T>.Size != 0, nameof(ECS_INVALID_PARAMETER));
+        return ref Managed.GetTypeRef<T>(ecs_ensure_id(World, Id, Type<T>.Id(World)));
     }
 
     /// <summary>

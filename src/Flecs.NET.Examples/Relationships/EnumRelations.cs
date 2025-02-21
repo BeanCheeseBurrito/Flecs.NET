@@ -53,7 +53,7 @@ public static class Relationships_EnumRelations
         Console.WriteLine(tile.Has(Tile.Stone)); // True
 
         // Get the current value of the enum
-        ref readonly Tile v = ref tile.Get<Tile>();
+        ref readonly Tile v = ref tile.Get<Tile>(Ecs.Wildcard);
         Console.WriteLine(v == Tile.Stone); // True
 
         // Create a few more entities that we can query

@@ -384,7 +384,7 @@ public unsafe partial struct Component<TComponent>
     }
 
     /// <inheritdoc cref="Entity.Target{T}(int)"/>
-    public Entity Target<T>(int index = 0) where T : unmanaged
+    public Entity Target<T>(int index = 0)
     {
         return Entity.Target<T>(index);
     }

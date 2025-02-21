@@ -181,10 +181,25 @@ public unsafe partial struct UntypedComponent : IEquatable<UntypedComponent>, IE
     /// <param name="value"></param>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
-    /// TODO: Handle all integer types instead of only int.
     public ref UntypedComponent Constant<TEnum>(string name, TEnum value) where TEnum : Enum
     {
-        return ref Constant(name, Convert.ToInt32(value, CultureInfo.InvariantCulture));
+        Add<EcsEnum>();
+
+        using NativeString nativeName = (NativeString)name;
+
+        ecs_entity_desc_t desc = default;
+        desc.name = nativeName;
+        desc.parent = Id;
+        Entity eId = new Entity(World, ecs_entity_init(World, &desc));
+
+        Ecs.Assert(eId != 0, nameof(ECS_INTERNAL_ERROR));
+
+        ulong pair = Ecs.Pair(Ecs.Constant, Type<TEnum>.UnderlyingTypeId);
+        TEnum* ptr = (TEnum*)eId.EnsurePtr(pair);
+        *ptr = value;
+        eId.Modified(pair);
+
+        return ref this;
     }
 
     /// <summary>

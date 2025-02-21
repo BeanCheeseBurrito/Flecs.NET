@@ -202,7 +202,7 @@ public unsafe interface IEntity<TEntity> : IId
     public Entity Target(ulong relation, int index = 0);
 
     /// <inheritdoc cref="Entity.Target{T}(int)"/>
-    public Entity Target<T>(int index = 0) where T : unmanaged;
+    public Entity Target<T>(int index = 0);
 
     /// <inheritdoc cref="Entity.TargetFor(ulong, ulong)"/>
     public Entity TargetFor(ulong relation, ulong id);

@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -64,6 +63,11 @@ public static unsafe class Type<T>
     ///     The underlying integer type if this type is an enum.
     /// </summary>
     public static readonly IntegerType UnderlyingType = GetUnderlyingType();
+
+    /// <summary>
+    ///     The underlying integer type id if this type is an enum.
+    /// </summary>
+    public static readonly ulong UnderlyingTypeId = GetUnderlyingTypeId();
 
     /// <summary>
     ///     The cache indexes of all enum members if this type is an enum.
@@ -362,7 +366,18 @@ public static unsafe class Type<T>
 
         for (int i = 0; i < values.Length; i++)
         {
-            long value = Convert.ToInt64(values.GetValue(i)!, CultureInfo.InvariantCulture);
+            long value = UnderlyingType switch
+            {
+                IntegerType.SByte => (sbyte)values.GetValue(i)!,
+                IntegerType.Byte => (byte)values.GetValue(i)!,
+                IntegerType.Int16 => (short)values.GetValue(i)!,
+                IntegerType.UInt16 => (ushort)values.GetValue(i)!,
+                IntegerType.Int32 => (int)values.GetValue(i)!,
+                IntegerType.UInt32 => (uint)values.GetValue(i)!,
+                IntegerType.Int64 => (long)values.GetValue(i)!,
+                IntegerType.UInt64 => (long)(ulong)values.GetValue(i)!,
+                _ => throw new Ecs.ErrorException("Type is not an enum.")
+            };
             constants[i] = new EnumMember(value, Interlocked.Increment(ref Ecs.CacheIndexCount));
         }
 
@@ -382,18 +397,16 @@ public static unsafe class Type<T>
         ecs_suspend_readonly_state_t state = default;
         world = flecs_suspend_readonly(world, &state);
 
-        type.Set(default(EcsEnum));
+        type.Set(new EcsEnum { underlying_type = UnderlyingTypeId });
 
         Entity prevScope = world.SetScope(type);
 
         for (int i = 0; i < Constants.Length; i++)
         {
             long value = Constants[i].Value;
-            T constant = Unsafe.As<long, T>(ref value);
-
-            // TODO: Support all integer types when flecs adds support for non-int enums.
-            EnsureCacheIndex(world, Constants[i].CacheIndex) = world.Entity(constant!.ToString()!)
-                .SetUntyped(EcsConstant, FLECS_IDecs_i32_tID_, sizeof(int), &value);
+            string name = Unsafe.As<long, T>(ref value)!.ToString()!;
+            EnsureCacheIndex(world, Constants[i].CacheIndex) =
+                world.Entity(name).SetUntyped(EcsConstant, UnderlyingTypeId, sizeof(T), &value);
         }
 
         world.SetScope(prevScope);
@@ -476,6 +489,22 @@ public static unsafe class Type<T>
             return IntegerType.UInt64;
 
         return IntegerType.None;
+    }
+
+    private static ulong GetUnderlyingTypeId()
+    {
+        return UnderlyingType switch
+        {
+            IntegerType.SByte => FLECS_IDecs_i8_tID_,
+            IntegerType.Byte => FLECS_IDecs_u8_tID_,
+            IntegerType.Int16 => FLECS_IDecs_i16_tID_,
+            IntegerType.UInt16 => FLECS_IDecs_u16_tID_,
+            IntegerType.Int32 => FLECS_IDecs_i32_tID_,
+            IntegerType.UInt32 => FLECS_IDecs_u32_tID_,
+            IntegerType.Int64 => FLECS_IDecs_i64_tID_,
+            IntegerType.UInt64 => FLECS_IDecs_u64_tID_,
+            _ => 0
+        };
     }
 
     private static string GetName()
