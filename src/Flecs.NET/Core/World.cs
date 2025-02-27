@@ -2360,6 +2360,15 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     }
 
     /// <summary>
+    ///     Override the generation of an entity.
+    /// </summary>
+    /// <param name="entity">The entity for which to set the generation with the new generation.</param>
+    public void SetVersion(ulong entity)
+    {
+        ecs_set_version(Handle, entity);
+    }
+
+    /// <summary>
     ///     Run callback after completing frame.
     /// </summary>
     /// <param name="callback">The callback.</param>
@@ -3070,7 +3079,10 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
             ecs_iter_t it = ecs_each_id(Handle, Pair(Ecs.ChildOf, current));
 
             if (!ecs_iter_is_true(&it))
+            {
                 current.Destruct();
+                SetVersion(current);
+            }
 
             current = next;
         }
@@ -3477,16 +3489,6 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     public IterToJsonDesc IterToJsonDesc()
     {
         return Core.IterToJsonDesc.Default;
-    }
-
-    /// <summary>
-    ///     Creates a new <see cref="Flecs.NET.Core.WorldToJsonDesc"/>.
-    /// </summary>
-    /// <returns></returns>
-    [SuppressMessage("Usage", "CA1822")]
-    public WorldToJsonDesc WorldToJsonDesc()
-    {
-        return Core.WorldToJsonDesc.Default;
     }
 
     /// <summary>
