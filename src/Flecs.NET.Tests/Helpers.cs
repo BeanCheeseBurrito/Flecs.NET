@@ -434,3 +434,19 @@ namespace NamespaceParent
         }
     }
 }
+
+namespace RenamedRootModule
+{
+    public struct Module : IFlecsModule
+    {
+        public void InitModule(World world)
+        {
+            world.Module<Module>(".MyModule");
+            for (int i = 0; i < 5; ++i)
+            {
+                Entity e = world.Entity();
+                Assert.True(e.Id == (uint)e.Id);
+            }
+        }
+    };
+}

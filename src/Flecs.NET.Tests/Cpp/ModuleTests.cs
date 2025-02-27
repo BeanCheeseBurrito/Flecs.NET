@@ -390,4 +390,15 @@ public class ModuleTests
         Assert.Equal("Namespace", p.Name());
         Assert.Equal("ReparentRootModule", m.Name());
     }
+
+    [Fact]
+    private void ModuleNoRecycleAfterRenameReparent()
+    {
+        using World world = World.Create();
+
+        Entity m = world.Import<RenamedRootModule.Module>();
+        Entity p = m.Parent();
+        Assert.True(p == 0);
+        Assert.Equal("MyModule", m.Name());
+    }
 }
