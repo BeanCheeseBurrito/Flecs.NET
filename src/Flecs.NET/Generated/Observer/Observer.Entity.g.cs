@@ -611,28 +611,16 @@ public unsafe partial struct Observer
         return Entity.Mut(entity);
     }
 
-    /// <inheritdoc cref="Entity.ToJson(ecs_entity_to_json_desc_t*)"/>
-    public string ToJson(ecs_entity_to_json_desc_t* desc)
+    /// <inheritdoc cref="Entity.ToJson(in EntityToJsonDesc)"/>
+    public string ToJson(in EntityToJsonDesc desc)
     {
-        return Entity.ToJson(desc);
+        return Entity.ToJson(in desc);
     }
-
+    
     /// <inheritdoc cref="Entity.ToJson()"/>
     public string ToJson()
     {
         return Entity.ToJson();
-    }
-
-    /// <inheritdoc cref="Entity.ToJson(ref EntityToJsonDesc)"/>
-    public string ToJson(ref EntityToJsonDesc desc)
-    {
-        return Entity.ToJson(ref desc);
-    }
-
-    /// <inheritdoc cref="Entity.ToJson(EntityToJsonDesc)"/>
-    public string ToJson(EntityToJsonDesc desc)
-    {
-        return Entity.ToJson(desc);
     }
 
     /// <inheritdoc cref="Entity.DocName()"/>

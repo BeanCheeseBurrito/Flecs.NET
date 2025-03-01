@@ -22,7 +22,6 @@ public static class Reflection_WorldSerializeDeserialize
         // Serialize world to JSON.
         string json = worldA.ToJson();
         Console.WriteLine(json);
-        // {"results":[{"ids":[["Move.Position"], ["Move.Velocity"], ["flecs.core.Identifier","flecs.core.Name"]], "entities":["Entity 1", "Entity 2"], "values":[[{"X":10, "Y":20}, {"X":30, "Y":40}], [{"X":1, "Y":-1}, {"X":-1, "Y":1}], 0]}]}
 
         // Create second world, import same module.
         using World worldB = World.Create();
@@ -63,7 +62,7 @@ file struct Move : IFlecsModule
 }
 
 // Output:
-// {"results":[{"ids":[["Move.Position"], ["Move.Velocity"], ["flecs.core.Identifier","flecs.core.Name"]], "entities":["Entity 1", "Entity 2"], "values":[[{"X":10, "Y":20}, {"X":30, "Y":40}], [{"X":1, "Y":-1}, {"X":-1, "Y":1}], 0]}]}
+// {"results":[{"name":"Entity 1", "id":543, "components":{"Move.Position":{"X":10, "Y":20}, "Move.Velocity":{"X":1, "Y":-1}}}, {"name":"Entity 2", "id":544, "components":{"Move.Position":{"X":30, "Y":40}, "Move.Velocity":{"X":-1, "Y":1}}}]}
 // Entity 1 moved to (X: 11, Y: 19)
 // Entity 2 moved to (X: 29, Y: 41)
 //

@@ -28,4 +28,4 @@ public static class Reflection_BasicsJson
 
 // Output:
 // {"X":10, "Y":20}
-// {"path":"Entity", "ids":[["Position"]], "values":[{"X":10, "Y":20}]}
+// {"name":"Entity", "components":{"Position":{"X":10, "Y":20}}}

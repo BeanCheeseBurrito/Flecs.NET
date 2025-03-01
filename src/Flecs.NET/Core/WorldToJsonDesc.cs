@@ -1,99 +1,53 @@
-using System;
-using System.Runtime.CompilerServices;
-using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
 
 /// <summary>
-///     A wrapper around ecs_world_to_json_desc_t.
+///     A wrapper around <see cref="ecs_world_to_json_desc_t"/>.
 /// </summary>
-public unsafe struct WorldToJsonDesc : IEquatable<WorldToJsonDesc>
+public unsafe record struct WorldToJsonDesc
 {
-    private ecs_world_to_json_desc_t _desc;
+    /// <summary>
+    ///     The underlying <see cref="ecs_world_to_json_desc_t"/> instance.
+    /// </summary>
+    public ecs_world_to_json_desc_t Desc;
 
     /// <summary>
-    ///     Reference to desc.
+    ///     Initializes a new instance of <see cref="WorldToJsonDesc"/> with the provided description.
     /// </summary>
-    public ref ecs_world_to_json_desc_t Desc => ref _desc;
-
-    /// <summary>
-    ///     Default serialization configuration.
-    /// </summary>
-    public static WorldToJsonDesc Default => default;
-
-    /// <summary>
-    ///     Exclude flecs modules and contents.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ref WorldToJsonDesc BuiltIn(bool value = true)
+    /// <param name="desc">The <see cref="ecs_world_to_json_desc_t"/> instance to wrap.</param>
+    public WorldToJsonDesc(ecs_world_to_json_desc_t desc)
     {
-        Desc.serialize_builtin = value;
-        return ref this;
+        Desc = desc;
     }
 
     /// <summary>
-    ///     Exclude modules and contents.
+    ///     Whether to include built-in flecs modules and contents.
     /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ref WorldToJsonDesc Modules(bool value = true)
+    public ref bool BuiltIn => ref Desc.serialize_builtin;
+
+    /// <summary>
+    ///     Whether to include modules and contents.
+    /// </summary>
+    public ref bool Modules => ref Desc.serialize_modules;
+
+    /// <summary>
+    ///     Implicitly converts an <see cref="ecs_world_to_json_desc_t"/> instance to a <see cref="WorldToJsonDesc"/>.
+    /// </summary>
+    /// <param name="desc">The <see cref="ecs_world_to_json_desc_t"/> instance to convert.</param>
+    /// <returns>A new <see cref="WorldToJsonDesc"/> instance initialized with the given description.</returns>
+    public static implicit operator WorldToJsonDesc(ecs_world_to_json_desc_t desc)
     {
-        Desc.serialize_modules = value;
-        return ref this;
+        return new WorldToJsonDesc(desc);
     }
 
     /// <summary>
-    ///     Checks if two <see cref="WorldToJsonDesc"/> instances are equal.
+    ///     Implicitly converts a <see cref="WorldToJsonDesc"/> instance to an <see cref="ecs_world_to_json_desc_t"/>.
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    public bool Equals(WorldToJsonDesc other)
+    /// <param name="desc">The <see cref="WorldToJsonDesc"/> instance to convert.</param>
+    /// <returns>A new <see cref="ecs_world_to_json_desc_t"/> instance initialized with the given description.</returns>
+    public static implicit operator ecs_world_to_json_desc_t(WorldToJsonDesc desc)
     {
-        return Desc == other.Desc;
-    }
-
-    /// <summary>
-    ///     Checks if two <see cref="WorldToJsonDesc"/> instances are equal.
-    /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
-    public override bool Equals(object? obj)
-    {
-        return obj is WorldToJsonDesc other && Equals(other);
-    }
-
-    /// <summary>
-    ///     Returns the hash code for the <see cref="WorldToJsonDesc"/>.
-    /// </summary>
-    /// <returns></returns>
-    public override int GetHashCode()
-    {
-        return Desc.GetHashCode();
-    }
-
-    /// <summary>
-    ///     Checks if two <see cref="WorldToJsonDesc"/> instances are equal.
-    /// </summary>
-    /// <param name="left"></param>
-    /// <param name="right"></param>
-    /// <returns></returns>
-    public static bool operator ==(WorldToJsonDesc left, WorldToJsonDesc right)
-    {
-        return left.Equals(right);
-    }
-
-    /// <summary>
-    ///     Checks if two <see cref="WorldToJsonDesc"/> instances are not equal.
-    /// </summary>
-    /// <param name="left"></param>
-    /// <param name="right"></param>
-    /// <returns></returns>
-    public static bool operator !=(WorldToJsonDesc left, WorldToJsonDesc right)
-    {
-        return !(left == right);
+        return desc.Desc;
     }
 }

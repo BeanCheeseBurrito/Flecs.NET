@@ -60,28 +60,16 @@ public unsafe partial struct IterIterable<T0, T1, T2> : IEquatable<IterIterable<
         return ref this;
     }
 
-    /// <inheritdoc cref="IterIterable.ToJson(ecs_iter_to_json_desc_t*)"/>
-    public string ToJson(ecs_iter_to_json_desc_t* desc)
+    /// <inheritdoc cref="IterIterable.ToJson(in IterToJsonDesc)"/>
+    public string ToJson(in IterToJsonDesc desc)
     {
-        return _iterIterable.ToJson(desc);
+        return _iterIterable.ToJson(in desc);
     }
-
+    
     /// <inheritdoc cref="IterIterable.ToJson()"/>
     public string ToJson()
     {
         return _iterIterable.ToJson();
-    }
-
-    /// <inheritdoc cref="IterIterable.ToJson(ref IterToJsonDesc)"/>
-    public string ToJson(ref IterToJsonDesc desc)
-    {
-        return _iterIterable.ToJson(desc);
-    }
-
-    /// <inheritdoc cref="IterIterable.ToJson(IterToJsonDesc)"/>
-    public string ToJson(IterToJsonDesc desc)
-    {
-        return _iterIterable.ToJson(desc);
     }
 
     /// <inheritdoc cref="IterIterable.Count()"/>

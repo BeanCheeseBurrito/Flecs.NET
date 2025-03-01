@@ -33,16 +33,14 @@ public static class Reflection_QueryToCustomJson
         // Query for components.
         using Query<Position, Velocity> query = world.Query<Position, Velocity>();
 
-        // Serialize query to JSON. Customize serializer to only serialize entity
-        // names and component values.
-        IterToJsonDesc desc = world.IterToJsonDesc()
-            .Values();
-
-        Console.WriteLine(query.Iter().ToJson(desc));
+        // Serialize query to JSON. Only serialize entity names.
+        Console.WriteLine(query.Iter().ToJson(new IterToJsonDesc
+        {
+            SerializeFields = false
+        }));
         // Iterator returns 2 sets of results, one for each table.
-        // {"results":[{"name":"A", "fields":[{"data":{"X":10, "Y":20}}, {"data":{"X":1, "Y":2}}]}, {"name":"B", "fields":[{"data":{"X":20, "Y":30}}, {"data":{"X":2, "Y":3}}]}, {"name":"C", "fields":[{"data":{"X":30, "Y":40}}, {"data":{"X":3, "Y":4}}]}, {"name":"D", "fields":[{"data":{"X":30, "Y":40}}, {"data":{"X":4, "Y":5}}]}]}
     }
 }
 
 // Output:
-// {"results":[{"name":"A", "fields":[{"data":{"X":10, "Y":20}}, {"data":{"X":1, "Y":2}}]}, {"name":"B", "fields":[{"data":{"X":20, "Y":30}}, {"data":{"X":2, "Y":3}}]}, {"name":"C", "fields":[{"data":{"X":30, "Y":40}}, {"data":{"X":3, "Y":4}}]}, {"name":"D", "fields":[{"data":{"X":30, "Y":40}}, {"data":{"X":4, "Y":5}}]}]}
+// {"results":[{"name":"A"}, {"name":"B"}, {"name":"C"}, {"name":"D"}]}

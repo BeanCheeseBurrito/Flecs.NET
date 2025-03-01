@@ -122,48 +122,29 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     }
 
     /// <summary>
-    ///     Serialize iterator to JSON.
+    ///     Serializes the iterator to a JSON string using the provided description.
     /// </summary>
-    /// <param name="desc"></param>
-    /// <returns></returns>
-    public string ToJson(ecs_iter_to_json_desc_t* desc)
+    /// <param name="desc">The description settings for JSON serialization.</param>
+    /// <returns>A JSON string with the serialized iterator data, or an empty string if failed.</returns>
+    public string ToJson(in IterToJsonDesc desc)
+    {
+        fixed (ecs_iter_t* it = &_iter)
+        fixed (ecs_iter_to_json_desc_t* ptr = &desc.Desc)
+        {
+            return NativeString.GetStringAndFree(ecs_iter_to_json(it, ptr));
+        }
+    }
+
+    /// <summary>
+    ///     Serializes the iterator to a JSON string.
+    /// </summary>
+    /// <returns>A JSON string with the serialized iterator data, or an empty string if failed.</returns>
+    public string ToJson()
     {
         fixed (ecs_iter_t* it = &_iter)
         {
-            return NativeString.GetStringAndFree(ecs_iter_to_json(it, desc));
+            return NativeString.GetStringAndFree(ecs_iter_to_json(it, null));
         }
-    }
-
-    /// <summary>
-    ///     Serialize iterator to JSON.
-    /// </summary>
-    /// <returns></returns>
-    public string ToJson()
-    {
-        return ToJson(null);
-    }
-
-    /// <summary>
-    ///     Serialize iterator to JSON.
-    /// </summary>
-    /// <param name="desc"></param>
-    /// <returns></returns>
-    public string ToJson(ref IterToJsonDesc desc)
-    {
-        fixed (ecs_iter_to_json_desc_t* ptr = &desc.Desc)
-        {
-            return ToJson(ptr);
-        }
-    }
-
-    /// <summary>
-    ///     Serialize iterator to JSON.
-    /// </summary>
-    /// <param name="desc"></param>
-    /// <returns></returns>
-    public string ToJson(IterToJsonDesc desc)
-    {
-        return ToJson(ref desc);
     }
 
     /// <summary>

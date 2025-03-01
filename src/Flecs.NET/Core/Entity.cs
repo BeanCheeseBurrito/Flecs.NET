@@ -1275,45 +1275,25 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     }
 
     /// <summary>
-    ///     Serialize entity to JSON.
+    ///     Serializes the entity to a JSON string using the provided description.
     /// </summary>
-    /// <param name="desc"></param>
-    /// <returns></returns>
-    public string ToJson(ecs_entity_to_json_desc_t* desc)
-    {
-        return NativeString.GetStringAndFree(ecs_entity_to_json(World, Id, desc));
-    }
-
-    /// <summary>
-    ///     Serialize entity to JSON.
-    /// </summary>
-    /// <returns></returns>
-    public string ToJson()
-    {
-        return ToJson(null);
-    }
-
-    /// <summary>
-    ///     Serialize entity to JSON.
-    /// </summary>
-    /// <param name="desc"></param>
-    /// <returns></returns>
-    public string ToJson(ref EntityToJsonDesc desc)
+    /// <param name="desc">The description settings for JSON serialization.</param>
+    /// <returns>A JSON string with the serialized entity data, or an empty string if failed.</returns>
+    public string ToJson(in EntityToJsonDesc desc)
     {
         fixed (ecs_entity_to_json_desc_t* ptr = &desc.Desc)
         {
-            return ToJson(ptr);
+            return NativeString.GetStringAndFree(ecs_entity_to_json(World, Id, ptr));
         }
     }
 
     /// <summary>
-    ///     Serialize entity to JSON.
+    ///     Serializes the entity to a JSON string.
     /// </summary>
-    /// <param name="desc"></param>
-    /// <returns></returns>
-    public string ToJson(EntityToJsonDesc desc)
+    /// <returns>A JSON string with the serialized entity data, or an empty string if failed.</returns>
+    public string ToJson()
     {
-        return ToJson(ref desc);
+        return NativeString.GetStringAndFree(ecs_entity_to_json(World, Id, null));
     }
 
     /// <summary>

@@ -33,9 +33,8 @@ public static class Reflection_QueryToJson
 
         // Serialize query to JSON. Note that this works for any iterable object.
         Console.WriteLine(query.Iter().ToJson());
-        // {"ids":[["Position"], ["Velocity"]], "results":[{"ids":[["Position"], ["Velocity"]], "sources":[0, 0], "entities":["A", "B"], "values":[[{"X":10, "Y":20}, {"X":20, "Y":30}], [{"X":1, "Y":2}, {"X":2, "Y":3}]]}, {"ids":[["Position"], ["Velocity"]], "sources":[0, 0], "entities":["C", "D"], "values":[[{"X":30, "Y":40}, {"X":30, "Y":40}], [{"X":3, "Y":4}, {"X":4, "Y":5}]]}]}
     }
 }
 
 // Output:
-// {"ids":[["Position"], ["Velocity"]], "results":[{"ids":[["Position"], ["Velocity"]], "sources":[0, 0], "entities":["A", "B"], "values":[[{"X":10, "Y":20}, {"X":20, "Y":30}], [{"X":1, "Y":2}, {"X":2, "Y":3}]]}, {"ids":[["Position"], ["Velocity"]], "sources":[0, 0], "entities":["C", "D"], "values":[[{"X":30, "Y":40}, {"X":30, "Y":40}], [{"X":3, "Y":4}, {"X":4, "Y":5}]]}]}
+// {"results":[{"name":"A", "fields":{"values":[{"X":10, "Y":20}, {"X":1, "Y":2}]}}, {"name":"B", "fields":{"values":[{"X":20, "Y":30}, {"X":2, "Y":3}]}}, {"name":"C", "fields":{"values":[{"X":30, "Y":40}, {"X":3, "Y":4}]}}, {"name":"D", "fields":{"values":[{"X":30, "Y":40}, {"X":4, "Y":5}]}}]}
