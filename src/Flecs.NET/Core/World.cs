@@ -3472,26 +3472,6 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     }
 
     /// <summary>
-    ///     Creates a new <see cref="Flecs.NET.Core.EntityToJsonDesc"/>.
-    /// </summary>
-    /// <returns></returns>
-    [SuppressMessage("Usage", "CA1822")]
-    public EntityToJsonDesc EntityToJsonDesc()
-    {
-        return Core.EntityToJsonDesc.Default;
-    }
-
-    /// <summary>
-    ///     Creates a new <see cref="Flecs.NET.Core.IterToJsonDesc"/>.
-    /// </summary>
-    /// <returns></returns>
-    [SuppressMessage("Usage", "CA1822")]
-    public IterToJsonDesc IterToJsonDesc()
-    {
-        return Core.IterToJsonDesc.Default;
-    }
-
-    /// <summary>
     ///     Serialize untyped value to JSON.
     /// </summary>
     /// <param name="id"></param>
@@ -3529,9 +3509,20 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     }
 
     /// <summary>
-    ///     Serialize world to JSON.
+    ///     Serializes the world to a JSON string using the provided description.
     /// </summary>
-    /// <returns></returns>
+    /// <param name="desc">The description settings for JSON serialization.</param>
+    /// <returns>A JSON string with the serialized world data, or an empty string if failed.</returns>
+    public string ToJson(in WorldToJsonDesc desc)
+    {
+        fixed (ecs_world_to_json_desc_t* ptr = &desc.Desc)
+            return NativeString.GetStringAndFree(ecs_world_to_json(Handle, ptr));
+    }
+
+    /// <summary>
+    ///     Serializes the world to a JSON string.
+    /// </summary>
+    /// <returns>A JSON string with the serialized world data, or an empty string if failed.</returns>
     public string ToJson()
     {
         return NativeString.GetStringAndFree(ecs_world_to_json(Handle, null));

@@ -315,17 +315,11 @@ public unsafe interface IEntity<TEntity> : IId
     /// <inheritdoc cref="Entity.Mut(Core.Entity)"/>
     public Entity Mut(Entity entity);
 
-    /// <inheritdoc cref="Entity.ToJson(ecs_entity_to_json_desc_t*)"/>
-    public string ToJson(ecs_entity_to_json_desc_t* desc);
+    /// <inheritdoc cref="Entity.ToJson(in EntityToJsonDesc)"/>
+    public string ToJson(in EntityToJsonDesc desc);
 
     /// <inheritdoc cref="Entity.ToJson()"/>
     public string ToJson();
-
-    /// <inheritdoc cref="Entity.ToJson(ref EntityToJsonDesc)"/>
-    public string ToJson(ref EntityToJsonDesc desc);
-
-    /// <inheritdoc cref="Entity.ToJson(EntityToJsonDesc)"/>
-    public string ToJson(EntityToJsonDesc desc);
 
     /// <inheritdoc cref="Entity.DocName()"/>
     public string DocName();
