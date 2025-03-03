@@ -7,32 +7,29 @@ using static Flecs.NET.Bindings.flecs;
 namespace Flecs.NET.Core;
 
 /// <summary>
-///     A wrapper around ecs_type_t.
+///     A wrapper around <see cref="ecs_type_t"/>*.
 /// </summary>
 public unsafe struct Types : IEnumerable<Id>, IEquatable<Types>
 {
-    private ecs_world_t* _world;
-    private ecs_type_t* _handle;
+    /// <summary>
+    ///     The world.
+    /// </summary>
+    public World World;
 
     /// <summary>
-    ///     A reference to the world.
+    ///     The underlying <see cref="ecs_type_t"/>* pointer.
     /// </summary>
-    public ref ecs_world_t* World => ref _world;
+    public ecs_type_t* Handle;
 
     /// <summary>
-    ///     A reference to the handle.
+    ///     Initializes a new instance of <see cref="Types"/> with the provided world and handle.
     /// </summary>
-    public ref ecs_type_t* Handle => ref _handle;
-
-    /// <summary>
-    ///     Creates a types wrapper around the provided world and handle.
-    /// </summary>
-    /// <param name="world"></param>
-    /// <param name="type"></param>
-    public Types(ecs_world_t* world, ecs_type_t* type)
+    /// <param name="world">The world.</param>
+    /// <param name="handle">The <see cref="ecs_type_t"/>* pointer to wrap. </param>
+    public Types(World world, ecs_type_t* handle)
     {
-        _world = world;
-        _handle = type;
+        World = world;
+        Handle = handle;
     }
 
     /// <summary>
@@ -59,42 +56,35 @@ public unsafe struct Types : IEnumerable<Id>, IEquatable<Types>
     /// <returns></returns>
     public ulong* Array()
     {
-        return _handle == null ? null : _handle->array;
+        return Handle == null ? null : Handle->array;
     }
 
     /// <summary>
-    ///     Get id at specified index in type.
+    ///     Gets the type id at provided index.
     /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
+    /// <param name="index">The index.</param>
+    /// <returns>The type id at the provided index.</returns>
     public Id Get(int index)
     {
-        Ecs.Assert(Handle != null, nameof(ECS_INVALID_PARAMETER));
+        if (Handle == null)
+            return default;
         Ecs.Assert(Handle->count > index, nameof(ECS_OUT_OF_RANGE));
-        return Handle == null ? new Id(null) : new Id(World, Handle->array[index]);
+        return new Id(World, Handle->array[index]);
     }
 
     /// <summary>
-    ///     Gets an enumerator.
+    ///     Returns an enumerator that iterates through the entity's types.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>An enumerator that can be used to iterate through the entity's types.</returns>
+    public IEnumerator<Id> GetEnumerator()
+    {
+        for (int i = 0; i < Count(); i++)
+            yield return Get(i);
+    }
+
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
-    }
-
-    IEnumerator<Id> IEnumerable<Id>.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    /// <summary>
-    ///     Gets an enumerator for the id array.
-    /// </summary>
-    /// <returns></returns>
-    public TypesEnumerator GetEnumerator()
-    {
-        return new TypesEnumerator(Handle);
     }
 
     /// <summary>
@@ -173,72 +163,5 @@ public unsafe struct Types : IEnumerable<Id>, IEquatable<Types>
     public override string ToString()
     {
         return Ecs.IsStageOrWorld(World) ? Str() : string.Empty;
-    }
-}
-
-/// <summary>
-///     Enumerator for <see cref="Types"/>.
-/// </summary>
-public unsafe struct TypesEnumerator : IEnumerator<Id>
-{
-    /// <summary>
-    ///     Pointer to <see cref="ecs_type_t"/>.
-    /// </summary>
-    public ecs_type_t* Handle { get; }
-
-    /// <summary>
-    ///     Length of the enumerator.
-    /// </summary>
-    public int Length { get; }
-
-    /// <summary>
-    ///     Current index of the enumerator.
-    /// </summary>
-    public int CurrentIndex { get; private set; }
-
-    /// <summary>
-    ///     Current Id of the enumerator.
-    /// </summary>
-    public readonly Id Current => CurrentIndex < 0 ? default : Handle->array[CurrentIndex];
-
-    /// <summary>
-    ///     Current Id of the enumerator.
-    /// </summary>
-    readonly object IEnumerator.Current => Current;
-
-    /// <summary>
-    ///     Create a new enumerator with the provided <see cref="ecs_type_t"/> handle.
-    /// </summary>
-    /// <param name="handle"></param>
-    public TypesEnumerator(ecs_type_t* handle)
-    {
-        Handle = handle;
-        Length = handle->count;
-        CurrentIndex = -1;
-    }
-
-    /// <summary>
-    ///     Moves to the next index of the id array.
-    /// </summary>
-    /// <returns></returns>
-    public bool MoveNext()
-    {
-        CurrentIndex++;
-        return CurrentIndex < Length;
-    }
-
-    /// <summary>
-    ///     Resets the current index of the enumerator.
-    /// </summary>
-    public void Reset()
-    {
-        CurrentIndex = -1;
-    }
-
-    /// <summary>
-    ///     Disposes of resources.
-    /// </summary>
-    public void Dispose()
-    {
     }
 }
