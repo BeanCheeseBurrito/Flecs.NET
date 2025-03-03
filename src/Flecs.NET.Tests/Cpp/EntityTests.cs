@@ -4693,4 +4693,46 @@ public unsafe class EntityTests
 
         e.Destruct();
     }
+
+    [Fact]
+    private void IterType()
+    {
+        using World world = World.Create();
+
+        Entity e = world.Entity().Add<Position>().Add<Velocity>();
+
+        int count = 0;
+        bool posFound = false;
+        bool velocityFound = false;
+
+        foreach (Id id in e.Type())
+        {
+            count++;
+
+            if (id == world.Id<Position>())
+                posFound = true;
+
+            if (id == world.Id<Velocity>())
+                velocityFound = true;
+        }
+
+        Assert.Equal(2, count);
+        Assert.True(posFound);
+        Assert.True(velocityFound);
+    }
+
+    [Fact]
+    private void IterEmptyType()
+    {
+        using World world = World.Create();
+
+        Entity e = world.Entity();
+
+        int count = 0;
+
+        foreach (Id _ in e.Type())
+            count++;
+
+        Assert.Equal(0, count);
+    }
 }

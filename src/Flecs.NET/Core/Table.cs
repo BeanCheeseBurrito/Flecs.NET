@@ -94,7 +94,7 @@ public readonly unsafe partial struct Table : IEquatable<Table>
     ///     Get table type.
     /// </summary>
     /// <returns></returns>
-    public Types Type()
+    public Types Types()
     {
         return new Types(World, ecs_table_get_type(Handle));
     }
