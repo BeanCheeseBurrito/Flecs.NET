@@ -189,7 +189,7 @@ public class Invoker : GeneratorBase
 
     private static string GenerateEachInvokerIterators(Callback callback, int i)
     {
-        IEnumerable<string> invokerIterators = Enum.GetValues(typeof(IterationTechnique)).Cast<IterationTechnique>()
+        IEnumerable<string> invokerIterators = Enum.GetValues<IterationTechnique>()
             .Select((IterationTechnique iterationTechnique) => $$"""
                         [MethodImpl(MethodImplOptions.AggressiveInlining)]
                         static void {{iterationTechnique}}(Iter it, int count, {{Generator.GetCallbackType(callback, i)}} callback, {{Generator.FieldDataParameters[i]}})
@@ -204,7 +204,7 @@ public class Invoker : GeneratorBase
 
     private static string GenerateFindInvokerIterators(Callback callback, int i)
     {
-        IEnumerable<string> invokerIterators = Enum.GetValues(typeof(IterationTechnique)).Cast<IterationTechnique>()
+        IEnumerable<string> invokerIterators = Enum.GetValues<IterationTechnique>()
             .Select((IterationTechnique iterationTechnique) => $$"""
                         [MethodImpl(MethodImplOptions.AggressiveInlining)]
                         static Entity {{iterationTechnique}}(Iter it, int count, {{Generator.GetCallbackType(callback, i)}} callback, {{Generator.FieldDataParameters[i]}})

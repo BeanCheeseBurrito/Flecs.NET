@@ -12,6 +12,7 @@
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
         <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+        <NoWarn>$(NoWarn);CA1515;CA1852</NoWarn>
     </PropertyGroup>
 
 </Project>
