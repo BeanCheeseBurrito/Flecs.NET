@@ -66,7 +66,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// </summary>
     /// <param name="args">Command line arguments.</param>
     /// <returns></returns>
-    public static World Create(params string[] args)
+    public static World Create(params Span<string> args)
     {
         NativeString* nativeStrings = Memory.AllocZeroed<NativeString>(args.Length);
 
