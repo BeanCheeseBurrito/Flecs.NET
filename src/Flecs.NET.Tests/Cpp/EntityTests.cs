@@ -4730,8 +4730,11 @@ public unsafe class EntityTests
 
         int count = 0;
 
-        foreach (Id _ in e.Type())
+        foreach (Id id in e.Type())
+        {
+            Assert.True(id != 0);
             count++;
+        }
 
         Assert.Equal(0, count);
     }

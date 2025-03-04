@@ -83,7 +83,7 @@ public static unsafe class Type<T>
     public static ulong Id(ecs_world_t* world)
     {
         ref ulong cachedId = ref LookupCacheIndex(world);
-        return Unsafe.IsNullRef(ref cachedId)
+        return Unsafe.IsNullRef(ref cachedId) || !ecs_is_alive(world, cachedId)
             ? RegisterComponent(world, true, true, 0, "")
             : cachedId;
     }
@@ -100,7 +100,7 @@ public static unsafe class Type<T>
     public static ulong Id(ecs_world_t* world, bool ignoreScope, bool isComponent, ulong id)
     {
         ref ulong cachedId = ref LookupCacheIndex(world);
-        return Unsafe.IsNullRef(ref cachedId)
+        return Unsafe.IsNullRef(ref cachedId) || !ecs_is_alive(world, cachedId)
             ? RegisterComponent(world, ignoreScope, isComponent, id, "")
             : cachedId;
     }
@@ -118,7 +118,7 @@ public static unsafe class Type<T>
     public static ulong Id(ecs_world_t* world, bool ignoreScope, bool isComponent, ulong id, string name)
     {
         ref ulong cachedId = ref LookupCacheIndex(world);
-        return Unsafe.IsNullRef(ref cachedId)
+        return Unsafe.IsNullRef(ref cachedId) || !ecs_is_alive(world, cachedId)
             ? RegisterComponent(world, ignoreScope, isComponent, id, name)
             : cachedId;
     }
@@ -201,7 +201,7 @@ public static unsafe class Type<T>
     public static bool IsRegistered(ecs_world_t* world)
     {
         ref ulong cachedId = ref LookupCacheIndex(world);
-        return !Unsafe.IsNullRef(ref cachedId) && cachedId != 0;
+        return !Unsafe.IsNullRef(ref cachedId) && cachedId != 0 && ecs_is_alive(world, cachedId);
     }
 
     /// <summary>
@@ -215,11 +215,11 @@ public static unsafe class Type<T>
     {
         ref ulong cachedId = ref LookupCacheIndex(world);
 
-        if (!Unsafe.IsNullRef(ref cachedId))
-            return (id = cachedId) != 0;
+        id = !Unsafe.IsNullRef(ref cachedId) && cachedId != 0 && ecs_is_alive(world, cachedId)
+            ? cachedId
+            : 0;
 
-        id = 0;
-        return false;
+        return id != 0;
     }
 
     /// <summary>
@@ -233,11 +233,11 @@ public static unsafe class Type<T>
     {
         ref ulong cachedId = ref LookupCacheIndex(world);
 
-        if (!Unsafe.IsNullRef(ref cachedId))
-            return (id = new Entity(world, cachedId)) != 0;
+        id = !Unsafe.IsNullRef(ref cachedId) && cachedId != 0 && ecs_is_alive(world, cachedId)
+            ? new Entity(world, cachedId)
+            : default;
 
-        id = new Entity(world, 0);
-        return false;
+        return id != 0;
     }
 
     /// <summary>

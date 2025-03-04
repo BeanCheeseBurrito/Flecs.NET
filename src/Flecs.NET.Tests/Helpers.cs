@@ -316,6 +316,8 @@ namespace Namespace
 {
     public struct NestedNameSpaceType;
 
+    public record struct Velocity(float X, float Y);
+
     public struct NestedModule : IFlecsModule
     {
         public void InitModule(World world)
