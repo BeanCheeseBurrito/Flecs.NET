@@ -401,4 +401,24 @@ public class ModuleTests
         Assert.True(p == 0);
         Assert.Equal("MyModule", m.Name());
     }
+
+    [Fact]
+    private void ReimportAfterDelete()
+    {
+        using World world = World.Create();
+
+        {
+            Entity m = world.Import<Module>();
+            Assert.True(m.Lookup("Position") == world.Component<Position>().Entity);
+            Assert.True(m == world.Entity<Module>());
+        }
+
+        world.Entity<Module>().Destruct();
+
+        {
+            Entity m = world.Import<Module>();
+            Assert.True(m.Lookup("Position") == world.Component<Position>().Entity);
+            Assert.True(m == world.Entity<Module>());
+        }
+    }
 }

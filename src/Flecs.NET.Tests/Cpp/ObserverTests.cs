@@ -5,7 +5,7 @@ using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Tests.Cpp;
 
-public class ObserverTests
+public unsafe class ObserverTests
 {
     [Fact]
     private void _2TermsOnAdd()
@@ -1583,5 +1583,67 @@ public class ObserverTests
         e1.Clear();
 
         Assert.Equal(0, count);
+    }
+
+    [Fact]
+    private void TriggerOnSetInOnAddImplicitRegistration()
+    {
+        using World world = World.Create();
+
+        world.Observer()
+            .With<Tag>()
+            .Event(Ecs.OnAdd)
+            .Each(static (Entity e) =>
+            {
+                e.Set(new Position(10, 20));
+            });
+
+        world.Observer<Position>()
+            .Event(Ecs.OnSet)
+            .Each(static (Entity e, ref Position _) =>
+            {
+                e.Set(new Velocity(1, 2));
+            });
+
+        Entity e = world.Entity().Add<Tag>();
+
+        Position* p = e.GetPtr<Position>();
+        Assert.Equal(10, p->X);
+        Assert.Equal(20, p->Y);
+
+        Velocity* v = e.GetPtr<Velocity>();
+        Assert.Equal(1, v->X);
+        Assert.Equal(2, v->Y);
+    }
+
+    [Fact]
+    private void TriggerOnSetInOnAddImplicitRegistrationNamespaced()
+    {
+        using World world = World.Create();
+
+        world.Observer()
+            .With<Tag>()
+            .Event(Ecs.OnAdd)
+            .Each(static (Entity e) =>
+            {
+                e.Set(new Position(10, 20));
+            });
+
+        world.Observer<Position>()
+            .Event(Ecs.OnSet)
+            .Each(static (Entity e, ref Position _) =>
+            {
+                e.Set(new Namespace.Velocity(1, 2));
+            });
+
+        Entity e = world.Entity().Add<Tag>();
+
+        Position* p = e.GetPtr<Position>();
+        Assert.Equal(10, p->X);
+        Assert.Equal(20, p->Y);
+
+        Namespace.Velocity* v = e.GetPtr<Namespace.Velocity>();
+        Assert.Equal(1, v->X);
+        Assert.Equal(2, v->Y);
     }
 }
