@@ -1646,4 +1646,66 @@ public unsafe class ObserverTests
         Assert.Equal(1, v->X);
         Assert.Equal(2, v->Y);
     }
+
+    [Fact]
+    private void FixedSrcWithEach()
+    {
+        using World world = World.Create();
+
+        Entity matched = default;
+        Entity e = world.Entity();
+
+        world.Observer()
+            .With<Tag>().Src(e)
+            .Event(Ecs.OnAdd)
+            .Each((Iter it, int _) =>
+            {
+                matched = it.Src(0);
+            });
+
+        Assert.True(matched == 0);
+
+        e.Add<Tag>();
+
+        Assert.True(matched == e);
+
+        matched = default;
+
+        world.Entity().Add<Tag>();
+
+        Assert.True(matched == 0);
+    }
+
+    [Fact]
+    private void FixedSrcWithRun()
+    {
+        using World world = World.Create();
+
+        Entity matched = default;
+        Entity e = world.Entity();
+
+        world.Observer()
+            .With<Tag>().Src(e)
+            .Event(Ecs.OnAdd)
+            .Run((Iter it) =>
+            {
+                while (it.Next())
+                {
+                    Assert.Equal(0, it.Count());
+                    matched = it.Src(0);
+                }
+            });
+
+        Assert.True(matched == 0);
+
+        e.Add<Tag>();
+
+        Assert.True(matched == e);
+
+        matched = default;
+
+        world.Entity().Add<Tag>();
+
+        Assert.True(matched == 0);
+    }
 }

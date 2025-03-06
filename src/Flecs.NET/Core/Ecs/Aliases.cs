@@ -220,6 +220,11 @@ public static partial class Ecs
     /// </summary>
     public static ref ulong Phase => ref EcsPhase;
 
+    /// <summary>
+    ///     Reference to <see cref="EcsConstant"/>.
+    /// </summary>
+    public static ref ulong Constant => ref EcsConstant;
+
     // Built-in event tags
 
     /// <summary>
@@ -295,6 +300,11 @@ public static partial class Ecs
     ///     Reference to <see cref="EcsFinal"/>.
     /// </summary>
     public static ref ulong Final => ref EcsFinal;
+
+    /// <summary>
+    ///     Reference to <see cref="EcsInheritable"/>.
+    /// </summary>
+    public static ref ulong Inheritable => ref EcsInheritable;
 
     /// <summary>
     ///     Reference to <see cref="EcsPairIsTag"/>.
@@ -618,11 +628,6 @@ public static partial class Ecs
     ///     Reference to <see cref="FLECS_IDecs_entity_tID_"/>.
     /// </summary>
     public static ref ulong Entity => ref FLECS_IDecs_entity_tID_;
-
-    /// <summary>
-    ///     Reference to <see cref="EcsConstant"/>.
-    /// </summary>
-    public static ref ulong Constant => ref EcsConstant;
 
     /// <summary>
     ///     Reference to <see cref="EcsQuantity"/>.

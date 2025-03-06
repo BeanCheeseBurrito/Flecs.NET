@@ -5480,7 +5480,7 @@ public unsafe class QueryBuilderTests
         Entity e2 = world.Entity()
             .Set(new Position(20, 30));
 
-        Query q = world.QueryBuilder()
+        using Query q = world.QueryBuilder()
             .With<Position>()
             .With<Velocity>().Src(e1)
             .CacheKind(cacheKind)
@@ -5527,7 +5527,7 @@ public unsafe class QueryBuilderTests
         Entity e2 = world.Entity()
             .Set(new Position(20, 30));
 
-        Query q = world.QueryBuilder()
+        using Query q = world.QueryBuilder()
             .With<Position>()
             .With<Velocity>().Src(e1)
             .CacheKind(cacheKind)
@@ -5574,7 +5574,7 @@ public unsafe class QueryBuilderTests
         Entity e2 = world.Entity()
             .Set(new Position(20, 30));
 
-        Query q = world.QueryBuilder()
+        using Query q = world.QueryBuilder()
             .With<Position>()
             .With<Velocity>().Src(e1)
             .CacheKind(cacheKind)
@@ -5622,7 +5622,7 @@ public unsafe class QueryBuilderTests
         Entity e2 = world.Entity()
             .Set(new Position(20, 30));
 
-        Query q = world.QueryBuilder()
+        using Query q = world.QueryBuilder()
             .With<Position>()
             .With<Velocity>().Src(e1)
             .CacheKind(cacheKind)
@@ -5655,5 +5655,35 @@ public unsafe class QueryBuilderTests
         });
 
         Assert.Equal(2, count);
+    }
+
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void SingletonPair(ecs_query_cache_kind_t cacheKind)
+    {
+        using World world = World.Create();
+
+        Entity rel = world.Component<Position>();
+        Entity tgt = world.Entity();
+
+        world.Set(tgt, new Position(10, 20));
+
+        int count = 0;
+
+        using Query<Position> q = world.QueryBuilder<Position>()
+            .TermAt(0).Second(tgt).Singleton()
+            .CacheKind(cacheKind)
+            .Build();
+
+        q.Each((Iter it, int _, ref Position p) =>
+        {
+            Assert.True(it.Src(0) == rel);
+            Assert.True(it.Pair(0) == world.Pair<Position>(tgt));
+            Assert.Equal(10, p.X);
+            Assert.Equal(20, p.Y);
+            count++;
+        });
+
+        Assert.Equal(1, count);
     }
 }
