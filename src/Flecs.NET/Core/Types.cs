@@ -9,7 +9,7 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     A wrapper around <see cref="ecs_type_t"/>*.
 /// </summary>
-public unsafe struct Types : IEnumerable<Id>, IEquatable<Types>
+public unsafe struct FlecsType : IEnumerable<Id>, IEquatable<FlecsType>
 {
     /// <summary>
     ///     The world.
@@ -22,11 +22,11 @@ public unsafe struct Types : IEnumerable<Id>, IEquatable<Types>
     public ecs_type_t* Handle;
 
     /// <summary>
-    ///     Initializes a new instance of <see cref="Types"/> with the provided world and handle.
+    ///     Initializes a new instance of <see cref="FlecsType"/> with the provided world and handle.
     /// </summary>
     /// <param name="world">The world.</param>
     /// <param name="handle">The <see cref="ecs_type_t"/>* pointer to wrap. </param>
-    public Types(World world, ecs_type_t* handle)
+    public FlecsType(World world, ecs_type_t* handle)
     {
         World = world;
         Handle = handle;
@@ -73,9 +73,9 @@ public unsafe struct Types : IEnumerable<Id>, IEquatable<Types>
     }
 
     /// <summary>
-    ///     Returns an enumerator that iterates through the entity's types.
+    ///     Returns an enumerator that iterates through the entity's components.
     /// </summary>
-    /// <returns>An enumerator that can be used to iterate through the entity's types.</returns>
+    /// <returns>An enumerator that can be used to iterate through the entity's components.</returns>
     public IEnumerator<Id> GetEnumerator()
     {
         for (int i = 0; i < Count(); i++)
@@ -89,44 +89,44 @@ public unsafe struct Types : IEnumerable<Id>, IEquatable<Types>
 
     /// <summary>
     /// </summary>
-    /// <param name="types"></param>
+    /// <param name="type"></param>
     /// <returns></returns>
-    public static implicit operator ecs_type_t*(Types types)
+    public static implicit operator ecs_type_t*(FlecsType type)
     {
-        return To(types);
+        return To(type);
     }
 
     /// <summary>
     /// </summary>
-    /// <param name="types"></param>
+    /// <param name="type"></param>
     /// <returns></returns>
-    public static ecs_type_t* To(Types types)
+    public static ecs_type_t* To(FlecsType type)
     {
-        return types.Handle;
+        return type.Handle;
     }
 
     /// <summary>
-    ///     Checks if two <see cref="Types"/> instances are equal.
+    ///     Checks if two <see cref="FlecsType"/> instances are equal.
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool Equals(Types other)
+    public bool Equals(FlecsType other)
     {
         return Handle == other.Handle;
     }
 
     /// <summary>
-    ///     Checks if two <see cref="Types"/> instances are equals.
+    ///     Checks if two <see cref="FlecsType"/> instances are equal.
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
     public override bool Equals(object? obj)
     {
-        return obj is Types types && Equals(types);
+        return obj is FlecsType type && Equals(type);
     }
 
     /// <summary>
-    ///     Returns the hash code of the <see cref="Types"/>.
+    ///     Returns the hash code of the <see cref="FlecsType"/> instance.
     /// </summary>
     /// <returns></returns>
     public override int GetHashCode()
@@ -135,29 +135,29 @@ public unsafe struct Types : IEnumerable<Id>, IEquatable<Types>
     }
 
     /// <summary>
-    ///     Checks if two <see cref="Types"/> are equal.
+    ///     Checks if two <see cref="FlecsType"/> instances are equal.
     /// </summary>
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator ==(Types left, Types right)
+    public static bool operator ==(FlecsType left, FlecsType right)
     {
         return left.Equals(right);
     }
 
     /// <summary>
-    ///     Checks if two <see cref="Types"/> are not equal.
+    ///     Checks if two <see cref="FlecsType"/> instances are not equal.
     /// </summary>
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator !=(Types left, Types right)
+    public static bool operator !=(FlecsType left, FlecsType right)
     {
         return !(left == right);
     }
 
     /// <summary>
-    ///     Returns comma separated string of type names.
+    ///     Returns comma separated string of component names.
     /// </summary>
     /// <returns></returns>
     public override string ToString()

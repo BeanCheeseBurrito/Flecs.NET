@@ -596,7 +596,7 @@ public unsafe class TableTests
         Table table = e.Table();
 
         int count = 0;
-        foreach (Id id in table.Types())
+        foreach (Id id in table.Type())
         {
             count++;
             Assert.True(id == world.Id<Position>() || id == world.Id<Velocity>());

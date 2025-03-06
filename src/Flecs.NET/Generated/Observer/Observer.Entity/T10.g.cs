@@ -110,7 +110,7 @@ public unsafe partial struct Observer<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
     }
 
     /// <inheritdoc cref="Entity.Type()"/>
-    public Types Type()
+    public FlecsType Type()
     {
         return Entity.Type();
     }
