@@ -18,13 +18,13 @@
 
 using Flecs.NET.Core;
 
-using World ecs = World.Create();
+using World world = World.Create();
 
-Entity entity = ecs.Entity()
+Entity entity = world.Entity()
     .Set(new Position(10, 20))
     .Set(new Velocity(1, 2));
 
-ecs.Each((ref Position p, ref Velocity v) =>
+world.Each(static (ref Position p, ref Velocity v) =>
 {
     p.X += v.X;
     p.Y += v.Y;
@@ -36,7 +36,7 @@ public record struct Velocity(float X, float Y);
 
 ## Overview
 **Flecs.NET - High-level C# port of the C++ wrapper**
-- Modern .NET 8
+- Modern .NET 9
 - Near feature parity with the C++ API
 - Struct-based API with minimal GC interaction
 - Supports both unmanaged and managed types as components
@@ -75,7 +75,7 @@ To include both of them in your project based on your build configuration, use t
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -119,7 +119,7 @@ dotnet add PROJECT package Flecs.NET.Release --version *-build.*
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -178,7 +178,7 @@ Reference the project and import the native libraries. You should now be able to
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
