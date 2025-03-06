@@ -88,11 +88,8 @@ public static unsafe partial class flecs
     [DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_count_id")]
     public static extern int ecs_count_id(ecs_world_t* world, ulong entity);
 
-    [DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_cpp_component_find")]
-    public static extern ulong ecs_cpp_component_find(ecs_world_t* world, ulong id, byte* name, byte* symbol, nint size, nint alignment, bool implicit_name, bool* existing_out);
-
     [DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_cpp_component_register")]
-    public static extern ulong ecs_cpp_component_register(ecs_world_t* world, ulong s_id, ulong id, byte* name, byte* type_name, byte* symbol, nint size, nint alignment, bool is_component, bool* existing_out);
+    public static extern ulong ecs_cpp_component_register(ecs_world_t* world, ulong id, int ids_index, byte* name, byte* cpp_name, byte* cpp_symbol, nint size, nint alignment, bool is_component, bool explicit_registration, bool* registered_out, bool* existing_out);
 
     [DllImport(BindgenInternal.DllImportPath, EntryPoint = "ecs_cpp_enum_constant_register")]
     public static extern ulong ecs_cpp_enum_constant_register(ecs_world_t* world, ulong parent, ulong id, byte* name, void* value, ulong value_type, nint value_size);
@@ -2269,17 +2266,13 @@ public static unsafe partial class flecs
 
     public partial struct ecs_map_t
     {
-        public byte bucket_shift;
-
-        public bool shared_allocator;
-
         public ecs_bucket_t* buckets;
 
         public int bucket_count;
 
-        public int count;
+        public uint count;
 
-        public ecs_block_allocator_t* entry_allocator;
+        public uint bucket_shift;
 
         public ecs_allocator_t* allocator;
     }
