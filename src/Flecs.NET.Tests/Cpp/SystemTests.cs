@@ -2166,6 +2166,39 @@ namespace Flecs.NET.Tests.Cpp
         }
 
         [Fact]
+        private void MultiThreadSystemWithGetVar()
+        {
+            using World world = World.Create();
+            world.SetThreads(Environment.ProcessorCount);
+
+            Entity bob = world.Entity("bob").Add<Position>();
+            Entity alice = world.Entity("alice").Add<Position>();
+
+            bob.Add<Rel>(alice);
+
+            int count = 0;
+
+            world.System<Position>()
+                .With<Rel>("$other")
+                .TermAt(0).Src("$other")
+                .MultiThreaded()
+                .Each((Iter it, int row, ref Position pos) =>
+                {
+                    Entity e = it.Entity(row);
+                    Entity other = it.GetVar("other");
+
+                    Assert.True(e == bob);
+                    Assert.True(other == alice);
+
+                    count++;
+                });
+
+            world.Progress();
+
+            Assert.Equal(1, count);
+        }
+
+        [Fact]
         private void RunCallback()
         {
             using World world = World.Create();

@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Flecs.NET.Core;
-using Flecs.NET.Utilities;
 using Xunit;
 using static Flecs.NET.Bindings.flecs;
 
@@ -566,6 +566,48 @@ public unsafe class QueryTests
     }
 
     [Fact]
+    private void FindWithMatchEmptyTables()
+    {
+        using World world = World.Create();
+
+        Entity e1 = world.Entity().Set(new Position(10, 20)).Add<Velocity>();
+        e1.Destruct();
+        Entity e2 = world.Entity().Set(new Position(20, 30));
+
+        using Query<Position> q = world.QueryBuilder<Position>()
+            .QueryFlags(Ecs.QueryMatchEmptyTables)
+            .Build();
+
+        Entity r = q.Find((ref Position p) =>
+        {
+            return p.X == 20;
+        });
+
+        Assert.True(r == e2);
+    }
+
+    [Fact]
+    private void FindWithEntityWithMatchEmptyTables()
+    {
+        using World world = World.Create();
+
+        Entity e1 = world.Entity().Set(new Position(10, 20)).Add<Velocity>();
+        e1.Destruct();
+        Entity e2 = world.Entity().Set(new Position(20, 30));
+
+        using Query<Position> q = world.QueryBuilder<Position>()
+            .QueryFlags(EcsQueryMatchEmptyTables)
+            .Build();
+
+        Entity r = q.Find((Entity e, ref Position p) =>
+        {
+            return p.X == 20;
+        });
+
+        Assert.True(r == e2);
+    }
+
+    [Fact]
     private void Run()
     {
         using World world = World.Create();
@@ -769,7 +811,44 @@ public unsafe class QueryTests
             .Set(new Position(10, 20))
             .Set(new Velocity(1, 2));
 
-        Query<Position, Velocity> q = world.Query<Position, Velocity>();
+        using Query<Position, Velocity> q = world.Query<Position, Velocity>();
+
+        q.Run((Iter it) =>
+        {
+            while (it.Next())
+            {
+                Field<Velocity> v = it.Field<Velocity>(1);
+
+                foreach (int i in it)
+                {
+                    ref Position p = ref it.FieldAt<Position>(0, i);
+                    p.X += v[i].X;
+                    p.Y += v[i].Y;
+                }
+            }
+        });
+
+        Position* p = entity.GetPtr<Position>();
+        Assert.Equal(11, p->X);
+        Assert.Equal(22, p->Y);
+    }
+
+    [Fact]
+    private void RunSparseWithWith()
+    {
+        using World world = World.Create();
+
+        world.Component<Position>().Add(Ecs.Sparse);
+        world.Component<Velocity>();
+
+        Entity entity = world.Entity()
+            .Set(new Position(10, 20))
+            .Set(new Velocity(1, 2));
+
+        using Query q = world.QueryBuilder()
+            .With<Position>()
+            .With<Velocity>()
+            .Build();
 
         q.Run((Iter it) =>
         {
@@ -958,7 +1037,7 @@ public unsafe class QueryTests
             .Set(new Position(10, 20))
             .Set(new Velocity(1, 2));
 
-        Query<Position, Velocity> q = world.Query<Position, Velocity>();
+        using Query<Position, Velocity> q = world.Query<Position, Velocity>();
 
         q.Each((ref Position p, ref Velocity v) =>
         {
@@ -969,6 +1048,77 @@ public unsafe class QueryTests
         Position* p = entity.GetPtr<Position>();
         Assert.Equal(11, p->X);
         Assert.Equal(22, p->Y);
+    }
+
+    [Fact]
+    private void EachSparseWithWith()
+    {
+        using World world = World.Create();
+
+        world.Component<Position>().Add(Ecs.Sparse);
+        world.Component<Velocity>();
+
+        Entity entity = world.Entity()
+            .Set(new Position(10, 20))
+            .Set(new Velocity(1, 2));
+
+        using Query q = world.QueryBuilder()
+            .With<Position>()
+            .With<Velocity>()
+            .Build();
+
+        q.Each((Iter it, int row) =>
+        {
+            ref Position p = ref it.FieldAt<Position>(0, row);
+            ref Velocity v = ref it.FieldAt<Velocity>(1, row);
+            p.X += v.X;
+            p.Y += v.Y;
+        });
+
+        Position* p = entity.GetPtr<Position>();
+        Assert.Equal(11, p->X);
+        Assert.Equal(22, p->Y);
+    }
+
+    [Fact]
+    private void EachSparseMany()
+    {
+        using World world = World.Create();
+
+        world.Component<Position>().Add(Ecs.Sparse);
+        world.Component<Velocity>();
+
+        List<Entity> entities = new List<Entity>();
+
+        for (int i = 0; i < 2000; i++)
+        {
+            entities.Add(
+                world.Entity()
+                    .Set(new Position(10 + i, 20 + i))
+                    .Set(new Velocity(i, i))
+            );
+        }
+
+        using Query<Position, Velocity> q = world.Query<Position, Velocity>();
+
+        q.Each(static (ref Position p, ref Velocity v) =>
+        {
+            p.X += v.X;
+            p.Y += v.Y;
+        });
+
+        for (int i = 0; i < 2000; i++)
+        {
+            Entity e = entities[i];
+
+            Position* p = e.GetPtr<Position>();
+            Assert.Equal(10 + i * 2, p->X);
+            Assert.Equal(20 + i * 2, p->Y);
+
+            Velocity* v = e.GetPtr<Velocity>();
+            Assert.Equal(i, v->X);
+            Assert.Equal(i, v->Y);
+        }
     }
 
     [Fact]
@@ -2709,6 +2859,99 @@ public unsafe class QueryTests
         };
 
         action();
+    }
+
+    [Fact]
+    private void SetGroupCapturedQuery()
+    {
+        using World world = World.Create();
+
+        Entity rel = world.Entity();
+        Entity tgtA = world.Entity();
+        Entity tgtB = world.Entity();
+
+        using Query<Position> q = world.QueryBuilder<Position>()
+            .GroupBy(rel)
+            .Build();
+
+        world.Entity().Set(new Position(10, 20)).Add(rel, tgtA);
+        Entity e2 = world.Entity().Set(new Position(20, 30)).Add(rel, tgtB);
+
+        new Action(() =>
+        {
+            int count = 0;
+            q.SetGroup(tgtB).Each((Entity e, ref Position p) =>
+            {
+                Assert.True(e == e2);
+                Assert.Equal(20, p.X);
+                Assert.Equal(30, p.Y);
+                count++;
+            });
+            Assert.Equal(1, count);
+        })();
+    }
+
+    [Fact]
+    private void SetVarCapturedQuery()
+    {
+        using World world = World.Create();
+
+        Entity rel = world.Entity();
+        Entity tgtA = world.Entity();
+        Entity tgtB = world.Entity();
+
+        using Query<Position> q = world.QueryBuilder<Position>()
+            .With(rel, "$var")
+            .Build();
+
+        world.Entity().Set(new Position(10, 20)).Add(rel, tgtA);
+        Entity e2 = world.Entity().Set(new Position(20, 30)).Add(rel, tgtB);
+
+        new Action(() =>
+        {
+            int count = 0;
+            q.SetVar("var", tgtB).Each((Entity e, ref Position p) =>
+            {
+                Assert.True(e == e2);
+                Assert.Equal(20, p.X);
+                Assert.Equal(30, p.Y);
+                count++;
+            });
+            Assert.Equal(1, count);
+        })();
+    }
+
+    [Fact]
+    private void SetVarIdCapturedQuery()
+    {
+        using World world = World.Create();
+
+        Entity rel = world.Entity();
+        Entity tgtA = world.Entity();
+        Entity tgtB = world.Entity();
+
+        using Query<Position> q = world.QueryBuilder<Position>()
+            .With(rel, "$var")
+            .Build();
+
+        int var = q.FindVar("var");
+        Assert.True(var != -1);
+
+        world.Entity().Set(new Position(10, 20)).Add(rel, tgtA);
+        Entity e2 = world.Entity().Set(new Position(20, 30)).Add(rel, tgtB);
+
+        new Action(() =>
+        {
+            int count = 0;
+            q.SetVar(var, tgtB).Each((Entity e, ref Position p) =>
+            {
+                Assert.True(e == e2);
+                Assert.Equal(20, p.X);
+                Assert.Equal(30, p.Y);
+                count++;
+            });
+            Assert.Equal(1, count);
+        })();
     }
 
     [Fact]

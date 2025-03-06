@@ -429,8 +429,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     /// <returns></returns>
     public Entity GetVar(string name)
     {
-        ecs_query_iter_t* iter = &Handle->priv_.iter.query;
-        ecs_query_t* query = iter->query;
+        ecs_query_t* query = Handle->query;
 
         using NativeString nativeName = (NativeString)name;
         int varId = ecs_query_find_var(query, nativeName);

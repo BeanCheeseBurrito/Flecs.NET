@@ -4022,6 +4022,22 @@ public unsafe class EntityTests
     }
 
     [Fact]
+    private void PrefabWithType()
+    {
+        using World world = World.Create();
+
+        Entity e = world.Prefab<EntityType>();
+
+        Assert.Equal("EntityType", e.Name());
+        Assert.Equal(".EntityType", e.Path());
+        Assert.True(e.Has<EcsComponent>());
+        Assert.True(e.Has(Ecs.Prefab));
+
+        Entity e2 = world.Entity<EntityType>();
+        Assert.True(e == e2);
+    }
+
+    [Fact]
     private void PrefabHierarchyWithTypes()
     {
         using World world = World.Create();

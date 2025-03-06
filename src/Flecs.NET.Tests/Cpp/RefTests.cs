@@ -177,6 +177,25 @@ public unsafe class RefTests
     }
 
     [Fact]
+    public void TryGetAfterDelete()
+    {
+        using World world = World.Create();
+
+        Entity e = world.Entity().Set(new Position(10, 20));
+
+        Ref<Position> p = e.GetRef<Position>();
+        Position* ptr = p.TryGetPtr();
+        Assert.True(ptr != null);
+        Assert.Equal(10, ptr->X);
+        Assert.Equal(20, ptr->Y);
+
+        e.Destruct();
+
+        ptr = p.TryGetPtr();
+        Assert.True(ptr == null);
+    }
+
+    [Fact]
     public void Has()
     {
         using World world = World.Create();
