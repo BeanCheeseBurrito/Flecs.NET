@@ -110,7 +110,7 @@ public unsafe partial struct UntypedComponent
     }
 
     /// <inheritdoc cref="Entity.Type()"/>
-    public Types Type()
+    public FlecsType Type()
     {
         return Entity.Type();
     }

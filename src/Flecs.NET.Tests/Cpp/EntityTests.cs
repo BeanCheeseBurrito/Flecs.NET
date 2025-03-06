@@ -1491,10 +1491,10 @@ public unsafe class EntityTests
         Entity entity = world.Entity();
         Assert.True(entity != 0);
 
-        Types type1 = entity.Type();
+        FlecsType type1 = entity.Type();
         Assert.Equal(0, type1.Count());
 
-        Types type2 = entity.Type();
+        FlecsType type2 = entity.Type();
         Assert.Equal(0, type2.Count());
     }
 
@@ -1507,11 +1507,11 @@ public unsafe class EntityTests
             .Add<Position>();
         Assert.True(entity != 0);
 
-        Types type1 = entity.Type();
+        FlecsType type1 = entity.Type();
         Assert.Equal(1, type1.Count());
         Assert.Equal(type1.Get(0), world.Id<Position>());
 
-        Types type2 = entity.Type();
+        FlecsType type2 = entity.Type();
         Assert.Equal(1, type2.Count());
         Assert.Equal(type2.Get(0), world.Id<Position>());
     }

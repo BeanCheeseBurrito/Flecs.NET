@@ -110,7 +110,7 @@ public unsafe partial struct Pipeline<T0, T1, T2, T3, T4, T5, T6>
     }
 
     /// <inheritdoc cref="Entity.Type()"/>
-    public Types Type()
+    public FlecsType Type()
     {
         return Entity.Type();
     }

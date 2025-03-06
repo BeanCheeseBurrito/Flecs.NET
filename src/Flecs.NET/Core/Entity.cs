@@ -284,9 +284,9 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     ///     Get the entity's type.
     /// </summary>
     /// <returns></returns>
-    public Types Type()
+    public FlecsType Type()
     {
-        return new Types(World, ecs_get_type(World, Id));
+        return new FlecsType(World, ecs_get_type(World, Id));
     }
 
     /// <summary>

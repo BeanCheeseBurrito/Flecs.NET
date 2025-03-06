@@ -92,7 +92,7 @@ public unsafe class TypeRegistrationTests
 
         world.Component<Position>();
         Entity entity = world.Entity("Test").Set(new Position());
-        Id posComponent = entity.Table().Types().Get(0);
+        Id posComponent = entity.Table().Type().Get(0);
         Assert.True(world.Entity(posComponent).Has<Type>());
         Assert.Equal(typeof(Position), world.Entity(posComponent).Get<Type>());
     }
@@ -104,7 +104,7 @@ public unsafe class TypeRegistrationTests
 
         world.Component<ManagedComponent>();
         Entity entity = world.Entity("Test").Set(new ManagedComponent(1));
-        Id comp = entity.Table().Types().Get(0);
+        Id comp = entity.Table().Type().Get(0);
         Assert.True(world.Entity(comp).Has<Type>());
         Assert.Equal(typeof(ManagedComponent), world.Entity(comp).Get<Type>());
     }

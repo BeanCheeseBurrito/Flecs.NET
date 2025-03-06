@@ -109,9 +109,9 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     ///     Returns the type of the iterated table.
     /// </summary>
     /// <returns></returns>
-    public Types Type()
+    public FlecsType Type()
     {
-        return new Types(Handle->world, ecs_table_get_type(Handle->table));
+        return new FlecsType(Handle->world, ecs_table_get_type(Handle->table));
     }
 
     /// <summary>

@@ -67,7 +67,7 @@ public unsafe interface IEntity<TEntity> : IId
     public bool EnabledSecond<TSecond>(ulong first);
 
     /// <inheritdoc cref="Entity.Type()"/>
-    public Types Type();
+    public FlecsType Type();
 
     /// <inheritdoc cref="Entity.Table()"/>
     public Table Table();

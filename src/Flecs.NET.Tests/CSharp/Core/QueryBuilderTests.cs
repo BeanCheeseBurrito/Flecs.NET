@@ -72,7 +72,7 @@ public class QueryBuilderTests
 
         static ulong GroupByFirstId(World world, Table table, ulong id)
         {
-            Types type = table.Types();
+            FlecsType type = table.Type();
             return type.Get(0);
         }
 

@@ -33,7 +33,7 @@ public static class Entities_IterateComponents
 
     private static void IterateComponents(Entity e)
     {
-        // 1. The easiest way to print the components is to use Types.Str
+        // 1. The easiest way to print the components is to use FlecsType.Str()
         Console.WriteLine(e.Type().Str() + "\n");
 
         // 2. To get individual component ids, use Entity.Each
