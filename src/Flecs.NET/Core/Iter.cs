@@ -321,10 +321,35 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     }
 
     /// <summary>
-    ///     Get access to field data.
+    ///     Retrieves an untyped field at the provided index.
     /// </summary>
-    /// <param name="index"></param>
-    /// <typeparam name="T"></typeparam>
+    /// <param name="index">The field index.</param>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public UntypedField Field(int index)
+    {
+        return GetUntypedField(index);
+    }
+
+    /// <summary>
+    ///     Retrieves a pointer to untyped field at row.
+    /// </summary>
+    /// <param name="index">The field index.</param>
+    /// <param name="row">The field row.</param>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void* FieldAt(int index, int row)
+    {
+        return Utils.IsBitSet(Handle->row_fields, index)
+            ? GetUntypedFieldAt(index, row)[0]
+            : GetUntypedField(index)[row];
+    }
+
+    /// <summary>
+    ///     Retrieves a field at the provided index.
+    /// </summary>
+    /// <param name="index">The field index.</param>
+    /// <typeparam name="T">The field type.</typeparam>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Field<T> Field<T>(int index)
@@ -333,11 +358,11 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     }
 
     /// <summary>
-    ///     Get reference to field at row.
+    ///     Retrieves a managed reference to field at row.
     /// </summary>
-    /// <param name="index"></param>
-    /// <param name="row"></param>
-    /// <typeparam name="T"></typeparam>
+    /// <param name="index">The field index.</param>
+    /// <param name="row">The field row.</param>
+    /// <typeparam name="T">The field type.</typeparam>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref T FieldAt<T>(int index, int row)
@@ -512,21 +537,39 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal UntypedField GetUntypedField(int index)
+    {
+        return new UntypedField(
+            ecs_field_w_size(Handle, 0, (byte)index),
+            (int)ecs_field_size(Handle, (byte)index),
+            ecs_field_is_self(Handle, (byte)index) ? Handle->count : 1
+        );
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal UntypedField GetUntypedFieldAt(int index, int row)
+    {
+        return new UntypedField(
+            ecs_field_at_w_size(Handle, 0, (byte)index, row),
+            (int)ecs_field_size(Handle, (byte)index),
+            1
+        );
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Field<T> GetField<T>(int index)
     {
         AssertField<T>(Handle, index);
-
-        return new Field<T>(
-            ecs_field_w_size(Handle, Type<T>.Size, (byte)index),
-            ecs_field_is_self(Handle, (byte)index) ? Handle->count : 1
-        );
+        UntypedField field = GetUntypedField(index);
+        return new Field<T>(field.Data, field.Length);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Field<T> GetFieldAt<T>(int index, int row)
     {
         AssertField<T>(Handle, index);
-        return new Field<T>(ecs_field_at_w_size(Handle, Type<T>.Size, (byte)index, row), 1);
+        UntypedField field = GetUntypedFieldAt(index, row);
+        return new Field<T>(field.Data, 1);
     }
 
     [Conditional("DEBUG")]

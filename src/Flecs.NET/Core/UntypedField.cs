@@ -1,15 +1,13 @@
 using System;
 using System.Runtime.CompilerServices;
-using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
 
 /// <summary>
-///     A wrapper around a field.
+///     A wrapper around an untyped field.
 /// </summary>
-/// <typeparam name="T">The field type.</typeparam>
-public readonly unsafe struct Field<T> : IEquatable<Field<T>>
+public readonly unsafe struct UntypedField : IEquatable<UntypedField>
 {
     /// <summary>
     ///     The field pointer.
@@ -17,18 +15,25 @@ public readonly unsafe struct Field<T> : IEquatable<Field<T>>
     public readonly void* Data;
 
     /// <summary>
+    ///     The size of each field element.
+    /// </summary>
+    public readonly int Size;
+
+    /// <summary>
     ///     The number of elements in the field.
     /// </summary>
     public readonly int Length;
 
     /// <summary>
-    ///     Initializes a field with the provided pointer and length.
+    ///     Initializes an untyped field with the provided pointer, size, and length.
     /// </summary>
     /// <param name="data">The field pointer.</param>
+    /// <param name="size">The size of each field element.</param>
     /// <param name="length">The number of elements in the field.</param>
-    public Field(void* data, int length)
+    public UntypedField(void* data, int size, int length)
     {
         Data = data;
+        Size = size;
         Length = length;
     }
 
@@ -38,42 +43,42 @@ public readonly unsafe struct Field<T> : IEquatable<Field<T>>
     public bool IsNull => Data == null;
 
     /// <summary>
-    ///     Gets a managed reference to the element at the specified index in the column.
+    ///     Returns a pointer to the element at the specified index in the column.
     /// </summary>
     /// <param name="index">The element index.</param>
-    public ref T this[int index]
+    public void* this[int index]
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
             Ecs.Assert(index >= 0 && index < Length, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
             Ecs.Assert(Data != null, nameof(ECS_COLUMN_INDEX_OUT_OF_RANGE));
-            return ref Managed.GetTypeRef<T>(Data, index);
+            return &((byte*)Data)[index * Size];
         }
     }
 
     /// <summary>
-    ///     Checks if two <see cref="Field{T}"/> instances are equal.
+    ///     Checks if two <see cref="UntypedField"/> instances are equal.
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool Equals(Field<T> other)
+    public bool Equals(UntypedField other)
     {
         return Data == other.Data;
     }
 
     /// <summary>
-    ///     Checks if two <see cref="Field{T}"/> instances are equal.
+    ///     Checks if two <see cref="UntypedField"/> instances are equal.
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
     public override bool Equals(object? obj)
     {
-        return obj is Field<T> field && Equals(field);
+        return obj is UntypedField field && Equals(field);
     }
 
     /// <summary>
-    ///     Returns the hash code of the <see cref="Field{T}"/>.
+    ///     Returns the hash code of the <see cref="UntypedField"/>.
     /// </summary>
     /// <returns></returns>
     public override int GetHashCode()
@@ -82,23 +87,23 @@ public readonly unsafe struct Field<T> : IEquatable<Field<T>>
     }
 
     /// <summary>
-    ///     Checks if two <see cref="Field{T}"/> instances are equal.
+    ///     Checks if two <see cref="UntypedField"/> instances are equal.
     /// </summary>
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator ==(Field<T> left, Field<T> right)
+    public static bool operator ==(UntypedField left, UntypedField right)
     {
         return left.Equals(right);
     }
 
     /// <summary>
-    ///     Checks if two <see cref="Field{T}"/> instances are not equal.
+    ///     Checks if two <see cref="UntypedField"/> instances are not equal.
     /// </summary>
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
-    public static bool operator !=(Field<T> left, Field<T> right)
+    public static bool operator !=(UntypedField left, UntypedField right)
     {
         return !(left == right);
     }

@@ -5466,4 +5466,194 @@ public unsafe class QueryBuilderTests
 
         Assert.Equal(3, count);
     }
+
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void EachWithFieldWithFixedSrc(ecs_query_cache_kind_t cacheKind)
+    {
+        using World world = World.Create();
+
+        Entity e1 = world.Entity()
+            .Set(new Position(10, 20))
+            .Set(new Velocity(1, 2));
+
+        Entity e2 = world.Entity()
+            .Set(new Position(20, 30));
+
+        Query q = world.QueryBuilder()
+            .With<Position>()
+            .With<Velocity>().Src(e1)
+            .CacheKind(cacheKind)
+            .Build();
+
+        int count = 0;
+        q.Each((Iter it, int row) =>
+        {
+            Entity e = it.Entity(row);
+            Position p = it.FieldAt<Position>(0, row);
+            Field<Velocity> v = it.Field<Velocity>(1);
+
+            if (e == e1)
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+                Assert.Equal(1, v[0].X);
+                Assert.Equal(2, v[0].Y);
+            }
+            if (e == e2)
+            {
+                Assert.Equal(20, p.X);
+                Assert.Equal(30, p.Y);
+                Assert.Equal(1, v[0].X);
+                Assert.Equal(2, v[0].Y);
+            }
+
+            count++;
+        });
+
+        Assert.Equal(2, count);
+    }
+
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void EachWithFieldAtWithFixedSrc(ecs_query_cache_kind_t cacheKind)
+    {
+        using World world = World.Create();
+
+        Entity e1 = world.Entity()
+            .Set(new Position(10, 20))
+            .Set(new Velocity(1, 2));
+
+        Entity e2 = world.Entity()
+            .Set(new Position(20, 30));
+
+        Query q = world.QueryBuilder()
+            .With<Position>()
+            .With<Velocity>().Src(e1)
+            .CacheKind(cacheKind)
+            .Build();
+
+        int count = 0;
+        q.Each((Iter it, int row) =>
+        {
+            Entity e = it.Entity(row);
+            Position p = it.FieldAt<Position>(0, row);
+            Velocity v = it.FieldAt<Velocity>(1, 0);
+
+            if (e == e1)
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+            }
+            if (e == e2)
+            {
+                Assert.Equal(20, p.X);
+                Assert.Equal(30, p.Y);
+                Assert.Equal(1, v.X);
+                Assert.Equal(2, v.Y);
+            }
+
+            count++;
+        });
+
+        Assert.Equal(2, count);
+    }
+
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void EachWithUntypedFieldWithFixedSrc(ecs_query_cache_kind_t cacheKind)
+    {
+        using World world = World.Create();
+
+        Entity e1 = world.Entity()
+            .Set(new Position(10, 20))
+            .Set(new Velocity(1, 2));
+
+        Entity e2 = world.Entity()
+            .Set(new Position(20, 30));
+
+        Query q = world.QueryBuilder()
+            .With<Position>()
+            .With<Velocity>().Src(e1)
+            .CacheKind(cacheKind)
+            .Build();
+
+        int count = 0;
+        q.Each((Iter it, int row) =>
+        {
+            Entity e = it.Entity(row);
+            Position p = it.FieldAt<Position>(0, row);
+            UntypedField vf = it.Field(1);
+            Velocity* v = (Velocity*)vf[0];
+
+            if (e == e1)
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+                Assert.Equal(1, v->X);
+                Assert.Equal(2, v->Y);
+            }
+            if (e == e2)
+            {
+                Assert.Equal(20, p.X);
+                Assert.Equal(30, p.Y);
+                Assert.Equal(1, v->X);
+                Assert.Equal(2, v->Y);
+            }
+
+            count++;
+        });
+
+        Assert.Equal(2, count);
+    }
+
+    [Theory]
+    [MemberData(nameof(CacheKinds))]
+    private void EachWithUntypedFieldAtWithFixedSrc(ecs_query_cache_kind_t cacheKind)
+    {
+        using World world = World.Create();
+
+        Entity e1 = world.Entity()
+            .Set(new Position(10, 20))
+            .Set(new Velocity(1, 2));
+
+        Entity e2 = world.Entity()
+            .Set(new Position(20, 30));
+
+        Query q = world.QueryBuilder()
+            .With<Position>()
+            .With<Velocity>().Src(e1)
+            .CacheKind(cacheKind)
+            .Build();
+
+        int count = 0;
+        q.Each((Iter it, int row) =>
+        {
+            Entity e = it.Entity(row);
+            Position p = it.FieldAt<Position>(0, row);
+            void* vPtr = it.FieldAt(1, 0);
+            Velocity* v = (Velocity*)vPtr;
+
+            if (e == e1)
+            {
+                Assert.Equal(10, p.X);
+                Assert.Equal(20, p.Y);
+                Assert.Equal(1, v->X);
+                Assert.Equal(2, v->Y);
+            }
+            if (e == e2)
+            {
+                Assert.Equal(20, p.X);
+                Assert.Equal(30, p.Y);
+                Assert.Equal(1, v->X);
+                Assert.Equal(2, v->Y);
+            }
+
+            count++;
+        });
+
+        Assert.Equal(2, count);
+    }
 }
