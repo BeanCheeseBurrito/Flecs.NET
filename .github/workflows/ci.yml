@@ -120,6 +120,8 @@ jobs:
       - name: Pack Nuget Packages
         shell: bash
         run: |
+          dotnet pack --property:VersionSuffix=$FlecsVersionSuffix -p:SkipNatives=true -p:BuildSelectorPackage=true
+          
           if [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
             dotnet pack --property:VersionSuffix=$FlecsVersionSuffix -p:SkipNatives=true -c Debug
             dotnet pack --property:VersionSuffix=$FlecsVersionSuffix -p:SkipNatives=true -c Release

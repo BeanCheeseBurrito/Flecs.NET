@@ -13,21 +13,44 @@
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
         <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
-        <NoWarn>$(NoWarn);CA1000;CA1024,CA1034;CA1051;CA1062;CA1720;CA2207;CA2225;CS9087;CS9084;CS8500</NoWarn>
+        <NoWarn>$(NoWarn);CA1000;CA1024,CA1034;CA1051;CA1062;CA1720;CA2207;CA2225;CS9087;CS9084;CS8500;NU5128</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>
         <IsPackable>true</IsPackable>
         <IncludeContentInPack>true</IncludeContentInPack>
-
-        <PackageId Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Debug</PackageId>
-        <PackageId Condition="'$(Configuration)' == 'Release'">Flecs.NET.Release</PackageId>
         <Description>High-level C# wrapper for flecs</Description>
     </PropertyGroup>
+    
+    <Choose>
+        <!-- 
+            Build the Flecs.NET package. It contains a single msbuild .targets file that automatically references the
+            debug or release builds based on the consuming project's $(Optimize) property.
+        -->
+        <When Condition="'$(BuildSelectorPackage)' == 'True'">
+            <PropertyGroup>
+                <PackageId>Flecs.NET</PackageId>
+                <IncludeSymbols>false</IncludeSymbols>
+                <IncludeBuildOutput>false</IncludeBuildOutput>
+                <NoBuild>true</NoBuild>
+            </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
-        <ProjectReference Include="..\Flecs.NET.Bindings\Flecs.NET.Bindings.csproj"/>
-    </ItemGroup>
+            <ItemGroup>
+                <None Pack="true" Include="buildTransitive/Flecs.NET.targets" PackagePath="buildTransitive/Flecs.NET.targets" />
+            </ItemGroup>
+        </When>
+        <!-- Build the Flecs.NET.Debug or Flecs.NET.Release package. This package contains the actual compiled dll. -->
+        <Otherwise>
+            <PropertyGroup>
+                <PackageId Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Debug</PackageId>
+                <PackageId Condition="'$(Configuration)' == 'Release'">Flecs.NET.Release</PackageId>
+            </PropertyGroup>
+            
+            <ItemGroup>
+                <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+                <ProjectReference Include="..\Flecs.NET.Bindings\Flecs.NET.Bindings.csproj"/>
+            </ItemGroup>
+        </Otherwise>
+    </Choose>
 
 </Project>
