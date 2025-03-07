@@ -1,0 +1,14 @@
+<Project>
+    <!-- Go up 2 levels to get the NuGet package version. -->
+    <PropertyGroup>
+        <FlecsNugetVersion>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)..'))</FlecsNugetVersion>
+        <FlecsNugetVersion>$([System.IO.Path]::GetDirectoryName('$(FlecsNugetVersion)'))</FlecsNugetVersion>
+        <FlecsNugetVersion>$([System.IO.Path]::GetFileName('$(FlecsNugetVersion)'))</FlecsNugetVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Flecs.NET.Release" Version="$(FlecsNugetVersion)" Condition="'$(Optimize)' == 'True'"/>
+        <PackageReference Include="Flecs.NET.Debug" Version="$(FlecsNugetVersion)" Condition="'$(Optimize)' != 'True'"/>
+    </ItemGroup>
+
+</Project>
