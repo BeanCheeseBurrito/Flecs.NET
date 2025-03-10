@@ -1,582 +1,286 @@
+using System.Collections.Generic;
 using Flecs.NET.Core;
+using Flecs.NET.Core.Hooks;
 using Xunit;
 
 namespace Flecs.NET.Tests.CSharp.Core;
 
 public unsafe class TypeHookTests
 {
-    public struct Struct
+    private static int CtorInvoked { get; set; }
+    private static int DtorInvoked { get; set; }
+    private static int CopyInvoked { get; set; }
+    private static int MoveInvoked { get; set; }
+    private static int OnAddInvoked { get; set; }
+    private static int OnSetInvoked { get; set; }
+    private static int OnRemoveInvoked { get; set; }
+
+    private static void ResetInvokes()
+    {
+        CtorInvoked = 0;
+        DtorInvoked = 0;
+        MoveInvoked = 0;
+        CopyInvoked = 0;
+        OnAddInvoked = 0;
+        OnSetInvoked = 0;
+        OnRemoveInvoked = 0;
+    }
+
+    private enum RegistrationKind
+    {
+        Interface, // Register using interfaces.
+        Delegate,  // Register using delegates.
+        Pointer    // Register using function pointers.
+    }
+
+    private enum TypeKind
+    {
+        Struct,
+        Class
+    }
+
+    public static IEnumerable<object[]> TestData = [
+        [RegistrationKind.Interface, TypeKind.Struct],
+        [RegistrationKind.Interface, TypeKind.Class],
+        [RegistrationKind.Delegate,  TypeKind.Struct],
+        [RegistrationKind.Delegate,  TypeKind.Class],
+        [RegistrationKind.Pointer,   TypeKind.Struct],
+        [RegistrationKind.Pointer,   TypeKind.Class],
+    ];
+
+    private interface ITestInterface
     {
         public int Value { get; set; }
+    }
 
-        public static int CtorInvoked { get; set; }
-        public static int DtorInvoked { get; set; }
-        public static int MoveInvoked { get; set; }
-        public static int CopyInvoked { get; set; }
-        public static int OnAddInvoked { get; set; }
-        public static int OnSetInvoked { get; set; }
-        public static int OnRemoveInvoked { get; set; }
+    private struct Struct :
+        ITestInterface,
+        ICtorHook<Struct>,
+        IDtorHook<Struct>,
+        ICopyHook<Struct>,
+        IMoveHook<Struct>,
+        IOnAddHook<Struct>,
+        IOnSetHook<Struct>,
+        IOnRemoveHook<Struct>
+    {
+        public int Value { get; set; }
+        public static void Ctor(ref Struct data, TypeInfo _) => Ctor<Struct>(ref data, _);
+        public static void Dtor(ref Struct data, TypeInfo _) => Dtor<Struct>(ref data, _);
+        public static void Copy(ref Struct dst, ref Struct src, TypeInfo _) => Copy<Struct>(ref dst, ref src, _);
+        public static void Move(ref Struct dst, ref Struct src, TypeInfo _) => Move<Struct>(ref dst, ref src, _);
+        public static void OnAdd(Iter it, int i, ref Struct data) => OnAdd<Struct>(it, i, ref data);
+        public static void OnSet(Iter it, int i, ref Struct data) => OnSet<Struct>(it, i, ref data);
+        public static void OnRemove(Iter it, int i, ref Struct data) => OnRemove<Struct>(it, i, ref data);
+    }
 
-        public Struct(int value)
+    private class Class :
+        ITestInterface,
+        ICtorHook<Class>,
+        IDtorHook<Class>,
+        ICopyHook<Class>,
+        IMoveHook<Class>,
+        IOnAddHook<Class>,
+        IOnSetHook<Class>,
+        IOnRemoveHook<Class>
+    {
+        public int Value { get; set; }
+        public static void Ctor(ref Class data, TypeInfo _) => Ctor<Class>(ref data, _);
+        public static void Dtor(ref Class data, TypeInfo _) => Dtor<Class>(ref data, _);
+        public static void Copy(ref Class dst, ref Class src, TypeInfo _) => Copy<Class>(ref dst, ref src, _);
+        public static void Move(ref Class dst, ref Class src, TypeInfo _) => Move<Class>(ref dst, ref src, _);
+        public static void OnAdd(Iter it, int i, ref Class data) => OnAdd<Class>(it, i, ref data);
+        public static void OnSet(Iter it, int i, ref Class data) => OnSet<Class>(it, i, ref data);
+        public static void OnRemove(Iter it, int i, ref Class data) => OnRemove<Class>(it, i, ref data);
+    }
+
+    private static void Ctor<T>(ref T data, TypeInfo _) where T : ITestInterface, new()
+    {
+        CtorInvoked++;
+        data = new T { Value = 10 };
+    }
+
+    private static void Dtor<T>(ref T data, TypeInfo _) where T : ITestInterface
+    {
+        DtorInvoked++;
+        data = default!;
+    }
+
+    private static void Copy<T>(ref T dst, ref T src, TypeInfo _) where T : ITestInterface
+    {
+        CopyInvoked++;
+        dst = src;
+    }
+
+    private static void Move<T>(ref T dst, ref T src, TypeInfo _) where T : ITestInterface
+    {
+        MoveInvoked++;
+        dst = src;
+        src = default!;
+    }
+
+    private static void OnAdd<T>(Iter it, int i, ref T data) where T : ITestInterface
+    {
+        OnAddInvoked++;
+    }
+
+    private static void OnSet<T>(Iter it, int i, ref T data) where T : ITestInterface
+    {
+        OnSetInvoked++;
+    }
+
+    private static void OnRemove<T>(Iter it, int i, ref T data) where T : ITestInterface
+    {
+        OnRemoveInvoked++;
+    }
+
+    private static void SetupHooks<T>(World world, RegistrationKind registrationKind) where T : ITestInterface, new()
+    {
+        ResetInvokes();
+
+        if (registrationKind == RegistrationKind.Delegate)
         {
-            Value = value;
-        }
-
-        public static void Ctor(ref Struct data, TypeInfo _)
-        {
-            CtorInvoked++;
-            data = default;
-            data.Value = 10;
-        }
-
-        public static void Dtor(ref Struct data, TypeInfo _)
-        {
-            DtorInvoked++;
-            data = default;
-        }
-
-        public static void Move(ref Struct dst, ref Struct src, TypeInfo _)
-        {
-            MoveInvoked++;
-            dst = src;
-            src = default;
-        }
-
-        public static void Copy(ref Struct dst, ref Struct src, TypeInfo _)
-        {
-            CopyInvoked++;
-            dst = src;
-        }
-
-        public static void OnAdd(ref Struct data)
-        {
-            OnAddInvoked++;
-        }
-
-        public static void OnSet(ref Struct data)
-        {
-            OnSetInvoked++;
-        }
-
-        public static void OnRemove(ref Struct data)
-        {
-            OnRemoveInvoked++;
-        }
-
-        private static void ResetInvokes()
-        {
-            CtorInvoked = 0;
-            DtorInvoked = 0;
-            MoveInvoked = 0;
-            CopyInvoked = 0;
-            OnAddInvoked = 0;
-            OnSetInvoked = 0;
-            OnRemoveInvoked = 0;
-        }
-
-        public static void RegisterHookDelegates(World world)
-        {
-            ResetInvokes();
-            world.Component<Struct>()
+            world.Component<T>()
                 .Ctor(Ctor)
                 .Dtor(Dtor)
-                .Move(Move)
                 .Copy(Copy)
+                .Move(Move)
                 .OnAdd(OnAdd)
                 .OnSet(OnSet)
                 .OnRemove(OnRemove);
         }
-
-        public static void RegisterHookPointers(World world)
+        else if (registrationKind == RegistrationKind.Pointer)
         {
-            ResetInvokes();
-            world.Component<Struct>()
+            world.Component<T>()
                 .Ctor(&Ctor)
                 .Dtor(&Dtor)
-                .Move(&Move)
                 .Copy(&Copy)
+                .Move(&Move)
                 .OnAdd(&OnAdd)
                 .OnSet(&OnSet)
                 .OnRemove(&OnRemove);
         }
     }
 
-    public class Class
+    private static void SetupHooks(World world, RegistrationKind registrationKind, TypeKind typeKind)
     {
-        public int Value { get; set; }
-
-        public static int CtorInvoked { get; set; }
-        public static int DtorInvoked { get; set; }
-        public static int MoveInvoked { get; set; }
-        public static int CopyInvoked { get; set; }
-        public static int OnAddInvoked { get; set; }
-        public static int OnSetInvoked { get; set; }
-        public static int OnRemoveInvoked { get; set; }
-
-        public Class(int value)
-        {
-            Value = value;
-        }
-
-        public static void Ctor(ref Class data, TypeInfo _)
-        {
-            CtorInvoked++;
-            data = new Class(10);
-        }
-
-        public static void Dtor(ref Class data, TypeInfo _)
-        {
-            DtorInvoked++;
-            data = default!;
-        }
-
-        public static void Move(ref Class dst, ref Class src, TypeInfo _)
-        {
-            MoveInvoked++;
-            dst = src;
-            src = default!;
-        }
-
-        public static void Copy(ref Class dst, ref Class src, TypeInfo _)
-        {
-            CopyInvoked++;
-            dst = src;
-        }
-
-        public static void OnAdd(ref Class data)
-        {
-            OnAddInvoked++;
-        }
-
-        public static void OnSet(ref Class data)
-        {
-            OnSetInvoked++;
-        }
-
-        public static void OnRemove(ref Class data)
-        {
-            OnRemoveInvoked++;
-        }
-
-        private static void ResetInvokes()
-        {
-            CtorInvoked = 0;
-            DtorInvoked = 0;
-            MoveInvoked = 0;
-            CopyInvoked = 0;
-            OnAddInvoked = 0;
-            OnSetInvoked = 0;
-            OnRemoveInvoked = 0;
-        }
-
-        public static void RegisterHookDelegates(World world)
-        {
-            ResetInvokes();
-            world.Component<Class>()
-                .Ctor(Ctor)
-                .Dtor(Dtor)
-                .Move(Move)
-                .Copy(Copy)
-                .OnAdd(OnAdd)
-                .OnSet(OnSet)
-                .OnRemove(OnRemove);
-        }
-
-        public static void RegisterHookPointers(World world)
-        {
-            ResetInvokes();
-            world.Component<Class>()
-                .Ctor(&Ctor)
-                .Dtor(&Dtor)
-                .Move(&Move)
-                .Copy(&Copy)
-                .OnAdd(&OnAdd)
-                .OnSet(&OnSet)
-                .OnRemove(&OnRemove);
-        }
+        if (typeKind == TypeKind.Struct)
+            SetupHooks<Struct>(world, registrationKind);
+        else
+            SetupHooks<Class>(world, registrationKind);
     }
 
-    [Fact]
-    private void AddUnmanagedDelegates()
+    [Theory]
+    [MemberData(nameof(TestData))]
+    private void Add(RegistrationKind registrationKind, TypeKind typeKind)
     {
         using World world = World.Create();
 
-        Struct.RegisterHookDelegates(world);
+        SetupHooks(world, registrationKind, typeKind);
 
-        Entity e = world.Entity().Add<Struct>();
+        if (typeKind == TypeKind.Struct)
+            Assert.Equal(10, world.Entity().Add<Struct>().Get<Struct>().Value);
+        else
+            Assert.Equal(10, world.Entity().Add<Class>().Get<Class>().Value);
 
-        Assert.Equal(10, e.Get<Struct>().Value);
-        Assert.Equal(1, Struct.CtorInvoked);
-        Assert.Equal(0, Struct.DtorInvoked);
-        Assert.Equal(0, Struct.CopyInvoked);
-        Assert.Equal(0, Struct.MoveInvoked);
-        Assert.Equal(1, Struct.OnAddInvoked);
-        Assert.Equal(0, Struct.OnSetInvoked);
-        Assert.Equal(0, Struct.OnRemoveInvoked);
+        Assert.Equal(1, CtorInvoked);
+        Assert.Equal(0, DtorInvoked);
+        Assert.Equal(0, CopyInvoked);
+        Assert.Equal(0, MoveInvoked);
+        Assert.Equal(1, OnAddInvoked);
+        Assert.Equal(0, OnSetInvoked);
+        Assert.Equal(0, OnRemoveInvoked);
     }
 
-    [Fact]
-    private void AddManagedDelegates()
+    [Theory]
+    [MemberData(nameof(TestData))]
+    private void AddRemove(RegistrationKind registrationKind, TypeKind typeKind)
     {
         using World world = World.Create();
 
-        Class.RegisterHookDelegates(world);
+        SetupHooks(world, registrationKind, typeKind);
 
-        Entity e = world.Entity().Add<Class>();
+        Entity e = world.Entity();
 
-        Assert.Equal(10, e.Get<Class>().Value);
-        Assert.Equal(1, Class.CtorInvoked);
-        Assert.Equal(0, Class.DtorInvoked);
-        Assert.Equal(0, Class.CopyInvoked);
-        Assert.Equal(0, Class.MoveInvoked);
-        Assert.Equal(1, Class.OnAddInvoked);
-        Assert.Equal(0, Class.OnSetInvoked);
-        Assert.Equal(0, Class.OnRemoveInvoked);
+        if (typeKind == TypeKind.Struct)
+            Assert.Equal(10, e.Add<Struct>().Get<Struct>().Value);
+        else
+            Assert.Equal(10, e.Add<Class>().Get<Class>().Value);
+
+        Assert.Equal(1, CtorInvoked);
+        Assert.Equal(0, DtorInvoked);
+        Assert.Equal(0, CopyInvoked);
+        Assert.Equal(0, MoveInvoked);
+        Assert.Equal(1, OnAddInvoked);
+        Assert.Equal(0, OnSetInvoked);
+        Assert.Equal(0, OnRemoveInvoked);
+
+        if (typeKind == TypeKind.Struct)
+            e.Remove<Struct>();
+        else
+            e.Remove<Class>();
+
+        Assert.Equal(1, CtorInvoked);
+        Assert.Equal(1, DtorInvoked);
+        Assert.Equal(0, CopyInvoked);
+        Assert.Equal(0, MoveInvoked);
+        Assert.Equal(1, OnAddInvoked);
+        Assert.Equal(0, OnSetInvoked);
+        Assert.Equal(1, OnRemoveInvoked);
     }
 
-    [Fact]
-    private void AddRemoveUnmanagedDelegates()
+    [Theory]
+    [MemberData(nameof(TestData))]
+    private void AddAdd(RegistrationKind registrationKind, TypeKind typeKind)
     {
         using World world = World.Create();
 
-        Struct.RegisterHookDelegates(world);
+        SetupHooks(world, registrationKind, typeKind);
 
-        Entity e = world.Entity().Add<Struct>();
+        Entity e = world.Entity();
 
-        Assert.Equal(10, e.Get<Struct>().Value);
-        Assert.Equal(1, Struct.CtorInvoked);
-        Assert.Equal(0, Struct.DtorInvoked);
-        Assert.Equal(0, Struct.CopyInvoked);
-        Assert.Equal(0, Struct.MoveInvoked);
-        Assert.Equal(1, Struct.OnAddInvoked);
-        Assert.Equal(0, Struct.OnSetInvoked);
-        Assert.Equal(0, Struct.OnRemoveInvoked);
+        if (typeKind == TypeKind.Struct)
+            Assert.Equal(10, e.Add<Struct>().Get<Struct>().Value);
+        else
+            Assert.Equal(10, e.Add<Class>().Get<Class>().Value);
 
-        e.Remove<Struct>();
-
-        Assert.Equal(1, Struct.CtorInvoked);
-        Assert.Equal(1, Struct.DtorInvoked);
-        Assert.Equal(0, Struct.CopyInvoked);
-        Assert.Equal(0, Struct.MoveInvoked);
-        Assert.Equal(1, Struct.OnAddInvoked);
-        Assert.Equal(0, Struct.OnSetInvoked);
-        Assert.Equal(1, Struct.OnRemoveInvoked);
-    }
-
-    [Fact]
-    private void AddRemoveManagedDelegates()
-    {
-        using World world = World.Create();
-
-        Class.RegisterHookDelegates(world);
-
-        Entity e = world.Entity().Add<Class>();
-
-        Assert.Equal(10, e.Get<Class>().Value);
-        Assert.Equal(1, Class.CtorInvoked);
-        Assert.Equal(0, Class.DtorInvoked);
-        Assert.Equal(0, Class.CopyInvoked);
-        Assert.Equal(0, Class.MoveInvoked);
-        Assert.Equal(1, Class.OnAddInvoked);
-        Assert.Equal(0, Class.OnSetInvoked);
-        Assert.Equal(0, Class.OnRemoveInvoked);
-
-        e.Remove<Class>();
-
-        Assert.Equal(1, Class.CtorInvoked);
-        Assert.Equal(1, Class.DtorInvoked);
-        Assert.Equal(0, Class.CopyInvoked);
-        Assert.Equal(0, Class.MoveInvoked);
-        Assert.Equal(1, Class.OnAddInvoked);
-        Assert.Equal(0, Class.OnSetInvoked);
-        Assert.Equal(1, Class.OnRemoveInvoked);
-    }
-
-    [Fact]
-    private void AddAddUnmanagedDelegates()
-    {
-        using World world = World.Create();
-
-        Struct.RegisterHookDelegates(world);
-
-        Entity e = world.Entity().Add<Struct>();
-
-        Assert.Equal(10, e.Get<Struct>().Value);
-        Assert.Equal(1, Struct.CtorInvoked);
-        Assert.Equal(0, Struct.DtorInvoked);
-        Assert.Equal(0, Struct.CopyInvoked);
-        Assert.Equal(0, Struct.MoveInvoked);
-        Assert.Equal(1, Struct.OnAddInvoked);
-        Assert.Equal(0, Struct.OnSetInvoked);
-        Assert.Equal(0, Struct.OnRemoveInvoked);
+        Assert.Equal(1, CtorInvoked);
+        Assert.Equal(0, DtorInvoked);
+        Assert.Equal(0, CopyInvoked);
+        Assert.Equal(0, MoveInvoked);
+        Assert.Equal(1, OnAddInvoked);
+        Assert.Equal(0, OnSetInvoked);
+        Assert.Equal(0, OnRemoveInvoked);
 
         e.Add<Position>();
 
-        Assert.Equal(2, Struct.CtorInvoked);
-        Assert.Equal(1, Struct.DtorInvoked);
-        Assert.Equal(0, Struct.CopyInvoked);
-        Assert.Equal(1, Struct.MoveInvoked);
-        Assert.Equal(1, Struct.OnAddInvoked);
-        Assert.Equal(0, Struct.OnSetInvoked);
-        Assert.Equal(0, Struct.OnRemoveInvoked);
+        Assert.Equal(2, CtorInvoked);
+        Assert.Equal(1, DtorInvoked);
+        Assert.Equal(0, CopyInvoked);
+        Assert.Equal(1, MoveInvoked);
+        Assert.Equal(1, OnAddInvoked);
+        Assert.Equal(0, OnSetInvoked);
+        Assert.Equal(0, OnRemoveInvoked);
     }
 
-    [Fact]
-    private void AddAddManagedDelegates()
+    [Theory]
+    [MemberData(nameof(TestData))]
+    private void Set(RegistrationKind registrationKind, TypeKind typeKind)
     {
         using World world = World.Create();
 
-        Class.RegisterHookDelegates(world);
+        SetupHooks(world, registrationKind, typeKind);
 
-        Entity e = world.Entity().Add<Class>();
+        if (typeKind == TypeKind.Struct)
+            Assert.Equal(20, world.Entity().Set(new Struct { Value = 20 }).Get<Struct>().Value);
+        else
+            Assert.Equal(20, world.Entity().Set(new Class { Value = 20 }).Get<Class>().Value);
 
-        Assert.Equal(10, e.Get<Class>().Value);
-        Assert.Equal(1, Class.CtorInvoked);
-        Assert.Equal(0, Class.DtorInvoked);
-        Assert.Equal(0, Class.CopyInvoked);
-        Assert.Equal(0, Class.MoveInvoked);
-        Assert.Equal(1, Class.OnAddInvoked);
-        Assert.Equal(0, Class.OnSetInvoked);
-        Assert.Equal(0, Class.OnRemoveInvoked);
-
-        e.Add<Position>();
-
-        Assert.Equal(2, Class.CtorInvoked);
-        Assert.Equal(1, Class.DtorInvoked);
-        Assert.Equal(0, Class.CopyInvoked);
-        Assert.Equal(1, Class.MoveInvoked);
-        Assert.Equal(1, Class.OnAddInvoked);
-        Assert.Equal(0, Class.OnSetInvoked);
-        Assert.Equal(0, Class.OnRemoveInvoked);
-    }
-
-    [Fact]
-    private void SetUnmanagedDelegates()
-    {
-        using World world = World.Create();
-
-        Struct.RegisterHookDelegates(world);
-
-        Entity e = world.Entity().Set(new Struct(20));
-
-        Assert.Equal(20, e.Get<Struct>().Value);
-        Assert.Equal(1, Struct.CtorInvoked);
-        Assert.Equal(0, Struct.DtorInvoked);
-        Assert.Equal(1, Struct.CopyInvoked);
-        Assert.Equal(0, Struct.MoveInvoked);
-        Assert.Equal(1, Struct.OnAddInvoked);
-        Assert.Equal(1, Struct.OnSetInvoked);
-        Assert.Equal(0, Struct.OnRemoveInvoked);
-    }
-
-    [Fact]
-    private void SetManagedDelegates()
-    {
-        using World world = World.Create();
-
-        Class.RegisterHookDelegates(world);
-
-        Entity e = world.Entity().Set(new Class(20));
-
-        Assert.Equal(20, e.Get<Class>().Value);
-        Assert.Equal(1, Class.CtorInvoked);
-        Assert.Equal(0, Class.DtorInvoked);
-        Assert.Equal(1, Class.CopyInvoked);
-        Assert.Equal(0, Class.MoveInvoked);
-        Assert.Equal(1, Class.OnAddInvoked);
-        Assert.Equal(1, Class.OnSetInvoked);
-        Assert.Equal(0, Class.OnRemoveInvoked);
-    }
-
-    [Fact]
-    private void AddUnmanagedPointers()
-    {
-        using World world = World.Create();
-
-        Struct.RegisterHookPointers(world);
-
-        Entity e = world.Entity().Add<Struct>();
-
-        Assert.Equal(10, e.Get<Struct>().Value);
-        Assert.Equal(1, Struct.CtorInvoked);
-        Assert.Equal(0, Struct.DtorInvoked);
-        Assert.Equal(0, Struct.CopyInvoked);
-        Assert.Equal(0, Struct.MoveInvoked);
-        Assert.Equal(1, Struct.OnAddInvoked);
-        Assert.Equal(0, Struct.OnSetInvoked);
-        Assert.Equal(0, Struct.OnRemoveInvoked);
-    }
-
-    [Fact]
-    private void AddManagedPointers()
-    {
-        using World world = World.Create();
-
-        Class.RegisterHookPointers(world);
-
-        Entity e = world.Entity().Add<Class>();
-
-        Assert.Equal(10, e.Get<Class>().Value);
-        Assert.Equal(1, Class.CtorInvoked);
-        Assert.Equal(0, Class.DtorInvoked);
-        Assert.Equal(0, Class.CopyInvoked);
-        Assert.Equal(0, Class.MoveInvoked);
-        Assert.Equal(1, Class.OnAddInvoked);
-        Assert.Equal(0, Class.OnSetInvoked);
-        Assert.Equal(0, Class.OnRemoveInvoked);
-    }
-
-    [Fact]
-    private void AddRemoveUnmanagedPointers()
-    {
-        using World world = World.Create();
-
-        Struct.RegisterHookPointers(world);
-
-        Entity e = world.Entity().Add<Struct>();
-
-        Assert.Equal(10, e.Get<Struct>().Value);
-        Assert.Equal(1, Struct.CtorInvoked);
-        Assert.Equal(0, Struct.DtorInvoked);
-        Assert.Equal(0, Struct.CopyInvoked);
-        Assert.Equal(0, Struct.MoveInvoked);
-        Assert.Equal(1, Struct.OnAddInvoked);
-        Assert.Equal(0, Struct.OnSetInvoked);
-        Assert.Equal(0, Struct.OnRemoveInvoked);
-
-        e.Remove<Struct>();
-
-        Assert.Equal(1, Struct.CtorInvoked);
-        Assert.Equal(1, Struct.DtorInvoked);
-        Assert.Equal(0, Struct.CopyInvoked);
-        Assert.Equal(0, Struct.MoveInvoked);
-        Assert.Equal(1, Struct.OnAddInvoked);
-        Assert.Equal(0, Struct.OnSetInvoked);
-        Assert.Equal(1, Struct.OnRemoveInvoked);
-    }
-
-    [Fact]
-    private void AddRemoveManagedPointers()
-    {
-        using World world = World.Create();
-
-        Class.RegisterHookPointers(world);
-
-        Entity e = world.Entity().Add<Class>();
-
-        Assert.Equal(10, e.Get<Class>().Value);
-        Assert.Equal(1, Class.CtorInvoked);
-        Assert.Equal(0, Class.DtorInvoked);
-        Assert.Equal(0, Class.CopyInvoked);
-        Assert.Equal(0, Class.MoveInvoked);
-        Assert.Equal(1, Class.OnAddInvoked);
-        Assert.Equal(0, Class.OnSetInvoked);
-        Assert.Equal(0, Class.OnRemoveInvoked);
-
-        e.Remove<Class>();
-
-        Assert.Equal(1, Class.CtorInvoked);
-        Assert.Equal(1, Class.DtorInvoked);
-        Assert.Equal(0, Class.CopyInvoked);
-        Assert.Equal(0, Class.MoveInvoked);
-        Assert.Equal(1, Class.OnAddInvoked);
-        Assert.Equal(0, Class.OnSetInvoked);
-        Assert.Equal(1, Class.OnRemoveInvoked);
-    }
-
-    [Fact]
-    private void AddAddUnmanagedPointers()
-    {
-        using World world = World.Create();
-
-        Struct.RegisterHookPointers(world);
-
-        Entity e = world.Entity().Add<Struct>();
-
-        Assert.Equal(10, e.Get<Struct>().Value);
-        Assert.Equal(1, Struct.CtorInvoked);
-        Assert.Equal(0, Struct.DtorInvoked);
-        Assert.Equal(0, Struct.CopyInvoked);
-        Assert.Equal(0, Struct.MoveInvoked);
-        Assert.Equal(1, Struct.OnAddInvoked);
-        Assert.Equal(0, Struct.OnSetInvoked);
-        Assert.Equal(0, Struct.OnRemoveInvoked);
-
-        e.Add<Position>();
-
-        Assert.Equal(2, Struct.CtorInvoked);
-        Assert.Equal(1, Struct.DtorInvoked);
-        Assert.Equal(0, Struct.CopyInvoked);
-        Assert.Equal(1, Struct.MoveInvoked);
-        Assert.Equal(1, Struct.OnAddInvoked);
-        Assert.Equal(0, Struct.OnSetInvoked);
-        Assert.Equal(0, Struct.OnRemoveInvoked);
-    }
-
-    [Fact]
-    private void AddAddManagedPointers()
-    {
-        using World world = World.Create();
-
-        Class.RegisterHookPointers(world);
-
-        Entity e = world.Entity().Add<Class>();
-
-        Assert.Equal(10, e.Get<Class>().Value);
-        Assert.Equal(1, Class.CtorInvoked);
-        Assert.Equal(0, Class.DtorInvoked);
-        Assert.Equal(0, Class.CopyInvoked);
-        Assert.Equal(0, Class.MoveInvoked);
-        Assert.Equal(1, Class.OnAddInvoked);
-        Assert.Equal(0, Class.OnSetInvoked);
-        Assert.Equal(0, Class.OnRemoveInvoked);
-
-        e.Add<Position>();
-
-        Assert.Equal(2, Class.CtorInvoked);
-        Assert.Equal(1, Class.DtorInvoked);
-        Assert.Equal(0, Class.CopyInvoked);
-        Assert.Equal(1, Class.MoveInvoked);
-        Assert.Equal(1, Class.OnAddInvoked);
-        Assert.Equal(0, Class.OnSetInvoked);
-        Assert.Equal(0, Class.OnRemoveInvoked);
-    }
-
-    [Fact]
-    private void SetUnmanagedPointers()
-    {
-        using World world = World.Create();
-
-        Struct.RegisterHookPointers(world);
-
-        Entity e = world.Entity().Set(new Struct(20));
-
-        Assert.Equal(20, e.Get<Struct>().Value);
-        Assert.Equal(1, Struct.CtorInvoked);
-        Assert.Equal(0, Struct.DtorInvoked);
-        Assert.Equal(1, Struct.CopyInvoked);
-        Assert.Equal(0, Struct.MoveInvoked);
-        Assert.Equal(1, Struct.OnAddInvoked);
-        Assert.Equal(1, Struct.OnSetInvoked);
-        Assert.Equal(0, Struct.OnRemoveInvoked);
-    }
-
-    [Fact]
-    private void SetManagedPointers()
-    {
-        using World world = World.Create();
-
-        Class.RegisterHookPointers(world);
-
-        Entity e = world.Entity().Set(new Class(20));
-
-        Assert.Equal(20, e.Get<Class>().Value);
-        Assert.Equal(1, Class.CtorInvoked);
-        Assert.Equal(0, Class.DtorInvoked);
-        Assert.Equal(1, Class.CopyInvoked);
-        Assert.Equal(0, Class.MoveInvoked);
-        Assert.Equal(1, Class.OnAddInvoked);
-        Assert.Equal(1, Class.OnSetInvoked);
-        Assert.Equal(0, Class.OnRemoveInvoked);
+        Assert.Equal(1, CtorInvoked);
+        Assert.Equal(0, DtorInvoked);
+        Assert.Equal(1, CopyInvoked);
+        Assert.Equal(0, MoveInvoked);
+        Assert.Equal(1, OnAddInvoked);
+        Assert.Equal(1, OnSetInvoked);
+        Assert.Equal(0, OnRemoveInvoked);
     }
 }
