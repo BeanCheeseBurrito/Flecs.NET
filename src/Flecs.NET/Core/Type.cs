@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using Flecs.NET.Collections;
 using Flecs.NET.Core.BindingContext;
+using Flecs.NET.Core.Hooks;
 using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
@@ -313,22 +314,74 @@ public static unsafe class Type<T>
         if (typeof(T).IsEnum)
             RegisterConstants(world, world.Entity(component));
 
-        if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+        if (IsTag)
             return component;
 
-        // Set default hooks for managed components.
-        TypeHooksContext* hooksContext = Memory.Alloc(TypeHooksContext.Default);
-        hooksContext->Ctor.Invoker = (delegate*<GCHandle*, int, ecs_type_info_t*, void>)&Functions.DefaultManagedCtorCallback<T>;
-        hooksContext->Dtor.Invoker = (delegate*<GCHandle*, int, ecs_type_info_t*, void>)&Functions.DefaultManagedDtorCallback<T>;
-        hooksContext->Move.Invoker = (delegate*<GCHandle*, GCHandle*, int, ecs_type_info_t*, void>)&Functions.DefaultManagedMoveCallback<T>;
-        hooksContext->Copy.Invoker = (delegate*<GCHandle*, GCHandle*, int, ecs_type_info_t*, void>)&Functions.DefaultManagedCopyCallback<T>;
+        // Register type hooks.
+        TypeHooksContext hooksContext = TypeHooksContext.Default;
+
+        if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+        {
+            hooksContext.Ctor.Invoker = (delegate*<GCHandle*, int, ecs_type_info_t*, void>)&Functions.DefaultManagedCtorCallback<T>;
+            hooksContext.Dtor.Invoker = (delegate*<GCHandle*, int, ecs_type_info_t*, void>)&Functions.DefaultManagedDtorCallback<T>;
+            hooksContext.Copy.Invoker = (delegate*<GCHandle*, GCHandle*, int, ecs_type_info_t*, void>)&Functions.DefaultManagedCopyCallback<T>;
+            hooksContext.Move.Invoker = (delegate*<GCHandle*, GCHandle*, int, ecs_type_info_t*, void>)&Functions.DefaultManagedMoveCallback<T>;
+        }
+
+        if (typeof(ICtorHook<T>).IsAssignableFrom(typeof(T)))
+        {
+            hooksContext.Ctor.Invoker = RuntimeHelpers.IsReferenceOrContainsReferences<T>()
+                ? (delegate*<GCHandle*, int, ecs_type_info_t*, void>)&Functions.ManagedCtorCallbackPointer<T>
+                : (delegate*<T*, int, ecs_type_info_t*, void>)&Functions.UnmanagedCtorCallbackPointer<T>;
+
+            hooksContext.Ctor.Pointer = (void*)(nint)typeof(ICtorHook<>.FunctionPointer<>)
+                .MakeGenericType(typeof(T), typeof(T))
+                .GetMethod("Get")!
+                .Invoke(null, null)!;
+        }
+
+        if (typeof(IDtorHook<T>).IsAssignableFrom(typeof(T)))
+        {
+            hooksContext.Dtor.Invoker = RuntimeHelpers.IsReferenceOrContainsReferences<T>()
+                ? (delegate*<GCHandle*, int, ecs_type_info_t*, void>)&Functions.ManagedDtorCallbackPointer<T>
+                : (delegate*<T*, int, ecs_type_info_t*, void>)&Functions.UnmanagedDtorCallbackPointer<T>;
+
+            hooksContext.Dtor.Pointer = (void*)(nint)typeof(IDtorHook<>.FunctionPointer<>)
+                .MakeGenericType(typeof(T), typeof(T))
+                .GetMethod("Get")!
+                .Invoke(null, null)!;
+        }
+
+        if (typeof(ICopyHook<T>).IsAssignableFrom(typeof(T)))
+        {
+            hooksContext.Copy.Invoker = RuntimeHelpers.IsReferenceOrContainsReferences<T>()
+                ? (delegate*<GCHandle*, GCHandle*, int, ecs_type_info_t*, void>)&Functions.ManagedCopyCallbackPointer<T>
+                : (delegate*<T*, T*, int, ecs_type_info_t*, void>)&Functions.UnmanagedCopyCallbackPointer<T>;
+
+            hooksContext.Copy.Pointer = (void*)(nint)typeof(ICopyHook<>.FunctionPointer<>)
+                .MakeGenericType(typeof(T), typeof(T))
+                .GetMethod("Get")!
+                .Invoke(null, null)!;
+        }
+
+        if (typeof(IMoveHook<T>).IsAssignableFrom(typeof(T)))
+        {
+            hooksContext.Move.Invoker = RuntimeHelpers.IsReferenceOrContainsReferences<T>()
+                ? (delegate*<GCHandle*, GCHandle*, int, ecs_type_info_t*, void>)&Functions.ManagedMoveCallbackPointer<T>
+                : (delegate*<T*, T*, int, ecs_type_info_t*, void>)&Functions.UnmanagedMoveCallbackPointer<T>;
+
+            hooksContext.Move.Pointer = (void*)(nint)typeof(IMoveHook<>.FunctionPointer<>)
+                .MakeGenericType(typeof(T), typeof(T))
+                .GetMethod("Get")!
+                .Invoke(null, null)!;
+        }
 
         ecs_type_hooks_t hooks = default;
-        hooks.ctor = &Functions.CtorCallback;
-        hooks.dtor = &Functions.DtorCallback;
-        hooks.move = &Functions.MoveCallback;
-        hooks.copy = &Functions.CopyCallback;
-        hooks.binding_ctx = hooksContext;
+        hooks.ctor = hooksContext.Ctor == default ? default : &Functions.CtorCallback;
+        hooks.dtor = hooksContext.Dtor == default ? default : &Functions.DtorCallback;
+        hooks.copy = hooksContext.Copy == default ? default : &Functions.CopyCallback;
+        hooks.move = hooksContext.Move == default ? default : &Functions.MoveCallback;
+        hooks.binding_ctx = Memory.Alloc(hooksContext);
         hooks.binding_ctx_free = &Functions.TypeHooksContextFree;
 
         ecs_set_hooks_id(world, component, &hooks);
@@ -655,33 +708,11 @@ public static unsafe class Type<T>
     }
 
     [SuppressMessage("ReSharper", "PrivateFieldCanBeConvertedToLocalVariable")]
-    private readonly struct AlignOfHelper
-    {
-        private readonly byte _dummy;
-        private readonly T _data;
-
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        public AlignOfHelper(byte dummy, T data)
-        {
-            _dummy = dummy;
-            _data = data;
-            _ = _dummy;
-            _ = _data;
-        }
-    }
+    [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local")]
+    private readonly record struct AlignOfHelper(byte Dummy, T Data);
 
     [SuppressMessage("ReSharper", "MemberHidesStaticFromOuterClass")]
-    private readonly struct EnumMember
-    {
-        public readonly long Value;
-        public readonly int CacheIndex;
-
-        public EnumMember(long value, int cacheIndex)
-        {
-            Value = value;
-            CacheIndex = cacheIndex;
-        }
-    }
+    private readonly record struct EnumMember(long Value, int CacheIndex);
 
     /// <summary>
     ///     Represents the underlying integer type of an enum.

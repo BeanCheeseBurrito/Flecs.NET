@@ -1,18 +1,24 @@
 using Flecs.NET.Core;
+using Flecs.NET.Core.Hooks;
 using Xunit;
 
 namespace Flecs.NET.Tests.CSharp.Core;
 
 public unsafe class TypeHookTests
 {
-    public struct Struct
+    public struct Struct :
+        ICtorHook<Struct>,
+        IDtorHook<Struct>,
+        ICopyHook<Struct>,
+        IMoveHook<Struct>
     {
         public int Value { get; set; }
 
         public static int CtorInvoked { get; set; }
         public static int DtorInvoked { get; set; }
-        public static int MoveInvoked { get; set; }
+
         public static int CopyInvoked { get; set; }
+        public static int MoveInvoked { get; set; }
         public static int OnAddInvoked { get; set; }
         public static int OnSetInvoked { get; set; }
         public static int OnRemoveInvoked { get; set; }
@@ -35,17 +41,17 @@ public unsafe class TypeHookTests
             data = default;
         }
 
+        public static void Copy(ref Struct dst, ref Struct src, TypeInfo _)
+        {
+            CopyInvoked++;
+            dst = src;
+        }
+
         public static void Move(ref Struct dst, ref Struct src, TypeInfo _)
         {
             MoveInvoked++;
             dst = src;
             src = default;
-        }
-
-        public static void Copy(ref Struct dst, ref Struct src, TypeInfo _)
-        {
-            CopyInvoked++;
-            dst = src;
         }
 
         public static void OnAdd(ref Struct data)
