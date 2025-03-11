@@ -151,10 +151,10 @@ jobs:
         run: |
           if [ '${{ github.event_name }}' == 'workflow_dispatch' ]; then
             if [ '${{ github.event.inputs.nuget-registry }}' == 'NuGet' ]; then
-              dotnet nuget push src/**/Flecs.NET.*.nupkg --api-key '${{ secrets.NUGET_ACCESS_TOKEN }}' --source 'https://api.nuget.org/v3/index.json'
+              dotnet nuget push src/**/Flecs.NET.*.nupkg --skip-duplicate --api-key '${{ secrets.NUGET_ACCESS_TOKEN }}' --source 'https://api.nuget.org/v3/index.json'
             elif [ '${{ github.event.inputs.nuget-registry }}' == 'GitHub' ]; then
-              dotnet nuget push src/**/Flecs.NET.*.nupkg --api-key '${{ secrets.GITHUB_TOKEN }}' --source 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json'
+              dotnet nuget push src/**/Flecs.NET.*.nupkg --skip-duplicate --api-key '${{ secrets.GITHUB_TOKEN }}' --source 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json'
             fi
           elif [ '${{ github.ref }}' == 'refs/heads/main' ]; then
-            dotnet nuget push src/**/Flecs.NET.*.nupkg --api-key '${{ secrets.GITHUB_TOKEN }}' --source 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json'
+            dotnet nuget push src/**/Flecs.NET.*.nupkg --skip-duplicate --api-key '${{ secrets.GITHUB_TOKEN }}' --source 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json'
           fi
