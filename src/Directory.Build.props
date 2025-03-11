@@ -7,9 +7,10 @@
         <PackageIconUrl>https://raw.githubusercontent.com/SanderMertens/flecs/master/docs/img/logo_small.png</PackageIconUrl>
         <PackageIcon>icon.png</PackageIcon>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <RepositoryUrl>https://github.com/BeanCheeseBurrito/Flecs.NET</RepositoryUrl>
         <RepositoryType>Github</RepositoryType>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 
         <DebugType>portable</DebugType>
         <IncludeSymbols>true</IncludeSymbols>
@@ -25,6 +26,10 @@
         <Deterministic Condition="'$(GITHUB_ACTIONS)' == 'true' And '$(Deterministic)' == ''">true</Deterministic>
         <AllowedOutputExtensionsInPackageBuildOutputFolder Condition="'$(FlecsPackPdb)' == 'true'">$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)../README.md" Pack="true" PackagePath="README.md"/>
+    </ItemGroup>
 
     <PropertyGroup>
         <HostArch>$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)</HostArch>
