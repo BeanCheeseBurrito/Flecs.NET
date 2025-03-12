@@ -31,7 +31,7 @@ public static unsafe partial class Ecs
         if (!Type<T>.IsTag)
         {
             module.Add(EcsSparse);
-            world.Set(ref moduleInstance);
+            world.Set(in moduleInstance);
         }
 
         return module;

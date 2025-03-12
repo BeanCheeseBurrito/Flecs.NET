@@ -531,47 +531,26 @@ public unsafe interface IEntity<TEntity> : IId
     /// <inheritdoc cref="Entity.AutoOverrideSecond{TSecond}(ulong)"/>
     public ref TEntity AutoOverrideSecond<TSecond>(ulong first);
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{T}(T)"/>
-    public ref TEntity SetAutoOverride<T>(T component);
+    /// <inheritdoc cref="Entity.SetAutoOverride{T}(in T)"/>
+    public ref TEntity SetAutoOverride<T>(in T component);
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{T}(ref T)"/>
-    public ref TEntity SetAutoOverride<T>(ref T component);
+    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst}(ulong, in TFirst)"/>
+    public ref TEntity SetAutoOverride<TFirst>(ulong second, in TFirst component);
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst}(ulong, TFirst)"/>
-    public ref TEntity SetAutoOverride<TFirst>(ulong second, TFirst component);
+    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(in TFirst)"/>
+    public ref TEntity SetAutoOverride<TFirst, TSecond>(in TFirst component);
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst}(ulong, ref TFirst)"/>
-    public ref TEntity SetAutoOverride<TFirst>(ulong second, ref TFirst component);
+    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(in TSecond)"/>
+    public ref TEntity SetAutoOverride<TFirst, TSecond>(in TSecond component);
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TFirst)"/>
-    public ref TEntity SetAutoOverride<TFirst, TSecond>(TFirst component);
+    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TSecond, in TFirst)"/>
+    public ref TEntity SetAutoOverride<TFirst, TSecond>(TSecond second, in TFirst component) where TSecond : Enum;
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(ref TFirst)"/>
-    public ref TEntity SetAutoOverride<TFirst, TSecond>(ref TFirst component);
+    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TFirst, in TSecond)"/>
+    public ref TEntity SetAutoOverride<TFirst, TSecond>(TFirst first, in TSecond component) where TFirst : Enum;
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TSecond)"/>
-    public ref TEntity SetAutoOverride<TFirst, TSecond>(TSecond component);
-
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(ref TSecond)"/>
-    public ref TEntity SetAutoOverride<TFirst, TSecond>(ref TSecond component);
-
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TSecond, TFirst)"/>
-    public ref TEntity SetAutoOverride<TFirst, TSecond>(TSecond second, TFirst component) where TSecond : Enum;
-
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TSecond, ref TFirst)"/>
-    public ref TEntity SetAutoOverride<TFirst, TSecond>(TSecond second, ref TFirst component) where TSecond : Enum;
-
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TFirst, TSecond)"/>
-    public ref TEntity SetAutoOverride<TFirst, TSecond>(TFirst first, TSecond component) where TFirst : Enum;
-
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TFirst, ref TSecond)"/>
-    public ref TEntity SetAutoOverride<TFirst, TSecond>(TFirst first, ref TSecond component) where TFirst : Enum;
-
-    /// <inheritdoc cref="Entity.SetAutoOverrideSecond{TSecond}(ulong, TSecond)"/>
-    public ref TEntity SetAutoOverrideSecond<TSecond>(ulong first, TSecond component);
-
-    /// <inheritdoc cref="Entity.SetAutoOverrideSecond{TSecond}(ulong, ref TSecond)"/>
-    public ref TEntity SetAutoOverrideSecond<TSecond>(ulong first, ref TSecond component);
+    /// <inheritdoc cref="Entity.SetAutoOverrideSecond{TSecond}(ulong, in TSecond)"/>
+    public ref TEntity SetAutoOverrideSecond<TSecond>(ulong first, in TSecond component);
 
     /// <inheritdoc cref="Entity.Enable()"/>
     public ref TEntity Enable();
@@ -663,47 +642,26 @@ public unsafe interface IEntity<TEntity> : IId
     /// <inheritdoc cref="Entity.SetPtrSecond{TSecond}(ulong, TSecond*)"/>
     public ref TEntity SetPtrSecond<TSecond>(ulong first, TSecond* data);
 
-    /// <inheritdoc cref="Entity.Set{T}(T)"/>
-    public ref TEntity Set<T>(T data);
+    /// <inheritdoc cref="Entity.Set{T}(in T)"/>
+    public ref TEntity Set<T>(in T data);
 
-    /// <inheritdoc cref="Entity.Set{TFirst}(ulong, TFirst)"/>
-    public ref TEntity Set<TFirst>(ulong second, TFirst data);
+    /// <inheritdoc cref="Entity.Set{TFirst}(ulong, in TFirst)"/>
+    public ref TEntity Set<TFirst>(ulong second, in TFirst data);
 
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TSecond)"/>
-    public ref TEntity Set<TFirst, TSecond>(TSecond data);
+    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(in TSecond)"/>
+    public ref TEntity Set<TFirst, TSecond>(in TSecond data);
 
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TFirst)"/>
-    public ref TEntity Set<TFirst, TSecond>(TFirst data);
+    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(in TFirst)"/>
+    public ref TEntity Set<TFirst, TSecond>(in TFirst data);
 
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TSecond, TFirst)"/>
-    public ref TEntity Set<TFirst, TSecond>(TSecond second, TFirst data) where TSecond : Enum;
+    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TSecond, in TFirst)"/>
+    public ref TEntity Set<TFirst, TSecond>(TSecond second, in TFirst data) where TSecond : Enum;
 
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TFirst, TSecond)"/>
-    public ref TEntity Set<TFirst, TSecond>(TFirst first, TSecond data) where TFirst : Enum;
+    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TFirst, in TSecond)"/>
+    public ref TEntity Set<TFirst, TSecond>(TFirst first, in TSecond data) where TFirst : Enum;
 
-    /// <inheritdoc cref="Entity.SetSecond{TSecond}(ulong, TSecond)"/>
-    public ref TEntity SetSecond<TSecond>(ulong first, TSecond data);
-
-    /// <inheritdoc cref="Entity.Set{T}(ref T)"/>
-    public ref TEntity Set<T>(ref T data);
-
-    /// <inheritdoc cref="Entity.Set{TFirst}(ulong, ref TFirst)"/>
-    public ref TEntity Set<TFirst>(ulong second, ref TFirst data);
-
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(ref TSecond)"/>
-    public ref TEntity Set<TFirst, TSecond>(ref TSecond data);
-
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(ref TFirst)"/>
-    public ref TEntity Set<TFirst, TSecond>(ref TFirst data);
-
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TSecond, ref TFirst)"/>
-    public ref TEntity Set<TFirst, TSecond>(TSecond second, ref TFirst data) where TSecond : Enum;
-
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TFirst, ref TSecond)"/>
-    public ref TEntity Set<TFirst, TSecond>(TFirst first, ref TSecond data) where TFirst : Enum;
-
-    /// <inheritdoc cref="Entity.SetSecond{TSecond}(ulong, ref TSecond)"/>
-    public ref TEntity SetSecond<TSecond>(ulong first, ref TSecond data);
+    /// <inheritdoc cref="Entity.SetSecond{TSecond}(ulong, in TSecond)"/>
+    public ref TEntity SetSecond<TSecond>(ulong first, in TSecond data);
 
     /// <inheritdoc cref="Entity.With(Action)"/>
     public ref TEntity With(Action callback);
