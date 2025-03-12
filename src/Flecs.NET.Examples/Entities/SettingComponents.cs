@@ -19,7 +19,7 @@ public static unsafe class Entities_SettingComponents
         // Set data for a typed component using a copy or reference.
         Position position = new(1, 1);
         entity.Set(position);
-        entity.Set(ref position);
+        entity.Set(in position);
 
         // Set data for a typed component using a pointer.
         Velocity velocity = new(2, 2);

@@ -2108,173 +2108,88 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <summary>
     ///     Set component, mark component for auto-overriding.
     /// </summary>
-    /// <param name="component"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverride<T>(T component)
+    /// <param name="component">The component data.</param>
+    /// <typeparam name="T">The component type.</typeparam>
+    /// <returns>Reference to self.</returns>
+    public ref Entity SetAutoOverride<T>(in T component)
     {
-        return ref SetAutoOverride(ref component);
-    }
-
-    /// <summary>
-    ///     Set component, mark component for auto-overriding.
-    /// </summary>
-    /// <param name="component"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverride<T>(ref T component)
-    {
-        return ref AutoOverride<T>().Set(ref component);
+        return ref AutoOverride<T>().Set(in component);
     }
 
     /// <summary>
     ///     Set pair, mark component for auto-overriding.
     /// </summary>
-    /// <param name="second"></param>
-    /// <param name="component"></param>
-    /// <typeparam name="TFirst"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverride<TFirst>(ulong second, TFirst component)
+    /// <param name="second">The second id of the pair.</param>
+    /// <param name="component">The component data.</param>
+    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+    /// <returns>Reference to self.</returns>
+    public ref Entity SetAutoOverride<TFirst>(ulong second, in TFirst component)
     {
-        return ref SetAutoOverride(second, ref component);
+        return ref AutoOverride<TFirst>(second).Set(second, in component);
     }
 
     /// <summary>
     ///     Set pair, mark component for auto-overriding.
     /// </summary>
-    /// <param name="second"></param>
-    /// <param name="component"></param>
-    /// <typeparam name="TFirst"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverride<TFirst>(ulong second, ref TFirst component)
+    /// <param name="component">The component data.</param>
+    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+    /// <returns>Reference to self.</returns>
+    public ref Entity SetAutoOverride<TFirst, TSecond>(in TFirst component)
     {
-        return ref AutoOverride<TFirst>(second).Set(second, ref component);
+        return ref AutoOverride<TFirst, TSecond>().Set<TFirst, TSecond>(in component);
     }
 
     /// <summary>
     ///     Set pair, mark component for auto-overriding.
     /// </summary>
-    /// <param name="component"></param>
-    /// <typeparam name="TFirst"></typeparam>
-    /// <typeparam name="TSecond"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverride<TFirst, TSecond>(TFirst component)
+    /// <param name="component">The component data.</param>
+    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+    /// <returns>Reference to self.</returns>
+    public ref Entity SetAutoOverride<TFirst, TSecond>(in TSecond component)
     {
-        return ref SetAutoOverride<TFirst, TSecond>(ref component);
+        return ref AutoOverride<TFirst, TSecond>().Set<TFirst, TSecond>(in component);
     }
 
     /// <summary>
     ///     Set pair, mark component for auto-overriding.
     /// </summary>
-    /// <param name="component"></param>
-    /// <typeparam name="TFirst"></typeparam>
-    /// <typeparam name="TSecond"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverride<TFirst, TSecond>(ref TFirst component)
-    {
-        return ref AutoOverride<TFirst, TSecond>().Set<TFirst, TSecond>(ref component);
-    }
-
-    /// <summary>
-    ///     Set pair, mark component for auto-overriding.
-    /// </summary>
-    /// <param name="component"></param>
-    /// <typeparam name="TFirst"></typeparam>
-    /// <typeparam name="TSecond"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverride<TFirst, TSecond>(TSecond component)
-    {
-        return ref SetAutoOverride<TFirst, TSecond>(ref component);
-    }
-
-    /// <summary>
-    ///     Set pair, mark component for auto-overriding.
-    /// </summary>
-    /// <param name="component"></param>
-    /// <typeparam name="TFirst"></typeparam>
-    /// <typeparam name="TSecond"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverride<TFirst, TSecond>(ref TSecond component)
-    {
-        return ref AutoOverride<TFirst, TSecond>().Set<TFirst, TSecond>(ref component);
-    }
-
-    /// <summary>
-    ///     Set pair, mark component for auto-overriding.
-    /// </summary>
-    /// <param name="second"></param>
-    /// <param name="component"></param>
-    /// <typeparam name="TFirst"></typeparam>
-    /// <typeparam name="TSecond"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverride<TFirst, TSecond>(TSecond second, TFirst component) where TSecond : Enum
-    {
-        return ref SetAutoOverride<TFirst, TSecond>(second, ref component);
-    }
-
-    /// <summary>
-    ///     Set pair, mark component for auto-overriding.
-    /// </summary>
-    /// <param name="second"></param>
-    /// <param name="component"></param>
-    /// <typeparam name="TFirst"></typeparam>
-    /// <typeparam name="TSecond"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverride<TFirst, TSecond>(TSecond second, ref TFirst component) where TSecond : Enum
+    /// <param name="second">The second id (enum member) of the pair.</param>
+    /// <param name="component">The component data.</param>
+    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+    /// <returns>Reference to self.</returns>
+    public ref Entity SetAutoOverride<TFirst, TSecond>(TSecond second, in TFirst component) where TSecond : Enum
     {
         ulong secondId = Type<TSecond>.Id(World, second);
-        return ref AutoOverride<TFirst>(secondId).Set(secondId, ref component);
+        return ref AutoOverride<TFirst>(secondId).Set(secondId, in component);
     }
 
     /// <summary>
     ///     Set pair, mark component for auto-overriding.
     /// </summary>
-    /// <param name="first"></param>
-    /// <param name="component"></param>
-    /// <typeparam name="TFirst"></typeparam>
-    /// <typeparam name="TSecond"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverride<TFirst, TSecond>(TFirst first, TSecond component) where TFirst : Enum
-    {
-        return ref SetAutoOverride<TFirst, TSecond>(first, ref component);
-    }
-
-    /// <summary>
-    ///     Set pair, mark component for auto-overriding.
-    /// </summary>
-    /// <param name="first"></param>
-    /// <param name="component"></param>
-    /// <typeparam name="TFirst"></typeparam>
-    /// <typeparam name="TSecond"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverride<TFirst, TSecond>(TFirst first, ref TSecond component) where TFirst : Enum
+    /// <param name="first">The first id (enum member) of the pair.</param>
+    /// <param name="component">The component data.</param>
+    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
+    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+    /// <returns>Reference to self.</returns>
+    public ref Entity SetAutoOverride<TFirst, TSecond>(TFirst first, in TSecond component) where TFirst : Enum
     {
         ulong firstId = Type<TFirst>.Id(World, first);
-        return ref AutoOverrideSecond<TSecond>(firstId).SetSecond(firstId, ref component);
+        return ref AutoOverrideSecond<TSecond>(firstId).SetSecond(firstId, in component);
     }
 
     /// <summary>
     ///     Set pair, mark component for auto-overriding.
     /// </summary>
-    /// <param name="first"></param>
-    /// <param name="component"></param>
-    /// <typeparam name="TSecond"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverrideSecond<TSecond>(ulong first, TSecond component)
+    /// <param name="first">The first id of the pair.</param>
+    /// <param name="component">The component data.</param>
+    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
+    /// <returns>Reference to self.</returns>
+    public ref Entity SetAutoOverrideSecond<TSecond>(ulong first, in TSecond component)
     {
-        return ref SetAutoOverrideSecond(first, ref component);
-    }
-
-    /// <summary>
-    ///     Set pair, mark component for auto-overriding.
-    /// </summary>
-    /// <param name="first"></param>
-    /// <param name="component"></param>
-    /// <typeparam name="TSecond"></typeparam>
-    /// <returns></returns>
-    public ref Entity SetAutoOverrideSecond<TSecond>(ulong first, ref TSecond component)
-    {
-        return ref AutoOverrideSecond<TSecond>(first).SetSecond(first, ref component);
+        return ref AutoOverrideSecond<TSecond>(first).SetSecond(first, in component);
     }
 
     /// <summary>
@@ -2625,171 +2540,86 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     /// <summary>
     ///     Sets the data of a component.
     /// </summary>
-    /// <param name="data">The data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="T">The component type.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref Entity Set<T>(T data)
+    public ref Entity Set<T>(in T data)
     {
-        return ref Set(ref data);
+        return ref SetInternal(Type<T>.Id(World), in data);
     }
 
     /// <summary>
     ///     Sets the data of a pair component.
     /// </summary>
     /// <param name="second">The second id of the pair.</param>
-    /// <param name="data">The data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref Entity Set<TFirst>(ulong second, TFirst data)
+    public ref Entity Set<TFirst>(ulong second, in TFirst data)
     {
-        return ref Set(second, ref data);
+        return ref SetInternal(Ecs.Pair<TFirst>(second, World), in data);
     }
 
     /// <summary>
     ///     Sets the data of a pair component.
     /// </summary>
-    /// <param name="data">The data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref Entity Set<TFirst, TSecond>(TSecond data)
+    public ref Entity Set<TFirst, TSecond>(in TSecond data)
     {
-        return ref Set<TFirst, TSecond>(ref data);
+        return ref SetInternal(Ecs.Pair<TFirst, TSecond>(World), in data);
     }
 
     /// <summary>
     ///     Sets the data of a pair component.
     /// </summary>
-    /// <param name="data">The data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref Entity Set<TFirst, TSecond>(TFirst data)
+    public ref Entity Set<TFirst, TSecond>(in TFirst data)
     {
-        return ref Set<TFirst, TSecond>(ref data);
+        return ref SetInternal(Ecs.Pair<TFirst, TSecond>(World), in data);
     }
 
     /// <summary>
     ///     Sets the data of a pair component.
     /// </summary>
     /// <param name="second">The second id (enum member) of the pair.</param>
-    /// <param name="data">The data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref Entity Set<TFirst, TSecond>(TSecond second, TFirst data) where TSecond : Enum
+    public ref Entity Set<TFirst, TSecond>(TSecond second, in TFirst data) where TSecond : Enum
     {
-        return ref Set<TFirst, TSecond>(second, ref data);
+        return ref Set(Type<TSecond>.Id(World, second), in data);
     }
 
     /// <summary>
     ///     Sets the data of a pair component.
     /// </summary>
     /// <param name="first">The first id (enum member) of the pair.</param>
-    /// <param name="data">The data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref Entity Set<TFirst, TSecond>(TFirst first, TSecond data) where TFirst : Enum
+    public ref Entity Set<TFirst, TSecond>(TFirst first, in TSecond data) where TFirst : Enum
     {
-        return ref Set<TFirst, TSecond>(first, ref data);
+        return ref SetSecond(Type<TFirst>.Id(World, first), in data);
     }
 
     /// <summary>
     ///     Sets the data of a pair component.
     /// </summary>
     /// <param name="first">The first id of the pair.</param>
-    /// <param name="data">The data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public ref Entity SetSecond<TSecond>(ulong first, TSecond data)
+    public ref Entity SetSecond<TSecond>(ulong first, in TSecond data)
     {
-        return ref SetSecond(first, ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a component.
-    /// </summary>
-    /// <param name="data">The reference to the data.</param>
-    /// <typeparam name="T">The component type.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public ref Entity Set<T>(ref T data)
-    {
-        return ref SetInternal(Type<T>.Id(World), ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a pair component.
-    /// </summary>
-    /// <param name="second">The second id of the pair.</param>
-    /// <param name="data">The reference to the data.</param>
-    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public ref Entity Set<TFirst>(ulong second, ref TFirst data)
-    {
-        return ref SetInternal(Ecs.Pair<TFirst>(second, World), ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a pair component.
-    /// </summary>
-    /// <param name="data">The reference to the data.</param>
-    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public ref Entity Set<TFirst, TSecond>(ref TSecond data)
-    {
-        return ref SetInternal(Ecs.Pair<TFirst, TSecond>(World), ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a pair component.
-    /// </summary>
-    /// <param name="data">The reference to the data.</param>
-    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public ref Entity Set<TFirst, TSecond>(ref TFirst data)
-    {
-        return ref SetInternal(Ecs.Pair<TFirst, TSecond>(World), ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a pair component.
-    /// </summary>
-    /// <param name="second">The second id (enum member) of the pair.</param>
-    /// <param name="data">The reference to the data.</param>
-    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public ref Entity Set<TFirst, TSecond>(TSecond second, ref TFirst data) where TSecond : Enum
-    {
-        return ref Set(Type<TSecond>.Id(World, second), ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a pair component.
-    /// </summary>
-    /// <param name="first">The first id (enum member) of the pair.</param>
-    /// <param name="data">The reference to the data.</param>
-    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public ref Entity Set<TFirst, TSecond>(TFirst first, ref TSecond data) where TFirst : Enum
-    {
-        return ref SetSecond(Type<TFirst>.Id(World, first), ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a pair component.
-    /// </summary>
-    /// <param name="first">The first id of the pair.</param>
-    /// <param name="data">The reference to the data.</param>
-    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public ref Entity SetSecond<TSecond>(ulong first, ref TSecond data)
-    {
-        return ref SetInternal(Ecs.PairSecond<TSecond>(first, World), ref data);
+        return ref SetInternal(Ecs.PairSecond<TSecond>(first, World), in data);
     }
 
     /// <summary>
@@ -3677,7 +3507,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private ref Entity SetInternal<T>(ulong id, ref T component)
+    private ref Entity SetInternal<T>(ulong id, in T component)
     {
         fixed (T* ptr = &component)
             return ref SetInternal(id, ptr);

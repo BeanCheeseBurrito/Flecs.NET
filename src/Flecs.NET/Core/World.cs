@@ -566,97 +566,12 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <summary>
     ///     Sets the data of a singleton component.
     /// </summary>
-    /// <param name="data">The data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="T">The component type.</typeparam>
     /// <returns>Reference to self.</returns>
-    public World Set<T>(T data)
+    public World Set<T>(in T data)
     {
-        return Set(ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a singleton pair component.
-    /// </summary>
-    /// <param name="second">The second id of the pair.</param>
-    /// <param name="data">The data.</param>
-    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public World Set<TFirst>(ulong second, TFirst data)
-    {
-        return Set(second, ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a singleton pair component.
-    /// </summary>
-    /// <param name="data">The data.</param>
-    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public World Set<TFirst, TSecond>(TFirst data)
-    {
-        return Set<TFirst, TSecond>(ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a singleton pair component.
-    /// </summary>
-    /// <param name="data">The data.</param>
-    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public World Set<TFirst, TSecond>(TSecond data)
-    {
-        return Set<TFirst, TSecond>(ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a singleton pair component.
-    /// </summary>
-    /// <param name="second">The second id (enum member) of the pair.</param>
-    /// <param name="data">The data.</param>
-    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public World Set<TFirst, TSecond>(TSecond second, TFirst data) where TSecond : Enum
-    {
-        return Set<TFirst, TSecond>(second, ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a singleton pair component.
-    /// </summary>
-    /// <param name="first">The first id (enum member) of the pair.</param>
-    /// <param name="data">The data.</param>
-    /// <typeparam name="TFirst">The first type of the pair.</typeparam>
-    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public World Set<TFirst, TSecond>(TFirst first, TSecond data) where TFirst : Enum
-    {
-        return Set<TFirst, TSecond>(first, ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a singleton pair component.
-    /// </summary>
-    /// <param name="first">The first id of the pair</param>
-    /// <param name="data">The data.</param>
-    /// <typeparam name="TSecond">The second type of the pair.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public World SetSecond<TSecond>(ulong first, TSecond data)
-    {
-        return SetSecond(first, ref data);
-    }
-
-    /// <summary>
-    ///     Sets the data of a singleton component.
-    /// </summary>
-    /// <param name="data">The reference to the data.</param>
-    /// <typeparam name="T">The component type.</typeparam>
-    /// <returns>Reference to self.</returns>
-    public World Set<T>(ref T data)
-    {
-        Entity<T>().Set(ref data);
+        Entity<T>().Set(in data);
         return this;
     }
 
@@ -664,38 +579,38 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     ///     Sets the data of a singleton pair component.
     /// </summary>
     /// <param name="second">The second id of the pair.</param>
-    /// <param name="data">The reference to the data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public World Set<TFirst>(ulong second, ref TFirst data)
+    public World Set<TFirst>(ulong second, in TFirst data)
     {
-        Entity<TFirst>().Set(second, ref data);
+        Entity<TFirst>().Set(second, in data);
         return this;
     }
 
     /// <summary>
     ///     Sets the data of a singleton pair component.
     /// </summary>
-    /// <param name="data">The reference to the data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public World Set<TFirst, TSecond>(ref TFirst data)
+    public World Set<TFirst, TSecond>(in TFirst data)
     {
-        Entity<TFirst>().Set<TFirst, TSecond>(ref data);
+        Entity<TFirst>().Set<TFirst, TSecond>(in data);
         return this;
     }
 
     /// <summary>
     ///     Sets the data of a singleton pair component.
     /// </summary>
-    /// <param name="data">The reference to the data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public World Set<TFirst, TSecond>(ref TSecond data)
+    public World Set<TFirst, TSecond>(in TSecond data)
     {
-        Entity<TFirst>().Set<TFirst, TSecond>(ref data);
+        Entity<TFirst>().Set<TFirst, TSecond>(in data);
         return this;
     }
 
@@ -703,38 +618,38 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     ///     Sets the data of a singleton pair component.
     /// </summary>
     /// <param name="second">The second id (enum member) of the pair.</param>
-    /// <param name="data">The reference to the data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public World Set<TFirst, TSecond>(TSecond second, ref TFirst data) where TSecond : Enum
+    public World Set<TFirst, TSecond>(TSecond second, in TFirst data) where TSecond : Enum
     {
-        return Set(Type<TSecond>.Id(Handle, second), ref data);
+        return Set(Type<TSecond>.Id(Handle, second), in data);
     }
 
     /// <summary>
     ///     Sets the data of a singleton pair component.
     /// </summary>
     /// <param name="first">The first id (enum member) of the pair.</param>
-    /// <param name="data">The reference to the data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="TFirst">The first type of the pair.</typeparam>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public World Set<TFirst, TSecond>(TFirst first, ref TSecond data) where TFirst : Enum
+    public World Set<TFirst, TSecond>(TFirst first, in TSecond data) where TFirst : Enum
     {
-        return SetSecond(Type<TFirst>.Id(Handle, first), ref data);
+        return SetSecond(Type<TFirst>.Id(Handle, first), in data);
     }
 
     /// <summary>
     ///     Sets the data of a singleton pair component.
     /// </summary>
     /// <param name="first">The first id of the pair.</param>
-    /// <param name="data">The reference to the data.</param>
+    /// <param name="data">The component data.</param>
     /// <typeparam name="TSecond">The second type of the pair.</typeparam>
     /// <returns>Reference to self.</returns>
-    public World SetSecond<TSecond>(ulong first, ref TSecond data)
+    public World SetSecond<TSecond>(ulong first, in TSecond data)
     {
-        Entity(first).SetSecond(first, ref data);
+        Entity(first).SetSecond(first, in data);
         return this;
     }
 

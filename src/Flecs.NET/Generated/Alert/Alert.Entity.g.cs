@@ -1092,101 +1092,52 @@ public unsafe partial struct Alert
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{T}(T)"/>
-    public ref Alert SetAutoOverride<T>(T component)
+    /// <inheritdoc cref="Entity.SetAutoOverride{T}(in T)"/>
+    public ref Alert SetAutoOverride<T>(in T component)
     {
-        Entity.SetAutoOverride(component);
+        Entity.SetAutoOverride(in component);
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{T}(ref T)"/>
-    public ref Alert SetAutoOverride<T>(ref T component)
+    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst}(ulong, in TFirst)"/>
+    public ref Alert SetAutoOverride<TFirst>(ulong second, in TFirst component)
     {
-        Entity.SetAutoOverride(ref component);
+        Entity.SetAutoOverride(second, in component);
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst}(ulong, TFirst)"/>
-    public ref Alert SetAutoOverride<TFirst>(ulong second, TFirst component)
+    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(in TFirst)"/>
+    public ref Alert SetAutoOverride<TFirst, TSecond>(in TFirst component)
     {
-        Entity.SetAutoOverride(second, component);
+        Entity.SetAutoOverride<TFirst, TSecond>(in component);
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst}(ulong, ref TFirst)"/>
-    public ref Alert SetAutoOverride<TFirst>(ulong second, ref TFirst component)
+    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(in TSecond)"/>
+    public ref Alert SetAutoOverride<TFirst, TSecond>(in TSecond component)
     {
-        Entity.SetAutoOverride(second, ref component);
+        Entity.SetAutoOverride<TFirst, TSecond>(in component);
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TFirst)"/>
-    public ref Alert SetAutoOverride<TFirst, TSecond>(TFirst component)
+    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TSecond, in TFirst)"/>
+    public ref Alert SetAutoOverride<TFirst, TSecond>(TSecond second, in TFirst component) where TSecond : Enum
     {
-        Entity.SetAutoOverride<TFirst, TSecond>(component);
+        Entity.SetAutoOverride<TFirst, TSecond>(second, in component);
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(ref TFirst)"/>
-    public ref Alert SetAutoOverride<TFirst, TSecond>(ref TFirst component)
+    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TFirst, in TSecond)"/>
+    public ref Alert SetAutoOverride<TFirst, TSecond>(TFirst first, in TSecond component) where TFirst : Enum
     {
-        Entity.SetAutoOverride<TFirst, TSecond>(ref component);
+        Entity.SetAutoOverride<TFirst, TSecond>(first, in component);
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TSecond)"/>
-    public ref Alert SetAutoOverride<TFirst, TSecond>(TSecond component)
+    /// <inheritdoc cref="Entity.SetAutoOverrideSecond{TSecond}(ulong, in TSecond)"/>
+    public ref Alert SetAutoOverrideSecond<TSecond>(ulong first, in TSecond component)
     {
-        Entity.SetAutoOverride<TFirst, TSecond>(component);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(ref TSecond)"/>
-    public ref Alert SetAutoOverride<TFirst, TSecond>(ref TSecond component)
-    {
-        Entity.SetAutoOverride<TFirst, TSecond>(ref component);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TSecond, TFirst)"/>
-    public ref Alert SetAutoOverride<TFirst, TSecond>(TSecond second, TFirst component) where TSecond : Enum
-    {
-        Entity.SetAutoOverride<TFirst, TSecond>(second, component);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TSecond, ref TFirst)"/>
-    public ref Alert SetAutoOverride<TFirst, TSecond>(TSecond second, ref TFirst component) where TSecond : Enum
-    {
-        Entity.SetAutoOverride<TFirst, TSecond>(second, ref component);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TFirst, TSecond)"/>
-    public ref Alert SetAutoOverride<TFirst, TSecond>(TFirst first, TSecond component) where TFirst : Enum
-    {
-        Entity.SetAutoOverride<TFirst, TSecond>(first, component);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.SetAutoOverride{TFirst, TSecond}(TFirst, ref TSecond)"/>
-    public ref Alert SetAutoOverride<TFirst, TSecond>(TFirst first, ref TSecond component) where TFirst : Enum
-    {
-        Entity.SetAutoOverride<TFirst, TSecond>(first, ref component);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.SetAutoOverrideSecond{TSecond}(ulong, TSecond)"/>
-    public ref Alert SetAutoOverrideSecond<TSecond>(ulong first, TSecond component)
-    {
-        Entity.SetAutoOverrideSecond(first, component);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.SetAutoOverrideSecond{TSecond}(ulong, ref TSecond)"/>
-    public ref Alert SetAutoOverrideSecond<TSecond>(ulong first, ref TSecond component)
-    {
-        Entity.SetAutoOverrideSecond(first, ref component);
+        Entity.SetAutoOverrideSecond(first, in component);
         return ref this;
     }
 
@@ -1400,101 +1351,52 @@ public unsafe partial struct Alert
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.Set{T}(T)"/>
-    public ref Alert Set<T>(T data)
+    /// <inheritdoc cref="Entity.Set{T}(in T)"/>
+    public ref Alert Set<T>(in T data)
     {
-        Entity.Set(data);
+        Entity.Set(in data);
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.Set{TFirst}(ulong, TFirst)"/>
-    public ref Alert Set<TFirst>(ulong second, TFirst data)
+    /// <inheritdoc cref="Entity.Set{TFirst}(ulong, in TFirst)"/>
+    public ref Alert Set<TFirst>(ulong second, in TFirst data)
     {
-        Entity.Set(second, data);
+        Entity.Set(second, in data);
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TSecond)"/>
-    public ref Alert Set<TFirst, TSecond>(TSecond data)
+    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(in TSecond)"/>
+    public ref Alert Set<TFirst, TSecond>(in TSecond data)
     {
-        Entity.Set<TFirst, TSecond>(data);
+        Entity.Set<TFirst, TSecond>(in data);
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TFirst)"/>
-    public ref Alert Set<TFirst, TSecond>(TFirst data)
+    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(in TFirst)"/>
+    public ref Alert Set<TFirst, TSecond>(in TFirst data)
     {
-        Entity.Set<TFirst, TSecond>(data);
+        Entity.Set<TFirst, TSecond>(in data);
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TSecond, TFirst)"/>
-    public ref Alert Set<TFirst, TSecond>(TSecond second, TFirst data) where TSecond : Enum
+    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TSecond, in TFirst)"/>
+    public ref Alert Set<TFirst, TSecond>(TSecond second, in TFirst data) where TSecond : Enum
     {
-        Entity.Set<TFirst, TSecond>(second, data);
+        Entity.Set<TFirst, TSecond>(second, in data);
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TFirst, TSecond)"/>
-    public ref Alert Set<TFirst, TSecond>(TFirst first, TSecond data) where TFirst : Enum
+    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TFirst, in TSecond)"/>
+    public ref Alert Set<TFirst, TSecond>(TFirst first, in TSecond data) where TFirst : Enum
     {
-        Entity.Set<TFirst, TSecond>(first, data);
+        Entity.Set<TFirst, TSecond>(first, in data);
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.SetSecond{TSecond}(ulong, TSecond)"/>
-    public ref Alert SetSecond<TSecond>(ulong first, TSecond data)
+    /// <inheritdoc cref="Entity.SetSecond{TSecond}(ulong, in TSecond)"/>
+    public ref Alert SetSecond<TSecond>(ulong first, in TSecond data)
     {
-        Entity.SetSecond(first, data);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Set{T}(ref T)"/>
-    public ref Alert Set<T>(ref T data)
-    {
-        Entity.Set(ref data);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Set{TFirst}(ulong, ref TFirst)"/>
-    public ref Alert Set<TFirst>(ulong second, ref TFirst data)
-    {
-        Entity.Set(second, ref data);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(ref TSecond)"/>
-    public ref Alert Set<TFirst, TSecond>(ref TSecond data)
-    {
-        Entity.Set<TFirst, TSecond>(ref data);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(ref TFirst)"/>
-    public ref Alert Set<TFirst, TSecond>(ref TFirst data)
-    {
-        Entity.Set<TFirst, TSecond>(ref data);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TSecond, ref TFirst)"/>
-    public ref Alert Set<TFirst, TSecond>(TSecond second, ref TFirst data) where TSecond : Enum
-    {
-        Entity.Set<TFirst, TSecond>(second, ref data);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Set{TFirst, TSecond}(TFirst, ref TSecond)"/>
-    public ref Alert Set<TFirst, TSecond>(TFirst first, ref TSecond data) where TFirst : Enum
-    {
-        Entity.Set<TFirst, TSecond>(first, ref data);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.SetSecond{TSecond}(ulong, ref TSecond)"/>
-    public ref Alert SetSecond<TSecond>(ulong first, ref TSecond data)
-    {
-        Entity.SetSecond(first, ref data);
+        Entity.SetSecond(first, in data);
         return ref this;
     }
 
