@@ -354,6 +354,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Field<T> Field<T>(int index)
     {
+        AssertField<T>(Handle, index);
         return GetField<T>(index);
     }
 
@@ -367,6 +368,7 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref T FieldAt<T>(int index, int row)
     {
+        AssertField<T>(Handle, index);
         return ref Utils.IsBitSet(Handle->row_fields, index)
             ? ref GetFieldAt<T>(index, row)[0]
             : ref GetField<T>(index)[row];
@@ -558,7 +560,6 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Field<T> GetField<T>(int index)
     {
-        AssertField<T>(Handle, index);
         UntypedField field = GetUntypedField(index);
         return new Field<T>(field.Data, field.Length);
     }
@@ -566,7 +567,6 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal Field<T> GetFieldAt<T>(int index, int row)
     {
-        AssertField<T>(Handle, index);
         UntypedField field = GetUntypedFieldAt(index, row);
         return new Field<T>(field.Data, 1);
     }
@@ -597,6 +597,58 @@ public unsafe partial struct Iter : IEnumerable<int>, IEquatable<Iter>, IDisposa
             [Provided Type]: {{new Entity(iter->world, Type<T>.Id(iter->world))}}
             """
         );
+    }
+
+    [Conditional("DEBUG")]
+    internal void AssertFields<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
+    {
+        if (typeof(T0) != typeof(_))
+            AssertField<T0>(Handle, 0);
+
+        if (typeof(T1) != typeof(_))
+            AssertField<T1>(Handle, 1);
+
+        if (typeof(T2) != typeof(_))
+            AssertField<T2>(Handle, 2);
+
+        if (typeof(T3) != typeof(_))
+            AssertField<T3>(Handle, 3);
+
+        if (typeof(T4) != typeof(_))
+            AssertField<T4>(Handle, 4);
+
+        if (typeof(T5) != typeof(_))
+            AssertField<T5>(Handle, 5);
+
+        if (typeof(T6) != typeof(_))
+            AssertField<T6>(Handle, 6);
+
+        if (typeof(T7) != typeof(_))
+            AssertField<T7>(Handle, 7);
+
+        if (typeof(T8) != typeof(_))
+            AssertField<T8>(Handle, 8);
+
+        if (typeof(T9) != typeof(_))
+            AssertField<T9>(Handle, 9);
+
+        if (typeof(T10) != typeof(_))
+            AssertField<T10>(Handle, 10);
+
+        if (typeof(T11) != typeof(_))
+            AssertField<T11>(Handle, 11);
+
+        if (typeof(T12) != typeof(_))
+            AssertField<T12>(Handle, 12);
+
+        if (typeof(T13) != typeof(_))
+            AssertField<T13>(Handle, 13);
+
+        if (typeof(T14) != typeof(_))
+            AssertField<T14>(Handle, 14);
+
+        if (typeof(T15) != typeof(_))
+            AssertField<T15>(Handle, 15);
     }
 
     /// <summary>
@@ -736,7 +788,7 @@ public unsafe partial struct Iter
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref T Single<T>(int index)
     {
-        return ref GetField<T>(index)[0];
+        return ref Field<T>(index)[0];
     }
 
     /// <summary>
@@ -748,6 +800,7 @@ public unsafe partial struct Iter
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Span<T> Span<T>(int index) where T : unmanaged
     {
+        AssertField<T>(Handle, index);
         return GetSpan<T>(index);
     }
 
@@ -760,6 +813,7 @@ public unsafe partial struct Iter
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T* Pointer<T>(int index) where T : unmanaged
     {
+        AssertField<T>(Handle, index);
         return GetPointer<T>(index);
     }
 
@@ -773,7 +827,10 @@ public unsafe partial struct Iter
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T* PointerAt<T>(int index, int row) where T : unmanaged
     {
-        return &Pointer<T>(index)[row];
+        AssertField<T>(Handle, index);
+        return Utils.IsBitSet(Handle->row_fields, index)
+            ? (T*)ecs_field_at_w_size(Handle, Type<T>.Size, (byte)index, row)
+            : &GetPointer<T>(index)[row];
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -786,15 +843,13 @@ public unsafe partial struct Iter
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal T* GetPointer<T>(int index)
     {
-        AssertField<T>(Handle, index);
         return (T*)ecs_field_w_size(Handle, Type<T>.Size, (byte)index);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal FieldData<T> GetFieldData<T>(byte index)
+    internal Fields GetFields(int fieldCount)
     {
-        AssertField<T>(Handle, index);
-        return new FieldData<T>(Handle, index);
+        return new Fields(Handle, fieldCount);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -802,7 +857,7 @@ public unsafe partial struct Iter
     {
         IterationTechnique flags = default;
 
-        int mask = (1 << fieldCount) - 1;
+        int mask = (1 << Handle->field_count) - 1;
 
         if ((Handle->row_fields & mask) != 0)
             flags |= IterationTechnique.Sparse;

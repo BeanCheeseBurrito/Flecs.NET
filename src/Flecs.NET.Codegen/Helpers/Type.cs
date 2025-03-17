@@ -11,7 +11,9 @@ public enum Type
     Component,
     Entity,
     IIterable,
+    Invoker,
     IterIterable,
+    JobState,
     Observer,
     ObserverBuilder,
     PageIterable,
@@ -23,7 +25,7 @@ public enum Type
     System_,
     SystemBuilder,
     TimerEntity,
-    TypeHelper,
+    Types,
     UntypedComponent,
     WorkerIterable
 }

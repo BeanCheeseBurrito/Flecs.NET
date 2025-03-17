@@ -70,22 +70,34 @@ public unsafe interface IIterable<T0, T1, T2> : IIterableBase
     public void Run(delegate*<Iter, void> callback);
 
     /// <summary>
+    ///     Iterates the iterable object using the provided .Run callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void Run(Ecs.RunDelegateCallback callback);
+
+    /// <summary>
+    ///     Iterates the iterable object using the provided .Run callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void Run(delegate*<Iter, Action<Iter>, void> callback);
+
+    /// <summary>
+    ///     Iterates the iterable object using the provided .Run callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void Run(Ecs.RunPointerCallback callback);
+
+    /// <summary>
+    ///     Iterates the iterable object using the provided .Run callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void Run(delegate*<Iter, delegate*<Iter, void>, void> callback);
+
+    /// <summary>
     ///     Iterates the iterable object using the provided .Iter callback.
     /// </summary>
     /// <param name="callback">The callback.</param>
     public void Iter(Ecs.IterFieldCallback<T0, T1, T2> callback);
-
-    /// <summary>
-    ///     Iterates the iterable object using the provided .Iter callback.
-    /// </summary>
-    /// <param name="callback">The callback.</param>
-    public void Iter(Ecs.IterSpanCallback<T0, T1, T2> callback);
-
-    /// <summary>
-    ///     Iterates the iterable object using the provided .Iter callback.
-    /// </summary>
-    /// <param name="callback">The callback.</param>
-    public void Iter(Ecs.IterPointerCallback<T0, T1, T2> callback);
 
     /// <summary>
     ///     Iterates the iterable object using the provided .Iter callback.
@@ -97,7 +109,19 @@ public unsafe interface IIterable<T0, T1, T2> : IIterableBase
     ///     Iterates the iterable object using the provided .Iter callback.
     /// </summary>
     /// <param name="callback">The callback.</param>
+    public void Iter(Ecs.IterSpanCallback<T0, T1, T2> callback);
+
+    /// <summary>
+    ///     Iterates the iterable object using the provided .Iter callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
     public void Iter(delegate*<Iter, Span<T0>, Span<T1>, Span<T2>, void> callback);
+
+    /// <summary>
+    ///     Iterates the iterable object using the provided .Iter callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void Iter(Ecs.IterPointerCallback<T0, T1, T2> callback);
 
     /// <summary>
     ///     Iterates the iterable object using the provided .Iter callback.

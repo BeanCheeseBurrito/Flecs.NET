@@ -41,47 +41,62 @@ public static unsafe partial class Ecs
     public delegate void CopyCallback<T>(ref T dst, ref T src, TypeInfo typeInfo);
 
     /// <summary>
-    ///     Each entity callback.
-    /// </summary>
-    public delegate void EachEntityCallback(Entity entity);
-
-    /// <summary>
     ///     Each id callback.
     /// </summary>
     public delegate void EachIdCallback(Id id);
 
     /// <summary>
-    ///     Each index callback.
+    ///     Each callback.
+    /// </summary>
+    public delegate void EachEntityCallback(Entity entity);
+
+    /// <summary>
+    ///     Each callback.
     /// </summary>
     public delegate void EachIterCallback(Iter it, int i);
 
     /// <summary>
-    ///     Function signature that takes an <see cref="Entity"/> argument.
+    ///     Find callback.
+    /// </summary>
+    public delegate bool FindEntityCallback(Entity entity);
+
+    /// <summary>
+    ///     Find callback.
+    /// </summary>
+    public delegate bool FindIterCallback(Iter it, int i);
+
+    /// <summary>
+    ///     Observe Callback.
+    /// </summary>
+    public delegate void ObserveCallback();
+
+    /// <summary>
+    ///     Observe Callback.
     /// </summary>
     public delegate void ObserveEntityCallback(Entity e);
 
     /// <summary>
-    ///     Function signature that takes a ref T argument.
+    ///     Observe Callback.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The component type.</typeparam>
     public delegate void ObserveRefCallback<T>(ref T component);
 
     /// <summary>
-    ///     Function signature that takes a T* callback.
+    ///     Observe Callback.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The component type.</typeparam>
     public delegate void ObservePointerCallback<T>(T* component);
 
     /// <summary>
-    ///     Function signature that takes an <see cref="Entity"/> and a ref T argument.
+    ///     Observe Callback.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The component type.</typeparam>
     public delegate void ObserveEntityRefCallback<T>(Entity e, ref T component);
 
     /// <summary>
-    ///     Function signature that takes an <see cref="Entity"/> and a T* argument.
+    ///     Observe Callback.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The component type.</typeparam>
     public delegate void ObserveEntityPointerCallback<T>(Entity e, T* component);
 
     /// <summary>

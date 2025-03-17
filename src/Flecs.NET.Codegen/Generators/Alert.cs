@@ -8,5 +8,6 @@ public class Alert : GeneratorBase
     {
         AddSource($"Alert.Id.g.cs", Id.GenerateExtensions(Type.Alert));
         AddSource($"Alert.Entity.g.cs", Entity.GenerateExtensions(Type.Alert));
+        AddSource($"Alert.Entity.Observe.g.cs", Entity.GenerateObserveFunctions(Type.Alert));
     }
 }

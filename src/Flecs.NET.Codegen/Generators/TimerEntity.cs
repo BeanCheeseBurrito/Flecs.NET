@@ -8,5 +8,6 @@ public class TimerEntity : GeneratorBase
     {
         AddSource($"TimerEntity.Id.g.cs", Id.GenerateExtensions(Type.TimerEntity));
         AddSource($"TimerEntity.Entity.g.cs", Entity.GenerateExtensions(Type.TimerEntity));
+        AddSource($"TimerEntity.Entity.Observe.g.cs", Entity.GenerateObserveFunctions(Type.TimerEntity));
     }
 }

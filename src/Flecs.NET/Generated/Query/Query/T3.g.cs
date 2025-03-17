@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using Flecs.NET.Utilities;
 
 using static Flecs.NET.Bindings.flecs;
 
@@ -24,21 +25,21 @@ public unsafe partial struct Query<T0, T1, T2> : IDisposable, IEquatable<Query<T
     /// <inheritdoc cref="Query(ecs_query_t*)"/>
     public Query(ecs_query_t* query)
     {
-        TypeHelper<T0, T1, T2>.AssertNoTags();
+        Types<T0, T1, T2, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertNoTags();
         Underlying = new Query(query);
     }
 
     /// <inheritdoc cref="Query(ecs_world_t*, ulong)"/>
     public Query(ecs_world_t* world, ulong entity)
     {
-        TypeHelper<T0, T1, T2>.AssertNoTags();
+        Types<T0, T1, T2, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertNoTags();
         Underlying = new Query(world, entity);
     }
 
     /// <inheritdoc cref="Query(Core.Entity)"/>
     public Query(Entity entity)
     {
-        TypeHelper<T0, T1, T2>.AssertNoTags();
+        Types<T0, T1, T2, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertNoTags();
         Underlying = new Query(entity);
     }
 

@@ -6,14 +6,16 @@ public class Pipeline : GeneratorBase
 {
     public override void Generate()
     {
-        AddSource($"Pipeline.Id.g.cs", Id.GenerateExtensions(Type.Pipeline));
-        AddSource($"Pipeline.Entity.g.cs", Entity.GenerateExtensions(Type.Pipeline));
-
         for (int i = 0; i < Generator.GenericCount; i++)
         {
             AddSource($"Pipeline/T{i + 1}.g.cs", GeneratePipeline(i));
+        }
+
+        for (int i = -1; i < Generator.GenericCount; i++)
+        {
             AddSource($"Pipeline.Id/T{i + 1}.g.cs", Id.GenerateExtensions(Type.Pipeline, i));
             AddSource($"Pipeline.Entity/T{i + 1}.g.cs", Entity.GenerateExtensions(Type.Pipeline, i));
+            AddSource($"Pipeline.Entity.Observe/T{i + 1}.g.cs", Entity.GenerateObserveFunctions(Type.Pipeline, i));
         }
     }
 

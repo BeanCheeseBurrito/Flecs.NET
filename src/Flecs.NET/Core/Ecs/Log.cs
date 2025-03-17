@@ -1,6 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
 
@@ -15,9 +14,10 @@ public static unsafe partial class Ecs
         ///     Set log level.
         /// </summary>
         /// <param name="level"></param>
+        [SuppressMessage("Performance", "CA1806:Do not ignore method results")]
         public static void SetLevel(int level)
         {
-            _ = ecs_log_set_level(level);
+            ecs_log_set_level(level);
         }
 
         /// <summary>

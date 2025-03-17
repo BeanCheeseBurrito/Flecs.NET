@@ -12,8 +12,10 @@ public class SystemBuilder : GeneratorBase
         {
             AddSource($"SystemBuilder/T{i + 1}.g.cs", GenerateSystemBuilder(i));
             AddSource($"SystemBuilder.QueryBuilder/T{i + 1}.g.cs", QueryBuilder.GenerateExtensions(Type.SystemBuilder, i));
-            AddSource($"SystemBuilder.NodeBuilder/T{i + 1}.g.cs", NodeBuilder.GenerateExtensions(Type.SystemBuilder, Type.System, i));
         }
+
+        for (int i = -1; i < Generator.GenericCount; i++)
+            AddSource($"SystemBuilder.NodeBuilder/T{i + 1}.g.cs", NodeBuilder.GenerateExtensions(Type.SystemBuilder, Type.System, i));
     }
 
     private static string GenerateSystemBuilder(int i)
@@ -22,6 +24,8 @@ public class SystemBuilder : GeneratorBase
             #nullable enable
 
             using System;
+            using Flecs.NET.Utilities;
+            
             using static Flecs.NET.Bindings.flecs;
 
             namespace Flecs.NET.Core;
@@ -49,21 +53,21 @@ public class SystemBuilder : GeneratorBase
                 /// <param name="systemBuilder">The system builder.</param>
                 public SystemBuilder(SystemBuilder systemBuilder)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _systemBuilder = systemBuilder;
                 }
             
                 /// <inheritdoc cref="SystemBuilder(ecs_world_t*)"/>
                 public SystemBuilder(ecs_world_t* world)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _systemBuilder = new SystemBuilder(world){{Generator.WithChain[i]}};
                 }
             
                 /// <inheritdoc cref="SystemBuilder(ecs_world_t*, string)"/>
                 public SystemBuilder(ecs_world_t* world, string name)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _systemBuilder = new SystemBuilder(world, name){{Generator.WithChain[i]}};
                 }
             
@@ -184,66 +188,14 @@ public class SystemBuilder : GeneratorBase
                     _systemBuilder.Ctx(ref value, callback);
                     return ref this;
                 }
-                
-                /// <inheritdoc cref="SystemBuilder.Run(System.Action)"/>
-                public {{Generator.GetTypeName(Type.System, i)}} Run(Action callback)
-                {
-                    return new {{Generator.GetTypeName(Type.System, i)}}(_systemBuilder.Run(callback));
-                }
-                
-                /// <inheritdoc cref="SystemBuilder.Run(System.Action)"/>
-                public {{Generator.GetTypeName(Type.System, i)}} Run(delegate*<void> callback)
-                {
-                    return new {{Generator.GetTypeName(Type.System, i)}}(_systemBuilder.Run(callback));
-                }
             
-                /// <inheritdoc cref="SystemBuilder.Run(Ecs.RunDelegateCallback)"/>
-                public ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} Run(Ecs.RunDelegateCallback callback)
-                {
-                    _systemBuilder.Run(callback);
-                    return ref this;
-                }
-            
-                /// <inheritdoc cref="SystemBuilder.Run(Ecs.RunDelegateCallback)"/>
-                public ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} Run(delegate*<Iter, Action<Iter>, void> callback)
-                {
-                    _systemBuilder.Run(callback);
-                    return ref this;
-                }
-            
-                /// <inheritdoc cref="SystemBuilder.Run(Ecs.RunPointerCallback)"/>
-                public ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} Run(Ecs.RunPointerCallback callback)
-                {
-                    _systemBuilder.Run(callback);
-                    return ref this;
-                }
-            
-                /// <inheritdoc cref="SystemBuilder.Run(Ecs.RunPointerCallback)"/>
-                public ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} Run(delegate*<Iter, delegate*<Iter, void>, void> callback)
-                {
-                    _systemBuilder.Run(callback);
-                    return ref this;
-                }
-            
-                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetCallback<T>(T callback, void* invoker) where T : Delegate
+                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetCallback(InvokerCallback callback, delegate*<ecs_iter_t*, void> invoker)
                 {
                     _systemBuilder.SetCallback(callback, invoker);
                     return ref this;
                 }
             
-                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetCallback(void* callback, void* invoker)
-                {
-                    _systemBuilder.SetCallback(callback, invoker);
-                    return ref this;
-                }
-            
-                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetRun<T>(T callback, void* invoker) where T : Delegate
-                {
-                    _systemBuilder.SetRun(callback, invoker);
-                    return ref this;
-                }
-            
-                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetRun(void* callback, void* invoker)
+                internal ref {{Generator.GetTypeName(Type.SystemBuilder, i)}} SetRun(InvokerCallback callback, delegate*<ecs_iter_t*, void> invoker)
                 {
                     _systemBuilder.SetRun(callback, invoker);
                     return ref this;

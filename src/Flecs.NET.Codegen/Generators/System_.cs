@@ -9,14 +9,16 @@ public class System_ : GeneratorBase
 {
     public override void Generate()
     {
-        AddSource($"System.Id.g.cs", Id.GenerateExtensions(Type.System_));
-        AddSource($"System.Entity.g.cs", Entity.GenerateExtensions(Type.System_));
-
         for (int i = 0; i < Generator.GenericCount; i++)
         {
             AddSource($"System/T{i + 1}.g.cs", GenerateSystem(i));
+        }
+
+        for (int i = -1; i < Generator.GenericCount; i++)
+        {
             AddSource($"System.Id/T{i + 1}.g.cs", Id.GenerateExtensions(Type.System, i));
             AddSource($"System.Entity/T{i + 1}.g.cs", Entity.GenerateExtensions(Type.System, i));
+            AddSource($"System.Entity.Observe/T{i + 1}.g.cs", Entity.GenerateObserveFunctions(Type.System, i));
         }
     }
 
@@ -28,6 +30,8 @@ public class System_ : GeneratorBase
             #nullable enable
 
             using System;
+            using Flecs.NET.Utilities;
+            
             using static Flecs.NET.Bindings.flecs;
 
             namespace Flecs.NET.Core;
@@ -55,21 +59,21 @@ public class System_ : GeneratorBase
                 /// <param name="system">The system.</param>
                 public System(System_ system)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _system = system;
                 }
             
                 /// <inheritdoc cref="System_(ecs_world_t*, ulong)"/>
                 public System(ecs_world_t* world, ulong entity)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _system = new System_(world, entity);
                 }
             
                 /// <inheritdoc cref="System_(Core.Entity)"/>
                 public System(Entity entity)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _system = new System_(entity);
                 }
                 

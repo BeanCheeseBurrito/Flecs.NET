@@ -7,11 +7,10 @@ public class IterIterable : GeneratorBase
     public override void Generate()
     {
         for (int i = 0; i < Generator.GenericCount; i++)
-        {
             AddSource($"IterIterable/T{i + 1}.g.cs", GenerateIterIterable(i));
-            AddSource($"IterIterable.IIterable/T{i + 1}.g.cs",
-                IIterable.GenerateExtensions(Type.IterIterable, i));
-        }
+
+        for (int i = -1; i < Generator.GenericCount; i++)
+            AddSource($"IterIterable.IIterable/T{i + 1}.g.cs", IIterable.GenerateIterators(Type.IterIterable, i));
     }
 
     private static string GenerateIterIterable(int i)

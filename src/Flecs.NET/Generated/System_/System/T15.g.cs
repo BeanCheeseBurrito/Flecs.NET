@@ -3,6 +3,8 @@
 #nullable enable
 
 using System;
+using Flecs.NET.Utilities;
+
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
@@ -30,21 +32,21 @@ public unsafe partial struct System<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     /// <param name="system">The system.</param>
     public System(System_ system)
     {
-        TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>.AssertNoTags();
+        Types<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, _>.AssertNoTags();
         _system = system;
     }
 
     /// <inheritdoc cref="System_(ecs_world_t*, ulong)"/>
     public System(ecs_world_t* world, ulong entity)
     {
-        TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>.AssertNoTags();
+        Types<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, _>.AssertNoTags();
         _system = new System_(world, entity);
     }
 
     /// <inheritdoc cref="System_(Core.Entity)"/>
     public System(Entity entity)
     {
-        TypeHelper<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>.AssertNoTags();
+        Types<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, _>.AssertNoTags();
         _system = new System_(entity);
     }
     

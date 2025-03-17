@@ -70,22 +70,34 @@ public unsafe interface IIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T
     public void Run(delegate*<Iter, void> callback);
 
     /// <summary>
+    ///     Iterates the iterable object using the provided .Run callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void Run(Ecs.RunDelegateCallback callback);
+
+    /// <summary>
+    ///     Iterates the iterable object using the provided .Run callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void Run(delegate*<Iter, Action<Iter>, void> callback);
+
+    /// <summary>
+    ///     Iterates the iterable object using the provided .Run callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void Run(Ecs.RunPointerCallback callback);
+
+    /// <summary>
+    ///     Iterates the iterable object using the provided .Run callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void Run(delegate*<Iter, delegate*<Iter, void>, void> callback);
+
+    /// <summary>
     ///     Iterates the iterable object using the provided .Iter callback.
     /// </summary>
     /// <param name="callback">The callback.</param>
     public void Iter(Ecs.IterFieldCallback<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> callback);
-
-    /// <summary>
-    ///     Iterates the iterable object using the provided .Iter callback.
-    /// </summary>
-    /// <param name="callback">The callback.</param>
-    public void Iter(Ecs.IterSpanCallback<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> callback);
-
-    /// <summary>
-    ///     Iterates the iterable object using the provided .Iter callback.
-    /// </summary>
-    /// <param name="callback">The callback.</param>
-    public void Iter(Ecs.IterPointerCallback<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> callback);
 
     /// <summary>
     ///     Iterates the iterable object using the provided .Iter callback.
@@ -97,7 +109,19 @@ public unsafe interface IIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T
     ///     Iterates the iterable object using the provided .Iter callback.
     /// </summary>
     /// <param name="callback">The callback.</param>
+    public void Iter(Ecs.IterSpanCallback<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> callback);
+
+    /// <summary>
+    ///     Iterates the iterable object using the provided .Iter callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
     public void Iter(delegate*<Iter, Span<T0>, Span<T1>, Span<T2>, Span<T3>, Span<T4>, Span<T5>, Span<T6>, Span<T7>, Span<T8>, Span<T9>, Span<T10>, Span<T11>, Span<T12>, Span<T13>, Span<T14>, Span<T15>, void> callback);
+
+    /// <summary>
+    ///     Iterates the iterable object using the provided .Iter callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void Iter(Ecs.IterPointerCallback<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> callback);
 
     /// <summary>
     ///     Iterates the iterable object using the provided .Iter callback.

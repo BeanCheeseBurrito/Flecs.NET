@@ -16,7 +16,11 @@ public class IIterable : GeneratorBase
 
     public static string GenerateIIterableInterface(int i)
     {
-        IEnumerable<string> iterators = Generator.CallbacksRunAndIterAndEachAndFind.Select((Callback callback) => $$"""
+        IEnumerable<string> iterators = Generator.GetRunCallbacks()
+            .Concat(Generator.GetIterCallbacks(i))
+            .Concat(Generator.GetEachCallbacks(i))
+            .Concat(Generator.GetFindCallbacks(i))
+            .Select((Callback callback) => $$"""
                 /// <summary>
                 ///     Iterates the iterable object using the provided .{{Generator.GetInvokerName(callback)}} callback.
                 /// </summary>
@@ -87,29 +91,84 @@ public class IIterable : GeneratorBase
             """;
     }
 
-    public static string GenerateExtensions(Type type, int i)
+    public static string GenerateIterators(Type type, int i)
     {
-        IEnumerable<string> iterators = Generator.CallbacksRunAndIterAndEachAndFind.Select((Callback callback) => $$"""
-                /// <summary>
-                ///     Iterates the <see cref="{{type}}"/> using the provided .{{Generator.GetInvokerName(callback)}} callback.
-                /// </summary>
-                /// <param name="callback">The callback.</param>
-                public {{Generator.GetInvokerReturnType(callback)}} {{Generator.GetInvokerName(callback)}}({{Generator.GetCallbackType(callback, i)}} callback)
+        string GenerateComment(Callback callback)
+        {
+            return $$"""
+                    /// <summary>
+                    ///     Iterates the <see cref="{{type}}"/> using the provided .{{Generator.GetInvokerName(callback)}} callback.
+                    /// </summary>
+                    /// <param name="callback">The callback.</param>
+                """;
+        }
+
+        IEnumerable<string> run = Generator.GetRunCallbacks().Select((Callback callback) => $$"""
+            {{GenerateComment(callback)}}
+                public void {{Generator.GetInvokerName(callback)}}({{Generator.GetCallbackType(callback)}} callback)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertReferenceTypes({{(Generator.GetCallbackIsUnmanaged(callback) ? "false" : "true")}});
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertSparseTypes(Ecs.GetIterableWorld(ref this), {{(Generator.GetCallbackIsIter(callback) ? "false" : "true")}});
-                    {{Generator.GetInvokerReturn(callback)}}Invoker.{{Generator.GetInvokerName(callback)}}(ref this, callback);
+                    {{Generator.GetTypeName(Type.Invoker, i)}}.Run<{{Generator.GetTypeName(type, i)}}, {{Generator.GetCallbackName(callback)}}>(ref this, callback);
+                }
+                
+            {{GenerateComment(callback)}}
+                public void RunJob({{Generator.GetCallbackType(callback, i)}} callback)
+                {
+                    {{Generator.GetTypeName(Type.Invoker, i)}}.Job<{{Generator.GetTypeName(type, i)}}, {{Generator.GetCallbackName(callback)}}>(ref this, callback);
+                }
+            """);
+
+        IEnumerable<string> iter = Generator.GetIterCallbacks(i).Select((Callback callback) => $$"""
+            {{GenerateComment(callback)}}
+                public void Iter({{Generator.GetCallbackType(callback, i)}} callback)
+                {
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertReferenceTypes({{(Generator.GetCallbackIsUnmanaged(callback) ? "false" : "true")}});
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+                    {{Generator.GetTypeName(Type.Invoker, i)}}.Iter<{{Generator.GetTypeName(type, i)}}, {{Generator.GetCallbackName(callback, i)}}>(ref this, callback);
+                }
+                
+            {{GenerateComment(callback)}}
+                public void IterJob({{Generator.GetCallbackType(callback, i)}} callback)
+                {
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertReferenceTypes({{(Generator.GetCallbackIsUnmanaged(callback) ? "false" : "true")}});
+                    {{Generator.GetTypeName(Type.Invoker, i)}}.Job<{{Generator.GetTypeName(type, i)}}, {{Generator.GetCallbackName(callback, i)}}>(ref this, callback);
+                }
+            """);
+
+        IEnumerable<string> each = Generator.GetEachCallbacks(i).Select((Callback callback) => $$"""
+            {{GenerateComment(callback)}}
+                public void Each({{Generator.GetCallbackType(callback, i)}} callback)
+                {
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertReferenceTypes({{(Generator.GetCallbackIsUnmanaged(callback) ? "false" : "true")}});
+                    {{Generator.GetTypeName(Type.Invoker, i)}}.Each<{{Generator.GetTypeName(type, i)}}, {{Generator.GetCallbackName(callback, i)}}>(ref this, callback);
+                }
+                
+            {{GenerateComment(callback)}}
+                public void EachJob({{Generator.GetCallbackType(callback, i)}} callback)
+                {
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertReferenceTypes({{(Generator.GetCallbackIsUnmanaged(callback) ? "false" : "true")}});
+                    {{Generator.GetTypeName(Type.Invoker, i)}}.Job<{{Generator.GetTypeName(type, i)}}, {{Generator.GetCallbackName(callback, i)}}>(ref this, callback);
+                }
+            """);
+
+        IEnumerable<string> find = Generator.GetFindCallbacks(i).Select((Callback callback) => $$"""
+            {{GenerateComment(callback)}}
+                public Entity Find({{Generator.GetCallbackType(callback, i)}} callback)
+                {
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertReferenceTypes({{(Generator.GetCallbackIsUnmanaged(callback) ? "false" : "true")}});
+                    return {{Generator.GetTypeName(Type.Invoker, i)}}.Find<{{Generator.GetTypeName(type, i)}}, {{Generator.GetCallbackName(callback, i)}}>(ref this, callback);
                 }
             """);
 
         return $$"""
             using System;
+            using Flecs.NET.Core.Invokers;
+            using Flecs.NET.Utilities;
 
             namespace Flecs.NET.Core;
 
             public unsafe partial struct {{Generator.GetTypeName(type, i)}}
             {
-            {{string.Join(Separator.DoubleNewLine, iterators)}}
+            {{string.Join(Separator.DoubleNewLine, run.Concat(iter).Concat(each).Concat(find))}}
             }
             """;
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Flecs.NET.Core;
 using Xunit;
 
@@ -6,6 +7,18 @@ namespace Flecs.NET.Tests.CSharp.Core;
 
 public unsafe class QueryTests
 {
+    private enum CallbackKind
+    {
+        Delegate,
+        Pointer
+    }
+
+    public static IEnumerable<object[]> TestData =
+    [
+        [CallbackKind.Delegate],
+        [CallbackKind.Pointer],
+    ];
+
     [Fact]
     private void IterCallbackDelegate()
     {
@@ -1011,5 +1024,44 @@ public unsafe class QueryTests
             .Build();
 
         query.Each((Iter _, int _) => { });
+    }
+
+    [Theory]
+    [MemberData(nameof(TestData))]
+    private void EachJob(CallbackKind callbackKind)
+    {
+        using World world = World.Create();
+        using Query<Position, Velocity> query = world.Query<Position, Velocity>();
+
+        world.SetStageCount(Environment.ProcessorCount);
+
+        Assert.Equal(Environment.ProcessorCount, world.GetStageCount());
+
+        Span<Entity> entities = stackalloc Entity[1000];
+
+        for (int i = 0; i < 1000; i++)
+        {
+            entities[i] = world.Entity()
+                .Set(new Position(i, 0))
+                .Set(new Velocity(0, i));
+
+            if (int.IsEvenInteger(i))
+                entities[i].Set(new Mass(i));
+        }
+
+        if (callbackKind == CallbackKind.Delegate)
+            query.EachJob(Callback);
+        else
+            query.EachJob(&Callback);
+
+        for (int i = 0; i < 1000; i++)
+            Assert.Equal(new Position(i, i), entities[i].Get<Position>());
+
+        return;
+
+        static void Callback(Entity e, ref Position p, ref Velocity v)
+        {
+            e.Set(new Position(p.X + v.X, p.Y + v.Y));
+        }
     }
 }

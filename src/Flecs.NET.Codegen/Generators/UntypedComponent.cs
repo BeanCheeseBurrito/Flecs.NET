@@ -8,5 +8,6 @@ public class UntypedComponent : GeneratorBase
     {
         AddSource($"UntypedComponent.Id.g.cs", Id.GenerateExtensions(Type.UntypedComponent));
         AddSource($"UntypedComponent.Entity.g.cs", Entity.GenerateExtensions(Type.UntypedComponent));
+        AddSource($"UntypedComponent.Entity.Observe.g.cs", Entity.GenerateObserveFunctions(Type.UntypedComponent));
     }
 }

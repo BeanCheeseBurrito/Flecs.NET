@@ -7,6 +7,12 @@ public enum Callback
     RunCallbackDelegate,
     RunCallbackPointer,
 
+    RunDelegateCallbackDelegate,
+    RunDelegateCallbackPointer,
+
+    RunPointerCallbackDelegate,
+    RunPointerCallbackPointer,
+
     #endregion
 
     #region Iter
@@ -26,9 +32,9 @@ public enum Callback
     #region Each
 
     EachEntityCallbackDelegate,
-    EachIterCallbackDelegate,
-
     EachEntityCallbackPointer,
+
+    EachIterCallbackDelegate,
     EachIterCallbackPointer,
 
     EachRefCallbackDelegate,
@@ -51,6 +57,12 @@ public enum Callback
 
     #region Find
 
+    FindEntityCallbackDelegate,
+    FindEntityCallbackPointer,
+
+    FindIterCallbackDelegate,
+    FindIterCallbackPointer,
+
     FindRefCallbackDelegate,
     FindEntityRefCallbackDelegate,
     FindIterRefCallbackDelegate,
@@ -66,6 +78,28 @@ public enum Callback
     FindPointerCallbackPointer,
     FindEntityPointerCallbackPointer,
     FindIterPointerCallbackPointer,
+
+    #endregion
+
+    #region Observe
+
+    ObserveCallbackDelegate,
+    ObserveCallbackPointer,
+
+    ObserveRefCallbackDelegate,
+    ObserveRefCallbackPointer,
+
+    ObservePointerCallbackDelegate,
+    ObservePointerCallbackPointer,
+
+    ObserveEntityCallbackDelegate,
+    ObserveEntityCallbackPointer,
+
+    ObserveEntityRefCallbackDelegate,
+    ObserveEntityRefCallbackPointer,
+
+    ObserveEntityPointerCallbackDelegate,
+    ObserveEntityPointerCallbackPointer,
 
     #endregion
 

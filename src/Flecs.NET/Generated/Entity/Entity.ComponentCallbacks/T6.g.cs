@@ -27,7 +27,7 @@ public unsafe partial struct Entity
     /// <returns>True if the entity has the specified components.</returns>
     public bool Read<T0, T1, T2, T3, T4, T5>(Ecs.ReadRefCallback<T0, T1, T2, T3, T4, T5> callback)
     {
-        return Invoker.Read(World, Id, callback);
+        return Invoker<T0, T1, T2, T3, T4, T5, _, _, _, _, _, _, _, _, _, _>.Read<ReadRefCallbackDelegate<T0, T1, T2, T3, T4, T5>>(new Entity(World, Id), callback);
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public unsafe partial struct Entity
     /// <returns>True if the entity has the specified components.</returns>
     public bool Write<T0, T1, T2, T3, T4, T5>(Ecs.WriteRefCallback<T0, T1, T2, T3, T4, T5> callback)
     {
-        return Invoker.Write(World, Id, callback);
+        return Invoker<T0, T1, T2, T3, T4, T5, _, _, _, _, _, _, _, _, _, _>.Write<WriteRefCallbackDelegate<T0, T1, T2, T3, T4, T5>>(new Entity(World, Id), callback);
     }
 
     /// <summary>
@@ -74,7 +74,7 @@ public unsafe partial struct Entity
     /// <returns>Reference to self.</returns>
     public ref Entity Insert<T0, T1, T2, T3, T4, T5>(Ecs.InsertRefCallback<T0, T1, T2, T3, T4, T5> callback)
     {
-        Invoker.Insert(World, Id, callback);
+        Invoker<T0, T1, T2, T3, T4, T5, _, _, _, _, _, _, _, _, _, _>.Insert<InsertRefCallbackDelegate<T0, T1, T2, T3, T4, T5>>(new Entity(World, Id), callback);
         return ref this;
     }
 }

@@ -17,6 +17,8 @@ public class QueryBuilder : GeneratorBase
     {
         return $$"""
             #nullable enable
+            
+            using Flecs.NET.Utilities;
 
             using static Flecs.NET.Bindings.flecs;
 
@@ -41,21 +43,21 @@ public class QueryBuilder : GeneratorBase
                 /// <inheritdoc cref="QueryBuilder(ecs_world_t*)"/>
                 public QueryBuilder(ecs_world_t* world)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _queryBuilder = new QueryBuilder(world){{Generator.WithChain[i]}};
                 }
             
                 /// <inheritdoc cref="QueryBuilder(ecs_world_t*, ulong)"/>
                 public QueryBuilder(ecs_world_t* world, ulong entity)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _queryBuilder = new QueryBuilder(world, entity){{Generator.WithChain[i]}};
                 }
             
                 /// <inheritdoc cref="QueryBuilder(ecs_world_t*, string)"/>
                 public QueryBuilder(ecs_world_t* world, string name)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _queryBuilder = new QueryBuilder(world, name){{Generator.WithChain[i]}};
                 }
             
@@ -102,6 +104,7 @@ public class QueryBuilder : GeneratorBase
     {
         return $$"""
             using System;
+            
             using static Flecs.NET.Bindings.flecs;
 
             namespace Flecs.NET.Core;

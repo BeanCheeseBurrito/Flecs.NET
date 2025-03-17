@@ -11,11 +11,11 @@ public class ObserverBuilder : GeneratorBase
         for (int i = 0; i < Generator.GenericCount; i++)
         {
             AddSource($"ObserverBuilder/T{i + 1}.g.cs", GenerateObserverBuilder(i));
-            AddSource($"ObserverBuilder.QueryBuilder/T{i + 1}.g.cs",
-                QueryBuilder.GenerateExtensions(Type.ObserverBuilder, i));
-            AddSource($"ObserverBuilder.NodeBuilder/T{i + 1}.g.cs",
-                NodeBuilder.GenerateExtensions(Type.ObserverBuilder, Type.Observer, i));
+            AddSource($"ObserverBuilder.QueryBuilder/T{i + 1}.g.cs", QueryBuilder.GenerateExtensions(Type.ObserverBuilder, i));
         }
+
+        for (int i = -1; i < Generator.GenericCount; i++)
+            AddSource($"ObserverBuilder.NodeBuilder/T{i + 1}.g.cs", NodeBuilder.GenerateExtensions(Type.ObserverBuilder, Type.Observer, i));
     }
 
     private static string GenerateObserverBuilder(int i)
@@ -24,6 +24,8 @@ public class ObserverBuilder : GeneratorBase
             #nullable enable
 
             using System;
+            using Flecs.NET.Utilities;
+            
             using static Flecs.NET.Bindings.flecs;
 
             namespace Flecs.NET.Core;
@@ -51,21 +53,21 @@ public class ObserverBuilder : GeneratorBase
                 /// <param name="observerBuilder">The observer builder.</param>
                 public ObserverBuilder(ObserverBuilder observerBuilder)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _observerBuilder = observerBuilder;
                 }
             
                 /// <inheritdoc cref="ObserverBuilder(ecs_world_t*)"/>
                 public ObserverBuilder(ecs_world_t* world)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _observerBuilder = new ObserverBuilder(world){{Generator.WithChain[i]}};
                 }
             
                 /// <inheritdoc cref="ObserverBuilder(ecs_world_t*, string)"/>
                 public ObserverBuilder(ecs_world_t* world, string name)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _observerBuilder = new ObserverBuilder(world, name){{Generator.WithChain[i]}};
                 }
             
@@ -137,66 +139,14 @@ public class ObserverBuilder : GeneratorBase
                     _observerBuilder.Ctx(ref value, callback);
                     return ref this;
                 }
-                
-                /// <inheritdoc cref="ObserverBuilder.Run(System.Action)"/>
-                public {{Generator.GetTypeName(Type.Observer, i)}} Run(Action callback)
-                {
-                    return new {{Generator.GetTypeName(Type.Observer, i)}}(_observerBuilder.Run(callback));
-                }
-                
-                /// <inheritdoc cref="ObserverBuilder.Run(System.Action)"/>
-                public {{Generator.GetTypeName(Type.Observer, i)}} Run(delegate*<void> callback)
-                {
-                    return new {{Generator.GetTypeName(Type.Observer, i)}}(_observerBuilder.Run(callback));
-                }
             
-                /// <inheritdoc cref="ObserverBuilder.Run(Ecs.RunDelegateCallback)"/>
-                public ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} Run(Ecs.RunDelegateCallback callback)
-                {
-                    _observerBuilder.Run(callback);
-                    return ref this;
-                }
-            
-                /// <inheritdoc cref="ObserverBuilder.Run(Ecs.RunDelegateCallback)"/>
-                public ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} Run(delegate*<Iter, Action<Iter>, void> callback)
-                {
-                    _observerBuilder.Run(callback);
-                    return ref this;
-                }
-            
-                /// <inheritdoc cref="ObserverBuilder.Run(Ecs.RunPointerCallback)"/>
-                public ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} Run(Ecs.RunPointerCallback callback)
-                {
-                    _observerBuilder.Run(callback);
-                    return ref this;
-                }
-            
-                /// <inheritdoc cref="ObserverBuilder.Run(Ecs.RunPointerCallback)"/>
-                public ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} Run(delegate*<Iter, delegate*<Iter, void>, void> callback)
-                {
-                    _observerBuilder.Run(callback);
-                    return ref this;
-                }
-            
-                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetCallback<T>(T callback, void* invoker) where T : Delegate
+                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetCallback(InvokerCallback callback, delegate*<ecs_iter_t*, void> invoker)
                 {
                     _observerBuilder.SetCallback(callback, invoker);
                     return ref this;
                 }
             
-                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetCallback(void* callback, void* invoker)
-                {
-                    _observerBuilder.SetCallback(callback, invoker);
-                    return ref this;
-                }
-            
-                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetRun<T>(T callback, void* invoker) where T : Delegate
-                {
-                    _observerBuilder.SetRun(callback, invoker);
-                    return ref this;
-                }
-            
-                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetRun(void* callback, void* invoker)
+                private ref {{Generator.GetTypeName(Type.ObserverBuilder, i)}} SetRun(InvokerCallback callback, delegate*<ecs_iter_t*, void> invoker)
                 {
                     _observerBuilder.SetRun(callback, invoker);
                     return ref this;
