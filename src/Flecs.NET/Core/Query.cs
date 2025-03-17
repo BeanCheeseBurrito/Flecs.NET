@@ -9,14 +9,12 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     A wrapper around ecs_query_t.
 /// </summary>
-public unsafe partial struct Query : IEquatable<Query>, IDisposable, IIterable
+public unsafe partial struct Query : IEquatable<Query>, IDisposable
 {
-    private ecs_query_t* _handle;
-
     /// <summary>
-    ///     A reference to the handle.
+    ///     The underlying <see cref="ecs_query_t"/>* handle.
     /// </summary>
-    public ref ecs_query_t* Handle => ref _handle;
+    public ecs_query_t* Handle;
 
     /// <summary>
     ///     Creates a query from a handle.
@@ -24,7 +22,7 @@ public unsafe partial struct Query : IEquatable<Query>, IDisposable, IIterable
     /// <param name="query">The query pointer.</param>
     public Query(ecs_query_t* query)
     {
-        _handle = query;
+        Handle = query;
     }
 
     /// <summary>
@@ -48,13 +46,13 @@ public unsafe partial struct Query : IEquatable<Query>, IDisposable, IIterable
 
             if (poly != null)
             {
-                _handle = (ecs_query_t*)poly->poly;
+                Handle = (ecs_query_t*)poly->poly;
                 return;
             }
         }
 
         ecs_query_desc_t desc = default;
-        _handle = ecs_query_init(entity.World, &desc);
+        Handle = ecs_query_init(entity.World, &desc);
     }
 
     /// <summary>
@@ -312,15 +310,23 @@ public unsafe partial struct Query
     }
 }
 
+// IQuery Interface
+public unsafe partial struct Query : IQuery
+{
+    ref Query IQuery.Underlying => ref this;
+    ecs_query_t* IQuery.Handle => Handle;
+}
+
+
 // IIterableBase Interface
-public unsafe partial struct Query
+public unsafe partial struct Query : IIterableBase
 {
     /// <inheritdoc cref="IIterableBase.World"/>
-    ref ecs_world_t* IIterableBase.World => ref _handle->world;
+    ecs_world_t* IIterableBase.World => Handle->world;
 
     /// <inheritdoc cref="IIterableBase.GetIter"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ecs_iter_t GetIter(ecs_world_t* world = null)
+    public ecs_iter_t GetIter(World world = default)
     {
         Ecs.Assert(Handle != null, "Cannot iterate invalid query.");
 
@@ -332,14 +338,14 @@ public unsafe partial struct Query
 
     /// <inheritdoc cref="IIterableBase.GetNext"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool GetNext(ecs_iter_t* it)
+    public bool GetNext(Iter it)
     {
         return ecs_query_next(it);
     }
 }
 
 // IIterable Interface
-public unsafe partial struct Query
+public unsafe partial struct Query : IIterable
 {
     /// <inheritdoc cref="IIterable.Run(Ecs.RunCallback)"/>
     public void Run(Ecs.RunCallback callback)

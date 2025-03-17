@@ -317,8 +317,8 @@ public static unsafe partial class Ecs
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static ref ecs_world_t* GetIterableWorld<T>(ref T obj) where T : IIterableBase
+    internal static ecs_world_t* GetIterableWorld<T>(ref T obj) where T : IIterableBase
     {
-        return ref obj.World;
+        return obj.World;
     }
 }

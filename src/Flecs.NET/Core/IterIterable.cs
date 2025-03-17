@@ -8,20 +8,27 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     An iterator object that can be modified before iterating.
 /// </summary>
-public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
+public unsafe partial struct IterIterable : IEquatable<IterIterable>
 {
-    private ecs_iter_t _iter;
-    private IterableType _iterableType;
+    /// <summary>
+    ///     The iterator instance.
+    /// </summary>
+    public ecs_iter_t Iterator;
+
+    /// <summary>
+    ///     The iterable type.
+    /// </summary>
+    public readonly IterableType IterableType;
 
     /// <summary>
     ///     Creates an iter iterable.
     /// </summary>
-    /// <param name="iter">The iterator.</param>
+    /// <param name="iterator">The iterator source.</param>
     /// <param name="iterableType">The iterator type.</param>
-    public IterIterable(ecs_iter_t iter, IterableType iterableType)
+    public IterIterable(ecs_iter_t iterator, IterableType iterableType)
     {
-        _iter = iter;
-        _iterableType = iterableType;
+        Iterator = iterator;
+        IterableType = iterableType;
     }
 
     /// <summary>
@@ -32,7 +39,7 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns>Reference to self.</returns>
     public ref IterIterable SetVar(int varId, ulong value)
     {
-        fixed (ecs_iter_t* it = &_iter)
+        fixed (ecs_iter_t* it = &Iterator)
         {
             Ecs.Assert(varId != -1, nameof(ECS_INVALID_PARAMETER));
             ecs_iter_set_var(it, varId, value);
@@ -48,7 +55,7 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns>Reference to self.</returns>
     public ref IterIterable SetVar(string name, ulong value)
     {
-        fixed (ecs_iter_t* it = &_iter)
+        fixed (ecs_iter_t* it = &Iterator)
         {
             using NativeString nativeName = (NativeString)name;
 
@@ -70,7 +77,7 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns>Reference to self.</returns>
     public ref IterIterable SetVar(string name, ecs_table_t* value)
     {
-        fixed (ecs_iter_t* it = &_iter)
+        fixed (ecs_iter_t* it = &Iterator)
         {
             using NativeString nativeName = (NativeString)name;
 
@@ -92,7 +99,7 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns>Reference to self.</returns>
     public ref IterIterable SetVar(string name, ecs_table_range_t value)
     {
-        fixed (ecs_iter_t* it = &_iter)
+        fixed (ecs_iter_t* it = &Iterator)
         {
             using NativeString nativeName = (NativeString)name;
 
@@ -128,7 +135,7 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns>A JSON string with the serialized iterator data, or an empty string if failed.</returns>
     public string ToJson(in IterToJsonDesc desc)
     {
-        fixed (ecs_iter_t* it = &_iter)
+        fixed (ecs_iter_t* it = &Iterator)
         fixed (ecs_iter_to_json_desc_t* ptr = &desc.Desc)
         {
             return NativeString.GetStringAndFree(ecs_iter_to_json(it, ptr));
@@ -141,7 +148,7 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns>A JSON string with the serialized iterator data, or an empty string if failed.</returns>
     public string ToJson()
     {
-        fixed (ecs_iter_t* it = &_iter)
+        fixed (ecs_iter_t* it = &Iterator)
         {
             return NativeString.GetStringAndFree(ecs_iter_to_json(it, null));
         }
@@ -153,11 +160,11 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns></returns>
     public int Count()
     {
-        fixed (ecs_iter_t* it = &_iter)
+        fixed (ecs_iter_t* it = &Iterator)
         {
             int result = 0;
-            while (GetNext(it))
-                result += _iter.count;
+            while (this.GetNext(it))
+                result += Iterator.count;
             return result;
         }
     }
@@ -168,9 +175,9 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns></returns>
     public bool IsTrue()
     {
-        fixed (ecs_iter_t* it = &_iter)
+        fixed (ecs_iter_t* it = &Iterator)
         {
-            bool result = GetNext(it);
+            bool result = this.GetNext(it);
             if (result)
                 ecs_iter_fini(it);
             return result;
@@ -183,11 +190,11 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns></returns>
     public Entity First()
     {
-        fixed (ecs_iter_t* it = &_iter)
+        fixed (ecs_iter_t* it = &Iterator)
         {
             Entity result = default;
 
-            if (GetNext(it) && it->count != 0)
+            if (this.GetNext(it) && it->count != 0)
             {
                 result = new Entity(it->world, it->entities[0]);
                 ecs_iter_fini(it);
@@ -204,7 +211,7 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns>Reference to self.</returns>
     public ref IterIterable SetGroup(ulong groupId)
     {
-        fixed (ecs_iter_t* it = &_iter)
+        fixed (ecs_iter_t* it = &Iterator)
         {
             ecs_iter_set_group(it, groupId);
             return ref this;
@@ -218,7 +225,7 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns>Reference to self.</returns>
     public ref IterIterable SetGroup<T>()
     {
-        fixed (ecs_iter_t* it = &_iter)
+        fixed (ecs_iter_t* it = &Iterator)
         {
             ecs_iter_set_group(it, Type<T>.Id(it->real_world));
             return ref this;
@@ -232,7 +239,7 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns></returns>
     public bool Equals(IterIterable other)
     {
-        return Equals(_iter, other._iter) && Equals(_iterableType, other._iterableType);
+        return Iterator == other.Iterator && IterableType == other.IterableType;
     }
 
     /// <summary>
@@ -251,7 +258,7 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     /// <returns></returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(_iter.GetHashCode(), _iterableType.GetHashCode());
+        return HashCode.Combine(Iterator.GetHashCode(), IterableType.GetHashCode());
     }
 
     /// <summary>
@@ -277,29 +284,37 @@ public unsafe partial struct IterIterable : IEquatable<IterIterable>, IIterable
     }
 }
 
+// IIterIterable Interface
+public unsafe partial struct IterIterable : IIterIterable
+{
+    ref IterIterable IIterIterable.Underlying => ref this;
+    ref ecs_iter_t IIterIterable.Iterator => ref Iterator;
+    IterableType IIterIterable.IterableType => IterableType;
+}
+
 // IIterableBase Interface
-public unsafe partial struct IterIterable
+public unsafe partial struct IterIterable : IIterableBase
 {
     /// <inheritdoc cref="IIterableBase.World"/>
-    public ref ecs_world_t* World => ref _iter.world;
+    ecs_world_t* IIterableBase.World => Iterator.world;
 
     /// <inheritdoc cref="IIterableBase.GetIter"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ecs_iter_t GetIter(ecs_world_t* world = null)
+    public ecs_iter_t GetIter(World world = default)
     {
         if (world == null)
-            return _iter;
+            return Iterator;
 
-        ecs_iter_t result = _iter;
-        result.world = world;
-        return result;
+        return world == null
+            ? Iterator
+            : Iterator with { world = world };
     }
 
     /// <inheritdoc cref="IIterableBase.GetNext"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool GetNext(ecs_iter_t* it)
+    public bool GetNext(Iter it)
     {
-        return _iterableType switch
+        return IterableType switch
         {
             IterableType.Query => ecs_query_next(it),
             IterableType.Worker => ecs_worker_next(it),
@@ -310,7 +325,7 @@ public unsafe partial struct IterIterable
 }
 
 // IIterable Interface
-public unsafe partial struct IterIterable
+public unsafe partial struct IterIterable : IIterable
 {
     /// <inheritdoc cref="IIterable.Run(Ecs.RunCallback)"/>
     public void Run(Ecs.RunCallback callback)
@@ -375,7 +390,7 @@ public unsafe partial struct IterIterable
     /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.World)"/>
     public IterIterable Iter(World world = default)
     {
-        return new IterIterable(GetIter(world), _iterableType);
+        return new IterIterable(GetIter(world), IterableType);
     }
 
     /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.Iter)"/>

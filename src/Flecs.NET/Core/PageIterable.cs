@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.CompilerServices;
-using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
@@ -8,23 +7,34 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///      An iterator that limits the returned entities with offset/limit.
 /// </summary>
-public partial struct PageIterable : IEquatable<PageIterable>, IIterable
+public partial struct PageIterable : IEquatable<PageIterable>
 {
-    private ecs_iter_t _iter;
-    private readonly int _offset;
-    private readonly int _limit;
+    /// <summary>
+    ///     The iterator instance.
+    /// </summary>
+    public ecs_iter_t Iterator;
+
+    /// <summary>
+    ///     The number of entities to skip.
+    /// </summary>
+    public readonly int Offset;
+
+    /// <summary>
+    ///     The max number of entities to return.
+    /// </summary>
+    public readonly int Limit;
 
     /// <summary>
     ///     Creates a <see cref="PageIterable"/>.
     /// </summary>
-    /// <param name="iter">The source iterator.</param>
+    /// <param name="iterator">The source iterator.</param>
     /// <param name="offset">The number of entities to skip.</param>
     /// <param name="limit">The maximum number of entities to return.</param>
-    public PageIterable(ecs_iter_t iter, int offset, int limit)
+    public PageIterable(ecs_iter_t iterator, int offset, int limit)
     {
-        _iter = iter;
-        _offset = offset;
-        _limit = limit;
+        Iterator = iterator;
+        Offset = offset;
+        Limit = limit;
     }
 
     /// <summary>
@@ -34,7 +44,7 @@ public partial struct PageIterable : IEquatable<PageIterable>, IIterable
     /// <returns></returns>
     public bool Equals(PageIterable other)
     {
-        return Equals(_iter, other._iter) && Equals(_offset, other._offset) && Equals(_limit, other._limit);
+        return Iterator == other.Iterator && Offset == other.Offset && Limit == other.Limit;
     }
 
     /// <summary>
@@ -53,7 +63,7 @@ public partial struct PageIterable : IEquatable<PageIterable>, IIterable
     /// <returns></returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(_iter.GetHashCode(), _offset, _limit);
+        return HashCode.Combine(Iterator, Offset, Limit);
     }
 
     /// <summary>
@@ -79,30 +89,39 @@ public partial struct PageIterable : IEquatable<PageIterable>, IIterable
     }
 }
 
+// IPageIterable Interface
+public unsafe partial struct PageIterable : IPageIterable
+{
+    ref PageIterable IPageIterable.Underlying => ref this;
+    ref ecs_iter_t IPageIterable.Iterator => ref Iterator;
+    int IPageIterable.Offset => Offset;
+    int IPageIterable.Limit => Limit;
+}
+
 // IIterableBase Interface
-public unsafe partial struct PageIterable
+public unsafe partial struct PageIterable: IIterableBase
 {
     /// <inheritdoc cref="IIterableBase.World"/>
-    public ref ecs_world_t* World => ref _iter.world;
+    ecs_world_t* IIterableBase.World => Iterator.world;
 
     /// <inheritdoc cref="IIterableBase.GetIter"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ecs_iter_t GetIter(ecs_world_t* world = null)
+    public ecs_iter_t GetIter(World world = default)
     {
-        fixed (ecs_iter_t* ptr = &_iter)
-            return ecs_page_iter(ptr, _offset, _limit);
+        fixed (ecs_iter_t* ptr = &Iterator)
+            return ecs_page_iter(ptr, Offset, Limit);
     }
 
     /// <inheritdoc cref="IIterableBase.GetNext"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool GetNext(ecs_iter_t* it)
+    public bool GetNext(Iter it)
     {
         return ecs_page_next(it);
     }
 }
 
 // IIterable Interface
-public unsafe partial struct PageIterable
+public unsafe partial struct PageIterable : IIterable
 {
     /// <inheritdoc cref="IIterable.Run(Ecs.RunCallback)"/>
     public void Run(Ecs.RunCallback callback)

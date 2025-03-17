@@ -6,15 +6,19 @@ namespace Flecs.NET.Core;
 public enum IterableType
 {
     /// <summary>
+    ///     Iter iterable.
+    /// </summary>
+    Iter,
+    /// <summary>
+    ///     Page iterable.
+    /// </summary>
+    Page,
+    /// <summary>
     ///     Query iterable.
     /// </summary>
     Query,
     /// <summary>
     ///     Worker iterable.
     /// </summary>
-    Worker,
-    /// <summary>
-    ///     Page iterable.
-    /// </summary>
-    Page
+    Worker
 }

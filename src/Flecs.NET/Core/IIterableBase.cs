@@ -8,20 +8,21 @@ namespace Flecs.NET.Core;
 public unsafe interface IIterableBase
 {
     /// <summary>
-    ///     Reference to the world.
+    ///     The world.
     /// </summary>
-    public ref ecs_world_t* World { get; }
+    ecs_world_t* World { get; }
 
     /// <summary>
-    ///     Iterate a query.
+    ///     Retrieves an iterator for this iterable object.
     /// </summary>
+    /// <param name="world">The world or stage to use with the iterator.</param>
     /// <returns>An iterator.</returns>
-    public ecs_iter_t GetIter(ecs_world_t* world = null);
+    public ecs_iter_t GetIter(World world = default);
 
     /// <summary>
-    ///     Progress iterator.
+    ///     Progresses the iterator object and returns true if the iterator has more results.
     /// </summary>
-    /// <param name="it">The iterator.</param>
-    /// <returns>The result.</returns>
-    public bool GetNext(ecs_iter_t* it);
+    /// <param name="it">The iterator object.</param>
+    /// <returns>True if the iterator has more results.</returns>
+    public bool GetNext(Iter it);
 }
