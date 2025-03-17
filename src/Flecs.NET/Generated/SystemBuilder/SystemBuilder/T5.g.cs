@@ -3,6 +3,8 @@
 #nullable enable
 
 using System;
+using Flecs.NET.Utilities;
+
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
@@ -30,21 +32,21 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4> : IDisposable, IE
     /// <param name="systemBuilder">The system builder.</param>
     public SystemBuilder(SystemBuilder systemBuilder)
     {
-        TypeHelper<T0, T1, T2, T3, T4>.AssertNoTags();
+        Types<T0, T1, T2, T3, T4, _, _, _, _, _, _, _, _, _, _, _>.AssertNoTags();
         _systemBuilder = systemBuilder;
     }
 
     /// <inheritdoc cref="SystemBuilder(ecs_world_t*)"/>
     public SystemBuilder(ecs_world_t* world)
     {
-        TypeHelper<T0, T1, T2, T3, T4>.AssertNoTags();
+        Types<T0, T1, T2, T3, T4, _, _, _, _, _, _, _, _, _, _, _>.AssertNoTags();
         _systemBuilder = new SystemBuilder(world).With<T0>().With<T1>().With<T2>().With<T3>().With<T4>();
     }
 
     /// <inheritdoc cref="SystemBuilder(ecs_world_t*, string)"/>
     public SystemBuilder(ecs_world_t* world, string name)
     {
-        TypeHelper<T0, T1, T2, T3, T4>.AssertNoTags();
+        Types<T0, T1, T2, T3, T4, _, _, _, _, _, _, _, _, _, _, _>.AssertNoTags();
         _systemBuilder = new SystemBuilder(world, name).With<T0>().With<T1>().With<T2>().With<T3>().With<T4>();
     }
 
@@ -165,66 +167,14 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4> : IDisposable, IE
         _systemBuilder.Ctx(ref value, callback);
         return ref this;
     }
-    
-    /// <inheritdoc cref="SystemBuilder.Run(System.Action)"/>
-    public System<T0, T1, T2, T3, T4> Run(Action callback)
-    {
-        return new System<T0, T1, T2, T3, T4>(_systemBuilder.Run(callback));
-    }
-    
-    /// <inheritdoc cref="SystemBuilder.Run(System.Action)"/>
-    public System<T0, T1, T2, T3, T4> Run(delegate*<void> callback)
-    {
-        return new System<T0, T1, T2, T3, T4>(_systemBuilder.Run(callback));
-    }
 
-    /// <inheritdoc cref="SystemBuilder.Run(Ecs.RunDelegateCallback)"/>
-    public ref SystemBuilder<T0, T1, T2, T3, T4> Run(Ecs.RunDelegateCallback callback)
-    {
-        _systemBuilder.Run(callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="SystemBuilder.Run(Ecs.RunDelegateCallback)"/>
-    public ref SystemBuilder<T0, T1, T2, T3, T4> Run(delegate*<Iter, Action<Iter>, void> callback)
-    {
-        _systemBuilder.Run(callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="SystemBuilder.Run(Ecs.RunPointerCallback)"/>
-    public ref SystemBuilder<T0, T1, T2, T3, T4> Run(Ecs.RunPointerCallback callback)
-    {
-        _systemBuilder.Run(callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="SystemBuilder.Run(Ecs.RunPointerCallback)"/>
-    public ref SystemBuilder<T0, T1, T2, T3, T4> Run(delegate*<Iter, delegate*<Iter, void>, void> callback)
-    {
-        _systemBuilder.Run(callback);
-        return ref this;
-    }
-
-    internal ref SystemBuilder<T0, T1, T2, T3, T4> SetCallback<T>(T callback, void* invoker) where T : Delegate
+    internal ref SystemBuilder<T0, T1, T2, T3, T4> SetCallback(InvokerCallback callback, delegate*<ecs_iter_t*, void> invoker)
     {
         _systemBuilder.SetCallback(callback, invoker);
         return ref this;
     }
 
-    internal ref SystemBuilder<T0, T1, T2, T3, T4> SetCallback(void* callback, void* invoker)
-    {
-        _systemBuilder.SetCallback(callback, invoker);
-        return ref this;
-    }
-
-    internal ref SystemBuilder<T0, T1, T2, T3, T4> SetRun<T>(T callback, void* invoker) where T : Delegate
-    {
-        _systemBuilder.SetRun(callback, invoker);
-        return ref this;
-    }
-
-    internal ref SystemBuilder<T0, T1, T2, T3, T4> SetRun(void* callback, void* invoker)
+    internal ref SystemBuilder<T0, T1, T2, T3, T4> SetRun(InvokerCallback callback, delegate*<ecs_iter_t*, void> invoker)
     {
         _systemBuilder.SetRun(callback, invoker);
         return ref this;

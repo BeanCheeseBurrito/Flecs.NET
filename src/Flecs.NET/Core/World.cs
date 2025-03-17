@@ -1,8 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Flecs.NET.Core.BindingContext;
-using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
 
@@ -90,12 +87,13 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <summary>
     ///     Calls <see cref="ecs_fini"/> and cleans up resources.
     /// </summary>
+    [SuppressMessage("Performance", "CA1806:Do not ignore method results")]
     public void Dispose()
     {
         if (Handle == null || !Ecs.IsStageOrWorld(Handle))
             return;
 
-        _ = ecs_fini(Handle);
+        ecs_fini(Handle);
     }
 
     /// <summary>
@@ -661,7 +659,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public void Insert<T>(Ecs.InsertRefCallback<T> callback)
     {
-        Invoker.Insert(Handle, Type<T>.Id(Handle), callback);
+        Invoker<T, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.Insert<InsertRefCallbackDelegate<T>>(Entity<T>(), callback);
     }
 
     /// <summary>
@@ -1291,7 +1289,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="T"></typeparam>
     public void Read<T>(Ecs.ReadRefCallback<T> callback)
     {
-        Invoker.Read(Handle, Type<T>.Id(Handle), callback);
+        Invoker<T, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.Read<ReadRefCallbackDelegate<T>>(Entity<T>(), callback);
     }
 
     /// <summary>
@@ -1301,7 +1299,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <typeparam name="T"></typeparam>
     public void Write<T>(Ecs.WriteRefCallback<T> callback)
     {
-        Invoker.Write(Handle, Type<T>.Id(Handle), callback);
+        Invoker<T, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.Write<WriteRefCallbackDelegate<T>>(Entity<T>(), callback);
     }
 
     /// <summary>
@@ -2840,7 +2838,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     {
         ecs_iter_t it = ecs_each_id(Handle, id);
         while (ecs_each_next(&it))
-            Invoker.Each(&it, callback);
+            Invoker<_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.Each<EachEntityCallbackDelegate>(&it, callback);
     }
 
     /// <summary>
@@ -2875,7 +2873,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     {
         ecs_iter_t it = ecs_each_id(Handle, Ecs.Pair<TFirst>(second, Handle));
         while (ecs_each_next(&it))
-            Invoker.Each(&it, callback);
+            Invoker<TFirst, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.Each<EachEntityRefCallbackDelegate<TFirst>>(&it, callback);
     }
 
     /// <summary>
@@ -2945,7 +2943,7 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     {
         ecs_iter_t it = ecs_each_id(Handle, Ecs.PairSecond<TSecond>(first, Handle));
         while (ecs_each_next(&it))
-            Invoker.Each(&it, callback);
+            Invoker<TSecond, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.Each<EachEntityRefCallbackDelegate<TSecond>>(&it, callback);
     }
 
     /// <summary>

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Flecs.NET.Core.BindingContext;
-using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
 
@@ -403,7 +400,7 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
 
         ecs_iter_t it = ecs_each_id(World, Ecs.Pair(relation, Id));
         while (ecs_each_next(&it))
-            Invoker.Each(&it, callback);
+            Invoker<_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.Each<EachEntityCallbackDelegate>(&it, callback);
     }
 
     /// <summary>
@@ -3056,72 +3053,6 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
     }
 
     /// <summary>
-    ///     Observe an event on this entity.
-    /// </summary>
-    /// <param name="eventId"></param>
-    /// <param name="callback"></param>
-    /// <returns></returns>
-    public ref Entity Observe(ulong eventId, Action callback)
-    {
-        return ref ObserveInternal(eventId, callback, (delegate*<ecs_iter_t*, void>)&Functions.ActionCallbackDelegate);
-    }
-
-    /// <summary>
-    ///     Observe an event on this entity.
-    /// </summary>
-    /// <param name="eventId"></param>
-    /// <param name="callback"></param>
-    /// <returns></returns>
-    public ref Entity Observe(ulong eventId, Ecs.ObserveEntityCallback callback)
-    {
-        return ref ObserveInternal(eventId, callback, (delegate*<ecs_iter_t*, void>)&Functions.ObserveEntityCallbackDelegate);
-    }
-
-    /// <summary>
-    ///     Observe an event on this entity.
-    /// </summary>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public ref Entity Observe<T>(Action callback)
-    {
-        return ref Observe(Type<T>.Id(World), callback);
-    }
-
-    /// <summary>
-    ///     Observe an event on this entity.
-    /// </summary>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public ref Entity Observe<T>(Ecs.ObserveEntityCallback callback)
-    {
-        return ref Observe(Type<T>.Id(World), callback);
-    }
-
-    /// <summary>
-    ///     Observe an event on this entity.
-    /// </summary>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public ref Entity Observe<T>(Ecs.ObserveRefCallback<T> callback)
-    {
-        return ref ObserveInternal(Type<T>.Id(World), callback, (delegate*<ecs_iter_t*, void>)&Functions.ObserveRefCallbackDelegate<T>);
-    }
-
-    /// <summary>
-    ///     Observe an event on this entity.
-    /// </summary>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public ref Entity Observe<T>(Ecs.ObserveEntityRefCallback<T> callback)
-    {
-        return ref ObserveInternal(Type<T>.Id(World), callback, (delegate*<ecs_iter_t*, void>)&Functions.ObserveEntityRefCallbackDelegate<T>);
-    }
-
-    /// <summary>
     ///     Get mutable component value (untyped).
     /// </summary>
     /// <param name="id"></param>
@@ -3542,44 +3473,6 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
         {
             ecs_set_id(World, Id, id, sizeof(T), component);
         }
-
-        return ref this;
-    }
-
-    private ref Entity ObserveInternal<T>(ulong eventId, T callback, void* invoker) where T : Delegate
-    {
-        IteratorContext* iteratorContext = Memory.AllocZeroed<IteratorContext>(1);
-        iteratorContext->Callback.Set(callback, invoker);
-
-        ecs_observer_desc_t desc = default;
-        desc.events[0] = eventId;
-        desc.query.terms[0].id = EcsAny;
-        desc.query.terms[0].src.id = Id;
-        desc.callback = &Functions.IteratorCallback;
-        desc.callback_ctx = iteratorContext;
-        desc.callback_ctx_free = &Functions.IteratorContextFree;
-
-        ulong observer = ecs_observer_init(World, &desc);
-        ecs_add_id(World, observer, Ecs.Pair(EcsChildOf, Id));
-
-        return ref this;
-    }
-
-    private ref Entity ObserveInternal<T>(ulong eventId, void* callback, void* invoker) where T : Delegate
-    {
-        IteratorContext* iteratorContext = Memory.AllocZeroed<IteratorContext>(1);
-        iteratorContext->Callback.Set(callback, invoker);
-
-        ecs_observer_desc_t desc = default;
-        desc.events[0] = eventId;
-        desc.query.terms[0].id = EcsAny;
-        desc.query.terms[0].src.id = Id;
-        desc.callback = &Functions.IteratorCallback;
-        desc.callback_ctx = iteratorContext;
-        desc.callback_ctx_free = &Functions.IteratorContextFree;
-
-        ulong observer = ecs_observer_init(World, &desc);
-        ecs_add_id(World, observer, Ecs.Pair(EcsChildOf, Id));
 
         return ref this;
     }

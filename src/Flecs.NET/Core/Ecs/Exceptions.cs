@@ -1,9 +1,15 @@
 using System;
+using System.Collections.Concurrent;
 
 namespace Flecs.NET.Core;
 
 public static partial class Ecs
 {
+    /// <summary>
+    ///     Stores exceptions caught inside multithreaded queries.
+    /// </summary>
+    internal static ConcurrentQueue<Exception> Exceptions = new();
+
     /// <summary>
     ///     Flecs.NET assertion exception.
     /// </summary>

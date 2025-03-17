@@ -7,11 +7,10 @@ public class WorkerIterable : GeneratorBase
     public override void Generate()
     {
         for (int i = 0; i < Generator.GenericCount; i++)
-        {
             AddSource($"WorkerIterable/T{i + 1}.g.cs", GenerateWorkerIterable(i));
-            AddSource($"WorkerIterable.IIterable/T{i + 1}.g.cs",
-                IIterable.GenerateExtensions(Type.WorkerIterable, i));
-        }
+
+        for (int i = -1; i < Generator.GenericCount; i++)
+            AddSource($"WorkerIterable.IIterable/T{i + 1}.g.cs", IIterable.GenerateIterators(Type.WorkerIterable, i));
     }
 
     private static string GenerateWorkerIterable(int i)

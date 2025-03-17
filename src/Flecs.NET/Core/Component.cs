@@ -579,7 +579,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(Ecs.IterSpanCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnAddIterSpanCallbackDelegate<TComponent>);
     }
 
@@ -590,7 +590,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(Ecs.IterPointerCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnAddIterPointerCallbackDelegate<TComponent>);
     }
 
@@ -631,7 +631,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(Ecs.EachPointerCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnAddEachPointerCallbackDelegate<TComponent>);
     }
 
@@ -642,7 +642,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(Ecs.EachEntityPointerCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnAddEachEntityPointerCallbackDelegate<TComponent>);
     }
 
@@ -653,7 +653,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(Ecs.EachIterPointerCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnAddEachIterPointerCallbackDelegate<TComponent>);
     }
 
@@ -674,7 +674,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(Ecs.IterSpanCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnSetIterSpanCallbackDelegate<TComponent>);
     }
 
@@ -685,7 +685,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(Ecs.IterPointerCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnSetIterPointerCallbackDelegate<TComponent>);
     }
 
@@ -726,7 +726,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(Ecs.EachPointerCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnSetEachPointerCallbackDelegate<TComponent>);
     }
 
@@ -737,7 +737,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(Ecs.EachEntityPointerCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnSetEachEntityPointerCallbackDelegate<TComponent>);
     }
 
@@ -748,7 +748,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(Ecs.EachIterPointerCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnSetEachIterPointerCallbackDelegate<TComponent>);
     }
 
@@ -769,7 +769,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(Ecs.IterSpanCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnRemoveIterSpanCallbackDelegate<TComponent>);
     }
 
@@ -780,7 +780,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(Ecs.IterPointerCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnRemoveIterPointerCallbackDelegate<TComponent>);
     }
 
@@ -821,7 +821,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(Ecs.EachPointerCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnRemoveEachPointerCallbackDelegate<TComponent>);
     }
 
@@ -832,7 +832,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(Ecs.EachEntityPointerCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnRemoveEachEntityPointerCallbackDelegate<TComponent>);
     }
 
@@ -843,7 +843,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(Ecs.EachIterPointerCallback<TComponent> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnRemoveEachIterPointerCallbackDelegate<TComponent>);
     }
 
@@ -864,7 +864,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(delegate*<Iter, Span<TComponent>, void> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnAddIterSpanCallbackPointer<TComponent>);
     }
 
@@ -875,7 +875,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(delegate*<Iter, TComponent*, void> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnAddIterPointerCallbackPointer<TComponent>);
     }
 
@@ -916,7 +916,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(delegate*<TComponent*, void>callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnAddEachPointerCallbackPointer<TComponent>);
     }
 
@@ -927,7 +927,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(delegate*<Entity, TComponent*, void> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnAddEachEntityPointerCallbackPointer<TComponent>);
     }
 
@@ -938,7 +938,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnAdd(delegate*<Iter, int, TComponent*, void> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnAddCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnAddEachIterPointerCallbackPointer<TComponent>);
     }
 
@@ -959,7 +959,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(delegate*<Iter, Span<TComponent>, void> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnSetIterSpanCallbackPointer<TComponent>);
     }
 
@@ -970,7 +970,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(delegate*<Iter, TComponent*, void> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnSetIterPointerCallbackPointer<TComponent>);
     }
 
@@ -1011,7 +1011,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(delegate*<TComponent*, void>callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnSetEachPointerCallbackPointer<TComponent>);
     }
 
@@ -1022,7 +1022,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(delegate*<Entity, TComponent*, void> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnSetEachEntityPointerCallbackPointer<TComponent>);
     }
 
@@ -1033,7 +1033,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnSet(delegate*<Iter, int, TComponent*, void> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnSetCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnSetEachIterPointerCallbackPointer<TComponent>);
     }
 
@@ -1054,7 +1054,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(delegate*<Iter, Span<TComponent>, void> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnRemoveIterSpanCallbackPointer<TComponent>);
     }
 
@@ -1065,7 +1065,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(delegate*<Iter, TComponent*, void> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnRemoveIterPointerCallbackPointer<TComponent>);
     }
 
@@ -1106,7 +1106,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(delegate*<TComponent*, void>callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnRemoveEachPointerCallbackPointer<TComponent>);
     }
 
@@ -1117,7 +1117,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(delegate*<Entity, TComponent*, void> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnRemoveEachEntityPointerCallbackPointer<TComponent>);
     }
 
@@ -1128,7 +1128,7 @@ public unsafe partial struct Component<TComponent>
     /// <returns>Reference to self.</returns>
     public ref Component<TComponent> OnRemove(delegate*<Iter, int, TComponent*, void> callback)
     {
-        TypeHelper<TComponent>.AssertReferenceTypes(false);
+        Types<TComponent, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _>.AssertReferenceTypes(false);
         return ref SetOnRemoveCallback(callback, (delegate*<ecs_iter_t*, void>)&Functions.OnRemoveEachIterPointerCallbackPointer<TComponent>);
     }
 

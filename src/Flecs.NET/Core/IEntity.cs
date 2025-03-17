@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
 
@@ -8,7 +7,7 @@ namespace Flecs.NET.Core;
 ///     Interface for entity objects.
 /// </summary>
 [SuppressMessage("Naming", "CA1716:Identifiers should not match keywords")]
-public unsafe interface IEntity<TEntity> : IId
+public unsafe partial interface IEntity<TEntity> : IId
 {
     /// <summary>
     ///     A reference to the entity.
@@ -763,24 +762,6 @@ public unsafe interface IEntity<TEntity> : IId
 
     /// <inheritdoc cref="Entity.SetJsonSecond{TSecond}(ulong, string, ecs_from_json_desc_t*)"/>
     public ref TEntity SetJsonSecond<TSecond>(ulong first, string json, ecs_from_json_desc_t* desc = null);
-
-    /// <inheritdoc cref="Entity.Observe(ulong, Action)"/>
-    public ref TEntity Observe(ulong eventId, Action callback);
-
-    /// <inheritdoc cref="Entity.Observe(ulong, Ecs.ObserveEntityCallback)"/>
-    public ref TEntity Observe(ulong eventId, Ecs.ObserveEntityCallback callback);
-
-    /// <inheritdoc cref="Entity.Observe{T}(Action)"/>
-    public ref TEntity Observe<T>(Action callback);
-
-    /// <inheritdoc cref="Entity.Observe{T}(Ecs.ObserveEntityCallback)"/>
-    public ref TEntity Observe<T>(Ecs.ObserveEntityCallback callback);
-
-    /// <inheritdoc cref="Entity.Observe{T}(Ecs.ObserveRefCallback{T})"/>
-    public ref TEntity Observe<T>(Ecs.ObserveRefCallback<T> callback);
-
-    /// <inheritdoc cref="Entity.Observe{T}(Ecs.ObserveEntityRefCallback{T})"/>
-    public ref TEntity Observe<T>(Ecs.ObserveEntityRefCallback<T> callback);
 
     /// <inheritdoc cref="Entity.EnsurePtr(ulong)"/>
     public void* EnsurePtr(ulong id);

@@ -8,16 +8,60 @@ public class Entity : GeneratorBase
 {
     public override void Generate()
     {
+        AddSource("Entity.Id.g.cs", Id.GenerateExtensions(Type.Entity));
+        AddSource("Entity.Observe.g.cs", GenerateObserveFunctions(Type.Entity));
+
         for (int i = 0; i < Generator.GenericCount; i++)
         {
-            AddSource($"Entity.Id.g.cs", Id.GenerateExtensions(Type.Entity));
             AddSource($"Entity.ComponentCallbacks/T{i + 1}.g.cs", GenerateComponentCallbacks(Type.Entity, i));
         }
     }
 
+    public static string GenerateObserveFunctions(Type type, int i = -1)
+    {
+        IEnumerable<string> untyped = Generator.GetObserveCallbacks()
+            .Select((Callback callback) => $$"""
+                /// <inheritdoc cref="IEntity{TEntity}.Observe(ulong, Ecs.ObserveEntityCallback)"/>
+                public void Observe(ulong id, {{Generator.GetCallbackType(callback)}} callback)
+                {
+                    Ecs.Observe(this, id, callback, &Functions.{{Generator.GetCallbackName(callback)}});
+                }
+                
+                /// <inheritdoc cref="IEntity{TEntity}.Observe{T}(Ecs.ObserveEntityCallback)"/>
+                public void Observe<T0>({{Generator.GetCallbackType(callback)}} callback)
+                {
+                    Ecs.Observe(this, Type<T0>.Id(World), callback, &Functions.{{Generator.GetCallbackName(callback)}});
+                }
+            """);
+
+        IEnumerable<string> typed = Generator.GetObserveCallbacks(0)
+            .Select((Callback callback) => $$"""
+                /// <inheritdoc cref="IEntity{TEntity}.Observe{T}(Ecs.ObserveEntityCallback)"/>
+                public void Observe<T0>({{Generator.GetCallbackType(callback)}} callback)
+                {
+                    Ecs.Observe(this, Type<T0>.Id(World), callback, &Functions.{{Generator.GetCallbackName(callback)}}<T0>);
+                }
+            """);
+
+        return $$"""
+            #pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
+            
+            using System;
+
+            namespace Flecs.NET.Core;
+
+            public unsafe partial struct {{Generator.GetTypeName(type, i)}}
+            {
+            {{string.Join(Separator.DoubleNewLine, untyped.Concat(typed))}}
+            }
+            """;
+    }
+
     public static string GenerateComponentCallbacks(Type type, int i)
     {
-        IEnumerable<string> readAndWrite = Generator.CallbacksReadAndWrite.Select((Callback callback) => $$"""
+        IEnumerable<string> readAndWrite = Generator.GetReadCallbacks()
+            .Concat(Generator.GetWriteCallbacks())
+            .Select((Callback callback) => $$"""
                 /// <summary>
                 ///     {{Generator.GetInvokerName(callback)}} {{i + 1}} components using the provided callback. <br/><br/>
                 /// 
@@ -39,11 +83,11 @@ public class Entity : GeneratorBase
                 /// <returns>True if the entity has the specified components.</returns>
                 public bool {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>({{Generator.GetCallbackType(callback, i)}} callback)
                 {
-                    return Invoker.{{Generator.GetInvokerName(callback)}}(World, Id, callback);
+                    return {{Generator.GetTypeName(Type.Invoker, i)}}.{{Generator.GetInvokerName(callback)}}<{{Generator.GetCallbackName(callback, i)}}>(new Entity(World, Id), callback);
                 }
             """);
 
-        IEnumerable<string> insert = Generator.CallbacksInsert.Select((Callback callback) => $$"""
+        IEnumerable<string> insert = Generator.GetInsertCallbacks().Select((Callback callback) => $$"""
                 /// <summary>
                 ///     Ensures {{i + 1}} components using the provided callback.<br/><br/>
                 /// 
@@ -62,9 +106,9 @@ public class Entity : GeneratorBase
                 /// <param name="callback">The callback.</param>
                 /// {{Generator.XmlTypeParameters[i]}}
                 /// <returns>Reference to self.</returns>
-                public ref {{type}} {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>({{Generator.GetCallbackType(callback, i)}} callback)
+                public ref {{Generator.GetTypeName(type)}} {{Generator.GetInvokerName(callback)}}<{{Generator.TypeParameters[i]}}>({{Generator.GetCallbackType(callback, i)}} callback)
                 {
-                    Invoker.{{Generator.GetInvokerName(callback)}}(World, Id, callback);
+                    {{Generator.GetTypeName(Type.Invoker, i)}}.{{Generator.GetInvokerName(callback)}}<{{Generator.GetCallbackName(callback, i)}}>(new Entity(World, Id), callback);
                     return ref this;
                 }
             """);
@@ -74,7 +118,7 @@ public class Entity : GeneratorBase
 
             namespace Flecs.NET.Core;
 
-            public unsafe partial struct {{type}}
+            public unsafe partial struct {{Generator.GetTypeName(type)}}
             {
             {{string.Join(Separator.DoubleNewLine, readAndWrite.Concat(insert))}}
             }
@@ -1704,48 +1748,6 @@ public class Entity : GeneratorBase
                 public ref {{typeName}} SetJsonSecond<TSecond>(ulong first, string json, ecs_from_json_desc_t* desc = null)
                 {
                     Entity.SetJsonSecond<TSecond>(first, json, desc);
-                    return ref this;
-                }
-            
-                /// <inheritdoc cref="Entity.Observe(ulong, Action)"/>
-                public ref {{typeName}} Observe(ulong eventId, Action callback)
-                {
-                    Entity.Observe(eventId, callback);
-                    return ref this;
-                }
-            
-                /// <inheritdoc cref="Entity.Observe(ulong, Ecs.ObserveEntityCallback)"/>
-                public ref {{typeName}} Observe(ulong eventId, Ecs.ObserveEntityCallback callback)
-                {
-                    Entity.Observe(eventId, callback);
-                    return ref this;
-                }
-            
-                /// <inheritdoc cref="Entity.Observe{T}(Action)"/>
-                public ref {{typeName}} Observe<T>(Action callback)
-                {
-                    Entity.Observe<T>(callback);
-                    return ref this;
-                }
-            
-                /// <inheritdoc cref="Entity.Observe{T}(Ecs.ObserveEntityCallback)"/>
-                public ref {{typeName}} Observe<T>(Ecs.ObserveEntityCallback callback)
-                {
-                    Entity.Observe<T>(callback);
-                    return ref this;
-                }
-            
-                /// <inheritdoc cref="Entity.Observe{T}(Ecs.ObserveRefCallback{T})"/>
-                public ref {{typeName}} Observe<T>(Ecs.ObserveRefCallback<T> callback)
-                {
-                    Entity.Observe(callback);
-                    return ref this;
-                }
-            
-                /// <inheritdoc cref="Entity.Observe{T}(Ecs.ObserveEntityRefCallback{T})"/>
-                public ref {{typeName}} Observe<T>(Ecs.ObserveEntityRefCallback<T> callback)
-                {
-                    Entity.Observe(callback);
                     return ref this;
                 }
             

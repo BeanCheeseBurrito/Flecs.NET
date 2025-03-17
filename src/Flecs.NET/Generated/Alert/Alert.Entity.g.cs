@@ -1621,48 +1621,6 @@ public unsafe partial struct Alert
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.Observe(ulong, Action)"/>
-    public ref Alert Observe(ulong eventId, Action callback)
-    {
-        Entity.Observe(eventId, callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Observe(ulong, Ecs.ObserveEntityCallback)"/>
-    public ref Alert Observe(ulong eventId, Ecs.ObserveEntityCallback callback)
-    {
-        Entity.Observe(eventId, callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Observe{T}(Action)"/>
-    public ref Alert Observe<T>(Action callback)
-    {
-        Entity.Observe<T>(callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Observe{T}(Ecs.ObserveEntityCallback)"/>
-    public ref Alert Observe<T>(Ecs.ObserveEntityCallback callback)
-    {
-        Entity.Observe<T>(callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Observe{T}(Ecs.ObserveRefCallback{T})"/>
-    public ref Alert Observe<T>(Ecs.ObserveRefCallback<T> callback)
-    {
-        Entity.Observe(callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Observe{T}(Ecs.ObserveEntityRefCallback{T})"/>
-    public ref Alert Observe<T>(Ecs.ObserveEntityRefCallback<T> callback)
-    {
-        Entity.Observe(callback);
-        return ref this;
-    }
-
     /// <inheritdoc cref="Entity.EnsurePtr(ulong)"/>
     public void* EnsurePtr(ulong id)
     {

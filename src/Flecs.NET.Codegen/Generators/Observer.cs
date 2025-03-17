@@ -6,14 +6,16 @@ public class Observer : GeneratorBase
 {
     public override void Generate()
     {
-        AddSource($"Observer.Id.g.cs", Id.GenerateExtensions(Type.Observer));
-        AddSource($"Observer.Entity.g.cs", Entity.GenerateExtensions(Type.Observer));
-
         for (int i = 0; i < Generator.GenericCount; i++)
         {
             AddSource($"Observer/T{i + 1}.g.cs", GenerateObserver(i));
+        }
+
+        for (int i = -1; i < Generator.GenericCount; i++)
+        {
             AddSource($"Observer.Id/T{i + 1}.g.cs", Id.GenerateExtensions(Type.Observer, i));
             AddSource($"Observer.Entity/T{i + 1}.g.cs", Entity.GenerateExtensions(Type.Observer, i));
+            AddSource($"Observer.Entity.Observe/T{i + 1}.g.cs", Entity.GenerateObserveFunctions(Type.Observer, i));
         }
     }
 
@@ -24,6 +26,8 @@ public class Observer : GeneratorBase
             #nullable enable
 
             using System;
+            using Flecs.NET.Utilities;
+            
             using static Flecs.NET.Bindings.flecs;
 
             namespace Flecs.NET.Core;
@@ -51,21 +55,21 @@ public class Observer : GeneratorBase
                 /// <param name="observer">The observer.</param>
                 public Observer(Observer observer)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _observer = observer;
                 }
             
                 /// <inheritdoc cref="Observer(ecs_world_t*, ulong)"/>
                 public Observer(ecs_world_t* world, ulong entity)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _observer = new Observer(world, entity);
                 }
             
                 /// <inheritdoc cref="Observer(Core.Entity)"/>
                 public Observer(Entity entity)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     _observer = new Observer(entity);
                 }
             

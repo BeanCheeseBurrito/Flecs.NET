@@ -24,23 +24,30 @@ internal unsafe struct Callback : IDisposable, IEquatable<Callback>
     public void Dispose()
     {
         Managed.FreeGcHandle(Delegate);
-        Invoker = default;
-        Pointer = default;
+        Invoker = null;
+        Pointer = null;
         Delegate = default;
     }
 
-    internal void Set(void* callback, void* invoker)
+    internal void Set(InvokerCallback callback, void* invoker)
     {
         Dispose();
         Invoker = invoker;
-        Pointer = callback;
+
+        if (callback.Pointer == null)
+            Delegate = GCHandle.Alloc(callback.Delegate);
+        else
+            Pointer = callback.Pointer;
     }
 
-    internal void Set<T>(T callback, void* invoker) where T : Delegate
+    public static implicit operator Delegate(Callback callback)
     {
-        Dispose();
-        Invoker = invoker;
-        Delegate = GCHandle.Alloc(callback);
+        return (Delegate)callback.Delegate.Target!;
+    }
+
+    public static implicit operator void*(Callback callback)
+    {
+        return callback.Pointer;
     }
 
     public bool Equals(Callback other)

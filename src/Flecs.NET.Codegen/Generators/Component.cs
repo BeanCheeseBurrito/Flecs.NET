@@ -8,5 +8,6 @@ public class Component : GeneratorBase
     {
         AddSource($"Component.Id.g.cs", Id.GenerateExtensions(Type.Component));
         AddSource($"Component.Entity.g.cs", Entity.GenerateExtensions(Type.Component));
+        AddSource($"System.Entity.Observe.g.cs", Entity.GenerateObserveFunctions(Type.Component));
     }
 }

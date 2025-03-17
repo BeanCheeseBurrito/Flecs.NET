@@ -1,402 +1,335 @@
 using System;
 using System.Threading;
-using Flecs.NET.Utilities;
-using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
 
 /// <summary>
-///     A static class for holding callback invokers.
+///     A static class for invoking user callbacks.
 /// </summary>
-// Iter Invokers
-public static unsafe partial class Invoker
+internal static unsafe class Invoker<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
 {
-    /// <summary>
-    ///     Invokes an iterator callback.
-    /// </summary>
-    /// <param name="it">The iterator.</param>
-    public static void Callback(Iter it)
+    private static readonly int TypeCount = Types<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>.Count;
+
+    internal static void Job<TIterable, TInvoker>(ref TIterable iterable, InvokerCallback callback)
+        where TIterable : IIterableBase
+        where TInvoker : IJobInvoker
     {
-        it.Callback();
+        World world = ecs_get_world(iterable.World);
+
+        bool isReadonly = world.IsReadOnly();
+
+        Ecs.Assert(isReadonly || !world.IsDeferred(), "Cannot run multi-threaded query when world is already in deferred mode.");
+
+        if (!isReadonly)
+            ecs_readonly_begin(world, true);
+
+        int stageCount = world.GetStageCount();
+
+        using CountdownEvent countdown = new(stageCount);
+
+        for (int i = 0; i < stageCount; i++)
+            ThreadPool.QueueUserWorkItem(ExecuteJob, new JobState(callback, countdown, new WorkerIterable(iterable.GetIter(world.GetStage(i)), i, stageCount)), true);
+
+        countdown.Wait();
+
+        if (!isReadonly)
+            ecs_readonly_end(world);
+
+        if (!Ecs.Exceptions.IsEmpty)
+        {
+            AggregateException exception = Ecs.Exception(Ecs.Exceptions, "One or more threads have raised an exception while iterating this query.");
+            Ecs.Exceptions.Clear();
+            throw exception;
+        }
+
+        return;
+
+        static void ExecuteJob(JobState state)
+        {
+            try
+            {
+                TInvoker.Invoke(state);
+            }
+            catch (Exception exception)
+            {
+                Ecs.Exceptions.Enqueue(exception);
+            }
+            finally
+            {
+                state.Countdown.Signal();
+            }
+        }
     }
 
-    /// <summary>
-    ///     Invokes an iter callback using a delegate.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    public static void Iter(ecs_iter_t* iter, Ecs.IterCallback callback)
+    internal static void Run<TInvoker>(Iter it, InvokerCallback callback)
+        where TInvoker : IRunInvoker
     {
-        Ecs.TableLock(iter->world, iter->table);
-        callback(new Iter(iter));
-        Ecs.TableUnlock(iter->world, iter->table);
+        it.Handle->flags &= ~EcsIterIsValid;
+
+        try
+        {
+            TInvoker.Invoke(it, callback);
+        }
+        catch (Exception)
+        {
+            it.Fini();
+            throw;
+        }
     }
 
-    /// <summary>
-    ///     Invokes an each callback using a delegate.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    public static void Each(ecs_iter_t* iter, Ecs.EachEntityCallback callback)
-    {
-        Ecs.Assert(iter->entities != null, "No entities returned, use Iter() or Each() without the entity argument instead.");
-
-        Ecs.TableLock(iter->world, iter->table);
-
-        for (int i = 0; i < iter->count; i++)
-            callback(new Entity(iter->world, iter->entities[i]));
-
-        Ecs.TableUnlock(iter->world, iter->table);
-    }
-
-    /// <summary>
-    ///     Invokes an each callback using a delegate.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    public static void Each(ecs_iter_t* iter, Ecs.EachIterCallback callback)
-    {
-        Ecs.TableLock(iter->world, iter->table);
-
-        int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
-
-        for (int i = 0; i < count; i++)
-            callback(new Iter(iter), i);
-
-        Ecs.TableUnlock(iter->world, iter->table);
-    }
-
-    /// <summary>
-    ///     Invokes a run callback using a delegate.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    public static void Run(ecs_iter_t* iter, Ecs.RunCallback callback)
-    {
-        iter->flags &= ~EcsIterIsValid;
-        callback(new Iter(iter));
-    }
-
-    /// <summary>
-    ///     Invokes a run callback using a delegate.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    public static void Run(ecs_iter_t* iter, Ecs.RunDelegateCallback callback)
-    {
-        iter->flags &= ~EcsIterIsValid;
-        callback(new Iter(iter), Callback);
-    }
-
-    /// <summary>
-    ///     Invokes an entity observer using a delegate.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    public static void Observe(ecs_iter_t* iter, Ecs.ObserveEntityCallback callback)
-    {
-        callback(new Entity(iter->world, ecs_field_src(iter, 0)));
-    }
-
-    /// <summary>
-    ///     Invokes an entity observer using a pointer.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    public static void Observe(ecs_iter_t* iter, delegate*<Entity, void> callback)
-    {
-        callback(new Entity(iter->world, ecs_field_src(iter, 0)));
-    }
-
-    /// <summary>
-    ///     Invokes an entity observer using a delegate.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    public static void Observe<T>(ecs_iter_t* iter, Ecs.ObserveRefCallback<T> callback)
-    {
-        Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
-        callback(ref Managed.GetTypeRef<T>(iter->param));
-    }
-
-    /// <summary>
-    ///     Invokes an entity observer using a pointer.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    public static void Observe<T>(ecs_iter_t* iter, delegate*<ref T, void> callback)
-    {
-        Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
-        callback(ref Managed.GetTypeRef<T>(iter->param));
-    }
-
-    /// <summary>
-    ///     Invokes an entity observer using a delegate.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    public static void Observe<T>(ecs_iter_t* iter, Ecs.ObservePointerCallback<T> callback)
-    {
-        Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
-        callback((T*)iter->param);
-    }
-
-    /// <summary>
-    ///     Invokes an entity observer using a pointer.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    public static void Observe<T>(ecs_iter_t* iter, delegate*<T*, void> callback)
-    {
-        Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
-        callback((T*)iter->param);
-    }
-
-    /// <summary>
-    ///     Invokes an entity observer using a delegate.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    public static void Observe<T>(ecs_iter_t* iter, Ecs.ObserveEntityRefCallback<T> callback)
-    {
-        Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
-        callback(new Entity(iter->world, ecs_field_src(iter, 0)), ref Managed.GetTypeRef<T>(iter->param));
-    }
-
-    /// <summary>
-    ///     Invokes an entity observer using a pointer.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    public static void Observe<T>(ecs_iter_t* iter, delegate*<Entity, ref T, void> callback)
-    {
-        Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
-        callback(new Entity(iter->world, ecs_field_src(iter, 0)), ref Managed.GetTypeRef<T>(iter->param));
-    }
-
-    /// <summary>
-    ///     Invokes an entity observer using a delegate.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    public static void Observe<T>(ecs_iter_t* iter, Ecs.ObserveEntityPointerCallback<T> callback)
-    {
-        Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
-        callback(new Entity(iter->world, ecs_field_src(iter, 0)), (T*)iter->param);
-    }
-
-    /// <summary>
-    ///     Invokes an entity observer using a pointer.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    /// <typeparam name="T"></typeparam>
-    public static void Observe<T>(ecs_iter_t* iter, delegate*<Entity, T*, void> callback)
-    {
-        Ecs.Assert(iter->param != null, "Entity observer invoked without event payload");
-        callback(new Entity(iter->world, ecs_field_src(iter, 0)), (T*)iter->param);
-    }
-
-    /// <summary>
-    ///     Invokes an iter callback using a managed function pointer.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    public static void Iter(ecs_iter_t* iter, delegate*<Iter, void> callback)
-    {
-        Ecs.TableLock(iter->world, iter->table);
-        callback(new Iter(iter));
-        Ecs.TableUnlock(iter->world, iter->table);
-    }
-
-    /// <summary>
-    ///     Invokes an each callback using a managed function pointer.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    public static void Each(ecs_iter_t* iter, delegate*<Entity, void> callback)
-    {
-        Ecs.Assert(iter->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
-
-        Ecs.TableLock(iter->world, iter->table);
-
-        for (int i = 0; i < iter->count; i++)
-            callback(new Entity(iter->world, iter->entities[i]));
-
-        Ecs.TableUnlock(iter->world, iter->table);
-    }
-
-    /// <summary>
-    ///      Invokes an each callback using a managed function pointer.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    public static void Each(ecs_iter_t* iter, delegate*<Iter, int, void> callback)
-    {
-        Ecs.TableLock(iter->world, iter->table);
-
-        int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
-
-        for (int i = 0; i < count; i++)
-            callback(new Iter(iter), i);
-
-        Ecs.TableUnlock(iter->world, iter->table);
-    }
-
-    /// <summary>
-    ///     Invokes a run callback using a managed function pointer.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    public static void Run(ecs_iter_t* iter, delegate*<Iter, void> callback)
-    {
-        iter->flags &= ~EcsIterIsValid;
-        callback(new Iter(iter));
-    }
-
-    /// <summary>
-    ///     Invokes a run pointer callback using a delegate.
-    /// </summary>
-    /// <param name="iter"></param>
-    /// <param name="callback"></param>
-    public static void Run(ecs_iter_t* iter, Ecs.RunPointerCallback callback)
-    {
-        iter->flags &= ~EcsIterIsValid;
-        callback(new Iter(iter), &Callback);
-    }
-
-    /// <summary>
-    ///     Invokes a run delegate callback using a managed function pointer.
-    /// </summary>
-    /// <param name="iter">The iterator.</param>
-    /// <param name="callback">The callback.</param>
-    public static void Run(ecs_iter_t* iter, delegate*<Iter, Action<Iter>, void> callback)
-    {
-        iter->flags &= ~EcsIterIsValid;
-        callback(new Iter(iter), Callback);
-    }
-
-    /// <summary>
-    ///     Invokes a run pointer callback using a managed function pointer.
-    /// </summary>
-    /// <param name="iter">The iterator.</param>
-    /// <param name="callback">The callback.</param>
-    public static void Run(ecs_iter_t* iter, delegate*<Iter, delegate*<Iter, void>, void> callback)
-    {
-        iter->flags &= ~EcsIterIsValid;
-        callback(new Iter(iter), &Callback);
-    }
-}
-
-// Iterable Invokers
-public static unsafe partial class Invoker
-{
-    /// <summary>
-    ///     Iterates over iterable with the provided Run callback.
-    /// </summary>
-    /// <param name="iterable">The iterable object.</param>
-    /// <param name="callback">The callback.</param>
-    /// <typeparam name="T">The iterable type.</typeparam>
-    public static void Run<T>(ref T iterable, Ecs.RunCallback callback) where T : unmanaged, IIterableBase
+    internal static void Run<TIterable, TInvoker>(ref TIterable iterable, InvokerCallback callback)
+        where TIterable : IIterableBase
+        where TInvoker : IRunInvoker
     {
         ecs_iter_t iter = iterable.GetIter();
-        Run(&iter, callback);
+        Run<TInvoker>(&iter, callback);
     }
 
-    /// <summary>
-    ///     Iterates over iterable with the provided Run callback.
-    /// </summary>
-    /// <param name="iterable">The iterable object.</param>
-    /// <param name="callback">The callback.</param>
-    /// <typeparam name="T">The iterable type.</typeparam>
-    public static void Run<T>(ref T iterable, delegate*<Iter, void> callback) where T : unmanaged, IIterableBase
+    internal static void Iter<TInvoker>(Iter it, InvokerCallback callback)
+        where TInvoker : IIterInvoker
     {
-        ecs_iter_t iter = iterable.GetIter();
-        Run(&iter, callback);
+        it.AssertFields<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
+
+        Ecs.TableLock(it);
+
+        try
+        {
+            TInvoker.Invoke(it, callback);
+        }
+        catch (Exception)
+        {
+            it.Fini();
+            throw;
+        }
+
+        Ecs.TableUnlock(it);
     }
 
-    /// <summary>
-    ///     Iterates over iterable with the provided Iter callback.
-    /// </summary>
-    /// <param name="iterable">The iterable object.</param>
-    /// <param name="callback">The callback.</param>
-    /// <typeparam name="T">The iterable type.</typeparam>
-    public static void Iter<T>(ref T iterable, Ecs.IterCallback callback) where T : unmanaged, IIterableBase
+    internal static void Iter<TIterable, TInvoker>(ref TIterable iterable, InvokerCallback callback)
+        where TIterable : IIterableBase
+        where TInvoker : IIterInvoker
     {
         ecs_iter_t iter = iterable.GetIter();
         while (iterable.GetNext(&iter))
-            Iter(&iter, callback);
+            Iter<TInvoker>(&iter, callback);
     }
 
-    /// <summary>
-    ///     Iterates over iterable with the provided Iter callback.
-    /// </summary>
-    /// <param name="iterable">The iterable object.</param>
-    /// <param name="callback">The callback.</param>
-    /// <typeparam name="T">The iterable type.</typeparam>
-    public static void Iter<T>(ref T iterable, delegate*<Iter, void> callback) where T : unmanaged, IIterableBase
+    internal static void Each<TInvoker>(Iter it, InvokerCallback callback)
+        where TInvoker : IEachInvoker
+    {
+        it.AssertFields<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
+
+        IterationTechnique flags = it.GetIterationTechnique(TypeCount);
+
+        Ecs.TableLock(it);
+
+        int count = it.Handle->entities == null ? 1 : it.Handle->count;
+
+        ulong empty = 0;
+        if (it.Handle->entities == null)
+            it.Handle->entities = &empty;
+
+        try
+        {
+            if (flags == IterationTechnique.None)
+                TInvoker.Invoke<IFieldGetter.Self>(it.GetFields(TypeCount), count, callback);
+            else if (flags == IterationTechnique.Shared)
+                TInvoker.Invoke<IFieldGetter.Shared>(it.GetFields(TypeCount), count, callback);
+            else if (flags == IterationTechnique.Sparse)
+                TInvoker.Invoke<IFieldGetter.Sparse>(it.GetFields(TypeCount), count, callback);
+            else if (flags == (IterationTechnique.Sparse | IterationTechnique.Shared))
+                TInvoker.Invoke<IFieldGetter.SparseShared>(it.GetFields(TypeCount), count, callback);
+        }
+        catch (Exception)
+        {
+            it.Fini();
+            throw;
+        }
+
+        Ecs.TableUnlock(it);
+    }
+
+    internal static void Each<TIterable, TInvoker>(ref TIterable iterable, InvokerCallback callback)
+        where TIterable : IIterableBase
+        where TInvoker : IEachInvoker
     {
         ecs_iter_t iter = iterable.GetIter();
         while (iterable.GetNext(&iter))
-            Iter(&iter, callback);
+            Each<TInvoker>(&iter, callback);
     }
 
-    /// <summary>
-    ///     Iterates over iterable with the provided Each callback.
-    /// </summary>
-    /// <param name="iterable">The iterable object.</param>
-    /// <param name="callback">The callback.</param>
-    /// <typeparam name="T">The iterable type.</typeparam>
-    public static void Each<T>(ref T iterable, Ecs.EachEntityCallback callback) where T : unmanaged, IIterableBase
+    internal static Entity Find<TInvoker>(Iter it, InvokerCallback callback)
+        where TInvoker : IFindInvoker
     {
-        ecs_iter_t iter = iterable.GetIter();
-        while (iterable.GetNext(&iter))
-            Each(&iter, callback);
+        it.AssertFields<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
+
+        IterationTechnique flags = it.GetIterationTechnique(TypeCount);
+
+        Ecs.TableLock(it);
+
+        int count = it.Handle->entities == null ? 1 : it.Handle->count;
+
+        ulong empty = 0;
+        if (it.Handle->entities == null)
+            it.Handle->entities = &empty;
+
+        Entity result = default;
+
+        try
+        {
+            if (flags == IterationTechnique.None)
+                result = TInvoker.Invoke<IFieldGetter.Self>(it.GetFields(TypeCount), count, callback);
+            else if (flags == IterationTechnique.Shared)
+                result = TInvoker.Invoke<IFieldGetter.Shared>(it.GetFields(TypeCount), count, callback);
+            else if (flags == IterationTechnique.Sparse)
+                result = TInvoker.Invoke<IFieldGetter.Sparse>(it.GetFields(TypeCount), count, callback);
+            else if (flags == (IterationTechnique.Sparse | IterationTechnique.Shared))
+                result = TInvoker.Invoke<IFieldGetter.SparseShared>(it.GetFields(TypeCount), count, callback);
+        }
+        catch (Exception)
+        {
+            it.Fini();
+            throw;
+        }
+
+        Ecs.TableUnlock(it);
+
+        return result;
     }
 
-    /// <summary>
-    ///     Iterates over iterable with the provided Each callback.
-    /// </summary>
-    /// <param name="iterable">The iterable object.</param>
-    /// <param name="callback">The callback.</param>
-    /// <typeparam name="T">The iterable type.</typeparam>
-    public static void Each<T>(ref T iterable, delegate*<Entity, void> callback) where T : unmanaged, IIterableBase
+    internal static Entity Find<TIterable, TInvoker>(ref TIterable iterable, InvokerCallback callback)
+        where TIterable : IIterableBase
+        where TInvoker : IFindInvoker
     {
+        Entity result = default;
+
         ecs_iter_t iter = iterable.GetIter();
-        while (iterable.GetNext(&iter))
-            Each(&iter, callback);
+        while (result == 0 && iterable.GetNext(&iter))
+            result = Find<TInvoker>(&iter, callback);
+
+        if (result != 0)
+            ecs_iter_fini(&iter);
+
+        return result;
     }
 
-    /// <summary>
-    ///     Iterates over iterable with the provided Each callback.
-    /// </summary>
-    /// <param name="iterable">The iterable object.</param>
-    /// <param name="callback">The callback.</param>
-    /// <typeparam name="T">The iterable type.</typeparam>
-    public static void Each<T>(ref T iterable, Ecs.EachIterCallback callback) where T : unmanaged, IIterableBase
+    internal static void Observe<TInvoker>(Iter it, InvokerCallback callback)
+        where TInvoker : IObserveInvoker
     {
-        ecs_iter_t iter = iterable.GetIter();
-        while (iterable.GetNext(&iter))
-            Each(&iter, callback);
+        TInvoker.Invoke(it, callback);
     }
 
-    /// <summary>
-    ///     Iterates over iterable with the provided Each callback.
-    /// </summary>
-    /// <param name="iterable">The iterable object.</param>
-    /// <param name="callback">The callback.</param>
-    /// <typeparam name="T">The iterable type.</typeparam>
-    public static void Each<T>(ref T iterable, delegate*<Iter, int, void> callback) where T : unmanaged, IIterableBase
+    internal static bool Read<TInvoker>(Entity entity, InvokerCallback callback)
+        where TInvoker : IReadInvoker
     {
-        ecs_iter_t iter = iterable.GetIter();
-        while (iterable.GetNext(&iter))
-            Each(&iter, callback);
+        ecs_record_t* record = ecs_read_begin(entity.World, entity);
+
+        if (record == null)
+            return false;
+
+        ecs_table_t *table = record->table;
+
+        if (table == null)
+            return false;
+
+        void** pointers = stackalloc void*[TypeCount];
+        bool hasComponents = Types<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>.Get(entity, record, table, pointers);
+
+        if (hasComponents)
+            TInvoker.Invoke(pointers, callback);
+
+        ecs_read_end(record);
+
+        return hasComponents;
+    }
+
+    internal static bool Write<TInvoker>(Entity entity, InvokerCallback callback)
+        where TInvoker : IWriteInvoker
+    {
+        ecs_record_t* record = ecs_write_begin(entity.World, entity);
+
+        if (record == null)
+            return false;
+
+        ecs_table_t *table = record->table;
+
+        if (table == null)
+            return false;
+
+        void** pointers = stackalloc void*[TypeCount];
+        bool hasComponents = Types<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>.Get(entity, record, table, pointers);
+
+        if (hasComponents)
+            TInvoker.Invoke(pointers, callback);
+
+        ecs_write_end(record);
+
+        return hasComponents;
+    }
+
+    internal static bool Insert<TInvoker>(Entity entity, InvokerCallback callback)
+        where TInvoker : IInsertInvoker
+    {
+        World world = entity.World;
+
+        ulong* ids = stackalloc ulong[TypeCount];
+        void** pointers = stackalloc void*[TypeCount];
+
+        Types<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>.Ids(world, ids);
+
+        ecs_table_t* table = null;
+
+        if (!world.IsDeferred())
+        {
+            Ecs.Assert(!world.IsStage(), nameof(ECS_INVALID_PARAMETER));
+
+            ecs_record_t* record = ecs_record_find(world, entity);
+
+            if (record != null)
+                table = record->table;
+
+            ecs_table_t* prev = table;
+            ecs_table_t* next = null;
+
+            ulong* added = stackalloc ulong[TypeCount];
+            int addedCount = 0;
+
+            for (int i = 0; i < TypeCount; i++)
+            {
+                next = ecs_table_add_id(world, prev, ids[i]);
+
+                if (prev != next)
+                    added[addedCount++] = ids[i];
+
+                prev = next;
+            }
+
+            if (table != next)
+            {
+                ecs_type_t type = default;
+                type.array = added;
+                type.count = addedCount;
+                ecs_commit(world, entity, record, next, &type, null);
+                table = next;
+            }
+
+            if (!Types<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>.Get(entity, record, table, pointers))
+                Ecs.Error(nameof(ECS_INTERNAL_ERROR));
+
+            Ecs.TableLock(world, table);
+        }
+        else
+        {
+            Types<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>.Ensure(entity, pointers);
+        }
+
+        TInvoker.Invoke(pointers, callback);
+
+        if (!world.IsDeferred())
+            Ecs.TableUnlock(world, table);
+
+        Types<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>.Modified(entity, ids);
+
+        return true;
     }
 }

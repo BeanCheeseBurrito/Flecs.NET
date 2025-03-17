@@ -7,10 +7,10 @@ public class Query : GeneratorBase
     public override void Generate()
     {
         for (int i = 0; i < Generator.GenericCount; i++)
-        {
             AddSource($"Query/T{i + 1}.g.cs", GenerateQuery(i));
-            AddSource($"Query.IIterable/T{i + 1}.g.cs", IIterable.GenerateExtensions(Type.Query, i));
-        }
+
+        for (int i = -1; i < Generator.GenericCount; i++)
+            AddSource($"Query.IIterable/T{i + 1}.g.cs", IIterable.GenerateIterators(Type.Query, i));
     }
 
     private static string GenerateQuery(int i)
@@ -20,6 +20,7 @@ public class Query : GeneratorBase
 
             using System;
             using System.Runtime.CompilerServices;
+            using Flecs.NET.Utilities;
 
             using static Flecs.NET.Bindings.flecs;
 
@@ -40,21 +41,21 @@ public class Query : GeneratorBase
                 /// <inheritdoc cref="Query(ecs_query_t*)"/>
                 public Query(ecs_query_t* query)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     Underlying = new Query(query);
                 }
             
                 /// <inheritdoc cref="Query(ecs_world_t*, ulong)"/>
                 public Query(ecs_world_t* world, ulong entity)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     Underlying = new Query(world, entity);
                 }
             
                 /// <inheritdoc cref="Query(Core.Entity)"/>
                 public Query(Entity entity)
                 {
-                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
+                    {{Generator.GetTypeName(Type.Types, i)}}.AssertNoTags();
                     Underlying = new Query(entity);
                 }
             

@@ -1621,48 +1621,6 @@ public unsafe partial struct Component<TComponent>
         return ref this;
     }
 
-    /// <inheritdoc cref="Entity.Observe(ulong, Action)"/>
-    public ref Component<TComponent> Observe(ulong eventId, Action callback)
-    {
-        Entity.Observe(eventId, callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Observe(ulong, Ecs.ObserveEntityCallback)"/>
-    public ref Component<TComponent> Observe(ulong eventId, Ecs.ObserveEntityCallback callback)
-    {
-        Entity.Observe(eventId, callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Observe{T}(Action)"/>
-    public ref Component<TComponent> Observe<T>(Action callback)
-    {
-        Entity.Observe<T>(callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Observe{T}(Ecs.ObserveEntityCallback)"/>
-    public ref Component<TComponent> Observe<T>(Ecs.ObserveEntityCallback callback)
-    {
-        Entity.Observe<T>(callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Observe{T}(Ecs.ObserveRefCallback{T})"/>
-    public ref Component<TComponent> Observe<T>(Ecs.ObserveRefCallback<T> callback)
-    {
-        Entity.Observe(callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="Entity.Observe{T}(Ecs.ObserveEntityRefCallback{T})"/>
-    public ref Component<TComponent> Observe<T>(Ecs.ObserveEntityRefCallback<T> callback)
-    {
-        Entity.Observe(callback);
-        return ref this;
-    }
-
     /// <inheritdoc cref="Entity.EnsurePtr(ulong)"/>
     public void* EnsurePtr(ulong id)
     {

@@ -21,9 +21,9 @@
         <IncludeContentInPack>true</IncludeContentInPack>
         <Description>High-level C# wrapper for flecs</Description>
     </PropertyGroup>
-    
+
     <Choose>
-        <!-- 
+        <!--
             Build the Flecs.NET package. It contains a single msbuild .targets file that automatically references the
             debug or release builds based on the consuming project's $(Optimize) property.
         -->
@@ -45,7 +45,7 @@
                 <PackageId Condition="'$(Configuration)' == 'Debug'">Flecs.NET.Debug</PackageId>
                 <PackageId Condition="'$(Configuration)' == 'Release'">Flecs.NET.Release</PackageId>
             </PropertyGroup>
-            
+
             <ItemGroup>
                 <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
                 <ProjectReference Include="..\Flecs.NET.Bindings\Flecs.NET.Bindings.csproj"/>

@@ -3,6 +3,8 @@
 #nullable enable
 
 using System;
+using Flecs.NET.Utilities;
+
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
@@ -30,21 +32,21 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3> : IDisposable, IEqu
     /// <param name="observerBuilder">The observer builder.</param>
     public ObserverBuilder(ObserverBuilder observerBuilder)
     {
-        TypeHelper<T0, T1, T2, T3>.AssertNoTags();
+        Types<T0, T1, T2, T3, _, _, _, _, _, _, _, _, _, _, _, _>.AssertNoTags();
         _observerBuilder = observerBuilder;
     }
 
     /// <inheritdoc cref="ObserverBuilder(ecs_world_t*)"/>
     public ObserverBuilder(ecs_world_t* world)
     {
-        TypeHelper<T0, T1, T2, T3>.AssertNoTags();
+        Types<T0, T1, T2, T3, _, _, _, _, _, _, _, _, _, _, _, _>.AssertNoTags();
         _observerBuilder = new ObserverBuilder(world).With<T0>().With<T1>().With<T2>().With<T3>();
     }
 
     /// <inheritdoc cref="ObserverBuilder(ecs_world_t*, string)"/>
     public ObserverBuilder(ecs_world_t* world, string name)
     {
-        TypeHelper<T0, T1, T2, T3>.AssertNoTags();
+        Types<T0, T1, T2, T3, _, _, _, _, _, _, _, _, _, _, _, _>.AssertNoTags();
         _observerBuilder = new ObserverBuilder(world, name).With<T0>().With<T1>().With<T2>().With<T3>();
     }
 
@@ -116,66 +118,14 @@ public unsafe partial struct ObserverBuilder<T0, T1, T2, T3> : IDisposable, IEqu
         _observerBuilder.Ctx(ref value, callback);
         return ref this;
     }
-    
-    /// <inheritdoc cref="ObserverBuilder.Run(System.Action)"/>
-    public Observer<T0, T1, T2, T3> Run(Action callback)
-    {
-        return new Observer<T0, T1, T2, T3>(_observerBuilder.Run(callback));
-    }
-    
-    /// <inheritdoc cref="ObserverBuilder.Run(System.Action)"/>
-    public Observer<T0, T1, T2, T3> Run(delegate*<void> callback)
-    {
-        return new Observer<T0, T1, T2, T3>(_observerBuilder.Run(callback));
-    }
 
-    /// <inheritdoc cref="ObserverBuilder.Run(Ecs.RunDelegateCallback)"/>
-    public ref ObserverBuilder<T0, T1, T2, T3> Run(Ecs.RunDelegateCallback callback)
-    {
-        _observerBuilder.Run(callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="ObserverBuilder.Run(Ecs.RunDelegateCallback)"/>
-    public ref ObserverBuilder<T0, T1, T2, T3> Run(delegate*<Iter, Action<Iter>, void> callback)
-    {
-        _observerBuilder.Run(callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="ObserverBuilder.Run(Ecs.RunPointerCallback)"/>
-    public ref ObserverBuilder<T0, T1, T2, T3> Run(Ecs.RunPointerCallback callback)
-    {
-        _observerBuilder.Run(callback);
-        return ref this;
-    }
-
-    /// <inheritdoc cref="ObserverBuilder.Run(Ecs.RunPointerCallback)"/>
-    public ref ObserverBuilder<T0, T1, T2, T3> Run(delegate*<Iter, delegate*<Iter, void>, void> callback)
-    {
-        _observerBuilder.Run(callback);
-        return ref this;
-    }
-
-    private ref ObserverBuilder<T0, T1, T2, T3> SetCallback<T>(T callback, void* invoker) where T : Delegate
+    private ref ObserverBuilder<T0, T1, T2, T3> SetCallback(InvokerCallback callback, delegate*<ecs_iter_t*, void> invoker)
     {
         _observerBuilder.SetCallback(callback, invoker);
         return ref this;
     }
 
-    private ref ObserverBuilder<T0, T1, T2, T3> SetCallback(void* callback, void* invoker)
-    {
-        _observerBuilder.SetCallback(callback, invoker);
-        return ref this;
-    }
-
-    private ref ObserverBuilder<T0, T1, T2, T3> SetRun<T>(T callback, void* invoker) where T : Delegate
-    {
-        _observerBuilder.SetRun(callback, invoker);
-        return ref this;
-    }
-
-    private ref ObserverBuilder<T0, T1, T2, T3> SetRun(void* callback, void* invoker)
+    private ref ObserverBuilder<T0, T1, T2, T3> SetRun(InvokerCallback callback, delegate*<ecs_iter_t*, void> invoker)
     {
         _observerBuilder.SetRun(callback, invoker);
         return ref this;

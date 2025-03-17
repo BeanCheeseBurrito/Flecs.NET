@@ -7,11 +7,10 @@ public class PageIterable : GeneratorBase
     public override void Generate()
     {
         for (int i = 0; i < Generator.GenericCount; i++)
-        {
             AddSource($"PageIterable/T{i + 1}.g.cs", GeneratePageIterable(i));
-            AddSource($"PageIterable.IIterable/T{i + 1}.g.cs",
-                IIterable.GenerateExtensions(Type.PageIterable, i));
-        }
+
+        for (int i = -1; i < Generator.GenericCount; i++)
+            AddSource($"PageIterable.IIterable/T{i + 1}.g.cs", IIterable.GenerateIterators(Type.PageIterable, i));
     }
 
     private static string GeneratePageIterable(int i)

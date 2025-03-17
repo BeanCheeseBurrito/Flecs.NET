@@ -30,6 +30,16 @@ public static unsafe class Utils
     }
 
     /// <summary>
+    ///     Checks if specific bit is set.
+    /// </summary>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsBitSet(uint value, uint index)
+    {
+        return (value & (1 << (int)index)) != 0;
+    }
+
+    /// <summary>
     ///     Gets the next power of 2 for the provided number.
     /// </summary>
     /// <param name="num"></param>
