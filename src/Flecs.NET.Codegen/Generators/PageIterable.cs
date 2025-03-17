@@ -27,29 +27,39 @@ public class PageIterable : GeneratorBase
 
             /// <inheritdoc cref="IterIterable"/>
             /// {{Generator.XmlTypeParameters[i]}}
-            public partial struct {{Generator.GetTypeName(Type.PageIterable, i)}} : IEquatable<{{Generator.GetTypeName(Type.PageIterable, i)}}>
+            public unsafe partial struct {{Generator.GetTypeName(Type.PageIterable, i)}} : IEquatable<{{Generator.GetTypeName(Type.PageIterable, i)}}>
             {
-                private PageIterable _pageIterable;
+                /// <inheritdoc cref="IPageIterable.Underlying"/>
+                public PageIterable Underlying;
+            
+                /// <inheritdoc cref="IPageIterable.Iterator"/>
+                public ref ecs_iter_t Iterator => ref Underlying.Iterator;
+                
+                /// <inheritdoc cref="IPageIterable.Offset"/>
+                public int Offset => Underlying.Offset;
+                
+                /// <inheritdoc cref="IPageIterable.Limit"/>
+                public int Limit => Underlying.Limit;
             
                 /// <summary>
                 ///     Creates a page iterable.
                 /// </summary>
-                /// <param name="pageIterable">The page iterable.</param>
-                public PageIterable(PageIterable pageIterable)
+                /// <param name="handle">The page iterable.</param>
+                public PageIterable(PageIterable handle)
                 {
-                    _pageIterable = pageIterable;
+                    Underlying = handle;
                 }
             
                 /// <inheritdoc cref="PageIterable(ecs_iter_t, int, int)"/>
                 public PageIterable(ecs_iter_t iter, int offset, int limit)
                 {
-                    _pageIterable = new PageIterable(iter, offset, limit);
+                    Underlying = new PageIterable(iter, offset, limit);
                 }
                 
                 /// <inheritdoc cref="PageIterable.Equals(PageIterable)"/>
                 public bool Equals({{Generator.GetTypeName(Type.PageIterable, i)}} other)
                 {
-                    return _pageIterable.Equals(other._pageIterable);
+                    return Underlying.Equals(other.Underlying);
                 }
                 
                 /// <inheritdoc cref="PageIterable.Equals(object)"/>
@@ -61,7 +71,7 @@ public class PageIterable : GeneratorBase
                 /// <inheritdoc cref="PageIterable.GetHashCode()"/>
                 public override int GetHashCode()
                 {
-                    return _pageIterable.GetHashCode();
+                    return Underlying.GetHashCode();
                 }
                 
                 /// <inheritdoc cref="PageIterable.op_Equality"/>
@@ -76,25 +86,31 @@ public class PageIterable : GeneratorBase
                     return !(left == right);
                 }
             }
+            
+            // IPageIterable Interface
+            public unsafe partial struct {{Generator.GetTypeName(Type.PageIterable, i)}} : IPageIterable
+            {
+                ref PageIterable IPageIterable.Underlying => ref Underlying;
+            }
 
             // IIterableBase Interface
             public unsafe partial struct {{Generator.GetTypeName(Type.PageIterable, i)}} : IIterableBase
             {
-                /// <inheritdoc cref="PageIterable.World"/>
-                public ref ecs_world_t* World => ref _pageIterable.World;
-            
-                /// <inheritdoc cref="PageIterable.GetIter(ecs_world_t*)"/>
+                /// <inheritdoc cref="IIterableBase.World"/>
+                ecs_world_t* IIterableBase.World => Iterator.world;
+                
+                /// <inheritdoc cref="IIterableBase.GetIter"/>
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public ecs_iter_t GetIter(ecs_world_t* world = null)
+                public ecs_iter_t GetIter(World world = default)
                 {
-                    return _pageIterable.GetIter(world);
+                    return Underlying.GetIter(world);
                 }
                 
-                /// <inheritdoc cref="PageIterable.GetNext(ecs_iter_t*)"/>
+                /// <inheritdoc cref="IIterableBase.GetNext"/>
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool GetNext(ecs_iter_t* it)
+                public bool GetNext(Iter it)
                 {
-                    return _pageIterable.GetNext(it);
+                    return Underlying.GetNext(it);
                 }
             }
 
@@ -104,91 +120,91 @@ public class PageIterable : GeneratorBase
                 /// <inheritdoc cref="PageIterable.Page(int, int)"/>
                 public {{Generator.GetTypeName(Type.PageIterable, i)}} Page(int offset, int limit)
                 {
-                    return new {{Generator.GetTypeName(Type.PageIterable, i)}}(_pageIterable.Page(offset, limit));
+                    return new {{Generator.GetTypeName(Type.PageIterable, i)}}(Underlying.Page(offset, limit));
                 }
                 
                 /// <inheritdoc cref="PageIterable.Worker(int, int)"/>
                 public {{Generator.GetTypeName(Type.WorkerIterable, i)}} Worker(int index, int count)
                 {
-                    return new {{Generator.GetTypeName(Type.WorkerIterable, i)}}(_pageIterable.Worker(index, count));
+                    return new {{Generator.GetTypeName(Type.WorkerIterable, i)}}(Underlying.Worker(index, count));
                 }
             
                 /// <inheritdoc cref="PageIterable.Iter(Flecs.NET.Core.World)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} Iter(World world = default)
                 {
-                    return new(_pageIterable.Iter(world));
+                    return new(Underlying.Iter(world));
                 }
                 
                 /// <inheritdoc cref="PageIterable.Iter(Flecs.NET.Core.Iter)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} Iter(Iter it)
                 {
-                    return new(_pageIterable.Iter(it));
+                    return new(Underlying.Iter(it));
                 }
                 
                 /// <inheritdoc cref="PageIterable.Iter(Flecs.NET.Core.Entity)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} Iter(Entity entity)
                 {
-                    return new(_pageIterable.Iter(entity));
+                    return new(Underlying.Iter(entity));
                 }
                 
                 /// <inheritdoc cref="PageIterable.Count()"/>
                 public int Count()
                 {
-                    return _pageIterable.Count();
+                    return Underlying.Count();
                 }
                 
                 /// <inheritdoc cref="PageIterable.IsTrue()"/>
                 public bool IsTrue()
                 {
-                    return _pageIterable.IsTrue();
+                    return Underlying.IsTrue();
                 }
                 
                 /// <inheritdoc cref="PageIterable.First()"/>
                 public Entity First()
                 {
-                    return _pageIterable.First();
+                    return Underlying.First();
                 }
                 
                 /// <inheritdoc cref="PageIterable.SetVar(int, ulong)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(int varId, ulong value)
                 {
-                    return new(_pageIterable.SetVar(varId, value));
+                    return new(Underlying.SetVar(varId, value));
                 }
                 
                 /// <inheritdoc cref="PageIterable.SetVar(string, ulong)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, ulong value)
                 {
-                    return new(_pageIterable.SetVar(name, value));
+                    return new(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="PageIterable.SetVar(string, ecs_table_t*)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, ecs_table_t* value)
                 {
-                    return new(_pageIterable.SetVar(name, value));
+                    return new(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="PageIterable.SetVar(string, ecs_table_range_t)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, ecs_table_range_t value)
                 {
-                    return new(_pageIterable.SetVar(name, value));
+                    return new(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="PageIterable.SetVar(string, Table)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, Table value)
                 {
-                    return new(_pageIterable.SetVar(name, value));
+                    return new(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="PageIterable.SetGroup(ulong)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetGroup(ulong groupId)
                 {
-                    return new(_pageIterable.SetGroup(groupId));
+                    return new(Underlying.SetGroup(groupId));
                 }
                 
                 /// <inheritdoc cref="PageIterable.SetGroup{T}()"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetGroup<T>()
                 {
-                    return new(_pageIterable.SetGroup<T>()); 
+                    return new(Underlying.SetGroup<T>()); 
                 }
             }
             """;

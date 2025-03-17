@@ -10,29 +10,39 @@ namespace Flecs.NET.Core;
 
 /// <inheritdoc cref="IterIterable"/>
 /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam> <typeparam name="T3">The T3 component type.</typeparam> <typeparam name="T4">The T4 component type.</typeparam> <typeparam name="T5">The T5 component type.</typeparam> <typeparam name="T6">The T6 component type.</typeparam> <typeparam name="T7">The T7 component type.</typeparam> <typeparam name="T8">The T8 component type.</typeparam> <typeparam name="T9">The T9 component type.</typeparam> <typeparam name="T10">The T10 component type.</typeparam> <typeparam name="T11">The T11 component type.</typeparam> <typeparam name="T12">The T12 component type.</typeparam> <typeparam name="T13">The T13 component type.</typeparam>
-public partial struct WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> : IEquatable<WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>
+public unsafe partial struct WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> : IEquatable<WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>, IIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
 {
-    private WorkerIterable _workerIterable;
+    /// <inheritdoc cref="IWorkerIterable.Underlying"/>
+    public WorkerIterable Underlying;
+    
+    /// <inheritdoc cref="IWorkerIterable.Iterator"/>
+    public ref ecs_iter_t Iterator => ref Underlying.Iterator;
+    
+    /// <inheritdoc cref="IWorkerIterable.ThreadIndex"/>
+    public int ThreadIndex => Underlying.ThreadIndex;
+    
+    /// <inheritdoc cref="IWorkerIterable.ThreadCount"/>
+    public int ThreadCount => Underlying.ThreadCount;
 
     /// <summary>
     ///     Creates a worker iterable.
     /// </summary>
-    /// <param name="workerIterable">The worker iterable.</param>
-    public WorkerIterable(WorkerIterable workerIterable)
+    /// <param name="handle">The worker iterable.</param>
+    public WorkerIterable(WorkerIterable handle)
     {
-        _workerIterable = workerIterable;
+        Underlying = handle;
     }
 
     /// <inheritdoc cref="WorkerIterable(ecs_iter_t, int, int)"/>
     public WorkerIterable(ecs_iter_t iter, int index, int count)
     {
-        _workerIterable = new WorkerIterable(iter, index, count);
+        Underlying = new WorkerIterable(iter, index, count);
     }
     
     /// <inheritdoc cref="WorkerIterable.Equals(WorkerIterable)"/>
     public bool Equals(WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> other)
     {
-        return _workerIterable.Equals(other._workerIterable);
+        return Underlying.Equals(other.Underlying);
     }
     
     /// <inheritdoc cref="WorkerIterable.Equals(object)"/>
@@ -44,7 +54,7 @@ public partial struct WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     /// <inheritdoc cref="WorkerIterable.GetHashCode()"/>
     public override int GetHashCode()
     {
-        return _workerIterable.GetHashCode();
+        return Underlying.GetHashCode();
     }
     
     /// <inheritdoc cref="WorkerIterable.op_Equality"/>
@@ -60,24 +70,30 @@ public partial struct WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
     }
 }
 
+// IWorkerIterable Interface
+public unsafe partial struct WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> : IWorkerIterable
+{
+    ref WorkerIterable IWorkerIterable.Underlying => ref Underlying;
+}
+
 // IIterableBase Interface
 public unsafe partial struct WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> : IIterableBase
 {
-    /// <inheritdoc cref="WorkerIterable.World"/>
-    public ref ecs_world_t* World => ref _workerIterable.World;
+    /// <inheritdoc cref="IIterableBase.World"/>
+    ecs_world_t* IIterableBase.World => Iterator.world;
     
-    /// <inheritdoc cref="WorkerIterable.GetIter(ecs_world_t*)"/>
+    /// <inheritdoc cref="IIterableBase.GetIter"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ecs_iter_t GetIter(ecs_world_t* world = null)
+    public ecs_iter_t GetIter(World world = default)
     {
-        return _workerIterable.GetIter(world);
+        return Underlying.GetIter(world);
     }
     
-    /// <inheritdoc cref="WorkerIterable.GetNext(ecs_iter_t*)"/>
+    /// <inheritdoc cref="IIterableBase.GetNext"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool GetNext(ecs_iter_t* it)
+    public bool GetNext(Iter it)
     {
-        return _workerIterable.GetNext(it);
+        return Underlying.GetNext(it);
     }
 }
 
@@ -87,90 +103,90 @@ public unsafe partial struct WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, 
     /// <inheritdoc cref="WorkerIterable.Page(int, int)"/>
     public PageIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Page(int offset, int limit)
     {
-        return new PageIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(_workerIterable.Page(offset, limit));
+        return new PageIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(Underlying.Page(offset, limit));
     }
     
     /// <inheritdoc cref="WorkerIterable.Worker(int, int)"/>
     public WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Worker(int index, int count)
     {
-        return new WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(_workerIterable.Worker(index, count));
+        return new WorkerIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(Underlying.Worker(index, count));
     }
     
     /// <inheritdoc cref="WorkerIterable.Iter(Flecs.NET.Core.World)"/>
     public IterIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Iter(World world = default)
     {
-        return new(_workerIterable.Iter(world));
+        return new(Underlying.Iter(world));
     }
     
     /// <inheritdoc cref="WorkerIterable.Iter(Flecs.NET.Core.Iter)"/>
     public IterIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Iter(Iter it)
     {
-        return new(_workerIterable.Iter(it));
+        return new(Underlying.Iter(it));
     }
     
     /// <inheritdoc cref="WorkerIterable.Iter(Flecs.NET.Core.Entity)"/>
     public IterIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Iter(Entity entity)
     {
-        return new(_workerIterable.Iter(entity));
+        return new(Underlying.Iter(entity));
     }
     
     /// <inheritdoc cref="WorkerIterable.Count()"/>
     public int Count()
     {
-        return _workerIterable.Count();
+        return Underlying.Count();
     }
     
     /// <inheritdoc cref="WorkerIterable.IsTrue()"/>
     public bool IsTrue()
     {
-        return _workerIterable.IsTrue();
+        return Underlying.IsTrue();
     }
     
     /// <inheritdoc cref="WorkerIterable.First()"/>
     public Entity First()
     {
-        return _workerIterable.First();
+        return Underlying.First();
     }
     
     /// <inheritdoc cref="WorkerIterable.SetVar(int, ulong)"/>
     public IterIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> SetVar(int varId, ulong value)
     {
-        return new(_workerIterable.SetVar(varId, value));
+        return new(Underlying.SetVar(varId, value));
     }
     
     /// <inheritdoc cref="WorkerIterable.SetVar(string, ulong)"/>
     public IterIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> SetVar(string name, ulong value)
     {
-        return new(_workerIterable.SetVar(name, value));
+        return new(Underlying.SetVar(name, value));
     }
     
     /// <inheritdoc cref="WorkerIterable.SetVar(string, ecs_table_t*)"/>
     public IterIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> SetVar(string name, ecs_table_t* value)
     {
-        return new(_workerIterable.SetVar(name, value));
+        return new(Underlying.SetVar(name, value));
     }
     
     /// <inheritdoc cref="WorkerIterable.SetVar(string, ecs_table_range_t)"/>
     public IterIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> SetVar(string name, ecs_table_range_t value)
     {
-        return new(_workerIterable.SetVar(name, value));
+        return new(Underlying.SetVar(name, value));
     }
     
     /// <inheritdoc cref="WorkerIterable.SetVar(string, Table)"/>
     public IterIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> SetVar(string name, Table value)
     {
-        return new(_workerIterable.SetVar(name, value));
+        return new(Underlying.SetVar(name, value));
     }
     
     /// <inheritdoc cref="WorkerIterable.SetGroup(ulong)"/>
     public IterIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> SetGroup(ulong groupId)
     {
-        return new(_workerIterable.SetGroup(groupId));
+        return new(Underlying.SetGroup(groupId));
     }
     
     /// <inheritdoc cref="WorkerIterable.SetGroup{T}()"/>
     public IterIterable<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> SetGroup<T>()
     {
-        return new(_workerIterable.SetGroup<T>()); 
+        return new(Underlying.SetGroup<T>()); 
     }
 }

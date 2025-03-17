@@ -27,29 +27,39 @@ public class WorkerIterable : GeneratorBase
 
             /// <inheritdoc cref="IterIterable"/>
             /// {{Generator.XmlTypeParameters[i]}}
-            public partial struct {{Generator.GetTypeName(Type.WorkerIterable, i)}} : IEquatable<{{Generator.GetTypeName(Type.WorkerIterable, i)}}>
+            public unsafe partial struct {{Generator.GetTypeName(Type.WorkerIterable, i)}} : IEquatable<{{Generator.GetTypeName(Type.WorkerIterable, i)}}>, {{Generator.GetTypeName(Type.IIterable, i)}}
             {
-                private WorkerIterable _workerIterable;
+                /// <inheritdoc cref="IWorkerIterable.Underlying"/>
+                public WorkerIterable Underlying;
+                
+                /// <inheritdoc cref="IWorkerIterable.Iterator"/>
+                public ref ecs_iter_t Iterator => ref Underlying.Iterator;
+                
+                /// <inheritdoc cref="IWorkerIterable.ThreadIndex"/>
+                public int ThreadIndex => Underlying.ThreadIndex;
+                
+                /// <inheritdoc cref="IWorkerIterable.ThreadCount"/>
+                public int ThreadCount => Underlying.ThreadCount;
             
                 /// <summary>
                 ///     Creates a worker iterable.
                 /// </summary>
-                /// <param name="workerIterable">The worker iterable.</param>
-                public WorkerIterable(WorkerIterable workerIterable)
+                /// <param name="handle">The worker iterable.</param>
+                public WorkerIterable(WorkerIterable handle)
                 {
-                    _workerIterable = workerIterable;
+                    Underlying = handle;
                 }
             
                 /// <inheritdoc cref="WorkerIterable(ecs_iter_t, int, int)"/>
                 public WorkerIterable(ecs_iter_t iter, int index, int count)
                 {
-                    _workerIterable = new WorkerIterable(iter, index, count);
+                    Underlying = new WorkerIterable(iter, index, count);
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.Equals(WorkerIterable)"/>
                 public bool Equals({{Generator.GetTypeName(Type.WorkerIterable, i)}} other)
                 {
-                    return _workerIterable.Equals(other._workerIterable);
+                    return Underlying.Equals(other.Underlying);
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.Equals(object)"/>
@@ -61,7 +71,7 @@ public class WorkerIterable : GeneratorBase
                 /// <inheritdoc cref="WorkerIterable.GetHashCode()"/>
                 public override int GetHashCode()
                 {
-                    return _workerIterable.GetHashCode();
+                    return Underlying.GetHashCode();
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.op_Equality"/>
@@ -76,25 +86,31 @@ public class WorkerIterable : GeneratorBase
                     return !(left == right);
                 }
             }
+            
+            // IWorkerIterable Interface
+            public unsafe partial struct {{Generator.GetTypeName(Type.WorkerIterable, i)}} : IWorkerIterable
+            {
+                ref WorkerIterable IWorkerIterable.Underlying => ref Underlying;
+            }
 
             // IIterableBase Interface
             public unsafe partial struct {{Generator.GetTypeName(Type.WorkerIterable, i)}} : IIterableBase
             {
-                /// <inheritdoc cref="WorkerIterable.World"/>
-                public ref ecs_world_t* World => ref _workerIterable.World;
+                /// <inheritdoc cref="IIterableBase.World"/>
+                ecs_world_t* IIterableBase.World => Iterator.world;
                 
-                /// <inheritdoc cref="WorkerIterable.GetIter(ecs_world_t*)"/>
+                /// <inheritdoc cref="IIterableBase.GetIter"/>
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public ecs_iter_t GetIter(ecs_world_t* world = null)
+                public ecs_iter_t GetIter(World world = default)
                 {
-                    return _workerIterable.GetIter(world);
+                    return Underlying.GetIter(world);
                 }
                 
-                /// <inheritdoc cref="WorkerIterable.GetNext(ecs_iter_t*)"/>
+                /// <inheritdoc cref="IIterableBase.GetNext"/>
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool GetNext(ecs_iter_t* it)
+                public bool GetNext(Iter it)
                 {
-                    return _workerIterable.GetNext(it);
+                    return Underlying.GetNext(it);
                 }
             }
 
@@ -104,91 +120,91 @@ public class WorkerIterable : GeneratorBase
                 /// <inheritdoc cref="WorkerIterable.Page(int, int)"/>
                 public {{Generator.GetTypeName(Type.PageIterable, i)}} Page(int offset, int limit)
                 {
-                    return new {{Generator.GetTypeName(Type.PageIterable, i)}}(_workerIterable.Page(offset, limit));
+                    return new {{Generator.GetTypeName(Type.PageIterable, i)}}(Underlying.Page(offset, limit));
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.Worker(int, int)"/>
                 public {{Generator.GetTypeName(Type.WorkerIterable, i)}} Worker(int index, int count)
                 {
-                    return new {{Generator.GetTypeName(Type.WorkerIterable, i)}}(_workerIterable.Worker(index, count));
+                    return new {{Generator.GetTypeName(Type.WorkerIterable, i)}}(Underlying.Worker(index, count));
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.Iter(Flecs.NET.Core.World)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} Iter(World world = default)
                 {
-                    return new(_workerIterable.Iter(world));
+                    return new(Underlying.Iter(world));
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.Iter(Flecs.NET.Core.Iter)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} Iter(Iter it)
                 {
-                    return new(_workerIterable.Iter(it));
+                    return new(Underlying.Iter(it));
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.Iter(Flecs.NET.Core.Entity)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} Iter(Entity entity)
                 {
-                    return new(_workerIterable.Iter(entity));
+                    return new(Underlying.Iter(entity));
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.Count()"/>
                 public int Count()
                 {
-                    return _workerIterable.Count();
+                    return Underlying.Count();
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.IsTrue()"/>
                 public bool IsTrue()
                 {
-                    return _workerIterable.IsTrue();
+                    return Underlying.IsTrue();
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.First()"/>
                 public Entity First()
                 {
-                    return _workerIterable.First();
+                    return Underlying.First();
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.SetVar(int, ulong)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(int varId, ulong value)
                 {
-                    return new(_workerIterable.SetVar(varId, value));
+                    return new(Underlying.SetVar(varId, value));
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.SetVar(string, ulong)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, ulong value)
                 {
-                    return new(_workerIterable.SetVar(name, value));
+                    return new(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.SetVar(string, ecs_table_t*)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, ecs_table_t* value)
                 {
-                    return new(_workerIterable.SetVar(name, value));
+                    return new(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.SetVar(string, ecs_table_range_t)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, ecs_table_range_t value)
                 {
-                    return new(_workerIterable.SetVar(name, value));
+                    return new(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.SetVar(string, Table)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, Table value)
                 {
-                    return new(_workerIterable.SetVar(name, value));
+                    return new(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.SetGroup(ulong)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetGroup(ulong groupId)
                 {
-                    return new(_workerIterable.SetGroup(groupId));
+                    return new(Underlying.SetGroup(groupId));
                 }
                 
                 /// <inheritdoc cref="WorkerIterable.SetGroup{T}()"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetGroup<T>()
                 {
-                    return new(_workerIterable.SetGroup<T>()); 
+                    return new(Underlying.SetGroup<T>()); 
                 }
             }
             """;

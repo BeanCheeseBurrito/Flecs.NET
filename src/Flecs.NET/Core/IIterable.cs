@@ -13,25 +13,19 @@ public unsafe interface IIterable : IIterableBase
     ///     Iterates the query using the provided callback.
     /// </summary>
     /// <param name="callback">The callback.</param>
-    public void Iter(Ecs.IterCallback callback);
-
-    /// <summary>
-    ///     Iterates the query using the provided callback.
-    /// </summary>
-    /// <param name="callback">The callback.</param>
-    public void Each(Ecs.EachEntityCallback callback);
-
-    /// <summary>
-    ///     Iterates the query using the provided callback.
-    /// </summary>
-    /// <param name="callback">The callback.</param>
-    public void Each(Ecs.EachIterCallback callback);
-
-    /// <summary>
-    ///     Iterates the query using the provided callback.
-    /// </summary>
-    /// <param name="callback">The callback.</param>
     public void Run(Ecs.RunCallback callback);
+
+    /// <summary>
+    ///     Iterates the query using the provided callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void Run(delegate*<Iter, void> callback);
+
+    /// <summary>
+    ///     Iterates the query using the provided callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void Iter(Ecs.IterCallback callback);
 
     /// <summary>
     ///     Iterates the query using the provided callback.
@@ -43,19 +37,25 @@ public unsafe interface IIterable : IIterableBase
     ///     Iterates the query using the provided callback.
     /// </summary>
     /// <param name="callback">The callback.</param>
+    public void Each(Ecs.EachEntityCallback callback);
+
+    /// <summary>
+    ///     Iterates the query using the provided callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
     public void Each(delegate*<Entity, void> callback);
 
     /// <summary>
     ///     Iterates the query using the provided callback.
     /// </summary>
     /// <param name="callback">The callback.</param>
-    public void Each(delegate*<Iter, int, void> callback);
+    public void Each(Ecs.EachIterCallback callback);
 
     /// <summary>
     ///     Iterates the query using the provided callback.
     /// </summary>
     /// <param name="callback">The callback.</param>
-    public void Run(delegate*<Iter, void> callback);
+    public void Each(delegate*<Iter, int, void> callback);
 
     /// <summary>
     ///     Create an iterator that limits the returned entities with offset/limit.

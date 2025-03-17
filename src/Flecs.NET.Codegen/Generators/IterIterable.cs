@@ -29,102 +29,109 @@ public class IterIterable : GeneratorBase
             /// {{Generator.XmlTypeParameters[i]}}
             public unsafe partial struct {{Generator.GetTypeName(Type.IterIterable, i)}} : IEquatable<{{Generator.GetTypeName(Type.IterIterable, i)}}>
             {
-                private IterIterable _iterIterable;
+                /// <inheritdoc cref="IIterIterable.Underlying"/>
+                public IterIterable Underlying;
                 
-                internal IterIterable(IterIterable iterIterable)
+                /// <inheritdoc cref="IIterIterable.Iterator"/>
+                public ref ecs_iter_t Iterator => ref Underlying.Iterator;
+                
+                /// <inheritdoc cref="IIterIterable.IterableType"/>
+                public readonly IterableType IterableType => Underlying.IterableType;
+                
+                internal IterIterable(IterIterable handle)
                 {
-                    _iterIterable = iterIterable;
+                    Underlying = handle;
                 }
             
                 /// <inheritdoc cref="IterIterable(ecs_iter_t, IterableType)"/>
                 public IterIterable(ecs_iter_t iter, IterableType iterableType)
                 {
-                    _iterIterable = new IterIterable(iter, iterableType);
+                    Underlying = new IterIterable(iter, iterableType);
                 }
             
                 /// <inheritdoc cref="IterIterable.SetVar(int, ulong)"/>
                 public ref {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(int varId, ulong value)
                 {
-                    _iterIterable.SetVar(varId, value);
+                    Underlying.SetVar(varId, value);
                     return ref this;
                 }
             
                 /// <inheritdoc cref="IterIterable.SetVar(string, ulong)"/>
                 public ref {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, ulong value)
                 {
-                    _iterIterable.SetVar(name, value);
+                    Underlying.SetVar(name, value);
                     return ref this;
                 }
             
                 /// <inheritdoc cref="IterIterable.SetVar(string, ecs_table_t*)"/>
                 public ref {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, ecs_table_t* value)
                 {
-                    _iterIterable.SetVar(name, value);
+                    Underlying.SetVar(name, value);
                     return ref this;
                 }
             
                 /// <inheritdoc cref="IterIterable.SetVar(string, ecs_table_range_t)"/>
                 public ref {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, ecs_table_range_t value)
                 {
-                    _iterIterable.SetVar(name, value);
+                    Underlying.SetVar(name, value);
                     return ref this;
                 }
             
                 /// <inheritdoc cref="IterIterable.SetVar(string, Table)"/>
                 public ref {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, Table value)
                 {
-                    _iterIterable.SetVar(name, value);
+                    Underlying.SetVar(name, value);
                     return ref this;
                 }
             
                 /// <inheritdoc cref="IterIterable.ToJson(in IterToJsonDesc)"/>
                 public string ToJson(in IterToJsonDesc desc)
                 {
-                    return _iterIterable.ToJson(in desc);
+                    return Underlying.ToJson(in desc);
                 }
                 
                 /// <inheritdoc cref="IterIterable.ToJson()"/>
                 public string ToJson()
                 {
-                    return _iterIterable.ToJson();
+                    return Underlying.ToJson();
                 }
             
                 /// <inheritdoc cref="IterIterable.Count()"/>
                 public int Count()
                 {
-                    return _iterIterable.Count();
+                    return Underlying.Count();
                 }
             
                 /// <inheritdoc cref="IterIterable.IsTrue()"/>
                 public bool IsTrue()
                 {
-                    return _iterIterable.IsTrue();
+                    return Underlying.IsTrue();
                 }
             
                 /// <inheritdoc cref="IterIterable.First()"/>
                 public Entity First()
                 {
-                    return _iterIterable.First();
+                    return Underlying.First();
                 }
             
                 /// <inheritdoc cref="IterIterable.SetGroup(ulong)"/>
                 public ref {{Generator.GetTypeName(Type.IterIterable, i)}} SetGroup(ulong groupId)
                 {
-                    _iterIterable.SetGroup(groupId);
+                    Underlying.SetGroup(groupId);
                     return ref this;
                 }
             
                 /// <inheritdoc cref="IterIterable.SetGroup{T}()"/>
                 public ref {{Generator.GetTypeName(Type.IterIterable, i)}} SetGroup<T>()
                 {
-                    _iterIterable.SetGroup<T>();
+                    Underlying.SetGroup<T>();
                     return ref this;
                 }
             
                 /// <inheritdoc cref="IterIterable.Equals(IterIterable)"/>
                 public bool Equals({{Generator.GetTypeName(Type.IterIterable, i)}} other)
                 {
-                    return _iterIterable.Equals(other._iterIterable);
+                    return Underlying.Equals(other.Underlying);
                 }
             
                 /// <inheritdoc cref="IterIterable.Equals(object)"/>
@@ -136,7 +143,7 @@ public class IterIterable : GeneratorBase
                 /// <inheritdoc cref="IterIterable.GetHashCode()"/>
                 public override int GetHashCode()
                 {
-                    return _iterIterable.GetHashCode();
+                    return Underlying.GetHashCode();
                 }
             
                 /// <inheritdoc cref="IterIterable.op_Equality"/>
@@ -151,25 +158,31 @@ public class IterIterable : GeneratorBase
                     return !(left == right);
                 }
             }
+            
+            // IIterIterable Interface
+            public unsafe partial struct {{Generator.GetTypeName(Type.IterIterable, i)}} : IIterIterable
+            {
+                ref IterIterable IIterIterable.Underlying => ref Underlying;
+            }
 
             // IIterableBase Interface
             public unsafe partial struct {{Generator.GetTypeName(Type.IterIterable, i)}} : IIterableBase
             {
-                /// <inheritdoc cref="IterIterable.World"/>
-                public ref ecs_world_t* World => ref _iterIterable.World;
+                /// <inheritdoc cref="IIterableBase.World"/>
+                ecs_world_t* IIterableBase.World => Iterator.world;
                 
-                /// <inheritdoc cref="IterIterable.GetIter(ecs_world_t*)"/>
+                /// <inheritdoc cref="IIterableBase.GetIter"/>
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public ecs_iter_t GetIter(ecs_world_t* world = null)
+                public ecs_iter_t GetIter(World world = default)
                 {
-                    return _iterIterable.GetIter(world);
+                    return Underlying.GetIter(world);
                 }
                 
-                /// <inheritdoc cref="IterIterable.GetNext(ecs_iter_t*)"/>
+                /// <inheritdoc cref="IIterableBase.GetNext"/>
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool GetNext(ecs_iter_t* it)
+                public bool GetNext(Iter it)
                 {
-                    return _iterIterable.GetNext(it);
+                    return Underlying.GetNext(it);
                 }
             }
 
@@ -179,73 +192,73 @@ public class IterIterable : GeneratorBase
                 /// <inheritdoc cref="IterIterable.Page(int, int)"/>
                 public {{Generator.GetTypeName(Type.PageIterable, i)}} Page(int offset, int limit)
                 {
-                    return new {{Generator.GetTypeName(Type.PageIterable, i)}}(_iterIterable.Page(offset, limit));
+                    return new {{Generator.GetTypeName(Type.PageIterable, i)}}(Underlying.Page(offset, limit));
                 }
                 
                 /// <inheritdoc cref="IterIterable.Worker(int, int)"/>
                 public {{Generator.GetTypeName(Type.WorkerIterable, i)}} Worker(int index, int count)
                 {
-                    return new {{Generator.GetTypeName(Type.WorkerIterable, i)}}(_iterIterable.Worker(index, count));
+                    return new {{Generator.GetTypeName(Type.WorkerIterable, i)}}(Underlying.Worker(index, count));
                 }
             
                 /// <inheritdoc cref="IterIterable.Iter(Flecs.NET.Core.World)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} Iter(World world = default)
                 {
-                    return new(_iterIterable.Iter(world));
+                    return new(Underlying.Iter(world));
                 }
                 
                 /// <inheritdoc cref="IterIterable.Iter(Flecs.NET.Core.Iter)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} Iter(Iter it)
                 {
-                    return new(_iterIterable.Iter(it));
+                    return new(Underlying.Iter(it));
                 }
                 
                 /// <inheritdoc cref="IterIterable.Iter(Flecs.NET.Core.Entity)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} Iter(Entity entity)
                 {
-                    return new(_iterIterable.Iter(entity));
+                    return new(Underlying.Iter(entity));
                 }
                 
                 /// <inheritdoc cref="IterIterable.SetVar(int, ulong)"/>
                 {{Generator.GetTypeName(Type.IterIterable, i)}} {{Generator.GetTypeName(Type.IIterable, i)}}.SetVar(int varId, ulong value)
                 {
-                    return new(_iterIterable.SetVar(varId, value));
+                    return new(Underlying.SetVar(varId, value));
                 }
                 
                 /// <inheritdoc cref="IterIterable.SetVar(string, ulong)"/>
                 {{Generator.GetTypeName(Type.IterIterable, i)}} {{Generator.GetTypeName(Type.IIterable, i)}}.SetVar(string name, ulong value)
                 {
-                    return new(_iterIterable.SetVar(name, value));
+                    return new(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="IterIterable.SetVar(string, ecs_table_t*)"/>
                 {{Generator.GetTypeName(Type.IterIterable, i)}} {{Generator.GetTypeName(Type.IIterable, i)}}.SetVar(string name, ecs_table_t* value)
                 {
-                    return new(_iterIterable.SetVar(name, value));
+                    return new(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="IterIterable.SetVar(string, ecs_table_range_t)"/>
                 {{Generator.GetTypeName(Type.IterIterable, i)}} {{Generator.GetTypeName(Type.IIterable, i)}}.SetVar(string name, ecs_table_range_t value)
                 {
-                    return new(_iterIterable.SetVar(name, value));
+                    return new(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="IterIterable.SetVar(string, Table)"/>
                 {{Generator.GetTypeName(Type.IterIterable, i)}} {{Generator.GetTypeName(Type.IIterable, i)}}.SetVar(string name, Table value)
                 {
-                    return new(_iterIterable.SetVar(name, value));
+                    return new(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="IterIterable.SetGroup(ulong)"/>
                 {{Generator.GetTypeName(Type.IterIterable, i)}} {{Generator.GetTypeName(Type.IIterable, i)}}.SetGroup(ulong groupId)
                 {
-                    return new(_iterIterable.SetGroup(groupId));
+                    return new(Underlying.SetGroup(groupId));
                 }
                 
                 /// <inheritdoc cref="IterIterable.SetGroup{T}()"/>
                 {{Generator.GetTypeName(Type.IterIterable, i)}} {{Generator.GetTypeName(Type.IIterable, i)}}.SetGroup<T>()
                 {
-                    return new(_iterIterable.SetGroup<T>()); 
+                    return new(Underlying.SetGroup<T>()); 
                 }
             }
             """;

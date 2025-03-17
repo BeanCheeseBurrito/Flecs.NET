@@ -12,102 +12,109 @@ namespace Flecs.NET.Core;
 /// <typeparam name="T0">The T0 component type.</typeparam> <typeparam name="T1">The T1 component type.</typeparam> <typeparam name="T2">The T2 component type.</typeparam> <typeparam name="T3">The T3 component type.</typeparam> <typeparam name="T4">The T4 component type.</typeparam>
 public unsafe partial struct IterIterable<T0, T1, T2, T3, T4> : IEquatable<IterIterable<T0, T1, T2, T3, T4>>
 {
-    private IterIterable _iterIterable;
+    /// <inheritdoc cref="IIterIterable.Underlying"/>
+    public IterIterable Underlying;
     
-    internal IterIterable(IterIterable iterIterable)
+    /// <inheritdoc cref="IIterIterable.Iterator"/>
+    public ref ecs_iter_t Iterator => ref Underlying.Iterator;
+    
+    /// <inheritdoc cref="IIterIterable.IterableType"/>
+    public readonly IterableType IterableType => Underlying.IterableType;
+    
+    internal IterIterable(IterIterable handle)
     {
-        _iterIterable = iterIterable;
+        Underlying = handle;
     }
 
     /// <inheritdoc cref="IterIterable(ecs_iter_t, IterableType)"/>
     public IterIterable(ecs_iter_t iter, IterableType iterableType)
     {
-        _iterIterable = new IterIterable(iter, iterableType);
+        Underlying = new IterIterable(iter, iterableType);
     }
 
     /// <inheritdoc cref="IterIterable.SetVar(int, ulong)"/>
     public ref IterIterable<T0, T1, T2, T3, T4> SetVar(int varId, ulong value)
     {
-        _iterIterable.SetVar(varId, value);
+        Underlying.SetVar(varId, value);
         return ref this;
     }
 
     /// <inheritdoc cref="IterIterable.SetVar(string, ulong)"/>
     public ref IterIterable<T0, T1, T2, T3, T4> SetVar(string name, ulong value)
     {
-        _iterIterable.SetVar(name, value);
+        Underlying.SetVar(name, value);
         return ref this;
     }
 
     /// <inheritdoc cref="IterIterable.SetVar(string, ecs_table_t*)"/>
     public ref IterIterable<T0, T1, T2, T3, T4> SetVar(string name, ecs_table_t* value)
     {
-        _iterIterable.SetVar(name, value);
+        Underlying.SetVar(name, value);
         return ref this;
     }
 
     /// <inheritdoc cref="IterIterable.SetVar(string, ecs_table_range_t)"/>
     public ref IterIterable<T0, T1, T2, T3, T4> SetVar(string name, ecs_table_range_t value)
     {
-        _iterIterable.SetVar(name, value);
+        Underlying.SetVar(name, value);
         return ref this;
     }
 
     /// <inheritdoc cref="IterIterable.SetVar(string, Table)"/>
     public ref IterIterable<T0, T1, T2, T3, T4> SetVar(string name, Table value)
     {
-        _iterIterable.SetVar(name, value);
+        Underlying.SetVar(name, value);
         return ref this;
     }
 
     /// <inheritdoc cref="IterIterable.ToJson(in IterToJsonDesc)"/>
     public string ToJson(in IterToJsonDesc desc)
     {
-        return _iterIterable.ToJson(in desc);
+        return Underlying.ToJson(in desc);
     }
     
     /// <inheritdoc cref="IterIterable.ToJson()"/>
     public string ToJson()
     {
-        return _iterIterable.ToJson();
+        return Underlying.ToJson();
     }
 
     /// <inheritdoc cref="IterIterable.Count()"/>
     public int Count()
     {
-        return _iterIterable.Count();
+        return Underlying.Count();
     }
 
     /// <inheritdoc cref="IterIterable.IsTrue()"/>
     public bool IsTrue()
     {
-        return _iterIterable.IsTrue();
+        return Underlying.IsTrue();
     }
 
     /// <inheritdoc cref="IterIterable.First()"/>
     public Entity First()
     {
-        return _iterIterable.First();
+        return Underlying.First();
     }
 
     /// <inheritdoc cref="IterIterable.SetGroup(ulong)"/>
     public ref IterIterable<T0, T1, T2, T3, T4> SetGroup(ulong groupId)
     {
-        _iterIterable.SetGroup(groupId);
+        Underlying.SetGroup(groupId);
         return ref this;
     }
 
     /// <inheritdoc cref="IterIterable.SetGroup{T}()"/>
     public ref IterIterable<T0, T1, T2, T3, T4> SetGroup<T>()
     {
-        _iterIterable.SetGroup<T>();
+        Underlying.SetGroup<T>();
         return ref this;
     }
 
     /// <inheritdoc cref="IterIterable.Equals(IterIterable)"/>
     public bool Equals(IterIterable<T0, T1, T2, T3, T4> other)
     {
-        return _iterIterable.Equals(other._iterIterable);
+        return Underlying.Equals(other.Underlying);
     }
 
     /// <inheritdoc cref="IterIterable.Equals(object)"/>
@@ -119,7 +126,7 @@ public unsafe partial struct IterIterable<T0, T1, T2, T3, T4> : IEquatable<IterI
     /// <inheritdoc cref="IterIterable.GetHashCode()"/>
     public override int GetHashCode()
     {
-        return _iterIterable.GetHashCode();
+        return Underlying.GetHashCode();
     }
 
     /// <inheritdoc cref="IterIterable.op_Equality"/>
@@ -135,24 +142,30 @@ public unsafe partial struct IterIterable<T0, T1, T2, T3, T4> : IEquatable<IterI
     }
 }
 
+// IIterIterable Interface
+public unsafe partial struct IterIterable<T0, T1, T2, T3, T4> : IIterIterable
+{
+    ref IterIterable IIterIterable.Underlying => ref Underlying;
+}
+
 // IIterableBase Interface
 public unsafe partial struct IterIterable<T0, T1, T2, T3, T4> : IIterableBase
 {
-    /// <inheritdoc cref="IterIterable.World"/>
-    public ref ecs_world_t* World => ref _iterIterable.World;
+    /// <inheritdoc cref="IIterableBase.World"/>
+    ecs_world_t* IIterableBase.World => Iterator.world;
     
-    /// <inheritdoc cref="IterIterable.GetIter(ecs_world_t*)"/>
+    /// <inheritdoc cref="IIterableBase.GetIter"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ecs_iter_t GetIter(ecs_world_t* world = null)
+    public ecs_iter_t GetIter(World world = default)
     {
-        return _iterIterable.GetIter(world);
+        return Underlying.GetIter(world);
     }
     
-    /// <inheritdoc cref="IterIterable.GetNext(ecs_iter_t*)"/>
+    /// <inheritdoc cref="IIterableBase.GetNext"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool GetNext(ecs_iter_t* it)
+    public bool GetNext(Iter it)
     {
-        return _iterIterable.GetNext(it);
+        return Underlying.GetNext(it);
     }
 }
 
@@ -162,72 +175,72 @@ public unsafe partial struct IterIterable<T0, T1, T2, T3, T4> : IIterable<T0, T1
     /// <inheritdoc cref="IterIterable.Page(int, int)"/>
     public PageIterable<T0, T1, T2, T3, T4> Page(int offset, int limit)
     {
-        return new PageIterable<T0, T1, T2, T3, T4>(_iterIterable.Page(offset, limit));
+        return new PageIterable<T0, T1, T2, T3, T4>(Underlying.Page(offset, limit));
     }
     
     /// <inheritdoc cref="IterIterable.Worker(int, int)"/>
     public WorkerIterable<T0, T1, T2, T3, T4> Worker(int index, int count)
     {
-        return new WorkerIterable<T0, T1, T2, T3, T4>(_iterIterable.Worker(index, count));
+        return new WorkerIterable<T0, T1, T2, T3, T4>(Underlying.Worker(index, count));
     }
 
     /// <inheritdoc cref="IterIterable.Iter(Flecs.NET.Core.World)"/>
     public IterIterable<T0, T1, T2, T3, T4> Iter(World world = default)
     {
-        return new(_iterIterable.Iter(world));
+        return new(Underlying.Iter(world));
     }
     
     /// <inheritdoc cref="IterIterable.Iter(Flecs.NET.Core.Iter)"/>
     public IterIterable<T0, T1, T2, T3, T4> Iter(Iter it)
     {
-        return new(_iterIterable.Iter(it));
+        return new(Underlying.Iter(it));
     }
     
     /// <inheritdoc cref="IterIterable.Iter(Flecs.NET.Core.Entity)"/>
     public IterIterable<T0, T1, T2, T3, T4> Iter(Entity entity)
     {
-        return new(_iterIterable.Iter(entity));
+        return new(Underlying.Iter(entity));
     }
     
     /// <inheritdoc cref="IterIterable.SetVar(int, ulong)"/>
     IterIterable<T0, T1, T2, T3, T4> IIterable<T0, T1, T2, T3, T4>.SetVar(int varId, ulong value)
     {
-        return new(_iterIterable.SetVar(varId, value));
+        return new(Underlying.SetVar(varId, value));
     }
     
     /// <inheritdoc cref="IterIterable.SetVar(string, ulong)"/>
     IterIterable<T0, T1, T2, T3, T4> IIterable<T0, T1, T2, T3, T4>.SetVar(string name, ulong value)
     {
-        return new(_iterIterable.SetVar(name, value));
+        return new(Underlying.SetVar(name, value));
     }
     
     /// <inheritdoc cref="IterIterable.SetVar(string, ecs_table_t*)"/>
     IterIterable<T0, T1, T2, T3, T4> IIterable<T0, T1, T2, T3, T4>.SetVar(string name, ecs_table_t* value)
     {
-        return new(_iterIterable.SetVar(name, value));
+        return new(Underlying.SetVar(name, value));
     }
     
     /// <inheritdoc cref="IterIterable.SetVar(string, ecs_table_range_t)"/>
     IterIterable<T0, T1, T2, T3, T4> IIterable<T0, T1, T2, T3, T4>.SetVar(string name, ecs_table_range_t value)
     {
-        return new(_iterIterable.SetVar(name, value));
+        return new(Underlying.SetVar(name, value));
     }
     
     /// <inheritdoc cref="IterIterable.SetVar(string, Table)"/>
     IterIterable<T0, T1, T2, T3, T4> IIterable<T0, T1, T2, T3, T4>.SetVar(string name, Table value)
     {
-        return new(_iterIterable.SetVar(name, value));
+        return new(Underlying.SetVar(name, value));
     }
     
     /// <inheritdoc cref="IterIterable.SetGroup(ulong)"/>
     IterIterable<T0, T1, T2, T3, T4> IIterable<T0, T1, T2, T3, T4>.SetGroup(ulong groupId)
     {
-        return new(_iterIterable.SetGroup(groupId));
+        return new(Underlying.SetGroup(groupId));
     }
     
     /// <inheritdoc cref="IterIterable.SetGroup{T}()"/>
     IterIterable<T0, T1, T2, T3, T4> IIterable<T0, T1, T2, T3, T4>.SetGroup<T>()
     {
-        return new(_iterIterable.SetGroup<T>()); 
+        return new(Underlying.SetGroup<T>()); 
     }
 }

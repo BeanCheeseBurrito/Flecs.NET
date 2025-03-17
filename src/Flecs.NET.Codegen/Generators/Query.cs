@@ -31,114 +31,115 @@ public class Query : GeneratorBase
             /// {{Generator.XmlTypeParameters[i]}}
             public unsafe partial struct {{Generator.GetTypeName(Type.Query, i)}} : IDisposable, IEquatable<{{Generator.GetTypeName(Type.Query, i)}}>
             {
-                private Query _query;
+                /// <inheritdoc cref="IQuery.Underlying"/>
+                public Query Underlying;
             
                 /// <inheritdoc cref="Query.Handle"/>
-                public ref ecs_query_t* Handle => ref _query.Handle;
+                public ecs_query_t* Handle => Underlying.Handle;
             
                 /// <inheritdoc cref="Query(ecs_query_t*)"/>
                 public Query(ecs_query_t* query)
                 {
                     {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
-                    _query = new Query(query);
+                    Underlying = new Query(query);
                 }
             
                 /// <inheritdoc cref="Query(ecs_world_t*, ulong)"/>
                 public Query(ecs_world_t* world, ulong entity)
                 {
                     {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
-                    _query = new Query(world, entity);
+                    Underlying = new Query(world, entity);
                 }
             
                 /// <inheritdoc cref="Query(Core.Entity)"/>
                 public Query(Entity entity)
                 {
                     {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertNoTags();
-                    _query = new Query(entity);
+                    Underlying = new Query(entity);
                 }
             
                 /// <inheritdoc cref="Query.Dispose()"/>
                 public void Dispose()
                 {
-                    _query.Dispose();
+                    Underlying.Dispose();
                 }
             
                 /// <inheritdoc cref="Query.Destruct()"/>
                 public void Destruct()
                 {
-                    _query.Destruct();
+                    Underlying.Destruct();
                 }
             
                 /// <inheritdoc cref="Query.Entity()"/>
                 public Entity Entity()
                 {
-                    return _query.Entity();
+                    return Underlying.Entity();
                 }
             
                 /// <inheritdoc cref="Query.CPtr()"/>
                 public ecs_query_t* CPtr()
                 {
-                    return _query.CPtr();
+                    return Underlying.CPtr();
                 }
             
                 /// <inheritdoc cref="Query.Changed()"/>
                 public bool Changed()
                 {
-                    return _query.Changed();
+                    return Underlying.Changed();
                 }
             
                 /// <inheritdoc cref="Query.GroupInfo(ulong)"/>
                 public ecs_query_group_info_t* GroupInfo(ulong groupId)
                 {
-                    return _query.GroupInfo(groupId);
+                    return Underlying.GroupInfo(groupId);
                 }
             
                 /// <inheritdoc cref="Query.GroupCtx{T}(ulong)"/>
                 public ref T GroupCtx<T>(ulong group)
                 {
-                    return ref _query.GroupCtx<T>(group);
+                    return ref Underlying.GroupCtx<T>(group);
                 }
             
                 /// <inheritdoc cref="Query.EachTerm(Ecs.TermCallback)"/>
                 public void EachTerm(Ecs.TermCallback callback)
                 {
-                    _query.EachTerm(callback);
+                    Underlying.EachTerm(callback);
                 }
             
                 /// <inheritdoc cref="Query.Term(int)"/>
                 public Term Term(int index)
                 {
-                    return _query.Term(index);
+                    return Underlying.Term(index);
                 }
             
                 /// <inheritdoc cref="Query.TermCount()"/>
                 public int TermCount()
                 {
-                    return _query.TermCount();
+                    return Underlying.TermCount();
                 }
             
                 /// <inheritdoc cref="Query.FieldCount()"/>
                 public int FieldCount()
                 {
-                    return _query.FieldCount();
+                    return Underlying.FieldCount();
                 }
             
                 /// <inheritdoc cref="Query.FindVar(string)"/>
                 public int FindVar(string name)
                 {
-                    return _query.FindVar(name);
+                    return Underlying.FindVar(name);
                 }
             
                 /// <inheritdoc cref="Query.Str()"/>
                 public string Str()
                 {
-                    return _query.Str();
+                    return Underlying.Str();
                 }
             
                 /// <inheritdoc cref="Query.Plan()"/>
                 public string Plan()
                 {
-                    return _query.Plan();
+                    return Underlying.Plan();
                 }
             
                 /// <inheritdoc cref="Query.To(Query)"/>
@@ -168,7 +169,7 @@ public class Query : GeneratorBase
                 /// <inheritdoc cref="Query.Equals(Query)"/>
                 public bool Equals(Query<{{Generator.TypeParameters[i]}}> other)
                 {
-                    return _query.Equals(other._query);
+                    return Underlying.Equals(other.Underlying);
                 }
             
                 /// <inheritdoc cref="Query.Equals(object)"/>
@@ -180,7 +181,7 @@ public class Query : GeneratorBase
                 /// <inheritdoc cref="Query.GetHashCode()"/>
                 public override int GetHashCode()
                 {
-                    return _query.GetHashCode();
+                    return Underlying.GetHashCode();
                 }
             
                 /// <inheritdoc cref="Query.op_Equality"/>
@@ -202,34 +203,40 @@ public class Query : GeneratorBase
                 /// <inheritdoc cref="Query.World()"/>
                 public World World()
                 {
-                    return _query.World();
+                    return Underlying.World();
                 }
             
                 /// <inheritdoc cref="Query.RealWorld()"/>
                 public World RealWorld()
                 {
-                    return _query.RealWorld();
+                    return Underlying.RealWorld();
                 }
+            }
+            
+            // IPageIterable Interface
+            public unsafe partial struct {{Generator.GetTypeName(Type.Query, i)}} : IQuery
+            {
+                ref Query IQuery.Underlying => ref Underlying;
             }
 
             // IIterableBase Interface
             public unsafe partial struct {{Generator.GetTypeName(Type.Query, i)}} : IIterableBase
             {
                 /// <inheritdoc cref="IIterableBase.World"/>
-                ref ecs_world_t* IIterableBase.World => ref Ecs.GetIterableWorld(ref _query);
-            
-                /// <inheritdoc cref="Query.GetIter(ecs_world_t*)"/>
+                ecs_world_t* IIterableBase.World => Handle->world;
+                
+                /// <inheritdoc cref="IIterableBase.GetIter"/>
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public ecs_iter_t GetIter(ecs_world_t* world = null)
+                public ecs_iter_t GetIter(World world = default)
                 {
-                    return _query.GetIter();
+                    return Underlying.GetIter(world);
                 }
                 
-                /// <inheritdoc cref="Query.GetNext(ecs_iter_t*)"/>
+                /// <inheritdoc cref="IIterableBase.GetNext"/>
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public bool GetNext(ecs_iter_t* it)
+                public bool GetNext(Iter it)
                 {
-                    return _query.GetNext(it);
+                    return Underlying.GetNext(it);
                 }
             }
 
@@ -239,91 +246,91 @@ public class Query : GeneratorBase
                 /// <inheritdoc cref="Query.Page(int, int)"/>
                 public {{Generator.GetTypeName(Type.PageIterable, i)}} Page(int offset, int limit)
                 {
-                    return new {{Generator.GetTypeName(Type.PageIterable, i)}}(_query.Page(offset, limit));
+                    return new {{Generator.GetTypeName(Type.PageIterable, i)}}(Underlying.Page(offset, limit));
                 }
                 
                 /// <inheritdoc cref="Query.Worker(int, int)"/>
                 public {{Generator.GetTypeName(Type.WorkerIterable, i)}} Worker(int index, int count)
                 {
-                    return new {{Generator.GetTypeName(Type.WorkerIterable, i)}}(_query.Worker(index, count));
+                    return new {{Generator.GetTypeName(Type.WorkerIterable, i)}}(Underlying.Worker(index, count));
                 }
             
                 /// <inheritdoc cref="Query.Iter(Flecs.NET.Core.World)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} Iter(World world = default)
                 {
-                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(_query.Iter(world));
+                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(Underlying.Iter(world));
                 }
                 
                 /// <inheritdoc cref="Query.Iter(Flecs.NET.Core.Iter)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} Iter(Iter it)
                 {
-                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(_query.Iter(it));
+                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(Underlying.Iter(it));
                 }
                 
                 /// <inheritdoc cref="Query.Iter(Flecs.NET.Core.Entity)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} Iter(Entity entity)
                 {
-                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(_query.Iter(entity));
+                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(Underlying.Iter(entity));
                 }
                 
                 /// <inheritdoc cref="Query.Count()"/>
                 public int Count()
                 {
-                    return _query.Count();
+                    return Underlying.Count();
                 }
                 
                 /// <inheritdoc cref="Query.IsTrue()"/>
                 public bool IsTrue()
                 {
-                    return _query.IsTrue();
+                    return Underlying.IsTrue();
                 }
                 
                 /// <inheritdoc cref="Query.First()"/>
                 public Entity First()
                 {
-                    return _query.First();
+                    return Underlying.First();
                 }
                 
                 /// <inheritdoc cref="Query.SetVar(int, ulong)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(int varId, ulong value)
                 {
-                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(_query.SetVar(varId, value));
+                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(Underlying.SetVar(varId, value));
                 }
                 
                 /// <inheritdoc cref="Query.SetVar(string, ulong)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, ulong value)
                 {
-                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(_query.SetVar(name, value));
+                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="Query.SetVar(string, ecs_table_t*)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, ecs_table_t* value)
                 {
-                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(_query.SetVar(name, value));
+                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="Query.SetVar(string, ecs_table_range_t)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, ecs_table_range_t value)
                 {
-                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(_query.SetVar(name, value));
+                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="Query.SetVar(string, Table)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetVar(string name, Table value)
                 {
-                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(_query.SetVar(name, value));
+                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(Underlying.SetVar(name, value));
                 }
                 
                 /// <inheritdoc cref="Query.SetGroup(ulong)"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetGroup(ulong groupId)
                 {
-                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(_query.SetGroup(groupId));
+                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(Underlying.SetGroup(groupId));
                 }
                 
                 /// <inheritdoc cref="Query.SetGroup{T}()"/>
                 public {{Generator.GetTypeName(Type.IterIterable, i)}} SetGroup<T>()
                 {
-                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(_query.SetGroup<T>());
+                    return new {{Generator.GetTypeName(Type.IterIterable, i)}}(Underlying.SetGroup<T>());
                 }
             }
             """;

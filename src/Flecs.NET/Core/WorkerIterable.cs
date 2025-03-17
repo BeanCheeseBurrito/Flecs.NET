@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.CompilerServices;
-using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
@@ -8,23 +7,34 @@ namespace Flecs.NET.Core;
 /// <summary>
 ///     An iterator that divides the number of matched entities across a number of resources.
 /// </summary>
-public partial struct WorkerIterable : IEquatable<WorkerIterable>, IIterable
+public partial struct WorkerIterable : IEquatable<WorkerIterable>
 {
-    private ecs_iter_t _iter;
-    private readonly int _index;
-    private readonly int _count;
+    /// <summary>
+    ///     The iterator instance.
+    /// </summary>
+    public ecs_iter_t Iterator;
+
+    /// <summary>
+    ///     The current thread index for this iterator.
+    /// </summary>
+    public readonly int ThreadIndex;
+
+    /// <summary>
+    ///     The total number of threads to divide entities between.
+    /// </summary>
+    public readonly int ThreadCount;
 
     /// <summary>
     ///     Creates a <see cref="WorkerIterable"/>.
     /// </summary>
-    /// <param name="iter">The source iterator.</param>
-    /// <param name="index">The index of the current resource.</param>
-    /// <param name="count">The total number of resources to divide entities between.</param>
-    public WorkerIterable(ecs_iter_t iter, int index, int count)
+    /// <param name="iterator">The source iterator.</param>
+    /// <param name="threadIndex">The current thread index for this iterator.</param>
+    /// <param name="threadCount">The total number of threads to divide entities between.</param>
+    public WorkerIterable(ecs_iter_t iterator, int threadIndex, int threadCount)
     {
-        _iter = iter;
-        _index = index;
-        _count = count;
+        Iterator = iterator;
+        ThreadIndex = threadIndex;
+        ThreadCount = threadCount;
     }
 
     /// <summary>
@@ -34,7 +44,7 @@ public partial struct WorkerIterable : IEquatable<WorkerIterable>, IIterable
     /// <returns></returns>
     public bool Equals(WorkerIterable other)
     {
-        return Equals(_iter, other._iter) && Equals(_index, other._index) && Equals(_count, other._count);
+        return Iterator == other.Iterator && ThreadIndex == other.ThreadIndex && ThreadCount == other.ThreadCount;
     }
 
     /// <summary>
@@ -53,7 +63,7 @@ public partial struct WorkerIterable : IEquatable<WorkerIterable>, IIterable
     /// <returns></returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(_iter.GetHashCode(), _index, _count);
+        return HashCode.Combine(Iterator.GetHashCode(), ThreadIndex, ThreadCount);
     }
 
     /// <summary>
@@ -79,30 +89,39 @@ public partial struct WorkerIterable : IEquatable<WorkerIterable>, IIterable
     }
 }
 
-//IIterableBase Interface
-public unsafe partial struct WorkerIterable
+// IWorkerIterable Interface
+public unsafe partial struct WorkerIterable : IWorkerIterable
+{
+    ref WorkerIterable IWorkerIterable.Underlying => ref this;
+    ref ecs_iter_t IWorkerIterable.Iterator => ref Iterator;
+    int IWorkerIterable.ThreadIndex => ThreadIndex;
+    int IWorkerIterable.ThreadCount => ThreadCount;
+}
+
+// IIterableBase Interface
+public unsafe partial struct WorkerIterable : IIterableBase
 {
     /// <inheritdoc cref="IIterableBase.World"/>
-    public ref ecs_world_t* World => ref _iter.world;
+    ecs_world_t* IIterableBase.World => Iterator.world;
 
     /// <inheritdoc cref="IIterableBase.GetIter"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ecs_iter_t GetIter(ecs_world_t* world = null)
+    public ecs_iter_t GetIter(World world = default)
     {
-        fixed (ecs_iter_t* ptr = &_iter)
-            return ecs_worker_iter(ptr, _index, _count);
+        fixed (ecs_iter_t* ptr = &Iterator)
+            return ecs_worker_iter(ptr, ThreadIndex, ThreadCount);
     }
 
     /// <inheritdoc cref="IIterableBase.GetNext"/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool GetNext(ecs_iter_t* it)
+    public bool GetNext(Iter it)
     {
         return ecs_worker_next(it);
     }
 }
 
 // IIterable Interface
-public unsafe partial struct WorkerIterable
+public unsafe partial struct WorkerIterable : IIterable
 {
     /// <inheritdoc cref="IIterable.Run(Ecs.RunCallback)"/>
     public void Run(Ecs.RunCallback callback)
@@ -155,19 +174,19 @@ public unsafe partial struct WorkerIterable
     /// <inheritdoc cref="IIterable.Page(int, int)"/>
     public PageIterable Page(int offset, int limit)
     {
-        return new PageIterable(GetIter(), offset, limit);
+        return new PageIterable(this.GetIter(), offset, limit);
     }
 
     /// <inheritdoc cref="IIterable.Worker(int, int)"/>
     public WorkerIterable Worker(int index, int count)
     {
-        return new WorkerIterable(GetIter(), index, count);
+        return new WorkerIterable(this.GetIter(), index, count);
     }
 
     /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.World)"/>
     public IterIterable Iter(World world = default)
     {
-        return new IterIterable(GetIter(world), IterableType.Worker);
+        return new IterIterable(this.GetIter(world), IterableType.Worker);
     }
 
     /// <inheritdoc cref="IIterable.Iter(Flecs.NET.Core.Iter)"/>
