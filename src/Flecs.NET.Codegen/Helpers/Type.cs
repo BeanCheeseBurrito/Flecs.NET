@@ -24,6 +24,7 @@ public enum Type
     SystemBuilder,
     TimerEntity,
     TypeHelper,
+    WorkerState,
     UntypedComponent,
     WorkerIterable
 }

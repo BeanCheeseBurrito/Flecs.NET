@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Flecs.NET.Codegen.Helpers;
+using Type = Flecs.NET.Codegen.Helpers.Type;
 
 namespace Flecs.NET.Codegen.Generators;
 
@@ -18,8 +19,10 @@ public class Invoker : GeneratorBase
             AddSource($"Find/Iterator/T{i + 1}.g.cs", GenerateFindIteratorInvokers(i));
 
             // Iterable Invokers
-            AddSource($"Iter/Iterable/T{i + 1}.g.cs", GenerateIterIterableInvokers(i));
-            AddSource($"Each/Iterable/T{i + 1}.g.cs", GenerateEachIterableInvokers(i));
+            AddSource($"Iter/Iterable/T{i + 1}.g.cs", GenerateIterableInvokers(Generator.CallbacksIter, i));
+            AddSource($"IterJob/Iterable/T{i + 1}.g.cs", GenerateJobIterableInvokers(Generator.CallbacksIter, i));
+            AddSource($"Each/Iterable/T{i + 1}.g.cs", GenerateIterableInvokers(Generator.CallbacksEach, i));
+            AddSource($"EachJob/Iterable/T{i + 1}.g.cs", GenerateJobIterableInvokers(Generator.CallbacksEach, i));
             AddSource($"Find/Iterable/T{i + 1}.g.cs", GenerateFindIterableInvokers(i));
 
             // Fetch Component Invokers
@@ -222,41 +225,9 @@ public class Invoker : GeneratorBase
         return string.Join(Separator.DoubleNewLine, invokerIterators);
     }
 
-    private static string GenerateIterIterableInvokers(int i)
+    private static string GenerateIterableInvokers(Callback[] callbacks, int i)
     {
-        IEnumerable<string> invokers = Generator.CallbacksIter.Select((Callback callback) => $$"""
-                /// <summary>
-                ///     Iterates over an IIterableBase object using the provided .{{Generator.GetInvokerName(callback)}} callback.
-                /// </summary>
-                /// <param name="iterable">The iterable object.</param>
-                /// <param name="callback">The callback.</param>
-                /// <typeparam name="T">The iterable type.</typeparam>
-                /// {{Generator.XmlTypeParameters[i]}}
-                public static void {{Generator.GetInvokerName(callback)}}<T, {{Generator.TypeParameters[i]}}>(ref T iterable, {{Generator.GetCallbackType(callback, i)}} callback)
-                    where T : unmanaged, IIterableBase
-                {
-                    ecs_iter_t iter = iterable.GetIter();
-                    while (iterable.GetNext(&iter))
-                        {{Generator.GetInvokerName(callback)}}(&iter, callback);
-                }
-            """);
-
-        return $$"""
-            using System;
-            using static Flecs.NET.Bindings.flecs;
-
-            namespace Flecs.NET.Core;
-
-            public static unsafe partial class Invoker
-            {
-            {{string.Join(Separator.DoubleNewLine, invokers)}}
-            }
-            """;
-    }
-
-    private static string GenerateEachIterableInvokers(int i)
-    {
-        IEnumerable<string> invokers = Generator.CallbacksEach.Select((Callback callback) => $$"""
+        IEnumerable<string> invokers = callbacks.Select((Callback callback) => $$"""
                 /// <summary>
                 ///     Iterates over an IIterableBase object using the provided .{{Generator.GetInvokerName(callback)}} callback.
                 /// </summary>
@@ -314,6 +285,62 @@ public class Invoker : GeneratorBase
 
         return $$"""
             using System;
+            using static Flecs.NET.Bindings.flecs;
+
+            namespace Flecs.NET.Core;
+
+            public static unsafe partial class Invoker
+            {
+            {{string.Join(Separator.DoubleNewLine, invokers)}}
+            }
+            """;
+    }
+
+    private static string GenerateJobIterableInvokers(Callback[] callbacks, int i)
+    {
+        IEnumerable<string> invokers = callbacks.Select((Callback callback) => $$"""
+                public static void {{Generator.GetInvokerName(callback)}}Job<T, {{Generator.TypeParameters[i]}}>(ref T iterable, {{Generator.GetCallbackType(callback, i)}} callback) where T : unmanaged, IIterableBase
+                {
+                    World world = iterable.World;
+                
+                    Ecs.Assert(!world.IsDeferred() && !world.IsReadOnly(), "Cannot run multi-threaded query when world is already in deferred or readonly mode.");
+                
+                    ecs_readonly_begin(world, true);
+                
+                    int stageCount = world.GetStageCount();
+                
+                    using CountdownEvent countdown = new(stageCount);
+                
+                    for (int i = 0; i < stageCount; i++)
+                    {
+                        ThreadPool.QueueUserWorkItem(Work, new {{Generator.GetTypeName(Type.WorkerState, i)}}.{{callback}}
+                        {
+                            Countdown = countdown,
+                            Worker = new {{Generator.GetTypeName(Type.WorkerIterable, i)}}(iterable.GetIter(world.GetStage(i)), i, stageCount),
+                            Callback = callback
+                        }, true);
+                    }
+                
+                    countdown.Wait();
+                
+                    ecs_readonly_end(world);
+                
+                    return;
+                
+                    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                    static void Work({{Generator.GetTypeName(Type.WorkerState, i)}}.{{callback}} state)
+                    {
+                        state.Worker.{{Generator.GetInvokerName(callback)}}(state.Callback);
+                        state.Countdown.Signal();
+                    }
+                }
+            """);
+
+        return $$"""
+            using System;
+            using System.Runtime.CompilerServices;
+            using System.Threading;
+            
             using static Flecs.NET.Bindings.flecs;
 
             namespace Flecs.NET.Core;

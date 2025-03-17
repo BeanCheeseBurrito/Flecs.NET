@@ -357,4 +357,202 @@ public unsafe partial struct Query<T0, T1, T2, T3, T4, T5, T6>
         TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
         return Invoker.Find(ref this, callback);
     }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Iter callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void IterJob(Ecs.IterFieldCallback<T0, T1, T2, T3, T4, T5, T6> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), false);
+        Invoker.IterJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Iter callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void IterJob(Ecs.IterSpanCallback<T0, T1, T2, T3, T4, T5, T6> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), false);
+        Invoker.IterJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Iter callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void IterJob(Ecs.IterPointerCallback<T0, T1, T2, T3, T4, T5, T6> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), false);
+        Invoker.IterJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Iter callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void IterJob(delegate*<Iter, Field<T0>, Field<T1>, Field<T2>, Field<T3>, Field<T4>, Field<T5>, Field<T6>, void> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), false);
+        Invoker.IterJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Iter callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void IterJob(delegate*<Iter, Span<T0>, Span<T1>, Span<T2>, Span<T3>, Span<T4>, Span<T5>, Span<T6>, void> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), false);
+        Invoker.IterJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Iter callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void IterJob(delegate*<Iter, T0*, T1*, T2*, T3*, T4*, T5*, T6*, void> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), false);
+        Invoker.IterJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Each callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void EachJob(Ecs.EachRefCallback<T0, T1, T2, T3, T4, T5, T6> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+        Invoker.EachJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Each callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void EachJob(Ecs.EachEntityRefCallback<T0, T1, T2, T3, T4, T5, T6> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+        Invoker.EachJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Each callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void EachJob(Ecs.EachIterRefCallback<T0, T1, T2, T3, T4, T5, T6> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+        Invoker.EachJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Each callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void EachJob(delegate*<ref T0, ref T1, ref T2, ref T3, ref T4, ref T5, ref T6, void> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+        Invoker.EachJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Each callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void EachJob(delegate*<Entity, ref T0, ref T1, ref T2, ref T3, ref T4, ref T5, ref T6, void> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+        Invoker.EachJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Each callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void EachJob(delegate*<Iter, int, ref T0, ref T1, ref T2, ref T3, ref T4, ref T5, ref T6, void> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(true);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+        Invoker.EachJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Each callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void EachJob(Ecs.EachPointerCallback<T0, T1, T2, T3, T4, T5, T6> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+        Invoker.EachJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Each callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void EachJob(Ecs.EachEntityPointerCallback<T0, T1, T2, T3, T4, T5, T6> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+        Invoker.EachJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Each callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void EachJob(Ecs.EachIterPointerCallback<T0, T1, T2, T3, T4, T5, T6> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+        Invoker.EachJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Each callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void EachJob(delegate*<T0*, T1*, T2*, T3*, T4*, T5*, T6*, void> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+        Invoker.EachJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Each callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void EachJob(delegate*<Entity, T0*, T1*, T2*, T3*, T4*, T5*, T6*, void> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+        Invoker.EachJob(ref this, callback);
+    }
+
+    /// <summary>
+    ///     Iterates the <see cref="Query"/> using the provided .Each callback.
+    /// </summary>
+    /// <param name="callback">The callback.</param>
+    public void EachJob(delegate*<Iter, int, T0*, T1*, T2*, T3*, T4*, T5*, T6*, void> callback)
+    {
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertReferenceTypes(false);
+        TypeHelper<T0, T1, T2, T3, T4, T5, T6>.AssertSparseTypes(Ecs.GetIterableWorld(ref this), true);
+        Invoker.EachJob(ref this, callback);
+    }
 }

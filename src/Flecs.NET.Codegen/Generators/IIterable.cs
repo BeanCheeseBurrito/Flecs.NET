@@ -102,6 +102,19 @@ public class IIterable : GeneratorBase
                 }
             """);
 
+        IEnumerable<string> jobIterators = Generator.CallbacksIterAndEach.Select((Callback callback) => $$"""
+                /// <summary>
+                ///     Iterates the <see cref="{{type}}"/> using the provided .{{Generator.GetInvokerName(callback)}} callback.
+                /// </summary>
+                /// <param name="callback">The callback.</param>
+                public {{Generator.GetInvokerReturnType(callback)}} {{Generator.GetInvokerName(callback)}}Job({{Generator.GetCallbackType(callback, i)}} callback)
+                {
+                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertReferenceTypes({{(Generator.GetCallbackIsUnmanaged(callback) ? "false" : "true")}});
+                    {{Generator.GetTypeName(Type.TypeHelper, i)}}.AssertSparseTypes(Ecs.GetIterableWorld(ref this), {{(Generator.GetCallbackIsIter(callback) ? "false" : "true")}});
+                    {{Generator.GetInvokerReturn(callback)}}Invoker.{{Generator.GetInvokerName(callback)}}Job(ref this, callback);
+                }
+            """);
+
         return $$"""
             using System;
 
@@ -109,7 +122,7 @@ public class IIterable : GeneratorBase
 
             public unsafe partial struct {{Generator.GetTypeName(type, i)}}
             {
-            {{string.Join(Separator.DoubleNewLine, iterators)}}
+            {{string.Join(Separator.DoubleNewLine, iterators.Concat(jobIterators))}}
             }
             """;
     }

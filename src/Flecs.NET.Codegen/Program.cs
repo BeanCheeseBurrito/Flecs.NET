@@ -23,6 +23,7 @@ Generate<TimerEntity>();
 Generate<TypeHelper>();
 Generate<UntypedComponent>();
 Generate<WorkerIterable>();
+Generate<WorkerState>();
 Generate<World>();
 
 return;
