@@ -45,9 +45,9 @@
     <ItemGroup>
         <None Pack="true" Include="buildTransitive/Flecs.NET.Native.props" PackagePath="buildTransitive/$(PackageId).props"/>
         <None Pack="true" Include="buildTransitive/Flecs.NET.Native.targets" PackagePath="buildTransitive/$(PackageId).targets"/>
-        <None Pack="true" Include="$(OutputPath)runtimes/**/*.a;$(OutputPath)runtimes/**/*.lib" PackagePath="static/" />
+        <None Pack="true" Include="$(OutputPath)runtimes/**/*.a;$(OutputPath)runtimes/**/*.lib" PackagePath="static/"/>
 
-        <Content Include="$(OutputPath)runtimes/**/**" Exclude="$(OutputPath)runtimes/**/*.a;$(OutputPath)runtimes/**/*.lib" Link="%(Filename)%(Extension)" >
+        <Content Include="$(OutputPath)runtimes/**/**" Exclude="$(OutputPath)runtimes/**/*.a;$(OutputPath)runtimes/**/*.lib" Link="%(Filename)%(Extension)">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <PackagePath>runtimes/</PackagePath>
         </Content>
@@ -58,75 +58,103 @@
         <When Condition="$(RuntimeIdentifier) == 'win-x64'">
             <PropertyGroup>
                 <ZigIdentifier>x86_64-windows-gnu</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
             </PropertyGroup>
         </When>
         <When Condition="$(RuntimeIdentifier) == 'win-x86'">
             <PropertyGroup>
                 <ZigIdentifier>x86-windows-gnu</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
             </PropertyGroup>
         </When>
         <When Condition="$(RuntimeIdentifier) == 'win-arm'">
             <PropertyGroup>
                 <ZigIdentifier>arm-windows-gnu</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
             </PropertyGroup>
         </When>
         <When Condition="$(RuntimeIdentifier) == 'win-arm64'">
             <PropertyGroup>
                 <ZigIdentifier>aarch64-windows-gnu</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
             </PropertyGroup>
         </When>
         <When Condition="$(RuntimeIdentifier) == 'linux-x64'">
             <PropertyGroup>
                 <ZigIdentifier>x86_64-linux-gnu</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
             </PropertyGroup>
         </When>
         <When Condition="$(RuntimeIdentifier) == 'linux-x86'">
             <PropertyGroup>
                 <ZigIdentifier>x86-linux-gnu</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
             </PropertyGroup>
         </When>
         <When Condition="$(RuntimeIdentifier) == 'linux-arm'">
             <PropertyGroup>
                 <ZigIdentifier>arm-linux-gnueabihf</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
             </PropertyGroup>
         </When>
         <When Condition="$(RuntimeIdentifier) == 'linux-arm64'">
             <PropertyGroup>
                 <ZigIdentifier>aarch64-linux-gnu</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
             </PropertyGroup>
         </When>
         <When Condition="$(RuntimeIdentifier) == 'osx-x64'">
             <PropertyGroup>
                 <ZigIdentifier>x86_64-macos</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
             </PropertyGroup>
         </When>
         <When Condition="$(RuntimeIdentifier) == 'osx-arm64'">
             <PropertyGroup>
                 <ZigIdentifier>aarch64-macos</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
             </PropertyGroup>
-            </When>
+        </When>
         <When Condition="$(RuntimeIdentifier) == 'iossimulator-x64'">
             <PropertyGroup>
                 <ZigIdentifier>x86_64-ios-simulator</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
                 <ZigArgs>--sysroot $(IOS_SIMULATOR_SDK)</ZigArgs>
             </PropertyGroup>
         </When>
         <When Condition="$(RuntimeIdentifier) == 'iossimulator-arm64'">
             <PropertyGroup>
                 <ZigIdentifier>aarch64-ios-simulator</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
                 <ZigArgs>--sysroot $(IOS_SIMULATOR_SDK)</ZigArgs>
             </PropertyGroup>
         </When>
         <When Condition="$(RuntimeIdentifier) == 'ios-arm64'">
             <PropertyGroup>
                 <ZigIdentifier>aarch64-ios</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
                 <ZigArgs>--sysroot $(IOS_SDK)</ZigArgs>
             </PropertyGroup>
         </When>
         <When Condition="$(RuntimeIdentifier) == 'browser-wasm'">
             <PropertyGroup>
                 <ZigIdentifier>wasm32-emscripten</ZigIdentifier>
+                <ZigLibraryType>Static</ZigLibraryType>
                 <ZigArgs>--sysroot "$(EMSDK)/upstream/emscripten"</ZigArgs>
+            </PropertyGroup>
+        </When>
+        <When Condition="$(RuntimeIdentifier) == 'android-arm64'">
+            <PropertyGroup>
+                <ZigIdentifier>aarch64-linux-android</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
+                <ZigArgs>--sysroot $(ANDROID_NDK_HOME)</ZigArgs>
+            </PropertyGroup>
+        </When>
+        <When Condition="$(RuntimeIdentifier) == 'android-x64'">
+            <PropertyGroup>
+                <ZigIdentifier>x86_64-linux-android</ZigIdentifier>
+                <ZigLibraryType>Shared</ZigLibraryType>
+                <ZigArgs>--sysroot $(ANDROID_NDK_HOME)</ZigArgs>
             </PropertyGroup>
         </When>
         <Otherwise>
@@ -157,7 +185,6 @@
         <Message Importance="High" Text="Build Target: $(RuntimeIdentifier) $(Configuration)"/>
         <Message Importance="High" Text="Build Zig Target: $(ZigIdentifier) $(ZigConfiguration)"/>
         <Message Importance="High" Text="Build Zig Args: $(ZigArgs)"/>
-        <Exec Command="$(BuildCommand) -Dlibrary-type=Shared" Condition="'$(RuntimeIdentifier)' != 'browser-wasm'"/>
-        <Exec Command="$(BuildCommand) -Dlibrary-type=Static"/>
+        <Exec Command="$(BuildCommand) -Dlibrary-type=$(ZigLibraryType)"/>
     </Target>
 </Project>

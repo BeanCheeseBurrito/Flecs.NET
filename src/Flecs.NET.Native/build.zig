@@ -1,7 +1,15 @@
 const std = @import("std");
+const builtin = @import("builtin");
 const Build = std.Build;
 
 pub const LibraryType = enum { Shared, Static };
+
+const BuildOptions = struct {
+    optimize: std.builtin.OptimizeMode,
+    target: Build.ResolvedTarget,
+    library_type: LibraryType,
+    compiler_rt_path: ?[]const u8,
+};
 
 const src_flags = [_][]const u8{
     "-std=c99",
@@ -134,7 +142,7 @@ const src_files = [_][]const u8{
     "../../native/flecs/src/storage/table.c",
 };
 
-pub fn compileFlecs(b: *Build, options: anytype) void {
+pub fn compileFlecs(b: *Build, options: BuildOptions) void {
     const lib = switch (options.library_type) {
         .Shared => b.addSharedLibrary(.{
             .name = "flecs",
@@ -189,6 +197,50 @@ pub fn compileFlecs(b: *Build, options: anytype) void {
             var dir = std.fs.openDirAbsolute(cache_include, std.fs.Dir.OpenDirOptions{ .access_sub_paths = true, .no_follow = true }) catch @panic("No emscripten cache. Generate it!");
             dir.close();
             lib.addIncludePath(.{ .cwd_relative = cache_include });
+        },
+        .linux => {
+            if (options.target.result.abi == .android) {
+                if (b.sysroot == null) {
+                    @panic("A --sysroot path to an Android NDK needs to be provided when compiling for Android.");
+                }
+
+                const host_tuple = switch (builtin.target.os.tag) {
+                    .linux => "linux-x86_64",
+                    .windows => "windows-x86_64",
+                    .macos => "darwin-x86_64",
+                    else => @panic("unsupported host OS"),
+                };
+
+                const triple = switch (options.target.result.cpu.arch) {
+                    .aarch64 => "aarch64-linux-android",
+                    .x86_64 => "x86_64-linux-android",
+                    else => @panic("Unsupported Android architecture"),
+                };
+                const android_api_level: []const u8 = "21";
+
+                const android_sysroot = b.pathJoin(&.{ b.sysroot.?, "/toolchains/llvm/prebuilt/", host_tuple, "/sysroot" });
+                const android_lib_path = b.pathJoin(&.{ android_sysroot, "/usr/lib/", triple, android_api_level });
+                const android_include_path = b.pathJoin(&.{ android_sysroot, "/usr/include" });
+                const android_system_include_path = b.pathJoin(&.{ android_sysroot, "/usr/include/", triple });
+
+                lib.addLibraryPath(.{ .cwd_relative = android_lib_path });
+
+                const libc_file_name = "android-libc.conf";
+                var libc_content = std.ArrayList(u8).init(b.allocator);
+                errdefer libc_content.deinit();
+
+                const writer = libc_content.writer();
+                const libc_installation = std.zig.LibCInstallation{
+                    .include_dir = android_include_path,
+                    .sys_include_dir = android_system_include_path,
+                    .crt_dir = android_lib_path,
+                };
+                libc_installation.render(writer) catch @panic("Failed to render libc");
+                const libc_path = b.addWriteFiles().add(libc_file_name, libc_content.items);
+
+                lib.setLibCFile(libc_path);
+                lib.libc_file.?.addStepDependencies(&lib.step);
+            }
         },
         else => {},
     }

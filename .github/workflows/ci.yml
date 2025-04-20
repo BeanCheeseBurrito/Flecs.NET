@@ -71,6 +71,19 @@ jobs:
         uses: mymindstorm/setup-emsdk@v14
         with:
           actions-cache-folder: 'emsdk-cache'
+          
+      - name: Setup Android NDK
+        if: matrix.os == 'macos-13'
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r25c
+          link-to-sdk: true
+          
+      - name: Set Android NDK variables
+        if: matrix.os == 'macos-13'
+        shell: bash
+        run: |
+          echo "ANDROID_NDK_HOME=$ANDROID_NDK_HOME" >> $GITHUB_ENV
 
       - name: Restore Dependencies
         shell: bash
@@ -101,6 +114,8 @@ jobs:
           dotnet build -c Debug -r iossimulator-x64
           dotnet build -c Debug -r iossimulator-arm64
           dotnet build -c Debug -r ios-arm64
+          dotnet build -c Debug -r android-arm64
+          dotnet build -c Debug -r android-x64
 
           dotnet build -c Release -r linux-x64
           dotnet build -c Release -r linux-arm64
@@ -112,6 +127,8 @@ jobs:
           dotnet build -c Release -r iossimulator-x64
           dotnet build -c Release -r iossimulator-arm64
           dotnet build -c Release -r ios-arm64
+          dotnet build -c Release -r android-arm64
+          dotnet build -c Release -r android-x64
 
       - name: Run Tests
         shell: bash
