@@ -1049,4 +1049,10 @@ public unsafe partial struct PipelineBuilder<T0, T1>
         Ecs.GetQueryBuilder(ref this).OnGroupDelete(callback);
         return ref this;
     }
+    
+    public ref PipelineBuilder<T0, T1> DetectChanges()
+    {
+        Ecs.GetQueryBuilder(ref this).DetectChanges();
+        return ref this;
+    }
 }

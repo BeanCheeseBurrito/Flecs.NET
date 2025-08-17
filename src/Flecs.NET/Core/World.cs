@@ -1,7 +1,11 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
 using Flecs.NET.Core.BindingContext;
 using Flecs.NET.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;
@@ -96,6 +100,20 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
             return;
 
         _ = ecs_fini(Handle);
+    }
+
+    public void Shrink()
+    {
+        ecs_shrink(Handle);
+    }
+    public void ExclusiveAccessBegin(string threadName)
+    {
+        using NativeString nativeThreadName = (NativeString) threadName;
+        ecs_exclusive_access_begin(Handle, nativeThreadName);
+    }
+    public void ExclusiveAccessEnd(bool lockWorld)
+    {
+        ecs_exclusive_access_end(Handle, lockWorld);
     }
 
     /// <summary>
@@ -2668,7 +2686,8 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public Entity Prefab<T>()
     {
-        return new Component<T>(Handle).Add(EcsPrefab);
+        Ecs.Assert( typeof(T).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).Length == 0, "Prefab types cannot have fields, while the following type does: " + Type<T>.FullName);
+        return new Entity(Handle, Type<T>.Id(Handle, false, false, 0)).Add(EcsPrefab);
     }
 
     /// <summary>
@@ -2679,7 +2698,8 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     /// <returns></returns>
     public Entity Prefab<T>(string name)
     {
-        return new Component<T>(Handle, name).Add(EcsPrefab);
+        Ecs.Assert( typeof(T).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).Length == 0, "Prefab types cannot have fields, while the following type does: " + Type<T>.FullName);
+        return new Entity(Handle, Type<T>.Id(Handle, false, false, 0, name)).Add(EcsPrefab);
     }
 
     /// <summary>
@@ -3242,6 +3262,128 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     public ScriptBuilder Script(string name)
     {
         return new ScriptBuilder(Handle, name);
+    }
+
+    private readonly List<Delegate> ScriptCallbacks = new();
+    private readonly Type TypesType = typeof(Type<>);
+    private readonly Dictionary<Type, ulong> ScriptTypeIds = new();
+    public void AddFunction(Delegate function, string? nameOverride = null, string[]? argumentOverrides = null)
+    {
+        AddFunctionImpl(function, nameOverride, argumentOverrides);
+    }
+
+    public void AddMethod(ulong parent, Delegate function, string? nameOverride = null, string[]? argumentOverrides = null)
+    {
+        AddFunctionImpl(function, nameOverride, argumentOverrides, parent: parent);
+    }
+
+    public void AddMethod<T>(Delegate function, string? nameOverride = null, string[]? argumentOverrides = null)
+    {
+        AddFunctionImpl(function, nameOverride, argumentOverrides, parent: Type<T>.Id(Handle));
+    }
+
+    internal void AddFunctionImpl(Delegate function, string? nameOverride, string[]? argumentOverrides, ulong parent = default)
+    {
+        using NativeString nativeName = (NativeString)(nameOverride ?? function.Method.Name);
+        InlineArrays.ecs_script_parameter_t_16 scriptParamsRaw = default;
+        ecs_script_parameter_t* scriptParams = (ecs_script_parameter_t * ) &scriptParamsRaw;
+
+        List<IDisposable> cleanup = new();
+        try
+        {
+            var args = function.Method.GetParameters();
+            for (int i = 0; i < args.Length; ++i)
+            {
+                cleanup.Add((NativeString)args[i].Name);
+                NativeString argName = (NativeString)cleanup[^-1];
+
+                if (!ScriptTypeIds.TryGetValue(args[i].ParameterType, out ulong argTypeId))
+                {
+                    ScriptTypeIds.Add(args[i].ParameterType, argTypeId = (ulong) TypesType.MakeGenericType(args[i].ParameterType).GetMethod(nameof(Type<string>.Id), [typeof(ecs_world_t*)])!.Invoke(null, [new IntPtr(Handle)])!);
+                }
+
+                scriptParams[i] = new()
+                {
+                    name = argName,
+                    type = argTypeId,
+                };
+            }
+
+
+            if (!ScriptTypeIds.TryGetValue(function.Method.ReturnType, out ulong retTypeId))
+            {
+                ScriptTypeIds.Add(function.Method.ReturnType, retTypeId = (ulong)TypesType.MakeGenericType(function.Method.ReturnType).GetMethod(nameof(Type<string>.Id), [typeof(ecs_world_t*)])!.Invoke(null, [new IntPtr(Handle)])!);
+            }
+
+            ecs_function_desc_t desc = new()
+            {
+                name = nativeName,
+                parent = parent,
+                @params = scriptParamsRaw,
+                return_type = retTypeId,
+                callback = &ScriptCallableCallback,
+                ctx = (void*)ScriptCallbacks.Count
+            };
+
+            ScriptCallbacks.Add(function);
+            ecs_function_init(Handle, &desc);
+        }
+        finally
+        {
+            foreach (var entry in cleanup)
+            {
+                entry.Dispose();
+            }
+        }
+    }
+
+    [UnmanagedCallersOnly]
+    public static void ScriptCallableCallback(ecs_function_ctx_t* ctx, int argc, ecs_value_t* argv, ecs_value_t* result)
+    {
+        World world = (World) ecs_get_binding_ctx_fast(ctx->world);
+        int ind = (int)ctx->ctx;
+        var del = world.ScriptCallbacks[ind];
+
+        object[] args = new object[argc];
+        var paramInfo = del.Method.GetParameters();
+        for (int i = 0; i < argc; i++)
+        {
+            Type argType = paramInfo[i].ParameterType;
+            args[i] = Managed.Get(argType, argv[i].ptr);
+        }
+
+        var ret = del.DynamicInvoke(args);
+        ecs_type_info_t* retType = ecs_get_type_info(ctx->world, result->type);
+        retType->hooks.copy(result->ptr, &ret, 1, retType);
+    }
+
+    public void AddConstant<T>(ulong parent, string name, T value)
+    {
+        using NativeString nativeName = (NativeString)name;
+
+        ecs_const_var_desc_t desc = default;
+        desc.name = nativeName;
+        desc.parent = parent;
+        desc.type = Type<T>.Id(Handle);
+
+        T* ptrValue = &value;
+        if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+        {
+            Managed.AllocGcHandle(ptrValue, out GCHandle handle);
+            desc.value = &handle;
+            ecs_const_var_init(Handle, &desc);
+            Managed.FreeGcHandle(handle);
+        }
+        else
+        {
+            desc.value = ptrValue;
+            ecs_const_var_init(Handle, &desc);
+        }
+    }
+
+    public void AddConstant<T>(string name, T value)
+    {
+        AddConstant(default, name, value);
     }
 
     /// <summary>

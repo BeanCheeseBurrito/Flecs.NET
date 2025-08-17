@@ -432,6 +432,8 @@ public static partial class Ecs
     /// </summary>
     public static ref ulong SlotOf => ref EcsSlotOf;
 
+    public static ref ulong OrderedChildren => ref EcsOrderedChildren;
+
     // Built-in identifiers
 
     /// <summary>
@@ -451,10 +453,7 @@ public static partial class Ecs
     /// </summary>
     public static ref ulong Sparse => ref EcsSparse;
 
-    /// <summary>
-    ///     Reference to <see cref="EcsUnion"/>.
-    /// </summary>
-    public static ref ulong Union => ref EcsUnion;
+    public static ref ulong DontFragment => ref EcsDontFragment;
 
     // Built-in predicates for comparing entity ids in queries.
 

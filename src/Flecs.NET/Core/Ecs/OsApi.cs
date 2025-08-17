@@ -29,6 +29,8 @@ public static unsafe partial class Ecs
         /// </summary>
         public static bool OverrideLog { get; set; } = true;
 
+        public static bool OverrideTrace { get; set; } = true;
+
         /// <summary>
         ///     Override the default os api.
         /// </summary>
@@ -49,6 +51,12 @@ public static unsafe partial class Ecs
 
             if (OverrideLog)
                 ecs_os_api.log_ = Context.Log == default ? ecs_os_api.log_ : &Functions.LogCallback;
+
+            if (OverrideTrace)
+            {
+                ecs_os_api.perf_trace_push_ = Context.Log == default ? ecs_os_api.perf_trace_push_ : &Functions.TracePushCallback;
+                ecs_os_api.perf_trace_push_ = Context.Log == default ? ecs_os_api.perf_trace_pop_ : &Functions.TracePopCallback;
+            }
 
             _initialized = true;
         }
@@ -87,6 +95,26 @@ public static unsafe partial class Ecs
         public static void SetLog(delegate*<int, string, int, string, void> callback)
         {
             Context.Log.Set(callback, (delegate*<int, byte*, int, byte*, void>)&Functions.LogCallbackPointer);
+        }
+
+        public static void SetTracePush(TraceCallback callback)
+        {
+            Context.TracePush.Set(callback, (delegate*<byte*, ulong, byte*, void>)&Functions.TracePushCallbackDelegate);
+        }
+
+        public static void SetTracePush(delegate*<string, ulong, string, void> callback)
+        {
+            Context.TracePush.Set(callback, (delegate*<byte*, ulong, byte*, void>)&Functions.TracePushCallbackPointer);
+        }
+
+        public static void SetTracePop(TraceCallback callback)
+        {
+            Context.TracePop.Set(callback, (delegate*<byte*, ulong, byte*, void>)&Functions.TracePopCallbackDelegate);
+        }
+
+        public static void SetTracePop(delegate*<string, ulong, string, void> callback)
+        {
+            Context.TracePop.Set(callback, (delegate*<byte*, ulong, byte*, void>)&Functions.TracePopCallbackPointer);
         }
 
         private static void DefaultAbort()

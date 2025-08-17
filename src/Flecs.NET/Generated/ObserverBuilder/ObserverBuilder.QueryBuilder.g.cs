@@ -1049,4 +1049,10 @@ public unsafe partial struct ObserverBuilder
         Ecs.GetQueryBuilder(ref this).OnGroupDelete(callback);
         return ref this;
     }
+    
+    public ref ObserverBuilder DetectChanges()
+    {
+        Ecs.GetQueryBuilder(ref this).DetectChanges();
+        return ref this;
+    }
 }

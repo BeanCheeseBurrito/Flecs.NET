@@ -26,6 +26,7 @@ public static class Queries_ChangeTracking
         // Each query has its own private dirty state which is reset only when the
         // query is iterated.
         using Query qRead = world.QueryBuilder()
+            .DetectChanges()
             .Cached()
             .With<Position>().In()
             .Build();

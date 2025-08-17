@@ -457,6 +457,38 @@ internal static unsafe partial class Functions
         ((delegate*<int, string, int, string, void>)Ecs.Os.Context.Log.Pointer)(level, NativeString.GetString(file), line, NativeString.GetString(message));
     }
 
+    [UnmanagedCallersOnly]
+    internal static void TracePushCallback(byte* file, ulong line, byte* message)
+    {
+        ((delegate*<byte*, ulong, byte*, void>)Ecs.Os.Context.TracePush.Invoker)(file, line, message);
+    }
+
+    internal static void TracePushCallbackDelegate(byte* file, ulong line, byte* message)
+    {
+        ((Ecs.TraceCallback)Ecs.Os.Context.TracePush.Delegate.Target!)(NativeString.GetString(file), line, NativeString.GetString(message));
+    }
+
+    internal static void TracePushCallbackPointer(byte* file, ulong line, byte* message)
+    {
+        ((delegate*<string, ulong, string, void>)Ecs.Os.Context.TracePush.Pointer)(NativeString.GetString(file), line, NativeString.GetString(message));
+    }
+
+    [UnmanagedCallersOnly]
+    internal static void TracePopCallback(byte* file, ulong line, byte* message)
+    {
+        ((delegate*<byte*, ulong, byte*, void>)Ecs.Os.Context.TracePop.Invoker)(file, line, message);
+    }
+
+    internal static void TracePopCallbackDelegate(byte* file, ulong line, byte* message)
+    {
+        ((Ecs.TraceCallback)Ecs.Os.Context.TracePop.Delegate.Target!)(NativeString.GetString(file), line, NativeString.GetString(message));
+    }
+
+    internal static void TracePopCallbackPointer(byte* file, ulong line, byte* message)
+    {
+        ((delegate*<string, ulong, string, void>)Ecs.Os.Context.TracePop.Pointer)(NativeString.GetString(file), line, NativeString.GetString(message));
+    }
+
     #endregion
 
     #region Resource Hook Callbacks

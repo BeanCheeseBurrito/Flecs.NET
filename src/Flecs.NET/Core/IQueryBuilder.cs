@@ -458,4 +458,6 @@ public unsafe interface IQueryBuilder<TBuilder, TResult> : IQueryBuilderBase
 
     /// <inheritdoc cref="Core.QueryBuilder.OnGroupDelete{T}(Ecs.GroupDeleteCallback{T})"/>
     public ref TBuilder OnGroupDelete<T>(Ecs.GroupDeleteCallback<T> callback);
+
+    public ref TBuilder DetectChanges();
 }

@@ -4030,7 +4030,7 @@ public unsafe class EntityTests
 
         Assert.Equal("EntityType", e.Name());
         Assert.Equal(".EntityType", e.Path());
-        Assert.True(e.Has<EcsComponent>());
+        Assert.True(!e.Has<EcsComponent>());
         Assert.True(e.Has(Ecs.Prefab));
 
         Entity e2 = world.Entity<EntityType>();

@@ -1049,4 +1049,10 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7>
         Ecs.GetQueryBuilder(ref this).OnGroupDelete(callback);
         return ref this;
     }
+    
+    public ref SystemBuilder<T0, T1, T2, T3, T4, T5, T6, T7> DetectChanges()
+    {
+        Ecs.GetQueryBuilder(ref this).DetectChanges();
+        return ref this;
+    }
 }

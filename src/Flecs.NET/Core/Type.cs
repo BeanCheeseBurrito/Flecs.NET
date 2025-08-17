@@ -303,6 +303,7 @@ public static unsafe class Type<T>
         componentDesc.type.alignment = Alignment;
         ulong component = ecs_component_init(world, &componentDesc);
         Ecs.Assert(component != 0, $"Failed to register component for type '{FullName}'");
+        Ecs.Assert(component == entity, $"Registered component ID wasn't the same as its entity for type '{FullName}'");
 
         world.SetWith(prevWith);
         world.SetScope(prevScope);
@@ -673,7 +674,8 @@ public static unsafe class Type<T>
         }
     }
 
-    private static int SizeOf()
+    // TODO: Change back to private when done debugging
+    public static int SizeOf()
     {
         NativeLayout(out int size, out int _);
         return size;

@@ -1150,6 +1150,12 @@ public class QueryBuilder : GeneratorBase
                     Ecs.GetQueryBuilder(ref this).OnGroupDelete(callback);
                     return ref this;
                 }
+                
+                public ref {{Generator.GetTypeName(type, i)}} DetectChanges()
+                {
+                    Ecs.GetQueryBuilder(ref this).DetectChanges();
+                    return ref this;
+                }
             }
             """;
     }

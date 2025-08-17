@@ -37,7 +37,7 @@ string GetFlecsIncludePath([CallerFilePath] string filePath = "")
 
 string GetFlecsHeaderPath([CallerFilePath] string filePath = "")
 {
-    return Path.GetFullPath(Path.Combine(filePath, "..", "..", "..", "native", "flecs", "include", "flecs.h"));
+    return Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Environment.ProcessPath!)!, "bootstrap.h"));
 }
 
 string GetBindingsOutputPath([CallerFilePath] string filePath = "")

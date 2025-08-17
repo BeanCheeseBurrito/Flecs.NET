@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Flecs.NET.Core.BindingContext;
@@ -35,6 +36,23 @@ public static unsafe class Managed
     {
         IntPtr handle = ((IntPtr*)data)[index];
         FreeGcHandle(handle);
+    }
+
+    private static readonly Dictionary<Type, bool> TypeIsRefy = new();
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static object Get(Type type, void* data)
+    {
+        if (!TypeIsRefy.TryGetValue(type, out bool refy))
+        {
+            TypeIsRefy.Add(type, refy = (bool) typeof(RuntimeHelpers).GetMethod(nameof(RuntimeHelpers.IsReferenceOrContainsReferences))!.MakeGenericMethod(type).Invoke(null, [])!);
+        }
+
+        if (refy)
+            return Unsafe.AsRef<object>(data);
+
+        GCHandle handle = GCHandle.FromIntPtr(*(IntPtr*)data);
+        IStrongBox box = (IStrongBox)handle.Target!;
+        return box.Value!;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

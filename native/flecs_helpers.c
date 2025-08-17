@@ -72,6 +72,7 @@ extern void* EcsDocColor;
 extern void* EcsDocDetail;
 extern void* EcsDocLink;
 extern void* EcsDocUuid;
+extern void* EcsDontFragment;
 extern void* EcsDontInherit;
 extern void* EcsDuration;
 extern void* EcsElectricCurrent;
@@ -163,6 +164,7 @@ extern void* EcsOnTableCreate;
 extern void* EcsOnTableDelete;
 extern void* EcsOnUpdate;
 extern void* EcsOnValidate;
+extern void* EcsOrderedChildren;
 extern void* EcsOverride;
 extern void* EcsPairIsTag;
 extern void* EcsPanic;
@@ -217,7 +219,6 @@ extern void* EcsTime;
 extern void* EcsTrait;
 extern void* EcsTransitive;
 extern void* EcsTraversable;
-extern void* EcsUnion;
 extern void* EcsUnitPrefixes;
 extern void* EcsUri;
 extern void* EcsUriFile;
@@ -287,6 +288,7 @@ extern void* FLECS_IDEcsScriptConstVarID_;
 extern void* FLECS_IDEcsScriptFunctionID_;
 extern void* FLECS_IDEcsScriptID_;
 extern void* FLECS_IDEcsScriptMethodID_;
+extern void* FLECS_IDEcsScriptRngID_;
 extern void* FLECS_IDEcsScriptTemplateID_;
 extern void* FLECS_IDEcsStructID_;
 extern void* FLECS_IDEcsSystemStatsID_;
@@ -508,6 +510,9 @@ BINDGEN_API void* EcsDocLink_BindgenGetExtern() {
 }
 BINDGEN_API void* EcsDocUuid_BindgenGetExtern() {
     return &EcsDocUuid;
+}
+BINDGEN_API void* EcsDontFragment_BindgenGetExtern() {
+    return &EcsDontFragment;
 }
 BINDGEN_API void* EcsDontInherit_BindgenGetExtern() {
     return &EcsDontInherit;
@@ -782,6 +787,9 @@ BINDGEN_API void* EcsOnUpdate_BindgenGetExtern() {
 BINDGEN_API void* EcsOnValidate_BindgenGetExtern() {
     return &EcsOnValidate;
 }
+BINDGEN_API void* EcsOrderedChildren_BindgenGetExtern() {
+    return &EcsOrderedChildren;
+}
 BINDGEN_API void* EcsOverride_BindgenGetExtern() {
     return &EcsOverride;
 }
@@ -943,9 +951,6 @@ BINDGEN_API void* EcsTransitive_BindgenGetExtern() {
 }
 BINDGEN_API void* EcsTraversable_BindgenGetExtern() {
     return &EcsTraversable;
-}
-BINDGEN_API void* EcsUnion_BindgenGetExtern() {
-    return &EcsUnion;
 }
 BINDGEN_API void* EcsUnitPrefixes_BindgenGetExtern() {
     return &EcsUnitPrefixes;
@@ -1153,6 +1158,9 @@ BINDGEN_API void* FLECS_IDEcsScriptID__BindgenGetExtern() {
 }
 BINDGEN_API void* FLECS_IDEcsScriptMethodID__BindgenGetExtern() {
     return &FLECS_IDEcsScriptMethodID_;
+}
+BINDGEN_API void* FLECS_IDEcsScriptRngID__BindgenGetExtern() {
+    return &FLECS_IDEcsScriptRngID_;
 }
 BINDGEN_API void* FLECS_IDEcsScriptTemplateID__BindgenGetExtern() {
     return &FLECS_IDEcsScriptTemplateID_;

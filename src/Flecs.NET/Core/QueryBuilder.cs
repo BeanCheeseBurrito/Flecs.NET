@@ -1850,6 +1850,12 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
         return ref this;
     }
 
+    public ref QueryBuilder DetectChanges()
+    {
+        Desc.flags |= EcsQueryDetectChanges;
+        return ref this;
+    }
+
     private QueryContext* EnsureQueryContext()
     {
         if (_desc.binding_ctx != null)

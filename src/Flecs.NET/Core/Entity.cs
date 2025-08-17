@@ -3506,6 +3506,14 @@ public unsafe partial struct Entity : IEquatable<Entity>, IEntity<Entity>
         return NativeString.GetString(ecs_entity_from_json(World, Id, nativeJson, null));
     }
 
+    public void SetChildOrder(ulong[] children)
+    {
+        fixed (ulong* childrenPtr = children)
+        {
+            ecs_set_child_order(World, Id, childrenPtr, children.Length);
+        }
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private ref Entity SetInternal<T>(ulong id, in T component)
     {
