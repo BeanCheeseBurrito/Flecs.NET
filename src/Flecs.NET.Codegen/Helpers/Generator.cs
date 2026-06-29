@@ -107,7 +107,7 @@ public static class Generator
 
     public static readonly string[] ColumnsArray = CacheStrings(i => $"int* columns = stackalloc int[] {{ {ColumnList[i]} }};");
 
-    public static readonly string[] EnsurePointers = CacheJoinedStrings(Separator.Space, i => $"ptrs[{i}] = ecs_ensure_id(world, e, Type<T{i}>.Id(world));");
+    public static readonly string[] EnsurePointers = CacheJoinedStrings(Separator.Space, i => $"ptrs[{i}] = ecs_ensure_id(world, e, Type<T{i}>.Id(world), Type<T{i}>.Size);");
 
     public static readonly string[] ModifiedChain = CacheJoinedStrings(Separator.Space, i => $"ecs_modified_id(world, entity, ids[{i}]);");
 

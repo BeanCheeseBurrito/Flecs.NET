@@ -492,6 +492,13 @@ public class QueryBuilder : GeneratorBase
                     Ecs.GetQueryBuilder(ref this).Cached();
                     return ref this;
                 }
+
+                /// <inheritdoc cref="Core.QueryBuilder.DetectChanges()"/>
+                public ref {{Generator.GetTypeName(type, i)}} DetectChanges()
+                {
+                    Ecs.GetQueryBuilder(ref this).DetectChanges();
+                    return ref this;
+                }
             
                 /// <inheritdoc cref="Core.QueryBuilder.Expr(string)"/>
                 public ref {{Generator.GetTypeName(type, i)}} Expr(string expr)

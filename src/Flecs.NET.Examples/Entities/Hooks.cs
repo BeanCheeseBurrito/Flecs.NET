@@ -53,19 +53,19 @@ file struct NativeString(string str) :
     // The on add hook gets called when the component is added.
     public static void OnAdd(Iter it, int i, ref NativeString _)
     {
-        Ecs.Log.Trace($"{it.Event()}: {it.Entity(i)}");
+        Ecs.Log.Trace("OnAdd");
     }
 
     // The on set hook gets called when the component is set.
     public static void OnSet(Iter it, int i, ref NativeString _)
     {
-        Ecs.Log.Trace($"{it.Event()}: {it.Entity(i)}");
+        Ecs.Log.Trace("OnSet");
     }
 
     // The on remove hook gets called when the component is removed.
     public static void OnRemove(Iter it, int i, ref NativeString _)
     {
-        Ecs.Log.Trace($"{it.Event()}: {it.Entity(i)}");
+        Ecs.Log.Trace("OnRemove");
     }
 }
 
@@ -73,7 +73,7 @@ public static class Entities_Hooks
 {
     public static void Main()
     {
-        World world = World.Create();
+        using World world = World.Create();
 
         Ecs.Log.SetLevel(0);
 
@@ -108,14 +108,14 @@ public static class Entities_Hooks
 // Output:
 // info: e.Add<NativeString>()
 // info: | Ctor
-// info: | OnAdd: Entity
+// info: | OnAdd
 // info: e.Set<NativeString>(new("Hello World"))
 // info: | Copy
-// info: | OnSet: Entity
+// info: | OnSet
 // info: e.Add(tag)
 // info: | Ctor
 // info: | Move
 // info: | Dtor
 // info: e.Destruct()
-// info: | OnRemove: Entity
+// info: | OnRemove
 // info: | Dtor

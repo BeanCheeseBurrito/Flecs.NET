@@ -8,10 +8,18 @@ internal unsafe struct OsApiContext : IDisposable
     public Callback Abort;
     public Callback Log;
 
+    public Callback TracePush;
+
+    public Callback TracePop;
+
     public void Dispose()
     {
         Abort.Dispose();
         Log.Dispose();
+
+        TracePush.Dispose();
+
+        TracePop.Dispose();
     }
 
     public static void Free(OsApiContext* context)

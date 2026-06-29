@@ -163,4 +163,9 @@ public static unsafe partial class Ecs
     ///     Os api log callback.
     /// </summary>
     public delegate void LogCallback(int level, string file, int line, string message);
+
+    /// <summary>
+    ///     Os api trace callback.
+    /// </summary>
+    public delegate void TraceCallback(string file, ulong line, string name);
 }

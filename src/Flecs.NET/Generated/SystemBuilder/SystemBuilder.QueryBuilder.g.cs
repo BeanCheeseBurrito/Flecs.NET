@@ -392,6 +392,13 @@ public unsafe partial struct SystemBuilder
         return ref this;
     }
 
+    /// <inheritdoc cref="Core.QueryBuilder.DetectChanges()"/>
+    public ref SystemBuilder DetectChanges()
+    {
+        Ecs.GetQueryBuilder(ref this).DetectChanges();
+        return ref this;
+    }
+
     /// <inheritdoc cref="Core.QueryBuilder.Expr(string)"/>
     public ref SystemBuilder Expr(string expr)
     {

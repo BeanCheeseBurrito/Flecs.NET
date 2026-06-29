@@ -27,6 +27,7 @@ public static class Queries_ChangeTracking
         // query is iterated.
         using Query qRead = world.QueryBuilder()
             .Cached()
+            .DetectChanges()
             .With<Position>().In()
             .Build();
 

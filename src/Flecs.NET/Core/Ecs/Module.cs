@@ -20,7 +20,13 @@ public static unsafe partial class Ecs
 
     private static ulong DoImport<T>(World world) where T : IFlecsModule, new()
     {
-        Entity module = world.Entity(Type<T>.Id(world)).Add(EcsModule);
+        Entity module = world.Entity(Type<T>.Id(world));
+
+        if (!Type<T>.IsTag)
+            module.Add(EcsSparse);
+
+        module.Add(EcsModule);
+
         ulong prevScope = world.SetScope(module);
 
         T moduleInstance = new T();
@@ -29,10 +35,7 @@ public static unsafe partial class Ecs
         world.SetScope(prevScope);
 
         if (!Type<T>.IsTag)
-        {
-            module.Add(EcsSparse);
             world.Set(in moduleInstance);
-        }
 
         return module;
     }

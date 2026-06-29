@@ -392,6 +392,13 @@ public unsafe partial struct SystemBuilder<T0, T1, T2, T3, T4, T5>
         return ref this;
     }
 
+    /// <inheritdoc cref="Core.QueryBuilder.DetectChanges()"/>
+    public ref SystemBuilder<T0, T1, T2, T3, T4, T5> DetectChanges()
+    {
+        Ecs.GetQueryBuilder(ref this).DetectChanges();
+        return ref this;
+    }
+
     /// <inheritdoc cref="Core.QueryBuilder.Expr(string)"/>
     public ref SystemBuilder<T0, T1, T2, T3, T4, T5> Expr(string expr)
     {

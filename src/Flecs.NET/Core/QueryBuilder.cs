@@ -757,6 +757,16 @@ public unsafe struct QueryBuilder : IDisposable, IEquatable<QueryBuilder>, IQuer
     }
 
     /// <summary>
+    ///     Enable change detection for this query.
+    /// </summary>
+    /// <returns></returns>
+    public ref QueryBuilder DetectChanges()
+    {
+        Desc.flags |= EcsQueryDetectChanges;
+        return ref this;
+    }
+
+    /// <summary>
     ///     Query expression. Should not be set at the same time as terms array.
     /// </summary>
     /// <param name="expr"></param>

@@ -1,6 +1,5 @@
 using System;
 using Flecs.NET.Core.BindingContext;
-using Flecs.NET.Utilities;
 using static Flecs.NET.Bindings.flecs;
 
 namespace Flecs.NET.Core;

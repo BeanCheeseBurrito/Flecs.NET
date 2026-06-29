@@ -10,7 +10,7 @@ public static unsafe partial class Ecs
 {
     internal static bool EnsurePointers<T0, T1, T2, T3, T4, T5>(ecs_world_t* world, ulong e, void** ptrs)
     {
-        ptrs[0] = ecs_ensure_id(world, e, Type<T0>.Id(world)); ptrs[1] = ecs_ensure_id(world, e, Type<T1>.Id(world)); ptrs[2] = ecs_ensure_id(world, e, Type<T2>.Id(world)); ptrs[3] = ecs_ensure_id(world, e, Type<T3>.Id(world)); ptrs[4] = ecs_ensure_id(world, e, Type<T4>.Id(world)); ptrs[5] = ecs_ensure_id(world, e, Type<T5>.Id(world));
+        ptrs[0] = ecs_ensure_id(world, e, Type<T0>.Id(world), Type<T0>.Size); ptrs[1] = ecs_ensure_id(world, e, Type<T1>.Id(world), Type<T1>.Size); ptrs[2] = ecs_ensure_id(world, e, Type<T2>.Id(world), Type<T2>.Size); ptrs[3] = ecs_ensure_id(world, e, Type<T3>.Id(world), Type<T3>.Size); ptrs[4] = ecs_ensure_id(world, e, Type<T4>.Id(world), Type<T4>.Size); ptrs[5] = ecs_ensure_id(world, e, Type<T5>.Id(world), Type<T5>.Size);
         return true;
     }
 

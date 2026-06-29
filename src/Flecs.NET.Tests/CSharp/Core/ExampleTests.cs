@@ -428,12 +428,6 @@ public class ExampleTests
     }
 
     [Fact]
-    private void Relationships_Union()
-    {
-        global::Relationships_Union.Main();
-    }
-
-    [Fact]
     private void Systems_Basics()
     {
         global::Systems_Basics.Main();

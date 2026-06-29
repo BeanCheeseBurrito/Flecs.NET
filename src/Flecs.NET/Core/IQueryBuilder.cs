@@ -183,6 +183,9 @@ public unsafe interface IQueryBuilder<TBuilder, TResult> : IQueryBuilderBase
     /// <inheritdoc cref="QueryBuilder.Cached()"/>
     public ref TBuilder Cached();
 
+    /// <inheritdoc cref="QueryBuilder.DetectChanges()"/>
+    public ref TBuilder DetectChanges();
+
     /// <inheritdoc cref="QueryBuilder.Expr(string)"/>
     public ref TBuilder Expr(string expr);
 

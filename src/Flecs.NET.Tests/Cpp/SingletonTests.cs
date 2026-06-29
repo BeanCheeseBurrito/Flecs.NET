@@ -121,8 +121,8 @@ public unsafe class SingletonTests
 
         world.Set(new Position(10, 20));
 
-        world.System()
-            .Expr("[inout] Position($)")
+        world.System<Position>()
+            .Singleton()
             .Run((Iter it) =>
             {
                 while (it.Next())

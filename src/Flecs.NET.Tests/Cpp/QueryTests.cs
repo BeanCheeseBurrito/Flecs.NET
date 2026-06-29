@@ -1421,6 +1421,7 @@ public unsafe class QueryTests
 
         using Query<Position> q = world.QueryBuilder<Position>()
             .Cached()
+            .DetectChanges()
             .Build();
 
         using Query<Position> qW = world.Query<Position>();
@@ -2575,6 +2576,7 @@ public unsafe class QueryTests
         using Query<Position> qw = world.Query<Position>();
         using Query<Position> qr = world.QueryBuilder<Position>()
             .Cached()
+            .DetectChanges()
             .Build();
 
         Entity e1 = world.Entity().Add<Tag>().Set(new Position(10, 20));

@@ -16,7 +16,12 @@ public static unsafe partial class Ecs
         /// <param name="world"></param>
         public readonly void InitModule(World world)
         {
+            world.Import<Ecs.Units>();
+
             FlecsStatsImport(world);
+            world.Component<EcsWorldSummary>();
+            world.Component<EcsWorldStats>();
+            world.Component<EcsPipelineStats>();
         }
 
         /// <summary>

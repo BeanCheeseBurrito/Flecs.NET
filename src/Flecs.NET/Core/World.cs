@@ -339,22 +339,35 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
     }
 
     /// <summary>
-    ///     Set entity range.
+    ///     Create a new entity id range constraining new entity identifiers returned by the
+    ///     specified <paramref name="min"/>..<paramref name="max"/> interval. If <paramref name="max"/> is 0,
+    ///     the range is unbounded. Ranges cannot be deleted once created; use <see cref="RangeSet"/>
+    ///     to activate them.
     /// </summary>
-    /// <param name="min"></param>
-    /// <param name="max"></param>
-    public void SetEntityRange(ulong min, ulong max)
+    /// <param name="min">The first entity id in the range (inclusive).</param>
+    /// <param name="max">The last entity id in the range (inclusive, 0 = unlimited).</param>
+    /// <returns>A pointer to the new range. Does not need to be freed.</returns>
+    public ecs_entity_range_t* RangeNew(uint min, uint max)
     {
-        ecs_set_entity_range(Handle, min, max);
+        return ecs_entity_range_new(Handle, min, max);
     }
 
     /// <summary>
-    ///     Enforce that operations cannot modify entities outside of range.
+    ///     Set the active entity range. Activates a range created with <see cref="RangeNew"/>.
     /// </summary>
-    /// <param name="enabled"></param>
-    public void EnableRangeCheck(bool enabled = true)
+    /// <param name="range">The range to activate.</param>
+    public void RangeSet(ecs_entity_range_t* range)
     {
-        ecs_enable_range_check(Handle, enabled);
+        ecs_entity_range_set(Handle, range);
+    }
+
+    /// <summary>
+    ///     Get the currently active entity id range, or <c>null</c> if no range is active.
+    /// </summary>
+    /// <returns>The active range, or <c>null</c>.</returns>
+    public ecs_entity_range_t* RangeGet()
+    {
+        return ecs_entity_range_get(Handle);
     }
 
     /// <summary>
@@ -2990,15 +3003,8 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
         while (current != 0)
         {
             Entity next = current.Parent();
-
-            ecs_iter_t it = ecs_each_id(Handle, Pair(Ecs.ChildOf, current));
-
-            if (!ecs_iter_is_true(&it))
-            {
-                current.Destruct();
-                SetVersion(current);
-            }
-
+            current.Destruct();
+            SetVersion(current);
             current = next;
         }
 
@@ -3211,7 +3217,8 @@ public readonly unsafe partial struct World : IDisposable, IEquatable<World>
         using NativeString nativeName = (NativeString)name;
         using NativeString nativeStr = (NativeString)str;
 
-        return ecs_script_run(Handle, nativeName, nativeStr);
+        ecs_script_eval_result_t result = default;
+        return ecs_script_run(Handle, nativeName, nativeStr, &result);
     }
 
     /// <summary>

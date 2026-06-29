@@ -303,6 +303,7 @@ public static unsafe class Type<T>
         componentDesc.type.alignment = Alignment;
         ulong component = ecs_component_init(world, &componentDesc);
         Ecs.Assert(component != 0, $"Failed to register component for type '{FullName}'");
+        Ecs.Assert(component == entity, $"Component id for type '{FullName}' does not match entity id");
 
         world.SetWith(prevWith);
         world.SetScope(prevScope);

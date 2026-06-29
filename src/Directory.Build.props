@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <VersionPrefix>4.0.4</VersionPrefix>
+        <VersionPrefix>4.1.6</VersionPrefix>
         <Authors>BeanCheeseBurrito</Authors>
         <Copyright>BeanCheeseBurrito</Copyright>
         <PackageProjectUrl>https://github.com/BeanCheeseBurrito/Flecs.NET</PackageProjectUrl>
@@ -21,7 +21,7 @@
 
     <PropertyGroup>
         <IsPackable>false</IsPackable>
-        <NoWarn>$(NoWarn);NETSDK1138</NoWarn>
+        <NoWarn>$(NoWarn);NETSDK1138;IDE0005</NoWarn>
         <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true' And '$(ContinuousIntegrationBuild)' == ''">true</ContinuousIntegrationBuild>
         <Deterministic Condition="'$(GITHUB_ACTIONS)' == 'true' And '$(Deterministic)' == ''">true</Deterministic>
         <AllowedOutputExtensionsInPackageBuildOutputFolder Condition="'$(FlecsPackPdb)' == 'true'">$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>

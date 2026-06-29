@@ -28,8 +28,7 @@ public static unsafe partial class Invoker
     public static void Iter(ecs_iter_t* iter, Ecs.IterCallback callback)
     {
         Ecs.TableLock(iter->world, iter->table);
-        callback(new Iter(iter));
-        Ecs.TableUnlock(iter->world, iter->table);
+        try { callback(new Iter(iter)); } finally { Ecs.TableUnlock(iter->world, iter->table); }
     }
 
     /// <summary>
@@ -42,11 +41,10 @@ public static unsafe partial class Invoker
         Ecs.Assert(iter->entities != null, "No entities returned, use Iter() or Each() without the entity argument instead.");
 
         Ecs.TableLock(iter->world, iter->table);
-
-        for (int i = 0; i < iter->count; i++)
-            callback(new Entity(iter->world, iter->entities[i]));
-
-        Ecs.TableUnlock(iter->world, iter->table);
+        try {
+            for (int i = 0; i < iter->count; i++)
+                callback(new Entity(iter->world, iter->entities[i]));
+        } finally { Ecs.TableUnlock(iter->world, iter->table); }
     }
 
     /// <summary>
@@ -57,13 +55,11 @@ public static unsafe partial class Invoker
     public static void Each(ecs_iter_t* iter, Ecs.EachIterCallback callback)
     {
         Ecs.TableLock(iter->world, iter->table);
-
-        int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
-
-        for (int i = 0; i < count; i++)
-            callback(new Iter(iter), i);
-
-        Ecs.TableUnlock(iter->world, iter->table);
+        try {
+            int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
+            for (int i = 0; i < count; i++)
+                callback(new Iter(iter), i);
+        } finally { Ecs.TableUnlock(iter->world, iter->table); }
     }
 
     /// <summary>
@@ -212,8 +208,7 @@ public static unsafe partial class Invoker
     public static void Iter(ecs_iter_t* iter, delegate*<Iter, void> callback)
     {
         Ecs.TableLock(iter->world, iter->table);
-        callback(new Iter(iter));
-        Ecs.TableUnlock(iter->world, iter->table);
+        try { callback(new Iter(iter)); } finally { Ecs.TableUnlock(iter->world, iter->table); }
     }
 
     /// <summary>
@@ -226,11 +221,10 @@ public static unsafe partial class Invoker
         Ecs.Assert(iter->count > 0, "No entities returned, use Iter() or Each() without the entity argument instead.");
 
         Ecs.TableLock(iter->world, iter->table);
-
-        for (int i = 0; i < iter->count; i++)
-            callback(new Entity(iter->world, iter->entities[i]));
-
-        Ecs.TableUnlock(iter->world, iter->table);
+        try {
+            for (int i = 0; i < iter->count; i++)
+                callback(new Entity(iter->world, iter->entities[i]));
+        } finally { Ecs.TableUnlock(iter->world, iter->table); }
     }
 
     /// <summary>
@@ -241,13 +235,11 @@ public static unsafe partial class Invoker
     public static void Each(ecs_iter_t* iter, delegate*<Iter, int, void> callback)
     {
         Ecs.TableLock(iter->world, iter->table);
-
-        int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
-
-        for (int i = 0; i < count; i++)
-            callback(new Iter(iter), i);
-
-        Ecs.TableUnlock(iter->world, iter->table);
+        try {
+            int count = iter->count == 0 && iter->table == null ? 1 : iter->count;
+            for (int i = 0; i < count; i++)
+                callback(new Iter(iter), i);
+        } finally { Ecs.TableUnlock(iter->world, iter->table); }
     }
 
     /// <summary>

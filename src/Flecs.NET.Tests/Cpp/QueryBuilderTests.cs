@@ -2251,12 +2251,6 @@ public unsafe class QueryBuilderTests
         ecs_type_t* type = ecs_table_get_type(table);
         return type->array[0];
     }
-
-    private static ulong GroupByFirstIdNegated(World world, Table table, ulong id)
-    {
-        return ~GroupByFirstId(world, table, id);
-    }
-
     [Theory]
     [MemberData(nameof(CacheKinds))]
     private void GroupByRaw(ecs_query_cache_kind_t cacheKind)
@@ -2275,7 +2269,8 @@ public unsafe class QueryBuilderTests
 
         using Query qReverse = world.QueryBuilder()
             .With<Tag23>()
-            .GroupBy(world.Id<Tag23>(), GroupByFirstIdNegated)
+            .GroupBy(world.Id<Tag23>(), GroupByFirstId)
+            .QueryFlags(EcsQueryGroupByOrdered | EcsQueryGroupByDesc)
             .Build();
 
         Entity e3 = world.Entity().Add<Tag23>().Add<Tag2>();
@@ -2340,7 +2335,8 @@ public unsafe class QueryBuilderTests
 
         using Query qReverse = world.QueryBuilder()
             .With<Tag23>()
-            .GroupBy<Tag23>(GroupByFirstIdNegated)
+            .GroupBy<Tag23>(GroupByFirstId)
+            .QueryFlags(EcsQueryGroupByOrdered | EcsQueryGroupByDesc)
             .Build();
 
         Entity e3 = world.Entity().Add<Tag23>().Add<Tag2>();

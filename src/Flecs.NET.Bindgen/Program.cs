@@ -11,9 +11,9 @@ BindingOptions bindingOptions = new()
     SuppressedWarnings = { "CS8981" },
 
     SystemIncludeDirectories = { Path.Combine(BuildConstants.ZigLibPath, "include") },
-    IncludeDirectories = { GetFlecsIncludePath() },
 
     InputFile = GetFlecsHeaderPath(),
+    IncludeDirectories = { GetFlecsIncludePath(), GetBootstrapDir() },
     OutputFile = GetBindingsOutputPath(),
     NativeOutputFile = GetBindingsHelperOutputPath(),
 
@@ -37,7 +37,12 @@ string GetFlecsIncludePath([CallerFilePath] string filePath = "")
 
 string GetFlecsHeaderPath([CallerFilePath] string filePath = "")
 {
-    return Path.GetFullPath(Path.Combine(filePath, "..", "..", "..", "native", "flecs", "include", "flecs.h"));
+    return Path.GetFullPath(Path.Combine(filePath, "..", "bootstrap.h"));
+}
+
+string GetBootstrapDir([CallerFilePath] string filePath = "")
+{
+    return Path.GetFullPath(Path.Combine(filePath, ".."));
 }
 
 string GetBindingsOutputPath([CallerFilePath] string filePath = "")
