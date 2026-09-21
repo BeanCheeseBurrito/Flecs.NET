@@ -32,7 +32,11 @@ public static partial class Ecs
             world.Component<UIntPtr>().Set(new EcsPrimitive { kind = EcsUPtr });
             world.Component<IntPtr>().Set(new EcsPrimitive { kind = EcsIPtr });
 
-            // TODO: Add support for string.
+            // Register string as an opaque type that maps to flecs' string type
+            world.Component<string>().Opaque(o => o
+                .String()
+                .Serialize(static (ref readonly Ecs.Serializer ser, in string value) => ser.Value(value))
+                .AssignString(static (ref string value, string str) => value = str));
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using Flecs.NET.Collections;
 using Flecs.NET.Utilities;
 
@@ -11,6 +12,8 @@ internal unsafe struct WorldContext : IDisposable
     public Callback UserContextFree;
     public Callback AppInit;
 
+    public NativeList<nint> OpaqueContexts;
+
     public NativeList<ulong> TypeCache;
     public NativeList<nint> RunPostFrameContexts; // Stores PostFrameContext*
     public NativeList<nint> WorldFinishContexts; // Stores WorldFinishContext*
@@ -21,6 +24,10 @@ internal unsafe struct WorldContext : IDisposable
         UserContextFree.Dispose();
         AppInit.Dispose();
         TypeCache.Dispose();
+
+        foreach (nint handle in OpaqueContexts)
+            GCHandle.FromIntPtr(handle).Free();
+        OpaqueContexts.Dispose();
 
         foreach (nint ptr in RunPostFrameContexts)
             Memory.Free((PostFrameContext*)ptr);

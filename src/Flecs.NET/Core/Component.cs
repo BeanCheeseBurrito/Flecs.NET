@@ -64,7 +64,34 @@ public unsafe partial struct Component<TComponent> : IEquatable<Component<TCompo
         _untypedComponent = new UntypedComponent(world, Type<TComponent>.Id(world, false, true, 0, name));
     }
 
-    // TODO: Port opaque stuff here later
+    /// <summary>
+    ///     Registers opaque type reflection for this component. The opaque type is
+    ///     registered when the provided builder callback returns.
+    /// </summary>
+    /// <param name="builder">The opaque type builder callback.</param>
+    /// <returns>Reference to self.</returns>
+    public ref Component<TComponent> Opaque(Action<Ecs.OpaqueBuilder<TComponent, byte>> builder)
+    {
+        Ecs.OpaqueBuilder<TComponent, byte> opaque = new(World, Id);
+        builder(opaque);
+        opaque.Commit();
+        return ref this;
+    }
+
+    /// <summary>
+    ///     Registers opaque type reflection for this component. The opaque type is
+    ///     registered when the provided builder callback returns.
+    /// </summary>
+    /// <param name="builder">The opaque type builder callback.</param>
+    /// <typeparam name="TElement">The element type of the opaque collection.</typeparam>
+    /// <returns>Reference to self.</returns>
+    public ref Component<TComponent> Opaque<TElement>(Action<Ecs.OpaqueBuilder<TComponent, TElement>> builder) where TElement : unmanaged
+    {
+        Ecs.OpaqueBuilder<TComponent, TElement> opaque = new(World, Id);
+        builder(opaque);
+        opaque.Commit();
+        return ref this;
+    }
 
     /// <summary>
     ///     Add member with unit.

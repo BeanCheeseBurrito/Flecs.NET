@@ -168,4 +168,90 @@ public static unsafe partial class Ecs
     ///     Os api trace callback.
     /// </summary>
     public delegate void TraceCallback(string file, ulong line, string name);
+
+    /// <summary>
+    ///     Opaque type serialize callback.
+    /// </summary>
+    /// <typeparam name="T">The opaque type.</typeparam>
+    public delegate int OpaqueSerializeCallback<T>(ref readonly Serializer ser, in T value);
+
+    /// <summary>
+    ///     Opaque struct member serialize callback.
+    /// </summary>
+    public delegate int OpaqueSerializeMemberCallback<T>(ref readonly Serializer ser, in T value, string member);
+
+    /// <summary>
+    ///     Opaque collection element serialize callback.
+    /// </summary>
+    public delegate int OpaqueSerializeElementCallback<T>(ref readonly Serializer ser, in T value, nuint index);
+
+    /// <summary>
+    ///     Opaque type bool assignment callback.
+    /// </summary>
+    public delegate void OpaqueAssignBoolCallback<T>(ref T value, bool assigned);
+
+    /// <summary>
+    ///     Opaque type char assignment callback.
+    /// </summary>
+    public delegate void OpaqueAssignCharCallback<T>(ref T value, char assigned);
+
+    /// <summary>
+    ///     Opaque type signed integer assignment callback.
+    /// </summary>
+    public delegate void OpaqueAssignIntCallback<T>(ref T value, long assigned);
+
+    /// <summary>
+    ///     Opaque type unsigned integer assignment callback.
+    /// </summary>
+    public delegate void OpaqueAssignUIntCallback<T>(ref T value, ulong assigned);
+
+    /// <summary>
+    ///     Opaque type floating-point assignment callback.
+    /// </summary>
+    public delegate void OpaqueAssignFloatCallback<T>(ref T value, double assigned);
+
+    /// <summary>
+    ///     Opaque type string assignment callback.
+    /// </summary>
+    public delegate void OpaqueAssignStringCallback<T>(ref T value, string assigned);
+
+    /// <summary>
+    ///     Opaque entity assignment callback.
+    /// </summary>
+    public delegate void OpaqueAssignEntityCallback<T>(ref T value, World world, ulong assigned);
+
+    /// <summary>
+    ///     Opaque id assignment callback.
+    /// </summary>
+    public delegate void OpaqueAssignIdCallback<T>(ref T value, World world, ulong assigned);
+
+    /// <summary>
+    ///     Opaque null assignment callback.
+    /// </summary>
+    public delegate void OpaqueAssignNullCallback<T>(ref T value);
+
+    /// <summary>
+    ///     Opaque collection clear callback.
+    /// </summary>
+    public delegate void OpaqueClearCallback<T>(ref T value);
+
+    /// <summary>
+    ///     Opaque member lookup callback. The returned reference must remain valid for the operation.
+    /// </summary>
+    public delegate ref byte OpaqueEnsureMemberCallback<T>(ref T value, string member);
+
+    /// <summary>
+    ///     Opaque type element count callback.
+    /// </summary>
+    public delegate nint OpaqueCountCallback<T>(in T value);
+
+    /// <summary>
+    ///     Opaque type resize callback.
+    /// </summary>
+    public delegate void OpaqueResizeCallback<T>(ref T value, nuint size);
+
+    /// <summary>
+    ///     Opaque type ensure element callback. The returned reference must remain valid for the operation.
+    /// </summary>
+    public delegate ref TElement OpaqueEnsureElementCallback<T, TElement>(ref T value, nuint index) where TElement : unmanaged;
 }

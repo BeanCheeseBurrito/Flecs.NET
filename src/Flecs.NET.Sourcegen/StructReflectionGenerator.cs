@@ -138,7 +138,7 @@ public sealed class StructReflectionGenerator : IIncrementalGenerator
 
             switch (member)
             {
-                case IFieldSymbol field when !field.IsStatic && !field.IsConst:
+                case IFieldSymbol field when !field.IsStatic && !field.IsConst && field.Type is not IPointerTypeSymbol:
                     fields.Add(new MemberInfo(field.Name, field.Type));
                     break;
                 case IPropertySymbol property when !property.IsStatic && property.Parameters.Length == 0:
